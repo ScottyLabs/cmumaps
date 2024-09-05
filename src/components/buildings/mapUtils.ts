@@ -7,7 +7,7 @@ import {
   setIsZooming,
   setShowRoomNames,
 } from '@/lib/features/uiSlice';
-import { Building, Floor, FloorPlanMap, ID } from '@/types';
+import { Building, Floor, Room } from '@/types';
 import prefersReducedMotion from '@/util/prefersReducedMotion';
 
 const setIsZoomingAsync = (isZooming: boolean) => {
@@ -21,34 +21,22 @@ const setIsZoomingAsync = (isZooming: boolean) => {
 
 export const zoomOnRoom = (
   map: mapkit.Map | null,
-  roomId: ID,
-  floor: Floor,
-  buildings: Record<string, Building> | null,
-  floorPlanMap: FloorPlanMap,
+  room: Room,
   dispatch: Dispatch<UnknownAction>,
 ) => {
-  if (!buildings || !map || !floorPlanMap) {
+  if (!map) {
     return;
   }
+  if (room) {
+    dispatch(selectRoom(room));
+    dispatch(setShowRoomNames(true));
+    dispatch(setFocusedFloor(room.floor));
 
-  if (floor) {
-    if (
-      floorPlanMap[floor.buildingCode] &&
-      floorPlanMap[floor.buildingCode][floor.level]
-    ) {
-      const floorPlan = floorPlanMap[floor.buildingCode][floor.level];
-      const room = floorPlan[roomId];
-
-      dispatch(selectRoom(room));
-      dispatch(setShowRoomNames(true));
-      dispatch(setFocusedFloor(floor));
-
-      // zoom after finish setting the floor
-      setIsZoomingAsync(true)(dispatch).then(() => {
-        const points = floorPlan[room.id].coordinates;
-        zoomOnObject(map, points[0]);
-      });
-    }
+    // zoom after finish setting the floor
+    setIsZoomingAsync(true)(dispatch).then(() => {
+      const points = room.coordinates;
+      zoomOnObject(map, points[0]);
+    });
   }
 };
 

@@ -13,20 +13,21 @@ import MapDisplay from '@/components/buildings/MapDisplay';
 import { zoomOnObject, zoomOnRoom } from '@/components/buildings/mapUtils';
 import ToolBar from '@/components/toolbar/ToolBar';
 import {
+  setAvailableRoomImages,
   setBuildings,
   setEateryData,
-  setAvailableRoomImages,
-  setSearchMap,
   setFloorPlanMap,
+  setSearchMap,
 } from '@/lib/features/dataSlice';
 import { setUserPosition } from '@/lib/features/navSlice';
 import {
+  getIsCardOpen,
+  selectBuilding,
   setFocusedFloor,
   setIsMobile,
-  selectBuilding,
-  getIsCardOpen,
 } from '@/lib/features/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { Room } from '@/types';
 import { getEateryData } from '@/util/eateryUtils';
 
 // const mockUserPosition = [40.44249719447571, -79.94314319195851];
@@ -65,44 +66,61 @@ const Page = ({ params, searchParams }: Props) => {
       const code = params.slug[0];
       if (!code.includes('-')) {
         // only building code
-        const buildingCode = code;
-        dispatch(selectBuilding(buildings[buildingCode]));
+        dispatch(selectBuilding(buildings[code]));
       } else {
-        // at least floor level
-        const buildingCode = code.split('-')[0];
-        const floorLevel = code.split('-')[1];
+        // Can be room name "5314" or floor name "5"
+        const [buildingCode, roomOrFloorName] = code.split('-');
 
+        // validation of the building code
         const building = buildings[buildingCode];
-
-        // validations on the building code
         if (!building) {
           router.push('/');
           return;
         }
+        // Zoom into building first
+        router.push(buildingCode);
 
-        // validations on the floor level
-        if (!building.floors.includes(floorLevel)) {
-          router.push(buildingCode);
+        // Extracting floor level from room name or floor level
+        const floorRegexStr = building.floors.map((floor) => floor).join('|');
+        const floorRegex = new RegExp(floorRegexStr);
+        const floorLevel = roomOrFloorName.match(floorRegex)?.[0];
+
+        // Dont check this earlier so we can zoom on a building before the floorplan is loaded
+        if (!Object.keys(floorPlanMap).length) {
           return;
         }
+        // Retrieve room with name roomName / check if it exists
+        const roomName = roomOrFloorName;
+        let room: Room | undefined;
+        if (floorLevel) {
+          room = Object.values(
+            floorPlanMap[buildingCode.toUpperCase()][floorLevel],
+          ).find((r: Room) => r.name === roomName);
+        }
 
-        const floor = { buildingCode, level: floorLevel };
-        const roomId = params.slug[1];
+        // If can't find room on floor, search the entire building
+        if (!room) {
+          const allBuildingRooms = Object.values(
+            floorPlanMap[buildingCode.toUpperCase()],
+          )
+            .flat()
+            .map((floorPlan) => Object.values(floorPlan))
+            .flat();
+          room = allBuildingRooms.find((r: Room) => r.name === roomName);
+        }
 
-        if (!roomId) {
-          // up to floor level
+        // if the room name is not provided, then zoom to the floor level
+        if (!room) {
+          if (!floorLevel) {
+            return;
+          }
+          console.log(floorLevel);
+          const floor = { buildingCode, level: floorLevel };
           dispatch(selectBuilding(building));
           zoomOnObject(mapRef.current, building.shapes.flat());
           dispatch(setFocusedFloor(floor));
         } else {
-          zoomOnRoom(
-            mapRef.current,
-            roomId,
-            floor,
-            buildings,
-            floorPlanMap,
-            dispatch,
-          );
+          zoomOnRoom(mapRef.current, room, dispatch);
         }
       }
     }
@@ -210,7 +228,7 @@ const Page = ({ params, searchParams }: Props) => {
     let url = window.location.origin + '/';
     if (selectedRoom) {
       const floor = selectedRoom.floor;
-      url += `${floor.buildingCode}-${floor.level}/${selectedRoom.id}`;
+      url += `${floor.buildingCode}-${selectedRoom.name}`;
     } else if (focusedFloor) {
       url += `${focusedFloor.buildingCode}`;
       url += `-${focusedFloor.level}`;
