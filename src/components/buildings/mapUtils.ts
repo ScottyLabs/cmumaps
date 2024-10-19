@@ -19,19 +19,17 @@ const setIsZoomingAsync = (isZooming: boolean) => {
   };
 };
 
-export const zoomOnRoomByName = (
-  map: mapkit.Map | null,
+export const getRoomIdByNameAndFloor = (
   roomName: string,
   floor: Floor,
   buildings: Record<string, Building> | null,
   floorPlanMap: FloorPlanMap,
-  dispatch: Dispatch<UnknownAction>,
-) => {
+): string | null => {
   // find the room id
-  let roomId;
+  let roomId: string | null = null;
 
-  if (!buildings || !map || !floorPlanMap) {
-    return;
+  if (!buildings || !floorPlanMap) {
+    return roomId;
   }
 
   if (floor) {
@@ -48,11 +46,37 @@ export const zoomOnRoomByName = (
     }
   }
 
+  return roomId;
+};
+
+/**
+ * Also assign the redux variables accordingly
+ */
+export const zoomOnRoomByName = (
+  map: mapkit.Map | null,
+  roomName: string,
+  floor: Floor,
+  buildings: Record<string, Building> | null,
+  floorPlanMap: FloorPlanMap,
+  dispatch: Dispatch<UnknownAction>,
+) => {
+  if (!map) {
+    return;
+  }
+
+  const roomId = getRoomIdByNameAndFloor(
+    roomName,
+    floor,
+    buildings,
+    floorPlanMap,
+  );
+
   if (roomId) {
     // call roomOnRoomByID
     zoomOnRoomById(map, roomId, floor, buildings, floorPlanMap, dispatch);
   }
 };
+
 export const zoomOnRoomById = (
   map: mapkit.Map | null,
   roomId: ID,

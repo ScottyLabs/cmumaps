@@ -95,6 +95,8 @@ const NavCard = ({ map }: Props) => {
             } else {
               dispatch(setRecommendedPath(null));
               dispatch(setIsNavOpen(false));
+              dispatch(setEndLocation(null));
+              dispatch(setStartLocation(null));
             }
           }}
         />
