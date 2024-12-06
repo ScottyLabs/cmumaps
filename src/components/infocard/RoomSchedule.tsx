@@ -1,3 +1,5 @@
+import desktopIcon from '@icons/infocard/desktop.svg';
+import envelopeIcon from '@icons/infocard/envelope.svg';
 import { Event } from '@prisma/client';
 import {
   format,
@@ -15,9 +17,11 @@ import { FaChevronRight } from 'react-icons/fa';
 import { fetchEvents } from '@/lib/apiRoutes';
 import { useAppSelector } from '@/lib/hooks';
 
+import { classroomTechInstructions } from './classroomTechInstructions';
+
 const RoomSchedule = () => {
   const selectedRoom = useAppSelector((state) => state.ui.selectedRoom);
-
+  console.log(selectedRoom);
   const today = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -157,10 +161,52 @@ const RoomSchedule = () => {
     }
   };
 
+  const renderScheduleButtons = () => {
+    if (!selectedRoom) {
+      return null;
+    }
+
+    const pdfLink =
+      classroomTechInstructions[
+        `${selectedRoom.floor.buildingCode}-${selectedRoom.name}`
+      ];
+
+    return (
+      <div className="mx-3 flex gap-2.5 py-3">
+        {/* Tech Guide Button */}
+        {pdfLink && (
+          <a
+            href={pdfLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-lg border-2 border-[#1e86ff] bg-transparent px-3 py-1 text-[#1e86ff]"
+          >
+            <img src={desktopIcon} alt="Tech Guide" className="h-5 w-5" />
+            <p>Tech Guide</p>
+          </a>
+        )}
+
+        {/* Change Reservation Button */}
+        <a
+          href="mailto:esrooms@andrew.cmu.edu"
+          className="flex items-center gap-2 rounded-lg border-2 border-blue-300 bg-transparent px-3 py-1 text-blue-300"
+        >
+          <img
+            src={envelopeIcon}
+            alt="Change Reservation"
+            className="h-5 w-5"
+          />
+          <p>Change Reservation</p>
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div className="border-t-4 pt-3">
       {renderDatePicker()}
       {renderContent()}
+      {renderScheduleButtons()}
     </div>
   );
 };
