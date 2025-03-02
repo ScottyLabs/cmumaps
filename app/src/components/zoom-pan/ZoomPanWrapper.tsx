@@ -78,7 +78,7 @@ const ZoomPanWrapper = ({ floorCode }: Props) => {
         )}
       </div>
       <div className="absolute inset-0 z-10 mt-24 ml-52 overflow-hidden">
-        {/* <FloorDisplay
+        <FloorDisplay
           floorCode={floorCode}
           setCanPan={setCanPan}
           handleWheel={handleWheel}
@@ -86,7 +86,7 @@ const ZoomPanWrapper = ({ floorCode }: Props) => {
           scale={scale}
           offset={offset}
           stageRef={stageRef}
-        /> */}
+        />
       </div>
     </>
   );
