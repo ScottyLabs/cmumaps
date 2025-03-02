@@ -1,36 +1,67 @@
-import { useState } from 'react';
+// import { UserButton } from '@clerk/nextjs';
+import React, { useEffect, useState } from 'react';
+// import { CiSquarePlus } from 'react-icons/ci';
+import { toast } from 'react-toastify';
 
-import './App.css';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+// import MyToastContainer from '../components/shared/MyToastContainer';
+// import { buildingCodeToName } from '../components/shared/buildings';
+// import useErrorToast from '../hooks/useErrorToast';
 
-function App() {
-  const [count, setCount] = useState<number>(0);
+const App: React.FC = () => {
+  const [buildingCodes, setBuildingCodes] = useState<string[]>([]);
+
+  // error toast
+
+  // fetch building codes
+  useEffect(() => {
+    fetch('http://localhost:80/api/buildings/codes')
+      .then((response) => response.json())
+      .then((buildingCodes) => {
+        if (buildingCodes) {
+          setBuildingCodes(buildingCodes);
+        } else {
+          toast.error(
+            'Fetching building codes failed! Check the Console for detailed error!',
+            { autoClose: false },
+          );
+        }
+      });
+  }, []);
+
+  const renderTopBar = () => (
+    <div className="m-2 flex justify-between">
+      {/* <Link href={'PDFUpload'}>
+        <CiSquarePlus
+          className="text-2xl text-blue-500 hover:text-blue-700"
+          size={40}
+        />
+      </Link>
+      <div>
+        <UserButton />
+      </div> */}
+    </div>
+  );
+
+  const renderBuildingLinks = () => (
+    <div className="m-5 flex flex-wrap gap-8">
+      {buildingCodes.map((buildingCode) => (
+        <button
+          key={buildingCode}
+          className="cursor-pointer rounded-lg border border-gray-300 p-4 shadow-md transition duration-200 ease-in-out hover:scale-105 hover:shadow-lg"
+        >
+          {buildingCode}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
-    <>
-      <div className="rounded border-2 bg-red-300">
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      {renderTopBar()}
+      {renderBuildingLinks()}
+      {/* <MyToastContainer /> */}
+    </div>
   );
-}
+};
 
 export default App;
