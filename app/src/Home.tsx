@@ -1,4 +1,10 @@
-// import { UserButton } from '@clerk/nextjs';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from '@clerk/clerk-react';
+
 import { NavLink } from 'react-router';
 
 import ErrorDisplay from './components/shared/ErrorDisplay';
@@ -36,10 +42,15 @@ const Home = () => {
           className="text-2xl text-blue-500 hover:text-blue-700"
           size={40}
         />
-      </Link>
-      <div>
-        <UserButton />
-      </div> */}
+      </Link> */}
+      <header>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header>
     </div>
   );
 
