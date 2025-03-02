@@ -1,6 +1,6 @@
 import { Polygon } from 'geojson';
 
-export interface PDFCoordinate {
+export interface PdfCoordinate {
   x: number;
   y: number;
 }
@@ -49,7 +49,7 @@ export interface NodeInfo {
   /**
    * the position (x and y coordinates) of the node
    */
-  pos: PDFCoordinate;
+  pos: PdfCoordinate;
 
   /**
    * (neighbor's id to the edge) for each neighbor of the node
@@ -75,7 +75,7 @@ export interface DoorInfo {
   /**
    * center of the door points
    */
-  center: PDFCoordinate;
+  center: PdfCoordinate;
 
   /**
    * the id of the rooms this door connects
@@ -129,7 +129,7 @@ export interface RoomInfo {
   /**
    * The coordinates of the label of the room
    */
-  labelPosition: PDFCoordinate;
+  labelPosition: PdfCoordinate;
 
   /**
    * The type of the room

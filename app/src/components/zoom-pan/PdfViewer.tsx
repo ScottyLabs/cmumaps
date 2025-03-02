@@ -7,7 +7,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
-import { PDFCoordinate } from '../../../../shared/types';
+import { PdfCoordinate } from '../../../../shared/types';
 import useClerkToken from '../../hooks/useClerkToken';
 import useFloorInfo from '../../hooks/useFloorInfo';
 import { DEFAULT_PDF_SCALE_INDEX } from '../../settings';
@@ -18,7 +18,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 interface Props {
   floorCode: string;
   scale: number;
-  offset: PDFCoordinate;
+  offset: PdfCoordinate;
 }
 
 const PDF_SCALES = [1, 2, 2.5, 3, 3.5, 4, 4.5, 5];

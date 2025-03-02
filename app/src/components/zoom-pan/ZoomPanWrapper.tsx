@@ -2,7 +2,7 @@ import Konva from 'konva';
 
 import { useRef, useState } from 'react';
 
-import { PDFCoordinate } from '../../../../shared/types';
+import { PdfCoordinate } from '../../../../shared/types';
 import { useAppSelector } from '../../store/hooks';
 import { LOADED } from '../../store/slices/statusSlice';
 import FloorDisplay from '../floor-display/FloorDisplay';
@@ -29,7 +29,7 @@ const ZoomPanWrapper = ({ floorCode }: Props) => {
 
   const stageRef = useRef<Konva.Stage>(null);
   const [scale, setScale] = useState<number>(1);
-  const [offset, setOffset] = useState<PDFCoordinate>({ x: 0, y: 0 });
+  const [offset, setOffset] = useState<PdfCoordinate>({ x: 0, y: 0 });
 
   const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();

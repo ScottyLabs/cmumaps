@@ -1,3 +1,5 @@
+import { PdfCoordinate } from '../../shared/types';
+
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
 const latitudeRatio = 111318.8450631976;
@@ -18,7 +20,7 @@ export function geoCoordsToPdfCoords(
     angle: number;
   },
   center: [number, number]
-): { x: number; y: number } {
+): PdfCoordinate {
   // Extract the latitude and longitude
   const { latitude, longitude } = position;
 

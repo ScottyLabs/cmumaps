@@ -5,7 +5,7 @@ import { Stage, Layer } from 'react-konva';
 // import { useAppDispatch, useAppSelector } from '../../store/hooks';
 // import { selectEditPolygon } from '../../store/slices/modeSlice';
 // import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
-import { PDFCoordinate } from '../../../../shared/types';
+import { PdfCoordinate } from '../../../../shared/types';
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
 import { useGetFloorNodesQuery } from '../../store/api/nodeApiSlice';
 import ErrorDisplay from '../shared/ErrorDisplay';
@@ -18,7 +18,7 @@ interface Props {
   handleWheel: (evt: Konva.KonvaEventObject<WheelEvent>) => void;
   handleDragMove: (evt: Konva.KonvaEventObject<DragEvent>) => void;
   scale: number;
-  offset: PDFCoordinate;
+  offset: PdfCoordinate;
   stageRef: React.RefObject<Konva.Stage | null>;
 }
 
