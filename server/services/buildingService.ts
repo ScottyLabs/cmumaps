@@ -1,11 +1,11 @@
 import { prisma } from '../index.ts';
 
 export const buildingService = {
-  async getAllBuildingCodes() {
+  async getAllBuildingCodesAndNames() {
     const buildings = await prisma.building.findMany({
-      select: { buildingCode: true },
+      select: { buildingCode: true, name: true },
     });
-    return buildings.map((building) => building.buildingCode);
+    return buildings.sort((a, b) => a.name.localeCompare(b.name));
   },
 
   async getDefaultFloor(buildingCode: string) {

@@ -2,14 +2,15 @@ import type { Request, Response } from 'express';
 import { buildingService } from '../services/buildingService.ts';
 
 export const buildingController = {
-  async getBuildingCodes(req: Request, res: Response) {
+  async getBuildingCodesAndNames(req: Request, res: Response) {
     try {
-      const buildingCodes = await buildingService.getAllBuildingCodes();
+      const buildingCodesAndNames =
+        await buildingService.getAllBuildingCodesAndNames();
 
-      res.json(buildingCodes);
+      res.json(buildingCodesAndNames);
     } catch (error) {
       res.status(500).json({
-        error: 'Error fetching building codes',
+        error: 'Error fetching building codes and names',
         details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
