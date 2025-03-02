@@ -1,20 +1,12 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from '@clerk/clerk-react';
+import { SignedIn, UserButton } from '@clerk/clerk-react';
 
 import { NavLink } from 'react-router';
 
 import ErrorDisplay from '../components/shared/ErrorDisplay';
 import Loader from '../components/shared/Loader';
-// import { toast } from 'react-toastify';
-
-import { useGetBuildingCodesAndNamesQuery } from '../store/api/buildingsApiSlice';
-
-// import MyToastContainer from '../components/shared/MyToastContainer';
+import MyToastContainer from '../components/shared/MyToastContainer';
 // import useErrorToast from '../hooks/useErrorToast';
+import { useGetBuildingCodesAndNamesQuery } from '../store/api/buildingsApiSlice';
 
 const Home = () => {
   const {
@@ -22,6 +14,8 @@ const Home = () => {
     isLoading,
     isError,
   } = useGetBuildingCodesAndNamesQuery();
+
+  // useErrorToast();
 
   if (isLoading) {
     return <Loader loadingText="Fetching building codes" />;
@@ -32,16 +26,11 @@ const Home = () => {
   }
 
   const renderTopBar = () => (
-    <div className="m-2 flex justify-between">
-      <header>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
-    </div>
+    <header className="m-2 flex flex-row-reverse">
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </header>
   );
 
   const renderBuildingLinks = () => (
@@ -62,7 +51,7 @@ const Home = () => {
     <div>
       {renderTopBar()}
       {renderBuildingLinks()}
-      {/* <MyToastContainer /> */}
+      <MyToastContainer />
     </div>
   );
 };

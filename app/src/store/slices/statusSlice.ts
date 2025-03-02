@@ -1,24 +1,25 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type LoadingStatus = "Loaded" | "Loading" | "Failed";
-export const LOADED: LoadingStatus = "Loaded";
-export const LOADING: LoadingStatus = "Loading";
-export const FAILED_LOAD: LoadingStatus = "Failed";
+export type LoadingStatus = 'Loaded' | 'Loading' | 'Failed';
+export const LOADED: LoadingStatus = 'Loaded';
+export const LOADING: LoadingStatus = 'Loading';
+export const FAILED_LOAD: LoadingStatus = 'Failed';
 
 interface StatusState {
   loadingStatus: LoadingStatus;
   loadingText: string;
   shortcutsDisabled: boolean;
+  error: string;
 }
 
 const initialState: StatusState = {
-  loadingStatus: "Loading",
-  loadingText: "",
+  loadingStatus: 'Loading',
+  loadingText: '',
   shortcutsDisabled: false,
 };
 
 const statusSlice = createSlice({
-  name: "status",
+  name: 'status',
   initialState,
   reducers: {
     startLoading(state, action: PayloadAction<string>) {
@@ -27,7 +28,7 @@ const statusSlice = createSlice({
     },
     finishLoading(state) {
       state.loadingStatus = LOADED;
-      state.loadingText = "";
+      state.loadingText = '';
     },
     failedLoading(state, action: PayloadAction<string>) {
       state.loadingStatus = FAILED_LOAD;
