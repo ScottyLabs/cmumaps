@@ -5,6 +5,7 @@ import MyToastContainer from '../components/shared/MyToastContainer';
 import FloorSwitcher from '../layouts/FloorSwitcher';
 import HelpInfo from '../layouts/HelpInfo';
 import LoadingText from '../layouts/LoadingText';
+import MainDisplay from '../layouts/MainDisplay';
 import ModeDisplay from '../layouts/ModeDisplay';
 import NavBar from '../layouts/NavBar';
 import { useGetDefaultFloorQuery } from '../store/api/buildingsApiSlice';
@@ -37,7 +38,7 @@ const FloorPage = () => {
     <>
       <NavBar />
       <LoadingText />
-      {/* <MainDisplay floorCode={floorCode} /> */}
+      <MainDisplay floorCode={floorCode} />
       <ModeDisplay />
       <FloorSwitcher floorCode={floorCode} />
       <HelpInfo />
