@@ -3,7 +3,9 @@ import Konva from 'konva';
 import { useRef, useState } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
+import { LOADED } from '../../store/slices/statusSlice';
 import FloorDisplay from '../floor-display/FloorDisplay';
+import LoadingText from '../layouts/LoadingText';
 import { PDFCoordinate } from '../shared/types';
 import PDFViewer from './PdfViewer';
 
@@ -19,6 +21,8 @@ const MAX_SCALE = 20;
  * Handles zooming and panning for PDF and Canvas
  */
 const ZoomPanWrapper = ({ floorCode }: Props) => {
+  const loadingStatus = useAppSelector((state) => state.status.loadingStatus);
+
   const showFile = useAppSelector((state) => state.visibility.showFile);
 
   const [canPan, setCanPan] = useState<boolean>(false);
@@ -69,6 +73,10 @@ const ZoomPanWrapper = ({ floorCode }: Props) => {
       });
     }
   };
+
+  if (loadingStatus !== LOADED) {
+    return <LoadingText />;
+  }
 
   return (
     <>

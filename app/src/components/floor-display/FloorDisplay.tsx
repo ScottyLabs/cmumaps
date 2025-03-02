@@ -2,6 +2,8 @@ import Konva from 'konva';
 
 import { Stage, Layer } from 'react-konva';
 
+import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
+import { useGetFloorNodesQuery } from '../../store/api/nodeApiSlice';
 // import { useAppDispatch, useAppSelector } from '../../store/hooks';
 // import { selectEditPolygon } from '../../store/slices/modeSlice';
 // import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
@@ -18,7 +20,7 @@ interface Props {
 }
 
 const FloorDisplay = ({
-  // floorCode,
+  floorCode,
   setCanPan,
   handleWheel,
   handleDragMove,
@@ -27,6 +29,10 @@ const FloorDisplay = ({
   stageRef,
 }: Props) => {
   // const dispatch = useAppDispatch();
+
+  const { data: nodes } = useGetFloorNodesQuery(floorCode);
+
+  useKeyboardShortcuts();
 
   // const mode = useAppSelector((state) => state.mode.mode);
   // const nodeIdSelected = useAppSelector((state) =>

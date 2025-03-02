@@ -3,7 +3,6 @@ import { useParams, Navigate } from 'react-router';
 import { ErrorCode } from '../../../shared/errorCode';
 import FloorSwitcher from '../components/layouts/FloorSwitcher';
 import HelpInfo from '../components/layouts/HelpInfo';
-// import LoadingText from '../components/layouts/LoadingText';
 import MainDisplay from '../components/layouts/MainDisplay';
 import ModeDisplay from '../components/layouts/ModeDisplay';
 import NavBar from '../components/layouts/NavBar';
@@ -37,7 +36,6 @@ const FloorPage = () => {
   return (
     <>
       <NavBar />
-      {/* <LoadingText /> */}
       <MainDisplay floorCode={floorCode} />
       <ModeDisplay />
       <FloorSwitcher floorCode={floorCode} />
