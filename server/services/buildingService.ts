@@ -22,4 +22,39 @@ export const buildingService = {
 
     return building.defaultFloor;
   },
+
+  async getBuildingFloors(buildingCode: string) {
+    const floorCodeOrder = [
+      'PH',
+      '9',
+      '8',
+      '7',
+      '6',
+      '5',
+      '4',
+      '3',
+      '2',
+      'M',
+      '1',
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'LL',
+      'EV',
+    ];
+
+    const floors = await prisma.floor.findMany({
+      where: { buildingCode },
+      select: { floorLevel: true },
+    });
+
+    const floorLevelSort = (f1: string, f2: string) => {
+      return floorCodeOrder.indexOf(f2) - floorCodeOrder.indexOf(f1);
+    };
+
+    return floors.map((floor) => floor.floorLevel).sort(floorLevelSort);
+  },
 };

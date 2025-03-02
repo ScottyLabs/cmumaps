@@ -2,6 +2,7 @@ import { useParams, Navigate } from 'react-router';
 
 import { ErrorCode } from '../../../shared/errorCode';
 import MyToastContainer from '../components/shared/MyToastContainer';
+import FloorSwitcher from '../layouts/FloorSwitcher';
 import HelpInfo from '../layouts/HelpInfo';
 import LoadingText from '../layouts/LoadingText';
 import ModeDisplay from '../layouts/ModeDisplay';
@@ -38,10 +39,7 @@ const FloorPage = () => {
       <LoadingText />
       {/* <MainDisplay floorCode={floorCode} /> */}
       <ModeDisplay />
-      {/* <FloorSwitcher
-        buildingCode={buildingCode}
-        floorLevelSelected={floorLevel}
-      /> */}
+      <FloorSwitcher floorCode={floorCode} />
       <HelpInfo />
       <MyToastContainer />
     </>

@@ -14,8 +14,14 @@ export const buildingsApiSlice = apiSlice.injectEndpoints({
     getDefaultFloor: builder.query<string, string>({
       query: (id) => `buildings/${id}/defaultFloor`,
     }),
+    getBuildingFloors: builder.query<string[], string>({
+      query: (id) => `buildings/${id}/floors`,
+    }),
   }),
 });
 
-export const { useGetBuildingCodesAndNamesQuery, useGetDefaultFloorQuery } =
-  buildingsApiSlice;
+export const {
+  useGetBuildingCodesAndNamesQuery,
+  useGetDefaultFloorQuery,
+  useGetBuildingFloorsQuery,
+} = buildingsApiSlice;

@@ -33,4 +33,23 @@ export const buildingController = {
       });
     }
   },
+
+  async getBuildingFloors(req: Request, res: Response) {
+    try {
+      const buildingFloors = await buildingService.getBuildingFloors(
+        req.params.id
+      );
+
+      res.json(buildingFloors);
+    } catch (error) {
+      if (error instanceof BuildingError) {
+        return res.status(404).json({ code: error.code });
+      }
+
+      res.status(500).json({
+        error: 'Error fetching building floors',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  },
 };

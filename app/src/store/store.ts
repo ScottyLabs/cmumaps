@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { apiSlice } from './api/apislice';
+import { apiSlice } from './api/apiSlice';
 import { listenerMiddleware } from './middleware/listenerMiddleware';
 import dataSlice from './slices/dataSlice';
 import floorSlice from './slices/floorSlice';
