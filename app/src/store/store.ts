@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import { apiSlice } from './api/apislice';
 import { listenerMiddleware } from './middleware/listenerMiddleware';
-// import { apiSlice } from './features/api/apiSlice';
 import dataSlice from './slices/dataSlice';
 import floorSlice from './slices/floorSlice';
 // import historySlice from './features/historySlice';
@@ -29,11 +29,12 @@ export const store = configureStore({
     lock: lockSlice,
     // history: historySlice,
     polygon: polygonSlice,
-    // [apiSlice.reducerPath]: apiSlice.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(listenerMiddleware.middleware),
-  // .concat(apiSlice.middleware),
+    getDefaultMiddleware()
+      .prepend(listenerMiddleware.middleware)
+      .concat(apiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

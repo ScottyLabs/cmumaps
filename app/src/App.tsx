@@ -1,32 +1,35 @@
 // import { UserButton } from '@clerk/nextjs';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+
 // import { CiSquarePlus } from 'react-icons/ci';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+
+import { useGetBuildingCodesQuery } from './store/api/buildingsApiSlice';
 
 // import MyToastContainer from '../components/shared/MyToastContainer';
 // import { buildingCodeToName } from '../components/shared/buildings';
 // import useErrorToast from '../hooks/useErrorToast';
 
 const App: React.FC = () => {
-  const [buildingCodes, setBuildingCodes] = useState<string[]>([]);
+  const {
+    data: buildingCodes,
+    isLoading,
+    isError,
+  } = useGetBuildingCodesQuery();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error</div>;
+  }
+
+  if (!buildingCodes) {
+    return <div>No data</div>;
+  }
 
   // error toast
-
-  // fetch building codes
-  useEffect(() => {
-    fetch('http://localhost:80/api/buildings/codes')
-      .then((response) => response.json())
-      .then((buildingCodes) => {
-        if (buildingCodes) {
-          setBuildingCodes(buildingCodes);
-        } else {
-          toast.error(
-            'Fetching building codes failed! Check the Console for detailed error!',
-            { autoClose: false },
-          );
-        }
-      });
-  }, []);
 
   const renderTopBar = () => (
     <div className="m-2 flex justify-between">
