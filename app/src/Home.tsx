@@ -1,5 +1,5 @@
 // import { UserButton } from '@clerk/nextjs';
-import React from 'react';
+import { NavLink } from 'react-router';
 
 import ErrorDisplay from './components/shared/ErrorDisplay';
 import Loader from './components/shared/Loader';
@@ -12,7 +12,7 @@ import { useGetBuildingCodesQuery } from './store/api/buildingsApiSlice';
 // import { buildingCodeToName } from '../components/shared/buildings';
 // import useErrorToast from '../hooks/useErrorToast';
 
-const App: React.FC = () => {
+const Home = () => {
   const {
     data: buildingCodes,
     isLoading,
@@ -46,12 +46,13 @@ const App: React.FC = () => {
   const renderBuildingLinks = () => (
     <div className="m-5 flex flex-wrap gap-8">
       {buildingCodes.map((buildingCode) => (
-        <button
+        <NavLink
+          to={`/${buildingCode}`}
           key={buildingCode}
           className="cursor-pointer rounded-lg border border-gray-300 p-4 shadow-md transition duration-200 ease-in-out hover:scale-105 hover:shadow-lg"
         >
           {buildingCode}
-        </button>
+        </NavLink>
       ))}
     </div>
   );
@@ -65,4 +66,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Home;

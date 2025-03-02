@@ -1,4 +1,4 @@
-import { apiSlice } from './apislice';
+import { apiSlice } from './apiSlice';
 
 export const buildingsApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
