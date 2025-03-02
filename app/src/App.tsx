@@ -1,6 +1,7 @@
 // import { UserButton } from '@clerk/nextjs';
 import React from 'react';
 
+import Loader from './components/shared/Loader';
 // import { CiSquarePlus } from 'react-icons/ci';
 // import { toast } from 'react-toastify';
 
@@ -17,8 +18,8 @@ const App: React.FC = () => {
     isError,
   } = useGetBuildingCodesQuery();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (!isLoading) {
+    return <Loader loadingText="Fetching building codes" />;
   }
 
   if (isError) {
