@@ -6,6 +6,7 @@ import HelpInfo from '../components/layouts/HelpInfo';
 import MainDisplay from '../components/layouts/MainDisplay';
 import ModeDisplay from '../components/layouts/ModeDisplay';
 import NavBar from '../components/layouts/NavBar';
+import Loader from '../components/shared/Loader';
 import MyToastContainer from '../components/shared/MyToastContainer';
 import { useGetDefaultFloorQuery } from '../store/api/buildingApiSlice';
 
@@ -22,7 +23,7 @@ const FloorPage = () => {
     return <Navigate to="/" />;
   }
 
-  if (floorCode?.split('-').length !== 2) {
+  if (floorCode.split('-').length !== 2) {
     if (error && 'data' in error && 'code' in (error.data as object)) {
       const errorData = error.data as { code: ErrorCode };
       return <Navigate to={`/?errorCode=${errorData.code}`} />;
@@ -30,6 +31,8 @@ const FloorPage = () => {
 
     if (defaultFloor) {
       return <Navigate to={`/${floorCode}-${defaultFloor}`} replace />;
+    } else {
+      return <Loader loadingText="Fetching default floor" />;
     }
   }
 

@@ -14,9 +14,9 @@ const NodesDisplay = ({ nodes }: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
 
-  const nodeIdHovered = useAppSelector(
-    (state) => state.mouseEvent.nodeIdOnHover,
-  );
+  // const nodeIdHovered = useAppSelector(
+  //   (state) => state.mouseEvent.nodeIdOnHover,
+  // );
 
   // const nodeIdSelected = useAppSelector((state) =>
   //   getNodeIdSelected(state.mouseEvent),
@@ -76,10 +76,6 @@ const NodesDisplay = ({ nodes }: Props) => {
 
     return 'blue';
   };
-
-  console.log(nodes);
-
-  return;
 
   return Object.entries(nodes).map(
     ([nodeId, node]: [ID, NodeInfo], index: number) => {

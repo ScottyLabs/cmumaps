@@ -1,4 +1,9 @@
-import { Polygon } from 'geojson';
+import type { Polygon } from 'geojson';
+
+export interface GeoCoordinate {
+  latitude: number;
+  longitude: number;
+}
 
 export interface PdfCoordinate {
   x: number;

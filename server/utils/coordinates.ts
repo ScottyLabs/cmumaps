@@ -1,45 +1,34 @@
-import { PdfCoordinate } from '../../shared/types';
+import type { Node } from '@prisma/client';
+import type {
+  GeoCoordinate,
+  Nodes,
+  PdfCoordinate,
+} from '../../shared/types.ts';
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
 const latitudeRatio = 111318.8450631976;
 const longitudeRatio = 84719.3945182816;
 
-/**
- * Converts geographical coordinates (latitude/longitude) to PDF coordinates (x/y)
- * @param position - Object containing latitude and longitude
- * @param placement - Object containing center, scale, and angle
- * @param center - Tuple containing x and y coordinates of the center
- * @returns Object with x and y PDF coordinates
- */
-export function geoCoordsToPdfCoords(
-  position: { latitude: number; longitude: number },
-  placement: {
-    center: { latitude: number; longitude: number };
-    scale: number;
-    angle: number;
-  },
-  center: [number, number]
-): PdfCoordinate {
-  // Extract the latitude and longitude
-  const { latitude, longitude } = position;
+export const transform = (
+  dbNodes: Node[],
+  center: GeoCoordinate,
+  scale: number,
+  angle: number
+): Nodes => {
+  // reverse the transform and scale
+  const nodes: Nodes = {};
+  for (const node of dbNodes) {
+    const x = (node.longitude - center.longitude) * longitudeRatio * scale;
+    const y = (node.latitude - center.latitude) * latitudeRatio * scale;
+    const pos = rotate(y, x, -angle);
+    pos.x += 503.01;
+    pos.y += 319.83000000000004;
+    nodes[node.elementId] = { neighbors: {}, pos, roomId: node.elementId };
+  }
 
-  // Reverse the scale and center transformations
-  const absolute_y =
-    (latitude - placement.center.latitude) * latitudeRatio * placement.scale;
-  const absolute_x =
-    (longitude - placement.center.longitude) * longitudeRatio * placement.scale;
-
-  // Reverse the rotation
-  const [rotated_x, rotated_y] = rotate(
-    absolute_y,
-    absolute_x,
-    -placement.angle
-  );
-
-  // Add the center offset
-  return { x: rotated_x + center[0], y: rotated_y + center[1] };
-}
+  return nodes;
+};
 
 /**
  * Rotates a point around the origin by the given angle
@@ -48,9 +37,11 @@ export function geoCoordsToPdfCoords(
  * @param angle - Angle in radians
  * @returns Tuple containing rotated x and y coordinates
  */
-function rotate(x: number, y: number, angle: number): [number, number] {
-  const cos = Math.cos(angle);
-  const sin = Math.sin(angle);
-
-  return [x * cos - y * sin, x * sin + y * cos];
+function rotate(x: number, y: number, angle: number): PdfCoordinate {
+  const radians = (Math.PI / 180) * angle;
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const nx = cos * x + sin * y;
+  const ny = cos * y - sin * x;
+  return { x: nx, y: ny };
 }

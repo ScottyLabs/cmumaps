@@ -3,6 +3,7 @@ import {
   extractBuildingCode,
   extractFloorLevel,
 } from '../../shared/utils/floorCodeUtils.ts';
+import { transform } from '../utils/coordinates.ts';
 
 export const nodeService = {
   getFloorNodes: async (floorCode: string) => {
@@ -13,12 +14,19 @@ export const nodeService = {
       where: { buildingCode_floorLevel: { buildingCode, floorLevel } },
     });
 
-    console.log(floor);
+    if (!floor) {
+      throw new Error('Floor not found');
+    }
 
     const nodes = await prisma.node.findMany({
       where: { element: { buildingCode, floorLevel } },
     });
 
-    return nodes;
+    return transform(
+      nodes,
+      { latitude: floor.centerLatitude, longitude: floor.centerLongitude },
+      floor.scale,
+      floor.angle
+    );
   },
 };
