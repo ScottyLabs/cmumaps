@@ -22,7 +22,7 @@ import {
 const useKeyboardShortcuts = () => {
   const dispatch = useAppDispatch();
 
-  const editPolygon = useAppSelector((state) => selectEditPolygon(state));
+  const editPolygon = useAppSelector(selectEditPolygon);
   const shortcutsDisabled = useAppSelector(
     (state) => state.status.shortcutsDisabled,
   );

@@ -1,5 +1,5 @@
-import ZoomPanWrapper from '../components/zoom-pan/ZoomPanWrapper';
-import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
+import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
+import ZoomPanWrapper from '../zoom-pan/ZoomPanWrapper';
 
 interface Props {
   floorCode: string;

@@ -10,7 +10,7 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import useClerkToken from '../../hooks/useClerkToken';
 import useFloorInfo from '../../hooks/useFloorInfo';
 import { DEFAULT_PDF_SCALE_INDEX } from '../../settings';
-import { useGetFloorPdfQuery } from '../../store/api/s3apiSlice';
+import { useGetFloorPdfQuery } from '../../store/api/s3ApiSlice';
 import { PDFCoordinate } from '../shared/types';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;

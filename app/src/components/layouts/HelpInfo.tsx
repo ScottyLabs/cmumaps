@@ -4,7 +4,7 @@ import { IconType } from 'react-icons';
 import { AiOutlineMacCommand } from 'react-icons/ai';
 import { MdOutlinePalette } from 'react-icons/md';
 
-import QuestionCircle from '../components/shared/QuestionCircle';
+import QuestionCircle from '../shared/QuestionCircle';
 
 const HelpInfo = () => {
   const IconHelper = (IconComponent: IconType, renderText: () => ReactNode) => {

@@ -3,8 +3,8 @@ import { FaArrowUp } from 'react-icons/fa';
 import { FaArrowDown } from 'react-icons/fa';
 import { NavLink } from 'react-router';
 
-import useFloorInfo from '../hooks/useFloorInfo';
-import { useGetBuildingFloorsQuery } from '../store/api/buildingsApiSlice';
+import useFloorInfo from '../../hooks/useFloorInfo';
+import { useGetBuildingFloorsQuery } from '../../store/api/buildingsApiSlice';
 
 interface Props {
   floorCode: string;

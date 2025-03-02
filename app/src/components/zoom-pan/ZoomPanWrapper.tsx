@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { useRef, useState } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
+import FloorDisplay from '../floor-display/FloorDisplay';
 import { PDFCoordinate } from '../shared/types';
 import PDFViewer from './PdfViewer';
 
