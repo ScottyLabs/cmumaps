@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { FaArrowDown } from 'react-icons/fa';
+import { NavLink } from 'react-router';
 
 import useFloorInfo from '../hooks/useFloorInfo';
 import { useGetBuildingFloorsQuery } from '../store/api/buildingsApiSlice';
@@ -16,49 +17,47 @@ const FloorSwitcher = ({ floorCode }: Props) => {
 
   const { data: floorLevels } = useGetBuildingFloorsQuery(buildingCode);
 
-  console.log(floorLevels);
-
-  return;
-
   if (!floorLevels) {
     return;
   }
 
   const renderFullDisplayMode = () =>
     floorLevels.map((floorLevel) => (
-      <td
-        key={floorLevel}
-        className={
-          'cursor-pointer border border-black px-4 ' +
-          (floorLevel == floorLevelSelected ? 'font-bold' : '')
-        }
-        onClick={() => {
-          // exit full display mode in case clicking on the same floor level
-          setFullDisplayMode(false);
-          router.push(`${buildingCode}-${floorLevel}`);
-        }}
-      >
-        {floorLevel}
+      <td key={floorLevel} className="border border-black">
+        <NavLink
+          to={`/${buildingCode}-${floorLevel}`}
+          className={
+            'cursor-pointer px-4 ' +
+            (floorLevel == floorLevelSelected ? 'font-bold' : '')
+          }
+          onClick={() => {
+            // exit full display mode in case clicking on the same floor level
+            setFullDisplayMode(false);
+          }}
+        >
+          {' '}
+          {floorLevel}
+        </NavLink>
       </td>
     ));
 
   const renderNotFullDisplayMode = () => {
     const index = floorLevels.indexOf(floorLevelSelected);
 
-    const handleDownClick = () => {
-      if (index != 0) {
-        router.push(`${buildingCode}-${floorLevels[index - 1]}`);
-      }
-    };
-
     const renderDownArrow = () => (
-      <td className="flex items-center border-x border-black p-1">
-        <FaArrowDown
-          className={
-            index == 0 ? 'cursor-pointer text-gray-400' : 'cursor-pointer'
-          }
-          onClick={handleDownClick}
-        />
+      <td className="border-x border-black">
+        {index !== 0 ? (
+          <NavLink
+            to={`/${buildingCode}-${floorLevels[index - 1]}`}
+            className="flex h-full w-full cursor-pointer items-center p-1"
+          >
+            <FaArrowDown />
+          </NavLink>
+        ) : (
+          <div className="flex h-full w-full items-center p-1 text-gray-400">
+            <FaArrowDown />
+          </div>
+        )}
       </td>
     );
 
@@ -82,20 +81,20 @@ const FloorSwitcher = ({ floorCode }: Props) => {
       </td>
     );
 
-    const handleUpClick = () => {
-      if (index != floorLevels.length - 1) {
-        router.push(`${buildingCode}-${floorLevels[index + 1]}`);
-      }
-    };
-
     const renderUpArrow = () => (
-      <td className="flex items-center border-l border-black p-1">
-        <FaArrowUp
-          className={
-            index == floorLevels.length - 1 ? 'text-gray-400' : 'cursor-pointer'
-          }
-          onClick={handleUpClick}
-        />
+      <td className="border-l border-black">
+        {index != floorLevels.length - 1 ? (
+          <NavLink
+            to={`/${buildingCode}-${floorLevels[index + 1]}`}
+            className="flex h-full w-full cursor-pointer items-center p-1"
+          >
+            <FaArrowUp />
+          </NavLink>
+        ) : (
+          <div className="flex h-full w-full items-center p-1 text-gray-400">
+            <FaArrowUp />
+          </div>
+        )}
       </td>
     );
 
@@ -115,7 +114,7 @@ const FloorSwitcher = ({ floorCode }: Props) => {
     <div className="fixed bottom-2 left-1/2 z-50 -translate-x-1/2">
       <div className="rounded border border-black bg-gray-50">
         <table>
-          <tbody className="flex">
+          <tbody>
             <tr className="flex">
               {fullDisplayMode
                 ? renderFullDisplayMode()
