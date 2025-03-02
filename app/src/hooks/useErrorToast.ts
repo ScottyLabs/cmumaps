@@ -37,7 +37,7 @@ const useErrorToast = () => {
 
     // clear the error in redux
     dispatch(setErrorCode(''));
-  }, [errorCode]);
+  }, [dispatch, errorCode]);
 };
 
 export default useErrorToast;
