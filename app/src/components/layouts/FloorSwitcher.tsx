@@ -4,7 +4,7 @@ import { FaArrowDown } from 'react-icons/fa';
 import { NavLink } from 'react-router';
 
 import useFloorInfo from '../../hooks/useFloorInfo';
-import { useGetBuildingFloorsQuery } from '../../store/api/buildingsApiSlice';
+import { useGetBuildingFloorsQuery } from '../../store/api/buildingApiSlice';
 
 interface Props {
   floorCode: string;

@@ -6,7 +6,7 @@ import ErrorDisplay from '../components/shared/ErrorDisplay';
 import Loader from '../components/shared/Loader';
 import MyToastContainer from '../components/shared/MyToastContainer';
 import useErrorToast from '../hooks/useErrorToast';
-import { useGetBuildingCodesAndNamesQuery } from '../store/api/buildingsApiSlice';
+import { useGetBuildingCodesAndNamesQuery } from '../store/api/buildingApiSlice';
 
 const Home = () => {
   const {

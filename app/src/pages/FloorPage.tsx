@@ -8,7 +8,7 @@ import MainDisplay from '../components/layouts/MainDisplay';
 import ModeDisplay from '../components/layouts/ModeDisplay';
 import NavBar from '../components/layouts/NavBar';
 import MyToastContainer from '../components/shared/MyToastContainer';
-import { useGetDefaultFloorQuery } from '../store/api/buildingsApiSlice';
+import { useGetDefaultFloorQuery } from '../store/api/buildingApiSlice';
 
 const FloorPage = () => {
   const { floorCode } = useParams();

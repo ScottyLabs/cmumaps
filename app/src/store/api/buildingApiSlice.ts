@@ -5,7 +5,7 @@ type BuildingCodeAndName = {
   name: string;
 };
 
-export const buildingsApiSlice = apiSlice.injectEndpoints({
+export const buildingApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getBuildingCodesAndNames: builder.query<BuildingCodeAndName[], void>({
@@ -24,4 +24,4 @@ export const {
   useGetBuildingCodesAndNamesQuery,
   useGetDefaultFloorQuery,
   useGetBuildingFloorsQuery,
-} = buildingsApiSlice;
+} = buildingApiSlice;
