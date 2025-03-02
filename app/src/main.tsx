@@ -3,11 +3,10 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter } from 'react-router';
 
-import FloorDisplay from './FloorDisplay.tsx';
-import Home from './Home.tsx';
 import './index.css';
+import AppRouter from './pages/AppRouter.tsx';
 import { store } from './store/store.ts';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -21,10 +20,7 @@ createRoot(document.getElementById('root')!).render(
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <BrowserRouter>
         <Provider store={store}>
-          <Routes>
-            <Route index element={<Home />} />
-            <Route path=":floorCode" element={<FloorDisplay />} />
-          </Routes>
+          <AppRouter />
         </Provider>
       </BrowserRouter>
     </ClerkProvider>

@@ -7,12 +7,12 @@ import {
 
 import { NavLink } from 'react-router';
 
-import ErrorDisplay from './components/shared/ErrorDisplay';
-import Loader from './components/shared/Loader';
+import ErrorDisplay from '../components/shared/ErrorDisplay';
+import Loader from '../components/shared/Loader';
 // import { CiSquarePlus } from 'react-icons/ci';
 // import { toast } from 'react-toastify';
 
-import { useGetBuildingCodesQuery } from './store/api/buildingsApiSlice';
+import { useGetBuildingCodesQuery } from '../store/api/buildingsApiSlice';
 
 // import MyToastContainer from '../components/shared/MyToastContainer';
 // import { buildingCodeToName } from '../components/shared/buildings';
