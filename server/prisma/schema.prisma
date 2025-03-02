@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Building {
+  buildingCode String @id @default(uuid())
+
+  name         String
+  osmId        String?
+  defaultFloor String
+
+  labelLatitude  Float
+  labelLongitude Float
+
+  shape  Json
+  hitbox Json
+
+  floors Floor[]
+}
+
+model Floor {
+  buildingCode String
+  floorLevel   String
+
+  centerLatitude  Float
+  centerLongitude Float
+  scale           Float
+  angle           Float
+  altitude        Float?
+
+  building Building  @relation(fields: [buildingCode], references: [buildingCode])
+  elements Element[]
+
+  @@id([buildingCode, floorLevel])
+}
+
+model Element {
+  elementId      String @id
+  labelLatitude  Float
+  labelLongitude Float
+  type           String
+
+  buildingCode String?
+  floorLevel   String?
+  floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+
+  nodes Node[]
+  poi   Poi?
+  room  Room?
+
+  @@index([buildingCode, floorLevel])
+}
+
+model Poi {
+  elementId String  @id
+  element   Element @relation(fields: [elementId], references: [elementId])
+}
+
+model Room {
+  elementId String  @id
+  element   Element @relation(fields: [elementId], references: [elementId])
+
+  name         String
+  displayAlias String?
+  aliases      Alias[]
+
+  polygon Json
+
+  updatedAt DateTime @updatedAt
+}
+
+model Node {
+  id        String @id @default(uuid())
+  latitude  Float
+  longitude Float
+
+  outNeighbors Neighbor[] @relation("OutNeighbors")
+  inNeighbors  Neighbor[] @relation("InNeighbors")
+
+  elementId String
+  element   Element @relation(fields: [elementId], references: [elementId])
+}
+
+model Neighbor {
+  inNodeId String
+  inNode   Node   @relation("OutNeighbors", fields: [inNodeId], references: [id])
+
+  outNodeId String
+  outNode   Node   @relation("InNeighbors", fields: [outNodeId], references: [id])
+
+  @@id([inNodeId, outNodeId])
+}
+
+model Alias {
+  alias String
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [elementId])
+
+  @@id([roomId, alias])
+}
