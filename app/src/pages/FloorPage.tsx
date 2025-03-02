@@ -1,6 +1,10 @@
 import { useParams, Navigate } from 'react-router';
 
 import { ErrorCode } from '../../../shared/errorCode';
+import MyToastContainer from '../components/shared/MyToastContainer';
+import LoadingText from '../layouts/LoadingText';
+import ModeDisplay from '../layouts/ModeDisplay';
+import NavBar from '../layouts/NavBar';
 import { useGetDefaultFloorQuery } from '../store/api/buildingsApiSlice';
 
 const FloorPage = () => {
@@ -27,7 +31,20 @@ const FloorPage = () => {
     }
   }
 
-  return <div>FloorPage</div>;
+  return (
+    <>
+      <NavBar />
+      <LoadingText />
+      {/* <MainDisplay floorCode={floorCode} /> */}
+      <ModeDisplay />
+      {/* <FloorSwitcher
+        buildingCode={buildingCode}
+        floorLevelSelected={floorLevel}
+      /> */}
+      {/* <HelpInfo /> */}
+      <MyToastContainer />
+    </>
+  );
 };
 
 export default FloorPage;
