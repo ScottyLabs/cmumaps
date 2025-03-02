@@ -14,4 +14,17 @@ export const buildingController = {
       });
     }
   },
+
+  async getDefaultFloor(req: Request, res: Response) {
+    try {
+      const defaultFLoor = await buildingService.getDefaultFloor(req.params.id);
+
+      res.json(defaultFLoor);
+    } catch (error) {
+      res.status(500).json({
+        error: 'Error fetching building codes',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  },
 };
