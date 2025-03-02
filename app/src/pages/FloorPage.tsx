@@ -37,7 +37,7 @@ const FloorPage = () => {
   return (
     <>
       <NavBar />
-      <LoadingText />
+      {/* <LoadingText /> */}
       <MainDisplay floorCode={floorCode} />
       <ModeDisplay />
       <FloorSwitcher floorCode={floorCode} />

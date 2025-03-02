@@ -8,9 +8,9 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import useClerkToken from '../../hooks/useClerkToken';
-// import useClerkToken from '../../hooks/useClerkToken';
 import useFloorInfo from '../../hooks/useFloorInfo';
 import { DEFAULT_PDF_SCALE_INDEX } from '../../settings';
+import { useGetFloorPdfQuery } from '../../store/api/s3apiSlice';
 import { PDFCoordinate } from '../shared/types';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -33,12 +33,9 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
   const { buildingCode } = useFloorInfo(floorCode);
   const filePath = `pdf/${buildingCode}/${floorCode}.pdf`;
   const token = useClerkToken();
-  console.log(token);
-  // const { data: pdfData } = useGetFileQuery(
-  //   token ? { filePath, token } : skipToken,
-  // );
-
-  return;
+  const { data: pdfData } = useGetFloorPdfQuery(
+    token ? { filePath, token } : skipToken,
+  );
 
   const renderZoomInButton = () => {
     const disabled = pdfScaleIndex == PDF_SCALES.length - 1;
