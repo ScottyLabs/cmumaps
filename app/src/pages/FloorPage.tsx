@@ -2,6 +2,7 @@ import { useParams, Navigate } from 'react-router';
 
 import { ErrorCode } from '../../../shared/errorCode';
 import MyToastContainer from '../components/shared/MyToastContainer';
+import HelpInfo from '../layouts/HelpInfo';
 import LoadingText from '../layouts/LoadingText';
 import ModeDisplay from '../layouts/ModeDisplay';
 import NavBar from '../layouts/NavBar';
@@ -41,7 +42,7 @@ const FloorPage = () => {
         buildingCode={buildingCode}
         floorLevelSelected={floorLevel}
       /> */}
-      {/* <HelpInfo /> */}
+      <HelpInfo />
       <MyToastContainer />
     </>
   );
