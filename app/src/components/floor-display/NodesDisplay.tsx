@@ -1,7 +1,7 @@
 import { Circle } from 'react-konva';
 
+import { EdgeTypeList, ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { useAppSelector } from '../../store/hooks';
-import { EdgeTypeList, ID, NodeInfo, Nodes } from '../shared/types';
 
 interface Props {
   floorCode: string;

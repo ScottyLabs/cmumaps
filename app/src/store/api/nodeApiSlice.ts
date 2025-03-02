@@ -1,4 +1,4 @@
-import { Nodes } from '../../components/shared/types';
+import { Nodes } from '../../../../shared/types';
 import { apiSlice } from './apiSlice';
 
 export const nodeApiSlice = apiSlice.injectEndpoints({

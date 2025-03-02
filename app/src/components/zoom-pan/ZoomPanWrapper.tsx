@@ -2,11 +2,11 @@ import Konva from 'konva';
 
 import { useRef, useState } from 'react';
 
+import { PDFCoordinate } from '../../../../shared/types';
 import { useAppSelector } from '../../store/hooks';
 import { LOADED } from '../../store/slices/statusSlice';
 import FloorDisplay from '../floor-display/FloorDisplay';
 import LoadingText from '../layouts/LoadingText';
-import { PDFCoordinate } from '../shared/types';
 import PDFViewer from './PdfViewer';
 
 interface Props {

@@ -1,18 +1,18 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ID } from "../../components/shared/types";
+import { ID } from '../../../../shared/types';
 
-export type IdSelectedType = "Node" | "Door" | "None";
-export const NODE: IdSelectedType = "Node";
-export const DOOR: IdSelectedType = "Door";
-export const NONE: IdSelectedType = "None";
+export type IdSelectedType = 'Node' | 'Door' | 'None';
+export const NODE: IdSelectedType = 'Node';
+export const DOOR: IdSelectedType = 'Door';
+export const NONE: IdSelectedType = 'None';
 
 export interface IdSelectedInfo {
   id: ID;
   type: IdSelectedType;
 }
 
-const DEFAULT: IdSelectedInfo = { id: "", type: NONE };
+const DEFAULT: IdSelectedInfo = { id: '', type: NONE };
 
 interface MouseEventState {
   idSelected: IdSelectedInfo;
@@ -27,7 +27,7 @@ const initialState: MouseEventState = {
 };
 
 const mouseEventSlice = createSlice({
-  name: "mouseEvent",
+  name: 'mouseEvent',
   initialState,
   reducers: {
     selectNode(state, action: PayloadAction<string>) {

@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Nodes, Mst } from "../../components/shared/types";
+import { Nodes, Mst } from '../../../../shared/types';
 
 interface DataState {
   nodes: Nodes | null;
@@ -13,7 +13,7 @@ const initialState: DataState = {
 };
 
 const dataSlice = createSlice({
-  name: "data",
+  name: 'data',
   initialState,
   reducers: {
     setNodes(state, action) {

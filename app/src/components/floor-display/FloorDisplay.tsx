@@ -2,14 +2,14 @@ import Konva from 'konva';
 
 import { Stage, Layer } from 'react-konva';
 
+// import { useAppDispatch, useAppSelector } from '../../store/hooks';
+// import { selectEditPolygon } from '../../store/slices/modeSlice';
+// import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
+import { PDFCoordinate } from '../../../../shared/types';
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
 import { useGetFloorNodesQuery } from '../../store/api/nodeApiSlice';
 import ErrorDisplay from '../shared/ErrorDisplay';
 import Loader from '../shared/Loader';
-// import { useAppDispatch, useAppSelector } from '../../store/hooks';
-// import { selectEditPolygon } from '../../store/slices/modeSlice';
-// import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
-import { PDFCoordinate } from '../shared/types';
 import NodesDisplay from './NodesDisplay';
 
 interface Props {
