@@ -5,7 +5,7 @@ import {
 } from '../../shared/utils/floorCodeUtils.ts';
 
 export const nodeService = {
-  getNodes: async (floorCode: string) => {
+  getFloorNodes: async (floorCode: string) => {
     const buildingCode = extractBuildingCode(floorCode);
     const floorLevel = extractFloorLevel(floorCode);
 
