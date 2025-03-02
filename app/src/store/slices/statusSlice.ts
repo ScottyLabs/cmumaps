@@ -12,7 +12,7 @@ interface StatusState {
 }
 
 const initialState: StatusState = {
-  loadingStatus: 'Loading',
+  loadingStatus: LOADED,
   loadingText: '',
   shortcutsDisabled: false,
 };

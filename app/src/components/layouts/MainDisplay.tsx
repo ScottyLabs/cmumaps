@@ -1,4 +1,5 @@
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
+import { useGetFloorNodesQuery } from '../../store/api/nodeApiSlice';
 import ZoomPanWrapper from '../zoom-pan/ZoomPanWrapper';
 
 interface Props {
@@ -6,6 +7,10 @@ interface Props {
 }
 
 const MainDisplay = ({ floorCode }: Props) => {
+  const { data } = useGetFloorNodesQuery(floorCode);
+
+  console.log(data);
+
   useKeyboardShortcuts();
 
   return (
