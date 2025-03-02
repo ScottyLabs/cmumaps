@@ -5,7 +5,7 @@ import { NavLink } from 'react-router';
 import ErrorDisplay from '../components/shared/ErrorDisplay';
 import Loader from '../components/shared/Loader';
 import MyToastContainer from '../components/shared/MyToastContainer';
-// import useErrorToast from '../hooks/useErrorToast';
+import useErrorToast from '../hooks/useErrorToast';
 import { useGetBuildingCodesAndNamesQuery } from '../store/api/buildingsApiSlice';
 
 const Home = () => {
@@ -15,7 +15,7 @@ const Home = () => {
     isError,
   } = useGetBuildingCodesAndNamesQuery();
 
-  // useErrorToast();
+  useErrorToast();
 
   if (isLoading) {
     return <Loader loadingText="Fetching building codes" />;

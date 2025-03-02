@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { buildingService } from '../services/buildingService.ts';
+import { BuildingError } from '../errors/error.ts';
 
 export const buildingController = {
   async getBuildingCodesAndNames(req: Request, res: Response) {
@@ -18,10 +19,14 @@ export const buildingController = {
 
   async getDefaultFloor(req: Request, res: Response) {
     try {
-      const defaultFLoor = await buildingService.getDefaultFloor(req.params.id);
+      const defaultFloor = await buildingService.getDefaultFloor(req.params.id);
 
-      res.json(defaultFLoor);
+      res.json(defaultFloor);
     } catch (error) {
+      if (error instanceof BuildingError) {
+        return res.status(404).json({ code: error.code });
+      }
+
       res.status(500).json({
         error: 'Error fetching building codes',
         details: error instanceof Error ? error.message : 'Unknown error',

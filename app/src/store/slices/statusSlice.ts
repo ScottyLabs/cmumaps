@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { ErrorCode } from '../../../../shared/errorCode';
+
 export type LoadingStatus = 'Loaded' | 'Loading' | 'Failed';
 export const LOADED: LoadingStatus = 'Loaded';
 export const LOADING: LoadingStatus = 'Loading';
@@ -9,13 +11,14 @@ interface StatusState {
   loadingStatus: LoadingStatus;
   loadingText: string;
   shortcutsDisabled: boolean;
-  error: string;
+  errorCode: ErrorCode;
 }
 
 const initialState: StatusState = {
   loadingStatus: 'Loading',
   loadingText: '',
   shortcutsDisabled: false,
+  errorCode: '',
 };
 
 const statusSlice = createSlice({
@@ -38,6 +41,9 @@ const statusSlice = createSlice({
     setShortcutsDisabled(state, action: PayloadAction<boolean>) {
       state.shortcutsDisabled = action.payload;
     },
+    setErrorCode(state, action: PayloadAction<ErrorCode>) {
+      state.errorCode = action.payload;
+    },
   },
 });
 
@@ -46,5 +52,6 @@ export const {
   finishLoading,
   failedLoading,
   setShortcutsDisabled,
+  setErrorCode,
 } = statusSlice.actions;
 export default statusSlice.reducer;
