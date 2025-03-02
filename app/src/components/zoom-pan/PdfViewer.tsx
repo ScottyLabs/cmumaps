@@ -7,6 +7,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
+import useClerkToken from '../../hooks/useClerkToken';
 // import useClerkToken from '../../hooks/useClerkToken';
 import useFloorInfo from '../../hooks/useFloorInfo';
 import { DEFAULT_PDF_SCALE_INDEX } from '../../settings';
@@ -31,10 +32,13 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
   // get pdf data
   const { buildingCode } = useFloorInfo(floorCode);
   const filePath = `pdf/${buildingCode}/${floorCode}.pdf`;
-  // const token = useClerkToken();
+  const token = useClerkToken();
+  console.log(token);
   // const { data: pdfData } = useGetFileQuery(
   //   token ? { filePath, token } : skipToken,
   // );
+
+  return;
 
   const renderZoomInButton = () => {
     const disabled = pdfScaleIndex == PDF_SCALES.length - 1;
