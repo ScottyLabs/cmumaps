@@ -1,9 +1,9 @@
 import { useParams } from 'react-router';
 
-const FloorDisplay = () => {
+const FloorPage = () => {
   const { floorCode } = useParams();
   console.log('floorCode', floorCode);
-  return <div>FloorDisplay</div>;
+  return <div>FloorPage</div>;
 };
 
-export default FloorDisplay;
+export default FloorPage;

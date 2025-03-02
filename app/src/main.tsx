@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router';
 
 import './index.css';
-import FloorDisplay from './pages/FloorDisplay.tsx';
+import FloorPage from './pages/FloorPage.tsx';
 import Home from './pages/Home.tsx';
 import { store } from './store/store.ts';
 
@@ -34,7 +34,7 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
             <Route element={<ProtectedRoute />}>
               <Route index element={<Home />} />
-              <Route path=":floorCode" element={<FloorDisplay />} />
+              <Route path=":floorCode" element={<FloorPage />} />
             </Route>
           </Routes>
         </Provider>
