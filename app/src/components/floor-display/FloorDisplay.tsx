@@ -4,10 +4,13 @@ import { Stage, Layer } from 'react-konva';
 
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
 import { useGetFloorNodesQuery } from '../../store/api/nodeApiSlice';
+import ErrorDisplay from '../shared/ErrorDisplay';
+import Loader from '../shared/Loader';
 // import { useAppDispatch, useAppSelector } from '../../store/hooks';
 // import { selectEditPolygon } from '../../store/slices/modeSlice';
 // import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
 import { PDFCoordinate } from '../shared/types';
+import NodesDisplay from './NodesDisplay';
 
 interface Props {
   floorCode: string;
@@ -30,7 +33,7 @@ const FloorDisplay = ({
 }: Props) => {
   // const dispatch = useAppDispatch();
 
-  const { data: nodes } = useGetFloorNodesQuery(floorCode);
+  const { data: nodes, isLoading, isError } = useGetFloorNodesQuery(floorCode);
 
   useKeyboardShortcuts();
 
@@ -46,6 +49,14 @@ const FloorDisplay = ({
 
   // const editPolygon = useAppSelector(selectEditPolygon);
   // const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
+
+  if (isLoading) {
+    return <Loader loadingText="Fetching nodes and rooms" />;
+  }
+
+  if (isError || !nodes) {
+    return <ErrorDisplay errorText="Failed to fetch nodes" />;
+  }
 
   return (
     <>
@@ -65,7 +76,9 @@ const FloorDisplay = ({
         y={offset.y}
         ref={stageRef}
       >
-        <Layer></Layer>
+        <Layer>
+          <NodesDisplay nodes={nodes} floorCode={floorCode} />
+        </Layer>
       </Stage>
     </>
   );

@@ -1,9 +1,10 @@
+import { Nodes } from '../../components/shared/types';
 import { apiSlice } from './apiSlice';
 
 export const nodeApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getFloorNodes: builder.query<string[], string>({
+    getFloorNodes: builder.query<Nodes, string>({
       query: (floorCode) => `nodes/?floorCode=${floorCode}`,
     }),
   }),
