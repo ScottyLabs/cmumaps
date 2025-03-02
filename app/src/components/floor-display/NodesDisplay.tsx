@@ -77,6 +77,10 @@ const NodesDisplay = ({ nodes }: Props) => {
     return 'blue';
   };
 
+  console.log(nodes);
+
+  return;
+
   return Object.entries(nodes).map(
     ([nodeId, node]: [ID, NodeInfo], index: number) => {
       if (!showRoomSpecific || node.roomId === roomIdSelected) {
