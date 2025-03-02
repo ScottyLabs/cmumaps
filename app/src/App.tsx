@@ -1,6 +1,7 @@
 // import { UserButton } from '@clerk/nextjs';
 import React from 'react';
 
+import ErrorDisplay from './components/shared/ErrorDisplay';
 import Loader from './components/shared/Loader';
 // import { CiSquarePlus } from 'react-icons/ci';
 // import { toast } from 'react-toastify';
@@ -18,16 +19,12 @@ const App: React.FC = () => {
     isError,
   } = useGetBuildingCodesQuery();
 
-  if (!isLoading) {
+  if (isLoading) {
     return <Loader loadingText="Fetching building codes" />;
   }
 
-  if (isError) {
-    return <div>Error</div>;
-  }
-
-  if (!buildingCodes) {
-    return <div>No data</div>;
+  if (isError || !buildingCodes) {
+    return <ErrorDisplay errorText="Failed to fetch building codes" />;
   }
 
   // error toast
