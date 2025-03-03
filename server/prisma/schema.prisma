@@ -90,8 +90,8 @@ model Node {
   outNeighbors Neighbor[] @relation("OutNeighbors")
   inNeighbors  Neighbor[] @relation("InNeighbors")
 
-  elementId String
-  element   Element @relation(fields: [elementId], references: [elementId])
+  elementId String?
+  element   Element? @relation(fields: [elementId], references: [elementId])
 }
 
 model Neighbor {

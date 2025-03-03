@@ -42,7 +42,7 @@ export const nodeService = {
         longitude: node.longitude,
       };
       const pos = geoCoordsToPdfCoordsHelper(position);
-      nodes[node.elementId] = { neighbors: {}, pos, roomId: node.elementId };
+      nodes[node.id] = { neighbors: {}, pos, roomId: node.elementId || '' };
     }
 
     return nodes;

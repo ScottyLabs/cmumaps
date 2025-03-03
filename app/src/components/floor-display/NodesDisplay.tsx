@@ -1,6 +1,6 @@
 import { Circle } from 'react-konva';
 
-import { EdgeTypeList, ID, NodeInfo, Nodes } from '../../../../shared/types';
+import { ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { useAppSelector } from '../../store/hooks';
 
 interface Props {
