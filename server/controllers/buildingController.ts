@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { buildingService } from "../services/buildingService.ts";
 import { BuildingError } from "../errors/error.ts";
+import { buildingService } from "../services/buildingService.ts";
 
 export const buildingController = {
   async getBuildingCodesAndNames(req: Request, res: Response) {
@@ -37,7 +37,7 @@ export const buildingController = {
   async getBuildingFloors(req: Request, res: Response) {
     try {
       const buildingFloors = await buildingService.getBuildingFloors(
-        req.params.id,
+        req.params.id
       );
 
       res.json(buildingFloors);
