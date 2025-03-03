@@ -3,7 +3,7 @@ import {
   extractBuildingCode,
   extractFloorLevel,
 } from '../../shared/utils/floorCodeUtils.ts';
-import type { Nodes } from '../../shared/types.ts';
+import type { ID, NodeInfo, Nodes } from '../../shared/types.ts';
 import { geoCoordsToPdfCoords } from '../utils/coordinates.ts';
 
 export const nodeService = {
@@ -46,5 +46,21 @@ export const nodeService = {
     }
 
     return nodes;
+  },
+
+  createNode: async (nodeId: ID, node: NodeInfo) => {
+    const { pos, roomId } = node;
+    console.log(pos);
+
+    return;
+
+    await prisma.node.create({
+      data: {
+        id: nodeId,
+        latitude: pos.x,
+        longitude: pos.y,
+        elementId: roomId ?? null,
+      },
+    });
   },
 };

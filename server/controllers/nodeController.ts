@@ -13,4 +13,19 @@ export const nodeController = {
     const nodes = await nodeService.getFloorNodes(floorCode as string);
     res.json(nodes);
   },
+
+  createNode: async (req: Request, res: Response) => {
+    const nodeId = req.params.id;
+    const node = req.body;
+
+    try {
+      await nodeService.createNode(nodeId, node);
+      res.json(null);
+    } catch (error) {
+      res.status(500).json({
+        error: 'Error creating node',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  },
 };
