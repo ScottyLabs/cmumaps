@@ -101,7 +101,7 @@ const FloorDisplay = ({
       getCursorPos(e, offset, scale, (pos) => {
         const nodeId = uuidv4();
         const nodeInfo: NodeInfo = {
-          pos: pos,
+          pos,
           neighbors: {},
           roomId: '',
           // roomId: findRoomId(rooms, pos),

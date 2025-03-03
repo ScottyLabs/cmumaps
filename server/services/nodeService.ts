@@ -4,10 +4,13 @@ import {
   extractFloorLevel,
 } from '../../shared/utils/floorCodeUtils.ts';
 import type { ID, NodeInfo, Nodes } from '../../shared/types.ts';
-import { geoCoordsToPdfCoords } from '../utils/coordinates.ts';
+import {
+  geoCoordsToPdfCoords,
+  pdfCoordsToGeoCoords,
+} from '../utils/coordinates.ts';
 
 export const nodeService = {
-  getFloorNodes: async (floorCode: string) => {
+  getFloorPlacement: async (floorCode: string) => {
     const buildingCode = extractBuildingCode(floorCode);
     const floorLevel = extractFloorLevel(floorCode);
 
@@ -19,21 +22,30 @@ export const nodeService = {
       throw new Error('Floor not found');
     }
 
-    const dbNodes = await prisma.node.findMany({
-      where: { element: { buildingCode, floorLevel } },
-    });
-
     const geoCenter = {
       latitude: floor.centerLatitude,
       longitude: floor.centerLongitude,
     };
     const pdfCenter = { x: floor.centerX, y: floor.centerY };
-    const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(
+
+    return {
       geoCenter,
       pdfCenter,
-      floor.scale,
-      floor.angle
-    );
+      scale: floor.scale,
+      angle: floor.angle,
+    };
+  },
+
+  getFloorNodes: async (floorCode: string) => {
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    const dbNodes = await prisma.node.findMany({
+      where: { element: { buildingCode, floorLevel } },
+    });
+
+    const placement = await nodeService.getFloorPlacement(floorCode);
+    const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(placement);
 
     const nodes: Nodes = {};
     for (const node of dbNodes) {
@@ -48,9 +60,13 @@ export const nodeService = {
     return nodes;
   },
 
-  createNode: async (nodeId: ID, node: NodeInfo) => {
+  createNode: async (floorCode: string, nodeId: ID, node: NodeInfo) => {
     const { pos, roomId } = node;
-    console.log(pos);
+
+    const placement = await nodeService.getFloorPlacement(floorCode);
+    const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
+
+    console.log(geoCoords);
 
     return;
 

@@ -168,3 +168,10 @@ export type Rooms = Record<ID, RoomInfo>;
 export type Nodes = Record<ID, NodeInfo>;
 
 export type Mst = Record<ID, Record<ID, boolean>>;
+
+export interface Placement {
+  geoCenter: GeoCoordinate;
+  pdfCenter: PdfCoordinate;
+  scale: number;
+  angle: number;
+}

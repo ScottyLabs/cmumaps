@@ -2,6 +2,7 @@ import { ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { apiSlice } from './apiSlice';
 
 export interface CreateNodeArgType {
+  floorCode: string;
   nodeId: ID;
   nodeInfo: NodeInfo;
   addToHistory?: boolean;
@@ -14,10 +15,10 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       query: (floorCode) => `nodes/?floorCode=${floorCode}`,
     }),
     createNode: builder.mutation<Response, CreateNodeArgType>({
-      query: ({ nodeId, nodeInfo }) => ({
+      query: ({ floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
         method: 'POST',
-        body: nodeInfo,
+        body: { floorCode, nodeInfo },
       }),
     }),
   }),

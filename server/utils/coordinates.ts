@@ -1,4 +1,8 @@
-import type { GeoCoordinate, PdfCoordinate } from '../../shared/types.ts';
+import type {
+  GeoCoordinate,
+  PdfCoordinate,
+  Placement,
+} from '../../shared/types.ts';
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
@@ -6,21 +10,48 @@ const latitudeRatio = 111318.8450631976;
 const longitudeRatio = 84719.3945182816;
 
 /**
+ * Converts PDF coordinates (x/y) to geographical coordinates (latitude/longitude)
+ * @param pdfCoords - Object containing x and y PDF coordinates
+ * @param geoCenter - Object containing center latitude and longitude
+ * @param pdfCenter - Object containing center x and y coordinates
+ * @param scale - Scale factor used in the conversion
+ * @param angle - Rotation angle in radians
+ * @returns Object with latitude and longitude geographical coordinates
+ */
+export const pdfCoordsToGeoCoords =
+  ({ geoCenter, pdfCenter, scale, angle }: Placement) =>
+  (pdfCoords: PdfCoordinate): GeoCoordinate => {
+    const { x, y } = pdfCoords;
+
+    // Apply translation
+    const translatedX = x - pdfCenter.x;
+    const translatedY = y - pdfCenter.y;
+
+    // Apply rotation
+    const rotated = rotate(translatedX, translatedY, angle);
+
+    // Apply scaling
+    const scaledX = rotated.x / scale;
+    const scaledY = rotated.y / scale;
+
+    // Convert to geographical coordinates
+    const longitude = scaledX / longitudeRatio + geoCenter.longitude;
+    const latitude = scaledY / latitudeRatio + geoCenter.latitude;
+
+    return { latitude, longitude };
+  };
+
+/**
  * Converts geographical coordinates (latitude/longitude) to PDF coordinates (x/y)
- * @param position - Object containing latitude and longitude
+ * @param geoCoords - Object containing latitude and longitude
  * @param placement - Object containing center, scale, and angle
  * @param center - Tuple containing x and y coordinates of the center
  * @returns Object with x and y PDF coordinates
  */
 export const geoCoordsToPdfCoords =
-  (
-    geoCenter: GeoCoordinate,
-    pdfCenter: PdfCoordinate,
-    scale: number,
-    angle: number
-  ) =>
-  (position: GeoCoordinate): PdfCoordinate => {
-    const { latitude, longitude } = position;
+  ({ geoCenter, pdfCenter, scale, angle }: Placement) =>
+  (geoCoords: GeoCoordinate): PdfCoordinate => {
+    const { latitude, longitude } = geoCoords;
 
     // reverse the transform and scale
     const x = (longitude - geoCenter.longitude) * longitudeRatio * scale;
