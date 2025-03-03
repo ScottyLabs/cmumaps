@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 // error handling for queryFulfilled
 export const handleQueryError = async (
@@ -8,7 +8,7 @@ export const handleQueryError = async (
   try {
     await queryFulfilled;
   } catch (e) {
-    toast.error('Failed to save! Check the Console for detailed error.');
+    toast.error("Failed to save! Check the Console for detailed error.");
     undo();
     const error = e as { error: { data: { error: string } } };
     console.error(error.error.data.error);

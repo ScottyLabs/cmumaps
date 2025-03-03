@@ -1,6 +1,6 @@
-import type { Request, Response } from 'express';
-import { buildingService } from '../services/buildingService.ts';
-import { BuildingError } from '../errors/error.ts';
+import type { Request, Response } from "express";
+import { buildingService } from "../services/buildingService.ts";
+import { BuildingError } from "../errors/error.ts";
 
 export const buildingController = {
   async getBuildingCodesAndNames(req: Request, res: Response) {
@@ -11,8 +11,8 @@ export const buildingController = {
       res.json(buildingCodesAndNames);
     } catch (error) {
       res.status(500).json({
-        error: 'Error fetching building codes and names',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Error fetching building codes and names",
+        details: error instanceof Error ? error.message : "Unknown error",
       });
     }
   },
@@ -28,8 +28,8 @@ export const buildingController = {
       }
 
       res.status(500).json({
-        error: 'Error fetching building codes',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Error fetching building codes",
+        details: error instanceof Error ? error.message : "Unknown error",
       });
     }
   },
@@ -37,7 +37,7 @@ export const buildingController = {
   async getBuildingFloors(req: Request, res: Response) {
     try {
       const buildingFloors = await buildingService.getBuildingFloors(
-        req.params.id
+        req.params.id,
       );
 
       res.json(buildingFloors);
@@ -47,8 +47,8 @@ export const buildingController = {
       }
 
       res.status(500).json({
-        error: 'Error fetching building floors',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Error fetching building floors",
+        details: error instanceof Error ? error.message : "Unknown error",
       });
     }
   },

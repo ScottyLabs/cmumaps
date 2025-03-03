@@ -1,6 +1,6 @@
-import { useAppSelector } from '../../store/hooks';
-import { FAILED_LOAD, LOADING } from '../../store/slices/statusSlice';
-import Loader from '../shared/Loader';
+import { useAppSelector } from "../../store/hooks";
+import { FAILED_LOAD, LOADING } from "../../store/slices/statusSlice";
+import Loader from "../shared/Loader";
 
 const LoadingText = () => {
   const loadingStatus = useAppSelector((state) => state.status.loadingStatus);

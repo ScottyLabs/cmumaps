@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { FaArrowUp } from 'react-icons/fa';
-import { FaArrowDown } from 'react-icons/fa';
-import { NavLink } from 'react-router';
+import { useState } from "react";
+import { FaArrowUp } from "react-icons/fa";
+import { FaArrowDown } from "react-icons/fa";
+import { NavLink } from "react-router";
 
-import useFloorInfo from '../../hooks/useFloorInfo';
-import { useGetBuildingFloorsQuery } from '../../store/api/buildingApiSlice';
+import useFloorInfo from "../../hooks/useFloorInfo";
+import { useGetBuildingFloorsQuery } from "../../store/api/buildingApiSlice";
 
 interface Props {
   floorCode: string;
@@ -27,15 +27,15 @@ const FloorSwitcher = ({ floorCode }: Props) => {
         <NavLink
           to={`/${buildingCode}-${floorLevel}`}
           className={
-            'cursor-pointer px-4 ' +
-            (floorLevel == floorLevelSelected ? 'font-bold' : '')
+            "cursor-pointer px-4 " +
+            (floorLevel == floorLevelSelected ? "font-bold" : "")
           }
           onClick={() => {
             // exit full display mode in case clicking on the same floor level
             setFullDisplayMode(false);
           }}
         >
-          {' '}
+          {" "}
           {floorLevel}
         </NavLink>
       </td>
@@ -72,8 +72,8 @@ const FloorSwitcher = ({ floorCode }: Props) => {
             <div
               key={floorLevel}
               className={
-                'm-[1px] h-1 w-1 rounded-full ' +
-                (floorLevel == floorLevelSelected ? 'bg-black' : 'bg-gray-400')
+                "m-[1px] h-1 w-1 rounded-full " +
+                (floorLevel == floorLevelSelected ? "bg-black" : "bg-gray-400")
               }
             ></div>
           ))}

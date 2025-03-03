@@ -1,8 +1,8 @@
-import Konva from 'konva';
+import Konva from "konva";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-import { PdfCoordinate } from '../../../shared/types';
+import { PdfCoordinate } from "../../../shared/types";
 
 /**
  * @param e Konva event
@@ -18,7 +18,7 @@ export const getCursorPos = (
 ) => {
   const pos = e.target.getStage()?.getPointerPosition();
   if (!pos) {
-    toast.error('Unable to get cursor position!');
+    toast.error("Unable to get cursor position!");
     return;
   }
   callback({

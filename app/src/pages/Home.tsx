@@ -1,12 +1,12 @@
-import { SignedIn, UserButton } from '@clerk/clerk-react';
+import { SignedIn, UserButton } from "@clerk/clerk-react";
 
-import { NavLink } from 'react-router';
+import { NavLink } from "react-router";
 
-import ErrorDisplay from '../components/shared/ErrorDisplay';
-import Loader from '../components/shared/Loader';
-import MyToastContainer from '../components/shared/MyToastContainer';
-import useErrorToast from '../hooks/useErrorToast';
-import { useGetBuildingCodesAndNamesQuery } from '../store/api/buildingApiSlice';
+import ErrorDisplay from "../components/shared/ErrorDisplay";
+import Loader from "../components/shared/Loader";
+import MyToastContainer from "../components/shared/MyToastContainer";
+import useErrorToast from "../hooks/useErrorToast";
+import { useGetBuildingCodesAndNamesQuery } from "../store/api/buildingApiSlice";
 
 const Home = () => {
   const {

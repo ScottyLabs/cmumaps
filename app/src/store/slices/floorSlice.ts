@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FloorState {
   floorCode: string | null;
@@ -11,7 +11,7 @@ const initialState: FloorState = {
 };
 
 const floorSlice = createSlice({
-  name: 'floor',
+  name: "floor",
   initialState,
   reducers: {
     setFloorCode(state, action: PayloadAction<string>) {

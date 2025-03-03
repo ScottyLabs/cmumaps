@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { DoorInfo, ID } from '../../../../shared/types';
+import { DoorInfo, ID } from "../../../../shared/types";
 
 interface OutlineState {
   walls: number[][] | null;
@@ -15,7 +15,7 @@ const initialState: OutlineState = {
 };
 
 const outlineSlice = createSlice({
-  name: 'outline',
+  name: "outline",
   initialState,
   reducers: {
     setOutline(state, action: PayloadAction<OutlineState>) {

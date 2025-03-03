@@ -1,8 +1,8 @@
 import {
   extractBuildingCode,
   extractFloorLevel,
-} from '../../shared/utils/floorCodeUtils.ts';
-import { prisma } from '../index.ts';
+} from "../../shared/utils/floorCodeUtils.ts";
+import { prisma } from "../index.ts";
 
 export const floorService = {
   getFloorPlacement: async (floorCode: string) => {
@@ -14,7 +14,7 @@ export const floorService = {
     });
 
     if (!floor) {
-      throw new Error('Floor not found');
+      throw new Error("Floor not found");
     }
 
     const geoCenter = {

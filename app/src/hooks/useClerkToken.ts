@@ -1,6 +1,6 @@
-import { useSession } from '@clerk/clerk-react';
+import { useSession } from "@clerk/clerk-react";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const useClerkToken = () => {
   const { session, isLoaded } = useSession();

@@ -1,6 +1,6 @@
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from "tailwind-merge";
 
-import { FaRegQuestionCircle } from 'react-icons/fa';
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 interface Props {
   url: string;
@@ -12,7 +12,7 @@ const QuestionCircle = ({ url, style }: Props) => {
     <a href={url} target="_blank" rel="noreferrer">
       <FaRegQuestionCircle
         className={twMerge(
-          'cursor-pointer rounded-full text-2xl hover:text-blue-600',
+          "cursor-pointer rounded-full text-2xl hover:text-blue-600",
           style,
         )}
       />

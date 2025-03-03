@@ -1,5 +1,5 @@
-import React from 'react';
-import { Slide, ToastContainer } from 'react-toastify';
+import React from "react";
+import { Slide, ToastContainer } from "react-toastify";
 
 const MyToastContainer = () => {
   return (
@@ -12,8 +12,8 @@ const MyToastContainer = () => {
       transition={Slide}
       toastStyle={
         {
-          'max-width': 'fit-content',
-          'padding-right': '2rem',
+          "max-width": "fit-content",
+          "padding-right": "2rem",
         } as React.CSSProperties
       }
     />

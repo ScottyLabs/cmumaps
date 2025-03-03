@@ -2,7 +2,7 @@ import type {
   GeoCoordinate,
   PdfCoordinate,
   Placement,
-} from '../../shared/types.ts';
+} from "../../shared/types.ts";
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564

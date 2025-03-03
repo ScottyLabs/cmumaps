@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface VisibilityState {
   showFile: boolean;
@@ -19,7 +19,7 @@ const initialState: VisibilityState = {
 };
 
 const visibilitySlice = createSlice({
-  name: 'visibility',
+  name: "visibility",
   initialState,
   reducers: {
     toggleShowFile(state) {

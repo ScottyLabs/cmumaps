@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   infoDisplayActiveTabIndex: number;
@@ -15,7 +15,7 @@ const initialState: UIState = {
 };
 
 const UISlice = createSlice({
-  name: 'ui',
+  name: "ui",
   initialState,
   reducers: {
     setInfoDisplayActiveTabIndex(state, action: PayloadAction<number>) {

@@ -1,19 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
-import { apiSlice } from './api/apiSlice';
-import { listenerMiddleware } from './middleware/listenerMiddleware';
-import dataSlice from './slices/dataSlice';
-import floorSlice from './slices/floorSlice';
+import { apiSlice } from "./api/apiSlice";
+import { listenerMiddleware } from "./middleware/listenerMiddleware";
+import dataSlice from "./slices/dataSlice";
+import floorSlice from "./slices/floorSlice";
 // import historySlice from './features/historySlice';
-import lockSlice from './slices/lockSlice';
-import modeSlice from './slices/modeSlice';
-import mouseEventSlice from './slices/mouseEventSlice';
-import outlineSlice from './slices/outlineSlice';
-import polygonSlice from './slices/polygonSlice';
-import statusSlice from './slices/statusSlice';
-import uiSlice from './slices/uiSlice';
+import lockSlice from "./slices/lockSlice";
+import modeSlice from "./slices/modeSlice";
+import mouseEventSlice from "./slices/mouseEventSlice";
+import outlineSlice from "./slices/outlineSlice";
+import polygonSlice from "./slices/polygonSlice";
+import statusSlice from "./slices/statusSlice";
+import uiSlice from "./slices/uiSlice";
 // import usersSlice from './features/usersSlice';
-import visibilitySlice from './slices/visibilitySlice';
+import visibilitySlice from "./slices/visibilitySlice";
 
 export const store = configureStore({
   reducer: {

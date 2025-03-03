@@ -1,20 +1,20 @@
-import Konva from 'konva';
-import { v4 as uuidv4 } from 'uuid';
+import Konva from "konva";
+import { v4 as uuidv4 } from "uuid";
 
-import { Stage, Layer } from 'react-konva';
-import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
+import { Stage, Layer } from "react-konva";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 // import { useAppDispatch, useAppSelector } from '../../store/hooks';
 // import { selectEditPolygon } from '../../store/slices/modeSlice';
 // import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
-import { NodeInfo, PdfCoordinate } from '../../../../shared/types';
-import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
+import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
+import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import {
   useCreateNodeMutation,
   useGetFloorNodesQuery,
-} from '../../store/api/nodeApiSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+} from "../../store/api/nodeApiSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
@@ -23,15 +23,15 @@ import {
   GRAPH_SELECT,
   POLYGON_ADD_VERTEX,
   setMode,
-} from '../../store/slices/modeSlice';
+} from "../../store/slices/modeSlice";
 import {
   setEditRoomLabel,
   setShowRoomSpecific,
-} from '../../store/slices/uiSlice';
-import { getCursorPos } from '../../utils/canvasUtils';
-import ErrorDisplay from '../shared/ErrorDisplay';
-import Loader from '../shared/Loader';
-import NodesDisplay from './NodesDisplay';
+} from "../../store/slices/uiSlice";
+import { getCursorPos } from "../../utils/canvasUtils";
+import ErrorDisplay from "../shared/ErrorDisplay";
+import Loader from "../shared/Loader";
+import NodesDisplay from "./NodesDisplay";
 
 interface Props {
   floorCode: string;
@@ -85,7 +85,7 @@ const FloorDisplay = ({
     // errors for each mode relative to stage clicking
     if (mode == ADD_NODE || mode == POLYGON_ADD_VERTEX) {
       if (!clickedOnStage) {
-        toast.error('Click on empty space!');
+        toast.error("Click on empty space!");
         return;
       }
     } else if (mode == ADD_DOOR_NODE) {
@@ -94,7 +94,7 @@ const FloorDisplay = ({
       }
     } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
       if (clickedOnStage) {
-        toast.error('Click on another node!');
+        toast.error("Click on another node!");
         return;
       }
     }
@@ -106,7 +106,7 @@ const FloorDisplay = ({
         const nodeInfo: NodeInfo = {
           pos,
           neighbors: {},
-          roomId: '',
+          roomId: "",
           // roomId: findRoomId(rooms, pos),
         };
         createNode({ floorCode, nodeId, nodeInfo });
@@ -115,7 +115,7 @@ const FloorDisplay = ({
     }
     // click to unselect a room or exit polygon editing or room label editing
     else if (clickedOnStage) {
-      navigate('?');
+      navigate("?");
       dispatch(setShowRoomSpecific(false));
       dispatch(setEditRoomLabel(false));
       dispatch(setMode(GRAPH_SELECT));
@@ -127,12 +127,12 @@ const FloorDisplay = ({
     let newCanPan = true;
 
     // can't pan when dragging on node or vertex
-    if (e.target.getClassName() === 'Circle') {
+    if (e.target.getClassName() === "Circle") {
       newCanPan = false;
     }
 
     // can't pan when dragging on label in label editing mode
-    if (editRoomLabel && e.target.getClassName() === 'Rect') {
+    if (editRoomLabel && e.target.getClassName() === "Rect") {
       newCanPan = false;
     }
 

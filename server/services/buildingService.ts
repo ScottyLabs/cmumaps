@@ -1,6 +1,6 @@
-import { prisma } from '../index.ts';
-import { INVALID_BUILDING_CODE } from '../../shared/errorCode.ts';
-import { BuildingError } from '../errors/error.ts';
+import { prisma } from "../index.ts";
+import { INVALID_BUILDING_CODE } from "../../shared/errorCode.ts";
+import { BuildingError } from "../errors/error.ts";
 
 export const buildingService = {
   async getAllBuildingCodesAndNames() {
@@ -25,25 +25,25 @@ export const buildingService = {
 
   async getBuildingFloors(buildingCode: string) {
     const floorCodeOrder = [
-      'PH',
-      '9',
-      '8',
-      '7',
-      '6',
-      '5',
-      '4',
-      '3',
-      '2',
-      'M',
-      '1',
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'LL',
-      'EV',
+      "PH",
+      "9",
+      "8",
+      "7",
+      "6",
+      "5",
+      "4",
+      "3",
+      "2",
+      "M",
+      "1",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "LL",
+      "EV",
     ];
 
     const floors = await prisma.floor.findMany({

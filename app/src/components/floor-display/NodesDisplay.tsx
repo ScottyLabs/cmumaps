@@ -1,14 +1,14 @@
-import { Circle } from 'react-konva';
-import { useNavigate, useSearchParams } from 'react-router';
+import { Circle } from "react-konva";
+import { useNavigate, useSearchParams } from "react-router";
 
-import { ID, NodeInfo, Nodes } from '../../../../shared/types';
-import { useAppSelector } from '../../store/hooks';
+import { ID, NodeInfo, Nodes } from "../../../../shared/types";
+import { useAppSelector } from "../../store/hooks";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
   DELETE_EDGE,
   GRAPH_SELECT,
-} from '../../store/slices/modeSlice';
+} from "../../store/slices/modeSlice";
 
 interface Props {
   floorCode: string;
@@ -20,7 +20,7 @@ const NodesDisplay = ({ nodes }: Props) => {
   const navigate = useNavigate();
 
   const [searchParam] = useSearchParams();
-  const nodeIdSelected = searchParam.get('nodeId');
+  const nodeIdSelected = searchParam.get("nodeId");
 
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
@@ -31,7 +31,7 @@ const NodesDisplay = ({ nodes }: Props) => {
   // );
 
   // const roomIdSelected = getRoomId(nodes, nodeIdSelected);
-  const roomIdSelected = '';
+  const roomIdSelected = "";
 
   if (!nodes) {
     return;
@@ -39,7 +39,7 @@ const NodesDisplay = ({ nodes }: Props) => {
 
   const getFillColor = (nodeId: ID) => {
     if (nodeId == nodeIdSelected) {
-      return 'yellow';
+      return "yellow";
     }
 
     // if (nodeId == nodeIdHovered) {
@@ -82,7 +82,7 @@ const NodesDisplay = ({ nodes }: Props) => {
     //   return 'gray';
     // }
 
-    return 'blue';
+    return "blue";
   };
 
   const handleNodeClick = (nodeId: ID) => {

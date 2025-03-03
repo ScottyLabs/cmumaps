@@ -1,4 +1,4 @@
-import ZoomPanWrapper from '../zoom-pan/ZoomPanWrapper';
+import ZoomPanWrapper from "../zoom-pan/ZoomPanWrapper";
 
 interface Props {
   floorCode: string;

@@ -10,7 +10,7 @@ const Loader = ({ loadingText }: Props) => {
         {loadingText}
         <span
           className="ml-1"
-          style={{ animation: 'dotBlink 1.5s infinite linear' }}
+          style={{ animation: "dotBlink 1.5s infinite linear" }}
         >
           .
         </span>

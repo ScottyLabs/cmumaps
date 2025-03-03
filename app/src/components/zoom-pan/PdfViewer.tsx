@@ -1,17 +1,17 @@
-import { skipToken } from '@reduxjs/toolkit/query';
+import { skipToken } from "@reduxjs/toolkit/query";
 
-import { useState } from 'react';
-import { FiZoomIn } from 'react-icons/fi';
-import { FiZoomOut } from 'react-icons/fi';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+import { useState } from "react";
+import { FiZoomIn } from "react-icons/fi";
+import { FiZoomOut } from "react-icons/fi";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
-import { PdfCoordinate } from '../../../../shared/types';
-import useClerkToken from '../../hooks/useClerkToken';
-import useFloorInfo from '../../hooks/useFloorInfo';
-import { DEFAULT_PDF_SCALE_INDEX } from '../../settings';
-import { useGetFloorPdfQuery } from '../../store/api/s3ApiSlice';
+import { PdfCoordinate } from "../../../../shared/types";
+import useClerkToken from "../../hooks/useClerkToken";
+import useFloorInfo from "../../hooks/useFloorInfo";
+import { DEFAULT_PDF_SCALE_INDEX } from "../../settings";
+import { useGetFloorPdfQuery } from "../../store/api/s3ApiSlice";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -46,7 +46,7 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
 
     return (
       <button onClick={zoomIn} disabled={disabled}>
-        <FiZoomIn className={`size-7 ${disabled ? 'text-gray-400' : ''}`} />
+        <FiZoomIn className={`size-7 ${disabled ? "text-gray-400" : ""}`} />
       </button>
     );
   };
@@ -60,7 +60,7 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
 
     return (
       <button onClick={zoomOut} disabled={disabled}>
-        <FiZoomOut className={`size-7 ${disabled ? 'text-gray-400' : ''}`} />
+        <FiZoomOut className={`size-7 ${disabled ? "text-gray-400" : ""}`} />
       </button>
     );
   };
@@ -78,11 +78,11 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
       <div
         style={{
           transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-          transformOrigin: 'top left',
+          transformOrigin: "top left",
         }}
       >
         <Document file={`data:application/pdf;base64,${pdfData}`}>
-          <div className={'border border-gray-400'}>
+          <div className={"border border-gray-400"}>
             <Page pageNumber={1} scale={pdfScale} />
           </div>
         </Document>

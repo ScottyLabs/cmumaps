@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ID } from '../../../../shared/types';
+import { ID } from "../../../../shared/types";
 
 interface LockState {
   /**
@@ -17,7 +17,7 @@ const initialState: LockState = {
 };
 
 const lockSlice = createSlice({
-  name: 'lock',
+  name: "lock",
   initialState,
   reducers: {
     lockRoom(state, action: PayloadAction<string>) {

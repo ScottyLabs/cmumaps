@@ -1,8 +1,8 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-import { ID, NodeInfo, Nodes } from '../../../../shared/types';
-import { apiSlice } from './apiSlice';
-import { handleQueryError } from './errorHandler';
+import { ID, NodeInfo, Nodes } from "../../../../shared/types";
+import { apiSlice } from "./apiSlice";
+import { handleQueryError } from "./errorHandler";
 
 export interface CreateNodeArgType {
   floorCode: string;
@@ -20,7 +20,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
     createNode: builder.mutation<Response, CreateNodeArgType>({
       query: ({ floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
-        method: 'POST',
+        method: "POST",
         body: { floorCode, nodeInfo },
       }),
       async onQueryStarted(
@@ -31,7 +31,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
           // optimistic update
           const { undo } = dispatch(
             nodeApiSlice.util.updateQueryData(
-              'getFloorNodes',
+              "getFloorNodes",
               floorCode,
               (draft) => {
                 draft[nodeId] = nodeInfo;
@@ -41,7 +41,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
 
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
-          toast.error('Check the Console for detailed error.');
+          toast.error("Check the Console for detailed error.");
           console.error(e);
         }
       },

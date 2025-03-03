@@ -1,4 +1,4 @@
-import { NavLink, useParams } from 'react-router';
+import { NavLink, useParams } from "react-router";
 
 const NavBar = () => {
   const { floorCode } = useParams();

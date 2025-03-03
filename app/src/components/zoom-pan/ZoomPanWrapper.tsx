@@ -1,13 +1,13 @@
-import Konva from 'konva';
+import Konva from "konva";
 
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
-import { PdfCoordinate } from '../../../../shared/types';
-import { useAppSelector } from '../../store/hooks';
-import { LOADED } from '../../store/slices/statusSlice';
-import FloorDisplay from '../floor-display/FloorDisplay';
-import LoadingText from '../layouts/LoadingText';
-import PDFViewer from './PdfViewer';
+import { PdfCoordinate } from "../../../../shared/types";
+import { useAppSelector } from "../../store/hooks";
+import { LOADED } from "../../store/slices/statusSlice";
+import FloorDisplay from "../floor-display/FloorDisplay";
+import LoadingText from "../layouts/LoadingText";
+import PDFViewer from "./PdfViewer";
 
 interface Props {
   floorCode: string;
