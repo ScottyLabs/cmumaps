@@ -1,13 +1,13 @@
 {
-    "singleQuote": true,
-    "plugins": [
-        "@trivago/prettier-plugin-sort-imports",
-        "prettier-plugin-tailwindcss"
-    ],
-    "importOrderSeparation": true,
-    "importOrder": [
-        "^react(.*)",
-        "@/(.*)",
-        "^[./]"
-    ]
+  "singleQuote": true,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "importOrderSeparation": true,
+  "importOrder": [
+    "^react(.*)",
+    "@/(.*)",
+    "^[./]"
+  ]
 }

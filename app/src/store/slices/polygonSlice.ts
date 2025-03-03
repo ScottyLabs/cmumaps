@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PolygonState {
   vertexIndexOnDrag: number | null;
@@ -11,7 +11,7 @@ const initialState: PolygonState = {
 };
 
 const polygonSlice = createSlice({
-  name: "polygon",
+  name: 'polygon',
   initialState,
   reducers: {
     dragVertex(state, action: PayloadAction<number>) {
