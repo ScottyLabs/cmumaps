@@ -1,7 +1,14 @@
 import { Circle } from 'react-konva';
+import { useNavigate } from 'react-router';
 
 import { ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { useAppSelector } from '../../store/hooks';
+import {
+  ADD_DOOR_NODE,
+  ADD_EDGE,
+  DELETE_EDGE,
+  GRAPH_SELECT,
+} from '../../store/slices/modeSlice';
 
 interface Props {
   floorCode: string;
@@ -10,9 +17,11 @@ interface Props {
 
 const NodesDisplay = ({ nodes }: Props) => {
   // const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
+  const mode = useAppSelector((state) => state.mode.mode);
 
   // const nodeIdHovered = useAppSelector(
   //   (state) => state.mouseEvent.nodeIdOnHover,
@@ -77,6 +86,18 @@ const NodesDisplay = ({ nodes }: Props) => {
     return 'blue';
   };
 
+  const handleNodeClick = (nodeId: ID) => {
+    if (mode == GRAPH_SELECT) {
+      navigate(`?nodeId=${nodeId}`);
+    } else if (mode == ADD_EDGE) {
+      // handleAddEdge(nodeId);
+    } else if (mode == DELETE_EDGE) {
+      // handleDeleteEdge(nodeId);
+    } else if (mode == ADD_DOOR_NODE) {
+      // addDoorNodeErrToast();s
+    }
+  };
+
   return Object.entries(nodes).map(
     ([nodeId, node]: [ID, NodeInfo], index: number) => {
       if (!showRoomSpecific || node.roomId === roomIdSelected) {
@@ -91,7 +112,7 @@ const NodesDisplay = ({ nodes }: Props) => {
             strokeWidth={nodeSize / 4}
             // onMouseEnter={(e) => setCursor(e, 'pointer')}
             // onMouseLeave={(e) => setCursor(e, 'default')}
-            // onClick={() => handleNodeClick(nodeId)}
+            onClick={() => handleNodeClick(nodeId)}
             // draggable
             // onDragStart={() => dispatch(dragNode(nodeId))}
             // onDragEnd={handleOnDragEnd(nodeId)}
