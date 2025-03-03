@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {

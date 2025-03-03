@@ -1,3 +1,4 @@
+import React from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
 
 const MyToastContainer = () => {
@@ -9,11 +10,12 @@ const MyToastContainer = () => {
       closeOnClick
       theme="colored"
       transition={Slide}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-      }}
+      toastStyle={
+        {
+          'max-width': 'fit-content',
+          'padding-right': '2rem',
+        } as React.CSSProperties
+      }
     />
   );
 };
