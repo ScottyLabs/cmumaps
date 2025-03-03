@@ -25,7 +25,7 @@ const ZoomPanWrapper = ({ floorCode }: Props) => {
 
   const showFile = useAppSelector((state) => state.visibility.showFile);
 
-  const [canPan, setCanPan] = useState<boolean>(false);
+  const [canPan, setCanPan] = useState<boolean>(true);
 
   const stageRef = useRef<Konva.Stage>(null);
   const [scale, setScale] = useState<number>(1);

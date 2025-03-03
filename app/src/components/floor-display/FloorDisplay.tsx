@@ -66,7 +66,7 @@ const FloorDisplay = ({
   // const showPolygons = useAppSelector((state) => state.visibility.showPolygons);
 
   // const editPolygon = useAppSelector(selectEditPolygon);
-  // const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
+  const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
 
   if (isLoading) {
     return <Loader loadingText="Fetching nodes and rooms" />;
@@ -112,13 +112,30 @@ const FloorDisplay = ({
     }
   };
 
+  // Disable panning when dragging node, vertex, or label
+  const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    let newCanPan = true;
+
+    // can't pan when dragging on node or vertex
+    if (e.target.getClassName() === 'Circle') {
+      newCanPan = false;
+    }
+
+    // can't pan when dragging on label in label editing mode
+    if (editRoomLabel && e.target.getClassName() === 'Rect') {
+      newCanPan = false;
+    }
+
+    setCanPan(newCanPan);
+  };
+
   return (
     <>
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
         // onMouseMove={handleMouseMove}
-        // onMouseDown={handleOnMouseDown}
+        onMouseDown={handleOnMouseDown}
         onMouseUp={() => setCanPan(true)}
         onClick={handleStageClick}
         onWheel={handleWheel}
