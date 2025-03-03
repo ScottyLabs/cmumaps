@@ -46,7 +46,9 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
 
     return (
       <button onClick={zoomIn} disabled={disabled}>
-        <FiZoomIn className={`size-7 ${disabled ? "text-gray-400" : ""}`} />
+        <FiZoomIn
+          className={`size-7 ${disabled ? "text-gray-400" : "cursor-pointer"}`}
+        />
       </button>
     );
   };
@@ -60,7 +62,9 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
 
     return (
       <button onClick={zoomOut} disabled={disabled}>
-        <FiZoomOut className={`size-7 ${disabled ? "text-gray-400" : ""}`} />
+        <FiZoomOut
+          className={`size-7 ${disabled ? "text-gray-400" : "cursor-pointer"}`}
+        />
       </button>
     );
   };
