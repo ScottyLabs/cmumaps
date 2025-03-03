@@ -1,42 +1,16 @@
 import { prisma } from '../index.ts';
-import {
-  extractBuildingCode,
-  extractFloorLevel,
-} from '../../shared/utils/floorCodeUtils.ts';
-import type { ID, NodeInfo, Nodes } from '../../shared/types.ts';
+import type { ID, NodeInfo, Nodes, Placement } from '../../shared/types.ts';
 import {
   geoCoordsToPdfCoords,
   pdfCoordsToGeoCoords,
 } from '../utils/coordinates.ts';
+import {
+  extractBuildingCode,
+  extractFloorLevel,
+} from '../../shared/utils/floorCodeUtils.ts';
 
 export const nodeService = {
-  getFloorPlacement: async (floorCode: string) => {
-    const buildingCode = extractBuildingCode(floorCode);
-    const floorLevel = extractFloorLevel(floorCode);
-
-    const floor = await prisma.floor.findUnique({
-      where: { buildingCode_floorLevel: { buildingCode, floorLevel } },
-    });
-
-    if (!floor) {
-      throw new Error('Floor not found');
-    }
-
-    const geoCenter = {
-      latitude: floor.centerLatitude,
-      longitude: floor.centerLongitude,
-    };
-    const pdfCenter = { x: floor.centerX, y: floor.centerY };
-
-    return {
-      geoCenter,
-      pdfCenter,
-      scale: floor.scale,
-      angle: floor.angle,
-    };
-  },
-
-  getFloorNodes: async (floorCode: string) => {
+  getFloorNodes: async (floorCode: string, placement: Placement) => {
     const buildingCode = extractBuildingCode(floorCode);
     const floorLevel = extractFloorLevel(floorCode);
 
@@ -44,9 +18,7 @@ export const nodeService = {
       where: { element: { buildingCode, floorLevel } },
     });
 
-    const placement = await nodeService.getFloorPlacement(floorCode);
     const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(placement);
-
     const nodes: Nodes = {};
     for (const node of dbNodes) {
       const position = {
@@ -60,10 +32,13 @@ export const nodeService = {
     return nodes;
   },
 
-  createNode: async (floorCode: string, nodeId: ID, node: NodeInfo) => {
+  createNode: async (
+    floorCode: string,
+    nodeId: ID,
+    node: NodeInfo,
+    placement: Placement
+  ) => {
     const { pos, roomId } = node;
-
-    const placement = await nodeService.getFloorPlacement(floorCode);
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
 
     console.log(geoCoords);
