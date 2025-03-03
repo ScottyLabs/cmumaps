@@ -43,6 +43,7 @@ model Floor {
 
   building Building  @relation(fields: [buildingCode], references: [buildingCode])
   elements Element[]
+  Node     Node[]
 
   @@id([buildingCode, floorLevel])
 }
@@ -90,8 +91,19 @@ model Node {
   outNeighbors Neighbor[] @relation("OutNeighbors")
   inNeighbors  Neighbor[] @relation("InNeighbors")
 
+  // Element relationship (optional)
   elementId String?
   element   Element? @relation(fields: [elementId], references: [elementId])
+
+  // Floor relationship (optional)
+  buildingCode String?
+  floorLevel   String?
+  floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+
+  // XOR constraint: Either elementId OR (buildingCode AND floorLevel) must be non-null, but not both
+  // This constraint needs to be enforced at the application level or with a database-level constraint
+
+  @@index([buildingCode, floorLevel])
 }
 
 model Neighbor {

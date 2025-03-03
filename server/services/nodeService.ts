@@ -51,3 +51,31 @@ export const nodeService = {
     });
   },
 };
+
+/**
+ * Validates that a node has either an Element OR Floor relationship, but not both
+ */
+const validateNodeRelationships = (nodeData: {
+  elementId?: string | null;
+  buildingCode?: string | null;
+  floorLevel?: string | null;
+}) => {
+  const hasElementRelation = !!nodeData.elementId;
+  const hasFloorRelation = !!nodeData.buildingCode && !!nodeData.floorLevel;
+
+  // Case 1: No relationship defined
+  if (!hasElementRelation && !hasFloorRelation) {
+    throw new Error(
+      'Node must be associated with either an Element OR a Floor'
+    );
+  }
+
+  // Case 2: Both relationships defined
+  if (hasElementRelation && hasFloorRelation) {
+    throw new Error(
+      'Node cannot be directly associated with both an Element AND a Floor'
+    );
+  }
+
+  // If we get here, exactly one relationship type is defined (XOR satisfied)
+};
