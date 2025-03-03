@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 
 import { ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { apiSlice } from './apiSlice';
+import { handleQueryError } from './errorHandler';
 
 export interface CreateNodeArgType {
   floorCode: string;
@@ -38,17 +39,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
             ),
           );
 
-          // different error handling for queryFulfilled
-          try {
-            await queryFulfilled;
-          } catch (e) {
-            toast.error(
-              'Failed to save! Check the Console for detailed error.',
-            );
-            undo();
-            const error = e as { error: { data: { error: string } } };
-            console.error(error.error.data.error);
-          }
+          handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error('Check the Console for detailed error.');
           console.error(e);
