@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { ReactNode, useState } from 'react';
 import { IconType } from 'react-icons';
 import { AiOutlineMacCommand } from 'react-icons/ai';

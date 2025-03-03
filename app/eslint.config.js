@@ -19,5 +19,13 @@ export default [
         version: 'detect',
       },
     },
+    rules: {
+      'react/no-unescaped-entities': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      curly: ['error', 'all'],
+    },
   },
 ];

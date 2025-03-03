@@ -15,7 +15,14 @@ export const nodeService = {
     const floorLevel = extractFloorLevel(floorCode);
 
     const dbNodes = await prisma.node.findMany({
-      where: { element: { buildingCode, floorLevel } },
+      where: {
+        OR: [
+          // Nodes directly on the floor
+          { buildingCode, floorLevel },
+          // Nodes on elements on the floor
+          { element: { buildingCode, floorLevel } },
+        ],
+      },
     });
 
     const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(placement);
@@ -55,7 +62,7 @@ export const nodeService = {
 /**
  * Validates that a node has either an Element OR Floor relationship, but not both
  */
-const validateNodeRelationships = (nodeData: {
+const _validateNodeRelationships = (nodeData: {
   elementId?: string | null;
   buildingCode?: string | null;
   floorLevel?: string | null;
