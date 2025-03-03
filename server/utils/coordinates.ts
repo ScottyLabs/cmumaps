@@ -31,8 +31,8 @@ export const pdfCoordsToGeoCoords =
     const rotated = rotate(translatedX, translatedY, angle);
 
     // Apply scaling
-    const scaledX = rotated.x / scale;
-    const scaledY = rotated.y / scale;
+    const scaledX = rotated.y / scale;
+    const scaledY = rotated.x / scale;
 
     // Convert to geographical coordinates
     const longitude = scaledX / longitudeRatio + geoCenter.longitude;
@@ -67,7 +67,7 @@ export const geoCoordsToPdfCoords =
   };
 
 /**
- * Rotates a point around the origin by the given angle
+ * Rotates a point around the origin by the given angle clockwise
  * @param x - X coordinate
  * @param y - Y coordinate
  * @param angle - Angle in radians
