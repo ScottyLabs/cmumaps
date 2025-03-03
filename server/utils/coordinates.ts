@@ -28,11 +28,12 @@ export const pdfCoordsToGeoCoords =
     const translatedY = y - pdfCenter.y;
 
     // Apply rotation
-    const rotated = rotate(translatedX, translatedY, angle);
+    // We have to swap x and y because in Konva the y-axis is inverted
+    const { x: ry, y: rx } = rotate(translatedX, translatedY, angle);
 
     // Apply scaling
-    const scaledX = rotated.y / scale;
-    const scaledY = rotated.x / scale;
+    const scaledX = rx / scale;
+    const scaledY = ry / scale;
 
     // Convert to geographical coordinates
     const longitude = scaledX / longitudeRatio + geoCenter.longitude;
@@ -58,6 +59,7 @@ export const geoCoordsToPdfCoords =
     const y = (latitude - geoCenter.latitude) * latitudeRatio * scale;
 
     // reverse the rotation
+    // We have to swap x and y to make this function the inverse of pdfCoordsToGeoCoords
     const pos = rotate(y, x, -angle);
 
     // reverse the translation
@@ -67,6 +69,7 @@ export const geoCoordsToPdfCoords =
   };
 
 /**
+ * Based on https://stackoverflow.com/a/17411276/4652564
  * Rotates a point around the origin by the given angle clockwise
  * @param x - X coordinate
  * @param y - Y coordinate
