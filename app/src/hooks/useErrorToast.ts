@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { ErrorCode, getErrorMessage } from "../../../shared/errorCode";
 
 // Toast the error message based on url param error code
-// Only works when not in StrictMode!
+// For it to work when not in StrictMode, we need to put this hook where the toast container is mounted
 const useErrorToast = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

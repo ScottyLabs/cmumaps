@@ -1,7 +1,10 @@
-import React from "react";
 import { Slide, ToastContainer } from "react-toastify";
 
+import useErrorToast from "../../hooks/useErrorToast";
+
 const MyToastContainer = () => {
+  useErrorToast();
+
   return (
     <ToastContainer
       position="top-right"
@@ -10,12 +13,10 @@ const MyToastContainer = () => {
       closeOnClick
       theme="colored"
       transition={Slide}
-      toastStyle={
-        {
-          "max-width": "fit-content",
-          "padding-right": "2rem",
-        } as React.CSSProperties
-      }
+      toastStyle={{
+        maxWidth: "fit-content",
+        paddingRight: "2rem",
+      }}
     />
   );
 };
