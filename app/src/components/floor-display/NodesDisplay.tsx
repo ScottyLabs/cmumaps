@@ -1,5 +1,5 @@
 import { Circle } from 'react-konva';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { useAppSelector } from '../../store/hooks';
@@ -19,16 +19,15 @@ const NodesDisplay = ({ nodes }: Props) => {
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const [searchParam] = useSearchParams();
+  const nodeIdSelected = searchParam.get('nodeId');
+
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
   const mode = useAppSelector((state) => state.mode.mode);
 
   // const nodeIdHovered = useAppSelector(
   //   (state) => state.mouseEvent.nodeIdOnHover,
-  // );
-
-  // const nodeIdSelected = useAppSelector((state) =>
-  //   getNodeIdSelected(state.mouseEvent),
   // );
 
   // const roomIdSelected = getRoomId(nodes, nodeIdSelected);
@@ -39,9 +38,9 @@ const NodesDisplay = ({ nodes }: Props) => {
   }
 
   const getFillColor = (nodeId: ID) => {
-    // if (nodeId == nodeIdSelected) {
-    //   return 'yellow';
-    // }
+    if (nodeId == nodeIdSelected) {
+      return 'yellow';
+    }
 
     // if (nodeId == nodeIdHovered) {
     //   return 'cyan';
