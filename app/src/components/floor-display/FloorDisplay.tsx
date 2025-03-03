@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Stage, Layer } from 'react-konva';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
 // import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -23,6 +24,10 @@ import {
   POLYGON_ADD_VERTEX,
   setMode,
 } from '../../store/slices/modeSlice';
+import {
+  setEditRoomLabel,
+  setShowRoomSpecific,
+} from '../../store/slices/uiSlice';
 import { getCursorPos } from '../../utils/canvasUtils';
 import ErrorDisplay from '../shared/ErrorDisplay';
 import Loader from '../shared/Loader';
@@ -48,6 +53,7 @@ const FloorDisplay = ({
   stageRef,
 }: Props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { data: nodes, isLoading, isError } = useGetFloorNodesQuery(floorCode);
 
@@ -56,9 +62,6 @@ const FloorDisplay = ({
   useKeyboardShortcuts();
 
   const mode = useAppSelector((state) => state.mode.mode);
-  // const nodeIdSelected = useAppSelector((state) =>
-  //   getNodeIdSelected(state.mouseEvent),
-  // );
 
   // const showOutline = useAppSelector((state) => state.visibility.showOutline);
   // const showNodes = useAppSelector((state) => state.visibility.showNodes);
@@ -109,6 +112,13 @@ const FloorDisplay = ({
         createNode({ floorCode, nodeId, nodeInfo });
         dispatch(setMode(GRAPH_SELECT));
       });
+    }
+    // click to unselect a room or exit polygon editing or room label editing
+    else if (clickedOnStage) {
+      navigate('?');
+      dispatch(setShowRoomSpecific(false));
+      dispatch(setEditRoomLabel(false));
+      dispatch(setMode(GRAPH_SELECT));
     }
   };
 
