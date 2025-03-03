@@ -48,14 +48,32 @@ export const nodeService = {
     const { pos, roomId } = node;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
 
-    await prisma.node.create({
-      data: {
-        id: nodeId,
-        latitude: geoCoords.latitude,
-        longitude: geoCoords.longitude,
-        ...(roomId ? { elementId: roomId } : {}),
-      },
-    });
+    // Belongs to an element
+    if (roomId) {
+      await prisma.node.create({
+        data: {
+          id: nodeId,
+          latitude: geoCoords.latitude,
+          longitude: geoCoords.longitude,
+          elementId: roomId,
+        },
+      });
+    }
+    // Directly associated with the floor (not an element)
+    else {
+      const buildingCode = extractBuildingCode(floorCode);
+      const floorLevel = extractFloorLevel(floorCode);
+
+      await prisma.node.create({
+        data: {
+          id: nodeId,
+          latitude: geoCoords.latitude,
+          longitude: geoCoords.longitude,
+          buildingCode,
+          floorLevel,
+        },
+      });
+    }
   },
 };
 
