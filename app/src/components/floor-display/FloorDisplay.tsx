@@ -1,13 +1,29 @@
 import Konva from 'konva';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Stage, Layer } from 'react-konva';
+import { toast } from 'react-toastify';
 
 // import { useAppDispatch, useAppSelector } from '../../store/hooks';
 // import { selectEditPolygon } from '../../store/slices/modeSlice';
 // import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
-import { PdfCoordinate } from '../../../../shared/types';
+import { NodeInfo, PdfCoordinate } from '../../../../shared/types';
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
-import { useGetFloorNodesQuery } from '../../store/api/nodeApiSlice';
+import {
+  useCreateNodeMutation,
+  useGetFloorNodesQuery,
+} from '../../store/api/nodeApiSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  ADD_DOOR_NODE,
+  ADD_EDGE,
+  ADD_NODE,
+  DELETE_EDGE,
+  GRAPH_SELECT,
+  POLYGON_ADD_VERTEX,
+  setMode,
+} from '../../store/slices/modeSlice';
+import { getCursorPos } from '../../utils/canvasUtils';
 import ErrorDisplay from '../shared/ErrorDisplay';
 import Loader from '../shared/Loader';
 import NodesDisplay from './NodesDisplay';
@@ -31,13 +47,15 @@ const FloorDisplay = ({
   offset,
   stageRef,
 }: Props) => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const { data: nodes, isLoading, isError } = useGetFloorNodesQuery(floorCode);
 
+  const [createNode] = useCreateNodeMutation();
+
   useKeyboardShortcuts();
 
-  // const mode = useAppSelector((state) => state.mode.mode);
+  const mode = useAppSelector((state) => state.mode.mode);
   // const nodeIdSelected = useAppSelector((state) =>
   //   getNodeIdSelected(state.mouseEvent),
   // );
@@ -58,6 +76,42 @@ const FloorDisplay = ({
     return <ErrorDisplay errorText="Failed to fetch nodes" />;
   }
 
+  const handleStageClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    const clickedOnStage = e.target == e.target.getStage();
+
+    // errors for each mode relative to stage clicking
+    if (mode == ADD_NODE || mode == POLYGON_ADD_VERTEX) {
+      if (!clickedOnStage) {
+        toast.error('Click on empty space!');
+        return;
+      }
+    } else if (mode == ADD_DOOR_NODE) {
+      if (clickedOnStage) {
+        // addDoorNodeErrToast();
+      }
+    } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
+      if (clickedOnStage) {
+        toast.error('Click on another node!');
+        return;
+      }
+    }
+
+    // create node
+    if (mode == ADD_NODE) {
+      getCursorPos(e, offset, scale, (pos) => {
+        const nodeId = uuidv4();
+        const nodeInfo: NodeInfo = {
+          pos: pos,
+          neighbors: {},
+          roomId: '',
+          // roomId: findRoomId(rooms, pos),
+        };
+        createNode({ nodeId, nodeInfo });
+        dispatch(setMode(GRAPH_SELECT));
+      });
+    }
+  };
+
   return (
     <>
       <Stage
@@ -66,7 +120,7 @@ const FloorDisplay = ({
         // onMouseMove={handleMouseMove}
         // onMouseDown={handleOnMouseDown}
         onMouseUp={() => setCanPan(true)}
-        // onClick={handleStageClick}
+        onClick={handleStageClick}
         onWheel={handleWheel}
         onDragMove={handleDragMove}
         draggable

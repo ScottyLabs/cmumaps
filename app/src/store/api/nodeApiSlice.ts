@@ -23,4 +23,4 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetFloorNodesQuery } = nodeApiSlice;
+export const { useGetFloorNodesQuery, useCreateNodeMutation } = nodeApiSlice;
