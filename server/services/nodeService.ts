@@ -3,7 +3,8 @@ import {
   extractBuildingCode,
   extractFloorLevel,
 } from '../../shared/utils/floorCodeUtils.ts';
-import { transform } from '../utils/coordinates.ts';
+import type { Nodes } from '../../shared/types.ts';
+import { geoCoordsToPdfCoords } from '../utils/coordinates.ts';
 
 export const nodeService = {
   getFloorNodes: async (floorCode: string) => {
@@ -18,15 +19,32 @@ export const nodeService = {
       throw new Error('Floor not found');
     }
 
-    const nodes = await prisma.node.findMany({
+    const dbNodes = await prisma.node.findMany({
       where: { element: { buildingCode, floorLevel } },
     });
 
-    return transform(
-      nodes,
-      { latitude: floor.centerLatitude, longitude: floor.centerLongitude },
+    const geoCenter = {
+      latitude: floor.centerLatitude,
+      longitude: floor.centerLongitude,
+    };
+    const pdfCenter = { x: floor.centerX, y: floor.centerY };
+    const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(
+      geoCenter,
+      pdfCenter,
       floor.scale,
       floor.angle
     );
+
+    const nodes: Nodes = {};
+    for (const node of dbNodes) {
+      const position = {
+        latitude: node.latitude,
+        longitude: node.longitude,
+      };
+      const pos = geoCoordsToPdfCoordsHelper(position);
+      nodes[node.elementId] = { neighbors: {}, pos, roomId: node.elementId };
+    }
+
+    return nodes;
   },
 };

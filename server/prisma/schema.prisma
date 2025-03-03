@@ -33,6 +33,8 @@ model Floor {
   buildingCode String
   floorLevel   String
 
+  centerX         Float
+  centerY         Float
   centerLatitude  Float
   centerLongitude Float
   scale           Float
