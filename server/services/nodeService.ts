@@ -41,16 +41,12 @@ export const nodeService = {
     const { pos, roomId } = node;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
 
-    console.log(geoCoords);
-
-    return;
-
     await prisma.node.create({
       data: {
         id: nodeId,
-        latitude: pos.x,
-        longitude: pos.y,
-        elementId: roomId ?? null,
+        latitude: geoCoords.latitude,
+        longitude: geoCoords.longitude,
+        ...(roomId ? { elementId: roomId } : {}),
       },
     });
   },

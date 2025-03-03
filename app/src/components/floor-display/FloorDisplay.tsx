@@ -106,7 +106,7 @@ const FloorDisplay = ({
           roomId: '',
           // roomId: findRoomId(rooms, pos),
         };
-        createNode({ nodeId, nodeInfo });
+        createNode({ floorCode, nodeId, nodeInfo });
         dispatch(setMode(GRAPH_SELECT));
       });
     }
