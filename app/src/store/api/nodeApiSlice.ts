@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 import { ID, NodeInfo, Nodes } from '../../../../shared/types';
 import { apiSlice } from './apiSlice';
 
@@ -20,6 +22,38 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { floorCode, nodeInfo },
       }),
+      async onQueryStarted(
+        { floorCode, nodeId, nodeInfo },
+        { dispatch, queryFulfilled },
+      ) {
+        try {
+          // optimistic update
+          const { undo } = dispatch(
+            nodeApiSlice.util.updateQueryData(
+              'getFloorNodes',
+              floorCode,
+              (draft) => {
+                draft[nodeId] = nodeInfo;
+              },
+            ),
+          );
+
+          // different error handling for queryFulfilled
+          try {
+            await queryFulfilled;
+          } catch (e) {
+            toast.error(
+              'Failed to save! Check the Console for detailed error.',
+            );
+            undo();
+            const error = e as { error: { data: { error: string } } };
+            console.error(error.error.data.error);
+          }
+        } catch (e) {
+          toast.error('Check the Console for detailed error.');
+          console.error(e);
+        }
+      },
     }),
   }),
 });
