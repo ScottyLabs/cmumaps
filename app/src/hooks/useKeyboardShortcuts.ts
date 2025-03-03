@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
@@ -21,6 +22,8 @@ import {
 
 const useKeyboardShortcuts = () => {
   const dispatch = useAppDispatch();
+  const [searchParam] = useSearchParams();
+  const nodeIdSelected = searchParam.get('nodeId');
 
   const editPolygon = useAppSelector(selectEditPolygon);
   const shortcutsDisabled = useAppSelector(
@@ -33,7 +36,7 @@ const useKeyboardShortcuts = () => {
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      //   const toastNodeNotSelectedErr = () => toast.error('Select a node first!');
+      const toastNodeNotSelectedErr = () => toast.error('Select a node first!');
 
       // general keyboard shortcuts
       switch (event.key) {
@@ -117,11 +120,11 @@ const useKeyboardShortcuts = () => {
           // delete or backspace to delete a node
           case 'Backspace':
           case 'Delete':
-            // if (nodeIdSelected && nodes) {
-            //   deleteNode(nodes, nodeIdSelected, floorCode, router, dispatch);
-            // } else {
-            //   toastNodeNotSelectedErr();
-            // }
+            if (nodeIdSelected) {
+              console.log('hi');
+            } else {
+              toastNodeNotSelectedErr();
+            }
             break;
 
           case 'w':
@@ -143,7 +146,7 @@ const useKeyboardShortcuts = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch, editPolygon, shortcutsDisabled]);
+  }, [dispatch, editPolygon, nodeIdSelected, shortcutsDisabled]);
 };
 
 export default useKeyboardShortcuts;
