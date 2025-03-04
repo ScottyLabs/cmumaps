@@ -6,7 +6,7 @@ import {
   WebSocketEventType,
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
-import { nodeApiSlice } from "../api/nodeApiSlice";
+import { createNode } from "../api/nodeApiSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
@@ -49,15 +49,7 @@ const createSocket = (dispatch: AppDispatch) => {
       }
 
       const { nodeId, node } = message;
-      dispatch(
-        nodeApiSlice.util.updateQueryData(
-          "getFloorNodes",
-          floorCode,
-          (draft) => {
-            draft[nodeId] = node;
-          },
-        ),
-      );
+      dispatch(createNode(floorCode, nodeId, node));
     },
   );
 

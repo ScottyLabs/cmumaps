@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 
 import { ID, NodeInfo, Nodes } from "../../../../shared/types";
+import { AppDispatch } from "../store";
 import { apiSlice } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
@@ -11,6 +12,15 @@ export interface CreateNodeArgType {
   nodeInfo: NodeInfo;
   addToHistory?: boolean;
 }
+
+export const createNode =
+  (floorCode: string, nodeId: ID, nodeInfo: NodeInfo) =>
+  (dispatch: AppDispatch) =>
+    dispatch(
+      nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
+        draft[nodeId] = nodeInfo;
+      }),
+    );
 
 export const nodeApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -30,16 +40,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       ) {
         try {
           // optimistic update
-          const { undo } = dispatch(
-            nodeApiSlice.util.updateQueryData(
-              "getFloorNodes",
-              floorCode,
-              (draft) => {
-                draft[nodeId] = nodeInfo;
-              },
-            ),
-          );
-
+          const { undo } = dispatch(createNode(floorCode, nodeId, nodeInfo));
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");
