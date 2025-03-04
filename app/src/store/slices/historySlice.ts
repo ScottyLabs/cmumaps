@@ -2,32 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { toast } from "react-toastify";
 
-import {
-  CreateNodeArg,
-  DeleteNodeArg,
-  nodeApiSlice,
-} from "../api/nodeApiSlice";
+import { nodeApiSlice } from "../api/nodeApiSlice";
 import { AppDispatch } from "../store";
 import { createAppAsyncThunk } from "../withTypes";
+import { Edit, EditPair } from "./historyTypes";
 
 const MAX_UNDO_LIMIT = 50;
-
-interface CreateNodeEdit {
-  endpoint: "createNode";
-  arg: CreateNodeArg;
-}
-
-interface DeleteNodeEdit {
-  endpoint: "deleteNode";
-  arg: DeleteNodeArg;
-}
-
-type Edit = CreateNodeEdit | DeleteNodeEdit;
-
-export interface EditPair {
-  edit: Edit;
-  reverseEdit: Edit;
-}
 
 interface HistoryState {
   editHistory: Edit[];

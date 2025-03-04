@@ -5,7 +5,8 @@ import {
   CreateNodePayload,
   DeleteNodePayload,
 } from "../../../../shared/webSocketTypes";
-import { addEditToHistory, EditPair } from "../slices/historySlice";
+import { addEditToHistory } from "../slices/historySlice";
+import { EditPair } from "../slices/historyTypes";
 import { AppDispatch } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
