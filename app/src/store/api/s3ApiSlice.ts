@@ -12,7 +12,7 @@ export const s3ApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getFloorPdf: builder.query<string, WithTokenArg>({
       query: ({ filePath, token }) => ({
-        url: `${AWS_API_INVOKE_URL}/get-floorplan?filePath=${filePath}`,
+        url: `${AWS_API_INVOKE_URL}/get-floorplan-pdf?filePath=${filePath}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },

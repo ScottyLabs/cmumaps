@@ -31,7 +31,7 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
 
   // get pdf data
   const { buildingCode } = useFloorInfo(floorCode);
-  const filePath = `pdf/${buildingCode}/${floorCode}.pdf`;
+  const filePath = `${buildingCode}/${floorCode}.pdf`;
   const token = useClerkToken();
   const { data: pdfData } = useGetFloorPdfQuery(
     token ? { filePath, token } : skipToken,
