@@ -5,7 +5,7 @@ import { listenerMiddleware } from "./middleware/listenerMiddleware";
 import { webSocketMiddleware } from "./middleware/webSocketMiddleware";
 import dataSlice from "./slices/dataSlice";
 import floorSlice from "./slices/floorSlice";
-// import historySlice from './features/historySlice';
+import historySlice from "./slices/historySlice";
 import lockSlice from "./slices/lockSlice";
 import modeSlice from "./slices/modeSlice";
 import mouseEventSlice from "./slices/mouseEventSlice";
@@ -28,7 +28,7 @@ export const store = configureStore({
     floor: floorSlice,
     // users: usersSlice,
     lock: lockSlice,
-    // history: historySlice,
+    history: historySlice,
     polygon: polygonSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
