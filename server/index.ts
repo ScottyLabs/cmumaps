@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Create HTTP server
+// Create HTTP server with Express app attached
 const server = http.createServer(app);
 
 // Initialize Socket.IO with CORS
@@ -32,9 +32,9 @@ app.use("/api/buildings", buildingRoutes);
 app.use("/api/nodes", nodeRoutes);
 app.use(notFoundHandler);
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+const port = 80;
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
 
 process.on("SIGINT", async () => {

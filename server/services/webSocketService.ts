@@ -8,11 +8,6 @@ export class WebSocketService {
 
   constructor(io: Server) {
     this.io = io;
-    this.setupConnectionHandlers();
-  }
-
-  private setupConnectionHandlers(): void {
-    const { io } = this;
 
     // Socket.IO connection handling
     io.on("connection", (socket) => {
