@@ -68,4 +68,9 @@ export const nodeService = {
     const payload = { nodeId, nodeInfo };
     websocketService.broadcastToFloor(socketId, "create-node", payload);
   },
+
+  deleteNode: async (socketId: string, nodeId: ID) => {
+    await prisma.node.delete({ where: { id: nodeId } });
+    websocketService.broadcastToFloor(socketId, "delete-node", { nodeId });
+  },
 };

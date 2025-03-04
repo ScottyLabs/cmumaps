@@ -39,4 +39,25 @@ export const nodeController = {
       });
     }
   },
+
+  deleteNode: async (req: Request, res: Response) => {
+    const nodeId = req.params.id;
+    const socketId = req.header("X-Socket-ID");
+
+    if (!socketId) {
+      res.status(400).json({ message: "X-Socket-ID header is required" });
+      return;
+    }
+
+    try {
+      await nodeService.deleteNode(socketId, nodeId);
+      res.json(null);
+    } catch (error) {
+      console.error("Error deleting node", error);
+      res.status(500).json({
+        error: "Error deleting node",
+        details: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  },
 };
