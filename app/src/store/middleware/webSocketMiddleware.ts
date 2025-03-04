@@ -5,6 +5,7 @@ import {
   WEBSOCKET_JOIN,
   WEBSOCKET_DISCONNECT,
   JoinWebSocketAction,
+  WEBSOCKET_LEAVE,
 } from "./webSocketActions";
 
 // import { AppDispatch, RootState } from "../store";
@@ -19,18 +20,16 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
   switch (type) {
     // Connect to socket
     case WEBSOCKET_JOIN: {
-      if (socket !== null) {
-        return;
+      if (socket === null) {
+        // Create new socket connection
+        socket = io(import.meta.env.VITE_SERVER_URL);
+        socket.on("connect", () => {
+          console.log("Connected to server");
+        });
+        socket.on("disconnect", () => {
+          console.log("Disconnected from server");
+        });
       }
-
-      // Create new socket connection
-      socket = io(import.meta.env.VITE_SERVER_URL);
-      socket.on("connect", () => {
-        console.log("Connected to server");
-      });
-      socket.on("disconnect", () => {
-        console.log("Disconnected from server");
-      });
 
       // Join room
       const { payload } = action as JoinWebSocketAction;
@@ -39,6 +38,19 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
         socket.emit("join", floorCode);
       }
 
+      break;
+    }
+
+    case WEBSOCKET_LEAVE: {
+      if (!socket) {
+        return;
+      }
+
+      const { payload } = action as JoinWebSocketAction;
+      const { floorCode } = payload;
+      if (floorCode) {
+        socket.emit("leave", floorCode);
+      }
       break;
     }
 
