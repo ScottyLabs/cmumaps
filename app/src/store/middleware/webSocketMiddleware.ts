@@ -1,6 +1,11 @@
 import { Action, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
 
+import {
+  WebSocketEvents,
+  WebSocketEventType,
+  WebSocketPayloads,
+} from "../../../../shared/webSocketTypes";
 import { nodeApiSlice } from "../api/nodeApiSlice";
 import { AppDispatch } from "../store";
 import {
@@ -29,18 +34,25 @@ const createSocket = (floorCode: string | undefined, dispatch: AppDispatch) => {
     console.log("Disconnected from server");
   });
 
-  socket.on("create-node", (message) => {
-    const { nodeId, node } = message;
-    if (!floorCode) {
-      return;
-    }
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.CREATE_NODE,
+    (message: WebSocketPayloads["create-node"]) => {
+      if (!floorCode) {
+        return;
+      }
 
-    dispatch(
-      nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
-        draft[nodeId] = node;
-      }),
-    );
-  });
+      const { nodeId, node } = message;
+      dispatch(
+        nodeApiSlice.util.updateQueryData(
+          "getFloorNodes",
+          floorCode,
+          (draft) => {
+            draft[nodeId] = node;
+          },
+        ),
+      );
+    },
+  );
 
   return socket;
 };
