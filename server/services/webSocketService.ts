@@ -27,12 +27,6 @@ export class WebSocketService {
         console.log(`${socket.id} left room: ${room}`);
       });
 
-      // Send message to a room
-      socket.on("room-message", ({ room, message }) => {
-        console.log(`Message to room ${room}:`, message);
-        io.to(room).emit("room-message", { room, message });
-      });
-
       // Handle disconnections
       socket.on("disconnect", () => {
         this.socketMap.delete(socket.id);

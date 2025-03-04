@@ -1,4 +1,4 @@
-import { prisma } from "../index.ts";
+import { prisma, websocketService } from "../index.ts";
 import type { ID, NodeInfo, Nodes, Placement } from "../../shared/types.ts";
 import {
   geoCoordsToPdfCoords,
@@ -65,6 +65,9 @@ export const nodeService = {
       });
     }
 
-    console.log(socketId);
+    websocketService.broadcastToOthersInRoom(socketId, "patch", {
+      nodeId,
+      node,
+    });
   },
 };

@@ -30,6 +30,10 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
         socket.on("disconnect", () => {
           console.log("Disconnected from server");
         });
+
+        socket.on("patch", (message) => {
+          console.log(message);
+        });
       }
 
       // Join room
