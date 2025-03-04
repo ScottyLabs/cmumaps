@@ -50,15 +50,15 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { floorCode, nodeId, addToHistory, nodeInfo } = arg;
-          // optimistic update
-          const { undo } = dispatch(
-            createNode(floorCode, { nodeId, nodeInfo }),
-          );
           // add to history
           if (addToHistory) {
             const editPair = buildCreateEditPair(arg);
             dispatch(addEditToHistory(editPair));
           }
+          // optimistic update
+          const { undo } = dispatch(
+            createNode(floorCode, { nodeId, nodeInfo }),
+          );
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");
@@ -75,14 +75,14 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
           const { floorCode, nodeId, addToHistory } = arg;
-          // optimistic update
-          const { undo } = dispatch(deleteNode(floorCode, { nodeId }));
           // add to history
           if (addToHistory) {
             const getStore = getState as () => RootState;
             const editPair = await buildDeleteEditPair(arg, getStore, dispatch);
             dispatch(addEditToHistory(editPair));
           }
+          // optimistic update
+          const { undo } = dispatch(deleteNode(floorCode, { nodeId }));
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");

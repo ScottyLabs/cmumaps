@@ -53,8 +53,6 @@ export const buildDeleteEditPair = async (
   };
 
   const nodes = await getNodes(floorCode, getStore, dispatch);
-  console.log(nodes);
-  console.log(nodes[nodeId]);
   const reverseEdit: Edit = {
     endpoint: "createNode",
     arg: {
