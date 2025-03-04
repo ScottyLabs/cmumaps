@@ -60,7 +60,7 @@ const FloorDisplay = ({
 
   const [createNode] = useCreateNodeMutation();
 
-  useKeyboardShortcuts();
+  useKeyboardShortcuts(floorCode);
 
   const mode = useAppSelector((state) => state.mode.mode);
 

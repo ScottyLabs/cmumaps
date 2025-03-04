@@ -1,12 +1,16 @@
 import { toast } from "react-toastify";
 
 import { Nodes } from "../../../../shared/types";
-import { CreateNodePayload } from "../../../../shared/webSocketTypes";
+import {
+  CreateNodePayload,
+  DeleteNodePayload,
+} from "../../../../shared/webSocketTypes";
 import { AppDispatch } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
 export type CreateNodeArg = BaseMutationArg & CreateNodePayload;
+export type DeleteNodeArg = BaseMutationArg & DeleteNodePayload;
 
 export const createNode =
   (floorCode: string, { nodeId, nodeInfo }: CreateNodePayload) =>
@@ -14,6 +18,15 @@ export const createNode =
     dispatch(
       nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
         draft[nodeId] = nodeInfo;
+      }),
+    );
+
+export const deleteNode =
+  (floorCode: string, { nodeId }: DeleteNodePayload) =>
+  (dispatch: AppDispatch) =>
+    dispatch(
+      nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
+        delete draft[nodeId];
       }),
     );
 
@@ -45,7 +58,31 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    deleteNode: builder.mutation<Response, DeleteNodeArg>({
+      query: ({ socketId, nodeId }) => ({
+        url: `nodes/${nodeId}`,
+        method: "DELETE",
+        headers: { "X-Socket-ID": socketId },
+      }),
+      async onQueryStarted(
+        { floorCode, nodeId },
+        { dispatch, queryFulfilled },
+      ) {
+        try {
+          // optimistic update
+          const { undo } = dispatch(deleteNode(floorCode, { nodeId }));
+          handleQueryError(queryFulfilled, undo);
+        } catch (e) {
+          toast.error("Check the Console for detailed error.");
+          console.error(e);
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetFloorNodesQuery, useCreateNodeMutation } = nodeApiSlice;
+export const {
+  useGetFloorNodesQuery,
+  useCreateNodeMutation,
+  useDeleteNodeMutation,
+} = nodeApiSlice;

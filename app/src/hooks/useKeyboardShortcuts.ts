@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
+import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getSocketId } from "../store/middleware/webSocketMiddleware";
 import {
   ADD_DOOR_NODE,
   ADD_NODE,
@@ -21,10 +23,12 @@ import {
   toggleShowPolygons,
 } from "../store/slices/visibilitySlice";
 
-const useKeyboardShortcuts = () => {
+const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
   const [searchParam] = useSearchParams();
   const nodeIdSelected = searchParam.get("nodeId");
+
+  const [deleteNode] = useDeleteNodeMutation();
 
   const editPolygon = useAppSelector(selectEditPolygon);
   const shortcutsDisabled = useAppSelector(
@@ -120,13 +124,15 @@ const useKeyboardShortcuts = () => {
 
           // delete or backspace to delete a node
           case "Backspace":
-          case "Delete":
-            if (nodeIdSelected) {
-              console.log("hi");
+          case "Delete": {
+            const socketId = getSocketId();
+            if (nodeIdSelected && socketId) {
+              deleteNode({ socketId, floorCode, nodeId: nodeIdSelected });
             } else {
               toastNodeNotSelectedErr();
             }
             break;
+          }
 
           case "w":
             dispatch(setMode(ADD_DOOR_NODE));
@@ -142,12 +148,20 @@ const useKeyboardShortcuts = () => {
       }
     };
 
+    console.log("Add event listener for keyboard shortcuts");
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [dispatch, editPolygon, nodeIdSelected, shortcutsDisabled]);
+  }, [
+    deleteNode,
+    dispatch,
+    editPolygon,
+    floorCode,
+    nodeIdSelected,
+    shortcutsDisabled,
+  ]);
 };
 
 export default useKeyboardShortcuts;
