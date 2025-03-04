@@ -14,8 +14,6 @@ import {
   useCreateNodeMutation,
   useGetFloorNodesQuery,
 } from "../../store/api/nodeApiSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getSocketId } from "../../store/middleware/webSocketMiddleware";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
@@ -24,11 +22,13 @@ import {
   GRAPH_SELECT,
   POLYGON_ADD_VERTEX,
   setMode,
-} from "../../store/slices/modeSlice";
+} from "../../store/features/modeSlice";
 import {
   setEditRoomLabel,
   setShowRoomSpecific,
-} from "../../store/slices/uiSlice";
+} from "../../store/features/uiSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getSocketId } from "../../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../../utils/canvasUtils";
 import ErrorDisplay from "../shared/ErrorDisplay";
 import Loader from "../shared/Loader";

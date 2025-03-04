@@ -3,8 +3,8 @@ import Konva from "konva";
 import { useRef, useState } from "react";
 
 import { PdfCoordinate } from "../../../../shared/types";
+import { LOADED } from "../../store/features/statusSlice";
 import { useAppSelector } from "../../store/hooks";
-import { LOADED } from "../../store/slices/statusSlice";
 import FloorDisplay from "../floor-display/FloorDisplay";
 import LoadingText from "../layouts/LoadingText";
 import PDFViewer from "./PdfViewer";

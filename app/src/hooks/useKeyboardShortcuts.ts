@@ -3,9 +3,7 @@ import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getSocketId } from "../store/middleware/webSocketMiddleware";
-import { redo, undo } from "../store/slices/history/historySlice";
+import { redo, undo } from "../store/features/history/historySlice";
 import {
   ADD_DOOR_NODE,
   ADD_NODE,
@@ -14,7 +12,7 @@ import {
   POLYGON_DELETE_VERTEX,
   selectEditPolygon,
   setMode,
-} from "../store/slices/modeSlice";
+} from "../store/features/modeSlice";
 import {
   toggleShowEdges,
   toggleShowFile,
@@ -22,7 +20,9 @@ import {
   toggleShowNodes,
   toggleShowOutline,
   toggleShowPolygons,
-} from "../store/slices/visibilitySlice";
+} from "../store/features/visibilitySlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getSocketId } from "../store/middleware/webSocketMiddleware";
 
 const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();

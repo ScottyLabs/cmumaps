@@ -2,13 +2,13 @@ import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
 
 import { ID, NodeInfo, Nodes } from "../../../../shared/types";
-import { useAppSelector } from "../../store/hooks";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
   DELETE_EDGE,
   GRAPH_SELECT,
-} from "../../store/slices/modeSlice";
+} from "../../store/features/modeSlice";
+import { useAppSelector } from "../../store/hooks";
 
 interface Props {
   floorCode: string;

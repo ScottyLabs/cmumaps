@@ -1,5 +1,5 @@
+import { FAILED_LOAD, LOADING } from "../../store/features/statusSlice";
 import { useAppSelector } from "../../store/hooks";
-import { FAILED_LOAD, LOADING } from "../../store/slices/statusSlice";
 import Loader from "../shared/Loader";
 
 const LoadingText = () => {
