@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { apiSlice } from "./api/apiSlice";
 import { listenerMiddleware } from "./middleware/listenerMiddleware";
+import { webSocketMiddleware } from "./middleware/webSocketMiddleware";
 import dataSlice from "./slices/dataSlice";
 import floorSlice from "./slices/floorSlice";
 // import historySlice from './features/historySlice';
@@ -34,6 +35,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(listenerMiddleware.middleware)
+      .concat(webSocketMiddleware)
       .concat(apiSlice.middleware),
 });
 
