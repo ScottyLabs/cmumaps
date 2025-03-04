@@ -1,3 +1,4 @@
+import useWebSocket from "../../hooks/useWebSocket";
 import ZoomPanWrapper from "../zoom-pan/ZoomPanWrapper";
 
 interface Props {
@@ -5,6 +6,8 @@ interface Props {
 }
 
 const MainDisplay = ({ floorCode }: Props) => {
+  useWebSocket(floorCode);
+
   return (
     <>
       <div className="fixed top-1/2 z-50 -translate-y-1/2">

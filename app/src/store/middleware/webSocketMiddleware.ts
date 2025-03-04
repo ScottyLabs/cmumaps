@@ -42,14 +42,6 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
       break;
     }
 
-    // Disconnect socket
-    case WEBSOCKET_DISCONNECT:
-      if (socket !== null) {
-        socket.close();
-        socket = null;
-      }
-      break;
-
     // Emit message through socket
     // case socketActions.SOCKET_EMIT:
     //   if (socket !== null) {
@@ -57,6 +49,14 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
     //     socket.emit(event, data);
     //   }
     //   break;
+
+    // Disconnect socket
+    case WEBSOCKET_DISCONNECT:
+      if (socket !== null) {
+        socket.close();
+        socket = null;
+      }
+      break;
 
     default:
       break;

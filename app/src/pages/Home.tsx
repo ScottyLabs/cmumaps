@@ -1,27 +1,15 @@
 import { SignedIn, UserButton } from "@clerk/clerk-react";
 
-import { useEffect } from "react";
 import { NavLink } from "react-router";
 
 import ErrorDisplay from "../components/shared/ErrorDisplay";
 import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
+import useWebSocket from "../hooks/useWebSocket";
 import { useGetBuildingCodesAndNamesQuery } from "../store/api/buildingApiSlice";
-import { useAppDispatch } from "../store/hooks";
-import {
-  joinWebSocket,
-  disconnectWebSocket,
-} from "../store/middleware/webSocketActions";
 
 const Home = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(joinWebSocket());
-    return () => {
-      dispatch(disconnectWebSocket());
-    };
-  }, [dispatch]);
+  useWebSocket();
 
   const {
     data: buildingCodesAndNames,
