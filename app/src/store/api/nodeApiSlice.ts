@@ -5,6 +5,7 @@ import {
   CreateNodePayload,
   DeleteNodePayload,
 } from "../../../../shared/webSocketTypes";
+import { addEditToHistory, EditPair } from "../slices/historySlice";
 import { AppDispatch } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
@@ -43,7 +44,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         body: { socketId, floorCode, nodeInfo },
       }),
       async onQueryStarted(
-        { floorCode, nodeId, nodeInfo },
+        { socketId, floorCode, nodeId, addToHistory, nodeInfo },
         { dispatch, queryFulfilled },
       ) {
         try {
@@ -51,6 +52,28 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
           const { undo } = dispatch(
             createNode(floorCode, { nodeId, nodeInfo }),
           );
+          if (addToHistory) {
+            const edit: EditPair = {
+              edit: {
+                endpoint: "createNode",
+                arg: {
+                  socketId,
+                  floorCode,
+                  nodeId,
+                  nodeInfo,
+                },
+              },
+              reverseEdit: {
+                endpoint: "deleteNode",
+                arg: {
+                  socketId,
+                  floorCode,
+                  nodeId,
+                },
+              },
+            };
+            dispatch(addEditToHistory(edit));
+          }
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");

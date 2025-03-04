@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getSocketId } from "../store/middleware/webSocketMiddleware";
+import { redo, undo } from "../store/slices/historySlice";
 import {
   ADD_DOOR_NODE,
   ADD_NODE,
@@ -78,9 +79,9 @@ const useKeyboardShortcuts = (floorCode: string) => {
         case "z":
           if (event.metaKey || event.ctrlKey) {
             if (event.shiftKey) {
-              //   dispatch(redo());
+              dispatch(redo());
             } else {
-              //   dispatch(undo()s);
+              dispatch(undo());
             }
           }
           break;
@@ -128,7 +129,13 @@ const useKeyboardShortcuts = (floorCode: string) => {
           case "Delete": {
             const socketId = getSocketId();
             if (nodeIdSelected && socketId) {
-              deleteNode({ socketId, floorCode, nodeId: nodeIdSelected });
+              const addToHistory = true;
+              deleteNode({
+                socketId,
+                floorCode,
+                addToHistory,
+                nodeId: nodeIdSelected,
+              });
             } else {
               toastNodeNotSelectedErr();
             }

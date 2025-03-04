@@ -112,7 +112,8 @@ const FloorDisplay = ({
         };
         const socketId = getSocketId();
         if (socketId) {
-          createNode({ socketId, floorCode, nodeId, nodeInfo });
+          const addToHistory = true;
+          createNode({ socketId, floorCode, addToHistory, nodeId, nodeInfo });
         } else {
           toast.error("Socket not connected");
         }

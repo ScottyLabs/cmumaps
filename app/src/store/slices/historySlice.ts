@@ -94,8 +94,8 @@ export const redo = createAppAsyncThunk(
   },
 );
 
-const getUpdatedHistory = <T>(history: T[], patch: T, index: number) => {
-  const updatedHistory = [...history.slice(0, index + 1), patch];
+const getUpdatedHistory = (history: Edit[], edit: Edit, index: number) => {
+  const updatedHistory = [...history.slice(0, index + 1), edit];
   // Trim the history arrays to maintain the maximum undo limit
   return updatedHistory.slice(-MAX_UNDO_LIMIT);
 };
@@ -108,7 +108,7 @@ const historySlice = createSlice({
       const edit = action.payload.edit;
       const reverseEdit = action.payload.reverseEdit;
 
-      // Update the history arrays with the new patch
+      // Update the history arrays with the new edit
       state.editHistory = getUpdatedHistory(
         state.editHistory,
         edit,
