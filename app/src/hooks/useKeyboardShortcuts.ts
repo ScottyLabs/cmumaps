@@ -25,10 +25,11 @@ import {
 
 const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
-  const [searchParam] = useSearchParams();
-  const nodeIdSelected = searchParam.get("nodeId");
 
   const [deleteNode] = useDeleteNodeMutation();
+
+  const [searchParam] = useSearchParams();
+  const nodeIdSelected = searchParam.get("nodeId");
 
   const editPolygon = useAppSelector(selectEditPolygon);
   const shortcutsDisabled = useAppSelector(
@@ -40,9 +41,9 @@ const useKeyboardShortcuts = (floorCode: string) => {
       return;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const toastNodeNotSelectedErr = () => toast.error("Select a node first!");
+    const toastNodeNotSelectedErr = () => toast.error("Select a node first!");
 
+    const handleKeyDown = (event: KeyboardEvent) => {
       // general keyboard shortcuts
       switch (event.key) {
         // visibility
@@ -148,15 +149,14 @@ const useKeyboardShortcuts = (floorCode: string) => {
       }
     };
 
-    console.log("Add event listener for keyboard shortcuts");
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [
-    deleteNode,
     dispatch,
+    deleteNode,
     editPolygon,
     floorCode,
     nodeIdSelected,
