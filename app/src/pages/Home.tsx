@@ -8,13 +8,19 @@ import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
 import { useGetBuildingCodesAndNamesQuery } from "../store/api/buildingApiSlice";
 import { useAppDispatch } from "../store/hooks";
-import { socketActions } from "../store/middleware/webSocketMiddleware";
+import {
+  connectWebSocket,
+  disconnectWebSocket,
+} from "../store/middleware/webSocketActions";
 
 const Home = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch({ type: socketActions.SOCKET_CONNECT });
+    dispatch(connectWebSocket());
+    return () => {
+      dispatch(disconnectWebSocket());
+    };
   }, [dispatch]);
 
   const {
