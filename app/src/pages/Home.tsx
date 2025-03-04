@@ -9,7 +9,7 @@ import MyToastContainer from "../components/shared/MyToastContainer";
 import { useGetBuildingCodesAndNamesQuery } from "../store/api/buildingApiSlice";
 import { useAppDispatch } from "../store/hooks";
 import {
-  connectWebSocket,
+  joinWebSocket,
   disconnectWebSocket,
 } from "../store/middleware/webSocketActions";
 
@@ -17,7 +17,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(connectWebSocket());
+    dispatch(joinWebSocket());
     return () => {
       dispatch(disconnectWebSocket());
     };

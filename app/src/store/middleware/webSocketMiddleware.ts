@@ -1,7 +1,11 @@
 import { Action, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
 
-import { WEBSOCKET_CONNECT, WEBSOCKET_DISCONNECT } from "./webSocketActions";
+import {
+  WEBSOCKET_JOIN,
+  WEBSOCKET_DISCONNECT,
+  JoinWebSocketAction,
+} from "./webSocketActions";
 
 // import { AppDispatch, RootState } from "../store";
 
@@ -14,13 +18,27 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
 
   switch (type) {
     // Connect to socket
-    case WEBSOCKET_CONNECT: {
+    case WEBSOCKET_JOIN: {
       if (socket !== null) {
         return;
       }
 
       // Create new socket connection
       socket = io(import.meta.env.VITE_SERVER_URL);
+      socket.on("connect", () => {
+        console.log("Connected to server");
+      });
+      socket.on("disconnect", () => {
+        console.log("Disconnected from server");
+      });
+
+      // Join room
+      const { payload } = action as JoinWebSocketAction;
+      const { floorCode } = payload;
+      if (floorCode) {
+        socket.emit("join", floorCode);
+      }
+
       break;
     }
 

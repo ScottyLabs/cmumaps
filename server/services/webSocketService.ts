@@ -13,24 +13,16 @@ export class WebSocketService {
     io.on("connection", (socket) => {
       console.log(`Client connected: ${socket.id}`);
 
-      // Echo message back to sender
-      socket.on("message", (data) => {
-        console.log(`Received message from ${socket.id}:`, data);
-        socket.emit("message", data);
-      });
-
       // Join a room
       socket.on("join", (room) => {
         socket.join(room);
         console.log(`${socket.id} joined room: ${room}`);
-        socket.emit("joined", { room });
       });
 
       // Leave a room
       socket.on("leave", (room) => {
         socket.leave(room);
         console.log(`${socket.id} left room: ${room}`);
-        socket.emit("left", { room });
       });
 
       // Send message to a room
