@@ -2,7 +2,7 @@ import { apiSlice } from "./apiSlice";
 
 export const AWS_API_INVOKE_URL = `${import.meta.env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;
 
-interface WithTokenArgType {
+interface WithTokenArg {
   filePath: string;
   token: string;
 }
@@ -10,7 +10,7 @@ interface WithTokenArgType {
 export const s3ApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getFloorPdf: builder.query<string, WithTokenArgType>({
+    getFloorPdf: builder.query<string, WithTokenArg>({
       query: ({ filePath, token }) => ({
         url: `${AWS_API_INVOKE_URL}/get-floorplan?filePath=${filePath}`,
         headers: {

@@ -3,16 +3,10 @@ import { toast } from "react-toastify";
 import { Nodes } from "../../../../shared/types";
 import { CreateNodePayload } from "../../../../shared/webSocketTypes";
 import { AppDispatch } from "../store";
-import { apiSlice } from "./apiSlice";
+import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
-interface BaseMutationArgType {
-  socketId: string;
-  floorCode: string;
-  addToHistory?: boolean;
-}
-
-export type CreateNodeArgType = BaseMutationArgType & CreateNodePayload;
+export type CreateNodeArg = BaseMutationArg & CreateNodePayload;
 
 export const createNode =
   (floorCode: string, { nodeId, nodeInfo }: CreateNodePayload) =>
@@ -29,7 +23,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
     getFloorNodes: builder.query<Nodes, string>({
       query: (floorCode) => `nodes/?floorCode=${floorCode}`,
     }),
-    createNode: builder.mutation<Response, CreateNodeArgType>({
+    createNode: builder.mutation<Response, CreateNodeArg>({
       query: ({ socketId, floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
         method: "POST",
