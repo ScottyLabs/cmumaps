@@ -6,15 +6,15 @@ import {
   leaveWebSocket,
 } from "../store/middleware/webSocketActions";
 
-const useWebSocket = (floorCode?: string) => {
+const useWebSocket = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(joinWebSocket(floorCode));
+    dispatch(joinWebSocket());
     return () => {
-      dispatch(leaveWebSocket(floorCode));
+      dispatch(leaveWebSocket());
     };
-  }, [dispatch, floorCode]);
+  }, [dispatch]);
 };
 
 export default useWebSocket;
