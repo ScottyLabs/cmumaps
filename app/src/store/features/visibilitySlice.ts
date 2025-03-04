@@ -10,7 +10,7 @@ interface VisibilityState {
 }
 
 const initialState: VisibilityState = {
-  showFile: true,
+  showFile: false,
   showOutline: true,
   showNodes: true,
   showEdges: true,

@@ -33,6 +33,7 @@ import { getCursorPos } from "../../utils/canvasUtils";
 import ErrorDisplay from "../shared/ErrorDisplay";
 import Loader from "../shared/Loader";
 import NodesDisplay from "./NodesDisplay";
+import OutlineDisplay from "./OutlineDisplay";
 
 interface Props {
   floorCode: string;
@@ -165,6 +166,7 @@ const FloorDisplay = ({
         ref={stageRef}
       >
         <Layer>
+          <OutlineDisplay floorCode={floorCode} />
           <NodesDisplay nodes={nodes} floorCode={floorCode} />
         </Layer>
       </Stage>

@@ -19,7 +19,16 @@ export const s3ApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: (response: { data: string }) => response.data,
     }),
+    getFloorOutline: builder.query<string, WithTokenArg>({
+      query: ({ filePath, token }) => ({
+        url: `${AWS_API_INVOKE_URL}/get-floorplan-outline?filePath=${filePath}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        transformResponse: (response: { data: string }) => response.data,
+      }),
+    }),
   }),
 });
 
-export const { useGetFloorPdfQuery } = s3ApiSlice;
+export const { useGetFloorPdfQuery, useGetFloorOutlineQuery } = s3ApiSlice;
