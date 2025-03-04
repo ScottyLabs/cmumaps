@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getSocketId } from "../store/middleware/webSocketMiddleware";
-import { redo, undo } from "../store/slices/historySlice";
+import { redo, undo } from "../store/slices/history/historySlice";
 import {
   ADD_DOOR_NODE,
   ADD_NODE,

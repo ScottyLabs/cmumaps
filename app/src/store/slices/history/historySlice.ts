@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { toast } from "react-toastify";
 
-import { nodeApiSlice } from "../api/nodeApiSlice";
-import { AppDispatch } from "../store";
-import { createAppAsyncThunk } from "../withTypes";
-import { Edit, EditPair } from "./historyTypes";
+import { nodeApiSlice } from "../../api/nodeApiSlice";
+import { AppDispatch } from "../../store";
+import { createAppAsyncThunk } from "../../withTypes";
+import { Edit, EditPair } from "../historyTypes";
 
 const MAX_UNDO_LIMIT = 50;
 

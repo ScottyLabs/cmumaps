@@ -1,4 +1,4 @@
-import { CreateNodeArg, DeleteNodeArg } from "../api/nodeApiSlice";
+import { CreateNodeArg, DeleteNodeArg } from "../../api/nodeApiSlice";
 
 interface CreateNodeEdit {
   endpoint: "createNode";
