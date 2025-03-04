@@ -12,6 +12,7 @@ import {
 
 // Socket instance
 let socket: Socket | null = null;
+export const getSocketId = () => socket?.id;
 
 // Socket middleware
 export const webSocketMiddleware: Middleware = () => (next) => (action) => {

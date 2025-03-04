@@ -1,4 +1,4 @@
-import { prisma, websocketService } from "../index.ts";
+import { prisma } from "../index.ts";
 import type { ID, NodeInfo, Nodes, Placement } from "../../shared/types.ts";
 import {
   geoCoordsToPdfCoords,
@@ -40,6 +40,7 @@ export const nodeService = {
   },
 
   createNode: async (
+    socketId: string,
     floorCode: string,
     nodeId: ID,
     node: NodeInfo,
@@ -63,33 +64,7 @@ export const nodeService = {
         data: { ...data, buildingCode, floorLevel },
       });
     }
+
+    console.log(socketId);
   },
-};
-
-/**
- * Validates that a node has either an Element OR Floor relationship, but not both
- */
-const _validateNodeRelationships = (nodeData: {
-  elementId?: string | null;
-  buildingCode?: string | null;
-  floorLevel?: string | null;
-}) => {
-  const hasElementRelation = !!nodeData.elementId;
-  const hasFloorRelation = !!nodeData.buildingCode && !!nodeData.floorLevel;
-
-  // Case 1: No relationship defined
-  if (!hasElementRelation && !hasFloorRelation) {
-    throw new Error(
-      "Node must be associated with either an Element OR a Floor"
-    );
-  }
-
-  // Case 2: Both relationships defined
-  if (hasElementRelation && hasFloorRelation) {
-    throw new Error(
-      "Node cannot be directly associated with both an Element AND a Floor"
-    );
-  }
-
-  // If we get here, exactly one relationship type is defined (XOR satisfied)
 };

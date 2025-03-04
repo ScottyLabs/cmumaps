@@ -5,6 +5,7 @@ import { apiSlice } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
 export interface CreateNodeArgType {
+  socketId: string;
   floorCode: string;
   nodeId: ID;
   nodeInfo: NodeInfo;
@@ -18,10 +19,10 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       query: (floorCode) => `nodes/?floorCode=${floorCode}`,
     }),
     createNode: builder.mutation<Response, CreateNodeArgType>({
-      query: ({ floorCode, nodeId, nodeInfo }) => ({
+      query: ({ socketId, floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
         method: "POST",
-        body: { floorCode, nodeInfo },
+        body: { socketId, floorCode, nodeInfo },
       }),
       async onQueryStarted(
         { floorCode, nodeId, nodeInfo },

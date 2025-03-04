@@ -19,11 +19,17 @@ export const nodeController = {
 
   createNode: async (req: Request, res: Response) => {
     const nodeId = req.params.id;
-    const { floorCode, nodeInfo } = req.body;
+    const { socketId, floorCode, nodeInfo } = req.body;
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await nodeService.createNode(floorCode, nodeId, nodeInfo, placement);
+      await nodeService.createNode(
+        socketId,
+        floorCode,
+        nodeId,
+        nodeInfo,
+        placement
+      );
       res.json(null);
     } catch (error) {
       console.error("Error creating node", error);

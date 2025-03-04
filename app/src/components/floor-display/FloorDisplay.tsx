@@ -15,6 +15,7 @@ import {
   useGetFloorNodesQuery,
 } from "../../store/api/nodeApiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getSocketId } from "../../store/middleware/webSocketMiddleware";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
@@ -109,7 +110,12 @@ const FloorDisplay = ({
           roomId: "",
           // roomId: findRoomId(rooms, pos),
         };
-        createNode({ floorCode, nodeId, nodeInfo });
+        const socketId = getSocketId();
+        if (socketId) {
+          createNode({ socketId, floorCode, nodeId, nodeInfo });
+        } else {
+          toast.error("Socket not connected");
+        }
         dispatch(setMode(GRAPH_SELECT));
       });
     }
