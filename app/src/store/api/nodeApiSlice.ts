@@ -6,8 +6,11 @@ import {
   DeleteNodePayload,
 } from "../../../../shared/webSocketTypes";
 import { addEditToHistory } from "../features/history/historySlice";
-import { generateCreateEditPair } from "../features/history/historyUtils";
-import { AppDispatch } from "../store";
+import {
+  buildCreateEditPair,
+  buildDeleteEditPair,
+} from "../features/history/historyUtils";
+import { AppDispatch, RootState } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
@@ -51,8 +54,9 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
           const { undo } = dispatch(
             createNode(floorCode, { nodeId, nodeInfo }),
           );
+          // add to history
           if (addToHistory) {
-            const editPair = generateCreateEditPair(arg);
+            const editPair = buildCreateEditPair(arg);
             dispatch(addEditToHistory(editPair));
           }
           handleQueryError(queryFulfilled, undo);
@@ -68,13 +72,17 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
         headers: { "X-Socket-ID": socketId },
       }),
-      async onQueryStarted(
-        { floorCode, nodeId },
-        { dispatch, queryFulfilled },
-      ) {
+      async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
+          const { floorCode, nodeId, addToHistory } = arg;
           // optimistic update
           const { undo } = dispatch(deleteNode(floorCode, { nodeId }));
+          // add to history
+          if (addToHistory) {
+            const getStore = getState as () => RootState;
+            const editPair = await buildDeleteEditPair(arg, getStore, dispatch);
+            dispatch(addEditToHistory(editPair));
+          }
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");
