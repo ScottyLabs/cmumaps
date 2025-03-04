@@ -1,18 +1,18 @@
 import { toast } from "react-toastify";
 
-import { ID, NodeInfo, Nodes } from "../../../../shared/types";
+import { Nodes } from "../../../../shared/types";
 import { CreateNodePayload } from "../../../../shared/webSocketTypes";
 import { AppDispatch } from "../store";
 import { apiSlice } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
-export interface CreateNodeArgType {
+interface BaseMutationArgType {
   socketId: string;
   floorCode: string;
-  nodeId: ID;
-  nodeInfo: NodeInfo;
   addToHistory?: boolean;
 }
+
+export type CreateNodeArgType = BaseMutationArgType & CreateNodePayload;
 
 export const createNode =
   (floorCode: string, { nodeId, nodeInfo }: CreateNodePayload) =>
