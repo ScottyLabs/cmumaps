@@ -1,22 +1,27 @@
 import { Action, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
 
+import { nodeApiSlice } from "../api/nodeApiSlice";
+import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
   WEBSOCKET_DISCONNECT,
-  JoinWebSocketAction,
   WEBSOCKET_LEAVE,
 } from "./webSocketActions";
-
-// import { AppDispatch, RootState } from "../store";
 
 // Socket instance
 let socket: Socket | null = null;
 export const getSocketId = () => socket?.id;
 
+interface ParamsType {
+  dispatch: AppDispatch;
+}
+
 // Socket middleware
-export const webSocketMiddleware: Middleware = () => (next) => (action) => {
+const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
+  const { dispatch } = params as ParamsType;
   const { type } = action as Action;
+  const floorCode = window.location.pathname.split("/")[1];
 
   switch (type) {
     // Connect to socket
@@ -32,13 +37,24 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
         });
 
         socket.on("patch", (message) => {
-          console.log(message);
+          const { nodeId, node } = message;
+          if (!floorCode) {
+            return;
+          }
+
+          dispatch(
+            nodeApiSlice.util.updateQueryData(
+              "getFloorNodes",
+              floorCode,
+              (draft) => {
+                draft[nodeId] = node;
+              },
+            ),
+          );
         });
       }
 
       // Join room
-      const { payload } = action as JoinWebSocketAction;
-      const { floorCode } = payload;
       if (floorCode) {
         socket.emit("join", floorCode);
       }
@@ -51,8 +67,6 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
         return;
       }
 
-      const { payload } = action as JoinWebSocketAction;
-      const { floorCode } = payload;
       if (floorCode) {
         socket.emit("leave", floorCode);
       }
@@ -81,3 +95,5 @@ export const webSocketMiddleware: Middleware = () => (next) => (action) => {
 
   return next(action);
 };
+
+export { webSocketMiddleware };
