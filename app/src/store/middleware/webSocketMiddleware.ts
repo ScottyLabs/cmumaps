@@ -17,6 +17,34 @@ interface ParamsType {
   dispatch: AppDispatch;
 }
 
+const createSocket = (floorCode: string | undefined, dispatch: AppDispatch) => {
+  // Create new socket connection
+  const socket = io(import.meta.env.VITE_SERVER_URL);
+
+  socket.on("connect", () => {
+    console.log("Connected to server");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Disconnected from server");
+  });
+
+  socket.on("patch", (message) => {
+    const { nodeId, node } = message;
+    if (!floorCode) {
+      return;
+    }
+
+    dispatch(
+      nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
+        draft[nodeId] = node;
+      }),
+    );
+  });
+
+  return socket;
+};
+
 // Socket middleware
 const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
   const { dispatch } = params as ParamsType;
@@ -24,34 +52,10 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
   const floorCode = window.location.pathname.split("/")[1];
 
   switch (type) {
-    // Connect to socket
     case WEBSOCKET_JOIN: {
+      // Connect to socket
       if (socket === null) {
-        // Create new socket connection
-        socket = io(import.meta.env.VITE_SERVER_URL);
-        socket.on("connect", () => {
-          console.log("Connected to server");
-        });
-        socket.on("disconnect", () => {
-          console.log("Disconnected from server");
-        });
-
-        socket.on("patch", (message) => {
-          const { nodeId, node } = message;
-          if (!floorCode) {
-            return;
-          }
-
-          dispatch(
-            nodeApiSlice.util.updateQueryData(
-              "getFloorNodes",
-              floorCode,
-              (draft) => {
-                draft[nodeId] = node;
-              },
-            ),
-          );
-        });
+        socket = createSocket(floorCode, dispatch);
       }
 
       // Join room
@@ -63,11 +67,7 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
     }
 
     case WEBSOCKET_LEAVE: {
-      if (!socket) {
-        return;
-      }
-
-      if (floorCode) {
+      if (socket && floorCode) {
         socket.emit("leave", floorCode);
       }
       break;
