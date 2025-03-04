@@ -1,27 +1,29 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 // Define the WebSocketEvent type
 export type WebSocketEvent = string;
 
 export class WebSocketService {
-  private io: Server;
+  private socketMap: Map<string, Socket> = new Map();
+  private socketToRoom: Map<string, string> = new Map();
 
   constructor(io: Server) {
-    this.io = io;
-
     // Socket.IO connection handling
     io.on("connection", (socket) => {
       console.log(`Client connected: ${socket.id}`);
+      this.socketMap.set(socket.id, socket);
 
       // Join a room
       socket.on("join", (room) => {
         socket.join(room);
+        this.socketToRoom.set(socket.id, room);
         console.log(`${socket.id} joined room: ${room}`);
       });
 
       // Leave a room
       socket.on("leave", (room) => {
         socket.leave(room);
+        this.socketToRoom.delete(socket.id);
         console.log(`${socket.id} left room: ${room}`);
       });
 
@@ -33,19 +35,29 @@ export class WebSocketService {
 
       // Handle disconnections
       socket.on("disconnect", () => {
+        this.socketMap.delete(socket.id);
+        this.socketToRoom.delete(socket.id);
         console.log(`Client disconnected: ${socket.id}`);
       });
     });
   }
 
   /**
-   * Send an event to clients in a specific room
+   * Send an event to all clients in the room except the sender
    */
-  public broadcastToRoom(
-    room: string,
+  public broadcastToOthersInRoom(
+    senderId: string,
     event: WebSocketEvent,
     data: unknown
   ): void {
-    this.io.to(room).emit(event, data);
+    const senderSocket = this.socketMap.get(senderId);
+    const room = this.socketToRoom.get(senderId);
+    if (senderSocket && room) {
+      senderSocket.to(room).emit(event, data);
+    } else {
+      console.error(
+        "Could not send message to room due to invalid sender or room"
+      );
+    }
   }
 }

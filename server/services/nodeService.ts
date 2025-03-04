@@ -1,4 +1,4 @@
-import { prisma } from "../index.ts";
+import { prisma, websocketService } from "../index.ts";
 import type { ID, NodeInfo, Nodes, Placement } from "../../shared/types.ts";
 import {
   geoCoordsToPdfCoords,
@@ -43,7 +43,7 @@ export const nodeService = {
     floorCode: string,
     nodeId: ID,
     node: NodeInfo,
-    placement: Placement,
+    placement: Placement
   ) => {
     const { pos, roomId } = node;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
@@ -80,14 +80,14 @@ const _validateNodeRelationships = (nodeData: {
   // Case 1: No relationship defined
   if (!hasElementRelation && !hasFloorRelation) {
     throw new Error(
-      "Node must be associated with either an Element OR a Floor",
+      "Node must be associated with either an Element OR a Floor"
     );
   }
 
   // Case 2: Both relationships defined
   if (hasElementRelation && hasFloorRelation) {
     throw new Error(
-      "Node cannot be directly associated with both an Element AND a Floor",
+      "Node cannot be directly associated with both an Element AND a Floor"
     );
   }
 
