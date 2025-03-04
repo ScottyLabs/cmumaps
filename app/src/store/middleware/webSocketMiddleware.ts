@@ -29,7 +29,7 @@ const createSocket = (floorCode: string | undefined, dispatch: AppDispatch) => {
     console.log("Disconnected from server");
   });
 
-  socket.on("patch", (message) => {
+  socket.on("create-node", (message) => {
     const { nodeId, node } = message;
     if (!floorCode) {
       return;

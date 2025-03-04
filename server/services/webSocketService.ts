@@ -1,8 +1,5 @@
 import { Server, Socket } from "socket.io";
-
-// Define the WebSocketEvent type
-export type WebSocketEvent = string;
-
+import type { WebSocketPayloads } from "../../shared/webSocketTypes.ts";
 export class WebSocketService {
   private socketMap: Map<string, Socket> = new Map();
   private socketToRoom: Map<string, string> = new Map();
@@ -39,15 +36,15 @@ export class WebSocketService {
   /**
    * Send an event to all clients in the room except the sender
    */
-  public broadcastToOthersInRoom(
+  public broadcastToFloor<E extends keyof WebSocketPayloads>(
     senderId: string,
-    event: WebSocketEvent,
-    data: unknown
+    event: E,
+    payload: WebSocketPayloads[E]
   ): void {
     const senderSocket = this.socketMap.get(senderId);
     const room = this.socketToRoom.get(senderId);
     if (senderSocket && room) {
-      senderSocket.to(room).emit(event, data);
+      senderSocket.to(room).emit(event, payload);
     } else {
       console.error(
         "Could not send message to room due to invalid sender or room"

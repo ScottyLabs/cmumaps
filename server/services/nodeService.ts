@@ -65,9 +65,7 @@ export const nodeService = {
       });
     }
 
-    websocketService.broadcastToOthersInRoom(socketId, "patch", {
-      nodeId,
-      node,
-    });
+    const payload = { nodeId, node };
+    websocketService.broadcastToFloor(socketId, "create-node", payload);
   },
 };
