@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
-import { redo, undo } from "../store/features/history/historySlice";
+import { redo, undo } from "../store/features/history/historyThunks";
 import {
   ADD_DOOR_NODE,
   ADD_NODE,

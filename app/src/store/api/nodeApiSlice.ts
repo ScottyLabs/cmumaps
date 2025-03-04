@@ -6,7 +6,7 @@ import {
   DeleteNodePayload,
 } from "../../../../shared/webSocketTypes";
 import { addEditToHistory } from "../features/history/historySlice";
-import { EditPair } from "../features/history/historyTypes";
+import { generateCreateEditPair } from "../features/history/historyUtils";
 import { AppDispatch } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
@@ -44,36 +44,16 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { socketId, floorCode, nodeInfo },
       }),
-      async onQueryStarted(
-        { socketId, floorCode, nodeId, addToHistory, nodeInfo },
-        { dispatch, queryFulfilled },
-      ) {
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
+          const { floorCode, nodeId, addToHistory, nodeInfo } = arg;
           // optimistic update
           const { undo } = dispatch(
             createNode(floorCode, { nodeId, nodeInfo }),
           );
           if (addToHistory) {
-            const edit: EditPair = {
-              edit: {
-                endpoint: "createNode",
-                arg: {
-                  socketId,
-                  floorCode,
-                  nodeId,
-                  nodeInfo,
-                },
-              },
-              reverseEdit: {
-                endpoint: "deleteNode",
-                arg: {
-                  socketId,
-                  floorCode,
-                  nodeId,
-                },
-              },
-            };
-            dispatch(addEditToHistory(edit));
+            const editPair = generateCreateEditPair(arg);
+            dispatch(addEditToHistory(editPair));
           }
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
