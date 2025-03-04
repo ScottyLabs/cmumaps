@@ -44,12 +44,9 @@ const createSocket = (dispatch: AppDispatch) => {
     WebSocketEvents.CREATE_NODE,
     (message: WebSocketPayloads["create-node"]) => {
       const floorCode = getFloorCode();
-      if (!floorCode) {
-        return;
+      if (floorCode) {
+        dispatch(createNode(floorCode, message));
       }
-
-      const { nodeId, node } = message;
-      dispatch(createNode(floorCode, nodeId, node));
     },
   );
 

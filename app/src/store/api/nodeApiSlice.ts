@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 
 import { ID, NodeInfo, Nodes } from "../../../../shared/types";
+import { CreateNodePayload } from "../../../../shared/webSocketTypes";
 import { AppDispatch } from "../store";
 import { apiSlice } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
@@ -14,7 +15,7 @@ export interface CreateNodeArgType {
 }
 
 export const createNode =
-  (floorCode: string, nodeId: ID, nodeInfo: NodeInfo) =>
+  (floorCode: string, { nodeId, nodeInfo }: CreateNodePayload) =>
   (dispatch: AppDispatch) =>
     dispatch(
       nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
@@ -40,7 +41,9 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       ) {
         try {
           // optimistic update
-          const { undo } = dispatch(createNode(floorCode, nodeId, nodeInfo));
+          const { undo } = dispatch(
+            createNode(floorCode, { nodeId, nodeInfo }),
+          );
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");

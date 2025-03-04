@@ -43,10 +43,10 @@ export const nodeService = {
     socketId: string,
     floorCode: string,
     nodeId: ID,
-    node: NodeInfo,
+    nodeInfo: NodeInfo,
     placement: Placement
   ) => {
-    const { pos, roomId } = node;
+    const { pos, roomId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
     const data = { id: nodeId, ...geoCoords };
 
@@ -65,7 +65,7 @@ export const nodeService = {
       });
     }
 
-    const payload = { nodeId, node };
+    const payload = { nodeId, nodeInfo };
     websocketService.broadcastToFloor(socketId, "create-node", payload);
   },
 };

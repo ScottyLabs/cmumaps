@@ -12,7 +12,7 @@ export type WebSocketEventType =
 // Event payload types
 export interface CreateNodePayload {
   nodeId: string;
-  node: NodeInfo;
+  nodeInfo: NodeInfo;
 }
 
 // Define payload types for each event
