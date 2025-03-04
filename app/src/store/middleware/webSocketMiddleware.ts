@@ -6,7 +6,7 @@ import {
   WebSocketEventType,
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
-import { createNode } from "../api/nodeApiSlice";
+import { createNode, deleteNode } from "../api/nodeApiSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
@@ -46,6 +46,17 @@ const createSocket = (dispatch: AppDispatch) => {
       const floorCode = getFloorCode();
       if (floorCode) {
         dispatch(createNode(floorCode, message));
+      }
+    },
+  );
+
+  // Handle delete node event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.DELETE_NODE,
+    (message: WebSocketPayloads["delete-node"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(deleteNode(floorCode, message));
       }
     },
   );
