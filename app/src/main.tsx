@@ -8,6 +8,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import "./index.css";
 import FloorPage from "./pages/FloorPage.tsx";
 import Home from "./pages/Home.tsx";
+import { USE_STRICT_MODE } from "./settings.ts";
 import { store } from "./store/store.ts";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -26,19 +27,27 @@ const ProtectedRoute = () => {
   return <Outlet />;
 };
 
+const AppContent = () => (
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <BrowserRouter>
+      <Provider store={store}>
+        <Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route index element={<Home />} />
+            <Route path=":floorCode" element={<FloorPage />} />
+          </Route>
+        </Routes>
+      </Provider>
+    </BrowserRouter>
+  </ClerkProvider>
+);
+
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <BrowserRouter>
-        <Provider store={store}>
-          <Routes>
-            <Route element={<ProtectedRoute />}>
-              <Route index element={<Home />} />
-              <Route path=":floorCode" element={<FloorPage />} />
-            </Route>
-          </Routes>
-        </Provider>
-      </BrowserRouter>
-    </ClerkProvider>
-  </StrictMode>,
+  USE_STRICT_MODE ? (
+    <StrictMode>
+      <AppContent />
+    </StrictMode>
+  ) : (
+    <AppContent />
+  ),
 );

@@ -2,6 +2,7 @@ import { useUser } from "@clerk/clerk-react";
 
 import { useEffect, useRef } from "react";
 
+import { USE_STRICT_MODE } from "../settings";
 import { useAppDispatch } from "../store/hooks";
 import {
   joinWebSocket,
@@ -33,7 +34,7 @@ const useWebSocket = (floorCode?: string) => {
 
     return () => {
       // Skip cleanup on initial Strict Mode run whne in development
-      if (isInitialRender.current && import.meta.env.MODE === "development") {
+      if (isInitialRender.current && USE_STRICT_MODE) {
         isInitialRender.current = false;
         return;
       }
