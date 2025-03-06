@@ -11,6 +11,7 @@ import {
   setCursorInfos,
 } from "../store/features/liveCursor/liveCursorSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { broadcastWebSocket } from "../store/middleware/webSocketActions";
 import { getSocketId } from "../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../utils/canvasUtils";
 
@@ -37,6 +38,9 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
     const intervalId = setInterval(() => {
       if (cursorInfos && cursorInfos.length > 0) {
         if (socketId) {
+          const event = "sync-cursors";
+          const payload = { socketId, cursorInfos };
+          dispatch(broadcastWebSocket({ event, payload }));
           dispatch(setCursorInfos({ socketId, cursorInfos: [] }));
         }
       }

@@ -44,8 +44,7 @@ export class WebSocketService {
         // broadcast the message to all clients in the room except the sender
         const room = this.socketToRoom.get(socket.id);
         if (room) {
-          this.io.to(room).emit("broadcast", message);
-          // socket.to(room).emit("broadcast", message);
+          socket.to(room).emit("broadcast", message);
         } else {
           console.error(
             "Could not send broadcast to room (excluding the sender) due to invalid sender or room"

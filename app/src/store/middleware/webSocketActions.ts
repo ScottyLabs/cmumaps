@@ -21,13 +21,34 @@ export const leaveWebSocket = (floorCode?: string) => ({
 });
 
 export type BroadcastWebSocketAction = ReturnType<typeof broadcastWebSocket>;
-export const broadcastWebSocket = (message: BroadcastMessageType) => ({
+export const broadcastWebSocket = ({ event, payload }: BroadcastMessage) => ({
   type: WEBSOCKET_BROADCAST,
-  payload: { message },
+  payload: { event, payload },
 });
 
-// Broadcast message types
-interface BroadcastMessageType {
+// Define all Broadcast event names as string literals
+export const BroadcastEvents = {
+  SYNC_CURSORS: "sync-cursors",
+} as const;
+
+// Create a type from the values
+export type BroadcastEventType =
+  (typeof BroadcastEvents)[keyof typeof BroadcastEvents];
+
+// Event payload types
+interface SyncCursorsPayload {
   socketId: string;
   cursorInfos: CursorInfo[];
 }
+
+// Define payload types for each event
+export type BroadcastPayloads = {
+  [BroadcastEvents.SYNC_CURSORS]: SyncCursorsPayload;
+};
+
+export type BroadcastMessage = {
+  [T in BroadcastEventType]: {
+    event: T;
+    payload: BroadcastPayloads[T];
+  };
+}[BroadcastEventType];

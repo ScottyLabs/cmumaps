@@ -17,6 +17,7 @@ import {
   LeaveWebSocketAction,
   WEBSOCKET_BROADCAST,
   BroadcastWebSocketAction,
+  BroadcastMessage,
 } from "./webSocketActions";
 
 // Socket instance
@@ -52,7 +53,9 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
   });
 
   socket.on("broadcast", (message) => {
-    console.log(message);
+    const { event, payload } = message as BroadcastMessage;
+    console.log(event);
+    console.log(payload);
   });
 
   // Handle sync users event
@@ -125,7 +128,7 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
     case WEBSOCKET_BROADCAST: {
       const { payload } = action as BroadcastWebSocketAction;
       if (socket !== null) {
-        socket.emit("broadcast", payload.message);
+        socket.emit("broadcast", payload);
       }
       break;
     }
