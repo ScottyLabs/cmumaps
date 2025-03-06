@@ -32,8 +32,8 @@ const useWebSocket = (floorCode?: string) => {
     }
 
     return () => {
-      // Skip cleanup on initial Strict Mode run
-      if (isInitialRender.current) {
+      // Skip cleanup on initial Strict Mode run whne in development
+      if (isInitialRender.current && import.meta.env.MODE === "development") {
         isInitialRender.current = false;
         return;
       }
