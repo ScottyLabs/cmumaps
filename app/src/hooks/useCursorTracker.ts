@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/clerk-react";
 import Konva from "konva";
 import { throttle } from "lodash";
 
@@ -18,6 +19,8 @@ import { getCursorPos } from "../utils/canvasUtils";
 
 const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   const dispatch = useAppDispatch();
+  const { user: clerkUser } = useUser();
+
   const socketId = getSocketId();
   const cursorInfoList = useAppSelector((state) =>
     selectCursorInfoList(state, socketId),
@@ -25,11 +28,12 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
 
   // optional show self cursor mostly for local testing
   useEffect(() => {
-    if (SHOW_SELF_CURSOR && socketId) {
-      const user = { userName: "Me", color: "blue", socketId };
+    if (SHOW_SELF_CURSOR && socketId && clerkUser) {
+      const userName = clerkUser.firstName || "";
+      const user = { userName, color: "blue", socketId };
       dispatch(addUser({ socketId, user }));
     }
-  }, [dispatch, socketId]);
+  }, [clerkUser, dispatch, socketId]);
 
   // store mouse positions
   const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
