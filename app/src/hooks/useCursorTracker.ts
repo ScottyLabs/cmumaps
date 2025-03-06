@@ -5,13 +5,9 @@ import { useEffect } from "react";
 
 import { PdfCoordinate } from "../../../shared/types";
 import { CURSOR_INTERVAL } from "../components/live-cursors/LiveCursors";
-import {
-  pushCursorInfos,
-  selectCursorInfos,
-  setCursorInfos,
-} from "../store/features/liveCursor/liveCursorSlice";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { broadcastWebSocket } from "../store/middleware/webSocketActions";
+import { pushCursorInfos } from "../store/features/liveCursor/liveCursorSlice";
+import { syncCursors } from "../store/features/liveCursor/liveCursorThunks";
+import { useAppDispatch } from "../store/hooks";
 import { getSocketId } from "../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../utils/canvasUtils";
 
@@ -19,9 +15,6 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   const dispatch = useAppDispatch();
 
   const socketId = getSocketId();
-  const cursorInfos = useAppSelector((state) =>
-    selectCursorInfos(state, socketId),
-  );
 
   // store mouse positions
   const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -36,20 +29,13 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   // sync cursor position
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (cursorInfos && cursorInfos.length > 0) {
-        if (socketId) {
-          const event = "sync-cursors";
-          const payload = { socketId, cursorInfos };
-          dispatch(broadcastWebSocket({ event, payload }));
-          dispatch(setCursorInfos({ socketId, cursorInfos: [] }));
-        }
-      }
+      dispatch(syncCursors());
     }, 500);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [cursorInfos, dispatch, socketId]);
+  }, [dispatch, socketId]);
 
   return handleMouseMove;
 };
