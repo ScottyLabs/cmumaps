@@ -3,6 +3,7 @@ import { useParams, Navigate } from "react-router";
 import { ErrorCode } from "../../../shared/errorCode";
 import FloorSwitcher from "../components/layouts/FloorSwitcher";
 import HelpInfo from "../components/layouts/HelpInfo";
+import LiveUserCount from "../components/layouts/LiveUserCount";
 import MainDisplay from "../components/layouts/MainDisplay";
 import ModeDisplay from "../components/layouts/ModeDisplay";
 import NavBar from "../components/layouts/NavBar";
@@ -39,6 +40,7 @@ const FloorPage = () => {
   return (
     <>
       <NavBar />
+      <LiveUserCount />
       <MainDisplay floorCode={floorCode} />
       <ModeDisplay />
       <FloorSwitcher floorCode={floorCode} />
