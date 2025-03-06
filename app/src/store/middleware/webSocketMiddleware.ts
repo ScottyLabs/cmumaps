@@ -8,7 +8,10 @@ import {
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
 import { createNode, deleteNode } from "../api/nodeApiSlice";
-import { setLiveUsers } from "../features/liveCursor/liveCursorSlice";
+import {
+  setCursorInfos,
+  setLiveUsers,
+} from "../features/liveCursor/liveCursorSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
@@ -54,8 +57,10 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
 
   socket.on("broadcast", (message) => {
     const { event, payload } = message as BroadcastMessage;
-    console.log(event);
-    console.log(payload);
+    if (event === "sync-cursors") {
+      const { socketId, cursorInfos } = payload;
+      dispatch(setCursorInfos({ socketId, cursorInfos }));
+    }
   });
 
   // Handle sync users event
