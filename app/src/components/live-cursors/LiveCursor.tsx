@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { GiArrowCursor } from "react-icons/gi";
 import { Path } from "react-konva";
 
+import { LiveUser } from "../../../../shared/webSocketTypes";
 import {
   CURSOR_INTERVAL,
   selectCursorInfoList,
   setCursorInfoList,
-  LiveUser,
 } from "../../store/features/liveCursor/liveCursorSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CursorNameRect from "./LiveCursorRect";

@@ -1,4 +1,4 @@
-import { LiveUser } from "../features/liveCursor/liveCursorSlice";
+import { LiveUser } from "../../../../shared/webSocketTypes";
 
 // Action types
 export const WEBSOCKET_JOIN = "WEBSOCKET_JOIN";

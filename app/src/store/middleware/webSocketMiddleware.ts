@@ -2,12 +2,12 @@ import { Action, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
 
 import {
+  LiveUser,
   WebSocketEvents,
   WebSocketEventType,
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
 import { createNode, deleteNode } from "../api/nodeApiSlice";
-import { LiveUser } from "../features/liveCursor/liveCursorSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,

@@ -1,13 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { LiveUser } from "../../../../../shared/webSocketTypes";
 import { CursorInfo } from "./liveCursorTypes";
 
 export const CURSOR_INTERVAL = 20;
-
-export interface LiveUser {
-  userName: string;
-  color: string;
-}
 
 interface LiveCursorState {
   liveUsers: Record<string, LiveUser>;

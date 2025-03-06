@@ -1,5 +1,10 @@
 import type { NodeInfo } from "./types.ts";
 
+export interface LiveUser {
+  userName: string;
+  color: string;
+}
+
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {
   CREATE_NODE: "create-node",
