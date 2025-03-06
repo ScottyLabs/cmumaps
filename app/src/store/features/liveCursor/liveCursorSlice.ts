@@ -19,9 +19,9 @@ interface pushCursorInfoPayload {
   socketId: string;
   cursorInfo: CursorInfo;
 }
-interface SetCursorInfoListPayload {
+interface SetCursorInfosPayload {
   socketId: string;
-  cursorInfoList: CursorInfo[];
+  cursorInfos: CursorInfo[];
 }
 
 const liveCursorSlice = createSlice({
@@ -32,20 +32,19 @@ const liveCursorSlice = createSlice({
       state.liveUsers = action.payload;
     },
 
-    pushCursorInfoList(state, action: PayloadAction<pushCursorInfoPayload>) {
+    pushCursorInfos(state, action: PayloadAction<pushCursorInfoPayload>) {
       const { socketId, cursorInfo } = action.payload;
       if (!state.liveCursors[socketId]) {
         state.liveCursors[socketId] = [];
       }
       state.liveCursors[socketId].push(cursorInfo);
     },
-    setCursorInfoList(state, action: PayloadAction<SetCursorInfoListPayload>) {
-      state.liveCursors[action.payload.socketId] =
-        action.payload.cursorInfoList;
+    setCursorInfos(state, action: PayloadAction<SetCursorInfosPayload>) {
+      state.liveCursors[action.payload.socketId] = action.payload.cursorInfos;
     },
   },
   selectors: {
-    selectCursorInfoList(state, socketId: string | undefined) {
+    selectCursorInfos(state, socketId: string | undefined) {
       if (!socketId) {
         return null;
       }
@@ -54,7 +53,7 @@ const liveCursorSlice = createSlice({
   },
 });
 
-export const { selectCursorInfoList } = liveCursorSlice.selectors;
-export const { setLiveUsers, pushCursorInfoList, setCursorInfoList } =
+export const { selectCursorInfos } = liveCursorSlice.selectors;
+export const { setLiveUsers, pushCursorInfos, setCursorInfos } =
   liveCursorSlice.actions;
 export default liveCursorSlice.reducer;

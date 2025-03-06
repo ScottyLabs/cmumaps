@@ -6,9 +6,9 @@ import { useEffect } from "react";
 import { PdfCoordinate } from "../../../shared/types";
 import { CURSOR_INTERVAL } from "../components/live-cursors/LiveCursors";
 import {
-  pushCursorInfoList,
-  selectCursorInfoList,
-  setCursorInfoList,
+  pushCursorInfos,
+  selectCursorInfos,
+  setCursorInfos,
 } from "../store/features/liveCursor/liveCursorSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getSocketId } from "../store/middleware/webSocketMiddleware";
@@ -18,8 +18,8 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   const dispatch = useAppDispatch();
 
   const socketId = getSocketId();
-  const cursorInfoList = useAppSelector((state) =>
-    selectCursorInfoList(state, socketId),
+  const cursorInfos = useAppSelector((state) =>
+    selectCursorInfos(state, socketId),
   );
 
   // store mouse positions
@@ -27,7 +27,7 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
     getCursorPos(e, offset, scale, (cursorPos) => {
       const socketId = getSocketId();
       if (socketId) {
-        dispatch(pushCursorInfoList({ socketId, cursorInfo: { cursorPos } }));
+        dispatch(pushCursorInfos({ socketId, cursorInfo: { cursorPos } }));
       }
     });
   }, CURSOR_INTERVAL);
@@ -35,9 +35,9 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   // sync cursor position
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (cursorInfoList && cursorInfoList.length > 0) {
+      if (cursorInfos && cursorInfos.length > 0) {
         if (socketId) {
-          dispatch(setCursorInfoList({ socketId, cursorInfoList: [] }));
+          dispatch(setCursorInfos({ socketId, cursorInfos: [] }));
         }
       }
     }, 500);
@@ -45,7 +45,7 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [cursorInfoList, dispatch, socketId]);
+  }, [cursorInfos, dispatch, socketId]);
 
   return handleMouseMove;
 };

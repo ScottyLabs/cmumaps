@@ -5,8 +5,8 @@ import { Path } from "react-konva";
 import { LiveUser } from "../../../../shared/webSocketTypes";
 import {
   CURSOR_INTERVAL,
-  selectCursorInfoList,
-  setCursorInfoList,
+  selectCursorInfos,
+  setCursorInfos,
 } from "../../store/features/liveCursor/liveCursorSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CursorNameRect from "./LiveCursorRect";
@@ -25,28 +25,28 @@ const LiveCursor = ({
   scale,
 }: LiveCursorProps) => {
   const dispatch = useAppDispatch();
-  const cursorInfoList = useAppSelector((state) =>
-    selectCursorInfoList(state, userSocketId),
+  const cursorInfos = useAppSelector((state) =>
+    selectCursorInfos(state, userSocketId),
   );
 
   // keep popping off the first element of cursor info list
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (cursorInfoList && cursorInfoList.length > 1) {
+      if (cursorInfos && cursorInfos.length > 1) {
         const socketId = userSocketId;
-        const payload = { socketId, cursorInfoList: cursorInfoList.slice(1) };
-        dispatch(setCursorInfoList(payload));
+        const payload = { socketId, cursorInfos: cursorInfos.slice(1) };
+        dispatch(setCursorInfos(payload));
       }
     }, CURSOR_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [cursorInfoList, dispatch, floorCode, userSocketId]);
+  }, [cursorInfos, dispatch, floorCode, userSocketId]);
 
-  if (!cursorInfoList || cursorInfoList.length === 0) {
+  if (!cursorInfos || cursorInfos.length === 0) {
     return;
   }
 
-  const cursorPos = cursorInfoList[0].cursorPos;
+  const cursorPos = cursorInfos[0].cursorPos;
   const renderCursor = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
