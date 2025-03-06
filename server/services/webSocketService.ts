@@ -1,22 +1,37 @@
 import { Server, Socket } from "socket.io";
-import type { WebSocketPayloads } from "../../shared/webSocketTypes.ts";
+import type {
+  LiveUser,
+  WebSocketPayloads,
+} from "../../shared/webSocketTypes.ts";
+import { WebSocketEvents } from "../../shared/webSocketTypes.ts";
 export class WebSocketService {
   private socketMap: Map<string, Socket> = new Map();
   private socketToRoom: Map<string, string> = new Map();
+  private socketToUser: Map<string, LiveUser> = new Map();
 
   constructor(io: Server) {
     // Socket.IO connection handling
     io.on("connection", (socket) => {
       console.log(`Client connected: ${socket.id}`);
       this.socketMap.set(socket.id, socket);
-
-      console.log(socket.handshake.query);
+      this.socketToUser.set(socket.id, {
+        userName: socket.handshake.query.userName as string,
+        color: socket.handshake.query.userColor as string,
+      });
 
       // Join a room
-      socket.on("join", (room) => {
+      socket.on("join", async (room) => {
         socket.join(room);
         this.socketToRoom.set(socket.id, room);
         console.log(`${socket.id} joined room: ${room}`);
+
+        // sync users in room
+        const users = await io.in(room).fetchSockets();
+        const userMap: Record<string, LiveUser> = {};
+        users.forEach((user) => {
+          userMap[user.id] = this.socketToUser.get(user.id) as LiveUser;
+        });
+        socket.emit(WebSocketEvents.SYNC_USERS, userMap);
       });
 
       // Leave a room

@@ -48,6 +48,14 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
     console.log("Disconnected from server");
   });
 
+  // Handle sync users event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.SYNC_USERS,
+    (message: WebSocketPayloads["sync-users"]) => {
+      console.log("Sync users", message);
+    },
+  );
+
   // Handle create node event
   socket.on<WebSocketEventType>(
     WebSocketEvents.CREATE_NODE,
