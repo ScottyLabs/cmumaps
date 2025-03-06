@@ -27,35 +27,46 @@ export class WebSocketService {
         await socket.join(room);
         this.socketToRoom.set(socket.id, room);
         console.log(`${socket.id} joined room: ${room}`);
-        await this.syncUsers(room, socket.id);
+        await this.syncUsers(room, socket.id, true);
       });
 
       // Leave a room
       socket.on("leave", async (room) => {
+        // sync users before leaving because can only broadcast to a room that the socket is in
+        await this.syncUsers(room, socket.id, false);
         await socket.leave(room);
         this.socketToRoom.delete(socket.id);
         console.log(`${socket.id} left room: ${room}`);
-        await this.syncUsers(room, socket.id);
       });
 
       // Handle disconnections
-      socket.on("disconnect", () => {
+      socket.on("disconnect", async () => {
+        const room = this.socketToRoom.get(socket.id);
+        if (room) {
+          await this.syncUsers(room, socket.id, false);
+        }
+
         this.socketMap.delete(socket.id);
+        this.socketToUser.delete(socket.id);
         this.socketToRoom.delete(socket.id);
         console.log(`Client disconnected: ${socket.id}`);
       });
     });
   }
 
-  private async syncUsers(room: string, senderId: string) {
-    // fetch all users in the room
+  private async syncUsers(
+    room: string,
+    senderId: string,
+    includeSender: boolean
+  ) {
+    // fetch all users in the room except the sender
     const users = await this.io.in(room).fetchSockets();
     const userMap: Record<string, LiveUser> = {};
     users.forEach((user) => {
-      userMap[user.id] = this.socketToUser.get(user.id) as LiveUser;
+      if (includeSender || user.id !== senderId) {
+        userMap[user.id] = this.socketToUser.get(user.id) as LiveUser;
+      }
     });
-
-    console.log("Syncing users", userMap);
 
     // broadcast the updated user list
     const payload = { users: userMap };

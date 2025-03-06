@@ -79,17 +79,6 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
     },
   );
 
-  // close WebSocket connection and leave room when closing window
-  window.addEventListener("beforeunload", () => {
-    if (socket) {
-      const floorCode = getFloorCode();
-      if (floorCode) {
-        socket.emit("leave", floorCode);
-      }
-      socket.close();
-    }
-  });
-
   return socket;
 };
 
