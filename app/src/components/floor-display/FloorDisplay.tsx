@@ -1,6 +1,8 @@
 import Konva from "konva";
+import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
+import { useEffect, useRef } from "react";
 import { Stage, Layer } from "react-konva";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -14,6 +16,7 @@ import {
   useCreateNodeMutation,
   useGetFloorNodesQuery,
 } from "../../store/api/nodeApiSlice";
+import { CursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
@@ -65,13 +68,31 @@ const FloorDisplay = ({
 
   const mode = useAppSelector((state) => state.mode.mode);
 
-  // const showOutline = useAppSelector((state) => state.visibility.showOutline);
-  // const showNodes = useAppSelector((state) => state.visibility.showNodes);
-  // const showEdges = useAppSelector((state) => state.visibility.showEdges);
-  // const showPolygons = useAppSelector((state) => state.visibility.showPolygons);
-
   // const editPolygon = useAppSelector(selectEditPolygon);
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
+
+  const cursorInfoListRef = useRef<CursorInfo[]>([]);
+
+  // store mouse positions
+  const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
+    getCursorPos(e, offset, scale, (cursorPos) => {
+      cursorInfoListRef.current.push({ cursorPos });
+    });
+  }, 20);
+
+  // sync cursor position
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (cursorInfoListRef.current.length > 0) {
+        console.log(cursorInfoListRef.current);
+        cursorInfoListRef.current = [];
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dispatch]);
 
   if (isLoading) {
     return <Loader loadingText="Fetching nodes and rooms" />;
@@ -152,7 +173,7 @@ const FloorDisplay = ({
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
-        // onMouseMove={handleMouseMove}
+        onMouseMove={handleMouseMove}
         onMouseDown={handleOnMouseDown}
         onMouseUp={() => setCanPan(true)}
         onClick={handleStageClick}
