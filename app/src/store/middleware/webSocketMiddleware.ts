@@ -15,6 +15,8 @@ import {
   WEBSOCKET_LEAVE,
   JoinWebSocketAction,
   LeaveWebSocketAction,
+  WEBSOCKET_BROADCAST,
+  BroadcastWebSocketAction,
 } from "./webSocketActions";
 
 // Socket instance
@@ -47,6 +49,10 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
 
   socket.on("disconnect", () => {
     console.log("Disconnected from server");
+  });
+
+  socket.on("broadcast", (message) => {
+    console.log(message);
   });
 
   // Handle sync users event
@@ -115,13 +121,14 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
       break;
     }
 
-    // Emit message through socket
-    // case socketActions.SOCKET_EMIT:
-    //   if (socket !== null) {
-    //     const { event, data } = payload;
-    //     socket.emit(event, data);
-    //   }
-    //   break;
+    // broadcast through socket
+    case WEBSOCKET_BROADCAST: {
+      const { payload } = action as BroadcastWebSocketAction;
+      if (socket !== null) {
+        socket.emit("broadcast", payload.message);
+      }
+      break;
+    }
 
     default:
       break;

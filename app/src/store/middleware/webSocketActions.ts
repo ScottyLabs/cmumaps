@@ -1,9 +1,10 @@
 import { LiveUser } from "../../../../shared/webSocketTypes";
+import { CursorInfo } from "../features/liveCursor/liveCursorTypes";
 
 // Action types
 export const WEBSOCKET_JOIN = "WEBSOCKET_JOIN";
 export const WEBSOCKET_LEAVE = "WEBSOCKET_LEAVE";
-export const WEBSOCKET_SEND = "WEBSOCKET_SEND";
+export const WEBSOCKET_BROADCAST = "WEBSOCKET_BROADCAST";
 
 // Action creators
 export type JoinWebSocketAction = ReturnType<typeof joinWebSocket>;
@@ -19,7 +20,14 @@ export const leaveWebSocket = (floorCode?: string) => ({
   payload: { floorCode },
 });
 
-export const sendWebSocketMessage = (message: string) => ({
-  type: WEBSOCKET_SEND,
+export type BroadcastWebSocketAction = ReturnType<typeof broadcastWebSocket>;
+export const broadcastWebSocket = (message: BroadcastMessageType) => ({
+  type: WEBSOCKET_BROADCAST,
   payload: { message },
 });
+
+// Broadcast message types
+interface BroadcastMessageType {
+  socketId: string;
+  cursorInfos: CursorInfo[];
+}

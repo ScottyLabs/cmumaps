@@ -8,7 +8,6 @@ export interface LiveUser {
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {
   SYNC_USERS: "sync-users",
-  SYNC_CURSORS: "sync-cursors",
 
   CREATE_NODE: "create-node",
   DELETE_NODE: "delete-node",

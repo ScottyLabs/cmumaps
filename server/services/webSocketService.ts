@@ -39,6 +39,20 @@ export class WebSocketService {
         console.log(`${socket.id} left room: ${room}`);
       });
 
+      // Handle broadcasts
+      socket.on("broadcast", (message) => {
+        // broadcast the message to all clients in the room except the sender
+        const room = this.socketToRoom.get(socket.id);
+        if (room) {
+          this.io.to(room).emit("broadcast", message);
+          // socket.to(room).emit("broadcast", message);
+        } else {
+          console.error(
+            "Could not send broadcast to room (excluding the sender) due to invalid sender or room"
+          );
+        }
+      });
+
       // Handle disconnections
       socket.on("disconnect", async () => {
         const room = this.socketToRoom.get(socket.id);
@@ -86,7 +100,7 @@ export class WebSocketService {
       this.io.to(room).emit(event, payload);
     } else {
       console.error(
-        "Could not send message to room due to invalid sender or room"
+        "Could not broadcast to room due to invalid sender or room"
       );
     }
   }
