@@ -15,11 +15,6 @@ const initialState: LiveCursorState = {
   liveCursors: {},
 };
 
-interface AddUserPayload {
-  socketId: string;
-  user: LiveUser;
-}
-
 interface pushCursorInfoPayload {
   socketId: string;
   cursorInfo: CursorInfo;
@@ -33,12 +28,8 @@ const liveCursorSlice = createSlice({
   name: "liveCursor",
   initialState,
   reducers: {
-    addUser(state, action: PayloadAction<AddUserPayload>) {
-      const { socketId, user } = action.payload;
-      state.liveUsers[socketId] = user;
-    },
-    removeUser(state, action: PayloadAction<string>) {
-      delete state.liveUsers[action.payload];
+    setLiveUsers(state, action: PayloadAction<Record<string, LiveUser>>) {
+      state.liveUsers = action.payload;
     },
 
     pushCursorInfoList(state, action: PayloadAction<pushCursorInfoPayload>) {
@@ -64,6 +55,6 @@ const liveCursorSlice = createSlice({
 });
 
 export const { selectCursorInfoList } = liveCursorSlice.selectors;
-export const { addUser, removeUser, pushCursorInfoList, setCursorInfoList } =
+export const { setLiveUsers, pushCursorInfoList, setCursorInfoList } =
   liveCursorSlice.actions;
 export default liveCursorSlice.reducer;

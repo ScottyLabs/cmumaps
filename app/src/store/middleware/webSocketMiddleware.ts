@@ -8,6 +8,7 @@ import {
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
 import { createNode, deleteNode } from "../api/nodeApiSlice";
+import { setLiveUsers } from "../features/liveCursor/liveCursorSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
@@ -52,7 +53,7 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
   socket.on<WebSocketEventType>(
     WebSocketEvents.SYNC_USERS,
     (message: WebSocketPayloads["sync-users"]) => {
-      console.log("Sync users", message);
+      dispatch(setLiveUsers(message.users));
     },
   );
 

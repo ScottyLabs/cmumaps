@@ -5,11 +5,14 @@ import type {
 } from "../../shared/webSocketTypes.ts";
 import { WebSocketEvents } from "../../shared/webSocketTypes.ts";
 export class WebSocketService {
+  private io: Server;
+
   private socketMap: Map<string, Socket> = new Map();
   private socketToRoom: Map<string, string> = new Map();
   private socketToUser: Map<string, LiveUser> = new Map();
 
   constructor(io: Server) {
+    this.io = io;
     // Socket.IO connection handling
     io.on("connection", (socket) => {
       console.log(`Client connected: ${socket.id}`);
@@ -31,7 +34,8 @@ export class WebSocketService {
         users.forEach((user) => {
           userMap[user.id] = this.socketToUser.get(user.id) as LiveUser;
         });
-        socket.emit(WebSocketEvents.SYNC_USERS, userMap);
+        const payload = { users: userMap };
+        this.broadcastToFloor(socket.id, WebSocketEvents.SYNC_USERS, payload);
       });
 
       // Leave a room
@@ -51,17 +55,16 @@ export class WebSocketService {
   }
 
   /**
-   * Send an event to all clients in the room except the sender
+   * Send an event to all clients in the room
    */
   public broadcastToFloor<E extends keyof WebSocketPayloads>(
     senderId: string,
     event: E,
     payload: WebSocketPayloads[E]
   ): void {
-    const senderSocket = this.socketMap.get(senderId);
     const room = this.socketToRoom.get(senderId);
-    if (senderSocket && room) {
-      senderSocket.to(room).emit(event, payload);
+    if (room) {
+      this.io.to(room).emit(event, payload);
     } else {
       console.error(
         "Could not send message to room due to invalid sender or room"
