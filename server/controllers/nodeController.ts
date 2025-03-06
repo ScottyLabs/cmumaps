@@ -11,10 +11,18 @@ export const nodeController = {
       return;
     }
 
-    const typedFloorCode = floorCode as string;
-    const placement = await floorService.getFloorPlacement(typedFloorCode);
-    const nodes = await nodeService.getFloorNodes(typedFloorCode, placement);
-    res.json(nodes);
+    try {
+      const typedFloorCode = floorCode as string;
+      const placement = await floorService.getFloorPlacement(typedFloorCode);
+      const nodes = await nodeService.getFloorNodes(typedFloorCode, placement);
+      res.json(nodes);
+    } catch (error) {
+      console.error("Error getting floor nodes", error);
+      res.status(500).json({
+        error: "Error getting floor nodes",
+        details: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   },
 
   createNode: async (req: Request, res: Response) => {
