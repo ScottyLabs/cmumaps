@@ -1,8 +1,6 @@
 import Konva from "konva";
-import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import { useEffect, useRef } from "react";
 import { Stage, Layer } from "react-konva";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -11,12 +9,12 @@ import { toast } from "react-toastify";
 // import { selectEditPolygon } from '../../store/slices/modeSlice';
 // import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
 import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
+import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import {
   useCreateNodeMutation,
   useGetFloorNodesQuery,
 } from "../../store/api/nodeApiSlice";
-import { CursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
@@ -64,35 +62,13 @@ const FloorDisplay = ({
 
   const [createNode] = useCreateNodeMutation();
 
-  useKeyboardShortcuts(floorCode);
-
   const mode = useAppSelector((state) => state.mode.mode);
-
-  // const editPolygon = useAppSelector(selectEditPolygon);
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
+  // const editPolygon = useAppSelector(selectEditPolygon);
 
-  const cursorInfoListRef = useRef<CursorInfo[]>([]);
-
-  // store mouse positions
-  const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
-    getCursorPos(e, offset, scale, (cursorPos) => {
-      cursorInfoListRef.current.push({ cursorPos });
-    });
-  }, 20);
-
-  // sync cursor position
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (cursorInfoListRef.current.length > 0) {
-        console.log(cursorInfoListRef.current);
-        cursorInfoListRef.current = [];
-      }
-    }, 500);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [dispatch]);
+  // custom hooks
+  useKeyboardShortcuts(floorCode);
+  const handleMouseMove = useCursorTracker(offset, scale);
 
   if (isLoading) {
     return <Loader loadingText="Fetching nodes and rooms" />;
