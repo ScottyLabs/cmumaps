@@ -7,7 +7,6 @@ export const CURSOR_INTERVAL = 20;
 export interface LiveUser {
   userName: string;
   color: string;
-  socketId: string;
 }
 
 interface LiveCursorState {
@@ -19,6 +18,11 @@ const initialState: LiveCursorState = {
   liveUsers: {},
   liveCursors: {},
 };
+
+interface AddUserPayload {
+  socketId: string;
+  user: LiveUser;
+}
 
 interface pushCursorInfoPayload {
   socketId: string;
@@ -33,8 +37,9 @@ const liveCursorSlice = createSlice({
   name: "liveCursor",
   initialState,
   reducers: {
-    addUser(state, action: PayloadAction<LiveUser>) {
-      state.liveUsers[action.payload.socketId] = action.payload;
+    addUser(state, action: PayloadAction<AddUserPayload>) {
+      const { socketId, user } = action.payload;
+      state.liveUsers[socketId] = user;
     },
     removeUser(state, action: PayloadAction<string>) {
       delete state.liveUsers[action.payload];

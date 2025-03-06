@@ -12,8 +12,14 @@ export const CURSOR_INTERVAL = 20;
 
 const LiveCursorsComponent = ({ floorCode, scale }: LiveCursorsProps) => {
   const otherUsers = useAppSelector((state) => state.liveCursor.liveUsers);
-  return Object.entries(otherUsers).map(([userId, user]) => (
-    <LiveCursor key={userId} floorCode={floorCode} user={user} scale={scale} />
+  return Object.entries(otherUsers).map(([userSocketId, user]) => (
+    <LiveCursor
+      key={userSocketId}
+      floorCode={floorCode}
+      userSocketId={userSocketId}
+      user={user}
+      scale={scale}
+    />
   ));
 };
 

@@ -26,7 +26,8 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   // optional show self cursor mostly for local testing
   useEffect(() => {
     if (SHOW_SELF_CURSOR && socketId) {
-      dispatch(addUser({ userName: "Me", color: "blue", socketId }));
+      const user = { userName: "Me", color: "blue", socketId };
+      dispatch(addUser({ socketId, user }));
     }
   }, [dispatch, socketId]);
 

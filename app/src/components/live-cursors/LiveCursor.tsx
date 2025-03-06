@@ -13,28 +13,34 @@ import CursorNameRect from "./LiveCursorRect";
 
 interface LiveCursorProps {
   floorCode: string;
+  userSocketId: string;
   user: LiveUser;
   scale: number;
 }
 
-const LiveCursor = ({ floorCode, user, scale }: LiveCursorProps) => {
+const LiveCursor = ({
+  floorCode,
+  userSocketId,
+  user,
+  scale,
+}: LiveCursorProps) => {
   const dispatch = useAppDispatch();
   const cursorInfoList = useAppSelector((state) =>
-    selectCursorInfoList(state, user.socketId),
+    selectCursorInfoList(state, userSocketId),
   );
 
   // keep popping off the first element of cursor info list
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (cursorInfoList && cursorInfoList.length > 1) {
-        const socketId = user.socketId;
+        const socketId = userSocketId;
         const payload = { socketId, cursorInfoList: cursorInfoList.slice(1) };
         dispatch(setCursorInfoList(payload));
       }
     }, CURSOR_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [cursorInfoList, dispatch, floorCode, user.socketId]);
+  }, [cursorInfoList, dispatch, floorCode, userSocketId]);
 
   if (!cursorInfoList || cursorInfoList.length === 0) {
     return;
