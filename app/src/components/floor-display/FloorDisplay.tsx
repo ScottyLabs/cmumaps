@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
+import { LIVE_CURSORS_ENABLED } from "../../settings";
 import {
   useCreateNodeMutation,
   useGetFloorNodesQuery,
@@ -31,6 +32,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getSocketId } from "../../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../../utils/canvasUtils";
+import LiveCursors from "../live-cursors/LiveCursors";
 import ErrorDisplay from "../shared/ErrorDisplay";
 import Loader from "../shared/Loader";
 import NodesDisplay from "./NodesDisplay";
@@ -165,6 +167,9 @@ const FloorDisplay = ({
         <Layer>
           <OutlineDisplay floorCode={floorCode} />
           <NodesDisplay nodes={nodes} floorCode={floorCode} />
+          {LIVE_CURSORS_ENABLED && (
+            <LiveCursors floorCode={floorCode} scale={scale} />
+          )}
         </Layer>
       </Stage>
     </>

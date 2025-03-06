@@ -33,6 +33,13 @@ const liveCursorSlice = createSlice({
   name: "liveCursor",
   initialState,
   reducers: {
+    addUser(state, action: PayloadAction<User>) {
+      state.users[action.payload.socketId] = action.payload;
+    },
+    removeUser(state, action: PayloadAction<string>) {
+      delete state.users[action.payload];
+    },
+
     pushCursorInfoList(state, action: PayloadAction<pushCursorInfoPayload>) {
       const { socketId, cursorInfo } = action.payload;
       if (!state.liveCursors[socketId]) {
@@ -48,7 +55,7 @@ const liveCursorSlice = createSlice({
   selectors: {
     selectCursorInfoList(state, socketId: string | undefined) {
       if (!socketId) {
-        return [];
+        return null;
       }
       return state.liveCursors[socketId];
     },
@@ -56,6 +63,6 @@ const liveCursorSlice = createSlice({
 });
 
 export const { selectCursorInfoList } = liveCursorSlice.selectors;
-export const { pushCursorInfoList, setCursorInfoList } =
+export const { addUser, removeUser, pushCursorInfoList, setCursorInfoList } =
   liveCursorSlice.actions;
 export default liveCursorSlice.reducer;

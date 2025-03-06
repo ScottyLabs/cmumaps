@@ -5,7 +5,9 @@ import { useEffect } from "react";
 
 import { PdfCoordinate } from "../../../shared/types";
 import { CURSOR_INTERVAL } from "../components/live-cursors/LiveCursors";
+import { SHOW_SELF_CURSOR } from "../settings";
 import {
+  addUser,
   pushCursorInfoList,
   selectCursorInfoList,
   setCursorInfoList,
@@ -21,6 +23,13 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
     selectCursorInfoList(state, socketId),
   );
 
+  // optional show self cursor mostly for local testing
+  useEffect(() => {
+    if (SHOW_SELF_CURSOR && socketId) {
+      dispatch(addUser({ userName: "Me", color: "blue", socketId }));
+    }
+  }, [dispatch, socketId]);
+
   // store mouse positions
   const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
     getCursorPos(e, offset, scale, (cursorPos) => {
@@ -34,8 +43,7 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   // sync cursor position
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (cursorInfoList.length > 0) {
-        console.log(cursorInfoList);
+      if (cursorInfoList && cursorInfoList.length > 0) {
         if (socketId) {
           dispatch(setCursorInfoList({ socketId, cursorInfoList: [] }));
         }
