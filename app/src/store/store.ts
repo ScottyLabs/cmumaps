@@ -27,7 +27,7 @@ export const store = configureStore({
     visibility: visibilitySlice,
     outline: outlineSlice,
     floor: floorSlice,
-    liveCursors: liveCursorSlice,
+    liveCursor: liveCursorSlice,
     lock: lockSlice,
     history: historySlice,
     polygon: polygonSlice,

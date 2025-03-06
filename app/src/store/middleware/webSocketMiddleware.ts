@@ -16,6 +16,8 @@ import {
 
 // Socket instance
 let socket: Socket | null = null;
+
+// acceptable approach since the socket id won't change
 export const getSocketId = () => socket?.id;
 
 interface ParamsType {
