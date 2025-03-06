@@ -6,7 +6,7 @@ interface Props {
 }
 
 const MainDisplay = ({ floorCode }: Props) => {
-  useWebSocket();
+  useWebSocket(floorCode);
 
   return (
     <>

@@ -3,7 +3,6 @@ import { LiveUser } from "../../../../shared/webSocketTypes";
 // Action types
 export const WEBSOCKET_JOIN = "WEBSOCKET_JOIN";
 export const WEBSOCKET_LEAVE = "WEBSOCKET_LEAVE";
-export const WEBSOCKET_DISCONNECT = "WEBSOCKET_DISCONNECT";
 export const WEBSOCKET_SEND = "WEBSOCKET_SEND";
 
 // Action creators
@@ -13,12 +12,11 @@ export const joinWebSocket = (user: LiveUser) => ({
   payload: { user },
 });
 
-export const leaveWebSocket = () => ({
+export type LeaveWebSocketAction = ReturnType<typeof leaveWebSocket>;
+export const leaveWebSocket = (floorCode?: string) => ({
   type: WEBSOCKET_LEAVE,
-});
-
-export const disconnectWebSocket = () => ({
-  type: WEBSOCKET_DISCONNECT,
+  // we need to send the floorCode because the url changes before the middleware can process the action
+  payload: { floorCode },
 });
 
 export const sendWebSocketMessage = (message: string) => ({

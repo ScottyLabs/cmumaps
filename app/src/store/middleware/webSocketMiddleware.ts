@@ -12,9 +12,9 @@ import { setLiveUsers } from "../features/liveCursor/liveCursorSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
-  WEBSOCKET_DISCONNECT,
   WEBSOCKET_LEAVE,
   JoinWebSocketAction,
+  LeaveWebSocketAction,
 } from "./webSocketActions";
 
 // Socket instance
@@ -79,6 +79,17 @@ const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
     },
   );
 
+  // close WebSocket connection and leave room when closing window
+  window.addEventListener("beforeunload", () => {
+    if (socket) {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        socket.emit("leave", floorCode);
+      }
+      socket.close();
+    }
+  });
+
   return socket;
 };
 
@@ -107,6 +118,8 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
     }
 
     case WEBSOCKET_LEAVE: {
+      const { payload } = action as LeaveWebSocketAction;
+      const { floorCode } = payload;
       if (socket && floorCode) {
         socket.emit("leave", floorCode);
       }
@@ -120,14 +133,6 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
     //     socket.emit(event, data);
     //   }
     //   break;
-
-    // Disconnect socket
-    case WEBSOCKET_DISCONNECT:
-      if (socket !== null) {
-        socket.close();
-        socket = null;
-      }
-      break;
 
     default:
       break;

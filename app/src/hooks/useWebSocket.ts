@@ -17,7 +17,7 @@ const getRandomColor = (): string => {
   );
 };
 
-const useWebSocket = () => {
+const useWebSocket = (floorCode?: string) => {
   const dispatch = useAppDispatch();
   const { user: clerkUser } = useUser();
 
@@ -29,9 +29,9 @@ const useWebSocket = () => {
     }
 
     return () => {
-      dispatch(leaveWebSocket());
+      dispatch(leaveWebSocket(floorCode));
     };
-  }, [clerkUser, dispatch]);
+  }, [clerkUser, dispatch, floorCode]);
 };
 
 export default useWebSocket;
