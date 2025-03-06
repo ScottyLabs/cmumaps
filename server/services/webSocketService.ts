@@ -10,6 +10,8 @@ export class WebSocketService {
       console.log(`Client connected: ${socket.id}`);
       this.socketMap.set(socket.id, socket);
 
+      console.log(socket.handshake.query);
+
       // Join a room
       socket.on("join", (room) => {
         socket.join(room);

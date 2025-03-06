@@ -7,11 +7,13 @@ import {
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
 import { createNode, deleteNode } from "../api/nodeApiSlice";
+import { LiveUser } from "../features/liveCursor/liveCursorSlice";
 import { AppDispatch } from "../store";
 import {
   WEBSOCKET_JOIN,
   WEBSOCKET_DISCONNECT,
   WEBSOCKET_LEAVE,
+  JoinWebSocketAction,
 } from "./webSocketActions";
 
 // Socket instance
@@ -30,8 +32,13 @@ const getFloorCode = () => {
 };
 
 // Create socket connection
-const createSocket = (dispatch: AppDispatch) => {
-  const socket = io(import.meta.env.VITE_SERVER_URL);
+const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
+  const socket = io(import.meta.env.VITE_SERVER_URL, {
+    query: {
+      userName: user.userName,
+      userColor: user.color,
+    },
+  });
 
   socket.on("connect", () => {
     console.log("Connected to server");
@@ -74,9 +81,12 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
 
   switch (type) {
     case WEBSOCKET_JOIN: {
+      const { payload } = action as JoinWebSocketAction;
+      const { user } = payload;
+
       // Connect to socket
       if (socket === null) {
-        socket = createSocket(dispatch);
+        socket = createSocket(user, dispatch);
       }
 
       // Join room
