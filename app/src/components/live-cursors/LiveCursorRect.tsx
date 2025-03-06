@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Group, Rect, Text } from "react-konva";
 
 import { PdfCoordinate } from "../../../../shared/types";
-import { User } from "../../store/features/liveCursor/liveCursorSlice";
+import { LiveUser } from "../../store/features/liveCursor/liveCursorSlice";
 
 interface CursorNameRectProps {
-  user: User;
+  user: LiveUser;
   cursorPos: PdfCoordinate;
   scale: number;
 }

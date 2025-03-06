@@ -6,14 +6,14 @@ import {
   CURSOR_INTERVAL,
   selectCursorInfoList,
   setCursorInfoList,
-  User,
+  LiveUser,
 } from "../../store/features/liveCursor/liveCursorSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CursorNameRect from "./LiveCursorRect";
 
 interface LiveCursorProps {
   floorCode: string;
-  user: User;
+  user: LiveUser;
   scale: number;
 }
 
