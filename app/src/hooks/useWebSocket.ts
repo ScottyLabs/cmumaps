@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAppDispatch } from "../store/hooks";
 import {
@@ -17,18 +17,28 @@ const getRandomColor = (): string => {
   );
 };
 
+// Custom hook to join and leave the WebSocket connection
+// Ignores ReactStrictMode
 const useWebSocket = (floorCode?: string) => {
   const dispatch = useAppDispatch();
   const { user: clerkUser } = useUser();
+  const isInitialRender = useRef<boolean>(true);
 
   useEffect(() => {
-    if (clerkUser) {
+    // Only join the WebSocket connection on initial render
+    if (clerkUser && isInitialRender.current) {
       const userName = clerkUser.firstName || "";
       const user = { userName, color: getRandomColor() };
       dispatch(joinWebSocket(user));
     }
 
     return () => {
+      // Skip cleanup on initial Strict Mode run
+      if (isInitialRender.current) {
+        isInitialRender.current = false;
+        return;
+      }
+
       dispatch(leaveWebSocket(floorCode));
     };
   }, [clerkUser, dispatch, floorCode]);
