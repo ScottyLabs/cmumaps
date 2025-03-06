@@ -4,6 +4,7 @@ import { apiSlice } from "./api/apiSlice";
 import dataSlice from "./features/dataSlice";
 import floorSlice from "./features/floorSlice";
 import historySlice from "./features/history/historySlice";
+import liveCursorSlice from "./features/liveCursor/liveCursorSlice";
 import lockSlice from "./features/lockSlice";
 import modeSlice from "./features/modeSlice";
 import mouseEventSlice from "./features/mouseEventSlice";
@@ -26,7 +27,7 @@ export const store = configureStore({
     visibility: visibilitySlice,
     outline: outlineSlice,
     floor: floorSlice,
-    // users: usersSlice,
+    liveCursors: liveCursorSlice,
     lock: lockSlice,
     history: historySlice,
     polygon: polygonSlice,
