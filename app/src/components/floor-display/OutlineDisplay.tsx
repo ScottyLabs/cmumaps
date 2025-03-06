@@ -6,6 +6,7 @@ import { DoorInfo, ID } from "../../../../shared/types";
 import useClerkToken from "../../hooks/useClerkToken";
 import useFloorInfo from "../../hooks/useFloorInfo";
 import { useGetFloorOutlineQuery } from "../../store/api/s3ApiSlice";
+import { useAppSelector } from "../../store/hooks";
 import { setCursor } from "../../utils/canvasUtils";
 
 interface Props {
@@ -20,7 +21,9 @@ const OutlineDisplay = ({ floorCode }: Props) => {
     token ? { filePath, token } : skipToken,
   );
 
-  if (!outlineData) {
+  const showOutline = useAppSelector((state) => state.visibility.showOutline);
+
+  if (!showOutline || !outlineData) {
     return;
   }
 
