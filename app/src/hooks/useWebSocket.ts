@@ -25,8 +25,7 @@ const useWebSocket = (floorCode?: string) => {
   const isInitialRender = useRef<boolean>(true);
 
   useEffect(() => {
-    // Only join the WebSocket connection on initial render
-    if (clerkUser && isInitialRender.current) {
+    if (clerkUser) {
       const userName = clerkUser.firstName || "";
       const user = { userName, color: getRandomColor() };
       dispatch(joinWebSocket(user));
