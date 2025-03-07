@@ -72,10 +72,10 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { floorCode, nodeId, addToHistory, nodeInfo } = arg;
+          const { floorCode, nodeId, batchId, nodeInfo } = arg;
           // add to history
-          if (addToHistory) {
-            const editPair = buildCreateNodeEditPair(arg);
+          if (batchId) {
+            const editPair = buildCreateNodeEditPair(batchId, arg);
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
@@ -97,11 +97,12 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
-          const { floorCode, nodeId, addToHistory } = arg;
+          const { floorCode, nodeId, batchId } = arg;
           // add to history
-          if (addToHistory) {
+          if (batchId) {
             const getStore = getState as () => RootState;
             const editPair = await buildDeleteNodeEditPair(
+              batchId,
               arg,
               getStore,
               dispatch,
@@ -126,11 +127,12 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
-          const { floorCode, nodeId, nodeInfo, addToHistory } = arg;
+          const { floorCode, nodeId, nodeInfo, batchId } = arg;
           // add to history
-          if (addToHistory) {
+          if (batchId) {
             const getStore = getState as () => RootState;
             const editPair = await buildUpdateNodeEditPair(
+              batchId,
               arg,
               getStore,
               dispatch,

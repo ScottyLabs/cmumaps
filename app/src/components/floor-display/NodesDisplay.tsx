@@ -1,5 +1,6 @@
 import Konva from "konva";
 import { throttle } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
@@ -146,8 +147,8 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
 
     const inNodeId = nodeId;
     const outNodeId = validateRes.outNodeId;
-    const addToHistory = true;
-    createEdge({ floorCode, inNodeId, outNodeId, addToHistory });
+    const batchId = uuidv4();
+    createEdge({ floorCode, inNodeId, outNodeId, batchId });
     dispatch(setMode(GRAPH_SELECT));
   };
 
@@ -164,10 +165,10 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
       return;
     }
 
-    const addToHistory = true;
+    const batchId = uuidv4();
     const inNodeId = nodeId;
     const outNodeId = selectedNodeId;
-    deleteEdge({ floorCode, inNodeId, outNodeId, addToHistory });
+    deleteEdge({ floorCode, inNodeId, outNodeId, batchId });
     dispatch(setMode(GRAPH_SELECT));
   };
 
@@ -204,8 +205,8 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
       const nodeInfo: NodeInfo = { ...graph[nodeId] };
       nodeInfo.pos = getNodePos(e);
       // newNode.roomId = findRoomId(rooms, newNode.pos);
-      const addToHistory = true;
-      updateNode({ floorCode, addToHistory, nodeId, nodeInfo });
+      const batchId = uuidv4();
+      updateNode({ floorCode, batchId, nodeId, nodeInfo });
 
       // release the node after updating the position to prevent position flickering
       dispatch(releaseNode());

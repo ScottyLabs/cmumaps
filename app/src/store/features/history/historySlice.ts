@@ -1,23 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { redo, undo } from "./historyThunks";
+import { redo } from "./historyThunks";
 import { Edit, EditPair } from "./historyTypes";
 
 const MAX_UNDO_LIMIT = 50;
 
 interface HistoryState {
+  batchIds: string[];
   editHistory: Edit[];
   reversedEditHistory: Edit[];
   editIndex: number; // index of the edit to undo
 }
 
 const initialState: HistoryState = {
+  batchIds: [],
   editHistory: [],
   reversedEditHistory: [],
   editIndex: -1,
 };
 
-const getUpdatedHistory = (history: Edit[], edit: Edit, index: number) => {
+const getUpdatedHistory = <E>(history: E[], edit: E, index: number) => {
   const updatedHistory = [...history.slice(0, index + 1), edit];
   // Trim the history arrays to maintain the maximum undo limit
   return updatedHistory.slice(-MAX_UNDO_LIMIT);
@@ -27,11 +29,20 @@ const historySlice = createSlice({
   name: "history",
   initialState,
   reducers: {
+    setEditIndex(state, action: PayloadAction<number>) {
+      state.editIndex = action.payload;
+    },
+
     addEditToHistory(state, action: PayloadAction<EditPair>) {
-      const edit = action.payload.edit;
-      const reverseEdit = action.payload.reverseEdit;
+      const { batchId, edit, reverseEdit } = action.payload;
 
       // Update the history arrays with the new edit
+      state.batchIds = getUpdatedHistory(
+        state.batchIds,
+        batchId,
+        state.editIndex + 1,
+      );
+
       state.editHistory = getUpdatedHistory(
         state.editHistory,
         edit,
@@ -49,9 +60,6 @@ const historySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(undo.fulfilled, (state) => {
-      state.editIndex--;
-    });
     builder.addCase(redo.pending, (state) => {
       state.editIndex++;
     });
@@ -61,5 +69,5 @@ const historySlice = createSlice({
   },
 });
 
-export const { addEditToHistory } = historySlice.actions;
+export const { setEditIndex, addEditToHistory } = historySlice.actions;
 export default historySlice.reducer;

@@ -63,16 +63,16 @@ const useStageClickHandler = (
         // roomId: findRoomId(rooms, pos),
       };
 
-      const addToHistory = true;
-      await createNode({ floorCode, addToHistory, nodeId, nodeInfo });
+      const batchId = uuidv4();
+      await createNode({ floorCode, batchId, nodeId, nodeInfo });
 
       // create an edge to the selected node if there is one
       if (selectedNodeId) {
         createEdge({
           floorCode,
+          batchId,
           inNodeId: nodeId,
           outNodeId: selectedNodeId,
-          addToHistory,
         });
       }
 

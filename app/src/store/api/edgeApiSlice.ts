@@ -58,10 +58,10 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { floorCode, inNodeId, outNodeId, addToHistory } = arg;
+          const { floorCode, inNodeId, outNodeId, batchId } = arg;
           // add to history
-          if (addToHistory) {
-            const editPair = buildCreateEdgeEditPair(arg);
+          if (batchId) {
+            const editPair = buildCreateEdgeEditPair(batchId, arg);
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
@@ -84,10 +84,10 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { floorCode, inNodeId, outNodeId, addToHistory } = arg;
+          const { floorCode, inNodeId, outNodeId, batchId } = arg;
           // add to history
-          if (addToHistory) {
-            const editPair = buildDeleteEdgeEditPair(arg);
+          if (batchId) {
+            const editPair = buildDeleteEdgeEditPair(batchId, arg);
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update

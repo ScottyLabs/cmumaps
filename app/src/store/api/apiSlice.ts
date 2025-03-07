@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface BaseMutationArg {
   floorCode: string;
-  addToHistory?: boolean;
+  batchId: string | null;
+  // batchId is for undo/redo a group of edits
+  // if null, it won't be added to the history
 }
 
 export const getClerkToken = async () => {

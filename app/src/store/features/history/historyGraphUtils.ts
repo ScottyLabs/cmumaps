@@ -28,20 +28,24 @@ const getGraph = async (
   return nodes;
 };
 
-export const buildCreateNodeEditPair = (arg: CreateNodeArg): EditPair => {
+export const buildCreateNodeEditPair = (
+  batchId: string,
+  arg: CreateNodeArg,
+): EditPair => {
   const { floorCode, nodeId } = arg;
   const edit: Edit = {
     endpoint: "createNode",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
   const reverseEdit: Edit = {
     endpoint: "deleteNode",
-    arg: { floorCode, nodeId, addToHistory: false },
+    arg: { floorCode, nodeId, batchId: null },
   };
-  return { edit, reverseEdit };
+  return { batchId, edit, reverseEdit };
 };
 
 export const buildDeleteNodeEditPair = async (
+  batchId: string,
   arg: DeleteNodeArg,
   getStore: () => RootState,
   dispatch: AppDispatch,
@@ -49,19 +53,20 @@ export const buildDeleteNodeEditPair = async (
   const { floorCode, nodeId } = arg;
   const edit: Edit = {
     endpoint: "deleteNode",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
 
   const nodes = await getGraph(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "createNode",
-    arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], addToHistory: false },
+    arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], batchId: null },
   };
 
-  return { edit, reverseEdit };
+  return { batchId, edit, reverseEdit };
 };
 
 export const buildUpdateNodeEditPair = async (
+  batchId: string,
   arg: UpdateNodeArg,
   getStore: () => RootState,
   dispatch: AppDispatch,
@@ -69,38 +74,44 @@ export const buildUpdateNodeEditPair = async (
   const { floorCode, nodeId } = arg;
   const edit: Edit = {
     endpoint: "updateNode",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
 
   const nodes = await getGraph(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "updateNode",
-    arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], addToHistory: false },
+    arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], batchId: null },
   };
 
-  return { edit, reverseEdit };
+  return { batchId, edit, reverseEdit };
 };
 
-export const buildCreateEdgeEditPair = (arg: CreateEdgeArg): EditPair => {
+export const buildCreateEdgeEditPair = (
+  batchId: string,
+  arg: CreateEdgeArg,
+): EditPair => {
   const edit: Edit = {
     endpoint: "createEdge",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
   const reverseEdit: Edit = {
     endpoint: "deleteEdge",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
-  return { edit, reverseEdit };
+  return { batchId, edit, reverseEdit };
 };
 
-export const buildDeleteEdgeEditPair = (arg: CreateEdgeArg): EditPair => {
+export const buildDeleteEdgeEditPair = (
+  batchId: string,
+  arg: CreateEdgeArg,
+): EditPair => {
   const edit: Edit = {
     endpoint: "deleteEdge",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
   const reverseEdit: Edit = {
     endpoint: "createEdge",
-    arg: { ...arg, addToHistory: false },
+    arg: { ...arg, batchId: null },
   };
-  return { edit, reverseEdit };
+  return { batchId, edit, reverseEdit };
 };

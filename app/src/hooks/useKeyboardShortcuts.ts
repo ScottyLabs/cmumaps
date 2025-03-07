@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
@@ -132,9 +134,13 @@ const useKeyboardShortcuts = (floorCode: string) => {
           case "Backspace":
           case "Delete": {
             if (selectedNodeId) {
-              const addToHistory = true;
+              const addToHistory = uuidv4();
               navigate("?");
-              deleteNode({ floorCode, addToHistory, nodeId: selectedNodeId });
+              deleteNode({
+                floorCode,
+                batchId: addToHistory,
+                nodeId: selectedNodeId,
+              });
             } else {
               toastNodeNotSelectedErr();
             }

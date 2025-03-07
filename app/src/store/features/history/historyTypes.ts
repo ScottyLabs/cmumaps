@@ -38,6 +38,7 @@ export type Edit =
   | DeleteEdgeEdit;
 
 export interface EditPair {
+  batchId: string;
   edit: Edit;
   reverseEdit: Edit;
 }
