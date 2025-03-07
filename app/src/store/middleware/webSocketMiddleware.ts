@@ -55,7 +55,7 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
   });
 
   socket.on("connect_error", (err) => {
-    console.log(err.message);
+    console.error("WebSocket connection error:", err.message);
   });
 
   socket.on("disconnect", () => {

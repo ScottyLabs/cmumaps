@@ -32,7 +32,7 @@ const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
     return next();
   } catch (error) {
     console.error("Socket authentication error:", error);
-    return;
+    return next(new Error("Unable to verify token"));
   }
 };
 
