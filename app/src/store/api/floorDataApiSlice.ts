@@ -1,10 +1,10 @@
-import { Nodes } from "../../../../shared/types";
+import { Graph } from "../../../../shared/types";
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getFloorNodes: builder.query<Nodes, string>({
+    getFloorGraph: builder.query<Graph, string>({
       query: (floorCode) => `floors/${floorCode}/graph`,
       providesTags: ["Nodes"],
     }),
@@ -15,5 +15,5 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetFloorNodesQuery, useInvalidateCacheMutation } =
+export const { useGetFloorGraphQuery, useInvalidateCacheMutation } =
   floorDataApiSlice;

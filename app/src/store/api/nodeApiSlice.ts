@@ -26,7 +26,7 @@ export const createNode =
   (dispatch: AppDispatch) =>
     dispatch(
       floorDataApiSlice.util.updateQueryData(
-        "getFloorNodes",
+        "getFloorGraph",
         floorCode,
         (draft) => {
           draft[nodeId] = nodeInfo;
@@ -39,7 +39,7 @@ export const deleteNode =
   (dispatch: AppDispatch) =>
     dispatch(
       floorDataApiSlice.util.updateQueryData(
-        "getFloorNodes",
+        "getFloorGraph",
         floorCode,
         (draft) => {
           delete draft[nodeId];
@@ -52,7 +52,7 @@ export const updateNode =
   (dispatch: AppDispatch) =>
     dispatch(
       floorDataApiSlice.util.updateQueryData(
-        "getFloorNodes",
+        "getFloorGraph",
         floorCode,
         (draft) => {
           draft[nodeId] = nodeInfo;

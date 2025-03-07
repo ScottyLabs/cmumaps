@@ -12,7 +12,7 @@ import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
-import { useGetFloorNodesQuery } from "../../store/api/floorDataApiSlice";
+import { useGetFloorGraphQuery } from "../../store/api/floorDataApiSlice";
 import { useCreateNodeMutation } from "../../store/api/nodeApiSlice";
 import {
   ADD_DOOR_NODE,
@@ -57,8 +57,7 @@ const FloorDisplay = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { data: nodes, isFetching, isError } = useGetFloorNodesQuery(floorCode);
-  console.log(nodes);
+  const { data: graph, isFetching, isError } = useGetFloorGraphQuery(floorCode);
 
   const [createNode] = useCreateNodeMutation();
 
@@ -76,7 +75,7 @@ const FloorDisplay = ({
     return <Loader loadingText="Fetching nodes and rooms" />;
   }
 
-  if (isError || !nodes) {
+  if (isError || !graph) {
     return <ErrorDisplay errorText="Failed to fetch nodes" />;
   }
 
@@ -164,7 +163,7 @@ const FloorDisplay = ({
         <Layer>
           <OutlineDisplay floorCode={floorCode} />
           <NodesDisplay
-            nodes={nodes}
+            graph={graph}
             floorCode={floorCode}
             offset={offset}
             scale={scale}

@@ -1,4 +1,4 @@
-import type { Polygon } from 'geojson';
+import type { Polygon } from "geojson";
 
 export interface GeoCoordinate {
   latitude: number;
@@ -24,10 +24,10 @@ export type Floor = string;
  * Edge Types
  */
 export const EdgeTypeList = [
-  'ramp',
-  'stairs',
-  'elevator',
-  '', // not assigned
+  "ramp",
+  "stairs",
+  "elevator",
+  "", // not assigned
 ];
 
 export type EdgeType = (typeof EdgeTypeList)[number];
@@ -92,37 +92,37 @@ export interface DoorInfo {
  * Room types
  */
 export const RoomTypeList = [
-  'Default',
-  'Corridor',
-  'Auditorium',
-  'Office',
-  'Classroom',
-  'Operational', // Used for storage or maintenance, not publicly accessible
-  'Conference',
-  'Study',
-  'Laboratory',
-  'Computer Lab',
-  'Studio',
-  'Workshop',
-  'Vestibule',
-  'Storage',
-  'Restroom',
-  'Stairs',
-  'Elevator',
-  'Ramp',
-  'Dining',
-  'Food',
-  'Store',
-  'Library',
-  'Sport',
-  'Parking',
-  'Inaccessible',
-  '', // not assigned
+  "Default",
+  "Corridor",
+  "Auditorium",
+  "Office",
+  "Classroom",
+  "Operational", // Used for storage or maintenance, not publicly accessible
+  "Conference",
+  "Study",
+  "Laboratory",
+  "Computer Lab",
+  "Studio",
+  "Workshop",
+  "Vestibule",
+  "Storage",
+  "Restroom",
+  "Stairs",
+  "Elevator",
+  "Ramp",
+  "Dining",
+  "Food",
+  "Store",
+  "Library",
+  "Sport",
+  "Parking",
+  "Inaccessible",
+  "", // not assigned
 ] as const;
 
 export type RoomType = (typeof RoomTypeList)[number];
 
-export const WalkwayTypeList = ['Corridor', 'Ramp', 'Library'];
+export const WalkwayTypeList = ["Corridor", "Ramp", "Library"];
 
 export interface RoomInfo {
   /**
@@ -165,7 +165,7 @@ export interface RoomInfo {
 }
 
 export type Rooms = Record<ID, RoomInfo>;
-export type Nodes = Record<ID, NodeInfo>;
+export type Graph = Record<ID, NodeInfo>;
 
 export type Mst = Record<ID, Record<ID, boolean>>;
 

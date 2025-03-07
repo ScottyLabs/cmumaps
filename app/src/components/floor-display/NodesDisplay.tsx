@@ -4,7 +4,7 @@ import { throttle } from "lodash";
 import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
 
-import { ID, NodeInfo, Nodes, PdfCoordinate } from "../../../../shared/types";
+import { ID, NodeInfo, Graph, PdfCoordinate } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import { useUpdateNodeMutation } from "../../store/api/nodeApiSlice";
 import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
@@ -20,12 +20,12 @@ import { getCursorPos, setCursor } from "../../utils/canvasUtils";
 
 interface Props {
   floorCode: string;
-  nodes: Nodes;
+  graph: Graph;
   offset: PdfCoordinate;
   scale: number;
 }
 
-const NodesDisplay = ({ floorCode, nodes, offset, scale }: Props) => {
+const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const NodesDisplay = ({ floorCode, nodes, offset, scale }: Props) => {
   // const roomIdSelected = getRoomId(nodes, nodeIdSelected);
   const roomIdSelected = "";
 
-  if (!nodes) {
+  if (!graph) {
     return;
   }
 
@@ -134,14 +134,14 @@ const NodesDisplay = ({ floorCode, nodes, offset, scale }: Props) => {
       // dispatch(releaseNode());
 
       // create new node
-      const nodeInfo: NodeInfo = { ...nodes[nodeId] };
+      const nodeInfo: NodeInfo = { ...graph[nodeId] };
       nodeInfo.pos = getNodePos(e);
       // newNode.roomId = findRoomId(rooms, newNode.pos);
       const addToHistory = true;
       updateNode({ floorCode, addToHistory, nodeId, nodeInfo });
     };
 
-  return Object.entries(nodes).map(
+  return Object.entries(graph).map(
     ([nodeId, node]: [ID, NodeInfo], index: number) => {
       if (!showRoomSpecific || node.roomId === roomIdSelected) {
         return (

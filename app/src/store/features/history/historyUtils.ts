@@ -1,4 +1,4 @@
-import { Nodes } from "../../../../../shared/types";
+import { Graph } from "../../../../../shared/types";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
 import {
   CreateNodeArg,
@@ -14,14 +14,14 @@ const getNodes = async (
   dispatch: AppDispatch,
 ) => {
   let nodes =
-    floorDataApiSlice.endpoints.getFloorNodes.select(floorCode)(
+    floorDataApiSlice.endpoints.getFloorGraph.select(floorCode)(
       getStore(),
     ).data;
 
   if (!nodes) {
     nodes = (await dispatch(
-      floorDataApiSlice.endpoints.getFloorNodes.initiate(floorCode),
-    ).unwrap()) as Nodes;
+      floorDataApiSlice.endpoints.getFloorGraph.initiate(floorCode),
+    ).unwrap()) as Graph;
   }
 
   return nodes;

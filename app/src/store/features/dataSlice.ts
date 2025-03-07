@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { Nodes, Mst } from "../../../../shared/types";
+import { Graph, Mst } from "../../../../shared/types";
 
 interface DataState {
-  nodes: Nodes | null;
+  nodes: Graph | null;
   mst: Mst | null;
 }
 
