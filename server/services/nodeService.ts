@@ -8,7 +8,6 @@ import {
 
 export const nodeService = {
   createNode: async (
-    socketId: string,
     floorCode: string,
     nodeId: ID,
     nodeInfo: NodeInfo,
@@ -34,12 +33,11 @@ export const nodeService = {
     }
   },
 
-  deleteNode: async (socketId: string, nodeId: ID) => {
+  deleteNode: async (nodeId: ID) => {
     await prisma.node.delete({ where: { id: nodeId } });
   },
 
   updateNode: async (
-    socketId: string,
     floorCode: string,
     nodeId: ID,
     nodeInfo: NodeInfo,
