@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { useInvalidateCacheMutation } from "../store/api/floorDataApiSlice";
@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [invalidateCache] = useInvalidateCacheMutation();
   const [deleteNode] = useDeleteNodeMutation();
@@ -132,6 +133,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
           case "Delete": {
             if (selectedNodeId) {
               const addToHistory = true;
+              navigate("?");
               deleteNode({ floorCode, addToHistory, nodeId: selectedNodeId });
             } else {
               toastNodeNotSelectedErr();
@@ -166,6 +168,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
     selectedNodeId,
     shortcutsDisabled,
     invalidateCache,
+    navigate,
   ]);
 };
 

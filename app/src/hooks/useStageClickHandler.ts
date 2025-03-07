@@ -49,7 +49,7 @@ const useStageClickHandler = (
   //   };
 
   const handleCreateNode = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    getCursorPos(e, offset, scale, (pos) => {
+    getCursorPos(e, offset, scale, async (pos) => {
       const nodeId = uuidv4();
       const nodeInfo: NodeInfo = {
         pos,
@@ -59,9 +59,10 @@ const useStageClickHandler = (
       };
 
       const addToHistory = true;
-      createNode({ floorCode, addToHistory, nodeId, nodeInfo });
+      await createNode({ floorCode, addToHistory, nodeId, nodeInfo });
 
       dispatch(setMode(GRAPH_SELECT));
+      navigate(`?nodeId=${nodeId}`);
     });
   };
 
