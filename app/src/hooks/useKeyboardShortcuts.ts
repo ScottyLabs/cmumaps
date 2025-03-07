@@ -7,7 +7,9 @@ import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { redo, undo } from "../store/features/history/historyThunks";
 import {
   ADD_DOOR_NODE,
+  ADD_EDGE,
   ADD_NODE,
+  DELETE_EDGE,
   GRAPH_SELECT,
   POLYGON_ADD_VERTEX,
   POLYGON_DELETE_VERTEX,
@@ -27,8 +29,8 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
 
-  const [deleteNode] = useDeleteNodeMutation();
   const [invalidateCache] = useInvalidateCacheMutation();
+  const [deleteNode] = useDeleteNodeMutation();
 
   const [searchParam] = useSearchParams();
   const selectedNodeId = searchParam.get("nodeId");
@@ -106,18 +108,18 @@ const useKeyboardShortcuts = (floorCode: string) => {
             dispatch(setMode(ADD_NODE));
             break;
           case "e":
-            // if (selectedNodeId) {
-            //   dispatch(setMode(ADD_EDGE));
-            // } else {
-            //   toastNodeNotSelectedErr();
-            // }
+            if (selectedNodeId) {
+              dispatch(setMode(ADD_EDGE));
+            } else {
+              toastNodeNotSelectedErr();
+            }
             break;
           case "d":
-            // if (selectedNodeId) {
-            //   dispatch(setMode(DELETE_EDGE));
-            // } else {
-            //   toastNodeNotSelectedErr();
-            // }
+            if (selectedNodeId) {
+              dispatch(setMode(DELETE_EDGE));
+            } else {
+              toastNodeNotSelectedErr();
+            }
             break;
           case "m":
             // if (nodes && rooms) {

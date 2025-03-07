@@ -3,9 +3,14 @@ import { throttle } from "lodash";
 
 import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
 import { ID, NodeInfo, Graph, PdfCoordinate } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
+import {
+  useCreateEdgeMutation,
+  useDeleteEdgeMutation,
+} from "../../store/api/edgeApiSlice";
 import { useUpdateNodeMutation } from "../../store/api/nodeApiSlice";
 import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
 import { CursorInfoOnDragNode } from "../../store/features/liveCursor/liveCursorTypes";
@@ -14,6 +19,7 @@ import {
   ADD_EDGE,
   DELETE_EDGE,
   GRAPH_SELECT,
+  setMode,
 } from "../../store/features/modeSlice";
 import {
   dragNode,
@@ -30,11 +36,20 @@ interface Props {
   scale: number;
 }
 
+const getNodePos = (e: Konva.KonvaEventObject<DragEvent>) => {
+  return {
+    x: Number(e.target.x().toFixed(2)),
+    y: Number(e.target.y().toFixed(2)),
+  };
+};
+
 const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [updateNode] = useUpdateNodeMutation();
+  const [createEdge] = useCreateEdgeMutation();
+  // const [deleteEdge] = useDeleteEdgeMutation();
 
   const [searchParam] = useSearchParams();
   const selectedNodeId = searchParam.get("nodeId");
@@ -47,7 +62,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   //   (state) => state.mouseEvent.nodeIdOnHover,
   // );
 
-  // const roomIdSelected = getRoomId(nodes, nodeIdSelected);
+  // const roomIdSelected = getRoomId(nodes, selectedNodeId);
   const roomIdSelected = "";
 
   if (!graph) {
@@ -102,18 +117,45 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     return "blue";
   };
 
-  const getNodePos = (e: Konva.KonvaEventObject<DragEvent>) => {
-    return {
-      x: Number(e.target.x().toFixed(2)),
-      y: Number(e.target.y().toFixed(2)),
+  const handleAddEdge = (nodeId: ID) => {
+    const validate = () => {
+      // this condition should never occur because we check that idSelected is
+      // selected before setting mode to ADD_EDGE
+      if (!selectedNodeId) {
+        return { error: "Please select a node first!" };
+      }
+
+      // Check for self-loop
+      if (selectedNodeId == nodeId) {
+        return { error: "No self-loop allowed!" };
+      }
+
+      // Check for multi-edge
+      if (Object.keys(graph[nodeId].neighbors).includes(selectedNodeId)) {
+        return { error: "Edge already existed!" };
+      }
+
+      return { valid: true, outNodeId: selectedNodeId };
     };
+
+    const validateRes = validate();
+    if (!validateRes.valid) {
+      toast.error(validateRes.error);
+      return;
+    }
+
+    const inNodeId = nodeId;
+    const outNodeId = validateRes.outNodeId;
+    const addToHistory = true;
+    createEdge({ floorCode, inNodeId, outNodeId, addToHistory });
+    dispatch(setMode(GRAPH_SELECT));
   };
 
   const handleNodeClick = (nodeId: ID) => {
     if (mode == GRAPH_SELECT) {
       navigate(`?nodeId=${nodeId}`);
     } else if (mode == ADD_EDGE) {
-      // handleAddEdge(nodeId);
+      handleAddEdge(nodeId);
     } else if (mode == DELETE_EDGE) {
       // handleDeleteEdge(nodeId);
     } else if (mode == ADD_DOOR_NODE) {
