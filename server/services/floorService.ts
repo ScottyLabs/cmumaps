@@ -1,4 +1,4 @@
-import type { Nodes, Placement } from "../../shared/types.ts";
+import type { EdgeInfo, ID, Nodes, Placement } from "../../shared/types.ts";
 import {
   extractBuildingCode,
   extractFloorLevel,
@@ -7,10 +7,12 @@ import { prisma } from "../index.ts";
 import { geoCoordsToPdfCoords } from "../utils/coordinates.ts";
 
 export const floorService = {
-  getFloorNodes: async (floorCode: string, placement: Placement) => {
+  getFloorGraph: async (floorCode: string, placement: Placement) => {
     const buildingCode = extractBuildingCode(floorCode);
     const floorLevel = extractFloorLevel(floorCode);
+    const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(placement);
 
+    // Get all nodes on the floor with their neighbors
     const dbNodes = await prisma.node.findMany({
       where: {
         OR: [
@@ -20,17 +22,26 @@ export const floorService = {
           { element: { buildingCode, floorLevel } },
         ],
       },
+      include: { outEdges: true },
     });
 
-    const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(placement);
+    // Convert the nodes to the format expected by the frontend
     const nodes: Nodes = {};
     for (const node of dbNodes) {
+      // Convert the node's geo position to PDF position
       const position = {
         latitude: node.latitude,
         longitude: node.longitude,
       };
       const pos = geoCoordsToPdfCoordsHelper(position);
-      nodes[node.id] = { neighbors: {}, pos, roomId: node.elementId || "" };
+
+      // Create a mapping of neighbor node IDs to edge info
+      const neighbors: Record<ID, EdgeInfo> = {};
+      for (const neighbor of node.outEdges) {
+        neighbors[neighbor.outNodeId] = {};
+      }
+
+      nodes[node.id] = { pos, neighbors, roomId: node.elementId || "" };
     }
 
     return nodes;

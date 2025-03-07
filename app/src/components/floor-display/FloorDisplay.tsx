@@ -58,6 +58,7 @@ const FloorDisplay = ({
   const navigate = useNavigate();
 
   const { data: nodes, isFetching, isError } = useGetFloorNodesQuery(floorCode);
+  console.log(nodes);
 
   const [createNode] = useCreateNodeMutation();
 
