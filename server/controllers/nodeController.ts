@@ -68,4 +68,27 @@ export const nodeController = {
       });
     }
   },
+
+  updateNode: async (req: Request, res: Response) => {
+    const nodeId = req.params.id;
+    const { socketId, floorCode, nodeInfo } = req.body;
+
+    try {
+      const placement = await floorService.getFloorPlacement(floorCode);
+      await nodeService.updateNode(
+        socketId,
+        floorCode,
+        nodeId,
+        nodeInfo,
+        placement
+      );
+      res.json(null);
+    } catch (error) {
+      console.error("Error updating node", error);
+      res.status(500).json({
+        error: "Error updating node",
+        details: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  },
 };

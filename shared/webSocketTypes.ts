@@ -11,6 +11,7 @@ export const WebSocketEvents = {
 
   CREATE_NODE: "create-node",
   DELETE_NODE: "delete-node",
+  UPDATE_NODE: "update-node",
 } as const;
 
 // Create a type from the values
@@ -31,10 +32,16 @@ export interface DeleteNodePayload {
   nodeId: string;
 }
 
+export interface UpdateNodePayload {
+  nodeId: string;
+  nodeInfo: NodeInfo;
+}
+
 // Define payload types for each event
 export type WebSocketPayloads = {
   [WebSocketEvents.SYNC_USERS]: SyncUserPayload;
 
   [WebSocketEvents.CREATE_NODE]: CreateNodePayload;
   [WebSocketEvents.DELETE_NODE]: DeleteNodePayload;
+  [WebSocketEvents.UPDATE_NODE]: UpdateNodePayload;
 };

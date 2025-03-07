@@ -73,4 +73,36 @@ export const nodeService = {
     await prisma.node.delete({ where: { id: nodeId } });
     websocketService.broadcastToFloor(socketId, "delete-node", { nodeId });
   },
+
+  updateNode: async (
+    socketId: string,
+    floorCode: string,
+    nodeId: ID,
+    nodeInfo: NodeInfo,
+    placement: Placement
+  ) => {
+    const { pos, roomId } = nodeInfo;
+    const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
+    const data = { id: nodeId, ...geoCoords };
+
+    // Belongs to an element
+    if (roomId) {
+      await prisma.node.update({
+        where: { id: nodeId },
+        data: { ...data, elementId: roomId },
+      });
+    }
+    // Directly associated with the floor (not an element)
+    else {
+      const buildingCode = extractBuildingCode(floorCode);
+      const floorLevel = extractFloorLevel(floorCode);
+      await prisma.node.update({
+        where: { id: nodeId },
+        data: { ...data, buildingCode, floorLevel },
+      });
+    }
+
+    const payload = { nodeId, nodeInfo };
+    websocketService.broadcastToFloor(socketId, "update-node", payload);
+  },
 };
