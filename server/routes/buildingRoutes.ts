@@ -1,12 +1,12 @@
 import express from "express";
-import { requireAuth } from "@clerk/express";
 import { buildingController } from "../controllers/buildingController.ts";
+import { requireAuth } from "../middleware/authMiddleware.ts";
 
 const buildingRouter = express.Router();
 
 buildingRouter.get(
   "/codes-and-names",
-  requireAuth(),
+  requireAuth,
   buildingController.getBuildingCodesAndNames
 );
 buildingRouter.get(

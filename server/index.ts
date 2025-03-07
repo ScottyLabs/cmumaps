@@ -28,13 +28,13 @@ const io = new Server(server, {
 // Initialize WebSocket service
 export const websocketService = new WebSocketService(io);
 
+// Clerk middleware to authenticate requests
+app.use(clerkMiddleware());
+
 // Routes
 app.use("/api/buildings", buildingRoutes);
 app.use("/api/nodes", nodeRoutes);
 app.use(notFoundHandler);
-
-// Clerk middleware to authenticate requests
-app.use(clerkMiddleware());
 
 const port = 80;
 server.listen(port, () => {
