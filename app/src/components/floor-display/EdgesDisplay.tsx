@@ -10,7 +10,7 @@ interface Props {
 
 const EdgesDisplay = ({ graph }: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
-  const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.nodeIdOnDrag);
+  const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.dragNodeId);
   const dragNodePos = useAppSelector((state) => state.mouseEvent.dragNodePos);
 
   const edges: [number[], string][] = useMemo(() => {

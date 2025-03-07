@@ -31,7 +31,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
   const [invalidateCache] = useInvalidateCacheMutation();
 
   const [searchParam] = useSearchParams();
-  const nodeIdSelected = searchParam.get("nodeId");
+  const selectedNodeId = searchParam.get("nodeId");
 
   const editPolygon = useAppSelector(selectEditPolygon);
   const shortcutsDisabled = useAppSelector(
@@ -106,14 +106,14 @@ const useKeyboardShortcuts = (floorCode: string) => {
             dispatch(setMode(ADD_NODE));
             break;
           case "e":
-            // if (nodeIdSelected) {
+            // if (selectedNodeId) {
             //   dispatch(setMode(ADD_EDGE));
             // } else {
             //   toastNodeNotSelectedErr();
             // }
             break;
           case "d":
-            // if (nodeIdSelected) {
+            // if (selectedNodeId) {
             //   dispatch(setMode(DELETE_EDGE));
             // } else {
             //   toastNodeNotSelectedErr();
@@ -128,9 +128,9 @@ const useKeyboardShortcuts = (floorCode: string) => {
           // delete or backspace to delete a node
           case "Backspace":
           case "Delete": {
-            if (nodeIdSelected) {
+            if (selectedNodeId) {
               const addToHistory = true;
-              deleteNode({ floorCode, addToHistory, nodeId: nodeIdSelected });
+              deleteNode({ floorCode, addToHistory, nodeId: selectedNodeId });
             } else {
               toastNodeNotSelectedErr();
             }
@@ -143,7 +143,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
 
           // enters polygon editing mode
           case "v":
-            // if (nodeIdSelected) {
+            // if (selectedNodeId) {
             //   dispatch(setMode(POLYGON_ADD_VERTEX));
             // }
             break;
@@ -161,7 +161,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
     deleteNode,
     editPolygon,
     floorCode,
-    nodeIdSelected,
+    selectedNodeId,
     shortcutsDisabled,
     invalidateCache,
   ]);

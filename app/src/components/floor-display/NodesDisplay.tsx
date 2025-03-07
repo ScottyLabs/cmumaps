@@ -37,7 +37,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   const [updateNode] = useUpdateNodeMutation();
 
   const [searchParam] = useSearchParams();
-  const nodeIdSelected = searchParam.get("nodeId");
+  const selectedNodeId = searchParam.get("nodeId");
 
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
@@ -55,7 +55,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   }
 
   const getFillColor = (nodeId: ID) => {
-    if (nodeId == nodeIdSelected) {
+    if (nodeId == selectedNodeId) {
       return "yellow";
     }
 

@@ -5,9 +5,6 @@ import { Stage, Layer } from "react-konva";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-// import { useAppDispatch, useAppSelector } from '../../store/hooks';
-// import { selectEditPolygon } from '../../store/slices/modeSlice';
-// import { getNodeIdSelected } from '../../store/slices/mouseEventSlice';
 import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
