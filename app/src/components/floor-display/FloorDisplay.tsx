@@ -57,7 +57,7 @@ const FloorDisplay = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { data: nodes, isLoading, isError } = useGetFloorNodesQuery(floorCode);
+  const { data: nodes, isFetching, isError } = useGetFloorNodesQuery(floorCode);
 
   const [createNode] = useCreateNodeMutation();
 
@@ -69,7 +69,9 @@ const FloorDisplay = ({
   useKeyboardShortcuts(floorCode);
   const handleMouseMove = useCursorTracker(offset, scale);
 
-  if (isLoading) {
+  // we need this for the flicker effect when refetching
+
+  if (isFetching) {
     return <Loader loadingText="Fetching nodes and rooms" />;
   }
 

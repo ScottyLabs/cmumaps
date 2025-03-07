@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
+import { useInvalidateCacheMutation } from "../store/api/floorDataApiSlice";
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { redo, undo } from "../store/features/history/historyThunks";
 import {
@@ -27,6 +28,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
 
   const [deleteNode] = useDeleteNodeMutation();
+  const [invalidateCache] = useInvalidateCacheMutation();
 
   const [searchParam] = useSearchParams();
   const nodeIdSelected = searchParam.get("nodeId");
@@ -71,7 +73,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
 
         // refetch data
         case "r":
-          // invalidateCache();
+          invalidateCache();
           break;
 
         // edit history
@@ -161,6 +163,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
     floorCode,
     nodeIdSelected,
     shortcutsDisabled,
+    invalidateCache,
   ]);
 };
 
