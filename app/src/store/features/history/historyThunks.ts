@@ -65,7 +65,7 @@ export const redo = createAppAsyncThunk(
   (_, { dispatch, getState }) => {
     try {
       const historyState = getState().history;
-      let editIndex = historyState.editIndex;
+      let editIndex = historyState.editIndex + 1;
 
       if (editIndex === historyState.editHistory.length) {
         toast.warn("Can't redo anymore!");
@@ -83,7 +83,7 @@ export const redo = createAppAsyncThunk(
         editIndex++;
       }
 
-      dispatch(setEditIndex(editIndex));
+      dispatch(setEditIndex(editIndex - 1));
     } catch (error) {
       toast.error("Failed to redo change!");
       console.error("Error redoing:", error);

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { redo } from "./historyThunks";
 import { Edit, EditPair } from "./historyTypes";
 
 const MAX_UNDO_LIMIT = 50;
@@ -58,14 +57,6 @@ const historySlice = createSlice({
       // Update the edit index
       state.editIndex = state.editHistory.length - 1;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(redo.pending, (state) => {
-      state.editIndex++;
-    });
-    builder.addCase(redo.rejected, (state) => {
-      state.editIndex--;
-    });
   },
 });
 
