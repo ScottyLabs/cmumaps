@@ -19,13 +19,19 @@ const getRandomColor = (): string => {
 };
 
 // Custom hook to join and leave the WebSocket connection
-// Ignores ReactStrictMode
+// Compatible with React Strict Mode
 const useWebSocket = (floorCode?: string) => {
   const dispatch = useAppDispatch();
   const { user: clerkUser } = useUser();
   const isInitialRender = useRef<boolean>(true);
 
   useEffect(() => {
+    // Skip first render if in Strict Mode
+    if (isInitialRender.current && USE_STRICT_MODE) {
+      isInitialRender.current = false;
+      return;
+    }
+
     if (clerkUser) {
       const userName = clerkUser.firstName || "";
       const user = { userName, color: getRandomColor() };
@@ -33,12 +39,6 @@ const useWebSocket = (floorCode?: string) => {
     }
 
     return () => {
-      // Skip cleanup on initial Strict Mode run whne in development
-      if (isInitialRender.current && USE_STRICT_MODE) {
-        isInitialRender.current = false;
-        return;
-      }
-
       dispatch(leaveWebSocket(floorCode));
     };
   }, [clerkUser, dispatch, floorCode]);
