@@ -7,8 +7,6 @@ interface LiveCursorsProps {
   scale: number;
 }
 
-export const CURSOR_INTERVAL = 20;
-
 const LiveCursors = ({ floorCode, scale }: LiveCursorsProps) => {
   const users = useAppSelector((state) => state.liveCursor.liveUsers);
   const socketId = getSocketId();

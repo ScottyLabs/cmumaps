@@ -3,8 +3,8 @@ import { GiArrowCursor } from "react-icons/gi";
 import { Path } from "react-konva";
 
 import { LiveUser } from "../../../../shared/webSocketTypes";
+import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import {
-  CURSOR_INTERVAL,
   selectCursorInfos,
   setCursorInfos,
 } from "../../store/features/liveCursor/liveCursorSlice";
@@ -37,7 +37,7 @@ const LiveCursor = ({
         const payload = { socketId, cursorInfos: cursorInfos.slice(1) };
         dispatch(setCursorInfos(payload));
       }
-    }, CURSOR_INTERVAL);
+    }, CURSOR_UPDATE_RATE);
 
     return () => clearInterval(intervalId);
   }, [cursorInfos, dispatch, floorCode, userSocketId]);

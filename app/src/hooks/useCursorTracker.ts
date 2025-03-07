@@ -4,12 +4,14 @@ import { throttle } from "lodash";
 import { useEffect } from "react";
 
 import { PdfCoordinate } from "../../../shared/types";
-import { CURSOR_INTERVAL } from "../components/live-cursors/LiveCursors";
-import { pushCursorInfos } from "../store/features/liveCursor/liveCursorSlice";
+import { pushCursorInfo } from "../store/features/liveCursor/liveCursorSlice";
 import { syncCursors } from "../store/features/liveCursor/liveCursorThunks";
 import { useAppDispatch } from "../store/hooks";
 import { getSocketId } from "../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../utils/canvasUtils";
+
+export const CURSOR_UPDATE_RATE = 20;
+const CURSOR_SYNC_INTERVAL = 500;
 
 const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   const dispatch = useAppDispatch();
@@ -21,16 +23,16 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
     getCursorPos(e, offset, scale, (cursorPos) => {
       const socketId = getSocketId();
       if (socketId) {
-        dispatch(pushCursorInfos({ socketId, cursorInfo: { cursorPos } }));
+        dispatch(pushCursorInfo({ socketId, cursorInfo: { cursorPos } }));
       }
     });
-  }, CURSOR_INTERVAL);
+  }, CURSOR_UPDATE_RATE);
 
   // sync cursor position
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch(syncCursors());
-    }, 500);
+    }, CURSOR_SYNC_INTERVAL);
 
     return () => {
       clearInterval(intervalId);

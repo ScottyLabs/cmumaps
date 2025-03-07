@@ -1,26 +1,33 @@
 import Konva from "konva";
+import { throttle } from "lodash";
 
 import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
 
-import { ID, NodeInfo, Nodes } from "../../../../shared/types";
+import { ID, NodeInfo, Nodes, PdfCoordinate } from "../../../../shared/types";
+import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import { useUpdateNodeMutation } from "../../store/api/nodeApiSlice";
+import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
+import { CursorInfoOnDragNode } from "../../store/features/liveCursor/liveCursorTypes";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
   DELETE_EDGE,
   GRAPH_SELECT,
 } from "../../store/features/modeSlice";
-import { useAppSelector } from "../../store/hooks";
-import { setCursor } from "../../utils/canvasUtils";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getSocketId } from "../../store/middleware/webSocketMiddleware";
+import { getCursorPos, setCursor } from "../../utils/canvasUtils";
 
 interface Props {
   floorCode: string;
   nodes: Nodes;
+  offset: PdfCoordinate;
+  scale: number;
 }
 
-const NodesDisplay = ({ floorCode, nodes }: Props) => {
-  // const dispatch = useAppDispatch();
+const NodesDisplay = ({ floorCode, nodes, offset, scale }: Props) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [updateNode] = useUpdateNodeMutation();
@@ -110,6 +117,22 @@ const NodesDisplay = ({ floorCode, nodes }: Props) => {
     }
   };
 
+  const handleDragMove = (nodeId: string) =>
+    throttle((e: Konva.KonvaEventObject<DragEvent>) => {
+      getCursorPos(e, offset, scale, (cursorPos) => {
+        const cursorInfo: CursorInfoOnDragNode = {
+          nodeId: nodeId,
+          cursorPos,
+          nodePos: getNodePos(e),
+        };
+
+        const socketId = getSocketId();
+        if (socketId) {
+          dispatch(pushCursorInfo({ socketId, cursorInfo }));
+        }
+      });
+    }, CURSOR_UPDATE_RATE);
+
   const handleOnDragEnd =
     (nodeId: ID) => (e: Konva.KonvaEventObject<DragEvent>) => {
       // dispatch(releaseNode());
@@ -139,8 +162,8 @@ const NodesDisplay = ({ floorCode, nodes }: Props) => {
             onClick={() => handleNodeClick(nodeId)}
             draggable
             // onDragStart={() => dispatch(dragNode(nodeId))}
+            onDragMove={handleDragMove(nodeId)}
             onDragEnd={handleOnDragEnd(nodeId)}
-            // onDragMove={handleDragMove(nodeId)}
           />
         );
       }

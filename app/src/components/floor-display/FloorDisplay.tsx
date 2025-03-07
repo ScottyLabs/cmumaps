@@ -162,7 +162,12 @@ const FloorDisplay = ({
       >
         <Layer>
           <OutlineDisplay floorCode={floorCode} />
-          <NodesDisplay nodes={nodes} floorCode={floorCode} />
+          <NodesDisplay
+            nodes={nodes}
+            floorCode={floorCode}
+            offset={offset}
+            scale={scale}
+          />
           {LIVE_CURSORS_ENABLED && (
             <LiveCursors floorCode={floorCode} scale={scale} />
           )}

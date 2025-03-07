@@ -3,8 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LiveUser } from "../../../../../shared/webSocketTypes";
 import { CursorInfo } from "./liveCursorTypes";
 
-export const CURSOR_INTERVAL = 20;
-
 interface LiveCursorState {
   liveUsers: Record<string, LiveUser>;
   liveCursors: Record<string, CursorInfo[]>;
@@ -32,7 +30,7 @@ const liveCursorSlice = createSlice({
       state.liveUsers = action.payload;
     },
 
-    pushCursorInfos(state, action: PayloadAction<pushCursorInfoPayload>) {
+    pushCursorInfo(state, action: PayloadAction<pushCursorInfoPayload>) {
       const { socketId, cursorInfo } = action.payload;
       if (!state.liveCursors[socketId]) {
         state.liveCursors[socketId] = [];
@@ -54,6 +52,6 @@ const liveCursorSlice = createSlice({
 });
 
 export const { selectCursorInfos } = liveCursorSlice.selectors;
-export const { setLiveUsers, pushCursorInfos, setCursorInfos } =
+export const { setLiveUsers, pushCursorInfo, setCursorInfos } =
   liveCursorSlice.actions;
 export default liveCursorSlice.reducer;
