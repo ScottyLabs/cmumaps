@@ -29,17 +29,11 @@ export const nodeController = {
   createNode: async (req: Request, res: Response) => {
     const nodeId = req.params.id;
     const { floorCode, nodeInfo } = req.body;
-    const socketId = req.socketId;
+    const sid = req.socketId;
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await nodeService.createNode(
-        socketId,
-        floorCode,
-        nodeId,
-        nodeInfo,
-        placement
-      );
+      await nodeService.createNode(sid, floorCode, nodeId, nodeInfo, placement);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "creating node");
@@ -61,17 +55,11 @@ export const nodeController = {
   updateNode: async (req: Request, res: Response) => {
     const nodeId = req.params.id;
     const { floorCode, nodeInfo } = req.body;
-    const socketId = req.socketId;
+    const sid = req.socketId;
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await nodeService.updateNode(
-        socketId,
-        floorCode,
-        nodeId,
-        nodeInfo,
-        placement
-      );
+      await nodeService.updateNode(sid, floorCode, nodeId, nodeInfo, placement);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "updating node");
