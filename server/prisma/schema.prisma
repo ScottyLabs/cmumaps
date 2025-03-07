@@ -73,8 +73,8 @@ model Node {
   elementId    String?
   buildingCode String?
   floorLevel   String?
-  outNeighbors Edge[]   @relation("OutNeighbors")
-  inNeighbors  Edge[]   @relation("InNeighbors")
+  outEdges     Edge[]   @relation("OutEdges")
+  inEdges      Edge[]   @relation("InEdges")
   floor        Floor?   @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
   element      Element? @relation(fields: [elementId], references: [elementId])
 
@@ -84,8 +84,8 @@ model Node {
 model Edge {
   inNodeId  String
   outNodeId String
-  inNode    Node   @relation("OutNeighbors", fields: [inNodeId], references: [id])
-  outNode   Node   @relation("InNeighbors", fields: [outNodeId], references: [id])
+  inNode    Node   @relation("OutEdges", fields: [inNodeId], references: [id])
+  outNode   Node   @relation("InEdges", fields: [outNodeId], references: [id])
 
   @@id([inNodeId, outNodeId])
 }
