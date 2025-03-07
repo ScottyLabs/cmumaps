@@ -1,10 +1,11 @@
 import Konva from "konva";
 import { v4 as uuidv4 } from "uuid";
 
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { NodeInfo, PdfCoordinate } from "../../../shared/types";
+import { useCreateEdgeMutation } from "../store/api/edgeApiSlice";
 import { useCreateNodeMutation } from "../store/api/nodeApiSlice";
 import { ADD_NODE, GRAPH_SELECT, setMode } from "../store/features/modeSlice";
 import {
@@ -22,9 +23,13 @@ const useStageClickHandler = (
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const mode = useAppSelector((state) => state.mode.mode);
+  const [searchParam] = useSearchParams();
+  const selectedNodeId = searchParam.get("nodeId");
 
   const [createNode] = useCreateNodeMutation();
+  const [createEdge] = useCreateEdgeMutation();
+
+  const mode = useAppSelector((state) => state.mode.mode);
 
   //   const isValidClick = (clickedOnStage: boolean) => {
   //     // errors for each mode relative to stage clicking
@@ -60,6 +65,16 @@ const useStageClickHandler = (
 
       const addToHistory = true;
       await createNode({ floorCode, addToHistory, nodeId, nodeInfo });
+
+      // create an edge to the selected node if there is one
+      if (selectedNodeId) {
+        createEdge({
+          floorCode,
+          inNodeId: nodeId,
+          outNodeId: selectedNodeId,
+          addToHistory,
+        });
+      }
 
       dispatch(setMode(GRAPH_SELECT));
       navigate(`?nodeId=${nodeId}`);
