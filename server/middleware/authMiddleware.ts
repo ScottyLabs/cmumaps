@@ -15,13 +15,14 @@ const checkAuth = (req: Request, res: Response, next: NextFunction) => {
 const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
   try {
     const token = socket.handshake.auth.token;
-
     if (!token) {
       console.error("Socket authentication error: No token provided");
       return;
     }
 
-    const session = await verifyToken(token, {});
+    const session = await verifyToken(token, {
+      secretKey: process.env.CLERK_SECRET_KEY,
+    });
 
     if (!session) {
       console.error("Socket authentication error: Invalid token");

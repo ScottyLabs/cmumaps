@@ -7,6 +7,7 @@ import {
   WebSocketEventType,
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
+import { getClerkToken } from "../api/apiSlice";
 import { createNode, deleteNode } from "../api/nodeApiSlice";
 import {
   setCursorInfos,
@@ -39,12 +40,14 @@ const getFloorCode = () => {
 };
 
 // Create socket connection
-const createSocket = (user: LiveUser, dispatch: AppDispatch) => {
+const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
+  const token = await getClerkToken();
   const socket = io(import.meta.env.VITE_SERVER_URL, {
     query: {
       userName: user.userName,
       userColor: user.color,
     },
+    auth: { token },
   });
 
   socket.on("connect", () => {
@@ -108,14 +111,16 @@ const webSocketMiddleware: Middleware = (params) => (next) => (action) => {
       const { user } = payload;
 
       // Connect to socket
-      if (socket === null) {
-        socket = createSocket(user, dispatch);
-      }
+      (async () => {
+        if (socket === null) {
+          socket = await createSocket(user, dispatch);
+        }
 
-      // Join room
-      if (floorCode) {
-        socket.emit("join", floorCode);
-      }
+        // Join room after socket creation
+        if (floorCode && socket) {
+          socket.emit("join", floorCode);
+        }
+      })();
 
       break;
     }
