@@ -18,12 +18,10 @@ app.use(express.json());
 // Create HTTP server with Express app attached
 const server = http.createServer(app);
 
-// Initialize Socket.IO with CORS
+// Initialize Socket.IO with CORS and authentication middleware
+// https://socket.io/docs/v4/handling-cors/
 const io = new Server(server, {
-  cors: {
-    origin: "*", // Configure this according to your security requirements
-    methods: ["GET", "POST"],
-  },
+  cors: { origin: "*" },
 });
 io.use(socketAuth);
 
