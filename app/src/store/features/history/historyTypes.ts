@@ -1,3 +1,4 @@
+import { CreateEdgeArg, DeleteEdgeArg } from "../../api/edgeApiSlice";
 import {
   CreateNodeArg,
   DeleteNodeArg,
@@ -19,7 +20,22 @@ interface UpdateNodeEdit {
   arg: UpdateNodeArg;
 }
 
-export type Edit = CreateNodeEdit | DeleteNodeEdit | UpdateNodeEdit;
+interface CreateEdgeEdit {
+  endpoint: "createEdge";
+  arg: CreateEdgeArg;
+}
+
+interface DeleteEdgeEdit {
+  endpoint: "deleteEdge";
+  arg: DeleteEdgeArg;
+}
+
+export type Edit =
+  | CreateNodeEdit
+  | DeleteNodeEdit
+  | UpdateNodeEdit
+  | CreateEdgeEdit
+  | DeleteEdgeEdit;
 
 export interface EditPair {
   edit: Edit;

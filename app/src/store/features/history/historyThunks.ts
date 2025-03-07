@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 
+import { edgeApiSlice } from "../../api/edgeApiSlice";
 import { nodeApiSlice } from "../../api/nodeApiSlice";
 import { AppDispatch } from "../../store";
 import { createAppAsyncThunk } from "../../withTypes";
@@ -15,6 +16,12 @@ const applyEdit = (edit: Edit, dispatch: AppDispatch) => {
       break;
     case "updateNode":
       dispatch(nodeApiSlice.endpoints.updateNode.initiate(edit.arg)).unwrap();
+      break;
+    case "createEdge":
+      dispatch(edgeApiSlice.endpoints.createEdge.initiate(edit.arg)).unwrap();
+      break;
+    case "deleteEdge":
+      dispatch(edgeApiSlice.endpoints.deleteEdge.initiate(edit.arg)).unwrap();
       break;
     default:
       toast.error("Unimplemented edit type!");

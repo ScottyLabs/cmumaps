@@ -1,4 +1,5 @@
 import { Graph } from "../../../../../shared/types";
+import { CreateEdgeArg } from "../../api/edgeApiSlice";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
 import {
   CreateNodeArg,
@@ -77,5 +78,29 @@ export const buildUpdateNodeEditPair = async (
     arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], addToHistory: false },
   };
 
+  return { edit, reverseEdit };
+};
+
+export const buildCreateEdgeEditPair = (arg: CreateEdgeArg): EditPair => {
+  const edit: Edit = {
+    endpoint: "createEdge",
+    arg: { ...arg, addToHistory: false },
+  };
+  const reverseEdit: Edit = {
+    endpoint: "deleteEdge",
+    arg: { ...arg, addToHistory: false },
+  };
+  return { edit, reverseEdit };
+};
+
+export const buildDeleteEdgeEditPair = (arg: CreateEdgeArg): EditPair => {
+  const edit: Edit = {
+    endpoint: "deleteEdge",
+    arg: { ...arg, addToHistory: false },
+  };
+  const reverseEdit: Edit = {
+    endpoint: "createEdge",
+    arg: { ...arg, addToHistory: false },
+  };
   return { edit, reverseEdit };
 };

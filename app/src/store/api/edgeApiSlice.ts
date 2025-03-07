@@ -4,6 +4,10 @@ import {
   CreateEdgePayload,
   DeleteEdgePayload,
 } from "../../../../shared/websocket-types/edgeTypes";
+import {
+  buildCreateEdgeEditPair,
+  buildDeleteEdgeEditPair,
+} from "../features/history/historyGraphUtils";
 import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
 import { AppDispatch } from "../store";
@@ -57,8 +61,8 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
           const { floorCode, inNodeId, outNodeId, addToHistory } = arg;
           // add to history
           if (addToHistory) {
-            // const editPair = buildCreateEditPair(arg);
-            // dispatch(addEditToHistory(editPair));
+            const editPair = buildCreateEdgeEditPair(arg);
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(
@@ -83,8 +87,8 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
           const { floorCode, inNodeId, outNodeId, addToHistory } = arg;
           // add to history
           if (addToHistory) {
-            // const editPair = buildDeleteEditPair(arg);
-            // dispatch(addEditToHistory(editPair));
+            const editPair = buildDeleteEdgeEditPair(arg);
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(
