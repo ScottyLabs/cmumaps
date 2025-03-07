@@ -5,20 +5,8 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { NodeInfo, PdfCoordinate } from "../../../shared/types";
-import {
-  useCreateEdgeMutation,
-  useDeleteEdgeMutation,
-} from "../store/api/edgeApiSlice";
 import { useCreateNodeMutation } from "../store/api/nodeApiSlice";
-import {
-  ADD_DOOR_NODE,
-  ADD_EDGE,
-  ADD_NODE,
-  DELETE_EDGE,
-  GRAPH_SELECT,
-  POLYGON_ADD_VERTEX,
-  setMode,
-} from "../store/features/modeSlice";
+import { ADD_NODE, GRAPH_SELECT, setMode } from "../store/features/modeSlice";
 import {
   setShowRoomSpecific,
   setEditRoomLabel,
@@ -37,32 +25,30 @@ const useStageClickHandler = (
   const mode = useAppSelector((state) => state.mode.mode);
 
   const [createNode] = useCreateNodeMutation();
-  const [createEdge] = useCreateEdgeMutation();
-  const [deleteEdge] = useDeleteEdgeMutation();
 
-  const isValidClick = (clickedOnStage: boolean) => {
-    // errors for each mode relative to stage clicking
-    if (mode == ADD_NODE || mode == POLYGON_ADD_VERTEX) {
-      if (!clickedOnStage) {
-        toast.error("Click on empty space!");
-        return false;
-      }
-    } else if (mode == ADD_DOOR_NODE) {
-      if (clickedOnStage) {
-        // addDoorNodeErrToast();
-        return false;
-      }
-    } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
-      if (clickedOnStage) {
-        toast.error("Click on another node!");
-        return false;
-      }
-    }
+  //   const isValidClick = (clickedOnStage: boolean) => {
+  //     // errors for each mode relative to stage clicking
+  //     if (mode == POLYGON_ADD_VERTEX) {
+  //       if (!clickedOnStage) {
+  //         toast.error("Click on empty space!");
+  //         return false;
+  //       }
+  //     } else if (mode == ADD_DOOR_NODE) {
+  //       if (clickedOnStage) {
+  //         // addDoorNodeErrToast();
+  //         return false;
+  //       }
+  //     } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
+  //       if (clickedOnStage) {
+  //         toast.error("Click on another node!");
+  //         return false;
+  //       }
+  //     }
 
-    return true;
-  };
+  //     return true;
+  //   };
 
-  const handleCreateNode = () => {
+  const handleCreateNode = (e: Konva.KonvaEventObject<MouseEvent>) => {
     getCursorPos(e, offset, scale, (pos) => {
       const nodeId = uuidv4();
       const nodeInfo: NodeInfo = {
@@ -89,13 +75,13 @@ const useStageClickHandler = (
   return (e: Konva.KonvaEventObject<MouseEvent>) => {
     const clickedOnStage = e.target == e.target.getStage();
 
-    if (!isValidClick(clickedOnStage)) {
-      return;
-    }
-
     // create node
     if (mode == ADD_NODE) {
-      handleCreateNode();
+      if (!clickedOnStage) {
+        toast.error("Click on empty space!");
+      } else {
+        handleCreateNode(e);
+      }
     }
 
     // click to unselect a room or exit polygon editing or room label editing
