@@ -12,10 +12,8 @@ import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
-import {
-  useCreateNodeMutation,
-  useGetFloorNodesQuery,
-} from "../../store/api/nodeApiSlice";
+import { useGetFloorNodesQuery } from "../../store/api/floorDataApiSlice";
+import { useCreateNodeMutation } from "../../store/api/nodeApiSlice";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,

@@ -1,9 +1,6 @@
 import { Nodes } from "../../../../../shared/types";
-import {
-  CreateNodeArg,
-  DeleteNodeArg,
-  nodeApiSlice,
-} from "../../api/nodeApiSlice";
+import { floorDataApiSlice } from "../../api/floorDataApiSlice";
+import { CreateNodeArg, DeleteNodeArg } from "../../api/nodeApiSlice";
 import { AppDispatch, RootState } from "../../store";
 import { Edit, EditPair } from "./historyTypes";
 
@@ -13,11 +10,13 @@ const getNodes = async (
   dispatch: AppDispatch,
 ) => {
   let nodes =
-    nodeApiSlice.endpoints.getFloorNodes.select(floorCode)(getStore()).data;
+    floorDataApiSlice.endpoints.getFloorNodes.select(floorCode)(
+      getStore(),
+    ).data;
 
   if (!nodes) {
     nodes = (await dispatch(
-      nodeApiSlice.endpoints.getFloorNodes.initiate(floorCode),
+      floorDataApiSlice.endpoints.getFloorNodes.initiate(floorCode),
     ).unwrap()) as Nodes;
   }
 

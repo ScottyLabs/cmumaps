@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 
-import { Nodes } from "../../../../shared/types";
 import {
   CreateNodePayload,
   DeleteNodePayload,
@@ -15,6 +14,7 @@ import { getSocketId } from "../middleware/webSocketMiddleware";
 import { AppDispatch, RootState } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
+import { floorDataApiSlice } from "./floorDataApiSlice";
 
 export type CreateNodeArg = BaseMutationArg & CreateNodePayload;
 export type DeleteNodeArg = BaseMutationArg & DeleteNodePayload;
@@ -24,26 +24,31 @@ export const createNode =
   (floorCode: string, { nodeId, nodeInfo }: CreateNodePayload) =>
   (dispatch: AppDispatch) =>
     dispatch(
-      nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
-        draft[nodeId] = nodeInfo;
-      }),
+      floorDataApiSlice.util.updateQueryData(
+        "getFloorNodes",
+        floorCode,
+        (draft) => {
+          draft[nodeId] = nodeInfo;
+        },
+      ),
     );
 
 export const deleteNode =
   (floorCode: string, { nodeId }: DeleteNodePayload) =>
   (dispatch: AppDispatch) =>
     dispatch(
-      nodeApiSlice.util.updateQueryData("getFloorNodes", floorCode, (draft) => {
-        delete draft[nodeId];
-      }),
+      floorDataApiSlice.util.updateQueryData(
+        "getFloorNodes",
+        floorCode,
+        (draft) => {
+          delete draft[nodeId];
+        },
+      ),
     );
 
 export const nodeApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getFloorNodes: builder.query<Nodes, string>({
-      query: (floorCode) => `nodes/?floorCode=${floorCode}`,
-    }),
     createNode: builder.mutation<Response, CreateNodeArg>({
       query: ({ floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
@@ -106,7 +111,6 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetFloorNodesQuery,
   useCreateNodeMutation,
   useDeleteNodeMutation,
   useUpdateNodeMutation,
