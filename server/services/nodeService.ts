@@ -1,4 +1,4 @@
-import { prisma, websocketService } from "../index.ts";
+import { prisma } from "../index.ts";
 import type { ID, NodeInfo, Placement } from "../../shared/types.ts";
 import { pdfCoordsToGeoCoords } from "../utils/coordinates.ts";
 import {
@@ -32,14 +32,10 @@ export const nodeService = {
         data: { ...data, buildingCode, floorLevel },
       });
     }
-
-    const payload = { nodeId, nodeInfo };
-    websocketService.broadcastToFloor(socketId, "create-node", payload);
   },
 
   deleteNode: async (socketId: string, nodeId: ID) => {
     await prisma.node.delete({ where: { id: nodeId } });
-    websocketService.broadcastToFloor(socketId, "delete-node", { nodeId });
   },
 
   updateNode: async (
@@ -69,8 +65,5 @@ export const nodeService = {
         data: { ...data, buildingCode, floorLevel },
       });
     }
-
-    const payload = { nodeId, nodeInfo };
-    websocketService.broadcastToFloor(socketId, "update-node", payload);
   },
 };
