@@ -1,31 +1,14 @@
 import Konva from "konva";
-import { v4 as uuidv4 } from "uuid";
 
 import { Stage, Layer } from "react-konva";
-import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
 
-import { NodeInfo, PdfCoordinate } from "../../../../shared/types";
+import { PdfCoordinate } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
+import useStageClickHandler from "../../hooks/useStageClickHandler";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
 import { useGetFloorGraphQuery } from "../../store/api/floorDataApiSlice";
-import { useCreateNodeMutation } from "../../store/api/nodeApiSlice";
-import {
-  ADD_DOOR_NODE,
-  ADD_EDGE,
-  ADD_NODE,
-  DELETE_EDGE,
-  GRAPH_SELECT,
-  POLYGON_ADD_VERTEX,
-  setMode,
-} from "../../store/features/modeSlice";
-import {
-  setEditRoomLabel,
-  setShowRoomSpecific,
-} from "../../store/features/uiSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getCursorPos } from "../../utils/canvasUtils";
+import { useAppSelector } from "../../store/hooks";
 import LiveCursors from "../live-cursors/LiveCursors";
 import ErrorDisplay from "../shared/ErrorDisplay";
 import Loader from "../shared/Loader";
@@ -52,19 +35,14 @@ const FloorDisplay = ({
   offset,
   stageRef,
 }: Props) => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
   const { data: graph, isFetching, isError } = useGetFloorGraphQuery(floorCode);
 
-  const [createNode] = useCreateNodeMutation();
-
-  const mode = useAppSelector((state) => state.mode.mode);
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
   // const editPolygon = useAppSelector(selectEditPolygon);
 
   // custom hooks
   useKeyboardShortcuts(floorCode);
+  const handleStageClick = useStageClickHandler(floorCode, scale, offset);
   const handleMouseMove = useCursorTracker(offset, scale);
 
   // we need this for the flicker effect when refetching
@@ -76,52 +54,6 @@ const FloorDisplay = ({
   if (isError || !graph) {
     return <ErrorDisplay errorText="Failed to fetch nodes" />;
   }
-
-  const handleStageClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const clickedOnStage = e.target == e.target.getStage();
-
-    // errors for each mode relative to stage clicking
-    if (mode == ADD_NODE || mode == POLYGON_ADD_VERTEX) {
-      if (!clickedOnStage) {
-        toast.error("Click on empty space!");
-        return;
-      }
-    } else if (mode == ADD_DOOR_NODE) {
-      if (clickedOnStage) {
-        // addDoorNodeErrToast();
-      }
-    } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
-      if (clickedOnStage) {
-        toast.error("Click on another node!");
-        return;
-      }
-    }
-
-    // create node
-    if (mode == ADD_NODE) {
-      getCursorPos(e, offset, scale, (pos) => {
-        const nodeId = uuidv4();
-        const nodeInfo: NodeInfo = {
-          pos,
-          neighbors: {},
-          roomId: "",
-          // roomId: findRoomId(rooms, pos),
-        };
-
-        const addToHistory = true;
-        createNode({ floorCode, addToHistory, nodeId, nodeInfo });
-
-        dispatch(setMode(GRAPH_SELECT));
-      });
-    }
-    // click to unselect a room or exit polygon editing or room label editing
-    else if (clickedOnStage) {
-      navigate("?");
-      dispatch(setShowRoomSpecific(false));
-      dispatch(setEditRoomLabel(false));
-      dispatch(setMode(GRAPH_SELECT));
-    }
-  };
 
   // Disable panning when dragging node, vertex, or label
   const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
