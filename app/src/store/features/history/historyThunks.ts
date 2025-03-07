@@ -7,22 +7,32 @@ import { createAppAsyncThunk } from "../../withTypes";
 import { setEditIndex } from "./historySlice";
 import { Edit } from "./historyTypes";
 
-const applyEdit = (edit: Edit, dispatch: AppDispatch) => {
+const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
   switch (edit.endpoint) {
     case "createNode":
-      dispatch(nodeApiSlice.endpoints.createNode.initiate(edit.arg)).unwrap();
+      await dispatch(
+        nodeApiSlice.endpoints.createNode.initiate(edit.arg),
+      ).unwrap();
       break;
     case "deleteNode":
-      dispatch(nodeApiSlice.endpoints.deleteNode.initiate(edit.arg)).unwrap();
+      await dispatch(
+        nodeApiSlice.endpoints.deleteNode.initiate(edit.arg),
+      ).unwrap();
       break;
     case "updateNode":
-      dispatch(nodeApiSlice.endpoints.updateNode.initiate(edit.arg)).unwrap();
+      await dispatch(
+        nodeApiSlice.endpoints.updateNode.initiate(edit.arg),
+      ).unwrap();
       break;
     case "createEdge":
-      dispatch(edgeApiSlice.endpoints.createEdge.initiate(edit.arg)).unwrap();
+      await dispatch(
+        edgeApiSlice.endpoints.createEdge.initiate(edit.arg),
+      ).unwrap();
       break;
     case "deleteEdge":
-      dispatch(edgeApiSlice.endpoints.deleteEdge.initiate(edit.arg)).unwrap();
+      await dispatch(
+        edgeApiSlice.endpoints.deleteEdge.initiate(edit.arg),
+      ).unwrap();
       break;
     default:
       toast.error("Unimplemented edit type!");
@@ -31,7 +41,7 @@ const applyEdit = (edit: Edit, dispatch: AppDispatch) => {
 
 export const undo = createAppAsyncThunk(
   "history/undo",
-  (_, { dispatch, getState }) => {
+  async (_, { dispatch, getState }) => {
     try {
       const historyState = getState().history;
       let editIndex = historyState.editIndex;
@@ -47,7 +57,7 @@ export const undo = createAppAsyncThunk(
         historyState.batchIds[editIndex] === batchId
       ) {
         const edit = historyState.reversedEditHistory[editIndex];
-        applyEdit(edit, dispatch);
+        await applyEdit(edit, dispatch);
         editIndex--;
       }
 
@@ -62,7 +72,7 @@ export const undo = createAppAsyncThunk(
 
 export const redo = createAppAsyncThunk(
   "history/redo",
-  (_, { dispatch, getState }) => {
+  async (_, { dispatch, getState }) => {
     try {
       const historyState = getState().history;
       let editIndex = historyState.editIndex + 1;
@@ -79,7 +89,7 @@ export const redo = createAppAsyncThunk(
         historyState.batchIds[editIndex] === batchId
       ) {
         const edit = historyState.editHistory[editIndex];
-        applyEdit(edit, dispatch);
+        await applyEdit(edit, dispatch);
         editIndex++;
       }
 
