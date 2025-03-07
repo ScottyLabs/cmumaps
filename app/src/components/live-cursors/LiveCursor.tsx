@@ -8,6 +8,7 @@ import {
   selectCursorInfos,
   setCursorInfos,
 } from "../../store/features/liveCursor/liveCursorSlice";
+import { moveNodeWithCursor } from "../../store/features/liveCursor/liveCursorThunks";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CursorNameRect from "./LiveCursorRect";
 
@@ -33,6 +34,11 @@ const LiveCursor = ({
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (cursorInfos && cursorInfos.length > 1) {
+        if ("nodeId" in cursorInfos[0]) {
+          const payload = { floorCode, cursorInfo: cursorInfos[0] };
+          dispatch(moveNodeWithCursor(payload));
+        }
+
         const socketId = userSocketId;
         const payload = { socketId, cursorInfos: cursorInfos.slice(1) };
         dispatch(setCursorInfos(payload));
