@@ -9,6 +9,8 @@ import { notFoundHandler } from "./middleware/notFoundHandler.ts";
 import nodeRoutes from "./routes/nodeRoutes.ts";
 import { WebSocketService } from "./services/webSocketService.ts";
 import { checkAuth, socketAuth } from "./middleware/authMiddleware.ts";
+import { requireSocketId } from "./middleware/socketIdMiddleware.ts";
+import floorRoutes from "./routes/floorRoutes.ts";
 
 export const prisma = new PrismaClient();
 const app = express();
@@ -32,8 +34,9 @@ export const websocketService = new WebSocketService(io);
 app.use(clerkMiddleware());
 
 // Routes
+app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", checkAuth, buildingRoutes);
-app.use("/api/nodes", checkAuth, nodeRoutes);
+app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 app.use(notFoundHandler);
 
 const port = 80;
