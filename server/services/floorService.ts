@@ -1,4 +1,4 @@
-import type { EdgeInfo, Nodes, Placement } from "../../shared/types.ts";
+import type { EdgeInfo, Graph, Placement } from "../../shared/types.ts";
 import {
   extractBuildingCode,
   extractFloorLevel,
@@ -26,7 +26,7 @@ export const floorService = {
     });
 
     // Convert the nodes to the format expected by the frontend
-    const nodes: Nodes = {};
+    const nodes: Graph = {};
     for (const node of dbNodes) {
       // Convert the node's geo position to PDF position
       const position = {

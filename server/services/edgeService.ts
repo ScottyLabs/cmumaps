@@ -1,4 +1,3 @@
-import type { string } from "../../shared/types";
 import { prisma } from "../index.ts";
 
 export const edgeService = {
