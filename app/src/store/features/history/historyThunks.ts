@@ -13,6 +13,11 @@ const applyEdit = (edit: Edit, dispatch: AppDispatch) => {
     case "deleteNode":
       dispatch(nodeApiSlice.endpoints.deleteNode.initiate(edit.arg)).unwrap();
       break;
+    case "updateNode":
+      dispatch(nodeApiSlice.endpoints.updateNode.initiate(edit.arg)).unwrap();
+      break;
+    default:
+      toast.error("Unimplemented edit type!");
   }
 };
 

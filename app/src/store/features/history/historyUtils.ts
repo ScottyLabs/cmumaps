@@ -1,6 +1,10 @@
 import { Nodes } from "../../../../../shared/types";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
-import { CreateNodeArg, DeleteNodeArg } from "../../api/nodeApiSlice";
+import {
+  CreateNodeArg,
+  DeleteNodeArg,
+  UpdateNodeArg,
+} from "../../api/nodeApiSlice";
 import { AppDispatch, RootState } from "../../store";
 import { Edit, EditPair } from "./historyTypes";
 
@@ -46,5 +50,23 @@ export const buildDeleteEditPair = async (
     endpoint: "createNode",
     arg: { floorCode, nodeId, nodeInfo: nodes[nodeId] },
   };
+
+  return { edit, reverseEdit };
+};
+
+export const buildUpdateEditPair = async (
+  arg: UpdateNodeArg,
+  getStore: () => RootState,
+  dispatch: AppDispatch,
+): Promise<EditPair> => {
+  const { floorCode, nodeId } = arg;
+  const edit: Edit = { endpoint: "updateNode", arg };
+
+  const nodes = await getNodes(floorCode, getStore, dispatch);
+  const reverseEdit: Edit = {
+    endpoint: "updateNode",
+    arg: { floorCode, nodeId, nodeInfo: nodes[nodeId] },
+  };
+
   return { edit, reverseEdit };
 };

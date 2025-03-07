@@ -118,7 +118,8 @@ const NodesDisplay = ({ floorCode, nodes }: Props) => {
       const nodeInfo: NodeInfo = { ...nodes[nodeId] };
       nodeInfo.pos = getNodePos(e);
       // newNode.roomId = findRoomId(rooms, newNode.pos);
-      updateNode({ floorCode, nodeId, nodeInfo });
+      const addToHistory = true;
+      updateNode({ floorCode, addToHistory, nodeId, nodeInfo });
     };
 
   return Object.entries(nodes).map(

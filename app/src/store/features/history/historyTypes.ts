@@ -1,4 +1,8 @@
-import { CreateNodeArg, DeleteNodeArg } from "../../api/nodeApiSlice";
+import {
+  CreateNodeArg,
+  DeleteNodeArg,
+  UpdateNodeArg,
+} from "../../api/nodeApiSlice";
 
 interface CreateNodeEdit {
   endpoint: "createNode";
@@ -10,7 +14,12 @@ interface DeleteNodeEdit {
   arg: DeleteNodeArg;
 }
 
-export type Edit = CreateNodeEdit | DeleteNodeEdit;
+interface UpdateNodeEdit {
+  endpoint: "updateNode";
+  arg: UpdateNodeArg;
+}
+
+export type Edit = CreateNodeEdit | DeleteNodeEdit | UpdateNodeEdit;
 
 export interface EditPair {
   edit: Edit;

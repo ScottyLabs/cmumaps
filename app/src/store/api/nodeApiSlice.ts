@@ -9,6 +9,7 @@ import { addEditToHistory } from "../features/history/historySlice";
 import {
   buildCreateEditPair,
   buildDeleteEditPair,
+  buildUpdateEditPair,
 } from "../features/history/historyUtils";
 import { getSocketId } from "../middleware/webSocketMiddleware";
 import { AppDispatch, RootState } from "../store";
@@ -42,6 +43,19 @@ export const deleteNode =
         floorCode,
         (draft) => {
           delete draft[nodeId];
+        },
+      ),
+    );
+
+export const updateNode =
+  (floorCode: string, { nodeId, nodeInfo }: UpdateNodePayload) =>
+  (dispatch: AppDispatch) =>
+    dispatch(
+      floorDataApiSlice.util.updateQueryData(
+        "getFloorNodes",
+        floorCode,
+        (draft) => {
+          draft[nodeId] = nodeInfo;
         },
       ),
     );
@@ -106,6 +120,25 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         body: { floorCode, nodeInfo },
         headers: { "X-Socket-ID": getSocketId() },
       }),
+      async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
+        try {
+          const { floorCode, nodeId, nodeInfo, addToHistory } = arg;
+          // add to history
+          if (addToHistory) {
+            const getStore = getState as () => RootState;
+            const editPair = await buildUpdateEditPair(arg, getStore, dispatch);
+            dispatch(addEditToHistory(editPair));
+          }
+          // optimistic update
+          const { undo } = dispatch(
+            updateNode(floorCode, { nodeId, nodeInfo }),
+          );
+          handleQueryError(queryFulfilled, undo);
+        } catch (e) {
+          toast.error("Check the Console for detailed error.");
+          console.error(e);
+        }
+      },
     }),
   }),
 });
