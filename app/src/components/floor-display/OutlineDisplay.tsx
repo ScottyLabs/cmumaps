@@ -1,9 +1,6 @@
-import { skipToken } from "@reduxjs/toolkit/query";
-
 import { Line } from "react-konva";
 
 import { DoorInfo, ID } from "../../../../shared/types";
-import useClerkToken from "../../hooks/useClerkToken";
 import useFloorInfo from "../../hooks/useFloorInfo";
 import { useGetFloorOutlineQuery } from "../../store/api/s3ApiSlice";
 import { useAppSelector } from "../../store/hooks";
@@ -16,10 +13,7 @@ interface Props {
 const OutlineDisplay = ({ floorCode }: Props) => {
   const { buildingCode } = useFloorInfo(floorCode);
   const filePath = `${buildingCode}/${floorCode}.json`;
-  const token = useClerkToken();
-  const { data: outlineData } = useGetFloorOutlineQuery(
-    token ? { filePath, token } : skipToken,
-  );
+  const { data: outlineData } = useGetFloorOutlineQuery(filePath);
 
   const showOutline = useAppSelector((state) => state.visibility.showOutline);
 

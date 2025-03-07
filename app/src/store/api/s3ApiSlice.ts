@@ -3,11 +3,6 @@ import { apiSlice } from "./apiSlice";
 
 export const AWS_API_INVOKE_URL = `${import.meta.env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;
 
-interface WithTokenArg {
-  filePath: string;
-  token: string;
-}
-
 interface OutlineData {
   walls: number[][];
   doors: Record<ID, DoorInfo>;
@@ -17,22 +12,14 @@ interface OutlineData {
 export const s3ApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getFloorPdf: builder.query<string, WithTokenArg>({
-      query: ({ filePath, token }) => ({
-        url: `${AWS_API_INVOKE_URL}/get-floorplan-pdf?filePath=${filePath}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
+    getFloorPdf: builder.query<string, string>({
+      query: (filePath) =>
+        `${AWS_API_INVOKE_URL}/get-floorplan-pdf?filePath=${filePath}`,
       transformResponse: (response: { data: string }) => response.data,
     }),
-    getFloorOutline: builder.query<OutlineData, WithTokenArg>({
-      query: ({ filePath, token }) => ({
-        url: `${AWS_API_INVOKE_URL}/get-floorplan-outline?filePath=${filePath}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
+    getFloorOutline: builder.query<OutlineData, string>({
+      query: (filePath) =>
+        `${AWS_API_INVOKE_URL}/get-floorplan-outline?filePath=${filePath}`,
       transformResponse: (response: { data: OutlineData }) => response.data,
     }),
   }),

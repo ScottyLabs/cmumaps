@@ -1,5 +1,3 @@
-import { skipToken } from "@reduxjs/toolkit/query";
-
 import { useState } from "react";
 import { FiZoomIn } from "react-icons/fi";
 import { FiZoomOut } from "react-icons/fi";
@@ -8,7 +6,6 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
 import { PdfCoordinate } from "../../../../shared/types";
-import useClerkToken from "../../hooks/useClerkToken";
 import useFloorInfo from "../../hooks/useFloorInfo";
 import { DEFAULT_PDF_SCALE_INDEX } from "../../settings";
 import { useGetFloorPdfQuery } from "../../store/api/s3ApiSlice";
@@ -32,10 +29,7 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
   // get pdf data
   const { buildingCode } = useFloorInfo(floorCode);
   const filePath = `${buildingCode}/${floorCode}.pdf`;
-  const token = useClerkToken();
-  const { data: pdfData } = useGetFloorPdfQuery(
-    token ? { filePath, token } : skipToken,
-  );
+  const { data: pdfData } = useGetFloorPdfQuery(filePath);
 
   const renderZoomInButton = () => {
     const disabled = pdfScaleIndex == PDF_SCALES.length - 1;

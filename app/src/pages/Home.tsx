@@ -1,25 +1,21 @@
 import { SignedIn, UserButton } from "@clerk/clerk-react";
-import { skipToken } from "@reduxjs/toolkit/query";
 
 import { NavLink } from "react-router";
 
 import ErrorDisplay from "../components/shared/ErrorDisplay";
 import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
-import useClerkToken from "../hooks/useClerkToken";
 import useWebSocket from "../hooks/useWebSocket";
 import { useGetBuildingCodesAndNamesQuery } from "../store/api/buildingApiSlice";
 
 const Home = () => {
   useWebSocket();
 
-  const token = useClerkToken();
-
   const {
     data: buildingCodesAndNames,
     isLoading,
     isError,
-  } = useGetBuildingCodesAndNamesQuery(token ? token : skipToken);
+  } = useGetBuildingCodesAndNamesQuery();
 
   if (isLoading) {
     return <Loader loadingText="Fetching building codes" />;
