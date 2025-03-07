@@ -12,6 +12,9 @@ export const WebSocketEvents = {
   CREATE_NODE: "create-node",
   DELETE_NODE: "delete-node",
   UPDATE_NODE: "update-node",
+
+  CREATE_EDGE: "create-edge",
+  DELETE_EDGE: "delete-edge",
 } as const;
 
 // Create a type from the values
@@ -37,6 +40,16 @@ export interface UpdateNodePayload {
   nodeInfo: NodeInfo;
 }
 
+export interface CreateEdgePayload {
+  inNodeId: string;
+  outNodeId: string;
+}
+
+export interface DeleteEdgePayload {
+  inNodeId: string;
+  outNodeId: string;
+}
+
 // Define payload types for each event
 export type WebSocketPayloads = {
   [WebSocketEvents.SYNC_USERS]: SyncUserPayload;
@@ -44,4 +57,7 @@ export type WebSocketPayloads = {
   [WebSocketEvents.CREATE_NODE]: CreateNodePayload;
   [WebSocketEvents.DELETE_NODE]: DeleteNodePayload;
   [WebSocketEvents.UPDATE_NODE]: UpdateNodePayload;
+
+  [WebSocketEvents.CREATE_EDGE]: CreateEdgePayload;
+  [WebSocketEvents.DELETE_EDGE]: DeleteEdgePayload;
 };
