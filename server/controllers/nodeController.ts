@@ -27,7 +27,13 @@ export const nodeController = {
 
   createNode: async (req: Request, res: Response) => {
     const nodeId = req.params.id;
-    const { socketId, floorCode, nodeInfo } = req.body;
+    const { floorCode, nodeInfo } = req.body;
+    const socketId = req.header("X-Socket-ID");
+
+    if (!socketId) {
+      res.status(400).json({ message: "X-Socket-ID header is required" });
+      return;
+    }
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
@@ -71,7 +77,13 @@ export const nodeController = {
 
   updateNode: async (req: Request, res: Response) => {
     const nodeId = req.params.id;
-    const { socketId, floorCode, nodeInfo } = req.body;
+    const { floorCode, nodeInfo } = req.body;
+    const socketId = req.header("X-Socket-ID");
+
+    if (!socketId) {
+      res.status(400).json({ message: "X-Socket-ID header is required" });
+      return;
+    }
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);

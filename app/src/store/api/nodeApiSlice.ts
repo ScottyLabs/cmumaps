@@ -45,7 +45,8 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       query: ({ socketId, floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
         method: "POST",
-        body: { socketId, floorCode, nodeInfo },
+        body: { floorCode, nodeInfo },
+        headers: { "X-Socket-ID": socketId },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {

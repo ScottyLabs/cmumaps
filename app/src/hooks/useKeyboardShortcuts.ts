@@ -128,7 +128,11 @@ const useKeyboardShortcuts = (floorCode: string) => {
           case "Backspace":
           case "Delete": {
             const socketId = getSocketId();
-            if (nodeIdSelected && socketId) {
+            if (!socketId) {
+              return;
+            }
+
+            if (nodeIdSelected) {
               const addToHistory = true;
               deleteNode({
                 socketId,
