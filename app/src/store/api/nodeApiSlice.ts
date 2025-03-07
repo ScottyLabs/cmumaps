@@ -4,18 +4,21 @@ import { Nodes } from "../../../../shared/types";
 import {
   CreateNodePayload,
   DeleteNodePayload,
+  UpdateNodePayload,
 } from "../../../../shared/webSocketTypes";
 import { addEditToHistory } from "../features/history/historySlice";
 import {
   buildCreateEditPair,
   buildDeleteEditPair,
 } from "../features/history/historyUtils";
+import { getSocketId } from "../middleware/webSocketMiddleware";
 import { AppDispatch, RootState } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 
 export type CreateNodeArg = BaseMutationArg & CreateNodePayload;
 export type DeleteNodeArg = BaseMutationArg & DeleteNodePayload;
+export type UpdateNodeArg = BaseMutationArg & UpdateNodePayload;
 
 export const createNode =
   (floorCode: string, { nodeId, nodeInfo }: CreateNodePayload) =>
@@ -42,11 +45,11 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       query: (floorCode) => `nodes/?floorCode=${floorCode}`,
     }),
     createNode: builder.mutation<Response, CreateNodeArg>({
-      query: ({ socketId, floorCode, nodeId, nodeInfo }) => ({
+      query: ({ floorCode, nodeId, nodeInfo }) => ({
         url: `nodes/${nodeId}`,
         method: "POST",
         body: { floorCode, nodeInfo },
-        headers: { "X-Socket-ID": socketId },
+        headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
@@ -68,10 +71,10 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
       },
     }),
     deleteNode: builder.mutation<Response, DeleteNodeArg>({
-      query: ({ socketId, nodeId }) => ({
+      query: ({ nodeId }) => ({
         url: `nodes/${nodeId}`,
         method: "DELETE",
-        headers: { "X-Socket-ID": socketId },
+        headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
@@ -91,6 +94,14 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateNode: builder.mutation<Response, UpdateNodeArg>({
+      query: ({ floorCode, nodeId, nodeInfo }) => ({
+        url: `nodes/${nodeId}`,
+        method: "PUT",
+        body: { floorCode, nodeInfo },
+        headers: { "X-Socket-ID": getSocketId() },
+      }),
+    }),
   }),
 });
 
@@ -98,4 +109,5 @@ export const {
   useGetFloorNodesQuery,
   useCreateNodeMutation,
   useDeleteNodeMutation,
+  useUpdateNodeMutation,
 } = nodeApiSlice;

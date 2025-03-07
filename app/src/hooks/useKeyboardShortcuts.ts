@@ -22,7 +22,6 @@ import {
   toggleShowPolygons,
 } from "../store/features/visibilitySlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getSocketId } from "../store/middleware/webSocketMiddleware";
 
 const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
@@ -127,19 +126,9 @@ const useKeyboardShortcuts = (floorCode: string) => {
           // delete or backspace to delete a node
           case "Backspace":
           case "Delete": {
-            const socketId = getSocketId();
-            if (!socketId) {
-              return;
-            }
-
             if (nodeIdSelected) {
               const addToHistory = true;
-              deleteNode({
-                socketId,
-                floorCode,
-                addToHistory,
-                nodeId: nodeIdSelected,
-              });
+              deleteNode({ floorCode, addToHistory, nodeId: nodeIdSelected });
             } else {
               toastNodeNotSelectedErr();
             }

@@ -30,7 +30,6 @@ import {
   setShowRoomSpecific,
 } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getSocketId } from "../../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../../utils/canvasUtils";
 import LiveCursors from "../live-cursors/LiveCursors";
 import ErrorDisplay from "../shared/ErrorDisplay";
@@ -110,13 +109,10 @@ const FloorDisplay = ({
           roomId: "",
           // roomId: findRoomId(rooms, pos),
         };
-        const socketId = getSocketId();
-        if (socketId) {
-          const addToHistory = true;
-          createNode({ socketId, floorCode, addToHistory, nodeId, nodeInfo });
-        } else {
-          toast.error("Socket not connected");
-        }
+
+        const addToHistory = true;
+        createNode({ floorCode, addToHistory, nodeId, nodeInfo });
+
         dispatch(setMode(GRAPH_SELECT));
       });
     }

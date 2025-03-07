@@ -25,18 +25,11 @@ const getNodes = async (
 };
 
 export const buildCreateEditPair = (arg: CreateNodeArg): EditPair => {
-  const { socketId, floorCode, nodeId } = arg;
-  const edit: Edit = {
-    endpoint: "createNode",
-    arg,
-  };
+  const { floorCode, nodeId } = arg;
+  const edit: Edit = { endpoint: "createNode", arg };
   const reverseEdit: Edit = {
     endpoint: "deleteNode",
-    arg: {
-      socketId,
-      floorCode,
-      nodeId,
-    },
+    arg: { floorCode, nodeId },
   };
   return { edit, reverseEdit };
 };
@@ -46,21 +39,13 @@ export const buildDeleteEditPair = async (
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<EditPair> => {
-  const { socketId, floorCode, nodeId } = arg;
-  const edit: Edit = {
-    endpoint: "deleteNode",
-    arg,
-  };
+  const { floorCode, nodeId } = arg;
+  const edit: Edit = { endpoint: "deleteNode", arg };
 
   const nodes = await getNodes(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "createNode",
-    arg: {
-      socketId,
-      floorCode,
-      nodeId,
-      nodeInfo: nodes[nodeId],
-    },
+    arg: { floorCode, nodeId, nodeInfo: nodes[nodeId] },
   };
   return { edit, reverseEdit };
 };
