@@ -43,5 +43,6 @@ npm run dev
 ```zsh
 cd server
 npm install
+npx prisma generate
 node index.ts
 ```
