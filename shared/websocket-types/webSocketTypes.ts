@@ -4,7 +4,12 @@ import type {
   DeleteNodePayload,
   UpdateNodePayload,
 } from "./nodeTypes.ts";
-import type { CreateEdgePayload, DeleteEdgePayload } from "./edgeTypes.ts";
+import type {
+  CreateEdgeAcrossFloorsPayload,
+  CreateEdgePayload,
+  DeleteEdgeAcrossFloorsPayload,
+  DeleteEdgePayload,
+} from "./edgeTypes.ts";
 
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {
@@ -16,6 +21,8 @@ export const WebSocketEvents = {
 
   CREATE_EDGE: "create-edge",
   DELETE_EDGE: "delete-edge",
+  CREATE_EDGE_ACROSS_FLOORS: "create-edge-across-floors",
+  DELETE_EDGE_ACROSS_FLOORS: "delete-edge-across-floors",
 } as const;
 
 // Create a type from the values
@@ -32,4 +39,6 @@ export type WebSocketPayloads = {
 
   [WebSocketEvents.CREATE_EDGE]: CreateEdgePayload;
   [WebSocketEvents.DELETE_EDGE]: DeleteEdgePayload;
+  [WebSocketEvents.CREATE_EDGE_ACROSS_FLOORS]: CreateEdgeAcrossFloorsPayload;
+  [WebSocketEvents.DELETE_EDGE_ACROSS_FLOORS]: DeleteEdgeAcrossFloorsPayload;
 };

@@ -11,11 +11,6 @@ export interface PdfCoordinate {
 }
 
 /**
- * name of the pdf file it is in
- * */
-export type Floor = string;
-
-/**
  * Edge Types
  */
 export const EdgeTypeList = [
@@ -27,19 +22,11 @@ export const EdgeTypeList = [
 
 export type EdgeType = (typeof EdgeTypeList)[number];
 
-export interface ToFloorInfo {
-  toFloor: Floor;
-  /**
-   *  "ramp" | "stairs" | "elevator" | "inside" | "outside" | ""
-   **/
-  type: EdgeType;
-}
-
 /**
  * Graph types
  */
 export interface EdgeInfo {
-  toFloorInfo?: ToFloorInfo;
+  outFloorCode?: string;
 }
 
 /**
