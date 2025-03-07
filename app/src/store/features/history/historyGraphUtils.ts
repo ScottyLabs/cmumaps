@@ -8,7 +8,7 @@ import {
 import { AppDispatch, RootState } from "../../store";
 import { Edit, EditPair } from "./historyTypes";
 
-const getNodes = async (
+const getGraph = async (
   floorCode: string,
   getStore: () => RootState,
   dispatch: AppDispatch,
@@ -27,7 +27,7 @@ const getNodes = async (
   return nodes;
 };
 
-export const buildCreateEditPair = (arg: CreateNodeArg): EditPair => {
+export const buildCreateNodeEditPair = (arg: CreateNodeArg): EditPair => {
   const { floorCode, nodeId } = arg;
   const edit: Edit = {
     endpoint: "createNode",
@@ -40,7 +40,7 @@ export const buildCreateEditPair = (arg: CreateNodeArg): EditPair => {
   return { edit, reverseEdit };
 };
 
-export const buildDeleteEditPair = async (
+export const buildDeleteNodeEditPair = async (
   arg: DeleteNodeArg,
   getStore: () => RootState,
   dispatch: AppDispatch,
@@ -51,7 +51,7 @@ export const buildDeleteEditPair = async (
     arg: { ...arg, addToHistory: false },
   };
 
-  const nodes = await getNodes(floorCode, getStore, dispatch);
+  const nodes = await getGraph(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "createNode",
     arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], addToHistory: false },
@@ -60,7 +60,7 @@ export const buildDeleteEditPair = async (
   return { edit, reverseEdit };
 };
 
-export const buildUpdateEditPair = async (
+export const buildUpdateNodeEditPair = async (
   arg: UpdateNodeArg,
   getStore: () => RootState,
   dispatch: AppDispatch,
@@ -71,7 +71,7 @@ export const buildUpdateEditPair = async (
     arg: { ...arg, addToHistory: false },
   };
 
-  const nodes = await getNodes(floorCode, getStore, dispatch);
+  const nodes = await getGraph(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "updateNode",
     arg: { floorCode, nodeId, nodeInfo: nodes[nodeId], addToHistory: false },

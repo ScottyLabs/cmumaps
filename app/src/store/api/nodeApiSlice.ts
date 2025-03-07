@@ -5,12 +5,12 @@ import {
   DeleteNodePayload,
   UpdateNodePayload,
 } from "../../../../shared/websocket-types/nodeTypes";
-import { addEditToHistory } from "../features/history/historySlice";
 import {
-  buildCreateEditPair,
-  buildDeleteEditPair,
-  buildUpdateEditPair,
-} from "../features/history/historyUtils";
+  buildCreateNodeEditPair,
+  buildDeleteNodeEditPair,
+  buildUpdateNodeEditPair,
+} from "../features/history/historyGraphUtils";
+import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
 import { AppDispatch, RootState } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
@@ -75,7 +75,7 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
           const { floorCode, nodeId, addToHistory, nodeInfo } = arg;
           // add to history
           if (addToHistory) {
-            const editPair = buildCreateEditPair(arg);
+            const editPair = buildCreateNodeEditPair(arg);
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
@@ -101,7 +101,11 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
           // add to history
           if (addToHistory) {
             const getStore = getState as () => RootState;
-            const editPair = await buildDeleteEditPair(arg, getStore, dispatch);
+            const editPair = await buildDeleteNodeEditPair(
+              arg,
+              getStore,
+              dispatch,
+            );
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
@@ -126,7 +130,11 @@ export const nodeApiSlice = apiSlice.injectEndpoints({
           // add to history
           if (addToHistory) {
             const getStore = getState as () => RootState;
-            const editPair = await buildUpdateEditPair(arg, getStore, dispatch);
+            const editPair = await buildUpdateNodeEditPair(
+              arg,
+              getStore,
+              dispatch,
+            );
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
