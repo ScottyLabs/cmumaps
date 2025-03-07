@@ -1,14 +1,14 @@
 import { useParams, Navigate } from "react-router";
 
 import { ErrorCode } from "../../../shared/errorCode";
-import FloorSwitcher from "../components/layouts/FloorSwitcher";
-import HelpInfo from "../components/layouts/HelpInfo";
-import LiveUserCount from "../components/layouts/LiveUserCount";
-import MainDisplay from "../components/layouts/MainDisplay";
-import ModeDisplay from "../components/layouts/ModeDisplay";
-import NavBar from "../components/layouts/NavBar";
 import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
+import FloorSwitcher from "../components/ui-layout/FloorSwitcher";
+import HelpInfo from "../components/ui-layout/HelpInfo";
+import LiveUserCount from "../components/ui-layout/LiveUserCount";
+import MainDisplay from "../components/ui-layout/MainDisplay";
+import ModeDisplay from "../components/ui-layout/ModeDisplay";
+import NavBar from "../components/ui-layout/NavBar";
 import { useGetDefaultFloorQuery } from "../store/api/buildingApiSlice";
 
 const FloorPage = () => {
