@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Line } from "react-konva";
 
-import { Graph, ID } from "../../../../shared/types";
+import { Graph } from "../../../../shared/types";
 import { useAppSelector } from "../../store/hooks";
 
 interface Props {
@@ -15,7 +15,7 @@ const EdgesDisplay = ({ graph }: Props) => {
 
   const edges: [number[], string][] = useMemo(() => {
     const includedNodes = new Set();
-    const shouldRender = (_curId: ID, neighborId: ID) => {
+    const shouldRender = (_curId: string, neighborId: string) => {
       // don't display an edge twice
       if (includedNodes.has(neighborId)) {
         return false;

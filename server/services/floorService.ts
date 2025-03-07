@@ -1,4 +1,4 @@
-import type { EdgeInfo, ID, Nodes, Placement } from "../../shared/types.ts";
+import type { EdgeInfo, Nodes, Placement } from "../../shared/types.ts";
 import {
   extractBuildingCode,
   extractFloorLevel,
@@ -35,8 +35,8 @@ export const floorService = {
       };
       const pos = geoCoordsToPdfCoordsHelper(position);
 
-      // Create a mapping of neighbor node IDs to edge info
-      const neighbors: Record<ID, EdgeInfo> = {};
+      // Create a mapping of neighbor node strings to edge info
+      const neighbors: Record<string, EdgeInfo> = {};
       for (const neighbor of node.outEdges) {
         neighbors[neighbor.outNodeId] = {};
       }

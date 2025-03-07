@@ -1,5 +1,5 @@
 import { prisma } from "../index.ts";
-import type { ID, NodeInfo, Placement } from "../../shared/types.ts";
+import type { NodeInfo, Placement } from "../../shared/types.ts";
 import { pdfCoordsToGeoCoords } from "../utils/coordinates.ts";
 import {
   extractBuildingCode,
@@ -9,7 +9,7 @@ import {
 export const nodeService = {
   createNode: async (
     floorCode: string,
-    nodeId: ID,
+    nodeId: string,
     nodeInfo: NodeInfo,
     placement: Placement
   ) => {
@@ -33,13 +33,13 @@ export const nodeService = {
     }
   },
 
-  deleteNode: async (nodeId: ID) => {
+  deleteNode: async (nodeId: string) => {
     await prisma.node.delete({ where: { id: nodeId } });
   },
 
   updateNode: async (
     floorCode: string,
-    nodeId: ID,
+    nodeId: string,
     nodeInfo: NodeInfo,
     placement: Placement
   ) => {

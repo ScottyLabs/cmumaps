@@ -11,11 +11,6 @@ export interface PdfCoordinate {
 }
 
 /**
- * Unique ID (UUID)
- * */
-export type ID = string;
-
-/**
  * name of the pdf file it is in
  * */
 export type Floor = string;
@@ -59,13 +54,13 @@ export interface NodeInfo {
   /**
    * (neighbor's id to the edge) for each neighbor of the node
    */
-  neighbors: Record<ID, EdgeInfo>;
+  neighbors: Record<string, EdgeInfo>;
 
   /**
-   * the ID of the Room the node belongs to
+   * the string of the Room the node belongs to
    * ${buildingCode}-${roomName}
    */
-  roomId: ID;
+  roomId: string;
 }
 
 /**
@@ -85,7 +80,7 @@ export interface DoorInfo {
   /**
    * the id of the rooms this door connects
    */
-  roomIds: ID[];
+  roomIds: string[];
 }
 
 /**
@@ -164,10 +159,10 @@ export interface RoomInfo {
   updatedAt: string;
 }
 
-export type Rooms = Record<ID, RoomInfo>;
-export type Graph = Record<ID, NodeInfo>;
+export type Rooms = Record<string, RoomInfo>;
+export type Graph = Record<string, NodeInfo>;
 
-export type Mst = Record<ID, Record<ID, boolean>>;
+export type Mst = Record<string, Record<string, boolean>>;
 
 export interface Placement {
   geoCenter: GeoCoordinate;

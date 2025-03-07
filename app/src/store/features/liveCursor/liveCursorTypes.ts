@@ -1,16 +1,16 @@
-import { ID, PdfCoordinate } from "../../../../../shared/types";
+import { PdfCoordinate } from "../../../../../shared/types";
 
 interface BaseCursorInfo {
   cursorPos: PdfCoordinate;
 }
 
 export interface CursorInfoOnDragNode extends BaseCursorInfo {
-  nodeId: ID;
+  nodeId: string;
   nodePos: PdfCoordinate;
 }
 
 interface CursorInfoOnDragVertex extends BaseCursorInfo {
-  roomId: ID;
+  roomId: string;
   holeIndex: number;
   vertexIndex: number;
   vertexPos: PdfCoordinate;

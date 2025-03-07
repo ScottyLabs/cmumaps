@@ -1,8 +1,8 @@
-import type { ID } from "../../shared/types";
+import type { string } from "../../shared/types";
 import { prisma } from "../index.ts";
 
 export const edgeService = {
-  createEdge: async (inNodeId: ID, outNodeId: ID) => {
+  createEdge: async (inNodeId: string, outNodeId: string) => {
     await prisma.edge.create({
       data: { inNodeId, outNodeId },
     });
@@ -11,7 +11,7 @@ export const edgeService = {
     });
   },
 
-  deleteEdge: async (inNodeId: ID, outNodeId: ID) => {
+  deleteEdge: async (inNodeId: string, outNodeId: string) => {
     await prisma.edge.delete({
       where: { inNodeId_outNodeId: { inNodeId, outNodeId } },
     });

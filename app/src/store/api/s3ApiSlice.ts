@@ -1,11 +1,11 @@
-import { DoorInfo, ID } from "../../../../shared/types";
+import { DoorInfo } from "../../../../shared/types";
 import { apiSlice } from "./apiSlice";
 
 export const AWS_API_INVOKE_URL = `${import.meta.env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;
 
 interface OutlineData {
   walls: number[][];
-  doors: Record<ID, DoorInfo>;
+  doors: Record<string, DoorInfo>;
   roomlessDoors: number[][];
 }
 

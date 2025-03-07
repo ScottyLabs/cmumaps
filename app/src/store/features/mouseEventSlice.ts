@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ID, PdfCoordinate } from "../../../../shared/types";
+import { PdfCoordinate } from "../../../../shared/types";
 
 interface MouseEventState {
-  hoverNodeId: ID | null;
-  dragNodeId: ID | null;
+  hoverNodeId: string | null;
+  dragNodeId: string | null;
   dragNodePos: PdfCoordinate | null;
 }
 
@@ -18,14 +18,14 @@ const mouseEventSlice = createSlice({
   name: "mouseEvent",
   initialState,
   reducers: {
-    hoverNode(state, action: PayloadAction<ID>) {
+    hoverNode(state, action: PayloadAction<string>) {
       state.hoverNodeId = action.payload;
     },
     unHoverNode(state) {
       state.hoverNodeId = null;
     },
 
-    dragNode(state, action: PayloadAction<ID>) {
+    dragNode(state, action: PayloadAction<string>) {
       state.dragNodeId = action.payload;
     },
     releaseNode(state) {

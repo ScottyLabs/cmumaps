@@ -5,7 +5,7 @@ import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
-import { ID, NodeInfo, Graph, PdfCoordinate } from "../../../../shared/types";
+import { NodeInfo, Graph, PdfCoordinate } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import {
   useCreateEdgeMutation,
@@ -69,7 +69,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     return;
   }
 
-  const getFillColor = (nodeId: ID) => {
+  const getFillColor = (nodeId: string) => {
     if (nodeId == selectedNodeId) {
       return "yellow";
     }
@@ -117,7 +117,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     return "blue";
   };
 
-  const handleAddEdge = (nodeId: ID) => {
+  const handleAddEdge = (nodeId: string) => {
     const validate = () => {
       // this condition should never occur because we check that idSelected is
       // selected before setting mode to ADD_EDGE
@@ -151,7 +151,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     dispatch(setMode(GRAPH_SELECT));
   };
 
-  const handleDeleteEdge = (nodeId: ID) => {
+  const handleDeleteEdge = (nodeId: string) => {
     // this condition should never occur because we check that idSelected is
     // selected before setting mode to ADD_EDGE
     if (!selectedNodeId) {
@@ -171,7 +171,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     dispatch(setMode(GRAPH_SELECT));
   };
 
-  const handleNodeClick = (nodeId: ID) => {
+  const handleNodeClick = (nodeId: string) => {
     if (mode == GRAPH_SELECT) {
       navigate(`?nodeId=${nodeId}`);
     } else if (mode == ADD_EDGE) {
@@ -199,7 +199,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     }, CURSOR_UPDATE_RATE);
 
   const handleOnDragEnd =
-    (nodeId: ID) => (e: Konva.KonvaEventObject<DragEvent>) => {
+    (nodeId: string) => (e: Konva.KonvaEventObject<DragEvent>) => {
       // create new node
       const nodeInfo: NodeInfo = { ...graph[nodeId] };
       nodeInfo.pos = getNodePos(e);
@@ -212,7 +212,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     };
 
   return Object.entries(graph).map(
-    ([nodeId, node]: [ID, NodeInfo], index: number) => {
+    ([nodeId, node]: [string, NodeInfo], index: number) => {
       if (!showRoomSpecific || node.roomId === roomIdSelected) {
         return (
           <Circle

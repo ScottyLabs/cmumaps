@@ -1,6 +1,6 @@
 import { Line } from "react-konva";
 
-import { DoorInfo, ID } from "../../../../shared/types";
+import { DoorInfo } from "../../../../shared/types";
 import useFloorInfo from "../../hooks/useFloorInfo";
 import { useGetFloorOutlineQuery } from "../../store/api/s3ApiSlice";
 import { useAppSelector } from "../../store/hooks";
@@ -30,7 +30,7 @@ const OutlineDisplay = ({ floorCode }: Props) => {
   const drawDoors = () => {
     const doors = outlineData.doors;
 
-    const getStrokeColor = (doorId: ID) => {
+    const getStrokeColor = (doorId: string) => {
       if (doors[doorId].roomIds.length != 2) {
         return "red";
       }
@@ -38,7 +38,7 @@ const OutlineDisplay = ({ floorCode }: Props) => {
       return "purple";
     };
 
-    return Object.entries(doors).map(([doorId, doorInfo]: [ID, DoorInfo]) =>
+    return Object.entries(doors).map(([doorId, doorInfo]: [string, DoorInfo]) =>
       doorInfo.lineList.map((points, index: number) => (
         // identify bezier curve by number of points
         <Line
