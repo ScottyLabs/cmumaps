@@ -8,6 +8,7 @@ import {
   WebSocketPayloads,
 } from "../../../../shared/websocket-types/webSocketTypes";
 import { getClerkToken } from "../api/apiSlice";
+import { createEdge, deleteEdge } from "../api/edgeApiSlice";
 import { createNode, deleteNode, updateNode } from "../api/nodeApiSlice";
 import {
   setCursorInfos,
@@ -107,6 +108,28 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
       const floorCode = getFloorCode();
       if (floorCode) {
         dispatch(updateNode(floorCode, message));
+      }
+    },
+  );
+
+  // Handle create edge event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.CREATE_EDGE,
+    (message: WebSocketPayloads["create-edge"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(createEdge(floorCode, message));
+      }
+    },
+  );
+
+  // Handle delete edge event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.DELETE_EDGE,
+    (message: WebSocketPayloads["delete-edge"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(deleteEdge(floorCode, message));
       }
     },
   );
