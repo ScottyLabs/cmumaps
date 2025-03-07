@@ -49,7 +49,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
 
   const [updateNode] = useUpdateNodeMutation();
   const [createEdge] = useCreateEdgeMutation();
-  // const [deleteEdge] = useDeleteEdgeMutation();
+  const [deleteEdge] = useDeleteEdgeMutation();
 
   const [searchParam] = useSearchParams();
   const selectedNodeId = searchParam.get("nodeId");
@@ -151,15 +151,35 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     dispatch(setMode(GRAPH_SELECT));
   };
 
+  const handleDeleteEdge = (nodeId: ID) => {
+    // this condition should never occur because we check that idSelected is
+    // selected before setting mode to ADD_EDGE
+    if (!selectedNodeId) {
+      toast.error("Please select a node first!");
+      return;
+    }
+
+    if (!Object.keys(graph[nodeId].neighbors).includes(selectedNodeId)) {
+      toast.error("No edge exist between these two nodes!");
+      return;
+    }
+
+    const addToHistory = true;
+    const inNodeId = nodeId;
+    const outNodeId = selectedNodeId;
+    deleteEdge({ floorCode, inNodeId, outNodeId, addToHistory });
+    dispatch(setMode(GRAPH_SELECT));
+  };
+
   const handleNodeClick = (nodeId: ID) => {
     if (mode == GRAPH_SELECT) {
       navigate(`?nodeId=${nodeId}`);
     } else if (mode == ADD_EDGE) {
       handleAddEdge(nodeId);
     } else if (mode == DELETE_EDGE) {
-      // handleDeleteEdge(nodeId);
+      handleDeleteEdge(nodeId);
     } else if (mode == ADD_DOOR_NODE) {
-      // addDoorNodeErrToast();s
+      // addDoorNodeErrToast();
     }
   };
 
