@@ -14,7 +14,7 @@ export const getClerkToken = async () => {
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  tagTypes: ["Nodes", "Rooms"],
+  tagTypes: ["Graph", "Rooms"],
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER_URL}/api/`,
     prepareHeaders: async (headers) => {
