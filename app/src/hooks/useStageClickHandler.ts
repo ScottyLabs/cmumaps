@@ -40,49 +40,67 @@ const useStageClickHandler = (
   const [createEdge] = useCreateEdgeMutation();
   const [deleteEdge] = useDeleteEdgeMutation();
 
-  return (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const clickedOnStage = e.target == e.target.getStage();
-
+  const isValidClick = (clickedOnStage: boolean) => {
     // errors for each mode relative to stage clicking
     if (mode == ADD_NODE || mode == POLYGON_ADD_VERTEX) {
       if (!clickedOnStage) {
         toast.error("Click on empty space!");
-        return;
+        return false;
       }
     } else if (mode == ADD_DOOR_NODE) {
       if (clickedOnStage) {
         // addDoorNodeErrToast();
+        return false;
       }
     } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
       if (clickedOnStage) {
         toast.error("Click on another node!");
-        return;
+        return false;
       }
+    }
+
+    return true;
+  };
+
+  const handleCreateNode = () => {
+    getCursorPos(e, offset, scale, (pos) => {
+      const nodeId = uuidv4();
+      const nodeInfo: NodeInfo = {
+        pos,
+        neighbors: {},
+        roomId: "",
+        // roomId: findRoomId(rooms, pos),
+      };
+
+      const addToHistory = true;
+      createNode({ floorCode, addToHistory, nodeId, nodeInfo });
+
+      dispatch(setMode(GRAPH_SELECT));
+    });
+  };
+
+  const handleDeselect = () => {
+    navigate("?");
+    dispatch(setShowRoomSpecific(false));
+    dispatch(setEditRoomLabel(false));
+    dispatch(setMode(GRAPH_SELECT));
+  };
+
+  return (e: Konva.KonvaEventObject<MouseEvent>) => {
+    const clickedOnStage = e.target == e.target.getStage();
+
+    if (!isValidClick(clickedOnStage)) {
+      return;
     }
 
     // create node
     if (mode == ADD_NODE) {
-      getCursorPos(e, offset, scale, (pos) => {
-        const nodeId = uuidv4();
-        const nodeInfo: NodeInfo = {
-          pos,
-          neighbors: {},
-          roomId: "",
-          // roomId: findRoomId(rooms, pos),
-        };
-
-        const addToHistory = true;
-        createNode({ floorCode, addToHistory, nodeId, nodeInfo });
-
-        dispatch(setMode(GRAPH_SELECT));
-      });
+      handleCreateNode();
     }
+
     // click to unselect a room or exit polygon editing or room label editing
     else if (clickedOnStage) {
-      navigate("?");
-      dispatch(setShowRoomSpecific(false));
-      dispatch(setEditRoomLabel(false));
-      dispatch(setMode(GRAPH_SELECT));
+      handleDeselect();
     }
   };
 };
