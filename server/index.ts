@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
 import { Server } from "socket.io";
+import { clerkMiddleware } from "@clerk/express";
 import http from "http";
 import buildingRoutes from "./routes/buildingRoutes.ts";
 import { notFoundHandler } from "./middleware/notFoundHandler.ts";
@@ -31,6 +32,9 @@ export const websocketService = new WebSocketService(io);
 app.use("/api/buildings", buildingRoutes);
 app.use("/api/nodes", nodeRoutes);
 app.use(notFoundHandler);
+
+// Clerk middleware to authenticate requests
+app.use(clerkMiddleware());
 
 const port = 80;
 server.listen(port, () => {

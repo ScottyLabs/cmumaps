@@ -1,19 +1,21 @@
 import express from "express";
+import { requireAuth } from "@clerk/express";
 import { buildingController } from "../controllers/buildingController.ts";
 
 const buildingRouter = express.Router();
 
 buildingRouter.get(
   "/codes-and-names",
-  buildingController.getBuildingCodesAndNames,
+  requireAuth(),
+  buildingController.getBuildingCodesAndNames
 );
 buildingRouter.get(
   "/:id/defaultFloor",
-  buildingController.getDefaultFloor as express.RequestHandler,
+  buildingController.getDefaultFloor as express.RequestHandler
 );
 buildingRouter.get(
   "/:id/floors",
-  buildingController.getBuildingFloors as express.RequestHandler,
+  buildingController.getBuildingFloors as express.RequestHandler
 );
 
 export default buildingRouter;
