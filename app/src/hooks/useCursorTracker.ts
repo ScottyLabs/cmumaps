@@ -21,10 +21,7 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   // store mouse positions
   const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
     getCursorPos(e, offset, scale, (cursorPos) => {
-      const socketId = getSocketId();
-      if (socketId) {
-        dispatch(pushCursorInfo({ socketId, cursorInfo: { cursorPos } }));
-      }
+      dispatch(pushCursorInfo({ cursorPos }));
     });
   }, CURSOR_UPDATE_RATE);
 

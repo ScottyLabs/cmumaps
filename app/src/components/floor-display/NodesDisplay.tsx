@@ -16,7 +16,6 @@ import {
   GRAPH_SELECT,
 } from "../../store/features/modeSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getSocketId } from "../../store/middleware/webSocketMiddleware";
 import { getCursorPos, setCursor } from "../../utils/canvasUtils";
 
 interface Props {
@@ -126,10 +125,7 @@ const NodesDisplay = ({ floorCode, nodes, offset, scale }: Props) => {
           nodePos: getNodePos(e),
         };
 
-        const socketId = getSocketId();
-        if (socketId) {
-          dispatch(pushCursorInfo({ socketId, cursorInfo }));
-        }
+        dispatch(pushCursorInfo(cursorInfo));
       });
     }, CURSOR_UPDATE_RATE);
 

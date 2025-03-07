@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { LiveUser } from "../../../../../shared/webSocketTypes";
+import { getSocketId } from "../../middleware/webSocketMiddleware";
 import { CursorInfo } from "./liveCursorTypes";
 
 interface LiveCursorState {
@@ -13,10 +14,7 @@ const initialState: LiveCursorState = {
   liveCursors: {},
 };
 
-interface pushCursorInfoPayload {
-  socketId: string;
-  cursorInfo: CursorInfo;
-}
+// need socketId for settting other users' cursor infos but don't need it when updating own cursor info
 interface SetCursorInfosPayload {
   socketId: string;
   cursorInfos: CursorInfo[];
@@ -30,15 +28,18 @@ const liveCursorSlice = createSlice({
       state.liveUsers = action.payload;
     },
 
-    pushCursorInfo(state, action: PayloadAction<pushCursorInfoPayload>) {
-      const { socketId, cursorInfo } = action.payload;
-      if (!state.liveCursors[socketId]) {
-        state.liveCursors[socketId] = [];
+    pushCursorInfo(state, action: PayloadAction<CursorInfo>) {
+      const socketId = getSocketId();
+      if (socketId) {
+        if (!state.liveCursors[socketId]) {
+          state.liveCursors[socketId] = [];
+        }
+        state.liveCursors[socketId].push(action.payload);
       }
-      state.liveCursors[socketId].push(cursorInfo);
     },
     setCursorInfos(state, action: PayloadAction<SetCursorInfosPayload>) {
-      state.liveCursors[action.payload.socketId] = action.payload.cursorInfos;
+      const { socketId, cursorInfos } = action.payload;
+      state.liveCursors[socketId] = cursorInfos;
     },
   },
   selectors: {
