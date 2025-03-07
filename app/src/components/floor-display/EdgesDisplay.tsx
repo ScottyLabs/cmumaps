@@ -10,6 +10,8 @@ interface Props {
 
 const EdgesDisplay = ({ graph }: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
+  const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.nodeIdOnDrag);
+  const dragNodePos = useAppSelector((state) => state.mouseEvent.dragNodePos);
 
   const edges: [number[], string][] = useMemo(() => {
     const includedNodes = new Set();
@@ -44,23 +46,15 @@ const EdgesDisplay = ({ graph }: Props) => {
           ];
 
           // update with dragging information if needed
-          // if (curId === nodeIdOnDrag) {
-          //   const cursorPos =
-          //     cursorInfoListRef.current[cursorInfoListRef.current.length - 1];
-          //   if (cursorPos && "nodePos" in cursorPos) {
-          //     line[0] = cursorPos.nodePos.x;
-          //     line[1] = cursorPos.nodePos.y;
-          //   }
-          // }
+          if (curId === nodeIdOnDrag && dragNodePos) {
+            line[0] = dragNodePos.x;
+            line[1] = dragNodePos.y;
+          }
 
-          // if (neighborId === nodeIdOnDrag) {
-          //   const cursorPos =
-          //     cursorInfoListRef.current[cursorInfoListRef.current.length - 1];
-          //   if (cursorPos && "nodePos" in cursorPos) {
-          //     line[2] = cursorPos.nodePos.x;
-          //     line[3] = cursorPos.nodePos.y;
-          //   }
-          // }
+          if (neighborId === nodeIdOnDrag && dragNodePos) {
+            line[2] = dragNodePos.x;
+            line[3] = dragNodePos.y;
+          }
 
           edges.push([line, "green"]);
         }
@@ -69,7 +63,7 @@ const EdgesDisplay = ({ graph }: Props) => {
     }
 
     return edges;
-  }, [graph]);
+  }, [dragNodePos, graph, nodeIdOnDrag]);
 
   return edges.map(([points, color], index: number) => {
     return (

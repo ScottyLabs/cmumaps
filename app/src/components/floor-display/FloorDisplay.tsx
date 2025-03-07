@@ -163,13 +163,13 @@ const FloorDisplay = ({
       >
         <Layer>
           <OutlineDisplay floorCode={floorCode} />
+          <EdgesDisplay graph={graph} />
           <NodesDisplay
             graph={graph}
             floorCode={floorCode}
             offset={offset}
             scale={scale}
           />
-          <EdgesDisplay graph={graph} />
           {LIVE_CURSORS_ENABLED && (
             <LiveCursors floorCode={floorCode} scale={scale} />
           )}

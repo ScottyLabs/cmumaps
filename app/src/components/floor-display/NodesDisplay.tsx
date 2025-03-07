@@ -15,6 +15,11 @@ import {
   DELETE_EDGE,
   GRAPH_SELECT,
 } from "../../store/features/modeSlice";
+import {
+  dragNode,
+  releaseNode,
+  setDragNodePos,
+} from "../../store/features/mouseEventSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getCursorPos, setCursor } from "../../utils/canvasUtils";
 
@@ -119,26 +124,29 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   const handleDragMove = (nodeId: string) =>
     throttle((e: Konva.KonvaEventObject<DragEvent>) => {
       getCursorPos(e, offset, scale, (cursorPos) => {
+        const nodePos = getNodePos(e);
         const cursorInfo: CursorInfoOnDragNode = {
           nodeId: nodeId,
           cursorPos,
-          nodePos: getNodePos(e),
+          nodePos,
         };
 
+        dispatch(setDragNodePos(nodePos));
         dispatch(pushCursorInfo(cursorInfo));
       });
     }, CURSOR_UPDATE_RATE);
 
   const handleOnDragEnd =
     (nodeId: ID) => (e: Konva.KonvaEventObject<DragEvent>) => {
-      // dispatch(releaseNode());
-
       // create new node
       const nodeInfo: NodeInfo = { ...graph[nodeId] };
       nodeInfo.pos = getNodePos(e);
       // newNode.roomId = findRoomId(rooms, newNode.pos);
       const addToHistory = true;
       updateNode({ floorCode, addToHistory, nodeId, nodeInfo });
+
+      // release the node after updating the position to prevent position flickering
+      dispatch(releaseNode());
     };
 
   return Object.entries(graph).map(
@@ -157,7 +165,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
             onMouseLeave={(e) => setCursor(e, "default")}
             onClick={() => handleNodeClick(nodeId)}
             draggable
-            // onDragStart={() => dispatch(dragNode(nodeId))}
+            onDragStart={() => dispatch(dragNode(nodeId))}
             onDragMove={handleDragMove(nodeId)}
             onDragEnd={handleOnDragEnd(nodeId)}
           />

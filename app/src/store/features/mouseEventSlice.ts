@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ID } from "../../../../shared/types";
+import { ID, PdfCoordinate } from "../../../../shared/types";
 
 export type IdSelectedType = "Node" | "Door" | "None";
 export const NODE: IdSelectedType = "Node";
@@ -18,12 +18,14 @@ interface MouseEventState {
   idSelected: IdSelectedInfo;
   nodeIdOnHover: ID | null;
   nodeIdOnDrag: ID | null;
+  dragNodePos: PdfCoordinate | null;
 }
 
 const initialState: MouseEventState = {
   idSelected: DEFAULT,
   nodeIdOnHover: null,
   nodeIdOnDrag: null,
+  dragNodePos: null,
 };
 
 const mouseEventSlice = createSlice({
@@ -53,6 +55,10 @@ const mouseEventSlice = createSlice({
     releaseNode(state) {
       state.nodeIdOnDrag = null;
     },
+
+    setDragNodePos(state, action: PayloadAction<PdfCoordinate>) {
+      state.dragNodePos = action.payload;
+    },
   },
 });
 
@@ -74,5 +80,6 @@ export const {
   unHoverNode,
   dragNode,
   releaseNode,
+  setDragNodePos,
 } = mouseEventSlice.actions;
 export default mouseEventSlice.reducer;
