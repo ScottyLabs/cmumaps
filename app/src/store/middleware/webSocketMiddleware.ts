@@ -54,6 +54,10 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
     console.log("Connected to server");
   });
 
+  socket.on("connect_error", (err) => {
+    console.log(err.message);
+  });
+
   socket.on("disconnect", () => {
     console.log("Disconnected from server");
   });

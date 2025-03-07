@@ -17,7 +17,7 @@ const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
     const token = socket.handshake.auth.token;
     if (!token) {
       console.error("Socket authentication error: No token provided");
-      return;
+      return next(new Error("Authentication failed: No token provided"));
     }
 
     const session = await verifyToken(token, {
@@ -26,7 +26,7 @@ const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
 
     if (!session) {
       console.error("Socket authentication error: Invalid token");
-      return;
+      return next(new Error("Authentication failed: Invalid token"));
     }
 
     return next();
