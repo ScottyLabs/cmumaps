@@ -32,6 +32,7 @@ import { getCursorPos } from "../../utils/canvasUtils";
 import LiveCursors from "../live-cursors/LiveCursors";
 import ErrorDisplay from "../shared/ErrorDisplay";
 import Loader from "../shared/Loader";
+import EdgesDisplay from "./EdgesDisplay";
 import NodesDisplay from "./NodesDisplay";
 import OutlineDisplay from "./OutlineDisplay";
 
@@ -168,6 +169,7 @@ const FloorDisplay = ({
             offset={offset}
             scale={scale}
           />
+          <EdgesDisplay graph={graph} />
           {LIVE_CURSORS_ENABLED && (
             <LiveCursors floorCode={floorCode} scale={scale} />
           )}
