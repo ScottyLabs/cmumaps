@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { nodeService } from "../services/nodeService.ts";
 import { floorService } from "../services/floorService.ts";
+import { handleControllerError } from "../errors/errorHandler.ts";
 
 export const nodeController = {
   getFloorNodes: async (req: Request, res: Response) => {
@@ -41,11 +42,7 @@ export const nodeController = {
       );
       res.json(null);
     } catch (error) {
-      console.error("Error creating node", error);
-      res.status(500).json({
-        error: "Error creating node",
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+      handleControllerError(res, error, "creating node");
     }
   },
 
@@ -57,11 +54,7 @@ export const nodeController = {
       await nodeService.deleteNode(socketId, nodeId);
       res.json(null);
     } catch (error) {
-      console.error("Error deleting node", error);
-      res.status(500).json({
-        error: "Error deleting node",
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+      handleControllerError(res, error, "deleting node");
     }
   },
 
@@ -81,11 +74,7 @@ export const nodeController = {
       );
       res.json(null);
     } catch (error) {
-      console.error("Error updating node", error);
-      res.status(500).json({
-        error: "Error updating node",
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+      handleControllerError(res, error, "updating node");
     }
   },
 };
