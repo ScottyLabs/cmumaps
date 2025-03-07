@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { BuildingError } from "../errors/error.ts";
 import { buildingService } from "../services/buildingService.ts";
+import { handleControllerError } from "../errors/errorHandler.ts";
 
 export const buildingController = {
   async getBuildingCodesAndNames(req: Request, res: Response) {
@@ -10,10 +11,7 @@ export const buildingController = {
 
       res.json(buildingCodesAndNames);
     } catch (error) {
-      res.status(500).json({
-        error: "Error fetching building codes and names",
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+      handleControllerError(res, error, "fetching building codes and names");
     }
   },
 
@@ -27,10 +25,7 @@ export const buildingController = {
         return res.status(404).json({ code: error.code });
       }
 
-      res.status(500).json({
-        error: "Error fetching building codes",
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+      handleControllerError(res, error, "getting default floor");
     }
   },
 
@@ -46,10 +41,7 @@ export const buildingController = {
         return res.status(404).json({ code: error.code });
       }
 
-      res.status(500).json({
-        error: "Error fetching building floors",
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+      handleControllerError(res, error, "getting building floors");
     }
   },
 };
