@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+# CMU-Maps-Data-Visualization
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
 
-Currently, two official plugins are available:
+A visualization tool for Carnegie Mellon University campus floorplans, featuring customizable room information and navigation graph. This repository powers the backend for [CMU Maps](https://github.com/scottylabs/cmumaps), providing accurate spatial data and pathfinding algorithms for seamless campus navigation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+For comprehensive usage instructions and features, refer to our [documentation](https://docs.google.com/document/d/1-cCIbMQp5eLcjvXO46XwQY86PnqABLn0Ts0VEIpT6AM/).
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- Git
+- Node.js and npm
+
+### Installation
+
+1. Clone the repository
+
+   ```zsh
+   git clone git@github.com:ScottyLabs/cmumaps.git
+   ```
+
+2. Set up environment variables
+
+- Frontend: Use credentials from [ScottyLabs Vault (Frontend)](https://vault.scottylabs.org/#/vault?organizationId=3ef62a20-29b9-4a0f-a745-50a8e6dc13ea&collectionId=6e348651-87b5-4124-85cb-2f0e48617b72&itemId=f28ca35c-6f3e-4679-b0e6-2edac8664aa6)
+- Backend: Use credentials from [ScottyLabs Vault (Backend)](https://vault.scottylabs.org/#/vault?organizationId=3ef62a20-29b9-4a0f-a745-50a8e6dc13ea&collectionId=6e348651-87b5-4124-85cb-2f0e48617b72&itemId=06bf9947-fb94-402a-9a96-97c5ba196226)
+
+### Running the Application
+
+You'll need to run both the frontend and backend servers in separate terminal windows.
+
+#### Frontend
+
+```zsh
+cd app
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Backend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```zsh
+cd server
+npm install
+node index.ts
 ```
