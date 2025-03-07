@@ -11,7 +11,7 @@ import { getSocketId } from "../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../utils/canvasUtils";
 
 export const CURSOR_UPDATE_RATE = 20;
-const CURSOR_SYNC_INTERVAL = 5000;
+const CURSOR_SYNC_INTERVAL = 500;
 
 const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   const dispatch = useAppDispatch();
