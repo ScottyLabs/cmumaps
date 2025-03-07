@@ -8,7 +8,7 @@ import buildingRoutes from "./routes/buildingRoutes.ts";
 import { notFoundHandler } from "./middleware/notFoundHandler.ts";
 import nodeRoutes from "./routes/nodeRoutes.ts";
 import { WebSocketService } from "./services/webSocketService.ts";
-import { checkAuth } from "./middleware/authMiddleware.ts";
+import { checkAuth, socketAuth } from "./middleware/authMiddleware.ts";
 
 export const prisma = new PrismaClient();
 const app = express();
@@ -25,6 +25,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+io.use(socketAuth);
 
 // Initialize WebSocket service
 export const websocketService = new WebSocketService(io);
