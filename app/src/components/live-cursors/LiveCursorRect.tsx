@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Group, Rect, Text } from "react-konva";
 
 import { PdfCoordinate } from "../../../../shared/types";
-import { LiveUser } from "../../../../shared/webSocketTypes";
+import { LiveUser } from "../../../../shared/websocket-types/userTypes";
 
 interface CursorNameRectProps {
   user: LiveUser;

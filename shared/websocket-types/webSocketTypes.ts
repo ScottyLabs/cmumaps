@@ -1,9 +1,10 @@
-import type { NodeInfo } from "./types.ts";
-
-export interface LiveUser {
-  userName: string;
-  color: string;
-}
+import type { SyncUserPayload } from "./userTypes.ts";
+import type {
+  CreateNodePayload,
+  DeleteNodePayload,
+  UpdateNodePayload,
+} from "./nodeTypes.ts";
+import type { CreateEdgePayload, DeleteEdgePayload } from "./edgeTypes.ts";
 
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {
@@ -20,35 +21,6 @@ export const WebSocketEvents = {
 // Create a type from the values
 export type WebSocketEventType =
   (typeof WebSocketEvents)[keyof typeof WebSocketEvents];
-
-// Event payload types
-export interface SyncUserPayload {
-  users: Record<string, LiveUser>;
-}
-
-export interface CreateNodePayload {
-  nodeId: string;
-  nodeInfo: NodeInfo;
-}
-
-export interface DeleteNodePayload {
-  nodeId: string;
-}
-
-export interface UpdateNodePayload {
-  nodeId: string;
-  nodeInfo: NodeInfo;
-}
-
-export interface CreateEdgePayload {
-  inNodeId: string;
-  outNodeId: string;
-}
-
-export interface DeleteEdgePayload {
-  inNodeId: string;
-  outNodeId: string;
-}
 
 // Define payload types for each event
 export type WebSocketPayloads = {

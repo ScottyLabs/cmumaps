@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { LiveUser } from "../../../../../shared/webSocketTypes";
+import { LiveUser } from "../../../../../shared/websocket-types/userTypes";
 import { getSocketId } from "../../middleware/webSocketMiddleware";
 import { CursorInfo } from "./liveCursorTypes";
 

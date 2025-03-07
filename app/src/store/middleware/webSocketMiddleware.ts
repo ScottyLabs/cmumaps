@@ -1,12 +1,12 @@
 import { Action, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
 
+import { LiveUser } from "../../../../shared/websocket-types/userTypes";
 import {
-  LiveUser,
   WebSocketEvents,
   WebSocketEventType,
   WebSocketPayloads,
-} from "../../../../shared/webSocketTypes";
+} from "../../../../shared/websocket-types/webSocketTypes";
 import { getClerkToken } from "../api/apiSlice";
 import { createNode, deleteNode, updateNode } from "../api/nodeApiSlice";
 import {

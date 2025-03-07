@@ -4,7 +4,7 @@ import {
   CreateNodePayload,
   DeleteNodePayload,
   UpdateNodePayload,
-} from "../../../../shared/webSocketTypes";
+} from "../../../../shared/websocket-types/nodeTypes";
 import { addEditToHistory } from "../features/history/historySlice";
 import {
   buildCreateEditPair,
