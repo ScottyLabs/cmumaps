@@ -5,10 +5,8 @@ import dataSlice from "./features/dataSlice";
 import floorSlice from "./features/floorSlice";
 import historySlice from "./features/history/historySlice";
 import liveCursorSlice from "./features/liveCursor/liveCursorSlice";
-import lockSlice from "./features/lockSlice";
 import modeSlice from "./features/modeSlice";
 import mouseEventSlice from "./features/mouseEventSlice";
-import outlineSlice from "./features/outlineSlice";
 import polygonSlice from "./features/polygonSlice";
 import statusSlice from "./features/statusSlice";
 import uiSlice from "./features/uiSlice";
@@ -25,10 +23,8 @@ export const store = configureStore({
     status: statusSlice,
     data: dataSlice,
     visibility: visibilitySlice,
-    outline: outlineSlice,
     floor: floorSlice,
     liveCursor: liveCursorSlice,
-    lock: lockSlice,
     history: historySlice,
     polygon: polygonSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
