@@ -17,6 +17,7 @@ import Home from "./pages/Home.tsx";
 import { USE_STRICT_MODE } from "./settings.ts";
 import { store } from "./store/store.ts";
 
+// https://clerk.com/docs/components/control/clerk-loaded
 declare global {
   interface Window {
     Clerk: Clerk;

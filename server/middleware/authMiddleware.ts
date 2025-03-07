@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import { Socket } from "socket.io";
 
 // for http requests
+// https://clerk.com/docs/references/express/overview#example-use-clerk-client-to-get-a-users-information
 const checkAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.auth.userId) {
     res.status(401).json({ error: "Unauthorized" });
