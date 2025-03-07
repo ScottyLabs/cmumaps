@@ -22,7 +22,8 @@ export const buildingController = {
       res.json(defaultFloor);
     } catch (error) {
       if (error instanceof BuildingError) {
-        return res.status(404).json({ code: error.code });
+        res.status(404).json({ code: error.code });
+        return;
       }
 
       handleControllerError(res, error, "getting default floor");
@@ -38,7 +39,8 @@ export const buildingController = {
       res.json(buildingFloors);
     } catch (error) {
       if (error instanceof BuildingError) {
-        return res.status(404).json({ code: error.code });
+        res.status(404).json({ code: error.code });
+        return;
       }
 
       handleControllerError(res, error, "getting building floors");
