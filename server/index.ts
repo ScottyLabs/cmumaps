@@ -28,7 +28,7 @@ const io = new Server(server, {
 io.use(socketAuth);
 
 // Initialize WebSocket service
-export const websocketService = new WebSocketService(io);
+export const webSocketService = new WebSocketService(io);
 
 // Clerk middleware to authenticate requests
 app.use(clerkMiddleware());

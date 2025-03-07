@@ -8,7 +8,7 @@ import {
   WebSocketPayloads,
 } from "../../../../shared/webSocketTypes";
 import { getClerkToken } from "../api/apiSlice";
-import { createNode, deleteNode } from "../api/nodeApiSlice";
+import { createNode, deleteNode, updateNode } from "../api/nodeApiSlice";
 import {
   setCursorInfos,
   setLiveUsers,
@@ -96,6 +96,17 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
       const floorCode = getFloorCode();
       if (floorCode) {
         dispatch(deleteNode(floorCode, message));
+      }
+    },
+  );
+
+  // Handle update node event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.UPDATE_NODE,
+    (message: WebSocketPayloads["update-node"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(updateNode(floorCode, message));
       }
     },
   );
