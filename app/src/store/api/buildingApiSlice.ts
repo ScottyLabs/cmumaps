@@ -8,8 +8,13 @@ type BuildingCodeAndName = {
 export const buildingApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getBuildingCodesAndNames: builder.query<BuildingCodeAndName[], void>({
-      query: () => "buildings/codes-and-names",
+    getBuildingCodesAndNames: builder.query<BuildingCodeAndName[], string>({
+      query: (token) => ({
+        url: "buildings/codes-and-names",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     }),
     getDefaultFloor: builder.query<string, string>({
       query: (id) => `buildings/${id}/defaultFloor`,
