@@ -1,15 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-declare global {
-  interface Window {
-    Clerk: {
-      session: {
-        getToken: () => Promise<string>;
-      };
-    };
-  }
-}
-
 export interface BaseMutationArg {
   socketId: string;
   floorCode: string;
@@ -21,9 +11,11 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER_URL}/api/`,
     prepareHeaders: async (headers) => {
-      const token = await window.Clerk.session.getToken();
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
+      if (window.Clerk && window.Clerk.session) {
+        const token = await window.Clerk.session.getToken();
+        if (token) {
+          headers.set("authorization", `Bearer ${token}`);
+        }
       }
       return headers;
     },
