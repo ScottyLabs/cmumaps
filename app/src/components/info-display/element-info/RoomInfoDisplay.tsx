@@ -8,6 +8,7 @@ import {
   RoomTypes,
 } from "../../../../../shared/types";
 import CopyIdRow from "../shared/CopyIdRow";
+import TableCell from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
 import EditCell from "./EditCell";
 import SelectTypeCell from "./SelectTypeCell";
@@ -36,7 +37,7 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
 
     return (
       <tr>
-        <td className="border pr-4 pl-4">Name</td>
+        <TableCell text="Name" />
         <EditCell
           property="name"
           value={room.name}
@@ -63,7 +64,7 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
 
     return (
       <tr>
-        <td className="border pr-4 pl-4">Type</td>
+        <TableCell text="Type" />
         <SelectTypeCell
           key={roomId}
           value={room.type}
