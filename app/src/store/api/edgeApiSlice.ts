@@ -75,7 +75,7 @@ export const createEdgeAcrossFloors =
         "getFloorGraph",
         outFloorCode,
         (draft) => {
-          draft[inNodeId].neighbors[outNodeId] = { outFloorCode: floorCode };
+          draft[outNodeId].neighbors[inNodeId] = { outFloorCode: floorCode };
         },
       ),
     );
@@ -109,7 +109,7 @@ export const deleteEdgeAcrossFloors =
         "getFloorGraph",
         outFloorCode,
         (draft) => {
-          delete draft[inNodeId].neighbors[outNodeId];
+          delete draft[outNodeId].neighbors[inNodeId];
         },
       ),
     );

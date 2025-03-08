@@ -37,7 +37,7 @@ export const edgeController = {
   },
 
   createEdgeAcrossFloors: async (req: Request, res: Response) => {
-    const { outFloorCode, inNodeId, outNodeId } = req.body;
+    const { floorCode, outFloorCode, inNodeId, outNodeId } = req.body;
     const socketId = req.socketId;
 
     try {
@@ -50,9 +50,9 @@ export const edgeController = {
       );
 
       const inPayload = {
-        outFloorCode,
-        outNodeId: inNodeId,
+        outFloorCode: floorCode,
         inNodeId: outNodeId,
+        outNodeId: inNodeId,
       };
       webSocketService.broadcastToFloor(
         outFloorCode,
@@ -66,7 +66,7 @@ export const edgeController = {
   },
 
   deleteEdgeAcrossFloors: async (req: Request, res: Response) => {
-    const { outFloorCode, inNodeId, outNodeId } = req.body;
+    const { floorCode, outFloorCode, inNodeId, outNodeId } = req.body;
     const socketId = req.socketId;
 
     try {
@@ -79,9 +79,9 @@ export const edgeController = {
       );
 
       const inPayload = {
-        outFloorCode,
-        outNodeId: inNodeId,
+        outFloorCode: floorCode,
         inNodeId: outNodeId,
+        outNodeId: inNodeId,
       };
       webSocketService.broadcastToFloor(
         outFloorCode,
