@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface VisibilityState {
-  showFile: boolean;
+  showPdf: boolean;
   showOutline: boolean;
   showNodes: boolean;
   showEdges: boolean;
@@ -10,7 +10,7 @@ interface VisibilityState {
 }
 
 const initialState: VisibilityState = {
-  showFile: false,
+  showPdf: false,
   showOutline: true,
   showNodes: true,
   showEdges: true,
@@ -22,8 +22,8 @@ const visibilitySlice = createSlice({
   name: "visibility",
   initialState,
   reducers: {
-    toggleShowFile(state) {
-      state.showFile = !state.showFile;
+    toggleShowPdf(state) {
+      state.showPdf = !state.showPdf;
     },
     toggleShowOutline(state) {
       state.showOutline = !state.showOutline;
@@ -49,7 +49,7 @@ const visibilitySlice = createSlice({
 });
 
 export const {
-  toggleShowFile,
+  toggleShowPdf,
   toggleShowOutline,
   toggleShowNodes,
   toggleShowEdges,

@@ -26,7 +26,7 @@ const MAX_SCALE = 20;
 const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
   const loadingStatus = useAppSelector((state) => state.status.loadingStatus);
 
-  const showFile = useAppSelector((state) => state.visibility.showFile);
+  const showPdf = useAppSelector((state) => state.visibility.showPdf);
 
   const [canPan, setCanPan] = useState<boolean>(true);
 
@@ -85,7 +85,7 @@ const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
     <>
       {/* PDFViewer can't be absolute so the zoom buttons can be displayed */}
       <div className="mt-24 ml-52 h-screen overflow-hidden">
-        {showFile && (
+        {showPdf && (
           <PDFViewer floorCode={floorCode} scale={scale} offset={offset} />
         )}
       </div>

@@ -20,7 +20,7 @@ import {
 } from "../store/features/modeSlice";
 import {
   toggleShowEdges,
-  toggleShowFile,
+  toggleShowPdf,
   toggleShowLabels,
   toggleShowNodes,
   toggleShowOutline,
@@ -55,7 +55,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
       switch (event.key) {
         // visibility
         case "f":
-          dispatch(toggleShowFile());
+          dispatch(toggleShowPdf());
           break;
         case "o":
           dispatch(toggleShowOutline());

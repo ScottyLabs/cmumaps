@@ -1,6 +1,6 @@
 import {
   toggleShowEdges,
-  toggleShowFile,
+  toggleShowPdf,
   toggleShowLabels,
   toggleShowNodes,
   toggleShowOutline,
@@ -13,7 +13,7 @@ const VisibilityTab = () => {
   const dispatch = useAppDispatch();
 
   const {
-    showFile,
+    showPdf,
     showOutline,
     showNodes,
     showEdges,
@@ -36,7 +36,7 @@ const VisibilityTab = () => {
 
   return (
     <div className="mt-1 mr-2 ml-3 space-y-5">
-      {renderToggle("Show File", showFile, () => dispatch(toggleShowFile()))}
+      {renderToggle("Show PDF", showPdf, () => dispatch(toggleShowPdf()))}
       {renderToggle("Show Outline", showOutline, () =>
         dispatch(toggleShowOutline()),
       )}
