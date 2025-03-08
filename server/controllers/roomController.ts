@@ -5,11 +5,11 @@ import { floorService } from "../services/floorService.ts";
 
 export const roomController = {
   createRoom: async (req: Request, res: Response) => {
-    const { floorCode, elementId, roomInfo } = req.body;
+    const { floorCode, roomId, roomInfo } = req.body;
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await roomService.createRoom(floorCode, elementId, roomInfo, placement);
+      await roomService.createRoom(floorCode, roomId, roomInfo, placement);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "creating room");
@@ -17,9 +17,9 @@ export const roomController = {
   },
 
   deleteRoom: async (req: Request, res: Response) => {
-    const elementId = req.params.elementId;
+    const roomId = req.params.roomId;
     try {
-      await roomService.deleteRoom(elementId);
+      await roomService.deleteRoom(roomId);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "deleting room");
@@ -27,10 +27,10 @@ export const roomController = {
   },
 
   updateRoom: async (req: Request, res: Response) => {
-    const { floorCode, elementId, roomInfo } = req.body;
+    const { floorCode, roomId, roomInfo } = req.body;
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await roomService.createRoom(floorCode, elementId, roomInfo, placement);
+      await roomService.createRoom(floorCode, roomId, roomInfo, placement);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "updating room");

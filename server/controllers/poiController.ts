@@ -4,10 +4,10 @@ import { handleControllerError } from "../errors/errorHandler.ts";
 
 export const poiController = {
   createPoi: async (req: Request, res: Response) => {
-    const elementId = req.params.id;
+    const poiId = req.params.id;
     const { floorCode, poiType } = req.body;
     try {
-      await poiService.createPoi(floorCode, elementId, poiType);
+      await poiService.createPoi(floorCode, poiId, poiType);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "creating POI");
@@ -15,9 +15,9 @@ export const poiController = {
   },
 
   deletePoi: async (req: Request, res: Response) => {
-    const elementId = req.params.id;
+    const poiId = req.params.id;
     try {
-      await poiService.deletePoi(elementId);
+      await poiService.deletePoi(poiId);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "deleting POI");
@@ -25,10 +25,10 @@ export const poiController = {
   },
 
   updatePoi: async (req: Request, res: Response) => {
-    const elementId = req.params.id;
+    const poiId = req.params.id;
     const { poiType } = req.body;
     try {
-      await poiService.updatePoi(elementId, poiType);
+      await poiService.updatePoi(poiId, poiType);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "updating POI");
