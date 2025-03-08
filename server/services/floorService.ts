@@ -1,4 +1,11 @@
-import type { EdgeInfo, Graph, Placement } from "../../shared/types.ts";
+import type {
+  EdgeInfo,
+  Graph,
+  Placement,
+  Polygon,
+  Rooms,
+  RoomType,
+} from "../../shared/types.ts";
 import {
   extractBuildingCode,
   extractFloorLevel,
@@ -85,6 +92,47 @@ export const floorService = {
     }
 
     return nodes;
+  },
+
+  getFloorRooms: async (floorCode: string) => {
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    const placement = await floorService.getFloorPlacement(floorCode);
+    const geoCoordsToPdfCoordsHelper = geoCoordsToPdfCoords(placement);
+
+    // Get all rooms on the floor from the database
+    const dbRooms = await prisma.room.findMany({
+      where: {
+        element: {
+          buildingCode: buildingCode,
+          floorLevel: floorLevel,
+        },
+      },
+      include: {
+        element: true,
+        aliases: true,
+      },
+    });
+
+    // Convert the rooms to the format expected by the frontend
+    const rooms: Rooms = {};
+    for (const room of dbRooms) {
+      rooms[room.elementId] = {
+        name: room.name,
+        labelPosition: geoCoordsToPdfCoordsHelper({
+          latitude: room.labelLatitude,
+          longitude: room.labelLongitude,
+        }),
+        type: room.element.type as RoomType,
+        displayAlias: room.displayAlias ?? undefined,
+        aliases: room.aliases.map((a) => a.alias),
+        polygon: room.polygon as unknown as Polygon,
+        updatedAt: room.updatedAt.toISOString(),
+      };
+    }
+
+    return rooms;
   },
 
   getFloorPlacement: async (floorCode: string) => {
