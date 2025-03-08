@@ -7,9 +7,10 @@ import {
   RoomType,
   RoomTypes,
 } from "../../../../../shared/types";
+import TableCell from "../shared/TableCell";
+import TableLayout from "../shared/TableLayout";
 import EditCell from "./EditCell";
 import SelectTypeCell from "./SelectTypeCell";
-import TableLayout, { renderCell } from "./TableLayout";
 
 interface Props {
   floorCode: string;
@@ -28,7 +29,7 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
 
     return (
       <tr>
-        {renderCell("Room ID")}
+        <TableCell text="Room ID" />
         <td className="border px-4 py-2">
           <button
             className="cursor-pointer border p-1 hover:bg-slate-700"

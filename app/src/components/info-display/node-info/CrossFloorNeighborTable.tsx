@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { EdgeInfo } from "../../../../../shared/types";
 import { useDeleteEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
-import { renderCell } from "../element-info/TableLayout";
+import TableCell from "../shared/TableCell";
 
 interface Props {
   floorCode: string;
@@ -89,8 +89,8 @@ const DifferentFloorNeighborTable = ({
       <table className="table-auto text-center">
         <tbody>
           <tr>
-            {renderCell("floor")}
-            {renderCell("delete")}
+            <TableCell text="select" />
+            <TableCell text="delete" />
           </tr>
           {renderDifferentFloorNeighbors(differentFloorNeighbors)}
         </tbody>

@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 
 import { Pois, PoiType, PoiTypes } from "../../../../../shared/types";
 import { useUpdatePoiMutation } from "../../../store/api/poiApiSlice";
+import TableCell from "../shared/TableCell";
+import TableLayout from "../shared/TableLayout";
 import SelectTypeCell from "./SelectTypeCell";
-import TableLayout, { renderCell } from "./TableLayout";
 
 interface Props {
   floorCode: string;
@@ -27,7 +28,7 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
 
     return (
       <tr>
-        {renderCell("POI ID")}
+        <TableCell text="POI ID" />
         <td className="border px-4 py-2">
           <button
             className="cursor-pointer border p-1 hover:bg-slate-700"
