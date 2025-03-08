@@ -7,7 +7,9 @@ import {
   DeleteEdgePayload,
 } from "../../../../shared/websocket-types/edgeTypes";
 import {
+  buildCreateEdgeAcrossFloorsEditPair,
   buildCreateEdgeEditPair,
+  buildDeleteEdgeAcrossFloorsEditPair,
   buildDeleteEdgeEditPair,
 } from "../features/history/historyGraphUtils";
 import { addEditToHistory } from "../features/history/historySlice";
@@ -190,8 +192,8 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
           const { floorCode, outFloorCode, inNodeId, outNodeId, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildCreateEdgeEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const editPair = buildCreateEdgeAcrossFloorsEditPair(batchId, arg);
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(
@@ -223,8 +225,8 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
           const { floorCode, outFloorCode, inNodeId, outNodeId, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildDeleteEdgeEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const editPair = buildDeleteEdgeAcrossFloorsEditPair(batchId, arg);
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(

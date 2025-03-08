@@ -1,4 +1,9 @@
-import { CreateEdgeArg, DeleteEdgeArg } from "../../api/edgeApiSlice";
+import {
+  CreateEdgeAcrossFloorsArg,
+  CreateEdgeArg,
+  DeleteEdgeAcrossFloorsArg,
+  DeleteEdgeArg,
+} from "../../api/edgeApiSlice";
 import {
   CreateNodeArg,
   DeleteNodeArg,
@@ -30,12 +35,24 @@ interface DeleteEdgeEdit {
   arg: DeleteEdgeArg;
 }
 
+interface CreateEdgeAcrossFloorsEdit {
+  endpoint: "createEdgeAcrossFloors";
+  arg: CreateEdgeAcrossFloorsArg;
+}
+
+interface DeleteEdgeAcrossFloorsEdit {
+  endpoint: "deleteEdgeAcrossFloors";
+  arg: DeleteEdgeAcrossFloorsArg;
+}
+
 export type Edit =
   | CreateNodeEdit
   | DeleteNodeEdit
   | UpdateNodeEdit
   | CreateEdgeEdit
-  | DeleteEdgeEdit;
+  | DeleteEdgeEdit
+  | CreateEdgeAcrossFloorsEdit
+  | DeleteEdgeAcrossFloorsEdit;
 
 export interface EditPair {
   batchId: string;

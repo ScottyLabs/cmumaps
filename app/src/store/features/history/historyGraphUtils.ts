@@ -1,5 +1,10 @@
 import { Graph } from "../../../../../shared/types";
-import { CreateEdgeArg } from "../../api/edgeApiSlice";
+import {
+  CreateEdgeAcrossFloorsArg,
+  CreateEdgeArg,
+  DeleteEdgeAcrossFloorsArg,
+  DeleteEdgeArg,
+} from "../../api/edgeApiSlice";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
 import {
   CreateNodeArg,
@@ -103,7 +108,7 @@ export const buildCreateEdgeEditPair = (
 
 export const buildDeleteEdgeEditPair = (
   batchId: string,
-  arg: CreateEdgeArg,
+  arg: DeleteEdgeArg,
 ): EditPair => {
   const edit: Edit = {
     endpoint: "deleteEdge",
@@ -111,6 +116,36 @@ export const buildDeleteEdgeEditPair = (
   };
   const reverseEdit: Edit = {
     endpoint: "createEdge",
+    arg: { ...arg, batchId: null },
+  };
+  return { batchId, edit, reverseEdit };
+};
+
+export const buildCreateEdgeAcrossFloorsEditPair = (
+  batchId: string,
+  arg: CreateEdgeAcrossFloorsArg,
+): EditPair => {
+  const edit: Edit = {
+    endpoint: "createEdgeAcrossFloors",
+    arg: { ...arg, batchId: null },
+  };
+  const reverseEdit: Edit = {
+    endpoint: "deleteEdgeAcrossFloors",
+    arg: { ...arg, batchId: null },
+  };
+  return { batchId, edit, reverseEdit };
+};
+
+export const buildDeleteEdgeAcrossFloorsEditPair = (
+  batchId: string,
+  arg: DeleteEdgeAcrossFloorsArg,
+): EditPair => {
+  const edit: Edit = {
+    endpoint: "deleteEdgeAcrossFloors",
+    arg: { ...arg, batchId: null },
+  };
+  const reverseEdit: Edit = {
+    endpoint: "createEdgeAcrossFloors",
     arg: { ...arg, batchId: null },
   };
   return { batchId, edit, reverseEdit };

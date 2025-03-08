@@ -34,6 +34,16 @@ const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
         edgeApiSlice.endpoints.deleteEdge.initiate(edit.arg),
       ).unwrap();
       break;
+    case "createEdgeAcrossFloors":
+      await dispatch(
+        edgeApiSlice.endpoints.createEdgeAcrossFloors.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "deleteEdgeAcrossFloors":
+      await dispatch(
+        edgeApiSlice.endpoints.deleteEdgeAcrossFloors.initiate(edit.arg),
+      ).unwrap();
+      break;
     default:
       toast.error("Unimplemented edit type!");
   }
