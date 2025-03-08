@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 import { EdgeInfo, Graph } from "../../../../../shared/types";
-import AddEdgeAcrossFloorsSection from "./AddEdgeAcrossFloorsSection";
+// import AddEdgeAcrossFloorsSection from "./AddEdgeAcrossFloorsSection";
 import CrossFloorNeighborTable from "./CrossFloorNeighborTable";
 import GraphInfoButtons from "./GraphInfoButtons";
 

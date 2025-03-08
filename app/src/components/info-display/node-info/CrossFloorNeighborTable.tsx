@@ -43,7 +43,7 @@ const DifferentFloorNeighborTable = ({
               {neighbor.outFloorCode}
             </NavLink>
           </td>
-          <td className="border p-2">{neighbor.type}</td>
+          <td className="border p-2">{neighbor.type || "???"}</td>
 
           <td className="border p-2">
             <button

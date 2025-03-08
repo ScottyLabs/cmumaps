@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import type { WebSocketPayloads } from "../../shared/websocket-types/webSocketTypes.ts";
 import { WebSocketEvents } from "../../shared/websocket-types/webSocketTypes.ts";
-import { LiveUser } from "../../shared/websocket-types/userTypes.ts";
+import type { LiveUser } from "../../shared/websocket-types/userTypes.ts";
 export class WebSocketService {
   private io: Server;
 
