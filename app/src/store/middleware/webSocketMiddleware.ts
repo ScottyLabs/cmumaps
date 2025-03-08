@@ -15,6 +15,7 @@ import {
   deleteEdgeAcrossFloors,
 } from "../api/edgeApiSlice";
 import { createNode, deleteNode, updateNode } from "../api/nodeApiSlice";
+import { createRoom, deleteRoom, updateRoom } from "../api/roomApiSlice";
 import {
   setCursorInfos,
   setLiveUsers,
@@ -157,6 +158,39 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
       const floorCode = getFloorCode();
       if (floorCode) {
         dispatch(deleteEdgeAcrossFloors(floorCode, message));
+      }
+    },
+  );
+
+  // Handle create room
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.CREATE_ROOM,
+    (message: WebSocketPayloads["create-room"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(createRoom(floorCode, message));
+      }
+    },
+  );
+
+  // Handle delete room
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.DELETE_ROOM,
+    (message: WebSocketPayloads["delete-room"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(deleteRoom(floorCode, message));
+      }
+    },
+  );
+
+  // Handle update room
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.UPDATE_ROOM,
+    (message: WebSocketPayloads["update-room"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(updateRoom(floorCode, message));
       }
     },
   );
