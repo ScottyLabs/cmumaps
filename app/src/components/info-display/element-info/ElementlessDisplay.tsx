@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Graph, RoomInfo } from "../../../../../shared/types";
 import { useUpdateNodeMutation } from "../../../store/api/nodeApiSlice";
+import { useCreatePoiMutation } from "../../../store/api/poiApiSlice";
 import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 
 const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
   const [createRoom] = useCreateRoomMutation();
+  const [createPoi] = useCreatePoiMutation();
   const [updateNode] = useUpdateNodeMutation();
 
   const renderButton = (text: string, handleClick: () => void) => (
@@ -51,15 +53,19 @@ const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
   };
 
   const renderCreatePoiButton = () => {
-    const createPoi = async () => {
-      // const elementId = uuidv4();
-      // const newPoi: PoiType = "";
-      // const newNode = JSON.parse(JSON.stringify(nodes[nodeId]));
-      // newNode.roomId = roomId;
-      // updateNode({ floorCode, nodeId, newNode });
+    const handleCreatePoi = async () => {
+      const poiId = uuidv4();
+      const poiType = "";
+      const batchId = uuidv4();
+      await createPoi({ floorCode, poiId, poiType, batchId });
+
+      const nodeInfo = { ...graph[nodeId] };
+      nodeInfo.elementId = poiId;
+      nodeInfo.type = "poi";
+      await updateNode({ floorCode, nodeId, nodeInfo, batchId });
     };
 
-    return renderButton("Create POI", createPoi);
+    return renderButton("Create POI", handleCreatePoi);
   };
 
   return (
