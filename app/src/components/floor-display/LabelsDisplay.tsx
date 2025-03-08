@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { TfiLocationPin } from "react-icons/tfi";
 import { Group, Path, Rect, Text } from "react-konva";
 
@@ -16,14 +17,19 @@ const LabelsDisplay = ({ rooms }: Props) => {
   const showLabels = useAppSelector((state) => state.visibility.showLabels);
 
   // label icon
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const path = TfiLocationPin({}).props.children[1].props.d;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const viewBox = TfiLocationPin({}).props.attr.viewBox.split(" ");
-  const width = Number(viewBox[2]);
-  const height = Number(viewBox[3]);
+  const { width, height, path } = useMemo(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const viewBox = TfiLocationPin({}).props.attr.viewBox.split(" ");
+    const width = Number(viewBox[2]);
+    const height = Number(viewBox[3]);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const path = TfiLocationPin({}).props.children[1].props.d;
+
+    return { width, height, path };
+  }, []);
 
   return Object.entries(rooms).map(([roomId, room]) => {
     // selected if it is edit label mode and it is the label of the selected room
