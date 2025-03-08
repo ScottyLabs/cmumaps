@@ -15,6 +15,15 @@ export const buildingController = {
     }
   },
 
+  async getBuildingName(req: Request, res: Response) {
+    try {
+      const buildingName = await buildingService.getBuildingName(req.params.id);
+      res.json(buildingName);
+    } catch (error) {
+      handleControllerError(res, error, "getting building name");
+    }
+  },
+
   async getDefaultFloor(req: Request, res: Response) {
     try {
       const defaultFloor = await buildingService.getDefaultFloor(req.params.id);

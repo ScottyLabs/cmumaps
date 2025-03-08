@@ -1,7 +1,15 @@
-import { NavLink, useParams } from "react-router";
+import { NavLink } from "react-router";
 
-const NavBar = () => {
-  const { floorCode } = useParams();
+import { extractBuildingCode } from "../../../../shared/utils/floorCodeUtils";
+import { useGetBuildingNameQuery } from "../../store/api/buildingApiSlice";
+
+interface Props {
+  floorCode: string;
+}
+
+const NavBar = ({ floorCode }: Props) => {
+  const buildingCode = extractBuildingCode(floorCode);
+  const { data: name } = useGetBuildingNameQuery(buildingCode);
 
   return (
     <nav className="absolute inset-0 z-50 h-min bg-gray-800 p-4">
@@ -10,7 +18,7 @@ const NavBar = () => {
           CMU Maps Data Visualization
         </div>
         <div className="h-7 -translate-x-1/2 text-xl text-white">
-          {floorCode}
+          {name ? name : ""}
         </div>
         <NavLink
           to="/"

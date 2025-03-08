@@ -7,6 +7,7 @@ buildingRouter.get(
   "/codes-and-names",
   buildingController.getBuildingCodesAndNames
 );
+buildingRouter.get("/:id/name", buildingController.getBuildingName);
 buildingRouter.get("/:id/defaultFloor", buildingController.getDefaultFloor);
 buildingRouter.get("/:id/floors", buildingController.getBuildingFloors);
 

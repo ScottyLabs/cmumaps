@@ -39,7 +39,7 @@ const FloorPage = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar floorCode={floorCode} />
       <LiveUserCount />
       <MainDisplay floorCode={floorCode} />
       <ModeDisplay />

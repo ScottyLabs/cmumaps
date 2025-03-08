@@ -10,6 +10,14 @@ export const buildingService = {
     return buildings.sort((a, b) => a.name.localeCompare(b.name));
   },
 
+  async getBuildingName(buildingCode: string) {
+    const building = await prisma.building.findUnique({
+      where: { buildingCode },
+      select: { name: true },
+    });
+    return building?.name;
+  },
+
   async getDefaultFloor(buildingCode: string) {
     const building = await prisma.building.findUnique({
       where: { buildingCode },

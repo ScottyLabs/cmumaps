@@ -11,6 +11,9 @@ export const buildingApiSlice = apiSlice.injectEndpoints({
     getBuildingCodesAndNames: builder.query<BuildingCodeAndName[], void>({
       query: () => "buildings/codes-and-names",
     }),
+    getBuildingName: builder.query<string, string>({
+      query: (id) => `buildings/${id}/name`,
+    }),
     getDefaultFloor: builder.query<string, string>({
       query: (id) => `buildings/${id}/defaultFloor`,
     }),
@@ -22,6 +25,7 @@ export const buildingApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetBuildingCodesAndNamesQuery,
+  useGetBuildingNameQuery,
   useGetDefaultFloorQuery,
   useGetBuildingFloorsQuery,
 } = buildingApiSlice;
