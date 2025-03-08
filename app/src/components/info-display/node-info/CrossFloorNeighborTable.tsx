@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { EdgeInfo } from "../../../../../shared/types";
 import { useDeleteEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
-import { renderCell } from "../../../utils/displayUtils";
+import { renderCell } from "../element-info/TableLayout";
 
 interface Props {
   floorCode: string;

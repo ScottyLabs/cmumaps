@@ -1,7 +1,10 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { SingleValue } from "react-select";
 import { toast } from "react-toastify";
 
-import { Pois, PoiTypes } from "../../../../../shared/types";
+import { Pois, PoiType, PoiTypes } from "../../../../../shared/types";
+import { useUpdatePoiMutation } from "../../../store/api/poiApiSlice";
 import SelectTypeCell from "./SelectTypeCell";
 import TableLayout, { renderCell } from "./TableLayout";
 
@@ -11,8 +14,10 @@ interface Props {
   pois: Pois;
 }
 
-const PoiInfoDisplay = ({ poiId, pois }: Props) => {
+const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
   const poiType = pois[poiId];
+
+  const [updatePoi] = useUpdatePoiMutation();
 
   const renderRoomIdRow = () => {
     const copyId = () => {
@@ -36,20 +41,17 @@ const PoiInfoDisplay = ({ poiId, pois }: Props) => {
   };
 
   const renderEditTypeRow = () => {
-    const handleChange =
-      () =>
-      (
-        newValue: SingleValue<{
-          value: string | undefined;
-          label: string | undefined;
-        }>,
-      ) => {
-        console.log("here");
-        console.log(newValue);
-        if (newValue?.value && newValue?.value !== poiType) {
-          console.log(newValue.value);
-        }
-      };
+    const handleChange = (
+      newValue: SingleValue<{
+        value: string | undefined;
+        label: string | undefined;
+      }>,
+    ) => {
+      if (newValue?.value && newValue?.value !== poiType) {
+        const poiType = newValue.value as PoiType;
+        updatePoi({ floorCode, poiId, poiType, batchId: uuidv4() });
+      }
+    };
 
     return (
       <tr>

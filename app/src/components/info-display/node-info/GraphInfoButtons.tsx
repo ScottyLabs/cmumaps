@@ -10,7 +10,7 @@ import {
   setMode,
 } from "../../../store/features/modeSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import { RED_BUTTON_STYLE } from "../../../utils/displayUtils";
+import { RED_BUTTON_STYLE } from "../element-info/TableLayout";
 
 interface Props {
   floorCode: string;
