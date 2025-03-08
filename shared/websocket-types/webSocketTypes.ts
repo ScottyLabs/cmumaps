@@ -10,6 +10,16 @@ import type {
   DeleteEdgeAcrossFloorsPayload,
   DeleteEdgePayload,
 } from "./edgeTypes.ts";
+import type {
+  CreateRoomPayload,
+  DeleteRoomPayload,
+  UpdateRoomPayload,
+} from "./roomTypes.ts";
+import type {
+  CreatePoiPayload,
+  DeletePoiPayload,
+  UpdatePoiPayload,
+} from "./poiTypes.ts";
 
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {
@@ -23,6 +33,14 @@ export const WebSocketEvents = {
   DELETE_EDGE: "delete-edge",
   CREATE_EDGE_ACROSS_FLOORS: "create-edge-across-floors",
   DELETE_EDGE_ACROSS_FLOORS: "delete-edge-across-floors",
+
+  CREATE_ROOM: "create-room",
+  DELETE_ROOM: "delete-room",
+  UPDATE_ROOM: "update-room",
+
+  CREATE_POI: "create-poi",
+  DELETE_POI: "delete-poi",
+  UPDATE_POI: "update-poi",
 } as const;
 
 // Create a type from the values
@@ -41,4 +59,12 @@ export type WebSocketPayloads = {
   [WebSocketEvents.DELETE_EDGE]: DeleteEdgePayload;
   [WebSocketEvents.CREATE_EDGE_ACROSS_FLOORS]: CreateEdgeAcrossFloorsPayload;
   [WebSocketEvents.DELETE_EDGE_ACROSS_FLOORS]: DeleteEdgeAcrossFloorsPayload;
+
+  [WebSocketEvents.CREATE_ROOM]: CreateRoomPayload;
+  [WebSocketEvents.DELETE_ROOM]: DeleteRoomPayload;
+  [WebSocketEvents.UPDATE_ROOM]: UpdateRoomPayload;
+
+  [WebSocketEvents.CREATE_POI]: CreatePoiPayload;
+  [WebSocketEvents.DELETE_POI]: DeletePoiPayload;
+  [WebSocketEvents.UPDATE_POI]: UpdatePoiPayload;
 };
