@@ -24,6 +24,7 @@ export const roomController = {
   deleteRoom: async (req: Request, res: Response) => {
     const roomId = req.params.id;
     const socketId = req.socketId;
+
     try {
       await roomService.deleteRoom(roomId);
       const payload = { roomId };

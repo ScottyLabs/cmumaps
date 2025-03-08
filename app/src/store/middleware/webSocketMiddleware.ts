@@ -15,6 +15,7 @@ import {
   deleteEdgeAcrossFloors,
 } from "../api/edgeApiSlice";
 import { createNode, deleteNode, updateNode } from "../api/nodeApiSlice";
+import { createPoi, deletePoi, updatePoi } from "../api/poiApiSlice";
 import { createRoom, deleteRoom, updateRoom } from "../api/roomApiSlice";
 import {
   setCursorInfos,
@@ -191,6 +192,39 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
       const floorCode = getFloorCode();
       if (floorCode) {
         dispatch(updateRoom(floorCode, message));
+      }
+    },
+  );
+
+  // Handle create poi
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.CREATE_POI,
+    (message: WebSocketPayloads["create-poi"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(createPoi(floorCode, message));
+      }
+    },
+  );
+
+  // Handle delete poi
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.DELETE_POI,
+    (message: WebSocketPayloads["delete-poi"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(deletePoi(floorCode, message));
+      }
+    },
+  );
+
+  // Handle update poi
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.UPDATE_POI,
+    (message: WebSocketPayloads["update-poi"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(updatePoi(floorCode, message));
       }
     },
   );
