@@ -31,7 +31,7 @@ const SelectTypeCell = ({ value, typeList, handleChange }: Props) => {
   }, [value]);
 
   return (
-    <td className="border border-white p-2 text-black">
+    <td className="border border-white px-4 py-2 text-black">
       <Select
         value={selectedOption}
         onChange={handleChange}

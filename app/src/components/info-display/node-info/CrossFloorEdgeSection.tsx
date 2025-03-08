@@ -149,7 +149,7 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
           />
         </div>
       </div>
-      <Button text="Add Edge Across Floor" handleClick={addEdgeWithId} />
+      <Button text="Add Edge Across Floors" handleClick={addEdgeWithId} />
     </div>
   );
 };
