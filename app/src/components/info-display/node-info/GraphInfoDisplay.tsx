@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router";
 
 import { EdgeInfo, Graph } from "../../../../../shared/types";
 import AddEdgeAcrossFloorsSection from "./AddEdgeAcrossFloorsSection";
-import DifferentFloorNeighborTable from "./DifferentFloorNeighborTable";
+import CrossFloorNeighborTable from "./CrossFloorNeighborTable";
 import GraphInfoButtons from "./GraphInfoButtons";
 
 interface Props {
@@ -45,15 +45,13 @@ const GraphInfoDisplay = ({ floorCode, graph }: Props) => {
     <>
       <div className="mb-1 space-y-4">
         <GraphInfoButtons floorCode={floorCode} nodeId={nodeId} />
-        {/* <DifferentFloorNeighborTable
+        <CrossFloorNeighborTable
           floorCode={floorCode}
-          nodes={graph}
+          nodeId={nodeId}
           neighbors={neighbors}
           differentFloorNeighbors={differentFloorNeighbors}
         />
-        {!floorCode.includes("outside") && (
-          <AddEdgeAcrossFloorsSection floorCode={floorCode} nodes={graph} />
-        )} */}
+        {/* <AddEdgeAcrossFloorsSection floorCode={floorCode} nodes={graph} /> */}
       </div>
     </>
   );

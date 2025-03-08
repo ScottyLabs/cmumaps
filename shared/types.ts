@@ -13,20 +13,21 @@ export interface PdfCoordinate {
 /**
  * Edge Types
  */
-export const EdgeTypeList = [
+export const ValidCrossFloorEdgeTypes = [
   "ramp",
   "stairs",
   "elevator",
   "", // not assigned
 ];
 
-export type EdgeType = (typeof EdgeTypeList)[number];
+export type EdgeType = (typeof ValidCrossFloorEdgeTypes)[number];
 
 /**
  * Graph types
  */
 export interface EdgeInfo {
   outFloorCode?: string;
+  type?: RoomType;
 }
 
 /**
