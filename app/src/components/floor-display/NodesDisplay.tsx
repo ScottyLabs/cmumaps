@@ -59,10 +59,6 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
   const mode = useAppSelector((state) => state.mode.mode);
 
-  // const nodeIdHovered = useAppSelector(
-  //   (state) => state.mouseEvent.nodeIdOnHover,
-  // );
-
   // const roomIdSelected = getRoomId(nodes, selectedNodeId);
   const roomIdSelected = "";
 
@@ -74,10 +70,6 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
     if (nodeId == selectedNodeId) {
       return "yellow";
     }
-
-    // if (nodeId == nodeIdHovered) {
-    //   return 'cyan';
-    // }
 
     // const hasAcrossFloorEdge =
     //   Object.values(nodes[nodeId].neighbors).filter(

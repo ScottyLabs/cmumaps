@@ -25,10 +25,10 @@ const DifferentFloorNeighborTable = ({
 
       // all nodes in differentFloorNeighbors should have outFloorCode
       if (outFloorCode) {
-        return `${outFloorCode}?nodeId=${neighborId}`;
+        return `/${outFloorCode}?nodeId=${neighborId}`;
       } else {
         toast.error("This is not a different floor neighbor");
-        return `${floorCode}?nodeId=${nodeId}`;
+        return `/${floorCode}?nodeId=${nodeId}`;
       }
     };
 
@@ -57,6 +57,10 @@ const DifferentFloorNeighborTable = ({
       ),
     );
   };
+
+  if (Object.keys(differentFloorNeighbors).length === 0) {
+    return;
+  }
 
   return (
     <div>
