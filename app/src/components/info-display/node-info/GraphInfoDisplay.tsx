@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 import { EdgeInfo, Graph } from "../../../../../shared/types";
-// import AddEdgeAcrossFloorsSection from "./AddEdgeAcrossFloorsSection";
+import CreateEdgeAcrossFloorsSection from "./CreateEdgeAcrossFloorsSection";
 import CrossFloorNeighborTable from "./CrossFloorNeighborTable";
 import GraphInfoButtons from "./GraphInfoButtons";
 
@@ -51,7 +51,7 @@ const GraphInfoDisplay = ({ floorCode, graph }: Props) => {
           neighbors={neighbors}
           differentFloorNeighbors={differentFloorNeighbors}
         />
-        {/* <AddEdgeAcrossFloorsSection floorCode={floorCode} nodes={graph} /> */}
+        <CreateEdgeAcrossFloorsSection floorCode={floorCode} graph={graph} />
       </div>
     </>
   );
