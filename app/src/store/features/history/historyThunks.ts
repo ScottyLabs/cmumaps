@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 
 import { edgeApiSlice } from "../../api/edgeApiSlice";
 import { nodeApiSlice } from "../../api/nodeApiSlice";
+import { poiApiSlice } from "../../api/poiApiSlice";
 import { roomApiSlice } from "../../api/roomApiSlice";
 import { AppDispatch } from "../../store";
 import { createAppAsyncThunk } from "../../withTypes";
@@ -58,6 +59,21 @@ const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
     case "updateRoom":
       await dispatch(
         roomApiSlice.endpoints.updateRoom.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "createPoi":
+      await dispatch(
+        poiApiSlice.endpoints.createPoi.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "deletePoi":
+      await dispatch(
+        poiApiSlice.endpoints.deletePoi.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "updatePoi":
+      await dispatch(
+        poiApiSlice.endpoints.updatePoi.initiate(edit.arg),
       ).unwrap();
       break;
     default:

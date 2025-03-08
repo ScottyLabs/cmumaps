@@ -5,8 +5,14 @@ import {
   DeletePoiPayload,
   UpdatePoiPayload,
 } from "../../../../shared/websocket-types/poiTypes";
+import {
+  buildCreatePoiEditPair,
+  buildDeletePoiEditPair,
+  buildUpdatePoiEditPair,
+} from "../features/history/historyPoiUtils";
+import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
-import { AppDispatch } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 import { floorDataApiSlice } from "./floorDataApiSlice";
@@ -71,8 +77,8 @@ export const poiApiSlice = apiSlice.injectEndpoints({
           const { floorCode, poiId, poiType, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildCreateRoomEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const editPair = buildCreatePoiEditPair(batchId, arg);
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(createPoi(floorCode, { poiId, poiType }));
@@ -93,13 +99,19 @@ export const poiApiSlice = apiSlice.injectEndpoints({
           "X-Socket-ID": getSocketId(),
         },
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
           const { floorCode, poiId, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildDeleteRoomEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const getStore = getState as () => RootState;
+            const editPair = await buildDeletePoiEditPair(
+              batchId,
+              arg,
+              getStore,
+              dispatch,
+            );
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(deletePoi(floorCode, { poiId }));
@@ -119,13 +131,19 @@ export const poiApiSlice = apiSlice.injectEndpoints({
           "X-Socket-ID": getSocketId(),
         },
       }),
-      onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
           const { floorCode, poiId, poiType, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildCreateRoomEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const getStore = getState as () => RootState;
+            const editPair = await buildUpdatePoiEditPair(
+              batchId,
+              arg,
+              getStore,
+              dispatch,
+            );
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(updatePoi(floorCode, { poiId, poiType }));

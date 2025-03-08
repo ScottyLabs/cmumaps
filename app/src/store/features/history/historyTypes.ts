@@ -10,6 +10,11 @@ import {
   UpdateNodeArg,
 } from "../../api/nodeApiSlice";
 import {
+  CreatePoiArg,
+  DeletePoiArg,
+  UpdatePoiArg,
+} from "../../api/poiApiSlice";
+import {
   CreateRoomArg,
   DeleteRoomArg,
   UpdateRoomArg,
@@ -65,6 +70,21 @@ interface UpdateRoomEdit {
   arg: UpdateRoomArg;
 }
 
+interface CreatePoiEdit {
+  endpoint: "createPoi";
+  arg: CreatePoiArg;
+}
+
+interface DeletePoiEdit {
+  endpoint: "deletePoi";
+  arg: DeletePoiArg;
+}
+
+interface UpdatePoiEdit {
+  endpoint: "updatePoi";
+  arg: UpdatePoiArg;
+}
+
 export type Edit =
   | CreateNodeEdit
   | DeleteNodeEdit
@@ -75,7 +95,10 @@ export type Edit =
   | DeleteEdgeAcrossFloorsEdit
   | CreateRoomEdit
   | DeleteRoomEdit
-  | UpdateRoomEdit;
+  | UpdateRoomEdit
+  | CreatePoiEdit
+  | DeletePoiEdit
+  | UpdatePoiEdit;
 
 export interface EditPair {
   batchId: string;
