@@ -3,8 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 import { SingleValue } from "react-select";
 
 import { Pois, PoiType, PoiTypes } from "../../../../../shared/types";
-import { useUpdatePoiMutation } from "../../../store/api/poiApiSlice";
+import {
+  useDeletePoiMutation,
+  useUpdatePoiMutation,
+} from "../../../store/api/poiApiSlice";
+import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
+import { RED_BUTTON_STYLE } from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
 import SelectTypeCell from "./SelectTypeCell";
 
@@ -16,6 +21,7 @@ interface Props {
 
 const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
   const poiType = pois[poiId];
+  const [deletePoi] = useDeletePoiMutation();
 
   const [updatePoi] = useUpdatePoiMutation();
 
@@ -45,11 +51,23 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
     );
   };
 
+  const deletePoiHelper = () =>
+    deletePoi({ floorCode, poiId, batchId: uuidv4() });
+
   return (
-    <TableLayout>
-      <CopyIdRow text="POI ID" id={poiId} />
-      {renderEditTypeRow()}
-    </TableLayout>
+    <>
+      <TableLayout>
+        <CopyIdRow text="POI ID" id={poiId} />
+        {renderEditTypeRow()}
+      </TableLayout>
+      <div className="mt-2 flex flex-row-reverse">
+        <Button
+          text="Delete POI"
+          handleClick={deletePoiHelper}
+          style={RED_BUTTON_STYLE + " text-base"}
+        />
+      </div>
+    </>
   );
 };
 
