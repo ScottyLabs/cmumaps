@@ -10,6 +10,7 @@ import {
 import { renderCell } from "../../../utils/displayUtils";
 import EditCell from "./EditCell";
 import SelectTypeCell from "./SelectTypeCell";
+import TableLayout from "./TableLayout";
 
 interface Props {
   floorCode: string;
@@ -95,23 +96,13 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
   };
 
   return (
-    <>
-      <table className="w-72 table-fixed">
-        <thead>
-          <tr>
-            {renderCell("Property", "font-bold w-28")}
-            {renderCell("Value", "font-bold")}
-          </tr>
-        </thead>
-        <tbody>
-          {renderRoomIdRow()}
-          {renderEditNameRow()}
-          {renderEditTypeRow()}
-          {/* {renderEditAliasesRow()} */}
-          {/* <RoomInfoButtons floorCode={floorCode} nodes={nodes} /> */}
-        </tbody>
-      </table>
-    </>
+    <TableLayout>
+      {renderRoomIdRow()}
+      {renderEditNameRow()}
+      {renderEditTypeRow()}
+      {/* {renderEditAliasesRow()} */}
+      {/* <RoomInfoButtons floorCode={floorCode} nodes={nodes} /> */}
+    </TableLayout>
   );
 };
 

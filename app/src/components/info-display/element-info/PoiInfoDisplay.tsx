@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Pois, PoiTypes } from "../../../../../shared/types";
 import { renderCell } from "../../../utils/displayUtils";
 import SelectTypeCell from "./SelectTypeCell";
+import TableLayout from "./TableLayout";
 
 interface Props {
   floorCode: string;
@@ -38,12 +39,14 @@ const PoiInfoDisplay = ({ poiId, pois }: Props) => {
   const renderEditTypeRow = () => {
     const handleChange =
       () =>
-      async (
+      (
         newValue: SingleValue<{
           value: string | undefined;
           label: string | undefined;
         }>,
       ) => {
+        console.log("here");
+        console.log(newValue);
         if (newValue?.value && newValue?.value !== poiType) {
           console.log(newValue.value);
         }
@@ -63,20 +66,10 @@ const PoiInfoDisplay = ({ poiId, pois }: Props) => {
   };
 
   return (
-    <>
-      <table className="w-72 table-fixed">
-        <thead>
-          <tr>
-            {renderCell("Property", "font-bold w-28")}
-            {renderCell("Value", "font-bold")}
-          </tr>
-        </thead>
-        <tbody>
-          {renderRoomIdRow()}
-          {renderEditTypeRow()}
-        </tbody>
-      </table>
-    </>
+    <TableLayout>
+      {renderRoomIdRow()}
+      {renderEditTypeRow()}
+    </TableLayout>
   );
 };
 

@@ -32,6 +32,7 @@ const MainDisplay = ({ floorCode }: Props) => {
     }
   }, [error, navigate]);
 
+  // fetch graph, rooms, and pois
   const {
     data: graph,
     isFetching: isFetchingGraph,
@@ -57,6 +58,7 @@ const MainDisplay = ({ floorCode }: Props) => {
     return <Loader loadingText="Fetching nodes, rooms, and pois" />;
   }
 
+  // handle errors
   const isError = isErrorGraph || isErrorRooms || isErrorPois;
   if (isError || !graph || !rooms || !pois) {
     return <ErrorDisplay errorText="Failed to fetch nodes, rooms, and pois" />;
