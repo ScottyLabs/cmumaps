@@ -74,7 +74,12 @@ const MainDisplay = ({ floorCode }: Props) => {
         pois={pois}
       />
       <div className="absolute top-28 right-4 z-50">
-        <InfoDisplay floorCode={floorCode} />
+        <InfoDisplay
+          floorCode={floorCode}
+          graph={graph}
+          rooms={rooms}
+          pois={pois}
+        />
       </div>
     </>
   );

@@ -1,11 +1,7 @@
 import React from "react";
 
-import { ElementType } from "../../../../shared/types";
+import { ElementType, Graph, Pois, Rooms } from "../../../../shared/types";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
-import {
-  useGetFloorGraphQuery,
-  useGetFloorRoomsQuery,
-} from "../../store/api/floorDataApiSlice";
 import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
 import {
   setEditRoomLabel,
@@ -13,29 +9,25 @@ import {
 } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import ElementlessDisplay from "./element-info/ElementlessDisplay";
+import PoiInfoDisplay from "./element-info/PoiInfoDisplay";
 import RoomInfoDisplay from "./element-info/RoomInfoDisplay";
 import GraphInfoDisplay from "./node-info/GraphInfoDisplay";
 
 interface Props {
   floorCode: string;
+  graph: Graph;
+  rooms: Rooms;
+  pois: Pois;
 }
 
-const InfoDisplay = ({ floorCode }: Props) => {
+const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
   const dispatch = useAppDispatch();
-  const { data: graph } = useGetFloorGraphQuery(floorCode);
-  const { data: rooms } = useGetFloorRoomsQuery(floorCode);
-
-  const { nodeId, roomId } = useValidatedFloorParams(floorCode);
-
   const activeTabIndex = useAppSelector(
     (state) => state.ui.infoDisplayActiveTabIndex,
   );
 
-  if (!graph || !rooms) {
-    return;
-  }
-
   // need at least one of nodeId or roomId for info display
+  const { nodeId, roomId } = useValidatedFloorParams(floorCode);
   if (!nodeId && !roomId) {
     return;
   }
@@ -61,7 +53,9 @@ const InfoDisplay = ({ floorCode }: Props) => {
         Component.displayName = "RoomInfoDisplay";
         return Component;
       } else if (type === "poi") {
-        const Component = () => <></>;
+        const Component = () => (
+          <PoiInfoDisplay floorCode={floorCode} poiId={roomId} pois={pois} />
+        );
         Component.displayName = "PoiInfoDisplay";
         return Component;
       }

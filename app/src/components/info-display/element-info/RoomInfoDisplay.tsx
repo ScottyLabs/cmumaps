@@ -42,6 +42,7 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
   };
 
   const handleSaveHelper = async (roomInfo: RoomInfo) => {
+    toast.error("Unimplemented!");
     console.log(roomInfo);
   };
 
