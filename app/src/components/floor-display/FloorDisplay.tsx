@@ -16,6 +16,7 @@ import LiveCursors from "../live-cursors/LiveCursors";
 import ErrorDisplay from "../shared/ErrorDisplay";
 import Loader from "../shared/Loader";
 import EdgesDisplay from "./EdgesDisplay";
+import LabelsDisplay from "./LabelsDisplay";
 import NodesDisplay from "./NodesDisplay";
 import OutlineDisplay from "./OutlineDisplay";
 import PolygonsDisplay from "./PolygonsDisplay";
@@ -113,6 +114,7 @@ const FloorDisplay = ({
             offset={offset}
             scale={scale}
           />
+          <LabelsDisplay floorCode={floorCode} graph={graph} rooms={rooms} />
           {LIVE_CURSORS_ENABLED && (
             <LiveCursors floorCode={floorCode} scale={scale} />
           )}
