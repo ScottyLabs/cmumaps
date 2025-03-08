@@ -22,7 +22,7 @@ const MainDisplay = ({ floorCode }: Props) => {
       <ZoomPanWrapper floorCode={floorCode} />
       {nodeIdSelected && (
         <div className="absolute top-28 right-4 z-50">
-          <InfoDisplay floorCode={floorCode} />
+          <InfoDisplay floorCode={floorCode} nodeId={nodeIdSelected} />
         </div>
       )}
     </>

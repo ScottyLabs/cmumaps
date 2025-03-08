@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { Graph } from "../../../../../shared/types";
@@ -13,18 +12,16 @@ import { useAppDispatch } from "../../../store/hooks";
 
 interface Props {
   floorCode: string;
+  nodeId: string;
   graph: Graph;
 }
 
-const CreateEdgeAcrossFloorsSection = ({ floorCode, graph }: Props) => {
+const CreateEdgeAcrossFloorsSection = ({ floorCode, nodeId, graph }: Props) => {
   const dispatch = useAppDispatch();
   const buildingCode = extractBuildingCode(floorCode);
   const { data: floorLevels } = useGetBuildingFloorsQuery(buildingCode);
 
   const [createEdgeAcrossFloors] = useCreateEdgeAcrossFloorsMutation();
-
-  const [searchParam] = useSearchParams();
-  const nodeId = searchParam.get("nodeId");
 
   const [toFloorCode, setToFloorCode] = useState("");
   const nodeIdRef = useRef<HTMLInputElement | null>(null);

@@ -67,8 +67,6 @@ const FloorDisplay = ({
     return <ErrorDisplay errorText="Failed to fetch nodes and rooms" />;
   }
 
-  console.log(rooms);
-
   // Disable panning when dragging node, vertex, or label
   const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
     let newCanPan = true;

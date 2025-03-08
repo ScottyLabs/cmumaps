@@ -1,4 +1,7 @@
-import { useGetFloorGraphQuery } from "../../store/api/floorDataApiSlice";
+import {
+  useGetFloorGraphQuery,
+  useGetFloorRoomsQuery,
+} from "../../store/api/floorDataApiSlice";
 import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
 import {
   setEditRoomLabel,
@@ -9,33 +12,38 @@ import GraphInfoDisplay from "./node-info/GraphInfoDisplay";
 
 interface Props {
   floorCode: string;
+  nodeId: string;
 }
 
-const InfoDisplay = ({ floorCode }: Props) => {
+const InfoDisplay = ({ floorCode, nodeId }: Props) => {
   const dispatch = useAppDispatch();
   const { data: graph } = useGetFloorGraphQuery(floorCode);
-  // const { data: rooms } = useGetRoomsQuery(floorCode);
+  const { data: rooms } = useGetFloorRoomsQuery(floorCode);
 
   const activeTabIndex = useAppSelector(
     (state) => state.ui.infoDisplayActiveTabIndex,
   );
 
-  // const renderRoomInfoDisplay = () => {
-  //   if (nodes && rooms) {
-  //     return (
-  //       <RoomInfoDisplay floorCode={floorCode} rooms={rooms} nodes={nodes} />
-  //     );
-  //   }
-  // };
+  if (!graph || !rooms) {
+    return;
+  }
 
-  const renderGraphInfoDisplay = () => {
-    if (graph) {
-      return <GraphInfoDisplay floorCode={floorCode} graph={graph} />;
-    }
+  const renderElemntInfoDisplay = () => {
+    return <></>;
+
+    // return (
+    //   <RoomInfoDisplay floorCode={floorCode} rooms={rooms} nodes={graph} />
+    // );
   };
 
-  const tabNames = ["Graph Info"];
-  const tabContents = [renderGraphInfoDisplay];
+  const renderGraphInfoDisplay = () => {
+    return (
+      <GraphInfoDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+    );
+  };
+
+  const tabNames = ["Element Info", "Graph Info"];
+  const tabContents = [renderElemntInfoDisplay, renderGraphInfoDisplay];
 
   const renderTabHeader = (tabName: string, index: number) => {
     const handleClick = () => {

@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useSearchParams } from "react-router";
 
 import { EdgeInfo, Graph } from "../../../../../shared/types";
 import CreateEdgeAcrossFloorsSection from "./CreateEdgeAcrossFloorsSection";
@@ -8,26 +7,17 @@ import GraphInfoButtons from "./GraphInfoButtons";
 
 interface Props {
   floorCode: string;
+  nodeId: string;
   // rooms: Rooms;
   graph: Graph;
 }
 
-const GraphInfoDisplay = ({ floorCode, graph }: Props) => {
-  const [searchParam] = useSearchParams();
-  const nodeId = searchParam.get("nodeId");
-
-  // get neighbors of the node
-  const neighbors = useMemo(() => {
-    if (nodeId && graph) {
-      return graph[nodeId]?.neighbors || {};
-    }
-    return {};
-  }, [nodeId, graph]);
+const GraphInfoDisplay = ({ nodeId, floorCode, graph }: Props) => {
+  const neighbors = graph[nodeId].neighbors;
 
   // calculate the same floor neighbors and different floor neighbors
   const differentFloorNeighbors = useMemo(() => {
     const differentFloorNeighbors: Record<string, EdgeInfo> = {};
-
     for (const neighborId in neighbors) {
       if (neighbors[neighborId].outFloorCode) {
         differentFloorNeighbors[neighborId] = neighbors[neighborId];
@@ -36,10 +26,6 @@ const GraphInfoDisplay = ({ floorCode, graph }: Props) => {
 
     return differentFloorNeighbors;
   }, [neighbors]);
-
-  if (!nodeId) {
-    return;
-  }
 
   return (
     <>
@@ -51,7 +37,11 @@ const GraphInfoDisplay = ({ floorCode, graph }: Props) => {
           neighbors={neighbors}
           differentFloorNeighbors={differentFloorNeighbors}
         />
-        <CreateEdgeAcrossFloorsSection floorCode={floorCode} graph={graph} />
+        <CreateEdgeAcrossFloorsSection
+          floorCode={floorCode}
+          nodeId={nodeId}
+          graph={graph}
+        />
       </div>
     </>
   );
