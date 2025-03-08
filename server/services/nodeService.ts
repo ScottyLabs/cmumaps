@@ -15,13 +15,11 @@ export const nodeService = {
   ) => {
     const { pos, elementId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
-    const data = { id: nodeId, ...geoCoords };
+    const data = { ...geoCoords, elementId };
 
     // Belongs to an element
     if (elementId) {
-      await prisma.node.create({
-        data: { ...data, elementId },
-      });
+      await prisma.node.create({ data });
     }
     // Directly associated with the floor (not an element)
     else {
@@ -49,10 +47,7 @@ export const nodeService = {
 
     // Belongs to an element
     if (elementId) {
-      await prisma.node.update({
-        where: { id: nodeId },
-        data: { ...data, elementId },
-      });
+      await prisma.node.update({ where: { id: nodeId }, data });
     }
     // Directly associated with the floor (not an element)
     else {

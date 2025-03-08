@@ -61,7 +61,6 @@ const useStageClickHandler = (
         neighbors: {},
         type: null,
         elementId: null,
-        // roomId: findRoomId(rooms, pos),
       };
 
       const batchId = uuidv4();
