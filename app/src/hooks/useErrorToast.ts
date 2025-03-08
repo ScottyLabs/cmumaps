@@ -17,7 +17,7 @@ const useErrorToast = () => {
     }
 
     toast.error(getErrorMessage(errorCode));
-    navigate("/", { replace: true });
+    navigate("?", { replace: true });
   }, [errorCode, navigate]);
 };
 

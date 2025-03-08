@@ -1,6 +1,6 @@
 import { prisma } from "../index.ts";
-import { INVALID_BUILDING_CODE } from "../../shared/errorCode.ts";
 import { BuildingError } from "../errors/error.ts";
+import { ERROR_CODES } from "../../shared/errorCode.ts";
 
 export const buildingService = {
   async getAllBuildingCodesAndNames() {
@@ -17,7 +17,7 @@ export const buildingService = {
     });
 
     if (!building) {
-      throw new BuildingError(INVALID_BUILDING_CODE);
+      throw new BuildingError(ERROR_CODES.INVALID_BUILDING_CODE);
     }
 
     return building.defaultFloor;
