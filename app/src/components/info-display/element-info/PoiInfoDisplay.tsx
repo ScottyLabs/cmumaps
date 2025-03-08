@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { SingleValue } from "react-select";
-import { toast } from "react-toastify";
 
 import { Pois, PoiType, PoiTypes } from "../../../../../shared/types";
 import { useUpdatePoiMutation } from "../../../store/api/poiApiSlice";
-import TableCell from "../shared/TableCell";
+import CopyIdRow from "../shared/CopyIdRow";
 import TableLayout from "../shared/TableLayout";
 import SelectTypeCell from "./SelectTypeCell";
 
@@ -19,27 +18,6 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
   const poiType = pois[poiId];
 
   const [updatePoi] = useUpdatePoiMutation();
-
-  const renderRoomIdRow = () => {
-    const copyId = () => {
-      navigator.clipboard.writeText(poiId);
-      toast.success("Copied!");
-    };
-
-    return (
-      <tr>
-        <TableCell text="POI ID" />
-        <td className="border px-4 py-2">
-          <button
-            className="cursor-pointer border p-1 hover:bg-slate-700"
-            onClick={copyId}
-          >
-            Copy POI ID
-          </button>
-        </td>
-      </tr>
-    );
-  };
 
   const renderEditTypeRow = () => {
     const handleChange = (
@@ -69,7 +47,7 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
 
   return (
     <TableLayout>
-      {renderRoomIdRow()}
+      <CopyIdRow text="POI ID" id={poiId} />
       {renderEditTypeRow()}
     </TableLayout>
   );

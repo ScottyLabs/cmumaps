@@ -7,7 +7,7 @@ import {
   RoomType,
   RoomTypes,
 } from "../../../../../shared/types";
-import TableCell from "../shared/TableCell";
+import CopyIdRow from "../shared/CopyIdRow";
 import TableLayout from "../shared/TableLayout";
 import EditCell from "./EditCell";
 import SelectTypeCell from "./SelectTypeCell";
@@ -20,27 +20,6 @@ interface Props {
 
 const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
   const room = rooms[roomId];
-
-  const renderRoomIdRow = () => {
-    const copyId = () => {
-      navigator.clipboard.writeText(roomId);
-      toast.success("Copied!");
-    };
-
-    return (
-      <tr>
-        <TableCell text="Room ID" />
-        <td className="border px-4 py-2">
-          <button
-            className="cursor-pointer border p-1 hover:bg-slate-700"
-            onClick={copyId}
-          >
-            Copy Room ID
-          </button>
-        </td>
-      </tr>
-    );
-  };
 
   const handleSaveHelper = async (roomInfo: RoomInfo) => {
     toast.error("Unimplemented!");
@@ -97,7 +76,7 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
 
   return (
     <TableLayout>
-      {renderRoomIdRow()}
+      <CopyIdRow text="Room ID" id={roomId} />
       {renderEditNameRow()}
       {renderEditTypeRow()}
       {/* {renderEditAliasesRow()} */}
