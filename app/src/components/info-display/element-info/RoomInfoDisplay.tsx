@@ -1,4 +1,5 @@
 import { SingleValue } from "react-select";
+import { toast } from "react-toastify";
 
 import {
   RoomInfo,
@@ -20,10 +21,22 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
   const room = rooms[roomId];
 
   const renderRoomIdRow = () => {
+    const copyId = () => {
+      navigator.clipboard.writeText(roomId);
+      toast.success("Copied!");
+    };
+
     return (
       <tr>
         {renderCell("Room ID")}
-        {renderCell(roomId, "truncate")}
+        <td className="border px-4 py-2">
+          <button
+            className="cursor-pointer border p-1 hover:bg-slate-700"
+            onClick={copyId}
+          >
+            Copy Room ID
+          </button>
+        </td>
       </tr>
     );
   };
