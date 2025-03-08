@@ -1,3 +1,6 @@
+import React from "react";
+import { useSearchParams } from "react-router";
+
 import {
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
@@ -12,13 +15,16 @@ import GraphInfoDisplay from "./node-info/GraphInfoDisplay";
 
 interface Props {
   floorCode: string;
-  nodeId: string;
 }
 
-const InfoDisplay = ({ floorCode, nodeId }: Props) => {
+const InfoDisplay = ({ floorCode }: Props) => {
   const dispatch = useAppDispatch();
   const { data: graph } = useGetFloorGraphQuery(floorCode);
   const { data: rooms } = useGetFloorRoomsQuery(floorCode);
+
+  const [searchParam] = useSearchParams();
+  const nodeId = searchParam.get("nodeId");
+  const roomId = searchParam.get("roomId");
 
   const activeTabIndex = useAppSelector(
     (state) => state.ui.infoDisplayActiveTabIndex,
@@ -28,22 +34,59 @@ const InfoDisplay = ({ floorCode, nodeId }: Props) => {
     return;
   }
 
-  const renderElemntInfoDisplay = () => {
-    return <></>;
+  // need at least one of nodeId or roomId for info display
+  if (!nodeId && !roomId) {
+    return;
+  }
 
-    // return (
-    //   <RoomInfoDisplay floorCode={floorCode} rooms={rooms} nodes={graph} />
-    // );
+  const renderElementlessDisplay = (_nodeId: string) => () => {
+    const Component = () => <></>;
+    Component.displayName = "ElementlessDisplay";
+    return Component;
   };
 
-  const renderGraphInfoDisplay = () => {
-    return (
+  const renderElementInfoDisplay = (_roomId: string) => () => {
+    const Component = () => <></>;
+    Component.displayName = "ElementInfoDisplay";
+    return Component;
+  };
+
+  const renderGraphInfoDisplay = (nodeId: string) => () => {
+    const Component = () => (
       <GraphInfoDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
     );
+    Component.displayName = "GraphInfoDisplay";
+    return Component;
   };
 
-  const tabNames = ["Element Info", "Graph Info"];
-  const tabContents = [renderElemntInfoDisplay, renderGraphInfoDisplay];
+  const { tabNames, tabContents } = (() => {
+    if (nodeId) {
+      const tabNames = ["Element Info", "Graph Info"];
+      if (graph[nodeId].elementId) {
+        const tabContents = [
+          renderElementInfoDisplay(graph[nodeId].elementId),
+          renderGraphInfoDisplay(nodeId),
+        ];
+        return { tabNames, tabContents };
+      } else {
+        const tabContents = [
+          renderElementlessDisplay(nodeId),
+          renderGraphInfoDisplay(nodeId),
+        ];
+        return { tabNames, tabContents };
+      }
+    } else if (roomId) {
+      return {
+        tabNames: ["Element Info"],
+        tabContents: [renderElementInfoDisplay(roomId)],
+      };
+    }
+    // this condition should never occur since
+    // we check for either nodeId and roomId is not null earlier in this file
+    else {
+      return { tabNames: [], tabContents: [] };
+    }
+  })();
 
   const renderTabHeader = (tabName: string, index: number) => {
     const handleClick = () => {
@@ -72,7 +115,7 @@ const InfoDisplay = ({ floorCode, nodeId }: Props) => {
       <ul className="flex text-sm">
         {tabNames.map((tabName, index) => renderTabHeader(tabName, index))}
       </ul>
-      <div>{tabContents[activeTabIndex]()}</div>
+      <div>{React.createElement(tabContents[activeTabIndex]())}</div>
     </div>
   );
 };
