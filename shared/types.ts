@@ -1,5 +1,7 @@
 import type { Polygon } from "geojson";
 
+export * from "geojson";
+
 export interface GeoCoordinate {
   latitude: number;
   longitude: number;

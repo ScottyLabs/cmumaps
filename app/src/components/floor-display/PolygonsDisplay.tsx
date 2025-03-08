@@ -1,9 +1,7 @@
-import { Polygon } from "geojson";
-
 import { Path } from "react-konva";
 import { useNavigate } from "react-router";
 
-import { Rooms } from "../../../../shared/types";
+import { Rooms, Polygon } from "../../../../shared/types";
 import { useAppSelector } from "../../store/hooks";
 import { getRoomTypeDetails } from "../../utils/colorUtils";
 

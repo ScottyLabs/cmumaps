@@ -1,7 +1,6 @@
 import { booleanPointInPolygon } from "@turf/turf";
-import { Polygon } from "geojson";
 
-import { PdfCoordinate, RoomInfo } from "../../../shared/types";
+import { PdfCoordinate, RoomInfo, Polygon } from "../../../shared/types";
 
 export const posToRoomId = (
   point: PdfCoordinate,
