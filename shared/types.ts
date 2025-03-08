@@ -147,7 +147,7 @@ export interface RoomInfo {
   polygon: Polygon;
 }
 
-export type PoiType = "Vending Machine" | "Water Fountain" | "Printer";
+export type PoiType = "Vending Machine" | "Water Fountain" | "Printer" | "";
 
 export type Rooms = Record<string, RoomInfo>;
 export type Graph = Record<string, NodeInfo>;
