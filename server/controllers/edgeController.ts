@@ -42,11 +42,23 @@ export const edgeController = {
 
     try {
       await edgeService.createEdge(inNodeId, outNodeId);
-      const payload = { inNodeId, outNodeId };
-      webSocketService.broadcastToUserFloor(socketId, "create-edge", payload);
+      const payload = { outFloorCode, inNodeId, outNodeId };
+      webSocketService.broadcastToUserFloor(
+        socketId,
+        "create-edge-across-floors",
+        payload
+      );
 
-      const inPayload = { outNodeId: inNodeId, inNodeId: outNodeId };
-      webSocketService.broadcastToFloor(outFloorCode, "create-edge", inPayload);
+      const inPayload = {
+        outFloorCode,
+        outNodeId: inNodeId,
+        inNodeId: outNodeId,
+      };
+      webSocketService.broadcastToFloor(
+        outFloorCode,
+        "create-edge-across-floors",
+        inPayload
+      );
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "creating edge across floors");
@@ -59,11 +71,23 @@ export const edgeController = {
 
     try {
       await edgeService.deleteEdge(inNodeId, outNodeId);
-      const payload = { inNodeId, outNodeId };
-      webSocketService.broadcastToUserFloor(socketId, "delete-edge", payload);
+      const payload = { outFloorCode, inNodeId, outNodeId };
+      webSocketService.broadcastToUserFloor(
+        socketId,
+        "delete-edge-across-floors",
+        payload
+      );
 
-      const inPayload = { outNodeId: inNodeId, inNodeId: outNodeId };
-      webSocketService.broadcastToFloor(outFloorCode, "delete-edge", inPayload);
+      const inPayload = {
+        outFloorCode,
+        outNodeId: inNodeId,
+        inNodeId: outNodeId,
+      };
+      webSocketService.broadcastToFloor(
+        outFloorCode,
+        "delete-edge-across-floors",
+        inPayload
+      );
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "creating edge across floors");

@@ -8,7 +8,12 @@ import {
   WebSocketPayloads,
 } from "../../../../shared/websocket-types/webSocketTypes";
 import { getClerkToken } from "../api/apiSlice";
-import { createEdge, deleteEdge } from "../api/edgeApiSlice";
+import {
+  createEdge,
+  createEdgeAcrossFloors,
+  deleteEdge,
+  deleteEdgeAcrossFloors,
+} from "../api/edgeApiSlice";
 import { createNode, deleteNode, updateNode } from "../api/nodeApiSlice";
 import {
   setCursorInfos,
@@ -130,6 +135,28 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
       const floorCode = getFloorCode();
       if (floorCode) {
         dispatch(deleteEdge(floorCode, message));
+      }
+    },
+  );
+
+  // Handle create edge across floors event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.CREATE_EDGE_ACROSS_FLOORS,
+    (message: WebSocketPayloads["create-edge-across-floors"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(createEdgeAcrossFloors(floorCode, message));
+      }
+    },
+  );
+
+  // Handle delete edge across floors event
+  socket.on<WebSocketEventType>(
+    WebSocketEvents.DELETE_EDGE_ACROSS_FLOORS,
+    (message: WebSocketPayloads["delete-edge-across-floors"]) => {
+      const floorCode = getFloorCode();
+      if (floorCode) {
+        dispatch(deleteEdgeAcrossFloors(floorCode, message));
       }
     },
   );
