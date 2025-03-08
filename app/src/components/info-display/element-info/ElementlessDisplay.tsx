@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { Graph, PoiType, RoomInfo } from "../../../../../shared/types";
+import { useUpdateNodeMutation } from "../../../store/api/nodeApiSlice";
+import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
 
 interface Props {
   floorCode: string;
@@ -9,6 +11,9 @@ interface Props {
 }
 
 const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
+  const [createRoom] = useCreateRoomMutation();
+  const [updateNode] = useUpdateNodeMutation();
+
   const renderButton = (text: string, handleClick: () => void) => (
     <button
       className="mr-2 rounded bg-slate-500 p-1 text-sm text-white hover:bg-slate-700"
@@ -19,9 +24,9 @@ const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
   );
 
   const renderCreateRoomButton = () => {
-    const createRoom = async () => {
-      const elementId = uuidv4();
-      const newRoom: RoomInfo = {
+    const handleCreateRoom = async () => {
+      const roomId = uuidv4();
+      const roomInfo: RoomInfo = {
         name: "",
         labelPosition: graph[nodeId].pos,
         type: "",
@@ -33,12 +38,16 @@ const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
         },
       };
 
-      // const newNode = JSON.parse(JSON.stringify(nodes[nodeId]));
-      // newNode.roomId = roomId;
-      // updateNode({ floorCode, nodeId, newNode });
+      const batchId = uuidv4();
+      await createRoom({ floorCode, roomId, roomInfo, batchId });
+
+      const nodeInfo = { ...graph[nodeId] };
+      nodeInfo.elementId = roomId;
+      nodeInfo.type = "room";
+      await updateNode({ floorCode, nodeId, nodeInfo, batchId });
     };
 
-    return renderButton("Create Room", createRoom);
+    return renderButton("Create Room", handleCreateRoom);
   };
 
   const renderCreatePoiButton = () => {

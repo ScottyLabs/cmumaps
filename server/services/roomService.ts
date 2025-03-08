@@ -1,4 +1,4 @@
-import { InputJsonValue } from "@prisma/client/runtime/library";
+import type { InputJsonValue } from "@prisma/client/runtime/library.d.ts";
 import { prisma } from "../index.ts";
 import type { Placement, RoomInfo } from "../../shared/types.ts";
 import {
