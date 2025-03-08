@@ -18,6 +18,7 @@ import Loader from "../shared/Loader";
 import EdgesDisplay from "./EdgesDisplay";
 import NodesDisplay from "./NodesDisplay";
 import OutlineDisplay from "./OutlineDisplay";
+import PolygonsDisplay from "./PolygonsDisplay";
 
 interface Props {
   floorCode: string;
@@ -104,6 +105,7 @@ const FloorDisplay = ({
       >
         <Layer>
           <OutlineDisplay floorCode={floorCode} />
+          <PolygonsDisplay rooms={rooms} />
           <EdgesDisplay graph={graph} />
           <NodesDisplay
             graph={graph}
