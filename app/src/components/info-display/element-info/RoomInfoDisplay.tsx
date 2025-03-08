@@ -93,21 +93,6 @@ const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
     );
   };
 
-  const renderEditAliasesRow = () => {
-    return (
-      <tr>
-        <td className="border pr-4 pl-4">Aliases</td>
-        <td className="border p-2 text-black">
-          <AliasesMultiSelect
-            key={roomId}
-            room={room}
-            handleSaveHelper={handleSaveHelper}
-          />
-        </td>
-      </tr>
-    );
-  };
-
   return (
     <>
       <table className="w-72 table-fixed">

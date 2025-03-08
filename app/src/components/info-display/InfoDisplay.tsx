@@ -12,6 +12,7 @@ import {
   setInfoDisplayActiveTabIndex,
 } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import ElementlessDisplay from "./element-info/ElementlessDisplay";
 import RoomInfoDisplay from "./element-info/RoomInfoDisplay";
 import GraphInfoDisplay from "./node-info/GraphInfoDisplay";
 
@@ -41,8 +42,10 @@ const InfoDisplay = ({ floorCode }: Props) => {
     return;
   }
 
-  const renderElementlessDisplay = (_nodeId: string) => () => {
-    const Component = () => <></>;
+  const renderElementlessDisplay = (nodeId: string) => () => {
+    const Component = () => (
+      <ElementlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+    );
     Component.displayName = "ElementlessDisplay";
     return Component;
   };
@@ -63,7 +66,11 @@ const InfoDisplay = ({ floorCode }: Props) => {
         const Component = () => <></>;
         Component.displayName = "PoiInfoDisplay";
         return Component;
-      } else {
+      }
+      // this condition should never occur since
+      // we check that elementId is not null before calling this function,
+      // which implies that type is either "room" or "poi"
+      else {
         const Component = () => <></>;
         return Component;
       }
