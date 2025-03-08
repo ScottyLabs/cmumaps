@@ -1,8 +1,8 @@
 import type {
   EdgeInfo,
+  GeoCoordinate,
   Graph,
   Placement,
-  Polygon,
   Rooms,
   RoomType,
 } from "../../shared/types.ts";
@@ -11,7 +11,10 @@ import {
   extractFloorLevel,
 } from "../../shared/utils/floorCodeUtils.ts";
 import { prisma } from "../index.ts";
-import { geoCoordsToPdfCoords } from "../utils/coordinates.ts";
+import {
+  geoCoordsToPdfCoords,
+  geoPolygonToPdfPolygon,
+} from "../utils/coordinates.ts";
 
 export const floorService = {
   getFloorGraph: async (floorCode: string, placement: Placement) => {
@@ -127,7 +130,10 @@ export const floorService = {
         type: room.element.type as RoomType,
         displayAlias: room.displayAlias ?? undefined,
         aliases: room.aliases.map((a) => a.alias),
-        polygon: room.polygon as unknown as Polygon,
+        polygon: geoPolygonToPdfPolygon(
+          room.polygon as unknown as GeoCoordinate[][],
+          placement
+        ),
       };
     }
 
