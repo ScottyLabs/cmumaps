@@ -11,6 +11,7 @@ import {
   Graph,
   PdfCoordinate,
   Rooms,
+  ValidCrossFloorEdgeTypes,
 } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import {
@@ -61,13 +62,11 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
 
   const [searchParam] = useSearchParams();
   const selectedNodeId = searchParam.get("nodeId");
+  const roomId = searchParam.get("roomId");
 
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
   const mode = useAppSelector((state) => state.mode.mode);
-
-  // const roomIdSelected = getRoomId(nodes, selectedNodeId);
-  const roomIdSelected = "";
 
   if (!graph) {
     return;
@@ -78,45 +77,45 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
       return "yellow";
     }
 
+    const room =
+      graph[nodeId].elementId &&
+      graph[nodeId].type === "room" &&
+      rooms[graph[nodeId].elementId];
+
+    // colors for cross floor edges
+    const isValidCrossFloorEdgeType =
+      room && ValidCrossFloorEdgeTypes.includes(room.type);
+
     const hasAcrossFloorEdge =
       Object.values(graph[nodeId].neighbors).filter(
         (neighbor) => neighbor.outFloorCode,
       ).length != 0;
 
-    // const isValidCrossFloorEdgeType =
-    //   graph[nodeId].roomId &&
-    //   rooms[graph[nodeId].roomId] &&
-    //   ValidCrossFloorEdgeTypes.includes(rooms[nodes[nodeId].roomId].type);
-
-    if (hasAcrossFloorEdge) {
-      return "pink";
+    if (isValidCrossFloorEdgeType) {
+      if (hasAcrossFloorEdge) {
+        return "lime";
+      } else {
+        return "pink";
+      }
+    } else {
+      if (hasAcrossFloorEdge) {
+        return "pink";
+      }
     }
 
-    // if (isRoomAcrossFloorType) {
-    //   if (hasAcrossFloorEdge) {
-    //     return 'lime';
-    //   } else {
-    //     return 'pink';
-    //   }
-    // } else {
-    //   if (hasAcrossFloorEdge) {
-    //     return 'pink';
-    //   }
-    // }
+    // warning, error, and default colors
 
-    // if (
-    //   rooms[nodes[nodeId].roomId] &&
-    //   rooms[nodes[nodeId].roomId].polygon.coordinates[0].length == 0
-    // ) {
-    //   return 'red';
-    // }
+    if (room && room.type == "Inaccessible") {
+      return "gray";
+    }
 
-    // if (
-    //   rooms[nodes[nodeId].roomId] &&
-    //   rooms[nodes[nodeId].roomId].type == 'Inaccessible'
-    // ) {
-    //   return 'gray';
-    // }
+    if (room && room.polygon.coordinates[0].length == 0) {
+      return "red";
+    }
+
+    if (!graph[nodeId].elementId) {
+      return "red";
+    }
 
     return "blue";
   };
@@ -220,7 +219,7 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
 
   return Object.entries(graph).map(
     ([nodeId, node]: [string, NodeInfo], index: number) => {
-      if (!showRoomSpecific || node.elementId === roomIdSelected) {
+      if (!showRoomSpecific || node.elementId === roomId) {
         return (
           <Circle
             key={index}
