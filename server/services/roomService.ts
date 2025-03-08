@@ -33,7 +33,7 @@ export const roomService = {
     await prisma.element.create({
       data: {
         elementId,
-        type: "room",
+        type: roomInfo.type,
         buildingCode,
         floorLevel,
         room: {

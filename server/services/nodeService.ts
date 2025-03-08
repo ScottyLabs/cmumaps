@@ -15,7 +15,7 @@ export const nodeService = {
   ) => {
     const { pos, elementId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
-    const data = { ...geoCoords, elementId };
+    const data = { id: nodeId, ...geoCoords, elementId };
 
     // Belongs to an element
     if (elementId) {

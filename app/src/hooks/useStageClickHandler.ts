@@ -64,7 +64,7 @@ const useStageClickHandler = (
       };
 
       const batchId = uuidv4();
-      await createNode({ floorCode, batchId, nodeId, nodeInfo });
+      await createNode({ floorCode, nodeId, nodeInfo, batchId });
 
       // create an edge to the selected node if there is one
       if (selectedNodeId) {
