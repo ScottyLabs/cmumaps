@@ -73,7 +73,9 @@ const EditCell = ({ property, value, handleSave }: Props) => {
     }
   };
 
-  return <td className="border pr-4 pl-4 text-black">{renderValueCell()}</td>;
+  return (
+    <td className="border border-white px-4 text-black">{renderValueCell()}</td>
+  );
 };
 
 export default EditCell;
