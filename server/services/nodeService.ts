@@ -13,14 +13,14 @@ export const nodeService = {
     nodeInfo: NodeInfo,
     placement: Placement
   ) => {
-    const { pos, roomId } = nodeInfo;
+    const { pos, elementId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
     const data = { id: nodeId, ...geoCoords };
 
     // Belongs to an element
-    if (roomId) {
+    if (elementId) {
       await prisma.node.create({
-        data: { ...data, elementId: roomId },
+        data: { ...data, elementId },
       });
     }
     // Directly associated with the floor (not an element)
@@ -43,15 +43,15 @@ export const nodeService = {
     nodeInfo: NodeInfo,
     placement: Placement
   ) => {
-    const { pos, roomId } = nodeInfo;
+    const { pos, elementId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
     const data = { id: nodeId, ...geoCoords };
 
     // Belongs to an element
-    if (roomId) {
+    if (elementId) {
       await prisma.node.update({
         where: { id: nodeId },
-        data: { ...data, elementId: roomId },
+        data: { ...data, elementId },
       });
     }
     // Directly associated with the floor (not an element)
