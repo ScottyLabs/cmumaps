@@ -1,4 +1,4 @@
-import { Graph } from "../../../../shared/types";
+import { Graph, Rooms } from "../../../../shared/types";
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
@@ -9,12 +9,20 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Graph"],
       keepUnusedDataFor: 0,
     }),
+    getFloorRooms: builder.query<Rooms, string>({
+      query: (floorCode) => `floors/${floorCode}/rooms`,
+      providesTags: ["Rooms"],
+      keepUnusedDataFor: 0,
+    }),
     invalidateCache: builder.mutation<unknown, void>({
       queryFn: () => ({ data: null }),
-      invalidatesTags: ["Graph"],
+      invalidatesTags: ["Graph", "Rooms"],
     }),
   }),
 });
 
-export const { useGetFloorGraphQuery, useInvalidateCacheMutation } =
-  floorDataApiSlice;
+export const {
+  useGetFloorGraphQuery,
+  useGetFloorRoomsQuery,
+  useInvalidateCacheMutation,
+} = floorDataApiSlice;

@@ -7,7 +7,10 @@ import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import useStageClickHandler from "../../hooks/useStageClickHandler";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
-import { useGetFloorGraphQuery } from "../../store/api/floorDataApiSlice";
+import {
+  useGetFloorGraphQuery,
+  useGetFloorRoomsQuery,
+} from "../../store/api/floorDataApiSlice";
 import { useAppSelector } from "../../store/hooks";
 import LiveCursors from "../live-cursors/LiveCursors";
 import ErrorDisplay from "../shared/ErrorDisplay";
@@ -35,7 +38,16 @@ const FloorDisplay = ({
   offset,
   stageRef,
 }: Props) => {
-  const { data: graph, isFetching, isError } = useGetFloorGraphQuery(floorCode);
+  const {
+    data: graph,
+    isFetching: isFetchingGraph,
+    isError: isErrorGraph,
+  } = useGetFloorGraphQuery(floorCode);
+  const {
+    data: rooms,
+    isFetching: isFetchingRooms,
+    isError: isErrorRooms,
+  } = useGetFloorRoomsQuery(floorCode);
 
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
   // const editPolygon = useAppSelector(selectEditPolygon);
@@ -47,13 +59,15 @@ const FloorDisplay = ({
 
   // we need this for the flicker effect when refetching
 
-  if (isFetching) {
+  if (isFetchingGraph || isFetchingRooms) {
     return <Loader loadingText="Fetching nodes and rooms" />;
   }
 
-  if (isError || !graph) {
-    return <ErrorDisplay errorText="Failed to fetch nodes" />;
+  if (isErrorGraph || isErrorRooms || !graph || !rooms) {
+    return <ErrorDisplay errorText="Failed to fetch nodes and rooms" />;
   }
+
+  console.log(rooms);
 
   // Disable panning when dragging node, vertex, or label
   const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
