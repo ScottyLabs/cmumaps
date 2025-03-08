@@ -83,7 +83,7 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
 
     // colors for cross floor edges
     const isValidCrossFloorEdgeType =
-      room && ValidCrossFloorEdgeTypes.includes(room.type);
+      room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
 
     const hasAcrossFloorEdge =
       Object.values(graph[nodeId].neighbors).filter(

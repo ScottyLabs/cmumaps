@@ -9,6 +9,11 @@ import {
   DeleteNodeArg,
   UpdateNodeArg,
 } from "../../api/nodeApiSlice";
+import {
+  CreateRoomArg,
+  DeleteRoomArg,
+  UpdateRoomArg,
+} from "../../api/roomApiSlice";
 
 interface CreateNodeEdit {
   endpoint: "createNode";
@@ -45,6 +50,21 @@ interface DeleteEdgeAcrossFloorsEdit {
   arg: DeleteEdgeAcrossFloorsArg;
 }
 
+interface CreateRoomEdit {
+  endpoint: "createRoom";
+  arg: CreateRoomArg;
+}
+
+interface DeleteRoomEdit {
+  endpoint: "deleteRoom";
+  arg: DeleteRoomArg;
+}
+
+interface UpdateRoomEdit {
+  endpoint: "updateRoom";
+  arg: UpdateRoomArg;
+}
+
 export type Edit =
   | CreateNodeEdit
   | DeleteNodeEdit
@@ -52,7 +72,10 @@ export type Edit =
   | CreateEdgeEdit
   | DeleteEdgeEdit
   | CreateEdgeAcrossFloorsEdit
-  | DeleteEdgeAcrossFloorsEdit;
+  | DeleteEdgeAcrossFloorsEdit
+  | CreateRoomEdit
+  | DeleteRoomEdit
+  | UpdateRoomEdit;
 
 export interface EditPair {
   batchId: string;

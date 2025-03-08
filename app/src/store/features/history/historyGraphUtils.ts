@@ -18,16 +18,16 @@ const getGraph = async (
   floorCode: string,
   getStore: () => RootState,
   dispatch: AppDispatch,
-) => {
+): Promise<Graph> => {
   let nodes =
     floorDataApiSlice.endpoints.getFloorGraph.select(floorCode)(
       getStore(),
     ).data;
 
   if (!nodes) {
-    nodes = (await dispatch(
+    nodes = await dispatch(
       floorDataApiSlice.endpoints.getFloorGraph.initiate(floorCode),
-    ).unwrap()) as Graph;
+    ).unwrap();
   }
 
   return nodes;

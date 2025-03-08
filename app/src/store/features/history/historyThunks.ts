@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 
 import { edgeApiSlice } from "../../api/edgeApiSlice";
 import { nodeApiSlice } from "../../api/nodeApiSlice";
+import { roomApiSlice } from "../../api/roomApiSlice";
 import { AppDispatch } from "../../store";
 import { createAppAsyncThunk } from "../../withTypes";
 import { setEditIndex } from "./historySlice";
@@ -42,6 +43,21 @@ const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
     case "deleteEdgeAcrossFloors":
       await dispatch(
         edgeApiSlice.endpoints.deleteEdgeAcrossFloors.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "createRoom":
+      await dispatch(
+        roomApiSlice.endpoints.createRoom.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "deleteRoom":
+      await dispatch(
+        roomApiSlice.endpoints.deleteRoom.initiate(edit.arg),
+      ).unwrap();
+      break;
+    case "updateRoom":
+      await dispatch(
+        roomApiSlice.endpoints.updateRoom.initiate(edit.arg),
       ).unwrap();
       break;
     default:

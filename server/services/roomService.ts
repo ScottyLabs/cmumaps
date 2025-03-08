@@ -25,8 +25,6 @@ export const roomService = {
     const geoPolygon = pdfPolygonToGeoPolygon(polygon, placement);
     const data = {
       name: roomInfo.name,
-      buildingCode,
-      floorCode,
       labelLatitude: geoCoords.latitude,
       labelLongitude: geoCoords.longitude,
       polygon: geoPolygon as unknown as InputJsonValue,
