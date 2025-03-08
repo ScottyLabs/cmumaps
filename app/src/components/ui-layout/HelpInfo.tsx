@@ -69,7 +69,7 @@ const HelpInfo = () => {
           <span className="text-yellow-600">Yellow</span>: selected
         </p>
         <p>
-          <span className="text-cyan-600">Cyan</span>: hovered
+          <span className="text-cyan-600">Cyan</span>: Point of Interest
         </p>
         <p>
           <span className="text-gray-600">Gray</span>: inaccessible

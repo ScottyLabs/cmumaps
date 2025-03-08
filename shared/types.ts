@@ -149,7 +149,13 @@ export interface RoomInfo {
   polygon: Polygon;
 }
 
-export type PoiType = "Vending Machine" | "Water Fountain" | "Printer" | "";
+export const PoiTypes = [
+  "Vending Machine",
+  "Water Fountain",
+  "Printer",
+  "",
+] as const;
+export type PoiType = (typeof PoiTypes)[number];
 
 export type Rooms = Record<string, RoomInfo>;
 export type Graph = Record<string, NodeInfo>;

@@ -70,18 +70,10 @@ const FloorDisplay = ({
     return <Loader loadingText="Fetching nodes, rooms, and pois" />;
   }
 
-  if (
-    isErrorGraph ||
-    isErrorRooms ||
-    isErrorPois ||
-    !graph ||
-    !rooms ||
-    !pois
-  ) {
+  const isError = isErrorGraph || isErrorRooms || isErrorPois;
+  if (isError || !graph || !rooms || !pois) {
     return <ErrorDisplay errorText="Failed to fetch nodes, rooms, and pois" />;
   }
-
-  console.log(pois);
 
   // Disable panning when dragging node, vertex, or label
   const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {

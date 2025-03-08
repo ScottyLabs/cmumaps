@@ -76,43 +76,44 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
       return "yellow";
     }
 
-    const room =
-      graph[nodeId].elementId &&
-      graph[nodeId].type === "room" &&
-      rooms[graph[nodeId].elementId];
+    if (graph[nodeId].type === "poi") {
+      return "cyan";
+    } else if (graph[nodeId].type === "room") {
+      const room =
+        graph[nodeId].elementId &&
+        graph[nodeId].type === "room" &&
+        rooms[graph[nodeId].elementId];
 
-    // colors for cross floor edges
-    const isValidCrossFloorEdgeType =
-      room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
+      // colors for cross floor edges
+      const isValidCrossFloorEdgeType =
+        room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
 
-    const hasAcrossFloorEdge =
-      Object.values(graph[nodeId].neighbors).filter(
-        (neighbor) => neighbor.outFloorCode,
-      ).length != 0;
+      const hasAcrossFloorEdge =
+        Object.values(graph[nodeId].neighbors).filter(
+          (neighbor) => neighbor.outFloorCode,
+        ).length != 0;
 
-    if (isValidCrossFloorEdgeType) {
-      if (hasAcrossFloorEdge) {
-        return "lime";
+      if (isValidCrossFloorEdgeType) {
+        if (hasAcrossFloorEdge) {
+          return "lime";
+        } else {
+          return "pink";
+        }
       } else {
-        return "pink";
+        if (hasAcrossFloorEdge) {
+          return "pink";
+        }
+      }
+
+      // warning, error, and default colors
+      if (room && room.type == "Inaccessible") {
+        return "gray";
+      }
+
+      if (room && room.polygon.coordinates[0].length == 0) {
+        return "red";
       }
     } else {
-      if (hasAcrossFloorEdge) {
-        return "pink";
-      }
-    }
-
-    // warning, error, and default colors
-
-    if (room && room.type == "Inaccessible") {
-      return "gray";
-    }
-
-    if (room && room.polygon.coordinates[0].length == 0) {
-      return "red";
-    }
-
-    if (!graph[nodeId].elementId) {
       return "red";
     }
 
