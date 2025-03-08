@@ -5,7 +5,7 @@ import { PdfCoordinate, RoomInfo, Polygon } from "../../../shared/types";
 export const posToRoomId = (
   point: PdfCoordinate,
   rooms: Record<string, RoomInfo>,
-) => {
+): string | null => {
   let resRoomId = "";
 
   for (const roomId in rooms) {
@@ -29,5 +29,6 @@ export const posToRoomId = (
       }
     }
   }
-  return resRoomId;
+
+  return resRoomId || null;
 };

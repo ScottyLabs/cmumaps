@@ -45,7 +45,7 @@ export const nodeService = {
   ) => {
     const { pos, elementId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
-    const data = { id: nodeId, ...geoCoords };
+    const data = { ...geoCoords, elementId };
 
     // Belongs to an element
     if (elementId) {
@@ -60,7 +60,7 @@ export const nodeService = {
       const floorLevel = extractFloorLevel(floorCode);
       await prisma.node.update({
         where: { id: nodeId },
-        data: { ...data, elementId: null, buildingCode, floorLevel },
+        data: { ...data, buildingCode, floorLevel },
       });
     }
   },
