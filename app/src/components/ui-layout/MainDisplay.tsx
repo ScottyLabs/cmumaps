@@ -1,4 +1,7 @@
+import { useSearchParams } from "react-router";
+
 import useWebSocket from "../../hooks/useWebSocket";
+import InfoDisplay from "../info-display/InfoDisplay";
 import ZoomPanWrapper from "../zoom-pan/ZoomPanWrapper";
 
 interface Props {
@@ -6,6 +9,9 @@ interface Props {
 }
 
 const MainDisplay = ({ floorCode }: Props) => {
+  const [searchParam] = useSearchParams();
+  const nodeIdSelected = searchParam.get("nodeId");
+
   useWebSocket(floorCode);
 
   return (
@@ -14,11 +20,11 @@ const MainDisplay = ({ floorCode }: Props) => {
         {/* <SidePanel floorCode={floorCode} /> */}
       </div>
       <ZoomPanWrapper floorCode={floorCode} />
-      {/* {nodeIdSelected && (
+      {nodeIdSelected && (
         <div className="absolute top-28 right-4 z-50">
           <InfoDisplay floorCode={floorCode} />
         </div>
-      )} */}
+      )}
     </>
   );
 };
