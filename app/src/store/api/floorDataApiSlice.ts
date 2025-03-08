@@ -14,9 +14,14 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Rooms"],
       keepUnusedDataFor: 0,
     }),
+    getFloorPois: builder.query<Rooms, string>({
+      query: (floorCode) => `floors/${floorCode}/pois`,
+      providesTags: ["Pois"],
+      keepUnusedDataFor: 0,
+    }),
     invalidateCache: builder.mutation<unknown, void>({
       queryFn: () => ({ data: null }),
-      invalidatesTags: ["Graph", "Rooms"],
+      invalidatesTags: ["Graph", "Rooms", "Pois"],
     }),
   }),
 });
@@ -24,5 +29,6 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
+  useGetFloorPoisQuery,
   useInvalidateCacheMutation,
 } = floorDataApiSlice;

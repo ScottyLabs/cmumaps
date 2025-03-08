@@ -9,6 +9,7 @@ import useStageClickHandler from "../../hooks/useStageClickHandler";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
 import {
   useGetFloorGraphQuery,
+  useGetFloorPoisQuery,
   useGetFloorRoomsQuery,
 } from "../../store/api/floorDataApiSlice";
 import { useAppSelector } from "../../store/hooks";
@@ -50,6 +51,11 @@ const FloorDisplay = ({
     isFetching: isFetchingRooms,
     isError: isErrorRooms,
   } = useGetFloorRoomsQuery(floorCode);
+  const {
+    data: pois,
+    isFetching: isFetchingPois,
+    isError: isErrorPois,
+  } = useGetFloorPoisQuery(floorCode);
 
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
   // const editPolygon = useAppSelector(selectEditPolygon);
@@ -60,14 +66,22 @@ const FloorDisplay = ({
   const handleMouseMove = useCursorTracker(offset, scale);
 
   // we need this for the flicker effect when refetching
-
-  if (isFetchingGraph || isFetchingRooms) {
-    return <Loader loadingText="Fetching nodes and rooms" />;
+  if (isFetchingGraph || isFetchingRooms || isFetchingPois) {
+    return <Loader loadingText="Fetching nodes, rooms, and pois" />;
   }
 
-  if (isErrorGraph || isErrorRooms || !graph || !rooms) {
-    return <ErrorDisplay errorText="Failed to fetch nodes and rooms" />;
+  if (
+    isErrorGraph ||
+    isErrorRooms ||
+    isErrorPois ||
+    !graph ||
+    !rooms ||
+    !pois
+  ) {
+    return <ErrorDisplay errorText="Failed to fetch nodes, rooms, and pois" />;
   }
+
+  console.log(pois);
 
   // Disable panning when dragging node, vertex, or label
   const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
