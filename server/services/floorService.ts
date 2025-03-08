@@ -3,6 +3,8 @@ import type {
   GeoCoordinate,
   Graph,
   Placement,
+  Pois,
+  PoiType,
   Rooms,
   RoomType,
 } from "../../shared/types.ts";
@@ -134,6 +136,30 @@ export const floorService = {
     }
 
     return rooms;
+  },
+
+  getFloorPois: async (floorCode: string) => {
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    const dbPois = await prisma.poi.findMany({
+      where: {
+        element: {
+          buildingCode: buildingCode,
+          floorLevel: floorLevel,
+        },
+      },
+      include: {
+        element: true,
+      },
+    });
+
+    const pois: Pois = {};
+    for (const poi of dbPois) {
+      pois[poi.elementId] = poi.element.type as PoiType;
+    }
+
+    return pois;
   },
 
   getFloorPlacement: async (floorCode: string) => {

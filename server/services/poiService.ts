@@ -24,9 +24,14 @@ export const poiService = {
   },
 
   deletePoi: async (elementId: string) => {
-    await prisma.element.delete({
-      where: { elementId },
-      include: { poi: true },
+    await prisma.$transaction(async (tx) => {
+      await tx.poi.delete({
+        where: { elementId },
+      });
+
+      await tx.element.delete({
+        where: { elementId },
+      });
     });
   },
 

@@ -25,4 +25,15 @@ export const floorController = {
       handleControllerError(res, error, "getting floor rooms");
     }
   },
+
+  getFloorPois: async (req: Request, res: Response) => {
+    const floorCode = req.params.id;
+
+    try {
+      const pois = await floorService.getFloorPois(floorCode);
+      res.json(pois);
+    } catch (error) {
+      handleControllerError(res, error, "getting floor pois");
+    }
+  },
 };
