@@ -1,6 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router";
 
+import { ElementType } from "../../../../shared/types";
 import {
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
@@ -11,6 +12,7 @@ import {
   setInfoDisplayActiveTabIndex,
 } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import RoomInfoDisplay from "./element-info/RoomInfoDisplay";
 import GraphInfoDisplay from "./node-info/GraphInfoDisplay";
 
 interface Props {
@@ -45,11 +47,27 @@ const InfoDisplay = ({ floorCode }: Props) => {
     return Component;
   };
 
-  const renderElementInfoDisplay = (_roomId: string) => () => {
-    const Component = () => <></>;
-    Component.displayName = "ElementInfoDisplay";
-    return Component;
-  };
+  const renderElementInfoDisplay =
+    (roomId: string, type: ElementType) => () => {
+      if (type === "room") {
+        const Component = () => (
+          <RoomInfoDisplay
+            floorCode={floorCode}
+            roomId={roomId}
+            rooms={rooms}
+          />
+        );
+        Component.displayName = "RoomInfoDisplay";
+        return Component;
+      } else if (type === "poi") {
+        const Component = () => <></>;
+        Component.displayName = "PoiInfoDisplay";
+        return Component;
+      } else {
+        const Component = () => <></>;
+        return Component;
+      }
+    };
 
   const renderGraphInfoDisplay = (nodeId: string) => () => {
     const Component = () => (
@@ -64,7 +82,7 @@ const InfoDisplay = ({ floorCode }: Props) => {
       const tabNames = ["Element Info", "Graph Info"];
       if (graph[nodeId].elementId) {
         const tabContents = [
-          renderElementInfoDisplay(graph[nodeId].elementId),
+          renderElementInfoDisplay(graph[nodeId].elementId, graph[nodeId].type),
           renderGraphInfoDisplay(nodeId),
         ];
         return { tabNames, tabContents };
@@ -78,7 +96,7 @@ const InfoDisplay = ({ floorCode }: Props) => {
     } else if (roomId) {
       return {
         tabNames: ["Element Info"],
-        tabContents: [renderElementInfoDisplay(roomId)],
+        tabContents: [renderElementInfoDisplay(roomId, "room")],
       };
     }
     // this condition should never occur since

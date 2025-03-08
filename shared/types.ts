@@ -1,7 +1,5 @@
 import type { Polygon } from "geojson";
 
-export * from "geojson";
-
 export interface GeoCoordinate {
   latitude: number;
   longitude: number;
@@ -31,6 +29,8 @@ export interface EdgeInfo {
   outFloorCode?: string;
 }
 
+export type ElementType = "room" | "poi" | undefined;
+
 /**
  * Graph types
  */
@@ -53,7 +53,7 @@ export interface NodeInfo {
   /**
    * The type of the node
    */
-  type?: "room" | "poi";
+  type?: ElementType;
 }
 
 /**
@@ -79,7 +79,7 @@ export interface DoorInfo {
 /**
  * Room types
  */
-export const RoomTypeList = [
+export const RoomTypes = [
   "Default",
   "Corridor",
   "Auditorium",
@@ -108,7 +108,7 @@ export const RoomTypeList = [
   "", // not assigned
 ] as const;
 
-export type RoomType = (typeof RoomTypeList)[number];
+export type RoomType = (typeof RoomTypes)[number];
 
 export const WalkwayTypeList = ["Corridor", "Ramp", "Library"];
 
