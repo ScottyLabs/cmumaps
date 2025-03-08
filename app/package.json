@@ -16,6 +16,8 @@
     "@clerk/react-router": "^1.1.2",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
+    "@turf/turf": "^7.2.0",
+    "geojson": "^0.5.0",
     "konva": "^9.3.18",
     "lodash": "^4.17.21",
     "react": "^19.0.0",

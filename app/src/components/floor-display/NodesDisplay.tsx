@@ -6,7 +6,12 @@ import { Circle } from "react-konva";
 import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
-import { NodeInfo, Graph, PdfCoordinate } from "../../../../shared/types";
+import {
+  NodeInfo,
+  Graph,
+  PdfCoordinate,
+  Rooms,
+} from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import {
   useCreateEdgeMutation,
@@ -29,10 +34,12 @@ import {
 } from "../../store/features/mouseEventSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getCursorPos, setCursor } from "../../utils/canvasUtils";
+import { posToRoomId } from "../../utils/roomUtils";
 
 interface Props {
   floorCode: string;
   graph: Graph;
+  rooms: Rooms;
   offset: PdfCoordinate;
   scale: number;
 }
@@ -44,7 +51,7 @@ const getNodePos = (e: Konva.KonvaEventObject<DragEvent>) => {
   };
 };
 
-const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
+const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -200,7 +207,10 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
       // create new node
       const nodeInfo: NodeInfo = { ...graph[nodeId] };
       nodeInfo.pos = getNodePos(e);
-      // newNode.roomId = findRoomId(rooms, newNode.pos);
+      // locate new room id if node doesn't belong to a poi
+      if (nodeInfo.type !== "poi") {
+        nodeInfo.elementId = posToRoomId(nodeInfo.pos, rooms);
+      }
       const batchId = uuidv4();
       updateNode({ floorCode, batchId, nodeId, nodeInfo });
 
@@ -210,7 +220,7 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
 
   return Object.entries(graph).map(
     ([nodeId, node]: [string, NodeInfo], index: number) => {
-      if (!showRoomSpecific || node.roomId === roomIdSelected) {
+      if (!showRoomSpecific || node.elementId === roomIdSelected) {
         return (
           <Circle
             key={index}

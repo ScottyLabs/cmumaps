@@ -109,8 +109,9 @@ const FloorDisplay = ({
           <PolygonsDisplay rooms={rooms} />
           <EdgesDisplay graph={graph} />
           <NodesDisplay
-            graph={graph}
             floorCode={floorCode}
+            graph={graph}
+            rooms={rooms}
             offset={offset}
             scale={scale}
           />
