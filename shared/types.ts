@@ -14,9 +14,9 @@ export interface PdfCoordinate {
  * Edge Types
  */
 export const ValidCrossFloorEdgeTypes = [
-  "ramp",
-  "stairs",
-  "elevator",
+  "Ramp",
+  "Stairs",
+  "Elevator",
   "", // not assigned
 ];
 
@@ -44,10 +44,14 @@ export interface NodeInfo {
   neighbors: Record<string, EdgeInfo>;
 
   /**
-   * the string of the Room the node belongs to
-   * ${buildingCode}-${roomName}
+   * Points to either a "room" or a "poi" or nothing
    */
-  roomId: string;
+  elementId?: string;
+
+  /**
+   * The type of the node
+   */
+  type: "room" | "poi";
 }
 
 /**
@@ -146,8 +150,11 @@ export interface RoomInfo {
   updatedAt: string;
 }
 
+export type PoiType = "Vending Machine" | "Water Fountain" | "Printer";
+
 export type Rooms = Record<string, RoomInfo>;
 export type Graph = Record<string, NodeInfo>;
+export type Pois = Record<string, PoiType>;
 
 export type Mst = Record<string, Record<string, boolean>>;
 

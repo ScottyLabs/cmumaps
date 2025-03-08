@@ -7,6 +7,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
     getFloorGraph: builder.query<Graph, string>({
       query: (floorCode) => `floors/${floorCode}/graph`,
       providesTags: ["Graph"],
+      keepUnusedDataFor: 0,
     }),
     invalidateCache: builder.mutation<unknown, void>({
       queryFn: () => ({ data: null }),
