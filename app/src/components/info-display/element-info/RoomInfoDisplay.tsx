@@ -7,10 +7,9 @@ import {
   RoomType,
   RoomTypes,
 } from "../../../../../shared/types";
-import { renderCell } from "../../../utils/displayUtils";
 import EditCell from "./EditCell";
 import SelectTypeCell from "./SelectTypeCell";
-import TableLayout from "./TableLayout";
+import TableLayout, { renderCell } from "./TableLayout";
 
 interface Props {
   floorCode: string;

@@ -2,9 +2,8 @@ import { SingleValue } from "react-select";
 import { toast } from "react-toastify";
 
 import { Pois, PoiTypes } from "../../../../../shared/types";
-import { renderCell } from "../../../utils/displayUtils";
 import SelectTypeCell from "./SelectTypeCell";
-import TableLayout from "./TableLayout";
+import TableLayout, { renderCell } from "./TableLayout";
 
 interface Props {
   floorCode: string;
