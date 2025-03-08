@@ -2,7 +2,7 @@ import Konva from "konva";
 
 import { useRef, useState } from "react";
 
-import { PdfCoordinate } from "../../../../shared/types";
+import { Graph, PdfCoordinate, Pois, Rooms } from "../../../../shared/types";
 import { LOADED } from "../../store/features/statusSlice";
 import { useAppSelector } from "../../store/hooks";
 import FloorDisplay from "../floor-display/FloorDisplay";
@@ -11,6 +11,9 @@ import PDFViewer from "./PdfViewer";
 
 interface Props {
   floorCode: string;
+  graph: Graph;
+  rooms: Rooms;
+  pois: Pois;
 }
 
 const SCALE_BY = 1.05;
@@ -20,7 +23,7 @@ const MAX_SCALE = 20;
 /**
  * Handles zooming and panning for PDF and Canvas
  */
-const ZoomPanWrapper = ({ floorCode }: Props) => {
+const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
   const loadingStatus = useAppSelector((state) => state.status.loadingStatus);
 
   const showFile = useAppSelector((state) => state.visibility.showFile);
@@ -89,6 +92,9 @@ const ZoomPanWrapper = ({ floorCode }: Props) => {
       <div className="absolute inset-0 z-10 mt-24 ml-52 overflow-hidden">
         <FloorDisplay
           floorCode={floorCode}
+          graph={graph}
+          rooms={rooms}
+          pois={pois}
           setCanPan={setCanPan}
           handleWheel={handleWheel}
           handleDragMove={handleDragMove}

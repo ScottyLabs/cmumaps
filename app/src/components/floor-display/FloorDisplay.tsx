@@ -2,20 +2,13 @@ import Konva from "konva";
 
 import { Stage, Layer } from "react-konva";
 
-import { PdfCoordinate } from "../../../../shared/types";
+import { Graph, PdfCoordinate, Pois, Rooms } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import useStageClickHandler from "../../hooks/useStageClickHandler";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
-import {
-  useGetFloorGraphQuery,
-  useGetFloorPoisQuery,
-  useGetFloorRoomsQuery,
-} from "../../store/api/floorDataApiSlice";
 import { useAppSelector } from "../../store/hooks";
 import LiveCursors from "../live-cursors/LiveCursors";
-import ErrorDisplay from "../shared/ErrorDisplay";
-import Loader from "../shared/Loader";
 import EdgesDisplay from "./EdgesDisplay";
 import LabelsDisplay from "./LabelsDisplay";
 import NodesDisplay from "./NodesDisplay";
@@ -24,6 +17,9 @@ import PolygonsDisplay from "./PolygonsDisplay";
 
 interface Props {
   floorCode: string;
+  graph: Graph;
+  rooms: Rooms;
+  pois: Pois;
   setCanPan: (canPan: boolean) => void;
   handleWheel: (evt: Konva.KonvaEventObject<WheelEvent>) => void;
   handleDragMove: (evt: Konva.KonvaEventObject<DragEvent>) => void;
@@ -34,6 +30,8 @@ interface Props {
 
 const FloorDisplay = ({
   floorCode,
+  graph,
+  rooms,
   setCanPan,
   handleWheel,
   handleDragMove,
@@ -41,22 +39,6 @@ const FloorDisplay = ({
   offset,
   stageRef,
 }: Props) => {
-  const {
-    data: graph,
-    isFetching: isFetchingGraph,
-    isError: isErrorGraph,
-  } = useGetFloorGraphQuery(floorCode);
-  const {
-    data: rooms,
-    isFetching: isFetchingRooms,
-    isError: isErrorRooms,
-  } = useGetFloorRoomsQuery(floorCode);
-  const {
-    data: pois,
-    isFetching: isFetchingPois,
-    isError: isErrorPois,
-  } = useGetFloorPoisQuery(floorCode);
-
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
   // const editPolygon = useAppSelector(selectEditPolygon);
 
@@ -64,16 +46,6 @@ const FloorDisplay = ({
   useKeyboardShortcuts(floorCode);
   const handleStageClick = useStageClickHandler(floorCode, scale, offset);
   const handleMouseMove = useCursorTracker(offset, scale);
-
-  // we need this for the flicker effect when refetching
-  if (isFetchingGraph || isFetchingRooms || isFetchingPois) {
-    return <Loader loadingText="Fetching nodes, rooms, and pois" />;
-  }
-
-  const isError = isErrorGraph || isErrorRooms || isErrorPois;
-  if (isError || !graph || !rooms || !pois) {
-    return <ErrorDisplay errorText="Failed to fetch nodes, rooms, and pois" />;
-  }
 
   // Disable panning when dragging node, vertex, or label
   const handleOnMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
