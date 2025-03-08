@@ -1,4 +1,4 @@
-import { Graph, Rooms } from "../../../../shared/types";
+import { Graph, Pois, Rooms } from "../../../../shared/types";
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
@@ -14,7 +14,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Rooms"],
       keepUnusedDataFor: 0,
     }),
-    getFloorPois: builder.query<Rooms, string>({
+    getFloorPois: builder.query<Pois, string>({
       query: (floorCode) => `floors/${floorCode}/pois`,
       providesTags: ["Pois"],
       keepUnusedDataFor: 0,
