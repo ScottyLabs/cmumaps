@@ -128,7 +128,6 @@ export const floorService = {
         displayAlias: room.displayAlias ?? undefined,
         aliases: room.aliases.map((a) => a.alias),
         polygon: room.polygon as unknown as Polygon,
-        updatedAt: room.updatedAt.toISOString(),
       };
     }
 

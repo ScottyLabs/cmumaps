@@ -145,11 +145,6 @@ export interface RoomInfo {
    * Geojson polygon that outlines the room
    */
   polygon: Polygon;
-
-  /**
-   * Most recent update timestamp as a string value in ISO format.
-   */
-  updatedAt: string;
 }
 
 export type PoiType = "Vending Machine" | "Water Fountain" | "Printer";

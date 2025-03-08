@@ -2,6 +2,7 @@ import type {
   GeoCoordinate,
   PdfCoordinate,
   Placement,
+  Polygon,
 } from "../../shared/types.ts";
 
 // The number of meters in a degree.
@@ -84,3 +85,33 @@ function rotate(x: number, y: number, angle: number): PdfCoordinate {
   const ny = cos * y - sin * x;
   return { x: nx, y: ny };
 }
+
+export const pdfPolygonToGeoPolygon = (
+  pdfPolygon: Polygon,
+  placement: Placement
+): GeoCoordinate[][] => {
+  return pdfPolygon.coordinates.map((ring) =>
+    ring.map((coords) =>
+      pdfCoordsToGeoCoords(placement)({ x: coords[0], y: coords[1] })
+    )
+  );
+};
+
+export const geoPolygonToPdfPolygon = (
+  geoPolygon: GeoCoordinate[][],
+  placement: Placement
+): Polygon => {
+  return {
+    type: "Polygon",
+    coordinates: geoPolygon.map((ring) =>
+      ring.map((coords) =>
+        Object.values(
+          geoCoordsToPdfCoords(placement)({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          })
+        )
+      )
+    ),
+  };
+};
