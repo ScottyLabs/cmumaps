@@ -12,6 +12,7 @@ const EdgesDisplay = ({ graph }: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.dragNodeId);
   const dragNodePos = useAppSelector((state) => state.mouseEvent.dragNodePos);
+  const showEdges = useAppSelector((state) => state.visibility.showEdges);
 
   const edges: [number[], string][] = useMemo(() => {
     const includedNodes = new Set();
@@ -64,6 +65,10 @@ const EdgesDisplay = ({ graph }: Props) => {
 
     return edges;
   }, [dragNodePos, graph, nodeIdOnDrag]);
+
+  if (!showEdges) {
+    return;
+  }
 
   return edges.map(([points, color], index: number) => {
     return (

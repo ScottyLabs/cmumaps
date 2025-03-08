@@ -66,8 +66,9 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
   const mode = useAppSelector((state) => state.mode.mode);
+  const showNodes = useAppSelector((state) => state.visibility.showNodes);
 
-  if (!graph) {
+  if (!graph || !showNodes) {
     return;
   }
 
