@@ -44,14 +44,14 @@ export interface NodeInfo {
   neighbors: Record<string, EdgeInfo>;
 
   /**
-   * Points to either a "room" or a "poi" or nothing
+   * A node belongs to either a "room" or a "poi" or a floor in general
    */
-  elementId?: string;
+  elementId: string | null;
 
   /**
    * The type of the node
    */
-  type: "room" | "poi";
+  type?: "room" | "poi";
 }
 
 /**

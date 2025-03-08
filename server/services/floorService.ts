@@ -1,9 +1,4 @@
-import type {
-  EdgeInfo,
-  Graph,
-  Placement,
-  RoomType,
-} from "../../shared/types.ts";
+import type { EdgeInfo, Graph, Placement } from "../../shared/types.ts";
 import {
   extractBuildingCode,
   extractFloorLevel,
@@ -31,8 +26,8 @@ export const floorService = {
       // include the element of each node (both in and out)
       include: {
         element: {
-          select: {
-            type: true,
+          include: {
+            poi: true,
           },
         },
         outEdges: {
@@ -44,7 +39,6 @@ export const floorService = {
                 elementId: true,
                 element: {
                   select: {
-                    type: true,
                     buildingCode: true,
                     floorLevel: true,
                   },
@@ -79,14 +73,15 @@ export const floorService = {
 
         neighbors[edge.outNodeId] = {};
         if (outFloorCode !== floorCode) {
-          if (node.element?.type === outNode.element?.type) {
-            neighbors[edge.outNodeId].type = node.element?.type as RoomType;
-          }
           neighbors[edge.outNodeId].outFloorCode = outFloorCode;
         }
       }
-
-      nodes[node.id] = { pos, neighbors, roomId: node.elementId || "" };
+      const type = node.element
+        ? node.element?.poi
+          ? "poi"
+          : "room"
+        : undefined;
+      nodes[node.id] = { pos, neighbors, type, elementId: node.elementId };
     }
 
     return nodes;
