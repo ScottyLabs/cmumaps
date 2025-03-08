@@ -9,7 +9,7 @@ import {
   setMode,
 } from "../../../store/features/modeSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import Button from "../../shared/Button";
+import Button from "../shared/Button";
 import { RED_BUTTON_STYLE } from "../shared/TableCell";
 
 interface Props {

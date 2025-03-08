@@ -9,7 +9,7 @@ import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import Button from "../../shared/Button";
+import Button from "../shared/Button";
 
 interface Props {
   floorCode: string;
