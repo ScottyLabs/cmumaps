@@ -3,7 +3,7 @@ import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import { Circle } from "react-konva";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import {
@@ -14,6 +14,7 @@ import {
   ValidCrossFloorEdgeTypes,
 } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
+import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import {
   useCreateEdgeMutation,
   useDeleteEdgeMutation,
@@ -60,9 +61,7 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
   const [createEdge] = useCreateEdgeMutation();
   const [deleteEdge] = useDeleteEdgeMutation();
 
-  const [searchParam] = useSearchParams();
-  const selectedNodeId = searchParam.get("nodeId");
-  const roomId = searchParam.get("roomId");
+  const { nodeId: selectedNodeId, roomId } = useValidatedFloorParams(floorCode);
 
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { useInvalidateCacheMutation } from "../store/api/floorDataApiSlice";
@@ -27,6 +27,7 @@ import {
   toggleShowPolygons,
 } from "../store/features/visibilitySlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import useValidatedFloorParams from "./useValidatedFloorParams";
 
 const useKeyboardShortcuts = (floorCode: string) => {
   const dispatch = useAppDispatch();
@@ -35,8 +36,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
   const [invalidateCache] = useInvalidateCacheMutation();
   const [deleteNode] = useDeleteNodeMutation();
 
-  const [searchParam] = useSearchParams();
-  const selectedNodeId = searchParam.get("nodeId");
+  const { nodeId: selectedNodeId } = useValidatedFloorParams(floorCode);
 
   const editPolygon = useAppSelector(selectEditPolygon);
   const shortcutsDisabled = useAppSelector(

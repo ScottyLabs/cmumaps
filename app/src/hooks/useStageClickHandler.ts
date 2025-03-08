@@ -1,7 +1,7 @@
 import Konva from "konva";
 import { v4 as uuidv4 } from "uuid";
 
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { NodeInfo, PdfCoordinate } from "../../../shared/types";
@@ -14,6 +14,7 @@ import {
 } from "../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCursorPos } from "../utils/canvasUtils";
+import useValidatedFloorParams from "./useValidatedFloorParams";
 
 const useStageClickHandler = (
   floorCode: string,
@@ -23,8 +24,7 @@ const useStageClickHandler = (
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [searchParam] = useSearchParams();
-  const selectedNodeId = searchParam.get("nodeId");
+  const { nodeId: selectedNodeId } = useValidatedFloorParams(floorCode);
 
   const [createNode] = useCreateNodeMutation();
   const [createEdge] = useCreateEdgeMutation();

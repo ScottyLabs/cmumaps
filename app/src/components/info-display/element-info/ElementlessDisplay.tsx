@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { Graph, PoiType, RoomInfo } from "../../../../../shared/types";
+import { Graph, RoomInfo } from "../../../../../shared/types";
 import { useUpdateNodeMutation } from "../../../store/api/nodeApiSlice";
 import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
 

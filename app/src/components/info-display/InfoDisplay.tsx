@@ -1,7 +1,7 @@
 import React from "react";
-import { useSearchParams } from "react-router";
 
 import { ElementType } from "../../../../shared/types";
+import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import {
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
@@ -25,9 +25,7 @@ const InfoDisplay = ({ floorCode }: Props) => {
   const { data: graph } = useGetFloorGraphQuery(floorCode);
   const { data: rooms } = useGetFloorRoomsQuery(floorCode);
 
-  const [searchParam] = useSearchParams();
-  const nodeId = searchParam.get("nodeId");
-  const roomId = searchParam.get("roomId");
+  const { nodeId, roomId } = useValidatedFloorParams(floorCode);
 
   const activeTabIndex = useAppSelector(
     (state) => state.ui.infoDisplayActiveTabIndex,
