@@ -1,7 +1,10 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { NavLink } from "react-router";
 import { toast } from "react-toastify";
 
 import { EdgeInfo } from "../../../../../shared/types";
+import { useDeleteEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { renderCell } from "../../../utils/displayUtils";
 
 interface Props {
@@ -17,6 +20,26 @@ const DifferentFloorNeighborTable = ({
   neighbors,
   differentFloorNeighbors,
 }: Props) => {
+  const [deleteEdgeAcrossFloors] = useDeleteEdgeAcrossFloorsMutation();
+
+  const handleDeleteAcrossFloors = (neighborId: string) => () => {
+    const outFloorCode = neighbors[neighborId].outFloorCode;
+    // this condition should never occur because all nodes
+    // in differentFloorNeighbors should have outFloorCode
+    if (!outFloorCode) {
+      return;
+    }
+
+    const arg = {
+      floorCode,
+      outFloorCode,
+      inNodeId: nodeId,
+      outNodeId: neighborId,
+      batchId: uuidv4(),
+    };
+    deleteEdgeAcrossFloors(arg);
+  };
+
   const renderDifferentFloorNeighbors = (
     differentFloorNeighbors: Record<string, EdgeInfo>,
   ) => {
@@ -48,7 +71,7 @@ const DifferentFloorNeighborTable = ({
           <td className="border p-2">
             <button
               className="border px-1 text-sm whitespace-nowrap hover:bg-sky-700"
-              // onClick={() => deleteEdgeAcrossFloors(neighborId)}
+              onClick={handleDeleteAcrossFloors(neighborId)}
             >
               delete
             </button>

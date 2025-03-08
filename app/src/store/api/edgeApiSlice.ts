@@ -244,4 +244,9 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useCreateEdgeMutation, useDeleteEdgeMutation } = edgeApiSlice;
+export const {
+  useCreateEdgeMutation,
+  useDeleteEdgeMutation,
+  useCreateEdgeAcrossFloorsMutation,
+  useDeleteEdgeAcrossFloorsMutation,
+} = edgeApiSlice;

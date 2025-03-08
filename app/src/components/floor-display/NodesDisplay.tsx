@@ -71,15 +71,19 @@ const NodesDisplay = ({ floorCode, graph, offset, scale }: Props) => {
       return "yellow";
     }
 
-    // const hasAcrossFloorEdge =
-    //   Object.values(nodes[nodeId].neighbors).filter(
-    //     (neighbor) => neighbor.toFloorInfo,
-    //   ).length != 0;
+    const hasAcrossFloorEdge =
+      Object.values(graph[nodeId].neighbors).filter(
+        (neighbor) => neighbor.outFloorCode,
+      ).length != 0;
 
-    // const isRoomAcrossFloorType =
-    //   nodes[nodeId].roomId &&
-    //   rooms[nodes[nodeId].roomId] &&
-    //   EdgeTypeList.includes(rooms[nodes[nodeId].roomId].type);
+    // const isValidCrossFloorEdgeType =
+    //   graph[nodeId].roomId &&
+    //   rooms[graph[nodeId].roomId] &&
+    //   ValidCrossFloorEdgeTypes.includes(rooms[nodes[nodeId].roomId].type);
+
+    if (hasAcrossFloorEdge) {
+      return "pink";
+    }
 
     // if (isRoomAcrossFloorType) {
     //   if (hasAcrossFloorEdge) {
