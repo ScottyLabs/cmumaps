@@ -32,7 +32,7 @@ const GraphInfoButtons = ({ floorCode, nodeId }: Props) => {
   };
 
   return (
-    <div>
+    <div className="space-y-2">
       <div className="flex space-x-4">
         <Button text="Copy Node ID" handleClick={copyNodeId} />
         <Button

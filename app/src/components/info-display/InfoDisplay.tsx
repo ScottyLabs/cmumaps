@@ -129,7 +129,7 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
 
   return (
     <div className="flex w-fit flex-col rounded-lg bg-gray-600 px-2 pb-2 text-white shadow-lg">
-      <ul className="flex text-sm">
+      <ul className="flex">
         {tabNames.map((tabName, index) => renderTabHeader(tabName, index))}
       </ul>
       <div>{React.createElement(tabContents[activeTabIndex]())}</div>

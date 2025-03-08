@@ -9,6 +9,7 @@ import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";
 import { useAppDispatch } from "../../../store/hooks";
+import Button from "../../shared/Button";
 
 interface Props {
   floorCode: string;
@@ -55,7 +56,7 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
     return;
   }
 
-  const addEdgeWithID = async () => {
+  const addEdgeWithId = async () => {
     const validate = () => {
       const inNodeId = nodeId;
 
@@ -131,25 +132,12 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
     );
   };
 
-  const renderCreateButton = () => {
-    return (
-      <div>
-        <button
-          className="mt-1 rounded bg-slate-500 px-2 py-1 text-sm text-white hover:bg-slate-700"
-          onClick={addEdgeWithID}
-        >
-          Create
-        </button>
-      </div>
-    );
-  };
-
   return (
     <div className="space-y-1">
       <div>
-        <p>Create Edge across Floors</p>
+        <p className="text-lg">Create Edge across Floors</p>
       </div>
-      <div className="space-y-2">
+      <div className="mb-3 space-y-2">
         {renderFloorSelector()}
         <div>
           <input
@@ -161,7 +149,7 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
           />
         </div>
       </div>
-      <div>{renderCreateButton()}</div>
+      <Button text="Add Edge Across Floor" handleClick={addEdgeWithId} />
     </div>
   );
 };

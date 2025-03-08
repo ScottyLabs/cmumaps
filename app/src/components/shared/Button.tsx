@@ -11,7 +11,7 @@ const Button = ({ text, handleClick, style }: Props) => {
     <div>
       <button
         className={twMerge(
-          "mb-2 rounded bg-slate-500 px-2 py-1 text-sm text-white hover:bg-slate-700",
+          "rounded bg-slate-500 px-2 py-1 text-sm hover:bg-slate-700",
           style,
         )}
         onClick={handleClick}

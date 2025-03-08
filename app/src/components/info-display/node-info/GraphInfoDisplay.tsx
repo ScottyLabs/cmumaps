@@ -8,7 +8,6 @@ import GraphInfoButtons from "./GraphInfoButtons";
 interface Props {
   floorCode: string;
   nodeId: string;
-  // rooms: Rooms;
   graph: Graph;
 }
 
@@ -29,7 +28,7 @@ const GraphInfoDisplay = ({ nodeId, floorCode, graph }: Props) => {
 
   return (
     <>
-      <div className="mb-1 space-y-4">
+      <div className="mb-2 space-y-4">
         <GraphInfoButtons floorCode={floorCode} nodeId={nodeId} />
         <CrossFloorNeighborTable
           floorCode={floorCode}

@@ -60,7 +60,7 @@ const DifferentFloorNeighborTable = ({
         <tr key={neighborId}>
           <td className="border p-2">
             <NavLink
-              className="border px-1 text-sm whitespace-nowrap hover:bg-sky-700"
+              className="border px-1 whitespace-nowrap hover:bg-sky-700"
               to={calculatePath(neighborId)}
             >
               {neighbor.outFloorCode}
@@ -68,7 +68,7 @@ const DifferentFloorNeighborTable = ({
           </td>
           <td className="border p-2">
             <button
-              className="border px-1 text-sm whitespace-nowrap hover:bg-sky-700"
+              className="border px-1 whitespace-nowrap hover:bg-sky-700"
               onClick={handleDeleteAcrossFloors(neighborId)}
             >
               delete
@@ -85,7 +85,7 @@ const DifferentFloorNeighborTable = ({
 
   return (
     <div>
-      <h1 className="mb-1">Different Floor Neighbors</h1>
+      <h1 className="mb-1 text-lg">Different Floor Neighbors</h1>
       <table className="table-auto text-center">
         <tbody>
           <tr>
