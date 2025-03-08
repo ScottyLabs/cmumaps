@@ -22,7 +22,7 @@ const SidePanel = ({ floorCode, graph, rooms }: Props) => {
     ? ["Visibility", "Polygon"]
     : ["Visibility", "Graph"];
 
-  const renderVisibilityTab = () => <></>;
+  const renderVisibilityTab = () => <VisibilityTab floorCode={floorCode} />;
 
   const renderGraphTab = () => <></>;
 
