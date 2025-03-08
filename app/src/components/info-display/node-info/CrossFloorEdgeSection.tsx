@@ -16,7 +16,7 @@ interface Props {
   graph: Graph;
 }
 
-const CreateEdgeAcrossFloorsSection = ({ floorCode, nodeId, graph }: Props) => {
+const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
   const dispatch = useAppDispatch();
   const buildingCode = extractBuildingCode(floorCode);
   const { data: floorLevels } = useGetBuildingFloorsQuery(buildingCode);
@@ -166,4 +166,4 @@ const CreateEdgeAcrossFloorsSection = ({ floorCode, nodeId, graph }: Props) => {
   );
 };
 
-export default CreateEdgeAcrossFloorsSection;
+export default CrossFloorEdgeSection;

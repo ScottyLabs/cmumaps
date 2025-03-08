@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { EdgeInfo, Graph } from "../../../../../shared/types";
-import CreateEdgeAcrossFloorsSection from "./CreateEdgeAcrossFloorsSection";
+import CrossFloorEdgeSection from "./CrossFloorEdge";
 import CrossFloorNeighborTable from "./CrossFloorNeighborTable";
 import GraphInfoButtons from "./GraphInfoButtons";
 
@@ -37,7 +37,7 @@ const GraphInfoDisplay = ({ nodeId, floorCode, graph }: Props) => {
           neighbors={neighbors}
           differentFloorNeighbors={differentFloorNeighbors}
         />
-        <CreateEdgeAcrossFloorsSection
+        <CrossFloorEdgeSection
           floorCode={floorCode}
           nodeId={nodeId}
           graph={graph}
