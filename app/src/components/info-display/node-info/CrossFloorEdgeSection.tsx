@@ -135,7 +135,7 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
     return (
       <div>
         <button
-          className="my-1 rounded bg-slate-500 px-2 py-1 text-sm text-white hover:bg-slate-700"
+          className="mt-1 rounded bg-slate-500 px-2 py-1 text-sm text-white hover:bg-slate-700"
           onClick={addEdgeWithID}
         >
           Create
@@ -145,10 +145,9 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
   };
 
   return (
-    <div>
-      <div className="flex items-center space-x-3">
+    <div className="space-y-1">
+      <div>
         <p>Create Edge across Floors</p>
-        {renderCreateButton()}
       </div>
       <div className="space-y-2">
         {renderFloorSelector()}
@@ -162,6 +161,7 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
           />
         </div>
       </div>
+      <div>{renderCreateButton()}</div>
     </div>
   );
 };
