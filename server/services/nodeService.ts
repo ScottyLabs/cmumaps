@@ -60,7 +60,7 @@ export const nodeService = {
       const floorLevel = extractFloorLevel(floorCode);
       await prisma.node.update({
         where: { id: nodeId },
-        data: { ...data, buildingCode, floorLevel },
+        data: { ...data, elementId: null, buildingCode, floorLevel },
       });
     }
   },

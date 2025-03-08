@@ -59,7 +59,8 @@ const useStageClickHandler = (
       const nodeInfo: NodeInfo = {
         pos,
         neighbors: {},
-        roomId: "",
+        type: null,
+        elementId: null,
         // roomId: findRoomId(rooms, pos),
       };
 

@@ -31,7 +31,7 @@ export interface EdgeInfo {
   outFloorCode?: string;
 }
 
-export type ElementType = "room" | "poi" | undefined;
+export type ElementType = "room" | "poi" | null;
 
 /**
  * Graph types
@@ -55,7 +55,7 @@ export interface NodeInfo {
   /**
    * The type of the node
    */
-  type?: ElementType;
+  type: ElementType;
 }
 
 /**

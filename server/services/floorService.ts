@@ -86,11 +86,7 @@ export const floorService = {
           neighbors[edge.outNodeId].outFloorCode = outFloorCode;
         }
       }
-      const type = node.element
-        ? node.element?.poi
-          ? "poi"
-          : "room"
-        : undefined;
+      const type = node.element ? (node.element?.poi ? "poi" : "room") : null;
       nodes[node.id] = { pos, neighbors, type, elementId: node.elementId };
     }
 

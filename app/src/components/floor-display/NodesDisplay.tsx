@@ -209,6 +209,11 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
       // locate new room id if node doesn't belong to a poi
       if (nodeInfo.type !== "poi") {
         nodeInfo.elementId = posToRoomId(nodeInfo.pos, rooms);
+        if (nodeInfo.elementId) {
+          nodeInfo.type = "room";
+        } else {
+          nodeInfo.type = null;
+        }
       }
       const batchId = uuidv4();
       updateNode({ floorCode, batchId, nodeId, nodeInfo });

@@ -52,9 +52,8 @@ const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
 
   const renderCreatePoiButton = () => {
     const createPoi = async () => {
-      const elementId = uuidv4();
-      const newPoi: PoiType = "";
-
+      // const elementId = uuidv4();
+      // const newPoi: PoiType = "";
       // const newNode = JSON.parse(JSON.stringify(nodes[nodeId]));
       // newNode.roomId = roomId;
       // updateNode({ floorCode, nodeId, newNode });
