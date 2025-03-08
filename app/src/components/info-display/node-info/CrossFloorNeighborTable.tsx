@@ -66,8 +66,6 @@ const DifferentFloorNeighborTable = ({
               {neighbor.outFloorCode}
             </NavLink>
           </td>
-          <td className="border p-2">{neighbor.type || "???"}</td>
-
           <td className="border p-2">
             <button
               className="border px-1 text-sm whitespace-nowrap hover:bg-sky-700"
@@ -92,7 +90,6 @@ const DifferentFloorNeighborTable = ({
         <tbody>
           <tr>
             {renderCell("floor")}
-            {renderCell("type")}
             {renderCell("delete")}
           </tr>
           {renderDifferentFloorNeighbors(differentFloorNeighbors)}

@@ -27,7 +27,6 @@ export type EdgeType = (typeof ValidCrossFloorEdgeTypes)[number];
  */
 export interface EdgeInfo {
   outFloorCode?: string;
-  type?: RoomType;
 }
 
 /**
