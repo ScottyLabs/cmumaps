@@ -37,16 +37,14 @@ model Floor {
 }
 
 model Element {
-  elementId      String  @id
-  labelLatitude  Float
-  labelLongitude Float
-  type           String
-  buildingCode   String?
-  floorLevel     String?
-  floor          Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
-  nodes          Node[]
-  poi            Poi?
-  room           Room?
+  elementId    String  @id
+  type         String
+  buildingCode String?
+  floorLevel   String?
+  floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+  nodes        Node[]
+  poi          Poi?
+  room         Room?
 
   @@index([buildingCode, floorLevel])
 }
@@ -57,13 +55,15 @@ model Poi {
 }
 
 model Room {
-  elementId    String   @id
-  name         String
-  displayAlias String?
-  polygon      Json
-  updatedAt    DateTime @updatedAt
-  aliases      Alias[]
-  element      Element  @relation(fields: [elementId], references: [elementId])
+  elementId      String   @id
+  name           String
+  displayAlias   String?
+  labelLatitude  Float
+  labelLongitude Float
+  polygon        Json
+  updatedAt      DateTime @updatedAt
+  aliases        Alias[]
+  element        Element  @relation(fields: [elementId], references: [elementId])
 }
 
 model Node {
