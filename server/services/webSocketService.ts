@@ -1,11 +1,10 @@
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import type { WebSocketPayloads } from "../../shared/websocket-types/webSocketTypes.ts";
 import { WebSocketEvents } from "../../shared/websocket-types/webSocketTypes.ts";
 import type { LiveUser } from "../../shared/websocket-types/userTypes.ts";
 export class WebSocketService {
   private io: Server;
 
-  private socketMap: Map<string, Socket> = new Map();
   private socketToRoom: Map<string, string> = new Map();
   private socketToUser: Map<string, LiveUser> = new Map();
 
@@ -14,7 +13,6 @@ export class WebSocketService {
     // Socket.IO connection handling
     io.on("connection", (socket) => {
       console.log(`Client connected: ${socket.id}`);
-      this.socketMap.set(socket.id, socket);
       this.socketToUser.set(socket.id, {
         userName: socket.handshake.query.userName as string,
         color: socket.handshake.query.userColor as string,
@@ -57,7 +55,6 @@ export class WebSocketService {
           await this.syncUsers(room, socket.id, false);
         }
 
-        this.socketMap.delete(socket.id);
         this.socketToUser.delete(socket.id);
         this.socketToRoom.delete(socket.id);
         console.log(`Client disconnected: ${socket.id}`);
@@ -81,18 +78,35 @@ export class WebSocketService {
 
     // broadcast the updated user list
     const payload = { users: userMap };
-    this.broadcastToFloor(senderId, WebSocketEvents.SYNC_USERS, payload);
+    this.broadcastToUserFloor(senderId, WebSocketEvents.SYNC_USERS, payload);
   }
 
   /**
-   * Send an event to all clients in the room
+   * Send an event to all clients in the room the sender is in
    */
-  public broadcastToFloor<E extends keyof WebSocketPayloads>(
+  public broadcastToUserFloor<E extends keyof WebSocketPayloads>(
     senderId: string,
     event: E,
     payload: WebSocketPayloads[E]
   ): void {
     const room = this.socketToRoom.get(senderId);
+    if (room) {
+      this.io.to(room).emit(event, payload);
+    } else {
+      console.error(
+        "Could not broadcast to room due to invalid sender or room"
+      );
+    }
+  }
+
+  /**
+   * Send an event to all clients in the room the sender is in
+   */
+  public broadcastToFloor<E extends keyof WebSocketPayloads>(
+    room: string,
+    event: E,
+    payload: WebSocketPayloads[E]
+  ): void {
     if (room) {
       this.io.to(room).emit(event, payload);
     } else {

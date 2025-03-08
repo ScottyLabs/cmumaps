@@ -38,7 +38,7 @@ app.use(clerkMiddleware());
 app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", checkAuth, buildingRoutes);
 app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
-app.use("/api/edge", checkAuth, requireSocketId, edgeRoutes);
+app.use("/api", checkAuth, requireSocketId, edgeRoutes);
 app.use(notFoundHandler);
 
 const port = 80;

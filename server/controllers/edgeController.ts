@@ -14,7 +14,7 @@ export const edgeController = {
 
       // broadcast to all users on the floor
       const payload = { inNodeId, outNodeId };
-      webSocketService.broadcastToFloor(socketId, "create-edge", payload);
+      webSocketService.broadcastToUserFloor(socketId, "create-edge", payload);
 
       res.json(null);
     } catch (error) {
@@ -29,10 +29,44 @@ export const edgeController = {
     try {
       await edgeService.deleteEdge(inNodeId, outNodeId);
       const payload = { inNodeId, outNodeId };
-      webSocketService.broadcastToFloor(socketId, "delete-edge", payload);
+      webSocketService.broadcastToUserFloor(socketId, "delete-edge", payload);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "deleting edge");
+    }
+  },
+
+  createEdgeAcrossFloors: async (req: Request, res: Response) => {
+    const { outFloorCode, inNodeId, outNodeId } = req.body;
+    const socketId = req.socketId;
+
+    try {
+      await edgeService.createEdge(inNodeId, outNodeId);
+      const payload = { inNodeId, outNodeId };
+      webSocketService.broadcastToUserFloor(socketId, "create-edge", payload);
+
+      const inPayload = { outNodeId: inNodeId, inNodeId: outNodeId };
+      webSocketService.broadcastToFloor(outFloorCode, "create-edge", inPayload);
+      res.json(null);
+    } catch (error) {
+      handleControllerError(res, error, "creating edge across floors");
+    }
+  },
+
+  deleteEdgeAcrossFloors: async (req: Request, res: Response) => {
+    const { outFloorCode, inNodeId, outNodeId } = req.body;
+    const socketId = req.socketId;
+
+    try {
+      await edgeService.deleteEdge(inNodeId, outNodeId);
+      const payload = { inNodeId, outNodeId };
+      webSocketService.broadcastToUserFloor(socketId, "delete-edge", payload);
+
+      const inPayload = { outNodeId: inNodeId, inNodeId: outNodeId };
+      webSocketService.broadcastToFloor(outFloorCode, "delete-edge", inPayload);
+      res.json(null);
+    } catch (error) {
+      handleControllerError(res, error, "creating edge across floors");
     }
   },
 };

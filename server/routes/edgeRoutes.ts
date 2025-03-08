@@ -3,7 +3,9 @@ import { edgeController } from "../controllers/edgeController.ts";
 
 const edgeRouter = express.Router();
 
-edgeRouter.post("/", edgeController.createEdge);
-edgeRouter.delete("/", edgeController.deleteEdge);
+edgeRouter.post("/edge", edgeController.createEdge);
+edgeRouter.delete("/edge", edgeController.deleteEdge);
+edgeRouter.post("/cross-floor-edge", edgeController.createEdgeAcrossFloors);
+edgeRouter.delete("/cross-floor-edge", edgeController.deleteEdgeAcrossFloors);
 
 export default edgeRouter;
