@@ -5,8 +5,14 @@ import {
   DeleteRoomPayload,
   UpdateRoomPayload,
 } from "../../../../shared/websocket-types/roomTypes";
+import {
+  buildCreateRoomEditPair,
+  buildDeleteRoomEditPair,
+  buildUpdateRoomEditPair,
+} from "../features/history/historyRoomUtils";
+import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
-import { AppDispatch } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { apiSlice, BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 import { floorDataApiSlice } from "./floorDataApiSlice";
@@ -61,7 +67,7 @@ export const roomApiSlice = apiSlice.injectEndpoints({
       query: ({ floorCode, roomId, roomInfo }) => ({
         url: `/rooms/${roomId}`,
         method: "POST",
-        body: { floorCode, roomId, roomInfo },
+        body: { floorCode, roomInfo },
         headers: {
           "X-Socket-ID": getSocketId(),
         },
@@ -71,8 +77,8 @@ export const roomApiSlice = apiSlice.injectEndpoints({
           const { floorCode, roomId, roomInfo, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildCreateNodeEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const editPair = buildCreateRoomEditPair(batchId, arg);
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(
@@ -93,13 +99,19 @@ export const roomApiSlice = apiSlice.injectEndpoints({
           "X-Socket-ID": getSocketId(),
         },
       }),
-      onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
           const { floorCode, roomId, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildDeleteNodeEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const getStore = getState as () => RootState;
+            const editPair = await buildDeleteRoomEditPair(
+              batchId,
+              arg,
+              getStore,
+              dispatch,
+            );
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(deleteRoom(floorCode, { roomId }));
@@ -114,18 +126,24 @@ export const roomApiSlice = apiSlice.injectEndpoints({
       query: ({ floorCode, roomId, roomInfo }) => ({
         url: `/rooms/${roomId}`,
         method: "PATCH",
-        body: { floorCode, roomId, roomInfo },
+        body: { floorCode, roomInfo },
         headers: {
           "X-Socket-ID": getSocketId(),
         },
       }),
-      onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
           const { floorCode, roomId, roomInfo, batchId } = arg;
           // add to history
           if (batchId) {
-            // const editPair = buildDeleteNodeEditPair(batchId, arg);
-            // dispatch(addEditToHistory(editPair));
+            const getStore = getState as () => RootState;
+            const editPair = await buildUpdateRoomEditPair(
+              batchId,
+              arg,
+              getStore,
+              dispatch,
+            );
+            dispatch(addEditToHistory(editPair));
           }
           // optimistic update
           const { undo } = dispatch(

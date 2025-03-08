@@ -5,7 +5,8 @@ import { floorService } from "../services/floorService.ts";
 
 export const roomController = {
   createRoom: async (req: Request, res: Response) => {
-    const { floorCode, roomId, roomInfo } = req.body;
+    const roomId = req.params.id;
+    const { floorCode, roomInfo } = req.body;
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
@@ -17,7 +18,7 @@ export const roomController = {
   },
 
   deleteRoom: async (req: Request, res: Response) => {
-    const roomId = req.params.roomId;
+    const roomId = req.params.id;
     try {
       await roomService.deleteRoom(roomId);
       res.json(null);
@@ -27,10 +28,11 @@ export const roomController = {
   },
 
   updateRoom: async (req: Request, res: Response) => {
-    const { floorCode, roomId, roomInfo } = req.body;
+    const roomId = req.params.id;
+    const { floorCode, roomInfo } = req.body;
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await roomService.createRoom(floorCode, roomId, roomInfo, placement);
+      await roomService.updateRoom(roomId, roomInfo, placement);
       res.json(null);
     } catch (error) {
       handleControllerError(res, error, "updating room");

@@ -1,6 +1,10 @@
 import { Rooms } from "../../../../../shared/types";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
-import { CreateRoomArg, DeleteRoomArg } from "../../api/roomApiSlice";
+import {
+  CreateRoomArg,
+  DeleteRoomArg,
+  UpdateRoomArg,
+} from "../../api/roomApiSlice";
 import { AppDispatch, RootState } from "../../store";
 import { Edit, EditPair } from "./historyTypes";
 
@@ -62,7 +66,7 @@ export const buildDeleteRoomEditPair = async (
 
 export const buildUpdateRoomEditPair = async (
   batchId: string,
-  arg: CreateRoomArg,
+  arg: UpdateRoomArg,
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<EditPair> => {

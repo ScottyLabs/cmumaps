@@ -44,9 +44,14 @@ export const roomService = {
   },
 
   deleteRoom: async (elementId: string) => {
-    await prisma.element.delete({
-      where: { elementId },
-      include: { room: true },
+    await prisma.$transaction(async (tx) => {
+      await tx.room.delete({
+        where: { elementId },
+      });
+
+      await tx.element.delete({
+        where: { elementId },
+      });
     });
   },
 
