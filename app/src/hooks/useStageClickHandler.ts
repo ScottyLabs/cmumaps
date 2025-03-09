@@ -8,7 +8,9 @@ import { NodeInfo, PdfCoordinate, Polygon, Rooms } from "../../../shared/types";
 import { useCreateEdgeMutation } from "../store/api/edgeApiSlice";
 import { useCreateNodeMutation } from "../store/api/nodeApiSlice";
 import {
+  ADD_EDGE,
   ADD_NODE,
+  DELETE_EDGE,
   GRAPH_SELECT,
   POLYGON_ADD_VERTEX,
   POLYGON_SELECT,
@@ -42,27 +44,13 @@ const useStageClickHandler = (
   const { nodeId: selectedNodeId, roomId } = useValidatedFloorParams(floorCode);
   const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
 
-  //   const isValidClick = (clickedOnStage: boolean) => {
-  //     // errors for each mode relative to stage clicking
-  //     if (mode == POLYGON_ADD_VERTEX) {
-  //       if (!clickedOnStage) {
-  //         toast.error("Click on empty space!");
-  //         return false;
-  //       }
-  //     } else if (mode == ADD_DOOR_NODE) {
+  // // errors for each mode relative to stage clicking
+  //    } else if (mode == ADD_DOOR_NODE) {
   //       if (clickedOnStage) {
   //         // addDoorNodeErrToast();
   //         return false;
   //       }
-  //     } else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
-  //       if (clickedOnStage) {
-  //         toast.error("Click on another node!");
-  //         return false;
-  //       }
   //     }
-
-  //     return true;
-  //   };
 
   const handleCreateNode = (e: Konva.KonvaEventObject<MouseEvent>) => {
     getCursorPos(e, offset, scale, async (pos) => {
@@ -142,18 +130,18 @@ const useStageClickHandler = (
 
     // create node
     if (mode == ADD_NODE) {
-      if (!clickedOnStage) {
-        toast.error("Click on empty space!");
-      } else {
-        handleCreateNode(e);
-      }
+      handleCreateNode(e);
     }
 
-    if (mode == POLYGON_ADD_VERTEX) {
-      if (!clickedOnStage) {
-        toast.error("Click on empty space!");
-      } else {
-        handleAddVertex(e);
+    // add vertex to polygon
+    else if (mode == POLYGON_ADD_VERTEX) {
+      handleAddVertex(e);
+    }
+
+    // error for edge edits
+    else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
+      if (clickedOnStage) {
+        toast.error("Click on another node!");
       }
     }
 
