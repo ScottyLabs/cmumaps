@@ -1,17 +1,12 @@
 import { SingleValue } from "react-select";
 import { toast } from "react-toastify";
 
-import {
-  RoomInfo,
-  Rooms,
-  RoomType,
-  RoomTypes,
-} from "../../../../../shared/types";
-import CopyIdRow from "../shared/CopyIdRow";
-import EditCell from "../shared/EditCell";
-import SelectTypeCell from "../shared/SelectTypeCell";
-import TableCell from "../shared/TableCell";
-import TableLayout from "../shared/TableLayout";
+import { Rooms, RoomInfo, RoomType, RoomTypes } from "../../../../shared/types";
+import CopyIdRow from "./shared/CopyIdRow";
+import EditCell from "./shared/EditCell";
+import SelectTypeCell from "./shared/SelectTypeCell";
+import TableCell from "./shared/TableCell";
+import TableLayout from "./shared/TableLayout";
 
 interface Props {
   floorCode: string;
@@ -21,7 +16,6 @@ interface Props {
 
 const RoomInfoDisplay = ({ roomId, rooms }: Props) => {
   const room = rooms[roomId];
-
   const handleSaveHelper = async (roomInfo: RoomInfo) => {
     toast.error("Unimplemented!");
     console.log(roomInfo);

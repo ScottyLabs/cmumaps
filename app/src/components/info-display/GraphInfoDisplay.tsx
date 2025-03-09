@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 
-import { EdgeInfo, Graph } from "../../../../../shared/types";
-import CrossFloorEdgeSection from "./CrossFloorEdgeSection";
-import CrossFloorNeighborTable from "./CrossFloorNeighborTable";
-import GraphInfoButtons from "./GraphInfoButtons";
+import { EdgeInfo, Graph } from "./../../../../shared/types";
+import CrossFloorEdgeSection from "./graph-info/CrossFloorEdgeSection";
+import CrossFloorNeighborTable from "./graph-info/CrossFloorNeighborTable";
+import GraphInfoButtons from "./graph-info/GraphInfoButtons";
 
 interface Props {
   floorCode: string;

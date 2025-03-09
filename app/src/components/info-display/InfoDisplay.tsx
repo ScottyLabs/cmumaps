@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Graph, Pois, Rooms } from "../../../../shared/types";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
@@ -8,10 +6,9 @@ import {
   setInfoDisplayActiveTabIndex,
 } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import ElementlessDisplay from "./element-info/ElementlessDisplay";
-import PoiInfoDisplay from "./element-info/PoiInfoDisplay";
-import RoomInfoDisplay from "./element-info/RoomInfoDisplay";
-import GraphInfoDisplay from "./node-info/GraphInfoDisplay";
+import GraphInfoDisplay from "./GraphInfoDisplay";
+import PoiInfoDisplay from "./PoiInfoDisplay";
+import RoomInfoDisplay from "./RoomInfoDisplay";
 
 interface Props {
   floorCode: string;
@@ -32,78 +29,40 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
     return;
   }
 
-  const renderElementlessDisplay = (nodeId: string) => () => {
-    const Component = () => (
-      <ElementlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
-    );
-    Component.displayName = "ElementlessDisplay";
-    return Component;
+  const renderRoomInfoDisplay = () => {
+    if (roomId) {
+      return (
+        <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
+      );
+    }
   };
 
-  const renderElementInfoDisplay =
-    (roomId: string, type: ElementType) => () => {
-      if (type === "room") {
-        const Component = () => (
-          <RoomInfoDisplay
-            floorCode={floorCode}
-            roomId={roomId}
-            rooms={rooms}
-          />
-        );
-        Component.displayName = "RoomInfoDisplay";
-        return Component;
-      } else if (type === "poi") {
-        const Component = () => (
-          <PoiInfoDisplay floorCode={floorCode} poiId={roomId} pois={pois} />
-        );
-        Component.displayName = "PoiInfoDisplay";
-        return Component;
-      }
-      // this condition should never occur since
-      // we check that elementId is not null before calling this function,
-      // which implies that type is either "room" or "poi"
-      else {
-        const Component = () => <></>;
-        return Component;
-      }
-    };
+  const renderPoiInfoDisplay = () => {
+    const poiId = Object.values(pois).find(
+      (poi) => poi.nodeId === nodeId,
+    )?.nodeId;
 
-  const renderGraphInfoDisplay = (nodeId: string) => () => {
+    if (poiId) {
+      <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />;
+    } else {
+      return <></>;
+    }
+  };
+
+  const renderGraphInfoDisplay = (nodeId: string) => {
     const Component = () => (
       <GraphInfoDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
     );
-    Component.displayName = "GraphInfoDisplay";
+    Component.displayName = "PoiInfoDisplay";
     return Component;
   };
 
-  const { tabNames, tabContents } = (() => {
-    if (nodeId) {
-      const tabNames = ["Element Info", "Graph Info"];
-      if (graph[nodeId].elementId) {
-        const tabContents = [
-          renderElementInfoDisplay(graph[nodeId].elementId, graph[nodeId].type),
-          renderGraphInfoDisplay(nodeId),
-        ];
-        return { tabNames, tabContents };
-      } else {
-        const tabContents = [
-          renderElementlessDisplay(nodeId),
-          renderGraphInfoDisplay(nodeId),
-        ];
-        return { tabNames, tabContents };
-      }
-    } else if (roomId) {
-      return {
-        tabNames: ["Element Info"],
-        tabContents: [renderElementInfoDisplay(roomId, "room")],
-      };
-    }
-    // this condition should never occur since
-    // we check for either nodeId and roomId is not null earlier in this file
-    else {
-      return { tabNames: [], tabContents: [] };
-    }
-  })();
+  const tabNames = ["Room Info", "POI Info"];
+  const tabContents = [renderRoomInfoDisplay, renderPoiInfoDisplay];
+  if (nodeId) {
+    tabNames.push("Graph Info");
+    tabContents.push(renderGraphInfoDisplay(nodeId));
+  }
 
   const renderTabHeader = (tabName: string, index: number) => {
     const handleClick = () => {
@@ -132,7 +91,7 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
       <ul className="flex">
         {tabNames.map((tabName, index) => renderTabHeader(tabName, index))}
       </ul>
-      <div>{React.createElement(tabContents[activeTabIndex]())}</div>
+      <div>{tabContents[activeTabIndex]()}</div>
     </div>
   );
 };
