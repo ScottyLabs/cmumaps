@@ -4,32 +4,42 @@ import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-import { NodeInfo, PdfCoordinate } from "../../../shared/types";
+import { NodeInfo, PdfCoordinate, Polygon, Rooms } from "../../../shared/types";
 import { useCreateEdgeMutation } from "../store/api/edgeApiSlice";
 import { useCreateNodeMutation } from "../store/api/nodeApiSlice";
-import { ADD_NODE, GRAPH_SELECT, setMode } from "../store/features/modeSlice";
+import {
+  ADD_NODE,
+  GRAPH_SELECT,
+  POLYGON_ADD_VERTEX,
+  setMode,
+} from "../store/features/modeSlice";
 import {
   setShowRoomSpecific,
   setEditRoomLabel,
 } from "../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCursorPos } from "../utils/canvasUtils";
+import { distPointToLine } from "../utils/geometryUtils";
+import useSavePolygonEdit from "./useSavePolygonEdit";
 import useValidatedFloorParams from "./useValidatedFloorParams";
 
 const useStageClickHandler = (
   floorCode: string,
+  rooms: Rooms,
   scale: number,
   offset: PdfCoordinate,
 ) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { nodeId: selectedNodeId } = useValidatedFloorParams(floorCode);
-
   const [createNode] = useCreateNodeMutation();
   const [createEdge] = useCreateEdgeMutation();
 
+  const ringIndex = useAppSelector((state) => state.polygon.ringIndex);
   const mode = useAppSelector((state) => state.mode.mode);
+
+  const { nodeId: selectedNodeId, roomId } = useValidatedFloorParams(floorCode);
+  const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
 
   //   const isValidClick = (clickedOnStage: boolean) => {
   //     // errors for each mode relative to stage clicking
@@ -80,6 +90,44 @@ const useStageClickHandler = (
     });
   };
 
+  const handleAddVertex = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    // this condition should never occur since
+    // we check roomId is not null before setting to POLYGON_ADD_VERTEX mode
+    if (!roomId) {
+      return;
+    }
+
+    getCursorPos(e, offset, scale, async (pos) => {
+      const newVertex = [Number(pos.x.toFixed(2)), Number(pos.y.toFixed(2))];
+
+      const polygon = rooms[roomId].polygon;
+      const coords = polygon.coordinates[ringIndex];
+      const newPolygon: Polygon = JSON.parse(JSON.stringify(polygon));
+      // empty polygon case
+      if (coords.length == 0) {
+        // first and last coordinate need to be the same
+        newPolygon.coordinates[ringIndex].push(newVertex);
+        newPolygon.coordinates[ringIndex].push(newVertex);
+      }
+      // insert to the closest vertices
+      else {
+        let minDist = distPointToLine(newVertex, coords[0], coords[1]);
+        let indexToInsert = 0;
+        for (let i = 0; i < coords.length - 1; i++) {
+          const curDist = distPointToLine(newVertex, coords[i], coords[i + 1]);
+          if (curDist < minDist) {
+            indexToInsert = i;
+            minDist = curDist;
+          }
+        }
+        const index = indexToInsert + 1;
+        newPolygon.coordinates[ringIndex].splice(index, 0, newVertex);
+      }
+
+      savePolygonEdit(newPolygon);
+    });
+  };
+
   const handleDeselect = () => {
     navigate("?");
     dispatch(setShowRoomSpecific(false));
@@ -96,6 +144,14 @@ const useStageClickHandler = (
         toast.error("Click on empty space!");
       } else {
         handleCreateNode(e);
+      }
+    }
+
+    if (mode == POLYGON_ADD_VERTEX) {
+      if (!clickedOnStage) {
+        toast.error("Click on empty space!");
+      } else {
+        handleAddVertex(e);
       }
     }
 

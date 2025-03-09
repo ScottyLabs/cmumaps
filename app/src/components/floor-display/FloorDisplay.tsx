@@ -48,7 +48,12 @@ const FloorDisplay = ({
   // custom hooks
   useKeyboardShortcuts(floorCode);
   const { roomId } = useValidatedFloorParams(floorCode);
-  const handleStageClick = useStageClickHandler(floorCode, scale, offset);
+  const handleStageClick = useStageClickHandler(
+    floorCode,
+    rooms,
+    scale,
+    offset,
+  );
   const handleMouseMove = useCursorTracker(offset, scale);
 
   // Disable panning when dragging node, vertex, or label
