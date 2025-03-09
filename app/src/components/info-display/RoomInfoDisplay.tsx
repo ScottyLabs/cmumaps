@@ -8,10 +8,10 @@ import {
   RoomTypes,
 } from "../../../../../shared/types";
 import CopyIdRow from "../shared/CopyIdRow";
+import EditCell from "../shared/EditCell";
+import SelectTypeCell from "../shared/SelectTypeCell";
 import TableCell from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
-import EditCell from "./EditCell";
-import SelectTypeCell from "./SelectTypeCell";
 
 interface Props {
   floorCode: string;

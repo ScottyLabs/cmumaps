@@ -9,9 +9,9 @@ import {
 } from "../../../store/api/poiApiSlice";
 import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
+import SelectTypeCell from "../shared/SelectTypeCell";
 import { RED_BUTTON_STYLE } from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
-import SelectTypeCell from "./SelectTypeCell";
 
 interface Props {
   floorCode: string;
