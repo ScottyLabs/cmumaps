@@ -115,7 +115,7 @@ export const undo = createAppAsyncThunk(
       console.error("Error undoing:", error);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      console.error("Error detail:", error.data.details);
+      console.error("Error details:", error.data.details);
       return Promise.reject();
     }
   },
@@ -152,7 +152,7 @@ export const redo = createAppAsyncThunk(
       console.error("Error redoing:", error);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      console.error("Error detail:", error.data.details);
+      console.error("Error details:", error.data.details);
       return Promise.reject();
     }
   },
