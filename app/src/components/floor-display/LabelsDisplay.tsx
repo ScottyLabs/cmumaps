@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { TfiLocationPin } from "react-icons/tfi";
 import { Group, Path, Rect, Text } from "react-konva";
+import { useNavigate } from "react-router";
 
 import { Graph, Rooms } from "../../../../shared/types";
 import { useAppSelector } from "../../store/hooks";
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const LabelsDisplay = ({ rooms }: Props) => {
+  const navigate = useNavigate();
+
   // const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
   const showLabels = useAppSelector((state) => state.visibility.showLabels);
 
@@ -60,22 +63,6 @@ const LabelsDisplay = ({ rooms }: Props) => {
     //   upsertRoom({ floorCode, roomId, newRoom, oldRoom });
     // };
 
-    // const handleClick = () => {
-    //   const nodeInfo = Object.entries(graph).filter(
-    //     (nodeInfo) => nodeInfo[1].roomId == roomId,
-    //   )[0];
-
-    //   if (nodeInfo) {
-    //     router.push(`?nodeId=${nodeInfo[0]}`);
-    //   } else {
-    //     addNewNode({
-    //       pos: room.labelPosition,
-    //       neighbors: {},
-    //       roomId,
-    //     });
-    //   }
-    // };
-
     return (
       <Group
         x={room.labelPosition.x - width / 2}
@@ -84,6 +71,7 @@ const LabelsDisplay = ({ rooms }: Props) => {
         // draggable={draggable}
         onMouseEnter={(e) => setCursor(e, "pointer")}
         onMouseLeave={(e) => setCursor(e, "default")}
+        onClick={() => navigate(`?roomId=${roomId}`)}
       >
         <Path fill={selected ? "orange" : "indigo"} data={path} />
         <Rect width={Number(width)} height={Number(height)} />
