@@ -1,5 +1,4 @@
 import { Graph, Rooms } from "@cmumaps/shared";
-import QuestionCircle from "@cmumaps/shared/QuestionCircle";
 
 import { BiHide } from "react-icons/bi";
 import { useNavigate } from "react-router";
@@ -15,6 +14,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { calcMst } from "../../utils/graphUtils";
 import SidePanelButton from "./SidePanelButton";
 import NodeSizeSlider from "./SizeSlider";
+import QuestionCircle from "../shared/QuestionCircle";
 
 interface Props {
   floorCode: string;

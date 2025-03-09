@@ -1,8 +1,8 @@
 import { PoiInfo } from "@cmumaps/shared";
-import InfoDisplayButton from "@cmumaps/shared/InfoDisplayButton";
 import { v4 as uuidv4 } from "uuid";
 
 import { useCreatePoiMutation } from "../../../store/api/poiApiSlice";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 
 interface Props {
   floorCode: string;

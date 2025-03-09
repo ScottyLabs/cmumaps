@@ -7,7 +7,7 @@ import {
   toggleShowPolygons,
 } from "../../store/features/visibilitySlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import ToggleSwitch from "@cmumaps/shared/ToggleSwitch";
+import ToggleSwitch from "../shared/ToggleSwitch";
 
 const VisibilityTab = () => {
   const dispatch = useAppDispatch();

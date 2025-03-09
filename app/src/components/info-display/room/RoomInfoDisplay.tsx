@@ -1,10 +1,5 @@
 import { Rooms, RoomInfo, RoomType, RoomTypes } from "@cmumaps/shared";
-import CopyIdRow from "@cmumaps/shared/CopyIdRow";
-import EditCell from "@cmumaps/shared/EditCell";
-import InfoDisplayButton from "@cmumaps/shared/InfoDisplayButton";
-import SelectTypeCell from "@cmumaps/shared/SelectTypeCell";
-import TableCell, { RED_BUTTON_STYLE } from "@cmumaps/shared/TableCell";
-import TableLayout from "@cmumaps/shared/TableLayout";
+
 import { v4 as uuidv4 } from "uuid";
 
 import { useDispatch } from "react-redux";
@@ -24,6 +19,12 @@ import {
   toggleEditRoomLabel,
 } from "../../../store/features/uiSlice";
 import { useAppSelector } from "../../../store/hooks";
+import CopyIdRow from "../shared/CopyIdRow";
+import EditCell from "../shared/EditCell";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
+import SelectTypeCell from "../shared/SelectTypeCell";
+import TableCell, { RED_BUTTON_STYLE } from "../shared/TableCell";
+import TableLayout from "../shared/TableLayout";
 
 interface Props {
   floorCode: string;
