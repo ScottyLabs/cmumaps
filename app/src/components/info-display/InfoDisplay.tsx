@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Graph, Pois, Rooms } from "../../../../shared/types";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
@@ -8,7 +10,9 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import GraphInfoDisplay from "./graph/GraphInfoDisplay";
 import PoiInfoDisplay from "./poi/PoiInfoDisplay";
+import PoilessDisplay from "./poi/PoiLessDisplay";
 import RoomInfoDisplay from "./room/RoomInfoDisplay";
+import RoomlessDisplay from "./room/RoomlessDisplay";
 
 interface Props {
   floorCode: string;
@@ -34,18 +38,35 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
       return (
         <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
       );
+    } else if (nodeId) {
+      return (
+        <RoomlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+      );
+    }
+    // this condition should never occur since
+    // we check that either nodeId and roomId is not null
+    else {
+      return <></>;
     }
   };
 
-  const renderPoiInfoDisplay = () => {
+  const renderPoiInfoDisplay = (nodeId: string) => {
     const poiId = Object.values(pois).find(
       (poi) => poi.nodeId === nodeId,
     )?.nodeId;
 
     if (poiId) {
-      <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />;
+      const Component = () => (
+        <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />
+      );
+      Component.displayName = "PoiInfoDisplay";
+      return Component;
     } else {
-      return <></>;
+      const Component = () => (
+        <PoilessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+      );
+      Component.displayName = "PoiInfoDisplay";
+      return Component;
     }
   };
 
@@ -57,9 +78,13 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
     return Component;
   };
 
-  const tabNames = ["Room Info", "POI Info"];
-  const tabContents = [renderRoomInfoDisplay, renderPoiInfoDisplay];
+  const tabNames = ["Room Info"];
+  const tabContents = [renderRoomInfoDisplay];
+  // only show poi and graph info if nodeId is available
   if (nodeId) {
+    tabNames.push("POI Info");
+    tabContents.push(renderPoiInfoDisplay(nodeId));
+
     tabNames.push("Graph Info");
     tabContents.push(renderGraphInfoDisplay(nodeId));
   }
@@ -88,10 +113,10 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
 
   return (
     <div className="flex w-fit flex-col rounded-lg bg-gray-600 px-2 pb-2 text-white shadow-lg">
-      <ul className="flex">
+      <ul className="flex text-sm">
         {tabNames.map((tabName, index) => renderTabHeader(tabName, index))}
       </ul>
-      <div>{tabContents[activeTabIndex]()}</div>
+      <div>{React.createElement(tabContents[activeTabIndex])}</div>
     </div>
   );
 };
