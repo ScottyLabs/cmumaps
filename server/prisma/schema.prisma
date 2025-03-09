@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Building {
-  buildingCode   String  @id @default(uuid())
+  buildingCode   String  @id
   name           String
   osmId          String?
   labelLatitude  Float
@@ -39,9 +39,8 @@ model Poi {
   poiId  String @id
   type   String
   nodeId String @unique
-  Node   Node   @relation(fields: [nodeId], references: [nodeId])
+  node   Node?  @relation(fields: [nodeId], references: [nodeId])
 }
-
 model Room {
   roomId         String  @id
   name           String
@@ -51,8 +50,8 @@ model Room {
   polygon        Json
   buildingCode   String?
   floorLevel     String?
+  nodes          Node[]
   aliases        Alias[]
-  Node           Node[]
 
   @@index([buildingCode, floorLevel])
 }
@@ -67,8 +66,8 @@ model Node {
   outEdges     Edge[]  @relation("OutEdges")
   inEdges      Edge[]  @relation("InEdges")
   floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
-  Room         Room?   @relation(fields: [roomId], references: [roomId])
-  Poi          Poi?
+  room         Room?   @relation(fields: [roomId], references: [roomId])
+  poi          Poi?
 
   @@index([buildingCode, floorLevel])
 }
