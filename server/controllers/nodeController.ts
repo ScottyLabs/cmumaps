@@ -13,7 +13,7 @@ export const nodeController = {
     try {
       // create node in database
       const placement = await floorService.getFloorPlacement(floorCode);
-      await nodeService.createNode(floorCode, nodeId, nodeInfo, placement);
+      await nodeService.upsertNode(floorCode, nodeId, nodeInfo, placement);
 
       // broadcast to all users on the floor
       const payload = { nodeId, nodeInfo };
@@ -47,7 +47,7 @@ export const nodeController = {
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await nodeService.updateNode(floorCode, nodeId, nodeInfo, placement);
+      await nodeService.upsertNode(floorCode, nodeId, nodeInfo, placement);
       const payload = { nodeId, nodeInfo };
       webSocketService.broadcastToUserFloor(socketId, "update-node", payload);
       res.json(null);

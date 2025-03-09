@@ -7,56 +7,36 @@ import {
 } from "../../shared/utils/floorCodeUtils.ts";
 
 export const nodeService = {
-  createNode: async (
+  upsertNode: async (
     floorCode: string,
     nodeId: string,
     nodeInfo: NodeInfo,
     placement: Placement
   ) => {
-    const { pos, elementId } = nodeInfo;
+    const { pos, roomId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
-    const data = { id: nodeId, ...geoCoords, elementId };
 
-    // Belongs to an element
-    if (elementId) {
-      await prisma.node.create({ data });
-    }
-    // Directly associated with the floor (not an element)
-    else {
-      const buildingCode = extractBuildingCode(floorCode);
-      const floorLevel = extractFloorLevel(floorCode);
-      await prisma.node.create({
-        data: { ...data, buildingCode, floorLevel },
-      });
-    }
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    const data = {
+      ...geoCoords,
+      buildingCode,
+      floorLevel,
+      ...(roomId ? { roomId } : {}),
+    };
+
+    await prisma.node.upsert({
+      where: { nodeId },
+      create: {
+        nodeId,
+        ...data,
+      },
+      update: data,
+    });
   },
 
   deleteNode: async (nodeId: string) => {
-    await prisma.node.delete({ where: { id: nodeId } });
-  },
-
-  updateNode: async (
-    floorCode: string,
-    nodeId: string,
-    nodeInfo: NodeInfo,
-    placement: Placement
-  ) => {
-    const { pos, elementId } = nodeInfo;
-    const geoCoords = pdfCoordsToGeoCoords(placement)(pos);
-    const data = { ...geoCoords, elementId };
-
-    // Belongs to an element
-    if (elementId) {
-      await prisma.node.update({ where: { id: nodeId }, data });
-    }
-    // Directly associated with the floor (not an element)
-    else {
-      const buildingCode = extractBuildingCode(floorCode);
-      const floorLevel = extractFloorLevel(floorCode);
-      await prisma.node.update({
-        where: { id: nodeId },
-        data: { ...data, buildingCode, floorLevel },
-      });
-    }
+    await prisma.node.delete({ where: { nodeId } });
   },
 };
