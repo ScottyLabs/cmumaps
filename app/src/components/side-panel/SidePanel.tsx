@@ -2,6 +2,7 @@ import { Graph, Rooms } from "../../../../shared/types";
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { setSidePanelActiveTabIndex } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import PolygonTab from "./PolygonTab";
 import VisibilityTab from "./VisibilityTab";
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
   rooms: Rooms;
 }
 
-const SidePanel = ({ floorCode: _ }: Props) => {
+const SidePanel = ({ floorCode, rooms }: Props) => {
   const dispatch = useAppDispatch();
 
   const editPolygon = useAppSelector(selectEditPolygon);
@@ -26,7 +27,9 @@ const SidePanel = ({ floorCode: _ }: Props) => {
 
   const renderGraphTab = () => <></>;
 
-  const renderPolygonTab = () => <></>;
+  const renderPolygonTab = () => (
+    <PolygonTab floorCode={floorCode} rooms={rooms} />
+  );
 
   const tabContents = editPolygon
     ? [renderVisibilityTab, renderPolygonTab]
