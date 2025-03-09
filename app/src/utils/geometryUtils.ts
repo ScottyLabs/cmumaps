@@ -1,3 +1,5 @@
+import { PdfCoordinate } from "../../../shared/types";
+
 export const distPointToLine = (p1: number[], p2: number[], p3: number[]) => {
   const x = p1[0];
   const y = p1[1];
@@ -36,4 +38,8 @@ export const distPointToLine = (p1: number[], p2: number[], p3: number[]) => {
   const dx = x - xx;
   const dy = y - yy;
   return Math.sqrt(dx * dx + dy * dy);
+};
+
+export const dist = (p1: PdfCoordinate, p2: PdfCoordinate) => {
+  return Number(Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2).toFixed(2));
 };

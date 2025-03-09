@@ -140,11 +140,10 @@ const useKeyboardShortcuts = (floorCode: string) => {
           case "Backspace":
           case "Delete": {
             if (selectedNodeId) {
-              const addToHistory = uuidv4();
               navigate("?");
               deleteNode({
                 floorCode,
-                batchId: addToHistory,
+                batchId: uuidv4(),
                 nodeId: selectedNodeId,
               });
             } else {
