@@ -5,6 +5,7 @@ import {
   DeleteRoomPayload,
   UpdateRoomPayload,
 } from "../../../../shared/websocket-types/roomTypes";
+import { buildUpdateNodesInRoomEditPairs } from "../features/history/historyGraphUtils";
 import {
   buildCreateRoomEditPair,
   buildDeleteRoomEditPair,
@@ -36,8 +37,8 @@ export const createRoom =
 
 export const deleteRoom =
   (floorCode: string, { roomId }: DeleteRoomPayload) =>
-  (dispatch: AppDispatch) =>
-    dispatch(
+  (dispatch: AppDispatch) => {
+    const { undo: roomUndo } = dispatch(
       floorDataApiSlice.util.updateQueryData(
         "getFloorRooms",
         floorCode,
@@ -46,6 +47,29 @@ export const deleteRoom =
         },
       ),
     );
+
+    // also need to delete room id of every node in this room
+    const { undo: nodesUndo } = dispatch(
+      floorDataApiSlice.util.updateQueryData(
+        "getFloorGraph",
+        floorCode,
+        (draft) => {
+          for (const nodeId in draft) {
+            if (draft[nodeId].roomId === roomId) {
+              draft[nodeId].roomId = "";
+            }
+          }
+        },
+      ),
+    );
+
+    return {
+      undo: () => {
+        roomUndo();
+        nodesUndo();
+      },
+    };
+  };
 
 export const updateRoom =
   (floorCode: string, { roomId, roomInfo }: UpdateRoomPayload) =>
@@ -105,6 +129,20 @@ export const roomApiSlice = apiSlice.injectEndpoints({
           // add to history
           if (batchId) {
             const getStore = getState as () => RootState;
+
+            // delete all nodes in this room
+            const nodesEditPairs = await buildUpdateNodesInRoomEditPairs(
+              floorCode,
+              roomId,
+              batchId,
+              getStore,
+              dispatch,
+            );
+            nodesEditPairs.forEach((editPair) =>
+              dispatch(addEditToHistory(editPair)),
+            );
+
+            // update room
             const editPair = await buildDeleteRoomEditPair(
               batchId,
               arg,

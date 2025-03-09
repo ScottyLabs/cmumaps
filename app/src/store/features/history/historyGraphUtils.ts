@@ -91,6 +91,38 @@ export const buildUpdateNodeEditPair = async (
   return { batchId, edit, reverseEdit };
 };
 
+export const buildUpdateNodesInRoomEditPairs = async (
+  floorCode: string,
+  roomId: string,
+  batchId: string,
+  getStore: () => RootState,
+  dispatch: AppDispatch,
+): Promise<EditPair[]> => {
+  const graph = await getGraph(floorCode, getStore, dispatch);
+  const editPairs: EditPair[] = [];
+  for (const nodeId in graph) {
+    if (graph[nodeId].roomId === roomId) {
+      const nodeInfo = graph[nodeId];
+      const edit: Edit = {
+        endpoint: "updateNode",
+        arg: {
+          floorCode,
+          nodeId,
+          nodeInfo: { ...nodeInfo, roomId: "" },
+          batchId: null,
+        },
+      };
+      const reverseEdit: Edit = {
+        endpoint: "updateNode",
+        arg: { floorCode, nodeId, nodeInfo: graph[nodeId], batchId: null },
+      };
+      editPairs.push({ batchId, edit, reverseEdit });
+    }
+  }
+
+  return editPairs;
+};
+
 export const buildCreateEdgeEditPair = (
   batchId: string,
   arg: CreateEdgeArg,
