@@ -35,12 +35,6 @@ model Floor {
   @@id([buildingCode, floorLevel])
 }
 
-model Poi {
-  poiId  String @id
-  type   String
-  nodeId String @unique
-  node   Node?  @relation(fields: [nodeId], references: [nodeId])
-}
 model Room {
   roomId         String  @id
   name           String
@@ -54,6 +48,15 @@ model Room {
   aliases        Alias[]
 
   @@index([buildingCode, floorLevel])
+}
+
+model Alias {
+  alias          String
+  isDisplayAlias Boolean
+  roomId         String
+  room           Room    @relation(fields: [roomId], references: [roomId])
+
+  @@id([roomId, alias])
 }
 
 model Node {
@@ -81,11 +84,9 @@ model Edge {
   @@id([inNodeId, outNodeId])
 }
 
-model Alias {
-  alias          String
-  isDisplayAlias Boolean
-  roomId         String
-  room           Room    @relation(fields: [roomId], references: [roomId])
-
-  @@id([roomId, alias])
+model Poi {
+  poiId  String @id
+  type   String
+  nodeId String @unique
+  node   Node?  @relation(fields: [nodeId], references: [nodeId])
 }
