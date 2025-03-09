@@ -1,8 +1,7 @@
-import { useState } from "react";
-
 import { Graph, Rooms } from "../../../../shared/types";
 import { selectEditPolygon } from "../../store/features/modeSlice";
-import { useAppSelector } from "../../store/hooks";
+import { setSidePanelActiveTabIndex } from "../../store/features/uiSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import VisibilityTab from "./VisibilityTab";
 
 interface Props {
@@ -12,9 +11,12 @@ interface Props {
 }
 
 const SidePanel = ({ floorCode: _ }: Props) => {
-  const editPolygon = useAppSelector(selectEditPolygon);
+  const dispatch = useAppDispatch();
 
-  const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
+  const editPolygon = useAppSelector(selectEditPolygon);
+  const activeTabIndex = useAppSelector(
+    (state) => state.ui.sidePanelActiveTabIndex,
+  );
 
   const tabNames = editPolygon
     ? ["Visibility", "Polygon"]
@@ -42,7 +44,7 @@ const SidePanel = ({ floorCode: _ }: Props) => {
                 ? "border-indigo-500 text-indigo-600"
                 : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
             }`}
-            onClick={() => setActiveTabIndex(index)}
+            onClick={() => dispatch(setSidePanelActiveTabIndex(index))}
           >
             {tabName}
           </button>

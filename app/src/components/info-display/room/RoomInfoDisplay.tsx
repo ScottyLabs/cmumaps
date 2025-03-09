@@ -17,7 +17,11 @@ import {
   selectEditPolygon,
   toggleEditPolygon,
 } from "../../../store/features/modeSlice";
-import { toggleEditRoomLabel } from "../../../store/features/uiSlice";
+import {
+  setSidePanelActiveTabIndex,
+  SidePanelTabIndex,
+  toggleEditRoomLabel,
+} from "../../../store/features/uiSlice";
 import { useAppSelector } from "../../../store/hooks";
 import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
@@ -97,7 +101,10 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
       <td className="text-center">
         <button
           className="my-2 w-28 rounded bg-slate-500 px-4 py-1 text-sm text-white hover:bg-slate-700"
-          onClick={() => dispatch(toggleEditPolygon())}
+          onClick={() => {
+            dispatch(setSidePanelActiveTabIndex(SidePanelTabIndex.POLYGON));
+            dispatch(toggleEditPolygon());
+          }}
         >
           {editPolygon ? "Finish Editing" : "Edit Room Polygon"}
         </button>

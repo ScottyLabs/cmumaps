@@ -6,8 +6,15 @@ export enum InfoDisplayTabIndex {
   NODE = 2,
 }
 
+export const SidePanelTabIndex = {
+  VISIBILITY: 0,
+  GRAPH: 1,
+  POLYGON: 1,
+};
+
 interface UIState {
   infoDisplayActiveTabIndex: InfoDisplayTabIndex;
+  sidePanelActiveTabIndex: (typeof SidePanelTabIndex)[keyof typeof SidePanelTabIndex];
   showRoomSpecific: boolean;
   editRoomLabel: boolean;
   nodeSize: number;
@@ -15,6 +22,7 @@ interface UIState {
 
 const initialState: UIState = {
   infoDisplayActiveTabIndex: InfoDisplayTabIndex.ROOM,
+  sidePanelActiveTabIndex: SidePanelTabIndex.VISIBILITY,
   showRoomSpecific: false,
   editRoomLabel: false,
   nodeSize: 2,
@@ -26,6 +34,9 @@ const UISlice = createSlice({
   reducers: {
     setInfoDisplayActiveTabIndex(state, action: PayloadAction<number>) {
       state.infoDisplayActiveTabIndex = action.payload;
+    },
+    setSidePanelActiveTabIndex(state, action: PayloadAction<number>) {
+      state.sidePanelActiveTabIndex = action.payload;
     },
 
     setShowRoomSpecific(state, action: PayloadAction<boolean>) {
@@ -50,6 +61,7 @@ const UISlice = createSlice({
 
 export const {
   setInfoDisplayActiveTabIndex,
+  setSidePanelActiveTabIndex,
   setShowRoomSpecific,
   toggleShowRoomSpecific,
   setEditRoomLabel,
