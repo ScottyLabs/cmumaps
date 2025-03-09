@@ -121,7 +121,7 @@ export const roomApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { floorCode, roomId, roomInfo, batchId } = arg;
+          const { floorCode, roomId, roomNodes, roomInfo, batchId } = arg;
           // add to history
           if (batchId) {
             const editPair = buildCreateRoomEditPair(batchId, arg);
@@ -129,7 +129,7 @@ export const roomApiSlice = apiSlice.injectEndpoints({
           }
           // optimistic update
           const { undo } = dispatch(
-            createRoom(floorCode, { roomId, roomInfo }),
+            createRoom(floorCode, { roomId, roomNodes, roomInfo }),
           );
           handleQueryError(queryFulfilled, undo);
         } catch (e) {

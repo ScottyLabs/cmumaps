@@ -14,7 +14,7 @@ export const roomService = {
   createRoom: async (
     floorCode: string,
     roomId: string,
-    roomNodes: string[] | undefined,
+    roomNodes: string[],
     roomInfo: RoomInfo,
     placement: Placement
   ) => {
@@ -24,30 +24,29 @@ export const roomService = {
     const { labelPosition, polygon } = roomInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(labelPosition);
     const geoPolygon = pdfPolygonToGeoPolygon(polygon, placement);
-    await prisma.room.create({
-      data: {
-        roomId,
-        type: roomInfo.type,
-        buildingCode,
-        floorLevel,
-        name: roomInfo.name,
-        labelLatitude: geoCoords.latitude,
-        labelLongitude: geoCoords.longitude,
-        polygon: geoPolygon as unknown as InputJsonValue,
-      },
-    });
 
     // also need to add room id to every node in this room
-    if (roomNodes) {
-      await prisma.$transaction(async (tx) => {
-        for (const nodeId of roomNodes) {
-          await tx.node.update({
-            where: { nodeId },
-            data: { roomId },
-          });
-        }
+    await prisma.$transaction(async (tx) => {
+      await prisma.room.create({
+        data: {
+          roomId,
+          type: roomInfo.type,
+          buildingCode,
+          floorLevel,
+          name: roomInfo.name,
+          labelLatitude: geoCoords.latitude,
+          labelLongitude: geoCoords.longitude,
+          polygon: geoPolygon as unknown as InputJsonValue,
+        },
       });
-    }
+
+      for (const nodeId of roomNodes) {
+        await tx.node.update({
+          where: { nodeId },
+          data: { roomId },
+        });
+      }
+    });
   },
 
   deleteRoom: async (roomId: string) => {

@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { Graph, RoomInfo } from "../../../../../shared/types";
-import { useUpdateNodeMutation } from "../../../store/api/nodeApiSlice";
 import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
 import Button from "../shared/Button";
 
@@ -13,7 +12,6 @@ interface Props {
 
 const RoomlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
   const [createRoom] = useCreateRoomMutation();
-  const [updateNode] = useUpdateNodeMutation();
 
   const handleCreateRoom = async () => {
     const roomId = uuidv4();
@@ -30,11 +28,8 @@ const RoomlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
     };
 
     const batchId = uuidv4();
-    await createRoom({ floorCode, roomId, roomInfo, batchId });
-
-    const nodeInfo = { ...graph[nodeId] };
-    nodeInfo.roomId = roomId;
-    await updateNode({ floorCode, nodeId, nodeInfo, batchId });
+    const roomNodes = [nodeId];
+    await createRoom({ floorCode, roomId, roomNodes, roomInfo, batchId });
   };
 
   return <Button text="Create Room" handleClick={handleCreateRoom} />;
