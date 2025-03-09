@@ -29,7 +29,7 @@ const EditCell = ({ property, value, handleSave }: Props) => {
         <div className="my-1 flex justify-between">
           <input
             id={property}
-            className="flex h-7 w-full rounded border border-gray-300 px-1 py-0.5"
+            className="flex h-7 w-full rounded border border-gray-300 bg-white px-1 py-0.5"
             type="text"
             value={editedValue}
             onChange={(e) => setEditedValue(e.target.value)}

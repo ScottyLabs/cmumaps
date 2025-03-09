@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { SingleValue } from "react-select";
-import { toast } from "react-toastify";
 
 import {
   Rooms,
@@ -9,7 +8,10 @@ import {
   RoomType,
   RoomTypes,
 } from "../../../../../shared/types";
-import { useDeleteRoomMutation } from "../../../store/api/roomApiSlice";
+import {
+  useDeleteRoomMutation,
+  useUpdateRoomMutation,
+} from "../../../store/api/roomApiSlice";
 import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
 import EditCell from "../shared/EditCell";
@@ -25,11 +27,12 @@ interface Props {
 
 const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
   const room = rooms[roomId];
+  const [updateRoom] = useUpdateRoomMutation();
   const [deleteRoom] = useDeleteRoomMutation();
 
-  const handleSaveHelper = async (roomInfo: RoomInfo) => {
-    toast.error("Unimplemented!");
-    console.log(roomInfo);
+  const handleSaveHelper = (roomInfo: RoomInfo) => {
+    const batchId = uuidv4();
+    updateRoom({ floorCode, roomId, roomInfo, batchId });
   };
 
   const renderEditNameRow = () => {
