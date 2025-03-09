@@ -3,7 +3,10 @@ import { broadcastWebSocket } from "../../middleware/webSocketActions";
 import { getSocketId } from "../../middleware/webSocketMiddleware";
 import { createAppAsyncThunk } from "../../withTypes";
 import { setCursorInfos } from "./liveCursorSlice";
-import { CursorInfoOnDragNode } from "./liveCursorTypes";
+import {
+  CursorInfoOnDragNode,
+  CursorInfoOnDragVertex,
+} from "./liveCursorTypes";
 
 export const syncCursors = createAppAsyncThunk(
   "liveCursor/syncCursors",
@@ -38,6 +41,29 @@ export const moveNodeWithCursor = createAppAsyncThunk(
         floorCode,
         (draft) => {
           draft[cursorInfo.nodeId].pos = cursorInfo.nodePos;
+        },
+      ),
+    );
+  },
+);
+
+interface MoveVertexWithCursorArgType {
+  cursorInfo: CursorInfoOnDragVertex;
+  floorCode: string;
+}
+
+// only changes the cache; used for syncing with cursor position
+export const moveVertexWithCursor = createAppAsyncThunk(
+  "liveCursor/moveVertexWithCursor",
+  ({ cursorInfo, floorCode }: MoveVertexWithCursorArgType, { dispatch }) => {
+    dispatch(
+      floorDataApiSlice.util.updateQueryData(
+        "getFloorRooms",
+        floorCode,
+        (draft) => {
+          const { roomId, ringIndex, vertexIndex, vertexPos } =
+            cursorInfo.dragVertexInfo;
+          draft[roomId].polygon.coordinates[ringIndex][vertexIndex] = vertexPos;
         },
       ),
     );

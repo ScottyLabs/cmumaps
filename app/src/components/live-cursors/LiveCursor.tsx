@@ -8,7 +8,10 @@ import {
   selectCursorInfos,
   setCursorInfos,
 } from "../../store/features/liveCursor/liveCursorSlice";
-import { moveNodeWithCursor } from "../../store/features/liveCursor/liveCursorThunks";
+import {
+  moveNodeWithCursor,
+  moveVertexWithCursor,
+} from "../../store/features/liveCursor/liveCursorThunks";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CursorNameRect from "./LiveCursorRect";
 
@@ -37,6 +40,11 @@ const LiveCursor = ({
         if ("nodeId" in cursorInfos[0]) {
           const payload = { floorCode, cursorInfo: cursorInfos[0] };
           dispatch(moveNodeWithCursor(payload));
+        }
+
+        if ("dragVertexInfo" in cursorInfos[0]) {
+          const payload = { floorCode, cursorInfo: cursorInfos[0] };
+          dispatch(moveVertexWithCursor(payload));
         }
 
         const socketId = userSocketId;
