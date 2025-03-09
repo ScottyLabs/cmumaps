@@ -1,9 +1,10 @@
-import { useSession } from "@clerk/clerk-react";
+import { simplify } from "@turf/simplify";
+
+import { toast } from "react-toastify";
 
 import { Rooms, Polygon } from "../../../../shared/types";
 import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
-import { AWS_API_INVOKE_URL } from "../../store/api/s3ApiSlice";
 import {
   setMode,
   POLYGON_ADD_VERTEX,
@@ -21,7 +22,6 @@ interface Props {
 }
 
 const PolygonTab = ({ floorCode, rooms }: Props) => {
-  const { session } = useSession();
   const dispatch = useAppDispatch();
 
   const ringIndex = useAppSelector((state) => state.polygon.ringIndex);
@@ -70,25 +70,12 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
   };
 
   const simplifyPolygon = async () => {
-    const token = await session?.getToken();
-
-    const result = await fetch(`${AWS_API_INVOKE_URL}/simplify-polygon`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      method: "POST",
-      body: JSON.stringify({ polygon }),
+    const newPolygon: Polygon = simplify(polygon, {
+      tolerance: 5,
+      highQuality: true,
     });
-
-    const body = await result.json();
-
-    if (!result.ok) {
-      console.error(body.error);
-      return;
-    }
-
-    const newPolygon: Polygon = JSON.parse(body);
-    savePolygonEdit(newPolygon);
+    await savePolygonEdit(newPolygon);
+    toast.success("Polygon simplified!");
   };
 
   const deletePolygon = async () => {
