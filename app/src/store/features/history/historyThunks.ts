@@ -9,13 +9,16 @@ import { createAppAsyncThunk } from "../../withTypes";
 import { setEditIndex } from "./historySlice";
 import { Edit } from "./historyTypes";
 
-const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
+const applyEdit = async (
+  edit: Edit,
+  dispatch: AppDispatch,
+): Promise<string> => {
   switch (edit.endpoint) {
     case "createNode":
       await dispatch(
         nodeApiSlice.endpoints.createNode.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?nodeId=${edit.arg.nodeId}`;
     case "deleteNode":
       await dispatch(
         nodeApiSlice.endpoints.deleteNode.initiate(edit.arg),
@@ -25,32 +28,32 @@ const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
       await dispatch(
         nodeApiSlice.endpoints.updateNode.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?nodeId=${edit.arg.nodeId}`;
     case "createEdge":
       await dispatch(
         edgeApiSlice.endpoints.createEdge.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?nodeId=${edit.arg.inNodeId}`;
     case "deleteEdge":
       await dispatch(
         edgeApiSlice.endpoints.deleteEdge.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?nodeId=${edit.arg.inNodeId}`;
     case "createEdgeAcrossFloors":
       await dispatch(
         edgeApiSlice.endpoints.createEdgeAcrossFloors.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?nodeId=${edit.arg.inNodeId}`;
     case "deleteEdgeAcrossFloors":
       await dispatch(
         edgeApiSlice.endpoints.deleteEdgeAcrossFloors.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?nodeId=${edit.arg.inNodeId}`;
     case "createRoom":
       await dispatch(
         roomApiSlice.endpoints.createRoom.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?roomId=${edit.arg.roomId}`;
     case "deleteRoom":
       await dispatch(
         roomApiSlice.endpoints.deleteRoom.initiate(edit.arg),
@@ -60,12 +63,12 @@ const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
       await dispatch(
         roomApiSlice.endpoints.updateRoom.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?roomId=${edit.arg.roomId}`;
     case "createPoi":
       await dispatch(
         poiApiSlice.endpoints.createPoi.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?poiId=${edit.arg.poiId}`;
     case "deletePoi":
       await dispatch(
         poiApiSlice.endpoints.deletePoi.initiate(edit.arg),
@@ -75,10 +78,11 @@ const applyEdit = async (edit: Edit, dispatch: AppDispatch) => {
       await dispatch(
         poiApiSlice.endpoints.updatePoi.initiate(edit.arg),
       ).unwrap();
-      break;
+      return `?poiId=${edit.arg.poiId}`;
     default:
       toast.error("Unimplemented edit type!");
   }
+  return "?";
 };
 
 export const undo = createAppAsyncThunk(
@@ -93,17 +97,19 @@ export const undo = createAppAsyncThunk(
       }
 
       // keep appling reverse edits in the same batch
+      let url = "?";
       const batchId = historyState.batchIds[editIndex];
       while (
         editIndex < historyState.reversedEditHistory.length &&
         historyState.batchIds[editIndex] === batchId
       ) {
         const edit = historyState.reversedEditHistory[editIndex];
-        await applyEdit(edit, dispatch);
+        url = await applyEdit(edit, dispatch);
         editIndex--;
       }
 
       dispatch(setEditIndex(editIndex));
+      return url;
     } catch (error) {
       toast.error("Failed to undo change!");
       console.error("Error undoing:", error);
@@ -125,17 +131,19 @@ export const redo = createAppAsyncThunk(
       }
 
       // keep applying edits in the same batch
+      let url = "?";
       const batchId = historyState.batchIds[editIndex];
       while (
         editIndex < historyState.editHistory.length &&
         historyState.batchIds[editIndex] === batchId
       ) {
         const edit = historyState.editHistory[editIndex];
-        await applyEdit(edit, dispatch);
+        url = await applyEdit(edit, dispatch);
         editIndex++;
       }
 
       dispatch(setEditIndex(editIndex - 1));
+      return url;
     } catch (error) {
       toast.error("Failed to redo change!");
       console.error("Error redoing:", error);

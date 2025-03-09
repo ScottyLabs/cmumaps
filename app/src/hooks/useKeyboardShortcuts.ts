@@ -50,7 +50,7 @@ const useKeyboardShortcuts = (floorCode: string) => {
 
     const toastNodeNotSelectedErr = () => toast.error("Select a node first!");
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = async (event: KeyboardEvent) => {
       // general keyboard shortcuts
       switch (event.key) {
         // visibility
@@ -85,9 +85,15 @@ const useKeyboardShortcuts = (floorCode: string) => {
         case "z":
           if (event.metaKey || event.ctrlKey) {
             if (event.shiftKey) {
-              dispatch(redo());
+              const action = await dispatch(redo());
+              if (action.payload) {
+                navigate(action.payload);
+              }
             } else {
-              dispatch(undo());
+              const action = await dispatch(undo());
+              if (action.payload) {
+                navigate(action.payload);
+              }
             }
           }
           break;
