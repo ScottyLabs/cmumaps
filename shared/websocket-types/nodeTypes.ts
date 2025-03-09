@@ -1,4 +1,4 @@
-import type { NodeInfo } from "../types.ts";
+import type { NodeInfo } from "../types";
 
 export interface CreateNodePayload {
   nodeId: string;

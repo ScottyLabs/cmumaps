@@ -3,7 +3,7 @@ import type {
   PdfCoordinate,
   Placement,
   Polygon,
-} from "../../shared/types.ts";
+} from "@cmumaps/shared";
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
@@ -88,18 +88,18 @@ function rotate(x: number, y: number, angle: number): PdfCoordinate {
 
 export const pdfPolygonToGeoPolygon = (
   pdfPolygon: Polygon,
-  placement: Placement
+  placement: Placement,
 ): GeoCoordinate[][] => {
   return pdfPolygon.coordinates.map((ring) =>
     ring.map((coords) =>
-      pdfCoordsToGeoCoords(placement)({ x: coords[0], y: coords[1] })
-    )
+      pdfCoordsToGeoCoords(placement)({ x: coords[0], y: coords[1] }),
+    ),
   );
 };
 
 export const geoPolygonToPdfPolygon = (
   geoPolygon: GeoCoordinate[][],
-  placement: Placement
+  placement: Placement,
 ): Polygon => {
   return {
     type: "Polygon",
@@ -109,9 +109,9 @@ export const geoPolygonToPdfPolygon = (
           geoCoordsToPdfCoords(placement)({
             latitude: coords.latitude,
             longitude: coords.longitude,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     ),
   };
 };

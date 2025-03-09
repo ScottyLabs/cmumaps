@@ -1,5 +1,5 @@
 import express from "express";
-import { poiController } from "../controllers/poiController.ts";
+import { poiController } from "../controllers/poiController";
 
 const poiRouter = express.Router();
 

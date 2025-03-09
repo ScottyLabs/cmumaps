@@ -1,14 +1,14 @@
-import type { InputJsonValue } from "@prisma/client/runtime/library.d.ts";
-import { prisma } from "../index.ts";
-import type { Placement, RoomInfo } from "../../shared/types.ts";
+import type { InputJsonValue } from "@prisma/client/runtime/library.d";
+import { prisma } from "../index";
+import type { Placement, RoomInfo } from "@cmumaps/shared";
 import {
   extractBuildingCode,
   extractFloorLevel,
-} from "../../shared/utils/floorCodeUtils.ts";
+} from "@cmumaps/shared/utils/floorCodeUtils";
 import {
   pdfCoordsToGeoCoords,
   pdfPolygonToGeoPolygon,
-} from "../utils/coordinates.ts";
+} from "../utils/coordinates";
 
 export const roomService = {
   createRoom: async (
@@ -16,7 +16,7 @@ export const roomService = {
     roomId: string,
     roomNodes: string[],
     roomInfo: RoomInfo,
-    placement: Placement
+    placement: Placement,
   ) => {
     const buildingCode = extractBuildingCode(floorCode);
     const floorLevel = extractFloorLevel(floorCode);
@@ -60,7 +60,7 @@ export const roomService = {
   updateRoom: async (
     roomId: string,
     roomInfo: Partial<RoomInfo>,
-    placement: Placement
+    placement: Placement,
   ) => {
     const { labelPosition, polygon } = roomInfo;
     const geoCoords = labelPosition

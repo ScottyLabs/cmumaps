@@ -1,12 +1,12 @@
 import { Action, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
 
-import { LiveUser } from "../../../../shared/websocket-types/userTypes";
+import { LiveUser } from "@cmumaps/shared/websocket-types/userTypes";
 import {
   WebSocketEvents,
   WebSocketEventType,
   WebSocketPayloads,
-} from "../../../../shared/websocket-types/webSocketTypes";
+} from "@cmumaps/shared/websocket-types/webSocketTypes";
 import { getClerkToken } from "../api/apiSlice";
 import {
   createEdge,

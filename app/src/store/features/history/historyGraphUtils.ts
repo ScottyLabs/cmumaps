@@ -1,4 +1,5 @@
-import { Graph } from "../../../../../shared/types";
+import { Graph } from "@cmumaps/shared";
+
 import {
   CreateEdgeAcrossFloorsArg,
   CreateEdgeArg,

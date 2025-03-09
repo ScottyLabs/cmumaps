@@ -1,8 +1,10 @@
+import { Graph, Rooms } from "@cmumaps/shared";
+import QuestionCircle from "@cmumaps/shared/QuestionCircle";
+
 import { BiHide } from "react-icons/bi";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-import { Graph, Rooms } from "../../../../shared/types";
 import { setMst } from "../../store/features/dataSlice";
 import {
   setMode,
@@ -11,7 +13,6 @@ import {
 } from "../../store/features/modeSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { calcMst } from "../../utils/graphUtils";
-import QuestionCircle from "../shared/QuestionCircle";
 import SidePanelButton from "./SidePanelButton";
 import NodeSizeSlider from "./SizeSlider";
 

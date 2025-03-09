@@ -10,8 +10,8 @@ import {
   useGetFloorRoomsQuery,
 } from "../../store/api/floorDataApiSlice";
 import InfoDisplay from "../info-display/InfoDisplay";
-import ErrorDisplay from "../shared/ErrorDisplay";
-import Loader from "../shared/Loader";
+import ErrorDisplay from "@cmumaps/shared/ErrorDisplay";
+import Loader from "@cmumaps/shared/Loader";
 import SidePanel from "../side-panel/SidePanel";
 import ZoomPanWrapper from "../zoom-pan/ZoomPanWrapper";
 

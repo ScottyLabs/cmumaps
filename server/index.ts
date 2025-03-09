@@ -4,16 +4,16 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { clerkMiddleware } from "@clerk/express";
 import http from "http";
-import buildingRoutes from "./routes/buildingRoutes.ts";
-import { notFoundHandler } from "./middleware/notFoundHandler.ts";
-import nodeRoutes from "./routes/nodeRoutes.ts";
-import { WebSocketService } from "./services/webSocketService.ts";
-import { checkAuth, socketAuth } from "./middleware/authMiddleware.ts";
-import { requireSocketId } from "./middleware/socketIdMiddleware.ts";
-import floorRoutes from "./routes/floorRoutes.ts";
-import edgeRoutes from "./routes/edgeRoutes.ts";
-import roomRoutes from "./routes/roomRoutes.ts";
-import poiRoutes from "./routes/poiRoutes.ts";
+import buildingRoutes from "./routes/buildingRoutes";
+import { notFoundHandler } from "./middleware/notFoundHandler";
+import nodeRoutes from "./routes/nodeRoutes";
+import { WebSocketService } from "./services/webSocketService";
+import { checkAuth, socketAuth } from "./middleware/authMiddleware";
+import { requireSocketId } from "./middleware/socketIdMiddleware";
+import floorRoutes from "./routes/floorRoutes";
+import edgeRoutes from "./routes/edgeRoutes";
+import roomRoutes from "./routes/roomRoutes";
+import poiRoutes from "./routes/poiRoutes";
 
 export const prisma = new PrismaClient();
 const app = express();
@@ -45,7 +45,7 @@ app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
 app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
 app.use(notFoundHandler);
 
-const port = 80;
+const port = process.env.PORT || 80;
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

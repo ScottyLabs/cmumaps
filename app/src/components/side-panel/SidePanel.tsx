@@ -1,4 +1,5 @@
-import { Graph, Rooms } from "../../../../shared/types";
+import { Graph, Rooms } from "@cmumaps/shared";
+
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { setSidePanelActiveTabIndex } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";

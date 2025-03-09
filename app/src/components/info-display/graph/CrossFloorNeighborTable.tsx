@@ -1,11 +1,11 @@
+import { EdgeInfo } from "@cmumaps/shared";
+import TableCell from "@cmumaps/shared/TableCell";
 import { v4 as uuidv4 } from "uuid";
 
 import { NavLink } from "react-router";
 import { toast } from "react-toastify";
 
-import { EdgeInfo } from "../../../../../shared/types";
 import { useDeleteEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
-import TableCell from "../shared/TableCell";
 
 interface Props {
   floorCode: string;

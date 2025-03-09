@@ -1,6 +1,6 @@
 import { useParams, Navigate } from "react-router";
 
-import { ErrorCode } from "../../../shared/errorCode";
+import { ErrorCode } from "@cmumaps/shared/errorCode";
 import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
 import FloorSwitcher from "../components/ui-layout/FloorSwitcher";

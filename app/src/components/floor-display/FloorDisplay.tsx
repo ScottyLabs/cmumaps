@@ -2,7 +2,7 @@ import Konva from "konva";
 
 import { Stage, Layer } from "react-konva";
 
-import { Graph, PdfCoordinate, Pois, Rooms } from "../../../../shared/types";
+import { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/shared";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import useStageClickHandler from "../../hooks/useStageClickHandler";

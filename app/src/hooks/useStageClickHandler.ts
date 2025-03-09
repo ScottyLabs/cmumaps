@@ -1,10 +1,10 @@
+import { NodeInfo, PdfCoordinate, Polygon, Rooms } from "@cmumaps/shared";
 import Konva from "konva";
 import { v4 as uuidv4 } from "uuid";
 
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-import { NodeInfo, PdfCoordinate, Polygon, Rooms } from "../../../shared/types";
 import { useCreateEdgeMutation } from "../store/api/edgeApiSlice";
 import { useCreateNodeMutation } from "../store/api/nodeApiSlice";
 import {

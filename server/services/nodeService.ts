@@ -1,17 +1,17 @@
-import { prisma } from "../index.ts";
-import type { NodeInfo, Placement } from "../../shared/types.ts";
-import { pdfCoordsToGeoCoords } from "../utils/coordinates.ts";
+import { prisma } from "../index";
+import type { NodeInfo, Placement } from "@cmumaps/shared";
+import { pdfCoordsToGeoCoords } from "../utils/coordinates";
 import {
   extractBuildingCode,
   extractFloorLevel,
-} from "../../shared/utils/floorCodeUtils.ts";
+} from "@cmumaps/shared/utils/floorCodeUtils";
 
 export const nodeService = {
   upsertNode: async (
     floorCode: string,
     nodeId: string,
     nodeInfo: NodeInfo,
-    placement: Placement
+    placement: Placement,
   ) => {
     const { pos, roomId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);

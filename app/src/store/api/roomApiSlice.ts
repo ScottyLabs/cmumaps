@@ -4,7 +4,7 @@ import {
   CreateRoomPayload,
   DeleteRoomPayload,
   UpdateRoomPayload,
-} from "../../../../shared/websocket-types/roomTypes";
+} from "@cmumaps/shared/websocket-types/roomTypes";
 import { getNodesInRoom } from "../features/history/historyGraphUtils";
 import {
   buildCreateRoomEditPair,

@@ -1,4 +1,4 @@
-import type { RoomInfo } from "../types.ts";
+import type { RoomInfo } from "../types";
 
 export interface CreateRoomPayload {
   roomId: string;

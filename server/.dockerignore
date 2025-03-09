@@ -1,0 +1,31 @@
+# Dependencies
+**/node_modules
+**/npm-debug.log
+
+# Build outputs
+**/dist
+**/build
+
+# Environment and system files
+**/.env
+**/.DS_Store
+**/*.log
+
+# Git
+.git
+**/.gitignore
+
+# Documentation
+**/README.md
+
+# Don't ignore shared package
+!shared/
+!shared/**/*
+
+# Don't ignore necessary server files
+!server/
+!server/**/*
+
+# Ignore app directory since it's not needed for server
+app/
+app/**/* 

@@ -1,4 +1,4 @@
-import type { ErrorCode } from "../../shared/errorCode.ts";
+import type { ErrorCode } from "@cmumaps/shared/errorCode";
 
 export class BuildingError extends Error {
   code: ErrorCode;

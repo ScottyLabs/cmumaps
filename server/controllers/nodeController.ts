@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { nodeService } from "../services/nodeService.ts";
-import { floorService } from "../services/floorService.ts";
-import { handleControllerError } from "../errors/errorHandler.ts";
-import { webSocketService } from "../index.ts";
+import { nodeService } from "../services/nodeService";
+import { floorService } from "../services/floorService";
+import { handleControllerError } from "../errors/errorHandler";
+import { webSocketService } from "../index";
 
 export const nodeController = {
   createNode: async (req: Request, res: Response) => {

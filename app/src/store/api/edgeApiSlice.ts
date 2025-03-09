@@ -5,7 +5,7 @@ import {
   CreateEdgePayload,
   DeleteEdgeAcrossFloorsPayload,
   DeleteEdgePayload,
-} from "../../../../shared/websocket-types/edgeTypes";
+} from "@cmumaps/shared/websocket-types/edgeTypes";
 import {
   buildCreateEdgeAcrossFloorsEditPair,
   buildCreateEdgeEditPair,

@@ -1,6 +1,6 @@
 import { booleanPointInPolygon } from "@turf/turf";
 
-import { PdfCoordinate, RoomInfo, Polygon } from "../../../shared/types";
+import { PdfCoordinate, RoomInfo, Polygon } from "@cmumaps/shared";
 
 export const posToRoomId = (
   point: PdfCoordinate,

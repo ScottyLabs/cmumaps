@@ -1,6 +1,7 @@
+import { DoorInfo } from "@cmumaps/shared";
+
 import { Line } from "react-konva";
 
-import { DoorInfo } from "../../../../shared/types";
 import useFloorInfo from "../../hooks/useFloorInfo";
 import { useGetFloorOutlineQuery } from "../../store/api/s3ApiSlice";
 import { useAppSelector } from "../../store/hooks";

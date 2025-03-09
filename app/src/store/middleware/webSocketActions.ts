@@ -1,4 +1,4 @@
-import { LiveUser } from "../../../../shared/websocket-types/userTypes";
+import { LiveUser } from "@cmumaps/shared/websocket-types/userTypes";
 import { CursorInfo } from "../features/liveCursor/liveCursorTypes";
 
 // Action types

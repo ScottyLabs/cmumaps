@@ -1,0 +1,14 @@
+{
+  "name": "cmumaps",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "app",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present"
+  }
+}

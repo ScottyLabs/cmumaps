@@ -1,6 +1,6 @@
 import { FAILED_LOAD, LOADING } from "../../store/features/statusSlice";
 import { useAppSelector } from "../../store/hooks";
-import Loader from "../shared/Loader";
+import Loader from "@cmumaps/shared/Loader";
 
 const LoadingText = () => {
   const loadingStatus = useAppSelector((state) => state.status.loadingStatus);

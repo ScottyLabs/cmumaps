@@ -1,6 +1,6 @@
+import { PdfCoordinate } from "@cmumaps/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { PdfCoordinate } from "../../../../shared/types";
 import { DragVertexInfo } from "./liveCursor/liveCursorTypes";
 
 interface MouseEventState {

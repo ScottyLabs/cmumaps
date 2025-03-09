@@ -4,7 +4,7 @@ import {
   CreateNodePayload,
   DeleteNodePayload,
   UpdateNodePayload,
-} from "../../../../shared/websocket-types/nodeTypes";
+} from "@cmumaps/shared/websocket-types/nodeTypes";
 import {
   buildCreateNodeEditPair,
   buildDeleteNodeEditPair,

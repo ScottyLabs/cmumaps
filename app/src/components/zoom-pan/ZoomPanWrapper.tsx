@@ -1,8 +1,8 @@
+import { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/shared";
 import Konva from "konva";
 
 import { useRef, useState } from "react";
 
-import { Graph, PdfCoordinate, Pois, Rooms } from "../../../../shared/types";
 import { LOADED } from "../../store/features/statusSlice";
 import { useAppSelector } from "../../store/hooks";
 import FloorDisplay from "../floor-display/FloorDisplay";

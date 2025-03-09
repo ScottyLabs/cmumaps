@@ -1,6 +1,6 @@
-import { prisma } from "../index.ts";
-import { BuildingError } from "../errors/error.ts";
-import { ERROR_CODES } from "../../shared/errorCode.ts";
+import { prisma } from "../index";
+import { BuildingError } from "../errors/error";
+import { ERROR_CODES } from "@cmumaps/shared/errorCode";
 
 export const buildingService = {
   async getAllBuildingCodesAndNames() {

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { GiArrowCursor } from "react-icons/gi";
 import { Path } from "react-konva";
 
-import { LiveUser } from "../../../../shared/websocket-types/userTypes";
+import { LiveUser } from "@cmumaps/shared/websocket-types/userTypes";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import {
   selectCursorInfos,

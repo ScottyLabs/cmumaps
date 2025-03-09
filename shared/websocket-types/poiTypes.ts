@@ -1,4 +1,4 @@
-import type { PoiInfo, PoiType } from "../types.ts";
+import type { PoiInfo, PoiType } from "../types";
 
 export interface CreatePoiPayload {
   poiId: string;

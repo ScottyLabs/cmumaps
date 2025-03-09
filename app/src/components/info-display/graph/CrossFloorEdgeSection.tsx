@@ -1,15 +1,15 @@
+import { Graph } from "@cmumaps/shared";
+import InfoDisplayButton from "../InfoDisplay";
+import { extractBuildingCode } from "@cmumaps/shared";
 import { v4 as uuidv4 } from "uuid";
 
 import { useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-import { Graph } from "../../../../../shared/types";
-import { extractBuildingCode } from "../../../../../shared/utils/floorCodeUtils";
 import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import InfoDisplayButton from "../shared/InfoDisplayButton";
 
 interface Props {
   floorCode: string;

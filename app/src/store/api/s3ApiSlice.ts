@@ -1,4 +1,5 @@
-import { DoorInfo } from "../../../../shared/types";
+import { DoorInfo } from "@cmumaps/shared";
+
 import { apiSlice } from "./apiSlice";
 
 export const AWS_API_INVOKE_URL = `${import.meta.env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;

@@ -1,6 +1,7 @@
+import { EdgeInfo, Graph } from "@cmumaps/shared";
+
 import { useMemo } from "react";
 
-import { EdgeInfo, Graph } from "../../../../../shared/types";
 import CrossFloorEdgeSection from "./CrossFloorEdgeSection";
 import CrossFloorNeighborTable from "./CrossFloorNeighborTable";
 import GraphInfoButtons from "./GraphInfoButtons";

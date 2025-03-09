@@ -1,25 +1,25 @@
-import type { SyncUserPayload } from "./userTypes.ts";
+import type { SyncUserPayload } from "./userTypes";
 import type {
   CreateNodePayload,
   DeleteNodePayload,
   UpdateNodePayload,
-} from "./nodeTypes.ts";
+} from "./nodeTypes";
 import type {
   CreateEdgeAcrossFloorsPayload,
   CreateEdgePayload,
   DeleteEdgeAcrossFloorsPayload,
   DeleteEdgePayload,
-} from "./edgeTypes.ts";
+} from "./edgeTypes";
 import type {
   CreateRoomPayload,
   DeleteRoomPayload,
   UpdateRoomPayload,
-} from "./roomTypes.ts";
+} from "./roomTypes";
 import type {
   CreatePoiPayload,
   DeletePoiPayload,
   UpdatePoiPayload,
-} from "./poiTypes.ts";
+} from "./poiTypes";
 
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {

@@ -1,7 +1,8 @@
+import { Graph } from "@cmumaps/shared";
+
 import { useMemo } from "react";
 import { Line } from "react-konva";
 
-import { Graph } from "../../../../shared/types";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { useAppSelector } from "../../store/hooks";

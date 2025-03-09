@@ -9,8 +9,8 @@ import {
   setMode,
 } from "../../../store/features/modeSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import InfoDisplayButton from "../shared/InfoDisplayButton";
-import { RED_BUTTON_STYLE } from "../shared/TableCell";
+import InfoDisplayButton, { RED_BUTTON_STYLE } from "@cmumaps/shared";
+
 
 interface Props {
   floorCode: string;

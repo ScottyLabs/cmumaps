@@ -7,16 +7,16 @@ import type {
   PoiType,
   Rooms,
   RoomType,
-} from "../../shared/types.ts";
+} from "@cmumaps/shared";
 import {
   extractBuildingCode,
   extractFloorLevel,
-} from "../../shared/utils/floorCodeUtils.ts";
-import { prisma } from "../index.ts";
+} from "@cmumaps/shared/utils/floorCodeUtils";
+import { prisma } from "../index";
 import {
   geoCoordsToPdfCoords,
   geoPolygonToPdfPolygon,
-} from "../utils/coordinates.ts";
+} from "../utils/coordinates";
 
 export const floorService = {
   getFloorGraph: async (floorCode: string, placement: Placement) => {
@@ -104,7 +104,7 @@ export const floorService = {
         aliases: room.aliases.map((a) => a.alias),
         polygon: geoPolygonToPdfPolygon(
           room.polygon as unknown as GeoCoordinate[][],
-          placement
+          placement,
         ),
       };
     }

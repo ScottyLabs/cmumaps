@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { edgeService } from "../services/edgeService.ts";
-import { handleControllerError } from "../errors/errorHandler.ts";
-import { webSocketService } from "../index.ts";
+import { edgeService } from "../services/edgeService";
+import { handleControllerError } from "../errors/errorHandler";
+import { webSocketService } from "../index";
 
 export const edgeController = {
   createEdge: async (req: Request, res: Response) => {

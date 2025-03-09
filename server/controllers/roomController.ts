@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { roomService } from "../services/roomService.ts";
-import { handleControllerError } from "../errors/errorHandler.ts";
-import { floorService } from "../services/floorService.ts";
-import { webSocketService } from "../index.ts";
+import { roomService } from "../services/roomService";
+import { handleControllerError } from "../errors/errorHandler";
+import { floorService } from "../services/floorService";
+import { webSocketService } from "../index";
 
 export const roomController = {
   createRoom: async (req: Request, res: Response) => {

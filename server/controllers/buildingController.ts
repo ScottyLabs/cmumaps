@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { BuildingError } from "../errors/error.ts";
-import { buildingService } from "../services/buildingService.ts";
-import { handleControllerError } from "../errors/errorHandler.ts";
+import { BuildingError } from "../errors/error";
+import { buildingService } from "../services/buildingService";
+import { handleControllerError } from "../errors/errorHandler";
 
 export const buildingController = {
   async getBuildingCodesAndNames(req: Request, res: Response) {

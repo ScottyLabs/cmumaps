@@ -1,8 +1,8 @@
+import { PdfCoordinate } from "@cmumaps/shared";
 import { Polygon } from "geojson";
 
 import { Line } from "react-konva";
 
-import { PdfCoordinate } from "../../../../shared/types";
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { useAppSelector } from "../../store/hooks";
 import PolygonEditor from "./PolygonEditor";

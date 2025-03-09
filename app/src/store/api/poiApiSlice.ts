@@ -4,7 +4,7 @@ import {
   CreatePoiPayload,
   DeletePoiPayload,
   UpdatePoiPayload,
-} from "../../../../shared/websocket-types/poiTypes";
+} from "@cmumaps/shared/websocket-types/poiTypes";
 import {
   buildCreatePoiEditPair,
   buildDeletePoiEditPair,

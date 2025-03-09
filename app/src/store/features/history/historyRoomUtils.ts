@@ -1,4 +1,5 @@
-import { Rooms } from "../../../../../shared/types";
+import { Rooms } from "@cmumaps/shared";
+
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
 import {
   CreateRoomArg,

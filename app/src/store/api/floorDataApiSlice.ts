@@ -1,4 +1,5 @@
-import { Graph, Pois, Rooms } from "../../../../shared/types";
+import { Graph, Pois, Rooms } from "@cmumaps/shared";
+
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({

@@ -1,5 +1,5 @@
-import { prisma } from "../index.ts";
-import type { PoiInfo, PoiType } from "../../shared/types.ts";
+import { prisma } from "../index";
+import type { PoiInfo, PoiType } from "@cmumaps/shared";
 
 export const poiService = {
   createPoi: async (floorCode: string, poiId: string, poiInfo: PoiInfo) => {

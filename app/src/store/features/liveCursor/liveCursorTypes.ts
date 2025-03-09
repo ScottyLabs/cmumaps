@@ -1,4 +1,4 @@
-import { PdfCoordinate, Position } from "../../../../../shared/types";
+import { PdfCoordinate, Position } from "@cmumaps/shared";
 
 interface BaseCursorInfo {
   cursorPos: PdfCoordinate;

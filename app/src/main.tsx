@@ -12,10 +12,10 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
 import "./index.css";
-import FloorPage from "./pages/FloorPage.tsx";
-import Home from "./pages/Home.tsx";
-import { USE_STRICT_MODE } from "./settings.ts";
-import { store } from "./store/store.ts";
+import FloorPage from "./pages/FloorPage";
+import Home from "./pages/Home";
+import { USE_STRICT_MODE } from "./settings";
+import { store } from "./store/store";
 
 // https://clerk.com/docs/components/control/clerk-loaded
 declare global {

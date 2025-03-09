@@ -1,17 +1,17 @@
+import { Pois, PoiType, PoiTypes } from "@cmumaps/shared";
+import CopyIdRow from "@cmumaps/shared/CopyIdRow";
+import InfoDisplayButton from "@cmumaps/shared/InfoDisplayButton";
+import SelectTypeCell from "@cmumaps/shared/SelectTypeCell";
+import { RED_BUTTON_STYLE } from "@cmumaps/shared/TableCell";
+import TableLayout from "@cmumaps/shared/TableLayout";
 import { v4 as uuidv4 } from "uuid";
 
 import { SingleValue } from "react-select";
 
-import { Pois, PoiType, PoiTypes } from "../../../../../shared/types";
 import {
   useDeletePoiMutation,
   useUpdatePoiMutation,
 } from "../../../store/api/poiApiSlice";
-import CopyIdRow from "../shared/CopyIdRow";
-import InfoDisplayButton from "../shared/InfoDisplayButton";
-import SelectTypeCell from "../shared/SelectTypeCell";
-import { RED_BUTTON_STYLE } from "../shared/TableCell";
-import TableLayout from "../shared/TableLayout";
 
 interface Props {
   floorCode: string;
