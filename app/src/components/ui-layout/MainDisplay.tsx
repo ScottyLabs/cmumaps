@@ -24,13 +24,13 @@ const MainDisplay = ({ floorCode }: Props) => {
   useWebSocket(floorCode);
 
   // handles invalid nodeId or roomId
-  const { error } = useValidatedFloorParams(floorCode);
+  const result = useValidatedFloorParams(floorCode);
   useEffect(() => {
-    if (error) {
-      toast.error(error);
+    if ("error" in result) {
+      toast.error(result.error);
       navigate("?");
     }
-  }, [error, navigate]);
+  }, [navigate, result]);
 
   // fetch graph, rooms, and pois
   const {
@@ -49,7 +49,7 @@ const MainDisplay = ({ floorCode }: Props) => {
     isError: isErrorPois,
   } = useGetFloorPoisQuery(floorCode);
 
-  if (error) {
+  if ("error" in result) {
     return;
   }
 

@@ -13,7 +13,7 @@ import {
 } from "../store/features/uiSlice";
 
 type FloorParamsResult =
-  | { error: string }
+  | { error: string; nodeId?: undefined; roomId?: undefined; poiId?: undefined }
   | {
       nodeId?: string | null;
       roomId?: string | null;
