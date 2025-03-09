@@ -113,6 +113,9 @@ export const undo = createAppAsyncThunk(
     } catch (error) {
       toast.error("Failed to undo change!");
       console.error("Error undoing:", error);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      console.error("Error detail:", error.data.details);
       return Promise.reject();
     }
   },
@@ -147,6 +150,9 @@ export const redo = createAppAsyncThunk(
     } catch (error) {
       toast.error("Failed to redo change!");
       console.error("Error redoing:", error);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      console.error("Error detail:", error.data.details);
       return Promise.reject();
     }
   },
