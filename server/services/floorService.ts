@@ -26,35 +26,16 @@ export const floorService = {
 
     // Get all nodes on the floor with their neighbors
     const dbNodes = await prisma.node.findMany({
-      where: {
-        OR: [
-          // Nodes directly on the floor
-          { buildingCode, floorLevel },
-          // Nodes on elements on the floor
-          { element: { buildingCode, floorLevel } },
-        ],
-      },
+      where: { buildingCode, floorLevel },
       // include the out floor code of each neighbor
       // include the element of each node (both in and out)
       include: {
-        element: {
-          include: {
-            poi: true,
-          },
-        },
         outEdges: {
           include: {
             outNode: {
               select: {
                 buildingCode: true,
                 floorLevel: true,
-                elementId: true,
-                element: {
-                  select: {
-                    buildingCode: true,
-                    floorLevel: true,
-                  },
-                },
               },
             },
           },
@@ -77,19 +58,15 @@ export const floorService = {
       for (const edge of node.outEdges) {
         const outNode = edge.outNode;
 
-        // Determine the target node's floor (either directly or via its element)
-        const outBuildingCode =
-          outNode.buildingCode || outNode.element?.buildingCode;
-        const outFloorLevel = outNode.floorLevel || outNode.element?.floorLevel;
-        const outFloorCode = `${outBuildingCode}-${outFloorLevel}`;
-
+        // Determine if cross floor edge
+        const outFloorCode = `${outNode.buildingCode}-${outNode.floorLevel}`;
         neighbors[edge.outNodeId] = {};
         if (outFloorCode !== floorCode) {
           neighbors[edge.outNodeId].outFloorCode = outFloorCode;
         }
       }
-      const type = node.element ? (node.element?.poi ? "poi" : "room") : null;
-      nodes[node.id] = { pos, neighbors, type, elementId: node.elementId };
+
+      nodes[node.nodeId] = { pos, neighbors, roomId: node.roomId };
     }
 
     return nodes;
@@ -105,13 +82,10 @@ export const floorService = {
     // Get all rooms on the floor from the database
     const dbRooms = await prisma.room.findMany({
       where: {
-        element: {
-          buildingCode: buildingCode,
-          floorLevel: floorLevel,
-        },
+        buildingCode: buildingCode,
+        floorLevel: floorLevel,
       },
       include: {
-        element: true,
         aliases: true,
       },
     });
@@ -119,14 +93,14 @@ export const floorService = {
     // Convert the rooms to the format expected by the frontend
     const rooms: Rooms = {};
     for (const room of dbRooms) {
-      rooms[room.elementId] = {
+      rooms[room.roomId] = {
         name: room.name,
         labelPosition: geoCoordsToPdfCoordsHelper({
           latitude: room.labelLatitude,
           longitude: room.labelLongitude,
         }),
-        type: room.element.type as RoomType,
-        displayAlias: room.displayAlias ?? undefined,
+        type: room.type as RoomType,
+        displayAlias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
         aliases: room.aliases.map((a) => a.alias),
         polygon: geoPolygonToPdfPolygon(
           room.polygon as unknown as GeoCoordinate[][],
@@ -144,19 +118,16 @@ export const floorService = {
 
     const dbPois = await prisma.poi.findMany({
       where: {
-        element: {
+        node: {
           buildingCode: buildingCode,
           floorLevel: floorLevel,
         },
-      },
-      include: {
-        element: true,
       },
     });
 
     const pois: Pois = {};
     for (const poi of dbPois) {
-      pois[poi.elementId] = poi.element.type as PoiType;
+      pois[poi.poiId] = { type: poi.type as PoiType, nodeId: poi.nodeId };
     }
 
     return pois;
