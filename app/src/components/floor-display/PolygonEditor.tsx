@@ -4,6 +4,7 @@ import Konva from "konva";
 import React from "react";
 import { Circle, Line } from "react-konva";
 
+import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import {
   POLYGON_DELETE_VERTEX,
   setMode,
@@ -20,11 +21,11 @@ interface Props {
   nodeSize: number;
 }
 
-const PolygonEditor = ({ polygon, nodeSize }: Props) => {
+const PolygonEditor = ({ floorCode, roomId, polygon, nodeSize }: Props) => {
   const dispatch = useAppDispatch();
   const mode = useAppSelector((state) => state.mode.mode);
   const ringIndex = useAppSelector((state) => state.polygon.ringIndex);
-  // const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
+  const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
   const vertexOnDrag = useAppSelector(
     (state) => state.polygon.vertexIndexOnDrag,
   );
@@ -45,7 +46,7 @@ const PolygonEditor = ({ polygon, nodeSize }: Props) => {
       coords[coords.length - 1] = newPos;
     }
 
-    // savePolygonEdit(newPolygon);
+    savePolygonEdit(newPolygon);
   };
 
   const handleClick = (index: number) => {
@@ -66,7 +67,7 @@ const PolygonEditor = ({ polygon, nodeSize }: Props) => {
         }
       }
 
-      // savePolygonEdit(newPolygon);
+      savePolygonEdit(newPolygon);
       dispatch(setMode(POLYGON_SELECT));
     }
   };
