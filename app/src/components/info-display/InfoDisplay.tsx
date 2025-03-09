@@ -70,7 +70,7 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
       return Component;
     } else {
       const Component = () => (
-        <PoilessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+        <PoilessDisplay floorCode={floorCode} nodeId={nodeId} />
       );
       Component.displayName = "PoiInfoDisplay";
       return Component;
