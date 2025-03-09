@@ -13,10 +13,8 @@ export const poiService = {
   },
 
   deletePoi: async (poiId: string) => {
-    await prisma.$transaction(async (tx) => {
-      await tx.poi.delete({
-        where: { poiId },
-      });
+    await prisma.poi.delete({
+      where: { poiId },
     });
   },
 
