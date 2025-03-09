@@ -12,7 +12,15 @@ import {
   setInfoDisplayActiveTabIndex,
 } from "../store/features/uiSlice";
 
-const useValidatedFloorParams = (floorCode: string) => {
+type FloorParamsResult =
+  | { error: string }
+  | {
+      nodeId?: string | null;
+      roomId?: string | null;
+      poiId?: string | null;
+    };
+
+const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,6 +34,7 @@ const useValidatedFloorParams = (floorCode: string) => {
   const poiId = searchParam.get("poiId");
 
   // set the active tab index based on the query params
+  // not for node id since it is how user change url param after the initial load
   useEffect(() => {
     if (roomId) {
       dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.ROOM));
@@ -34,14 +43,10 @@ const useValidatedFloorParams = (floorCode: string) => {
     if (poiId) {
       dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.POI));
     }
-
-    if (nodeId) {
-      dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.NODE));
-    }
   }, [dispatch, navigate, nodeId, poiId, pois, roomId]);
 
   if (!graph || !pois || !rooms) {
-    return { nodeId: null, roomId: null };
+    return {};
   }
 
   if (roomId && !rooms[roomId]) {
@@ -56,7 +61,34 @@ const useValidatedFloorParams = (floorCode: string) => {
     return { error: "Invalid Node ID" };
   }
 
-  return { nodeId, roomId, poiId };
+  if (roomId) {
+    // no way to get the nodeId from the roomId since a room can have multiple nodes
+    return { roomId };
+  }
+
+  if (poiId) {
+    // nodeId can be the nodeId of the poi
+    const nodeId = pois[poiId].nodeId;
+
+    // roomId can be the roomId of the node
+    const roomId = graph[nodeId].roomId;
+
+    return { poiId, nodeId, roomId };
+  }
+
+  if (nodeId) {
+    // poiId can be the poiId of the node
+    const poiId = Object.entries(pois).find(
+      (poi) => poi[1].nodeId === nodeId,
+    )?.[0];
+
+    // roomId can be the roomId of the node
+    const roomId = graph[nodeId].roomId;
+
+    return { nodeId, poiId, roomId };
+  }
+
+  return {};
 };
 
 export default useValidatedFloorParams;

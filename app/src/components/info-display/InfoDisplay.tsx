@@ -27,51 +27,36 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
     (state) => state.ui.infoDisplayActiveTabIndex,
   );
 
+  const result = useValidatedFloorParams(floorCode);
+  if ("error" in result) {
+    return;
+  }
+
   // need at least one of ids for info display
-  const { nodeId, roomId, poiId } = useValidatedFloorParams(floorCode);
+  const { nodeId, roomId, poiId } = result;
   if (!nodeId && !roomId && !poiId) {
     return;
   }
 
   const renderRoomInfoDisplay = () => {
-    // roomId is either the roomId in the search param or the roomId of the node
-    const resRoomId: string | null = roomId || (nodeId && graph[nodeId].roomId);
-    if (resRoomId) {
+    if (roomId) {
       return (
-        <RoomInfoDisplay
-          floorCode={floorCode}
-          roomId={resRoomId}
-          rooms={rooms}
-        />
+        <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
       );
-    }
-
-    // nodeId is either the nodeId in the search param or
-    const resNodeId: string | null = nodeId || (poiId && pois[poiId].nodeId);
-    if (resNodeId) {
+    } else if (nodeId) {
       return (
-        <RoomlessDisplay
-          floorCode={floorCode}
-          nodeId={resNodeId}
-          graph={graph}
-        />
+        <RoomlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
       );
     }
 
     // this condition should never occur since we checked that one of the ids is available
+    // and we can retrieve nodeId from poiId
     return <></>;
   };
 
   const renderPoiInfoDisplay = () => {
-    // poiId is either the poiId in the search param or the poiId of the node
-    const resPoiId =
-      poiId ||
-      Object.entries(pois).find((poi) => poi[1].nodeId === nodeId)?.[0];
-
-    if (resPoiId) {
-      return (
-        <PoiInfoDisplay floorCode={floorCode} poiId={resPoiId} pois={pois} />
-      );
+    if (poiId) {
+      return <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />;
     } else if (nodeId) {
       return <PoilessDisplay floorCode={floorCode} nodeId={nodeId} />;
     }
@@ -81,29 +66,25 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
   };
 
   const renderGraphInfoDisplay = () => {
-    // nodeId is either the nodeId in the search param or the nodeId of the poi
-    const resNodeId = nodeId || (poiId && pois[poiId].nodeId);
-    if (resNodeId) {
+    if (nodeId) {
       return (
-        <GraphInfoDisplay
-          floorCode={floorCode}
-          nodeId={resNodeId}
-          graph={graph}
-        />
+        <GraphInfoDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
       );
     }
 
-    // this condition should never occur since we check either poiId or nodeId is available
+    // this condition should never occur since we check nodeId is available
     return <></>;
   };
 
   const tabNames = ["Room Info"];
   const tabContents = [renderRoomInfoDisplay];
-  // only show poi and graph info if nodeId is available
-  if (nodeId || poiId) {
+
+  if (poiId || nodeId) {
     tabNames.push("POI Info");
     tabContents.push(renderPoiInfoDisplay);
+  }
 
+  if (nodeId) {
     tabNames.push("Graph Info");
     tabContents.push(renderGraphInfoDisplay);
   }
