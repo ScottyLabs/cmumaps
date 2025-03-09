@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router";
 
 import { ERROR_CODES } from "../../../shared/errorCode";
@@ -7,9 +8,11 @@ import {
   useGetFloorPoisQuery,
   useGetFloorRoomsQuery,
 } from "../store/api/floorDataApiSlice";
+import { setInfoDisplayActiveTabIndex } from "../store/features/uiSlice";
 
 const useValidatedFloorParams = (floorCode: string) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { data: graph } = useGetFloorGraphQuery(floorCode);
   const { data: rooms } = useGetFloorRoomsQuery(floorCode);
@@ -25,13 +28,14 @@ const useValidatedFloorParams = (floorCode: string) => {
     if (poiId && pois) {
       if (pois[poiId]) {
         const nodeId = pois[poiId].nodeId;
+        dispatch(setInfoDisplayActiveTabIndex(1));
         navigate(`?nodeId=${nodeId}`);
         return;
       }
 
       navigate(`?errorCode=${ERROR_CODES.INVALID_POI_ID}`);
     }
-  }, [navigate, poiId, pois]);
+  }, [dispatch, navigate, poiId, pois]);
 
   if (!graph || !rooms) {
     return { nodeId: null, roomId: null };
