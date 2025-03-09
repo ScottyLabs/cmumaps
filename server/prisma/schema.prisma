@@ -11,7 +11,6 @@ model Building {
   buildingCode   String  @id @default(uuid())
   name           String
   osmId          String?
-  defaultFloor   String
   labelLatitude  Float
   labelLongitude Float
   shape          Json
@@ -22,6 +21,7 @@ model Building {
 model Floor {
   buildingCode    String
   floorLevel      String
+  isDefault       Boolean
   centerX         Float
   centerY         Float
   centerLatitude  Float
@@ -29,54 +29,46 @@ model Floor {
   scale           Float
   angle           Float
   altitude        Float?
-  elements        Element[]
-  building        Building  @relation(fields: [buildingCode], references: [buildingCode])
+  building        Building @relation(fields: [buildingCode], references: [buildingCode])
   Node            Node[]
 
   @@id([buildingCode, floorLevel])
 }
 
-model Element {
-  elementId    String  @id
-  type         String
-  buildingCode String?
-  floorLevel   String?
-  floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
-  nodes        Node[]
-  poi          Poi?
-  room         Room?
+model Poi {
+  poiId  String @id
+  type   String
+  nodeId String @unique
+  Node   Node   @relation(fields: [nodeId], references: [nodeId])
+}
+
+model Room {
+  roomId         String  @id
+  name           String
+  type           String
+  labelLatitude  Float
+  labelLongitude Float
+  polygon        Json
+  buildingCode   String?
+  floorLevel     String?
+  aliases        Alias[]
+  Node           Node[]
 
   @@index([buildingCode, floorLevel])
 }
 
-model Poi {
-  elementId String  @id
-  element   Element @relation(fields: [elementId], references: [elementId])
-}
-
-model Room {
-  elementId      String   @id
-  name           String
-  displayAlias   String?
-  labelLatitude  Float
-  labelLongitude Float
-  polygon        Json
-  updatedAt      DateTime @updatedAt
-  aliases        Alias[]
-  element        Element  @relation(fields: [elementId], references: [elementId])
-}
-
 model Node {
-  id           String   @id @default(uuid())
+  nodeId       String  @id
   latitude     Float
   longitude    Float
-  elementId    String?
   buildingCode String?
   floorLevel   String?
-  outEdges     Edge[]   @relation("OutEdges")
-  inEdges      Edge[]   @relation("InEdges")
-  floor        Floor?   @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
-  element      Element? @relation(fields: [elementId], references: [elementId])
+  roomId       String?
+  outEdges     Edge[]  @relation("OutEdges")
+  inEdges      Edge[]  @relation("InEdges")
+  floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+  Room         Room?   @relation(fields: [roomId], references: [roomId])
+  Poi          Poi?
 
   @@index([buildingCode, floorLevel])
 }
@@ -84,16 +76,17 @@ model Node {
 model Edge {
   inNodeId  String
   outNodeId String
-  inNode    Node   @relation("OutEdges", fields: [inNodeId], references: [id])
-  outNode   Node   @relation("InEdges", fields: [outNodeId], references: [id])
+  inNode    Node   @relation("OutEdges", fields: [inNodeId], references: [nodeId])
+  outNode   Node   @relation("InEdges", fields: [outNodeId], references: [nodeId])
 
   @@id([inNodeId, outNodeId])
 }
 
 model Alias {
-  alias  String
-  roomId String
-  room   Room   @relation(fields: [roomId], references: [elementId])
+  alias          String
+  isDisplayAlias Boolean
+  roomId         String
+  room           Room    @relation(fields: [roomId], references: [roomId])
 
   @@id([roomId, alias])
 }
