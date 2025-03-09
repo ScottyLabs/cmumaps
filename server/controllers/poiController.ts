@@ -6,12 +6,12 @@ import { webSocketService } from "../index.ts";
 export const poiController = {
   createPoi: async (req: Request, res: Response) => {
     const poiId = req.params.id;
-    const { floorCode, poiType } = req.body;
+    const { floorCode, poiInfo } = req.body;
     const socketId = req.socketId;
 
     try {
-      await poiService.createPoi(floorCode, poiId, poiType);
-      const payload = { poiId, poiType };
+      await poiService.createPoi(floorCode, poiId, poiInfo);
+      const payload = { poiId, poiInfo };
       webSocketService.broadcastToUserFloor(socketId, "create-poi", payload);
       res.json(null);
     } catch (error) {
@@ -35,12 +35,12 @@ export const poiController = {
 
   updatePoi: async (req: Request, res: Response) => {
     const poiId = req.params.id;
-    const { poiType } = req.body;
+    const { poiInfo } = req.body;
     const socketId = req.socketId;
 
     try {
-      await poiService.updatePoi(poiId, poiType);
-      const payload = { poiId, poiType };
+      await poiService.updatePoi(poiId, poiInfo);
+      const payload = { poiId, poiInfo };
       webSocketService.broadcastToUserFloor(socketId, "update-poi", payload);
       res.json(null);
     } catch (error) {

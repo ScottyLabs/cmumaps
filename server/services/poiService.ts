@@ -1,44 +1,29 @@
 import { prisma } from "../index.ts";
-import type { PoiType } from "../../shared/types.ts";
-import {
-  extractBuildingCode,
-  extractFloorLevel,
-} from "../../shared/utils/floorCodeUtils.ts";
+import type { PoiInfo } from "../../shared/types.ts";
 
 export const poiService = {
-  createPoi: async (floorCode: string, elementId: string, poiType: PoiType) => {
-    const buildingCode = extractBuildingCode(floorCode);
-    const floorLevel = extractFloorLevel(floorCode);
-
-    await prisma.element.create({
+  createPoi: async (floorCode: string, poiId: string, poiInfo: PoiInfo) => {
+    await prisma.poi.create({
       data: {
-        elementId,
-        type: poiType,
-        buildingCode,
-        floorLevel,
-        poi: {
-          create: {},
-        },
+        poiId,
+        type: poiInfo.type,
+        nodeId: poiInfo.nodeId,
       },
     });
   },
 
-  deletePoi: async (elementId: string) => {
+  deletePoi: async (poiId: string) => {
     await prisma.$transaction(async (tx) => {
       await tx.poi.delete({
-        where: { elementId },
-      });
-
-      await tx.element.delete({
-        where: { elementId },
+        where: { poiId },
       });
     });
   },
 
-  updatePoi: async (elementId: string, poiType: PoiType) => {
-    await prisma.element.update({
-      where: { elementId },
-      data: { type: poiType },
+  updatePoi: async (poiId: string, poiInfo: PoiInfo) => {
+    await prisma.poi.update({
+      where: { poiId },
+      data: poiInfo,
     });
   },
 };
