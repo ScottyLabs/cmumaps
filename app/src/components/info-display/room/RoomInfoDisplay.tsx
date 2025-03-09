@@ -18,6 +18,7 @@ import EditCell from "../shared/EditCell";
 import SelectTypeCell from "../shared/SelectTypeCell";
 import TableCell, { RED_BUTTON_STYLE } from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
+import AliasesSection from "./AliasesSection";
 
 interface Props {
   floorCode: string;
@@ -90,9 +91,9 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
         <CopyIdRow text="Room ID" id={roomId} />
         {renderEditNameRow()}
         {renderEditTypeRow()}
-        {/* {renderEditAliasesRow()} */}
         {/* <RoomInfoButtons floorCode={floorCode} nodes={nodes} /> */}
       </TableLayout>
+      <AliasesSection aliases={room.aliases} />
       <div className="mt-2 flex flex-row-reverse">
         <Button
           text="Delete Room"
