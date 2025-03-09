@@ -10,7 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import GraphInfoDisplay from "./graph/GraphInfoDisplay";
 import PoiInfoDisplay from "./poi/PoiInfoDisplay";
-import PoilessDisplay from "./poi/PoiLessDisplay";
+import PoilessDisplay from "./poi/PoilessDisplay";
 import RoomInfoDisplay from "./room/RoomInfoDisplay";
 import RoomlessDisplay from "./room/RoomlessDisplay";
 

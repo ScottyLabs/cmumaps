@@ -7,13 +7,19 @@ import { webSocketService } from "../index.ts";
 export const roomController = {
   createRoom: async (req: Request, res: Response) => {
     const roomId = req.params.id;
-    const { floorCode, roomInfo } = req.body;
+    const { floorCode, roomNodes, roomInfo } = req.body;
     const socketId = req.socketId;
 
     try {
       const placement = await floorService.getFloorPlacement(floorCode);
-      await roomService.createRoom(floorCode, roomId, roomInfo, placement);
-      const payload = { roomId, roomInfo };
+      await roomService.createRoom(
+        floorCode,
+        roomId,
+        roomNodes,
+        roomInfo,
+        placement
+      );
+      const payload = { roomId, roomNodes, roomInfo };
       webSocketService.broadcastToUserFloor(socketId, "create-room", payload);
       res.json(null);
     } catch (error) {

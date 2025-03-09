@@ -46,6 +46,7 @@ export const buildCreateRoomEditPair = (
 export const buildDeleteRoomEditPair = async (
   batchId: string,
   arg: DeleteRoomArg,
+  roomNodes: string[],
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<EditPair> => {
@@ -58,7 +59,13 @@ export const buildDeleteRoomEditPair = async (
   const rooms = await getRooms(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "createRoom",
-    arg: { floorCode, roomId, roomInfo: rooms[roomId], batchId: null },
+    arg: {
+      floorCode,
+      roomId,
+      roomNodes,
+      roomInfo: rooms[roomId],
+      batchId: null,
+    },
   };
 
   return { batchId, edit, reverseEdit };

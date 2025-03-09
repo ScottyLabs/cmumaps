@@ -14,6 +14,7 @@ export const roomService = {
   createRoom: async (
     floorCode: string,
     roomId: string,
+    roomNodes: string[] | undefined,
     roomInfo: RoomInfo,
     placement: Placement
   ) => {
@@ -35,6 +36,18 @@ export const roomService = {
         polygon: geoPolygon as unknown as InputJsonValue,
       },
     });
+
+    // also need to add room id to every node in this room
+    if (roomNodes) {
+      await prisma.$transaction(async (tx) => {
+        for (const nodeId of roomNodes) {
+          await tx.node.update({
+            where: { nodeId },
+            data: { roomId },
+          });
+        }
+      });
+    }
   },
 
   deleteRoom: async (roomId: string) => {

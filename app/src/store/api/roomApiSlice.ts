@@ -5,7 +5,7 @@ import {
   DeleteRoomPayload,
   UpdateRoomPayload,
 } from "../../../../shared/websocket-types/roomTypes";
-import { buildUpdateNodesInRoomEditPairs } from "../features/history/historyGraphUtils";
+import { getNodesInRoom } from "../features/history/historyGraphUtils";
 import {
   buildCreateRoomEditPair,
   buildDeleteRoomEditPair,
@@ -23,9 +23,9 @@ export type DeleteRoomArg = BaseMutationArg & DeleteRoomPayload;
 export type UpdateRoomArg = BaseMutationArg & UpdateRoomPayload;
 
 export const createRoom =
-  (floorCode: string, { roomId, roomInfo }: CreateRoomPayload) =>
-  (dispatch: AppDispatch) =>
-    dispatch(
+  (floorCode: string, { roomId, roomNodes, roomInfo }: CreateRoomPayload) =>
+  (dispatch: AppDispatch) => {
+    const { undo: roomUndo } = dispatch(
       floorDataApiSlice.util.updateQueryData(
         "getFloorRooms",
         floorCode,
@@ -34,6 +34,29 @@ export const createRoom =
         },
       ),
     );
+
+    // also need to add back room id of every node in this room
+    const { undo: nodesUndo } = dispatch(
+      floorDataApiSlice.util.updateQueryData(
+        "getFloorGraph",
+        floorCode,
+        (draft) => {
+          if (roomNodes) {
+            for (const nodeId of roomNodes) {
+              draft[nodeId].roomId = roomId;
+            }
+          }
+        },
+      ),
+    );
+
+    return {
+      undo: () => {
+        roomUndo();
+        nodesUndo();
+      },
+    };
+  };
 
 export const deleteRoom =
   (floorCode: string, { roomId }: DeleteRoomPayload) =>
@@ -88,10 +111,10 @@ export const roomApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     createRoom: builder.mutation<Response, CreateRoomArg>({
-      query: ({ floorCode, roomId, roomInfo }) => ({
+      query: ({ floorCode, roomId, roomNodes, roomInfo }) => ({
         url: `/rooms/${roomId}`,
         method: "POST",
-        body: { floorCode, roomInfo },
+        body: { floorCode, roomNodes, roomInfo },
         headers: {
           "X-Socket-ID": getSocketId(),
         },
@@ -131,24 +154,22 @@ export const roomApiSlice = apiSlice.injectEndpoints({
             const getStore = getState as () => RootState;
 
             // delete all nodes in this room
-            const nodesEditPairs = await buildUpdateNodesInRoomEditPairs(
+            const roomNodes = await getNodesInRoom(
               floorCode,
               roomId,
-              batchId,
               getStore,
               dispatch,
-            );
-            nodesEditPairs.forEach((editPair) =>
-              dispatch(addEditToHistory(editPair)),
             );
 
             // update room
             const editPair = await buildDeleteRoomEditPair(
               batchId,
               arg,
+              roomNodes,
               getStore,
               dispatch,
             );
+
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
