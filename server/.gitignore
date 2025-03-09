@@ -19,3 +19,5 @@ benchmarks/graphs
 
 .env
 .DS_Store
+
+/dist
