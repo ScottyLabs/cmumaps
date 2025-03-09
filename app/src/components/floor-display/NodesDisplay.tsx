@@ -82,8 +82,9 @@ const NodesDisplay = ({
   const poiNodes: string[] = useMemo(
     () =>
       Object.keys(graph).filter((nodeId) => {
-        return Object.values(pois).filter(
-          (poiInfo) => poiInfo.nodeId === nodeId,
+        return (
+          Object.values(pois).filter((poiInfo) => poiInfo.nodeId === nodeId)
+            .length != 0
         );
       }),
     [graph, pois],
@@ -98,7 +99,7 @@ const NodesDisplay = ({
       return "yellow";
     }
 
-    if (nodeId in poiNodes) {
+    if (poiNodes.includes(nodeId)) {
       return "cyan";
     }
 
