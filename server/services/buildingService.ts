@@ -19,16 +19,15 @@ export const buildingService = {
   },
 
   async getDefaultFloor(buildingCode: string) {
-    const building = await prisma.building.findUnique({
-      where: { buildingCode },
-      select: { defaultFloor: true },
+    const floor = await prisma.floor.findFirst({
+      where: { buildingCode, isDefault: true },
     });
 
-    if (!building) {
-      throw new BuildingError(ERROR_CODES.INVALID_BUILDING_CODE);
+    if (!floor) {
+      throw new BuildingError(ERROR_CODES.NO_DEFAULT_FLOOR);
     }
 
-    return building.defaultFloor;
+    return floor.floorLevel;
   },
 
   async getBuildingFloors(buildingCode: string) {

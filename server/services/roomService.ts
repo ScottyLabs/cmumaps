@@ -13,7 +13,7 @@ import {
 export const roomService = {
   createRoom: async (
     floorCode: string,
-    elementId: string,
+    roomId: string,
     roomInfo: RoomInfo,
     placement: Placement
   ) => {
@@ -23,40 +23,30 @@ export const roomService = {
     const { labelPosition, polygon } = roomInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(labelPosition);
     const geoPolygon = pdfPolygonToGeoPolygon(polygon, placement);
-    const data = {
-      name: roomInfo.name,
-      labelLatitude: geoCoords.latitude,
-      labelLongitude: geoCoords.longitude,
-      polygon: geoPolygon as unknown as InputJsonValue,
-    };
-
-    await prisma.element.create({
+    await prisma.room.create({
       data: {
-        elementId,
+        roomId,
         type: roomInfo.type,
         buildingCode,
         floorLevel,
-        room: {
-          create: data,
-        },
+        name: roomInfo.name,
+        labelLatitude: geoCoords.latitude,
+        labelLongitude: geoCoords.longitude,
+        polygon: geoPolygon as unknown as InputJsonValue,
       },
     });
   },
 
-  deleteRoom: async (elementId: string) => {
+  deleteRoom: async (roomId: string) => {
     await prisma.$transaction(async (tx) => {
       await tx.room.delete({
-        where: { elementId },
-      });
-
-      await tx.element.delete({
-        where: { elementId },
+        where: { roomId },
       });
     });
   },
 
   updateRoom: async (
-    elementId: string,
+    roomId: string,
     roomInfo: Partial<RoomInfo>,
     placement: Placement
   ) => {
@@ -77,7 +67,7 @@ export const roomService = {
     };
 
     await prisma.room.update({
-      where: { elementId },
+      where: { roomId },
       data,
     });
   },
