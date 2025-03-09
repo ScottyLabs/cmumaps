@@ -2,7 +2,7 @@ import { Polygon } from "geojson";
 import Konva from "konva";
 import { throttle } from "lodash";
 
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Circle, Line } from "react-konva";
 
 import { PdfCoordinate, Position } from "../../../../shared/types";
@@ -17,7 +17,6 @@ import {
 } from "../../store/features/modeSlice";
 import {
   releaseVertex,
-  setDragNodePos,
   setDragVertexInfo,
 } from "../../store/features/mouseEventSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -48,19 +47,40 @@ const PolygonEditor = ({
   const mode = useAppSelector((state) => state.mode.mode);
   const ringIndex = useAppSelector((state) => state.polygon.ringIndex);
   const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
+  const dragVertexInfo = useAppSelector(
+    (state) => state.mouseEvent.dragVertexInfo,
+  );
 
   const lines = useMemo(() => {
     const lines: Position[][] = [];
     for (let i = 0; i < polygon.coordinates[ringIndex].length - 1; i++) {
+      // use the dragged vertex info for display
+      if (dragVertexInfo && dragVertexInfo.ringIndex === ringIndex) {
+        if (dragVertexInfo.vertexIndex === i) {
+          lines.push([
+            dragVertexInfo.vertexPos,
+            polygon.coordinates[ringIndex][i + 1],
+          ]);
+          continue;
+        }
+        if (dragVertexInfo.vertexIndex === i + 1) {
+          lines.push([
+            polygon.coordinates[ringIndex][i],
+            dragVertexInfo.vertexPos,
+          ]);
+          continue;
+        }
+      }
+
       lines.push([
         polygon.coordinates[ringIndex][i],
         polygon.coordinates[ringIndex][i + 1],
       ]);
     }
     return lines;
-  }, [polygon.coordinates, ringIndex]);
+  }, [dragVertexInfo, polygon.coordinates, ringIndex]);
 
-  const handleOnDragEnd = (
+  const handleOnDragEnd = async (
     e: Konva.KonvaEventObject<DragEvent>,
     index: number,
   ) => {
@@ -76,7 +96,7 @@ const PolygonEditor = ({
       coords[coords.length - 1] = newPos;
     }
 
-    savePolygonEdit(newPolygon);
+    await savePolygonEdit(newPolygon);
     dispatch(releaseVertex());
   };
 
@@ -103,6 +123,36 @@ const PolygonEditor = ({
     }
   };
 
+  const handleOnDragStart = (
+    e: Konva.KonvaEventObject<DragEvent>,
+    vertexIndex: number,
+  ) => {
+    const vertexPdfCoords = getDragObjectPos(e);
+    const vertexPos = [vertexPdfCoords.x, vertexPdfCoords.y];
+    dispatch(setDragVertexInfo({ roomId, ringIndex, vertexIndex, vertexPos }));
+  };
+
+  const handleDragMove = (vertexIndex: number) =>
+    throttle((e: Konva.KonvaEventObject<DragEvent>) => {
+      const vertexPdfCoords = getDragObjectPos(e);
+      const dragVertexInfo = {
+        roomId,
+        ringIndex,
+        vertexIndex,
+        vertexPos: [vertexPdfCoords.x, vertexPdfCoords.y],
+      };
+
+      getCursorPos(e, offset, scale, (cursorPos) => {
+        const cursorInfo: CursorInfoOnDragVertex = {
+          cursorPos,
+          dragVertexInfo,
+        };
+
+        dispatch(setDragVertexInfo(dragVertexInfo));
+        dispatch(pushCursorInfo(cursorInfo));
+      });
+    }, CURSOR_UPDATE_RATE);
+
   const renderLines = () => {
     return lines.map((line, index) => (
       <Line
@@ -113,35 +163,6 @@ const PolygonEditor = ({
       />
     ));
   };
-
-  const handleOnDragStart = (
-    e: Konva.KonvaEventObject<DragEvent>,
-    vertexIndex: number,
-  ) => {
-    const vertexPos = getDragObjectPos(e);
-    dispatch(setDragVertexInfo({ roomId, ringIndex, vertexIndex, vertexPos }));
-  };
-
-  const handleDragMove = (vertexIndex: number) =>
-    throttle((e: Konva.KonvaEventObject<DragEvent>) => {
-      const dragVertexInfo = {
-        roomId,
-        ringIndex,
-        vertexIndex,
-        vertexPos: getDragObjectPos(e),
-      };
-
-      getCursorPos(e, offset, scale, (cursorPos) => {
-        const vertexPos = getDragObjectPos(e);
-        const cursorInfo: CursorInfoOnDragVertex = {
-          cursorPos,
-          dragVertexInfo,
-        };
-
-        dispatch(setDragNodePos(vertexPos));
-        dispatch(pushCursorInfo(cursorInfo));
-      });
-    }, CURSOR_UPDATE_RATE);
 
   return (
     <>

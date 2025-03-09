@@ -1,4 +1,4 @@
-import { PdfCoordinate } from "../../../../../shared/types";
+import { PdfCoordinate, Position } from "../../../../../shared/types";
 
 interface BaseCursorInfo {
   cursorPos: PdfCoordinate;
@@ -13,7 +13,7 @@ export interface DragVertexInfo {
   roomId: string;
   ringIndex: number;
   vertexIndex: number;
-  vertexPos: PdfCoordinate;
+  vertexPos: Position;
 }
 
 export interface CursorInfoOnDragVertex extends BaseCursorInfo {
