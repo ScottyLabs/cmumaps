@@ -3,7 +3,6 @@ export const ERROR_CODES = {
   INVALID_FLOOR_LEVEL: "INVALID_FLOOR_LEVEL",
   INVALID_BUILDING_CODE: "INVALID_BUILDING_CODE",
   NO_DEFAULT_FLOOR: "NO_DEFAULT_FLOOR",
-  INVALID_POI_ID: "INVALID_POI_ID",
 } as const;
 
 // Create type from object keys
@@ -14,7 +13,6 @@ const ERROR_MESSAGES: Record<ErrorCode, string> = {
   INVALID_FLOOR_LEVEL: "The floor level is invalid!",
   INVALID_BUILDING_CODE: "The building code is invalid!",
   NO_DEFAULT_FLOOR: "This building has no default floor!",
-  INVALID_POI_ID: "The POI ID is invalid!",
 };
 
 // Function to get error message from code

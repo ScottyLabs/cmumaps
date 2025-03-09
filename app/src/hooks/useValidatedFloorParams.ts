@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router";
 
-import { ERROR_CODES } from "../../../shared/errorCode";
 import {
   useGetFloorGraphQuery,
   useGetFloorPoisQuery,
@@ -26,21 +25,14 @@ const useValidatedFloorParams = (floorCode: string) => {
   const roomId = searchParam.get("roomId");
   const poiId = searchParam.get("poiId");
 
-  // redirect from poi id to node id
+  // set the active tab index based on the query params
   useEffect(() => {
-    if (poiId && pois) {
-      if (pois[poiId]) {
-        const nodeId = pois[poiId].nodeId;
-        dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.POI));
-        navigate(`?nodeId=${nodeId}`);
-        return;
-      }
-
-      navigate(`?errorCode=${ERROR_CODES.INVALID_POI_ID}`);
-    }
-
     if (roomId) {
       dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.ROOM));
+    }
+
+    if (poiId) {
+      dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.POI));
     }
 
     if (nodeId) {
@@ -48,19 +40,23 @@ const useValidatedFloorParams = (floorCode: string) => {
     }
   }, [dispatch, navigate, nodeId, poiId, pois, roomId]);
 
-  if (!graph || !rooms) {
+  if (!graph || !pois || !rooms) {
     return { nodeId: null, roomId: null };
   }
 
-  if (nodeId && !graph[nodeId]) {
-    return { error: "Invalid node ID" };
-  }
-
   if (roomId && !rooms[roomId]) {
-    return { error: "Invalid room ID" };
+    return { error: "Invalid Room ID" };
   }
 
-  return { nodeId, roomId };
+  if (poiId && !pois[poiId]) {
+    return { error: "Invalid POI ID" };
+  }
+
+  if (nodeId && !graph[nodeId]) {
+    return { error: "Invalid Node ID" };
+  }
+
+  return { nodeId, roomId, poiId };
 };
 
 export default useValidatedFloorParams;
