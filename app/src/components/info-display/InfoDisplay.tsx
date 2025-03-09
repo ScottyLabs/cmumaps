@@ -34,20 +34,27 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
   }
 
   const renderRoomInfoDisplay = () => {
-    if (roomId) {
+    // roomId is either the roomId in the search param or the roomId of the node
+    const resRoomId: string | null = roomId || (nodeId && graph[nodeId].roomId);
+    if (resRoomId) {
       return (
-        <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
+        <RoomInfoDisplay
+          floorCode={floorCode}
+          roomId={resRoomId}
+          rooms={rooms}
+        />
       );
-    } else if (nodeId) {
+    }
+
+    if (nodeId) {
       return (
         <RoomlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
       );
     }
+
     // this condition should never occur since
-    // we check that either nodeId and roomId is not null
-    else {
-      return <></>;
-    }
+    // we checked that either nodeId and roomId is not null
+    return <></>;
   };
 
   const renderPoiInfoDisplay = (nodeId: string) => {
