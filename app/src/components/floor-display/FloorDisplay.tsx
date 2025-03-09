@@ -32,6 +32,7 @@ const FloorDisplay = ({
   floorCode,
   graph,
   rooms,
+  pois,
   setCanPan,
   handleWheel,
   handleDragMove,
@@ -90,6 +91,7 @@ const FloorDisplay = ({
             floorCode={floorCode}
             graph={graph}
             rooms={rooms}
+            pois={pois}
             offset={offset}
             scale={scale}
           />

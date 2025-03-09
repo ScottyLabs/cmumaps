@@ -2,6 +2,7 @@ import Konva from "konva";
 import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
+import { useMemo } from "react";
 import { Circle } from "react-konva";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -11,6 +12,8 @@ import {
   Graph,
   PdfCoordinate,
   Rooms,
+  Pois,
+  ValidCrossFloorEdgeTypes,
 } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
@@ -41,6 +44,7 @@ interface Props {
   floorCode: string;
   graph: Graph;
   rooms: Rooms;
+  pois: Pois;
   offset: PdfCoordinate;
   scale: number;
 }
@@ -52,7 +56,14 @@ const getNodePos = (e: Konva.KonvaEventObject<DragEvent>) => {
   };
 };
 
-const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
+const NodesDisplay = ({
+  floorCode,
+  graph,
+  rooms,
+  pois,
+  offset,
+  scale,
+}: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -67,7 +78,18 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
   const mode = useAppSelector((state) => state.mode.mode);
   const showNodes = useAppSelector((state) => state.visibility.showNodes);
 
-  if (!graph || !showNodes) {
+  // calculate which nodes are pois
+  const poiNodes: string[] = useMemo(
+    () =>
+      Object.keys(graph).filter((nodeId) => {
+        return Object.values(pois).filter(
+          (poiInfo) => poiInfo.nodeId === nodeId,
+        );
+      }),
+    [graph, pois],
+  );
+
+  if (!showNodes) {
     return;
   }
 
@@ -76,46 +98,45 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
       return "yellow";
     }
 
-    // if (graph[nodeId].type === "poi") {
-    //   return "cyan";
-    // } else if (graph[nodeId].type === "room") {
-    //   const room =
-    //     graph[nodeId].elementId &&
-    //     graph[nodeId].type === "room" &&
-    //     rooms[graph[nodeId].elementId];
+    if (nodeId in poiNodes) {
+      return "cyan";
+    }
 
-    //   // colors for cross floor edges
-    //   const isValidCrossFloorEdgeType =
-    //     room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
+    const room = graph[nodeId].roomId && rooms[graph[nodeId].roomId];
 
-    //   const hasAcrossFloorEdge =
-    //     Object.values(graph[nodeId].neighbors).filter(
-    //       (neighbor) => neighbor.outFloorCode,
-    //     ).length != 0;
+    if (!room) {
+      return "red";
+    }
 
-    //   if (isValidCrossFloorEdgeType) {
-    //     if (hasAcrossFloorEdge) {
-    //       return "lime";
-    //     } else {
-    //       return "pink";
-    //     }
-    //   } else {
-    //     if (hasAcrossFloorEdge) {
-    //       return "pink";
-    //     }
-    //   }
+    // colors for cross floor edges
+    const isValidCrossFloorEdgeType =
+      room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
 
-    //   // warning, error, and default colors
-    //   if (room && room.type == "Inaccessible") {
-    //     return "gray";
-    //   }
+    const hasAcrossFloorEdge =
+      Object.values(graph[nodeId].neighbors).filter(
+        (neighbor) => neighbor.outFloorCode,
+      ).length != 0;
 
-    //   if (room && room.polygon.coordinates[0].length == 0) {
-    //     return "red";
-    //   }
-    // } else {
-    //   return "red";
-    // }
+    if (isValidCrossFloorEdgeType) {
+      if (hasAcrossFloorEdge) {
+        return "lime";
+      } else {
+        return "pink";
+      }
+    } else {
+      if (hasAcrossFloorEdge) {
+        return "pink";
+      }
+    }
+
+    // warning, error, and default colors
+    if (room && room.type == "Inaccessible") {
+      return "gray";
+    }
+
+    if (room && room.polygon.coordinates[0].length == 0) {
+      return "red";
+    }
 
     return "blue";
   };
