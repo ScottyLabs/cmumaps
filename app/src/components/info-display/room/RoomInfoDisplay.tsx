@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
+import { useDispatch } from "react-redux";
 import { SingleValue } from "react-select";
 
 import {
@@ -12,6 +13,12 @@ import {
   useDeleteRoomMutation,
   useUpdateRoomMutation,
 } from "../../../store/api/roomApiSlice";
+import {
+  selectEditPolygon,
+  toggleEditPolygon,
+} from "../../../store/features/modeSlice";
+import { toggleEditRoomLabel } from "../../../store/features/uiSlice";
+import { useAppSelector } from "../../../store/hooks";
 import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
 import EditCell from "../shared/EditCell";
@@ -26,6 +33,10 @@ interface Props {
 }
 
 const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
+  const dispatch = useDispatch();
+  const editPolygon = useAppSelector(selectEditPolygon);
+  const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
+
   const room = rooms[roomId];
   const [updateRoom] = useUpdateRoomMutation();
   const [deleteRoom] = useDeleteRoomMutation();
@@ -81,6 +92,32 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
     );
   };
 
+  const renderToggleEditPolygonButton = () => {
+    return (
+      <td className="text-center">
+        <button
+          className="my-2 w-28 rounded bg-slate-500 px-4 py-1 text-sm text-white hover:bg-slate-700"
+          onClick={() => dispatch(toggleEditPolygon())}
+        >
+          {editPolygon ? "Finish Editing" : "Edit Room Polygon"}
+        </button>
+      </td>
+    );
+  };
+
+  const renderToggleEditLabelButton = () => {
+    return (
+      <td className="text-center">
+        <button
+          className="my-2 w-28 rounded bg-slate-500 px-4 py-1 text-sm text-white hover:bg-slate-700"
+          onClick={() => dispatch(toggleEditRoomLabel())}
+        >
+          {editRoomLabel ? "Finish Editing" : "Edit Room Label"}
+        </button>
+      </td>
+    );
+  };
+
   const deleteRoomHelper = () =>
     deleteRoom({ floorCode, roomId, batchId: uuidv4() });
 
@@ -90,7 +127,10 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
         <CopyIdRow text="Room ID" id={roomId} />
         {renderEditNameRow()}
         {renderEditTypeRow()}
-        {/* <RoomInfoButtons floorCode={floorCode} nodes={nodes} /> */}
+        <tr>
+          {renderToggleEditPolygonButton()}
+          {renderToggleEditLabelButton()}
+        </tr>
       </TableLayout>
       <div className="mt-2 flex flex-row-reverse">
         <Button
