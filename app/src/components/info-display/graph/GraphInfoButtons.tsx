@@ -9,7 +9,7 @@ import {
   setMode,
 } from "../../../store/features/modeSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import Button from "../shared/Button";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 import { RED_BUTTON_STYLE } from "../shared/TableCell";
 
 interface Props {
@@ -34,19 +34,19 @@ const GraphInfoButtons = ({ floorCode, nodeId }: Props) => {
   return (
     <div className="space-y-2">
       <div className="flex space-x-4">
-        <Button text="Copy Node ID" handleClick={copyNodeId} />
-        <Button
+        <InfoDisplayButton text="Copy Node ID" handleClick={copyNodeId} />
+        <InfoDisplayButton
           text="Delete Node"
           handleClick={deleteNodeHelper}
           style={RED_BUTTON_STYLE}
         />
       </div>
       <div className="flex space-x-4">
-        <Button
+        <InfoDisplayButton
           text="Add Edge"
           handleClick={() => dispatch(setMode(ADD_EDGE))}
         />
-        <Button
+        <InfoDisplayButton
           text="Delete Edge"
           handleClick={() => dispatch(setMode(DELETE_EDGE))}
         />

@@ -7,8 +7,8 @@ import {
   useDeletePoiMutation,
   useUpdatePoiMutation,
 } from "../../../store/api/poiApiSlice";
-import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 import SelectTypeCell from "../shared/SelectTypeCell";
 import { RED_BUTTON_STYLE } from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
@@ -61,7 +61,7 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
         {renderEditTypeRow()}
       </TableLayout>
       <div className="mt-2 flex flex-row-reverse">
-        <Button
+        <InfoDisplayButton
           text="Delete POI"
           handleClick={deletePoiHelper}
           style={RED_BUTTON_STYLE + " text-base"}

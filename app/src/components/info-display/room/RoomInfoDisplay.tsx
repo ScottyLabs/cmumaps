@@ -23,9 +23,9 @@ import {
   toggleEditRoomLabel,
 } from "../../../store/features/uiSlice";
 import { useAppSelector } from "../../../store/hooks";
-import Button from "../shared/Button";
 import CopyIdRow from "../shared/CopyIdRow";
 import EditCell from "../shared/EditCell";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 import SelectTypeCell from "../shared/SelectTypeCell";
 import TableCell, { RED_BUTTON_STYLE } from "../shared/TableCell";
 import TableLayout from "../shared/TableLayout";
@@ -140,7 +140,7 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
         </tr>
       </TableLayout>
       <div className="mt-2 flex flex-row-reverse">
-        <Button
+        <InfoDisplayButton
           text="Delete Room"
           handleClick={deleteRoomHelper}
           style={RED_BUTTON_STYLE + " text-base"}

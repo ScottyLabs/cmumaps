@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Graph, RoomInfo } from "../../../../../shared/types";
 import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
-import Button from "../shared/Button";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 
 interface Props {
   floorCode: string;
@@ -32,7 +32,9 @@ const RoomlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
     await createRoom({ floorCode, roomId, roomNodes, roomInfo, batchId });
   };
 
-  return <Button text="Create Room" handleClick={handleCreateRoom} />;
+  return (
+    <InfoDisplayButton text="Create Room" handleClick={handleCreateRoom} />
+  );
 };
 
 export default RoomlessDisplay;

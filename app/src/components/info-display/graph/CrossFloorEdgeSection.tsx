@@ -9,7 +9,7 @@ import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";
 import { useAppDispatch } from "../../../store/hooks";
-import Button from "../shared/Button";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 
 interface Props {
   floorCode: string;
@@ -149,7 +149,10 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
           />
         </div>
       </div>
-      <Button text="Add Edge Across Floors" handleClick={addEdgeWithId} />
+      <InfoDisplayButton
+        text="Add Edge Across Floors"
+        handleClick={addEdgeWithId}
+      />
     </div>
   );
 };

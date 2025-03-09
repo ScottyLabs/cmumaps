@@ -6,7 +6,7 @@ interface Props {
   style?: string;
 }
 
-const Button = ({ text, handleClick, style }: Props) => {
+const InfoDisplayButton = ({ text, handleClick, style }: Props) => {
   return (
     <div>
       <button
@@ -22,4 +22,4 @@ const Button = ({ text, handleClick, style }: Props) => {
   );
 };
 
-export default Button;
+export default InfoDisplayButton;
