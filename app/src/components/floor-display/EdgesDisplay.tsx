@@ -2,20 +2,25 @@ import { useMemo } from "react";
 import { Line } from "react-konva";
 
 import { Graph } from "../../../../shared/types";
+import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { useAppSelector } from "../../store/hooks";
 
 interface Props {
+  floorCode: string;
   graph: Graph;
 }
 
-const EdgesDisplay = ({ graph }: Props) => {
+const EdgesDisplay = ({ floorCode, graph }: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.dragNodeId);
   const dragNodePos = useAppSelector((state) => state.mouseEvent.dragNodePos);
   const showEdges = useAppSelector((state) => state.visibility.showEdges);
   const editPolygon = useAppSelector(selectEditPolygon);
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
+  const mst = useAppSelector((state) => state.data.mst);
+
+  const { nodeId } = useValidatedFloorParams(floorCode);
 
   const edges: [number[], string][] = useMemo(() => {
     const includedNodes = new Set();
@@ -36,6 +41,26 @@ const EdgesDisplay = ({ graph }: Props) => {
       // }
 
       return true;
+    };
+
+    const getStrokeColor = (curId: string, neighborId: string) => {
+      // orange if selected
+      if (curId == nodeId || neighborId == nodeId) {
+        return "orange";
+      }
+
+      // blue if in the mst
+      if (mst) {
+        if (
+          (mst && mst[curId] && mst[curId][neighborId]) ||
+          (mst[neighborId] && mst[neighborId][curId])
+        ) {
+          return "blue";
+        }
+      }
+
+      // default is green
+      return "green";
     };
 
     const edges: [number[], string][] = [];
@@ -60,14 +85,14 @@ const EdgesDisplay = ({ graph }: Props) => {
             line[3] = dragNodePos.y;
           }
 
-          edges.push([line, "green"]);
+          edges.push([line, getStrokeColor(curId, neighborId)]);
         }
       }
       includedNodes.add(curId);
     }
 
     return edges;
-  }, [dragNodePos, graph, nodeIdOnDrag]);
+  }, [dragNodePos, graph, mst, nodeId, nodeIdOnDrag]);
 
   if (!showEdges || editPolygon || editRoomLabel) {
     return;

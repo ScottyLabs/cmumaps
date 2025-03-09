@@ -46,7 +46,7 @@ const FloorDisplay = ({
   // const editPolygon = useAppSelector(selectEditPolygon);
 
   // custom hooks
-  useKeyboardShortcuts(floorCode);
+  useKeyboardShortcuts(floorCode, graph, rooms);
   const { roomId } = useValidatedFloorParams(floorCode);
   const handleStageClick = useStageClickHandler(
     floorCode,
@@ -94,7 +94,7 @@ const FloorDisplay = ({
         <Layer>
           <OutlineDisplay floorCode={floorCode} />
           <PolygonsDisplay rooms={rooms} />
-          <EdgesDisplay graph={graph} />
+          <EdgesDisplay floorCode={floorCode} graph={graph} />
           <NodesDisplay
             floorCode={floorCode}
             graph={graph}

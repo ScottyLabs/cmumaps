@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
+import { Graph, Rooms } from "../../../shared/types";
 import { useInvalidateCacheMutation } from "../store/api/floorDataApiSlice";
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { redo, undo } from "../store/features/history/historyThunks";
@@ -27,9 +28,14 @@ import {
   toggleShowPolygons,
 } from "../store/features/visibilitySlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { calcMst } from "../utils/graphUtils";
 import useValidatedFloorParams from "./useValidatedFloorParams";
 
-const useKeyboardShortcuts = (floorCode: string) => {
+const useKeyboardShortcuts = (
+  floorCode: string,
+  graph: Graph,
+  rooms: Rooms,
+) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -130,11 +136,6 @@ const useKeyboardShortcuts = (floorCode: string) => {
               toastNodeNotSelectedErr();
             }
             break;
-          case "m":
-            // if (nodes && rooms) {
-            //   calcMst(nodes, rooms, router, dispatch);
-            // }
-            break;
 
           // delete or backspace to delete a node
           case "Backspace":
@@ -158,9 +159,9 @@ const useKeyboardShortcuts = (floorCode: string) => {
 
           // enters polygon editing mode
           case "v":
-            // if (selectedNodeId) {
-            //   dispatch(setMode(POLYGON_ADD_VERTEX));
-            // }
+            if (selectedNodeId) {
+              dispatch(setMode(POLYGON_ADD_VERTEX));
+            }
             break;
         }
       }
@@ -181,6 +182,27 @@ const useKeyboardShortcuts = (floorCode: string) => {
     invalidateCache,
     navigate,
   ]);
+
+  // mst calculation as a separate effect to avoid re-calculating on every graph/rooms edit
+  useEffect(() => {
+    if (shortcutsDisabled) {
+      return;
+    }
+
+    const handleKeyDown = async (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "m":
+          calcMst(graph, rooms, navigate, dispatch);
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [graph, rooms, navigate, dispatch, shortcutsDisabled]);
 };
 
 export default useKeyboardShortcuts;
