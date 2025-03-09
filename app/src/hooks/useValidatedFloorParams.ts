@@ -8,7 +8,10 @@ import {
   useGetFloorPoisQuery,
   useGetFloorRoomsQuery,
 } from "../store/api/floorDataApiSlice";
-import { setInfoDisplayActiveTabIndex } from "../store/features/uiSlice";
+import {
+  InfoDisplayTabIndex,
+  setInfoDisplayActiveTabIndex,
+} from "../store/features/uiSlice";
 
 const useValidatedFloorParams = (floorCode: string) => {
   const navigate = useNavigate();
@@ -28,14 +31,22 @@ const useValidatedFloorParams = (floorCode: string) => {
     if (poiId && pois) {
       if (pois[poiId]) {
         const nodeId = pois[poiId].nodeId;
-        dispatch(setInfoDisplayActiveTabIndex(1));
+        dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.POI));
         navigate(`?nodeId=${nodeId}`);
         return;
       }
 
       navigate(`?errorCode=${ERROR_CODES.INVALID_POI_ID}`);
     }
-  }, [dispatch, navigate, poiId, pois]);
+
+    if (roomId) {
+      dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.ROOM));
+    }
+
+    if (nodeId) {
+      dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.NODE));
+    }
+  }, [dispatch, navigate, nodeId, poiId, pois, roomId]);
 
   if (!graph || !rooms) {
     return { nodeId: null, roomId: null };

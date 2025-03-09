@@ -1,14 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export enum InfoDisplayTabIndex {
+  ROOM = 0,
+  POI = 1,
+  NODE = 2,
+}
+
 interface UIState {
-  infoDisplayActiveTabIndex: number;
+  infoDisplayActiveTabIndex: InfoDisplayTabIndex;
   showRoomSpecific: boolean;
   editRoomLabel: boolean;
   nodeSize: number;
 }
 
 const initialState: UIState = {
-  infoDisplayActiveTabIndex: 0,
+  infoDisplayActiveTabIndex: InfoDisplayTabIndex.ROOM,
   showRoomSpecific: false,
   editRoomLabel: false,
   nodeSize: 2,
