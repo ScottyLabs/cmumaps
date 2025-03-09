@@ -2,6 +2,7 @@ import { Polygon } from "geojson";
 
 import { Line } from "react-konva";
 
+import { PdfCoordinate } from "../../../../shared/types";
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { useAppSelector } from "../../store/hooks";
 import PolygonEditor from "./PolygonEditor";
@@ -10,9 +11,17 @@ interface Props {
   floorCode: string;
   roomId: string;
   polygon: Polygon;
+  offset: PdfCoordinate;
+  scale: number;
 }
 
-const SelectedPolygonDisplay = ({ floorCode, roomId, polygon }: Props) => {
+const SelectedPolygonDisplay = ({
+  floorCode,
+  roomId,
+  polygon,
+  offset,
+  scale,
+}: Props) => {
   const nodeSize = useAppSelector((state) => state.ui.nodeSize);
   const editPolygon = useAppSelector(selectEditPolygon);
 
@@ -37,6 +46,8 @@ const SelectedPolygonDisplay = ({ floorCode, roomId, polygon }: Props) => {
       roomId={roomId}
       polygon={polygon}
       nodeSize={nodeSize}
+      offset={offset}
+      scale={scale}
     />
   );
 };

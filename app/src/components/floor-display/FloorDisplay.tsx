@@ -108,6 +108,8 @@ const FloorDisplay = ({
               floorCode={floorCode}
               roomId={roomId}
               polygon={rooms[roomId].polygon}
+              offset={offset}
+              scale={scale}
             />
           )}
           <LabelsDisplay floorCode={floorCode} graph={graph} rooms={rooms} />

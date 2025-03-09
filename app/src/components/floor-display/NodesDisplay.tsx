@@ -37,7 +37,11 @@ import {
   setDragNodePos,
 } from "../../store/features/mouseEventSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getCursorPos, setCursor } from "../../utils/canvasUtils";
+import {
+  getCursorPos,
+  getDragObjectPos,
+  setCursor,
+} from "../../utils/canvasUtils";
 import { posToRoomId } from "../../utils/roomUtils";
 
 interface Props {
@@ -48,13 +52,6 @@ interface Props {
   offset: PdfCoordinate;
   scale: number;
 }
-
-const getNodePos = (e: Konva.KonvaEventObject<DragEvent>) => {
-  return {
-    x: Number(e.target.x().toFixed(2)),
-    y: Number(e.target.y().toFixed(2)),
-  };
-};
 
 const NodesDisplay = ({
   floorCode,
@@ -211,7 +208,7 @@ const NodesDisplay = ({
   const handleDragMove = (nodeId: string) =>
     throttle((e: Konva.KonvaEventObject<DragEvent>) => {
       getCursorPos(e, offset, scale, (cursorPos) => {
-        const nodePos = getNodePos(e);
+        const nodePos = getDragObjectPos(e);
         const cursorInfo: CursorInfoOnDragNode = {
           nodeId: nodeId,
           cursorPos,
@@ -227,7 +224,7 @@ const NodesDisplay = ({
     (nodeId: string) => (e: Konva.KonvaEventObject<DragEvent>) => {
       // create new node
       const nodeInfo: NodeInfo = { ...graph[nodeId] };
-      nodeInfo.pos = getNodePos(e);
+      nodeInfo.pos = getDragObjectPos(e);
 
       // locate new room id
       nodeInfo.roomId = posToRoomId(nodeInfo.pos, rooms);

@@ -9,12 +9,15 @@ export interface CursorInfoOnDragNode extends BaseCursorInfo {
   nodePos: PdfCoordinate;
 }
 
-interface CursorInfoOnDragVertex extends BaseCursorInfo {
+export interface DragVertexInfo {
   roomId: string;
-  holeIndex: number;
+  ringIndex: number;
   vertexIndex: number;
   vertexPos: PdfCoordinate;
-  cursorPos: PdfCoordinate;
+}
+
+export interface CursorInfoOnDragVertex extends BaseCursorInfo {
+  dragVertexInfo: DragVertexInfo;
 }
 
 type CursorInfoOnMove = BaseCursorInfo;

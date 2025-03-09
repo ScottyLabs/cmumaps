@@ -11,6 +11,7 @@ import {
   ADD_NODE,
   GRAPH_SELECT,
   POLYGON_ADD_VERTEX,
+  POLYGON_SELECT,
   setMode,
 } from "../store/features/modeSlice";
 import {
@@ -125,6 +126,7 @@ const useStageClickHandler = (
       }
 
       savePolygonEdit(newPolygon);
+      dispatch(setMode(POLYGON_SELECT));
     });
   };
 

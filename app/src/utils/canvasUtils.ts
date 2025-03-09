@@ -35,3 +35,10 @@ export const getCursorPos = (
     y: Number(((pos.y - offset.y) / scale).toFixed(2)),
   });
 };
+
+export const getDragObjectPos = (e: Konva.KonvaEventObject<DragEvent>) => {
+  return {
+    x: Number(e.target.x().toFixed(2)),
+    y: Number(e.target.y().toFixed(2)),
+  };
+};
