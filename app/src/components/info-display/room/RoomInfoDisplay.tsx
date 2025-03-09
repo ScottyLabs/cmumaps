@@ -56,19 +56,17 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
   };
 
   const renderEditTypeRow = () => {
-    const handleChange =
-      () =>
-      async (
-        newValue: SingleValue<{
-          value: string | undefined;
-          label: string | undefined;
-        }>,
-      ) => {
-        if (newValue?.value && newValue?.value !== room.type) {
-          const newRoomInfo = { ...room, type: newValue.value as RoomType };
-          handleSaveHelper(newRoomInfo);
-        }
-      };
+    const handleChange = (
+      newValue: SingleValue<{
+        value: string | undefined;
+        label: string | undefined;
+      }>,
+    ) => {
+      if (newValue?.value && newValue?.value !== room.type) {
+        const newRoomInfo = { ...room, type: newValue.value as RoomType };
+        handleSaveHelper(newRoomInfo);
+      }
+    };
 
     return (
       <tr>
