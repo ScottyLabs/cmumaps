@@ -1,6 +1,6 @@
 import type { Polygon } from "geojson";
 
-export type { Polygon } from "geojson";
+export type { Polygon, Position } from "geojson";
 
 //#region Coordinate types
 export interface GeoCoordinate {

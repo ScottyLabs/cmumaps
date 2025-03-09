@@ -2,10 +2,10 @@ import { Polygon } from "geojson";
 import Konva from "konva";
 import { throttle } from "lodash";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Circle, Line } from "react-konva";
 
-import { PdfCoordinate } from "../../../../shared/types";
+import { PdfCoordinate, Position } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
@@ -48,6 +48,17 @@ const PolygonEditor = ({
   const mode = useAppSelector((state) => state.mode.mode);
   const ringIndex = useAppSelector((state) => state.polygon.ringIndex);
   const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
+
+  const lines = useMemo(() => {
+    const lines: Position[][] = [];
+    for (let i = 0; i < polygon.coordinates[ringIndex].length - 1; i++) {
+      lines.push([
+        polygon.coordinates[ringIndex][i],
+        polygon.coordinates[ringIndex][i + 1],
+      ]);
+    }
+    return lines;
+  }, [polygon.coordinates, ringIndex]);
 
   const handleOnDragEnd = (
     e: Konva.KonvaEventObject<DragEvent>,
@@ -93,36 +104,14 @@ const PolygonEditor = ({
   };
 
   const renderLines = () => {
-    const coords = polygon.coordinates[ringIndex];
-    let prev = coords[0];
-
-    const lines: React.JSX.Element[] = [];
-
-    // skip the first point and point on drag
-    coords.map((points, index) => {
-      if (
-        !(
-          (index === 0)
-          // ||
-          // index === vertexOnDrag ||
-          // (index + coords.length - 1) % coords.length === vertexOnDrag ||
-          // special case of dragging the last coord
-          // (vertexOnDrag == 0 && index == coords.length - 1)
-        )
-      ) {
-        lines.push(
-          <Line
-            key={index}
-            points={[...prev, ...points]}
-            stroke="orange"
-            strokeWidth={nodeSize / 2}
-          />,
-        );
-      }
-      prev = points;
-    });
-
-    return lines.map((line) => line);
+    return lines.map((line, index) => (
+      <Line
+        key={index}
+        points={[...line[0], ...line[1]]}
+        stroke="orange"
+        strokeWidth={nodeSize / 2}
+      />
+    ));
   };
 
   const handleOnDragStart = (
