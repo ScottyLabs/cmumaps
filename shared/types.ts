@@ -2,6 +2,7 @@ import type { Polygon } from "geojson";
 
 export * from "geojson";
 
+//#region Coordinate types
 export interface GeoCoordinate {
   latitude: number;
   longitude: number;
@@ -12,9 +13,15 @@ export interface PdfCoordinate {
   y: number;
 }
 
-/**
- * Edge Types
- */
+export interface Placement {
+  geoCenter: GeoCoordinate;
+  pdfCenter: PdfCoordinate;
+  scale: number;
+  angle: number;
+}
+//#endregion
+
+//#region Graph types
 export const ValidCrossFloorEdgeTypes = [
   "Ramp",
   "Stairs",
@@ -24,18 +31,10 @@ export const ValidCrossFloorEdgeTypes = [
 
 export type EdgeType = (typeof ValidCrossFloorEdgeTypes)[number];
 
-/**
- * Graph types
- */
 export interface EdgeInfo {
   outFloorCode?: string;
 }
 
-export type ElementType = "room" | "poi" | null;
-
-/**
- * Graph types
- */
 export interface NodeInfo {
   /**
    * the position (x and y coordinates) of the node
@@ -48,39 +47,14 @@ export interface NodeInfo {
   neighbors: Record<string, EdgeInfo>;
 
   /**
-   * A node belongs to either a "room" or a "poi" or a floor in general
+   * A node belongs to a room if it is inside the room
+   * If null, the node is not associated with any room
    */
-  elementId: string | null;
-
-  /**
-   * The type of the node
-   */
-  type: ElementType;
+  roomId: string | null;
 }
+//#endregion
 
-/**
- * Door type
- */
-export interface DoorInfo {
-  /**
-   * list of lines that outlines the door
-   */
-  lineList: number[][];
-
-  /**
-   * center of the door points
-   */
-  center: PdfCoordinate;
-
-  /**
-   * the id of the rooms this door connects
-   */
-  roomIds: string[];
-}
-
-/**
- * Room types
- */
+//#region Room types
 export const RoomTypes = [
   "Default",
   "Corridor",
@@ -148,7 +122,9 @@ export interface RoomInfo {
    */
   polygon: Polygon;
 }
+//#endregion
 
+//#region POI types
 export const PoiTypes = [
   "Vending Machine",
   "Water Fountain",
@@ -156,16 +132,31 @@ export const PoiTypes = [
   "",
 ] as const;
 export type PoiType = (typeof PoiTypes)[number];
+//#endregion
 
+// Floor data types
 export type Rooms = Record<string, RoomInfo>;
 export type Graph = Record<string, NodeInfo>;
 export type Pois = Record<string, PoiType>;
 
+/**
+ * Misc types
+ */
 export type Mst = Record<string, Record<string, boolean>>;
 
-export interface Placement {
-  geoCenter: GeoCoordinate;
-  pdfCenter: PdfCoordinate;
-  scale: number;
-  angle: number;
+export interface DoorInfo {
+  /**
+   * list of lines that outlines the door
+   */
+  lineList: number[][];
+
+  /**
+   * center of the door points
+   */
+  center: PdfCoordinate;
+
+  /**
+   * the id of the rooms this door connects
+   */
+  roomIds: string[];
 }
