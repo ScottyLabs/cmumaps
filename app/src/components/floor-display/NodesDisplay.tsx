@@ -29,6 +29,7 @@ import {
   ADD_EDGE,
   DELETE_EDGE,
   GRAPH_SELECT,
+  selectEditPolygon,
   setMode,
 } from "../../store/features/modeSlice";
 import {
@@ -74,6 +75,8 @@ const NodesDisplay = ({
   const showRoomSpecific = useAppSelector((state) => state.ui.showRoomSpecific);
   const mode = useAppSelector((state) => state.mode.mode);
   const showNodes = useAppSelector((state) => state.visibility.showNodes);
+  const editPolygon = useAppSelector(selectEditPolygon);
+  const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
 
   // calculate which nodes are pois
   const poiNodes: string[] = useMemo(
@@ -87,7 +90,7 @@ const NodesDisplay = ({
     [graph, pois],
   );
 
-  if (!showNodes) {
+  if (!showNodes || editPolygon || editRoomLabel) {
     return;
   }
 

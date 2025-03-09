@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Line } from "react-konva";
 
 import { Graph } from "../../../../shared/types";
+import { selectEditPolygon } from "../../store/features/modeSlice";
 import { useAppSelector } from "../../store/hooks";
 
 interface Props {
@@ -13,6 +14,8 @@ const EdgesDisplay = ({ graph }: Props) => {
   const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.dragNodeId);
   const dragNodePos = useAppSelector((state) => state.mouseEvent.dragNodePos);
   const showEdges = useAppSelector((state) => state.visibility.showEdges);
+  const editPolygon = useAppSelector(selectEditPolygon);
+  const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
 
   const edges: [number[], string][] = useMemo(() => {
     const includedNodes = new Set();
@@ -66,7 +69,7 @@ const EdgesDisplay = ({ graph }: Props) => {
     return edges;
   }, [dragNodePos, graph, nodeIdOnDrag]);
 
-  if (!showEdges) {
+  if (!showEdges || editPolygon || editRoomLabel) {
     return;
   }
 
