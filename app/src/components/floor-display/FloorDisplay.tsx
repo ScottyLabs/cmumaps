@@ -6,6 +6,7 @@ import { Graph, PdfCoordinate, Pois, Rooms } from "../../../../shared/types";
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";
 import useStageClickHandler from "../../hooks/useStageClickHandler";
+import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { LIVE_CURSORS_ENABLED } from "../../settings";
 import { useAppSelector } from "../../store/hooks";
 import LiveCursors from "../live-cursors/LiveCursors";
@@ -14,6 +15,7 @@ import LabelsDisplay from "./LabelsDisplay";
 import NodesDisplay from "./NodesDisplay";
 import OutlineDisplay from "./OutlineDisplay";
 import PolygonsDisplay from "./PolygonsDisplay";
+import SelectedPolygonDisplay from "./SelectedPolygonDisplay";
 
 interface Props {
   floorCode: string;
@@ -45,6 +47,7 @@ const FloorDisplay = ({
 
   // custom hooks
   useKeyboardShortcuts(floorCode);
+  const { roomId } = useValidatedFloorParams(floorCode);
   const handleStageClick = useStageClickHandler(floorCode, scale, offset);
   const handleMouseMove = useCursorTracker(offset, scale);
 
@@ -95,6 +98,13 @@ const FloorDisplay = ({
             offset={offset}
             scale={scale}
           />
+          {roomId && (
+            <SelectedPolygonDisplay
+              floorCode={floorCode}
+              roomId={roomId}
+              polygon={rooms[roomId].polygon}
+            />
+          )}
           <LabelsDisplay floorCode={floorCode} graph={graph} rooms={rooms} />
           {LIVE_CURSORS_ENABLED && (
             <LiveCursors floorCode={floorCode} scale={scale} />
