@@ -33,14 +33,14 @@ export const poiController = {
     }
   },
 
-  updatePoi: async (req: Request, res: Response) => {
+  updatePoiType: async (req: Request, res: Response) => {
     const poiId = req.params.id;
-    const { poiInfo } = req.body;
+    const { poiType } = req.body;
     const socketId = req.socketId;
 
     try {
-      await poiService.updatePoi(poiId, poiInfo);
-      const payload = { poiId, poiInfo };
+      await poiService.updatePoiType(poiId, poiType);
+      const payload = { poiId, poiType };
       webSocketService.broadcastToUserFloor(socketId, "update-poi", payload);
       res.json(null);
     } catch (error) {

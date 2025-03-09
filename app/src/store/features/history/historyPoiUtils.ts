@@ -77,7 +77,7 @@ export const buildUpdatePoiEditPair = async (
   const pois = await getPois(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "updatePoi",
-    arg: { floorCode, poiId, poiInfo: pois[poiId], batchId: null },
+    arg: { floorCode, poiId, poiType: pois[poiId].type, batchId: null },
   };
 
   return { batchId, edit, reverseEdit };

@@ -34,8 +34,7 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
     ) => {
       if (newValue?.value && newValue?.value !== poiInfo.type) {
         const poiType = newValue.value as PoiType;
-        const poiInfo = { ...pois[poiId], type: poiType };
-        updatePoi({ floorCode, poiId, poiInfo, batchId: uuidv4() });
+        updatePoi({ floorCode, poiId, poiType, batchId: uuidv4() });
       }
     };
 

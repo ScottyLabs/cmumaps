@@ -48,14 +48,14 @@ export const deletePoi =
     );
 
 export const updatePoi =
-  (floorCode: string, { poiId, poiInfo }: UpdatePoiPayload) =>
+  (floorCode: string, { poiId, poiType }: UpdatePoiPayload) =>
   (dispatch: AppDispatch) =>
     dispatch(
       floorDataApiSlice.util.updateQueryData(
         "getFloorPois",
         floorCode,
         (draft) => {
-          draft[poiId] = poiInfo;
+          draft[poiId].type = poiType;
         },
       ),
     );
@@ -123,17 +123,17 @@ export const poiApiSlice = apiSlice.injectEndpoints({
       },
     }),
     updatePoi: builder.mutation<Response, UpdatePoiArg>({
-      query: ({ floorCode, poiId, poiInfo }) => ({
-        url: `/pois/${poiId}`,
+      query: ({ floorCode, poiId, poiType }) => ({
+        url: `/pois/${poiId}/type`,
         method: "PUT",
-        body: { floorCode, poiInfo },
+        body: { floorCode, poiType },
         headers: {
           "X-Socket-ID": getSocketId(),
         },
       }),
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
-          const { floorCode, poiId, poiInfo, batchId } = arg;
+          const { floorCode, poiId, poiType, batchId } = arg;
           // add to history
           if (batchId) {
             const getStore = getState as () => RootState;
@@ -146,7 +146,7 @@ export const poiApiSlice = apiSlice.injectEndpoints({
             dispatch(addEditToHistory(editPair));
           }
           // optimistic update
-          const { undo } = dispatch(updatePoi(floorCode, { poiId, poiInfo }));
+          const { undo } = dispatch(updatePoi(floorCode, { poiId, poiType }));
           handleQueryError(queryFulfilled, undo);
         } catch (e) {
           toast.error("Check the Console for detailed error.");

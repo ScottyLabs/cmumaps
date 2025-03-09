@@ -1,5 +1,5 @@
 import { prisma } from "../index.ts";
-import type { PoiInfo } from "../../shared/types.ts";
+import type { PoiInfo, PoiType } from "../../shared/types.ts";
 
 export const poiService = {
   createPoi: async (floorCode: string, poiId: string, poiInfo: PoiInfo) => {
@@ -20,10 +20,10 @@ export const poiService = {
     });
   },
 
-  updatePoi: async (poiId: string, poiInfo: PoiInfo) => {
+  updatePoiType: async (poiId: string, poiType: PoiType) => {
     await prisma.poi.update({
       where: { poiId },
-      data: poiInfo,
+      data: { type: poiType },
     });
   },
 };
