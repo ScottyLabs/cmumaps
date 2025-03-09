@@ -1,6 +1,10 @@
 import { Pois } from "../../../../../shared/types";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
-import { CreatePoiArg, DeletePoiArg } from "../../api/poiApiSlice";
+import {
+  CreatePoiArg,
+  DeletePoiArg,
+  UpdatePoiArg,
+} from "../../api/poiApiSlice";
 import { AppDispatch, RootState } from "../../store";
 import { Edit, EditPair } from "./historyTypes";
 
@@ -52,7 +56,7 @@ export const buildDeletePoiEditPair = async (
   const pois = await getPois(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "createPoi",
-    arg: { floorCode, poiId, poiType: pois[poiId], batchId: null },
+    arg: { floorCode, poiId, poiInfo: pois[poiId], batchId: null },
   };
 
   return { batchId, edit, reverseEdit };
@@ -60,7 +64,7 @@ export const buildDeletePoiEditPair = async (
 
 export const buildUpdatePoiEditPair = async (
   batchId: string,
-  arg: CreatePoiArg,
+  arg: UpdatePoiArg,
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<EditPair> => {
@@ -73,7 +77,7 @@ export const buildUpdatePoiEditPair = async (
   const pois = await getPois(floorCode, getStore, dispatch);
   const reverseEdit: Edit = {
     endpoint: "updatePoi",
-    arg: { floorCode, poiId, poiType: pois[poiId], batchId: null },
+    arg: { floorCode, poiId, poiInfo: pois[poiId], batchId: null },
   };
 
   return { batchId, edit, reverseEdit };

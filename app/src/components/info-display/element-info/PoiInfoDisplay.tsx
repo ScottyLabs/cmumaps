@@ -20,7 +20,7 @@ interface Props {
 }
 
 const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
-  const poiType = pois[poiId];
+  const poiInfo = pois[poiId];
   const [deletePoi] = useDeletePoiMutation();
 
   const [updatePoi] = useUpdatePoiMutation();
@@ -32,9 +32,10 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
         label: string | undefined;
       }>,
     ) => {
-      if (newValue?.value && newValue?.value !== poiType) {
+      if (newValue?.value && newValue?.value !== poiInfo.type) {
         const poiType = newValue.value as PoiType;
-        updatePoi({ floorCode, poiId, poiType, batchId: uuidv4() });
+        const poiInfo = { ...pois[poiId], type: poiType };
+        updatePoi({ floorCode, poiId, poiInfo, batchId: uuidv4() });
       }
     };
 
@@ -43,7 +44,7 @@ const PoiInfoDisplay = ({ floorCode, poiId, pois }: Props) => {
         <td className="border pr-4 pl-4">Type</td>
         <SelectTypeCell
           key={poiId}
-          value={poiType}
+          value={poiInfo.type}
           typeList={PoiTypes as readonly string[]}
           handleChange={handleChange}
         />

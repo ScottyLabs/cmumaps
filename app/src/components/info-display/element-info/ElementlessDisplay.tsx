@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { Graph, RoomInfo } from "../../../../../shared/types";
+import { Graph, PoiInfo, RoomInfo } from "../../../../../shared/types";
 import { useUpdateNodeMutation } from "../../../store/api/nodeApiSlice";
 import { useCreatePoiMutation } from "../../../store/api/poiApiSlice";
 import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
@@ -44,8 +44,7 @@ const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
       await createRoom({ floorCode, roomId, roomInfo, batchId });
 
       const nodeInfo = { ...graph[nodeId] };
-      nodeInfo.elementId = roomId;
-      nodeInfo.type = "room";
+      nodeInfo.roomId = roomId;
       await updateNode({ floorCode, nodeId, nodeInfo, batchId });
     };
 
@@ -55,13 +54,11 @@ const ElementlessDisplay = ({ floorCode, nodeId, graph }: Props) => {
   const renderCreatePoiButton = () => {
     const handleCreatePoi = async () => {
       const poiId = uuidv4();
-      const poiType = "";
+      const poiInfo: PoiInfo = { type: "", nodeId };
       const batchId = uuidv4();
-      await createPoi({ floorCode, poiId, poiType, batchId });
+      await createPoi({ floorCode, poiId, poiInfo, batchId });
 
       const nodeInfo = { ...graph[nodeId] };
-      nodeInfo.elementId = poiId;
-      nodeInfo.type = "poi";
       await updateNode({ floorCode, nodeId, nodeInfo, batchId });
     };
 

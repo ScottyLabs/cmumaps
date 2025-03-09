@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ElementType, Graph, Pois, Rooms } from "../../../../shared/types";
+import { Graph, Pois, Rooms } from "../../../../shared/types";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
 import {

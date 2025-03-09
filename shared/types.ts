@@ -132,12 +132,23 @@ export const PoiTypes = [
   "",
 ] as const;
 export type PoiType = (typeof PoiTypes)[number];
+export interface PoiInfo {
+  /**
+   * The type of the POI
+   */
+  type: PoiType;
+
+  /**
+   * The node id that the POI is associated with
+   */
+  nodeId: string;
+}
 //#endregion
 
 // Floor data types
 export type Rooms = Record<string, RoomInfo>;
 export type Graph = Record<string, NodeInfo>;
-export type Pois = Record<string, PoiType>;
+export type Pois = Record<string, PoiInfo>;
 
 /**
  * Misc types

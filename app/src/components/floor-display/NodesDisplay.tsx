@@ -11,7 +11,6 @@ import {
   Graph,
   PdfCoordinate,
   Rooms,
-  ValidCrossFloorEdgeTypes,
 } from "../../../../shared/types";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
@@ -77,46 +76,46 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
       return "yellow";
     }
 
-    if (graph[nodeId].type === "poi") {
-      return "cyan";
-    } else if (graph[nodeId].type === "room") {
-      const room =
-        graph[nodeId].elementId &&
-        graph[nodeId].type === "room" &&
-        rooms[graph[nodeId].elementId];
+    // if (graph[nodeId].type === "poi") {
+    //   return "cyan";
+    // } else if (graph[nodeId].type === "room") {
+    //   const room =
+    //     graph[nodeId].elementId &&
+    //     graph[nodeId].type === "room" &&
+    //     rooms[graph[nodeId].elementId];
 
-      // colors for cross floor edges
-      const isValidCrossFloorEdgeType =
-        room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
+    //   // colors for cross floor edges
+    //   const isValidCrossFloorEdgeType =
+    //     room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
 
-      const hasAcrossFloorEdge =
-        Object.values(graph[nodeId].neighbors).filter(
-          (neighbor) => neighbor.outFloorCode,
-        ).length != 0;
+    //   const hasAcrossFloorEdge =
+    //     Object.values(graph[nodeId].neighbors).filter(
+    //       (neighbor) => neighbor.outFloorCode,
+    //     ).length != 0;
 
-      if (isValidCrossFloorEdgeType) {
-        if (hasAcrossFloorEdge) {
-          return "lime";
-        } else {
-          return "pink";
-        }
-      } else {
-        if (hasAcrossFloorEdge) {
-          return "pink";
-        }
-      }
+    //   if (isValidCrossFloorEdgeType) {
+    //     if (hasAcrossFloorEdge) {
+    //       return "lime";
+    //     } else {
+    //       return "pink";
+    //     }
+    //   } else {
+    //     if (hasAcrossFloorEdge) {
+    //       return "pink";
+    //     }
+    //   }
 
-      // warning, error, and default colors
-      if (room && room.type == "Inaccessible") {
-        return "gray";
-      }
+    //   // warning, error, and default colors
+    //   if (room && room.type == "Inaccessible") {
+    //     return "gray";
+    //   }
 
-      if (room && room.polygon.coordinates[0].length == 0) {
-        return "red";
-      }
-    } else {
-      return "red";
-    }
+    //   if (room && room.polygon.coordinates[0].length == 0) {
+    //     return "red";
+    //   }
+    // } else {
+    //   return "red";
+    // }
 
     return "blue";
   };
@@ -207,15 +206,11 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
       // create new node
       const nodeInfo: NodeInfo = { ...graph[nodeId] };
       nodeInfo.pos = getNodePos(e);
-      // locate new room id if node doesn't belong to a poi
-      if (nodeInfo.type !== "poi") {
-        nodeInfo.elementId = posToRoomId(nodeInfo.pos, rooms);
-        if (nodeInfo.elementId) {
-          nodeInfo.type = "room";
-        } else {
-          nodeInfo.type = null;
-        }
-      }
+
+      // locate new room id
+      nodeInfo.roomId = posToRoomId(nodeInfo.pos, rooms);
+
+      // update node
       const batchId = uuidv4();
       updateNode({ floorCode, batchId, nodeId, nodeInfo });
 
@@ -225,7 +220,7 @@ const NodesDisplay = ({ floorCode, graph, rooms, offset, scale }: Props) => {
 
   return Object.entries(graph).map(
     ([nodeId, node]: [string, NodeInfo], index: number) => {
-      if (!showRoomSpecific || node.elementId === roomId) {
+      if (!showRoomSpecific || node.roomId === roomId) {
         return (
           <Circle
             key={index}

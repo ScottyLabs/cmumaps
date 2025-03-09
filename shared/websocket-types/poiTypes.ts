@@ -1,8 +1,8 @@
-import type { PoiType } from "../types.ts";
+import type { PoiInfo } from "../types.ts";
 
 export interface CreatePoiPayload {
   poiId: string;
-  poiType: PoiType;
+  poiInfo: PoiInfo;
 }
 
 export interface DeletePoiPayload {
@@ -11,5 +11,5 @@ export interface DeletePoiPayload {
 
 export interface UpdatePoiPayload {
   poiId: string;
-  poiType: PoiType;
+  poiInfo: PoiInfo;
 }

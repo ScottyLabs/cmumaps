@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { ERROR_CODES } from "../../../shared/errorCode";
 import {
   useGetFloorGraphQuery,
+  useGetFloorPoisQuery,
   useGetFloorRoomsQuery,
 } from "../store/api/floorDataApiSlice";
 
@@ -12,6 +13,7 @@ const useValidatedFloorParams = (floorCode: string) => {
 
   const { data: graph } = useGetFloorGraphQuery(floorCode);
   const { data: rooms } = useGetFloorRoomsQuery(floorCode);
+  const { data: pois } = useGetFloorPoisQuery(floorCode);
 
   const [searchParam] = useSearchParams();
   const nodeId = searchParam.get("nodeId");
@@ -20,17 +22,16 @@ const useValidatedFloorParams = (floorCode: string) => {
 
   // redirect from poi id to node id
   useEffect(() => {
-    if (poiId && graph) {
-      for (const nodeId in graph) {
-        if (graph[nodeId].elementId === poiId) {
-          navigate(`?nodeId=${nodeId}`);
-          return;
-        }
+    if (poiId && pois) {
+      if (pois[poiId]) {
+        const nodeId = pois[poiId].nodeId;
+        navigate(`?nodeId=${nodeId}`);
+        return;
       }
 
       navigate(`?errorCode=${ERROR_CODES.INVALID_POI_ID}`);
     }
-  }, [graph, navigate, nodeId, poiId, searchParam]);
+  }, [navigate, poiId, pois]);
 
   if (!graph || !rooms) {
     return { nodeId: null, roomId: null };

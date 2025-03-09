@@ -59,8 +59,7 @@ const useStageClickHandler = (
       const nodeInfo: NodeInfo = {
         pos,
         neighbors: {},
-        type: null,
-        elementId: null,
+        roomId: null,
       };
 
       const batchId = uuidv4();
