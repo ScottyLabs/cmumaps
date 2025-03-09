@@ -105,7 +105,7 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
         <select
           value={ringIndex}
           onChange={(e) => dispatch(setRingIndex(Number(e.target.value)))}
-          className="rounded"
+          className="rounded bg-white"
         >
           {polygon.coordinates.map((_, index) => (
             <option value={index} key={index}>
@@ -117,21 +117,19 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
         {renderInteriorButton()}
       </div>
 
-      <div className="space-x-2">
-        <SidePanelButton
-          text="Add Vertex"
-          handleClick={() => dispatch(setMode(POLYGON_ADD_VERTEX))}
-        />
-        <SidePanelButton
-          text="Delete Vertex"
-          handleClick={() => dispatch(setMode(POLYGON_DELETE_VERTEX))}
-        />
-      </div>
+      <SidePanelButton
+        text="Add Vertex"
+        handleClick={() => dispatch(setMode(POLYGON_ADD_VERTEX))}
+      />
+
+      <SidePanelButton
+        text="Delete Vertex"
+        handleClick={() => dispatch(setMode(POLYGON_DELETE_VERTEX))}
+      />
 
       <SidePanelButton
         text="Simplify Polygon"
         handleClick={() => simplifyPolygon()}
-        style="block"
       />
 
       <NodeSizeSlider text="Vertex" />
@@ -139,7 +137,7 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
       <SidePanelButton
         text="Delete Polygon"
         handleClick={() => deletePolygon()}
-        style={RED_BUTTON_STYLE + " block"}
+        style={RED_BUTTON_STYLE}
       />
     </div>
   );
