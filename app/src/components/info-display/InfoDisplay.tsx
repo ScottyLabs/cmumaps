@@ -58,9 +58,9 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
   };
 
   const renderPoiInfoDisplay = (nodeId: string) => {
-    const poiId = Object.values(pois).find(
-      (poi) => poi.nodeId === nodeId,
-    )?.nodeId;
+    const poiId = Object.entries(pois).find(
+      (poi) => poi[1].nodeId === nodeId,
+    )?.[0];
 
     if (poiId) {
       const Component = () => (
