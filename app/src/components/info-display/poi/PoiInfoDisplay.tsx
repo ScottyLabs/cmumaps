@@ -2,16 +2,16 @@ import { v4 as uuidv4 } from "uuid";
 
 import { SingleValue } from "react-select";
 
-import { Pois, PoiType, PoiTypes } from "../../../../shared/types";
+import { Pois, PoiType, PoiTypes } from "../../../../../shared/types";
 import {
   useDeletePoiMutation,
   useUpdatePoiMutation,
-} from "../../store/api/poiApiSlice";
-import Button from "./shared/Button";
-import CopyIdRow from "./shared/CopyIdRow";
-import SelectTypeCell from "./shared/SelectTypeCell";
-import { RED_BUTTON_STYLE } from "./shared/TableCell";
-import TableLayout from "./shared/TableLayout";
+} from "../../../store/api/poiApiSlice";
+import Button from "../shared/Button";
+import CopyIdRow from "../shared/CopyIdRow";
+import SelectTypeCell from "../shared/SelectTypeCell";
+import { RED_BUTTON_STYLE } from "../shared/TableCell";
+import TableLayout from "../shared/TableLayout";
 
 interface Props {
   floorCode: string;

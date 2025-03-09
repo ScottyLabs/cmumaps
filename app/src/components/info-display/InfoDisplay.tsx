@@ -6,9 +6,9 @@ import {
   setInfoDisplayActiveTabIndex,
 } from "../../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import GraphInfoDisplay from "./GraphInfoDisplay";
-import PoiInfoDisplay from "./PoiInfoDisplay";
-import RoomInfoDisplay from "./RoomInfoDisplay";
+import GraphInfoDisplay from "./graph/GraphInfoDisplay";
+import PoiInfoDisplay from "./poi/PoiInfoDisplay";
+import RoomInfoDisplay from "./room/RoomInfoDisplay";
 
 interface Props {
   floorCode: string;
