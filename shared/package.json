@@ -12,6 +12,14 @@
     "./websocket-types/*": {
       "types": "./dist/websocket-types/*.d.ts",
       "import": "./dist/websocket-types/*.js"
+    },
+    "./errorCode": {
+      "types": "./dist/errorCode.d.ts",
+      "import": "./dist/errorCode.js"
+    },
+    "./utils/floorCodeUtils": {
+      "types": "./dist/utils/floorCodeUtils.d.ts",
+      "import": "./dist/utils/floorCodeUtils.js"
     }
   },
   "scripts": {
