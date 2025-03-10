@@ -32,6 +32,10 @@ export default defineConfig({
           __dirname,
           "websocket-types/nodeTypes.ts",
         ),
+        "websocket-types/edgeTypes": resolve(
+          __dirname,
+          "websocket-types/edgeTypes.ts",
+        ),
         "utils/floorCodeUtils": resolve(__dirname, "utils/floorCodeUtils.ts"),
       },
       formats: ["es"],

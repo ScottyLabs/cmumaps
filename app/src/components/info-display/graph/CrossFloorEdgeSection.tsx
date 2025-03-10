@@ -1,6 +1,5 @@
 import { Graph } from "@cmumaps/shared";
-import InfoDisplayButton from "../InfoDisplay";
-import { extractBuildingCode } from "@cmumaps/shared";
+import { extractBuildingCode } from "@cmumaps/shared/utils/floorCodeUtils";
 import { v4 as uuidv4 } from "uuid";
 
 import { useMemo, useRef, useState } from "react";
@@ -10,6 +9,7 @@ import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";
 import { useAppDispatch } from "../../../store/hooks";
+import InfoDisplayButton from "../shared/InfoDisplayButton";
 
 interface Props {
   floorCode: string;

@@ -7,7 +7,8 @@
     "start": "node dist/index.js",
     "build": "vite build",
     "dev": "vite build --watch",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "tsc": "tsc -b"
   },
   "keywords": [],
   "author": "",
