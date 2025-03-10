@@ -5,7 +5,6 @@ import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as ecsPatterns from "aws-cdk-lib/aws-ecs-patterns";
 import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
-import { Platform } from "aws-cdk-lib/aws-ecr-assets";
 import * as ecr from "aws-cdk-lib/aws-ecr";
 
 interface ServerStackProps extends cdk.StackProps {
@@ -80,7 +79,7 @@ export class ServerStack extends cdk.Stack {
               DATABASE_PORT: "5432",
               DATABASE_NAME: "postgres",
               ALLOWED_ORIGINS: "https://floorsplans.scottylabs.org",
-              PORT: "80",
+              PORT: "3000",
             },
             secrets: {
               DATABASE_USERNAME: ecs.Secret.fromSecretsManager(
@@ -100,7 +99,7 @@ export class ServerStack extends cdk.Stack {
                 "clerk_publishable_key",
               ),
             },
-            containerPort: 80, // Adjust to match your server's port
+            containerPort: 3000, // Adjust to match your server's port
           },
           securityGroups: [serviceSecurityGroup],
         },

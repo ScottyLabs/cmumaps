@@ -1,5 +1,6 @@
 # Slim image
 FROM node:22-slim AS slim
+RUN apt-get update -y && apt-get install -y openssl
 
 # Setup pnpm and turbo on the alpine base
 FROM slim AS base
