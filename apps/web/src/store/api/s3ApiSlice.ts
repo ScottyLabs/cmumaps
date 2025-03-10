@@ -1,4 +1,5 @@
-import { DoorInfo } from "../../../../../packages/common/dist";
+import { DoorInfo } from "@cmumaps/common";
+
 import { apiSlice } from "./apiSlice";
 
 export const AWS_API_INVOKE_URL = `${import.meta.env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;

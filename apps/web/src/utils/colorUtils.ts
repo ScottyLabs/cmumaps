@@ -1,4 +1,4 @@
-import { RoomType } from "../../../../packages/common/dist";
+import { RoomType } from "@cmumaps/common";
 
 /**
  * The attributes of a room type.

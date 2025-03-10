@@ -1,6 +1,5 @@
+import { Mst } from "@cmumaps/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-import { Mst } from "../../../../../packages/common/dist";
 
 interface DataState {
   mst: Mst | null;

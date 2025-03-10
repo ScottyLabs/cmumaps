@@ -1,11 +1,8 @@
+import { ErrorCode, getErrorMessage } from "@cmumaps/common";
+
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
-
-import {
-  ErrorCode,
-  getErrorMessage,
-} from "../../../../packages/common/dist/errorCode";
 
 // Toast the error message based on url param error code
 // For it to work when not in StrictMode, we need to put this hook where the toast container is mounted

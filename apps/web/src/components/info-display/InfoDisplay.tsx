@@ -1,6 +1,7 @@
+import { Graph, Pois, Rooms } from "@cmumaps/common";
+
 import React from "react";
 
-import { Graph, Pois, Rooms } from "../../../../../packages/common/dist";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
 import {

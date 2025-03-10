@@ -1,7 +1,7 @@
+import { RoomInfo } from "@cmumaps/common";
 import { Polygon } from "geojson";
 import { v4 as uuidv4 } from "uuid";
 
-import { RoomInfo } from "../../../../packages/common/dist";
 import { useUpdateRoomMutation } from "../store/api/roomApiSlice";
 
 const useSavePolygonEdit = (floorCode: string, roomId?: string | null) => {

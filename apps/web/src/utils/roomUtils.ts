@@ -1,10 +1,5 @@
+import { PdfCoordinate, RoomInfo, Polygon } from "@cmumaps/common";
 import { booleanPointInPolygon } from "@turf/turf";
-
-import {
-  PdfCoordinate,
-  RoomInfo,
-  Polygon,
-} from "../../../../packages/common/dist";
 
 export const posToRoomId = (
   point: PdfCoordinate,

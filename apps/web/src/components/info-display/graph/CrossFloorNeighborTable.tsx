@@ -1,9 +1,9 @@
+import { EdgeInfo } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { NavLink } from "react-router";
 import { toast } from "react-toastify";
 
-import { EdgeInfo } from "../../../../../../packages/common/dist";
 import { useDeleteEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import TableCell from "../shared/TableCell";
 

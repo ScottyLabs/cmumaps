@@ -1,9 +1,8 @@
+import { PdfCoordinate } from "@cmumaps/common";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 
 import { toast } from "react-toastify";
-
-import { PdfCoordinate } from "../../../../packages/common/dist";
 
 export const setCursor = (e: KonvaEventObject<MouseEvent>, cursor: string) => {
   const curStage = e.target.getStage();

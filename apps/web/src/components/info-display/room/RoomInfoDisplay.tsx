@@ -1,14 +1,9 @@
+import { Rooms, RoomInfo, RoomType, RoomTypes } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useDispatch } from "react-redux";
 import { SingleValue } from "react-select";
 
-import {
-  Rooms,
-  RoomInfo,
-  RoomType,
-  RoomTypes,
-} from "../../../../../../packages/common/dist";
 import {
   useDeleteRoomMutation,
   useUpdateRoomMutation,

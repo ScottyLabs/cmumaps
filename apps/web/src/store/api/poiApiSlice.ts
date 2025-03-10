@@ -1,10 +1,11 @@
-import { toast } from "react-toastify";
-
 import {
   CreatePoiPayload,
   DeletePoiPayload,
   UpdatePoiPayload,
-} from "../../../../../packages/common/dist/websocket-types/poiTypes";
+} from "@cmumaps/common";
+
+import { toast } from "react-toastify";
+
 import {
   buildCreatePoiEditPair,
   buildDeletePoiEditPair,

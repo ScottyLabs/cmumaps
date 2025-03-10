@@ -1,3 +1,5 @@
+import { PdfCoordinate } from "@cmumaps/common";
+
 import { useState } from "react";
 import { FiZoomIn } from "react-icons/fi";
 import { FiZoomOut } from "react-icons/fi";
@@ -5,7 +7,6 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
-import { PdfCoordinate } from "../../../../../packages/common/dist";
 import useFloorInfo from "../../hooks/useFloorInfo";
 import { DEFAULT_PDF_SCALE_INDEX } from "../../settings";
 import { useGetFloorPdfQuery } from "../../store/api/s3ApiSlice";

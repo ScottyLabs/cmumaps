@@ -1,9 +1,9 @@
+import { Graph, Mst, Rooms } from "@cmumaps/common";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
 
 import { NavigateFunction } from "react-router";
 import { toast } from "react-toastify";
 
-import { Graph, Mst, Rooms } from "../../../../packages/common/dist";
 import { setMst } from "../store/features/dataSlice";
 import { AppDispatch } from "../store/store";
 import { dist } from "./geometryUtils";

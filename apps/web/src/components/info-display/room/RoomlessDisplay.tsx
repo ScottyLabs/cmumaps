@@ -1,6 +1,6 @@
+import { Graph, RoomInfo } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
-import { Graph, RoomInfo } from "../../../../../../packages/common/dist";
 import { useCreateRoomMutation } from "../../../store/api/roomApiSlice";
 import InfoDisplayButton from "../shared/InfoDisplayButton";
 

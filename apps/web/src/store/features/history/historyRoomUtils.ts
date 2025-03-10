@@ -1,4 +1,5 @@
-import { Rooms } from "../../../../../../packages/common/dist";
+import { Rooms } from "@cmumaps/common";
+
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
 import {
   CreateRoomArg,

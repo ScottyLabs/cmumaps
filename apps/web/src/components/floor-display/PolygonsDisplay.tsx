@@ -1,7 +1,8 @@
+import { Rooms, Polygon } from "@cmumaps/common";
+
 import { Path } from "react-konva";
 import { useNavigate } from "react-router";
 
-import { Rooms, Polygon } from "../../../../../packages/common/dist";
 import { useAppSelector } from "../../store/hooks";
 import { getRoomTypeDetails } from "../../utils/colorUtils";
 

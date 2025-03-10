@@ -1,3 +1,4 @@
+import { PdfCoordinate, Position } from "@cmumaps/common";
 import { Polygon } from "geojson";
 import Konva from "konva";
 import { throttle } from "lodash";
@@ -5,7 +6,6 @@ import { throttle } from "lodash";
 import { useMemo } from "react";
 import { Circle, Line } from "react-konva";
 
-import { PdfCoordinate, Position } from "../../../../../packages/common/dist";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";

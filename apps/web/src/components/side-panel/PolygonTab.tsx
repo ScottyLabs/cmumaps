@@ -1,8 +1,8 @@
+import { Rooms, Polygon } from "@cmumaps/common";
 import { simplify } from "@turf/simplify";
 
 import { toast } from "react-toastify";
 
-import { Rooms, Polygon } from "../../../../../packages/common/dist";
 import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import {

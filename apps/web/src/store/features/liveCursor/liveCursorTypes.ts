@@ -1,7 +1,4 @@
-import {
-  PdfCoordinate,
-  Position,
-} from "../../../../../../packages/common/dist";
+import { PdfCoordinate, Position } from "@cmumaps/common";
 
 interface BaseCursorInfo {
   cursorPos: PdfCoordinate;

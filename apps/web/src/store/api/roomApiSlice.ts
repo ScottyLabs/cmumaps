@@ -1,10 +1,11 @@
-import { toast } from "react-toastify";
-
 import {
   CreateRoomPayload,
   DeleteRoomPayload,
   UpdateRoomPayload,
-} from "../../../../../packages/common/dist/websocket-types/roomTypes";
+} from "@cmumaps/common";
+
+import { toast } from "react-toastify";
+
 import { getNodesInRoom } from "../features/history/historyGraphUtils";
 import {
   buildCreateRoomEditPair,

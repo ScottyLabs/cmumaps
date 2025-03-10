@@ -1,3 +1,4 @@
+import { Graph, RoomInfo, Rooms } from "@cmumaps/common";
 import Konva from "konva";
 import { v4 as uuidv4 } from "uuid";
 
@@ -6,7 +7,6 @@ import { TfiLocationPin } from "react-icons/tfi";
 import { Group, Path, Rect, Text } from "react-konva";
 import { useNavigate } from "react-router";
 
-import { Graph, RoomInfo, Rooms } from "../../../../../packages/common/dist";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import { useUpdateRoomMutation } from "../../store/api/roomApiSlice";
 import { useAppSelector } from "../../store/hooks";

@@ -1,4 +1,5 @@
-import { Pois } from "../../../../../../packages/common/dist";
+import { Pois } from "@cmumaps/common";
+
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
 import {
   CreatePoiArg,

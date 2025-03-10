@@ -1,10 +1,10 @@
+import { Graph } from "@cmumaps/common";
+import { extractBuildingCode } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-import { Graph } from "../../../../../../packages/common/dist";
-import { extractBuildingCode } from "../../../../../../packages/common/dist/utils/floorCodeUtils";
 import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";

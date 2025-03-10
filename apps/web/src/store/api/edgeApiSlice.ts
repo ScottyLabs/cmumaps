@@ -1,11 +1,12 @@
-import { toast } from "react-toastify";
-
 import {
   CreateEdgeAcrossFloorsPayload,
   CreateEdgePayload,
   DeleteEdgeAcrossFloorsPayload,
   DeleteEdgePayload,
-} from "../../../../../packages/common/dist/websocket-types/edgeTypes";
+} from "@cmumaps/common";
+
+import { toast } from "react-toastify";
+
 import {
   buildCreateEdgeAcrossFloorsEditPair,
   buildCreateEdgeEditPair,

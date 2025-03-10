@@ -1,10 +1,11 @@
-import { toast } from "react-toastify";
-
 import {
   CreateNodePayload,
   DeleteNodePayload,
   UpdateNodePayload,
-} from "../../../../../packages/common/dist/websocket-types/nodeTypes";
+} from "@cmumaps/common";
+
+import { toast } from "react-toastify";
+
 import {
   buildCreateNodeEditPair,
   buildDeleteNodeEditPair,

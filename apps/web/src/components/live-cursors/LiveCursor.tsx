@@ -1,8 +1,9 @@
+import { LiveUser } from "@cmumaps/common";
+
 import { useEffect } from "react";
 import { GiArrowCursor } from "react-icons/gi";
 import { Path } from "react-konva";
 
-import { LiveUser } from "../../../../../packages/common/dist/websocket-types/userTypes";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import {
   selectCursorInfos,

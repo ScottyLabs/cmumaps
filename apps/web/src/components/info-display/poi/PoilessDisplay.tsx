@@ -1,6 +1,6 @@
+import { PoiInfo } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
-import { PoiInfo } from "../../../../../../packages/common/dist";
 import { useCreatePoiMutation } from "../../../store/api/poiApiSlice";
 import InfoDisplayButton from "../shared/InfoDisplayButton";
 

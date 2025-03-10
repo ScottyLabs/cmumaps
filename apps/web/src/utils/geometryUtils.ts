@@ -1,4 +1,4 @@
-import { PdfCoordinate } from "../../../../packages/common/dist";
+import { PdfCoordinate } from "@cmumaps/common";
 
 export const distPointToLine = (p1: number[], p2: number[], p3: number[]) => {
   const x = p1[0];

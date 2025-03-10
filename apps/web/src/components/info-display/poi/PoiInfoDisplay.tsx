@@ -1,12 +1,8 @@
+import { Pois, PoiType, PoiTypes } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { SingleValue } from "react-select";
 
-import {
-  Pois,
-  PoiType,
-  PoiTypes,
-} from "../../../../../../packages/common/dist";
 import {
   useDeletePoiMutation,
   useUpdatePoiMutation,

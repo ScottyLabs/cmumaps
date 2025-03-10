@@ -1,6 +1,6 @@
+import { LiveUser } from "@cmumaps/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { LiveUser } from "../../../../../../packages/common/dist/websocket-types/userTypes";
 import { getSocketId } from "../../middleware/webSocketMiddleware";
 import { CursorInfo } from "./liveCursorTypes";
 

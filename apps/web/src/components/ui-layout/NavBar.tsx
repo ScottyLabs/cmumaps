@@ -1,6 +1,7 @@
+import { extractBuildingCode } from "@cmumaps/common";
+
 import { NavLink } from "react-router";
 
-import { extractBuildingCode } from "../../../../../packages/common/dist/utils/floorCodeUtils";
 import { useGetBuildingNameQuery } from "../../store/api/buildingApiSlice";
 
 interface Props {

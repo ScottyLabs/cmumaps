@@ -1,10 +1,10 @@
+import { Graph, Rooms } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-import { Graph, Rooms } from "../../../../packages/common/dist";
 import { useInvalidateCacheMutation } from "../store/api/floorDataApiSlice";
 import { useDeleteNodeMutation } from "../store/api/nodeApiSlice";
 import { redo, undo } from "../store/features/history/historyThunks";

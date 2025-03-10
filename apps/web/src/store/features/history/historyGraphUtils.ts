@@ -1,4 +1,5 @@
-import { Graph } from "../../../../../../packages/common/dist";
+import { Graph } from "@cmumaps/common";
+
 import {
   CreateEdgeAcrossFloorsArg,
   CreateEdgeArg,

@@ -1,9 +1,9 @@
+import { PdfCoordinate } from "@cmumaps/common";
 import Konva from "konva";
 import { throttle } from "lodash";
 
 import { useEffect } from "react";
 
-import { PdfCoordinate } from "../../../../packages/common/dist";
 import { pushCursorInfo } from "../store/features/liveCursor/liveCursorSlice";
 import { syncCursors } from "../store/features/liveCursor/liveCursorThunks";
 import { useAppDispatch } from "../store/hooks";

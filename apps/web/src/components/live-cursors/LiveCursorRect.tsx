@@ -1,8 +1,8 @@
+import { PdfCoordinate } from "@cmumaps/common";
+import { LiveUser } from "@cmumaps/common";
+
 import { useState } from "react";
 import { Group, Rect, Text } from "react-konva";
-
-import { PdfCoordinate } from "../../../../../packages/common/dist";
-import { LiveUser } from "../../../../../packages/common/dist/websocket-types/userTypes";
 
 interface CursorNameRectProps {
   user: LiveUser;
