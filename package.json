@@ -1,14 +1,21 @@
 {
   "name": "cmumaps",
   "private": true,
+  "packageManager": "pnpm@9.9.0",
   "type": "module",
   "workspaces": [
-    "app",
-    "server",
-    "shared"
+    "apps/*",
+    "packages/*",
+    "infrastructure"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "dev": "npm run dev --workspaces --if-present"
+    "start": "turbo run start",
+    "build": "turbo build --parallel",
+    "dev": "turbo dev --parallel"
+  },
+  "devDependencies": {
+    "eslint": "^9.21.0",
+    "turbo": "^2.4.4",
+    "typescript": "^5.8.2"
   }
 }

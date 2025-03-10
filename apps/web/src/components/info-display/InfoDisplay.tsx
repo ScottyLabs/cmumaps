@@ -1,0 +1,124 @@
+import React from "react";
+
+import { Graph, Pois, Rooms } from "../../../../../packages/common/dist";
+import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
+import { GRAPH_SELECT, setMode } from "../../store/features/modeSlice";
+import {
+  setEditRoomLabel,
+  setInfoDisplayActiveTabIndex,
+} from "../../store/features/uiSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import GraphInfoDisplay from "./graph/GraphInfoDisplay";
+import PoiInfoDisplay from "./poi/PoiInfoDisplay";
+import PoilessDisplay from "./poi/PoilessDisplay";
+import RoomInfoDisplay from "./room/RoomInfoDisplay";
+import RoomlessDisplay from "./room/RoomlessDisplay";
+
+interface Props {
+  floorCode: string;
+  graph: Graph;
+  rooms: Rooms;
+  pois: Pois;
+}
+
+const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
+  const dispatch = useAppDispatch();
+  const activeTabIndex = useAppSelector(
+    (state) => state.ui.infoDisplayActiveTabIndex,
+  );
+
+  const result = useValidatedFloorParams(floorCode);
+  if ("error" in result) {
+    return;
+  }
+
+  // need at least one of ids for info display
+  const { nodeId, roomId, poiId } = result;
+  if (!nodeId && !roomId && !poiId) {
+    return;
+  }
+
+  const renderRoomInfoDisplay = () => {
+    if (roomId) {
+      return (
+        <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
+      );
+    } else if (nodeId) {
+      return (
+        <RoomlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+      );
+    }
+
+    // this condition should never occur since we checked that one of the ids is available
+    // and we can retrieve nodeId from poiId
+    return <></>;
+  };
+
+  const renderPoiInfoDisplay = () => {
+    if (poiId) {
+      return <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />;
+    } else if (nodeId) {
+      return <PoilessDisplay floorCode={floorCode} nodeId={nodeId} />;
+    }
+
+    // this condition should never occur since we check either poiId or nodeId is available
+    return <></>;
+  };
+
+  const renderGraphInfoDisplay = () => {
+    if (nodeId) {
+      return (
+        <GraphInfoDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
+      );
+    }
+
+    // this condition should never occur since we check nodeId is available
+    return <></>;
+  };
+
+  const tabNames = ["Room Info"];
+  const tabContents = [renderRoomInfoDisplay];
+
+  if (poiId || nodeId) {
+    tabNames.push("POI Info");
+    tabContents.push(renderPoiInfoDisplay);
+  }
+
+  if (nodeId) {
+    tabNames.push("Graph Info");
+    tabContents.push(renderGraphInfoDisplay);
+  }
+
+  const renderTabHeader = (tabName: string, index: number) => {
+    const handleClick = () => {
+      dispatch(setEditRoomLabel(false));
+      dispatch(setInfoDisplayActiveTabIndex(index));
+      dispatch(setMode(GRAPH_SELECT));
+    };
+
+    return (
+      <button
+        key={index}
+        className={`mb-3 cursor-pointer border-b-2 px-3 pt-4 pb-2 text-center font-medium ${
+          index === activeTabIndex
+            ? "border-blue-400 text-blue-400"
+            : "border-transparent text-gray-400 hover:border-gray-300 hover:text-white"
+        }`}
+        onClick={handleClick}
+      >
+        {tabName}
+      </button>
+    );
+  };
+
+  return (
+    <div className="flex w-fit flex-col rounded-lg bg-gray-600 px-2 pb-2 text-white shadow-lg">
+      <ul className="flex text-sm">
+        {tabNames.map((tabName, index) => renderTabHeader(tabName, index))}
+      </ul>
+      <div>{React.createElement(tabContents[activeTabIndex])}</div>
+    </div>
+  );
+};
+
+export default InfoDisplay;
