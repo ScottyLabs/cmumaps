@@ -18,6 +18,7 @@
     "@datastructures-js/priority-queue": "^6.3.2",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
+    "@turf/simplify": "^7.2.0",
     "@turf/turf": "^7.2.0",
     "geojson": "^0.5.0",
     "konva": "^9.3.18",

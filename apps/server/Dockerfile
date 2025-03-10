@@ -52,9 +52,6 @@ USER server
 
 COPY --from=builder app/apps/server/package.json .
 COPY --from=builder --chown=server:nodejs app/apps/server/dist ./apps/server/dist
-# Copy Prisma generated files
-COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/@prisma ./node_modules/@prisma
 
 EXPOSE $PORT
 CMD ["node", "apps/server/dist/index.cjs"]
