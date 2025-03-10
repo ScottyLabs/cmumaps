@@ -1,9 +1,7 @@
-# Slim image
-FROM node:22-slim AS slim
-RUN apt-get update -y && apt-get install -y openssl
+FROM node:22-alpine AS alpine
 
 # Setup pnpm and turbo on the alpine base
-FROM slim AS base
+FROM alpine AS base
 
 ENV HOME=/home
 ENV PNPM_HOME="/pnpm"
@@ -42,7 +40,7 @@ RUN pnpm turbo build --filter=@cmumaps/server...
 RUN pnpm prune --prod --no-optional
 
 # Run the project
-FROM slim AS runner
+FROM alpine AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 server
