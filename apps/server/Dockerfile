@@ -34,6 +34,9 @@ RUN pnpm install --frozen-lockfile
 # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
+# Generate Prisma Client
+RUN cd apps/server && pnpm prisma generate
+
 RUN pnpm turbo build --filter=@cmumaps/server...
 RUN pnpm prune --prod --no-optional
 
@@ -49,6 +52,9 @@ USER server
 
 COPY --from=builder app/apps/server/package.json .
 COPY --from=builder --chown=server:nodejs app/apps/server/dist ./apps/server/dist
+# Copy Prisma generated files
+COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/@prisma ./node_modules/@prisma
 
 EXPOSE $PORT
 CMD ["node", "apps/server/dist/index.cjs"]
