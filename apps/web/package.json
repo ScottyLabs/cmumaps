@@ -12,13 +12,14 @@
     "tsc": "tsc -b"
   },
   "dependencies": {
-    "@cmumaps/common": "workspace:*",
     "@clerk/clerk-react": "^5.24.1",
     "@clerk/react-router": "^1.1.2",
+    "@cmumaps/common": "workspace:*",
     "@datastructures-js/priority-queue": "^6.3.2",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
     "@turf/turf": "^7.2.0",
+    "geojson": "^0.5.0",
     "konva": "^9.3.18",
     "lodash": "^4.17.21",
     "react": "^19.0.0",
@@ -37,6 +38,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@clerk/types": "^4.47.0",
     "@eslint/compat": "^1.2.7",
     "@eslint/js": "^9.21.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
