@@ -4,4 +4,6 @@ export * from "./websocket-types/webSocketTypes";
 export * from "./websocket-types/userTypes";
 export * from "./websocket-types/roomTypes";
 export * from "./websocket-types/poiTypes";
+export * from "./websocket-types/edgeTypes";
+export * from "./websocket-types/nodeTypes";
 export * from "./types";

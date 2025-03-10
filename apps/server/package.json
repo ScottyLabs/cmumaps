@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/index.cjs",
     "build": "esbuild index.ts --bundle --outdir=dist --platform=node --format=cjs --out-extension:.js=.cjs --sourcemap",
-    "dev": "tsx watch index.ts",
+    "dev": "dotenv -e .env -- tsx watch index.ts",
     "db-generate": "prisma generate",
     "lint": "eslint .",
     "tsc": "tsc -b"
@@ -24,16 +24,18 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "typescript-eslint": "^8.25.0",
     "@eslint/js": "^9.21.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^20.11.24",
+    "dotenv-cli": "^8.0.0",
+    "esbuild": "^0.23.0",
     "eslint": "^9.21.0",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^16.0.0",
     "prisma": "^6.4.1",
-    "esbuild": "^0.23.0",
-    "typescript": "^5.8.2"
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.25.0"
   }
 }
