@@ -13,6 +13,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 RUN corepack prepare pnpm@9.9.0 --activate
 
+RUN npm install -g @prisma/engines@6.4,1
+RUN cp /usr/local/lib/node_modules/@prisma/engines/libquery_engine-*.so.node /
 RUN pnpm install -g turbo
 
 # Prune projects
