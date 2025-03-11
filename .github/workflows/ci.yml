@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -45,7 +45,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ github.ref == 'refs/heads/main' && secrets.PRD_ASSUME_ROLE_ARN || secrets.STG_ASSUME_ROLE_ARN }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
