@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import { clerkMiddleware } from "@clerk/express";
 import http from "http";
 
-import { PrismaClient } from "./generated/prisma_client";
+import { PrismaClient } from "@prisma/client";
 import buildingRoutes from "./routes/buildingRoutes";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 import nodeRoutes from "./routes/nodeRoutes";
