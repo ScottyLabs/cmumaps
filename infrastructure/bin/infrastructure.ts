@@ -3,8 +3,15 @@
 import * as cdk from "aws-cdk-lib";
 import { InfrastructureStack } from "../lib/infrastructure-stack";
 import { ServerStack } from "../lib/server-stack";
+import { CiStack } from "../lib/ci-stack";
 
 const app = new cdk.App();
+
+const ciStack = new CiStack(app, "CiStack", {
+  owner: "ScottyLabs",
+  repo: "cmumaps-data-visualization",
+  branch: "main",
+});
 
 // Create the infrastructure stack first
 const infraStack = new InfrastructureStack(app, "InfrastructureStack", {
