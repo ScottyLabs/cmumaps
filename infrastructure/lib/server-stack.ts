@@ -19,8 +19,9 @@ export class ServerStack extends cdk.Stack {
     super(scope, id, props);
 
     // Create ECS Cluster
-    const cluster = new ecs.Cluster(this, "ServerCluster", {
+    const cluster = new ecs.Cluster(this, "CmumapsCluster", {
       vpc: props.vpc,
+      clusterName: "cmumaps-cluster",
     });
 
     // Create security group for the Fargate service
@@ -53,7 +54,7 @@ export class ServerStack extends cdk.Stack {
     const repository = ecr.Repository.fromRepositoryName(
       this,
       "ServerRepository",
-      "cmumaps-data-visualization-backend",
+      "cmumaps-server",
     );
 
     const secret = secretsmanager.Secret.fromSecretNameV2(
@@ -66,14 +67,16 @@ export class ServerStack extends cdk.Stack {
     const fargateService =
       new ecsPatterns.ApplicationLoadBalancedFargateService(
         this,
-        "ServerService",
+        "CmumapsServerService",
         {
           cluster,
           memoryLimitMiB: 1024,
           cpu: 512,
           desiredCount: 1,
+          serviceName: "cmumaps-server",
           taskImageOptions: {
             image: ecs.ContainerImage.fromEcrRepository(repository),
+            containerName: "cmumaps-server",
             environment: {
               DATABASE_HOST: props.database.instanceEndpoint.hostname,
               DATABASE_PORT: "5432",
@@ -104,6 +107,12 @@ export class ServerStack extends cdk.Stack {
           securityGroups: [serviceSecurityGroup],
         },
       );
+
+    // Define the task definition with a specific name to match CI workflow
+    const taskDefinition = fargateService.taskDefinition;
+    const cfnTaskDef = taskDefinition.node
+      .defaultChild as cdk.aws_ecs.CfnTaskDefinition;
+    cfnTaskDef.addPropertyOverride("Family", "cmumaps-server");
 
     // Output the service URL
     new cdk.CfnOutput(this, "ServiceURL", {

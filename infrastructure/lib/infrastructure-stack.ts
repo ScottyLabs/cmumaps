@@ -84,6 +84,45 @@ export class InfrastructureStack extends cdk.Stack {
       securityGroups: [this.dbSecurityGroup],
     });
 
+    const ubuntuAmi = new ec2.GenericSSMParameterImage(
+      "/aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id",
+      ec2.OperatingSystemType.LINUX,
+    );
+
+    const bastionSG = new ec2.SecurityGroup(this, "BastionSecurityGroup", {
+      vpc: this.vpc,
+      allowAllOutbound: true,
+    });
+
+    bastionSG.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(22),
+      "Allow SSH access",
+    );
+
+    // Bastion host
+    const bastionHost = new ec2.Instance(this, "BastionHost", {
+      vpc: this.vpc,
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC,
+      },
+      instanceType: ec2.InstanceType.of(
+        ec2.InstanceClass.T3,
+        ec2.InstanceSize.MICRO,
+      ),
+      machineImage: ubuntuAmi,
+      securityGroup: bastionSG,
+    });
+
+    this.database.connections.allowFrom(bastionHost, ec2.Port.tcp(5432));
+    bastionHost.connections.allowFrom(bastionSG, ec2.Port.tcp(22));
+
+    // Output the bastion host public IP
+    new cdk.CfnOutput(this, "BastionHostPublicIp", {
+      value: bastionHost.instancePublicIp,
+      description: "Bastion host public IP",
+    });
+
     // Output the database endpoint
     new cdk.CfnOutput(this, "DbEndpoint", {
       value: this.database.instanceEndpoint.hostname,
@@ -95,12 +134,5 @@ export class InfrastructureStack extends cdk.Stack {
       value: this.dbCredentials.secretArn,
       description: "Database credentials secret ARN",
     });
-
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'InfrastructureQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
   }
 }
