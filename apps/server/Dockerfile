@@ -1,7 +1,7 @@
 FROM node:22-alpine AS alpine
 
-RUN apt-get update -y \
-    && apt-get install -y openssl
+RUN apk update \
+    && apk add --no-cache openssl
 
 # Setup pnpm and turbo on the alpine base
 FROM alpine AS base
