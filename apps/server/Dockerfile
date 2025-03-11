@@ -1,7 +1,10 @@
-FROM node:22-alpine AS alpine
+FROM node:lts AS lts
+
+RUN apt-get update -y \
+    && apt-get install -y openssl
 
 # Setup pnpm and turbo on the alpine base
-FROM alpine AS base
+FROM lts AS base
 
 ENV HOME=/home
 ENV PNPM_HOME="/pnpm"
@@ -40,7 +43,7 @@ RUN pnpm turbo build --filter=@cmumaps/server...
 RUN pnpm prune --prod --no-optional
 
 # Run the project
-FROM alpine AS runner
+FROM lts AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 server
