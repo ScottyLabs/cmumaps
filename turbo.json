@@ -10,7 +10,7 @@
     },
     "@cmumaps/server#db-generate": {},
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "@cmumaps/server#db-generate"],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
