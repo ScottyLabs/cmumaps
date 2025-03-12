@@ -56,6 +56,7 @@ const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
       userColor: user.color,
     },
     auth: { token },
+    reconnectionAttempts: 1,
   });
 
   socket.on("connect", () => {
