@@ -6,11 +6,8 @@ import * as ecsPatterns from "aws-cdk-lib/aws-ecs-patterns";
 import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import * as ecr from "aws-cdk-lib/aws-ecr";
-import * as iam from "aws-cdk-lib/aws-iam";
 import * as acm from "aws-cdk-lib/aws-certificatemanager";
 import * as route53 from "aws-cdk-lib/aws-route53";
-import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
-import * as elasticloadbalancingv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 interface ServerStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
@@ -130,12 +127,6 @@ export class ServerStack extends cdk.Stack {
           redirectHTTP: true,
         },
       );
-
-    // Define the task definition with a specific name to match CI workflow
-    const taskDefinition = fargateService.taskDefinition;
-    const cfnTaskDef = taskDefinition.node
-      .defaultChild as cdk.aws_ecs.CfnTaskDefinition;
-    cfnTaskDef.addPropertyOverride("Family", "cmumaps-server");
 
     // Output the HTTPS URL
     new cdk.CfnOutput(this, "ApiEndpoint", {
