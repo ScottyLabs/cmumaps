@@ -1,9 +1,5 @@
 import { Server } from "socket.io";
-import type {
-  WebSocketPayloads,
-  WebSocketEvents,
-  LiveUser,
-} from "@cmumaps/common";
+import { WebSocketEvents, WebSocketPayloads, LiveUser } from "@cmumaps/common";
 
 export class WebSocketService {
   private io: Server;
@@ -46,7 +42,7 @@ export class WebSocketService {
           socket.to(room).emit("broadcast", message);
         } else {
           console.error(
-            "Could not send broadcast to room (excluding the sender) due to invalid sender or room",
+            "Could not send broadcast to room (excluding the sender) due to invalid sender or room"
           );
         }
       });
@@ -68,7 +64,7 @@ export class WebSocketService {
   private async syncUsers(
     room: string,
     senderId: string,
-    includeSender: boolean,
+    includeSender: boolean
   ) {
     // fetch all users in the room except the sender
     const users = await this.io.in(room).fetchSockets();
@@ -90,14 +86,14 @@ export class WebSocketService {
   public broadcastToUserFloor<E extends keyof WebSocketPayloads>(
     senderId: string,
     event: E,
-    payload: WebSocketPayloads[E],
+    payload: WebSocketPayloads[E]
   ): void {
     const room = this.socketToRoom.get(senderId);
     if (room) {
       this.io.to(room).emit(event, payload);
     } else {
       console.error(
-        "Could not broadcast to room due to invalid sender or room",
+        "Could not broadcast to room due to invalid sender or room"
       );
     }
   }
@@ -108,13 +104,13 @@ export class WebSocketService {
   public broadcastToFloor<E extends keyof WebSocketPayloads>(
     room: string,
     event: E,
-    payload: WebSocketPayloads[E],
+    payload: WebSocketPayloads[E]
   ): void {
     if (room) {
       this.io.to(room).emit(event, payload);
     } else {
       console.error(
-        "Could not broadcast to room due to invalid sender or room",
+        "Could not broadcast to room due to invalid sender or room"
       );
     }
   }

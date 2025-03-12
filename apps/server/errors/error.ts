@@ -1,4 +1,4 @@
-import type { ErrorCode } from "@cmumaps/";
+import type { ErrorCode } from "@cmumaps/common/src/errorCode";
 
 export class BuildingError extends Error {
   code: ErrorCode;
