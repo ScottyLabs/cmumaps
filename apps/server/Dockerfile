@@ -1,10 +1,10 @@
-FROM node:22-alpine AS alpine
+FROM node:lts AS lts
 
-RUN apk update \
-    && apk add --no-cache openssl
+RUN apt-get update -y \
+    && apt-get install -y openssl
 
 # Setup pnpm and turbo on the alpine base
-FROM alpine AS base
+FROM lts AS base
 
 ENV HOME=/home
 ENV PNPM_HOME="/pnpm"
@@ -43,7 +43,7 @@ RUN pnpm turbo build --filter=@cmumaps/server...
 RUN pnpm prune --prod --no-optional
 
 # Run the project
-FROM alpine AS runner
+FROM lts AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 server
@@ -55,5 +55,8 @@ USER server
 COPY --from=builder app/apps/server/package.json .
 COPY --from=builder --chown=server:nodejs app/apps/server/dist ./apps/server/dist
 
+COPY --chown=node:node --from=build /usr/src/app/apps/server/node_modules/prisma/client  /app/.prisma/client
+
 EXPOSE $PORT
-CMD ["node", "apps/server/dist/index.cjs"]
+RUN cd apps/server
+CMD ["node", "dist/index.cjs"]
