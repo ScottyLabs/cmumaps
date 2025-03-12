@@ -1,16 +1,30 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "VITE_CLERK_PUBLISHABLE_KEY",
+    "VITE_AWS_API_INVOKE_URL",
+    "VITE_SERVER_URL"
+  ],
   "tasks": {
     "topo": {
-      "dependsOn": ["^topo"]
+      "dependsOn": [
+        "^topo"
+      ]
     },
     "start": {
-      "dependsOn": ["^start", "^@cmumaps/server#db-generate", "^build"]
+      "dependsOn": [
+        "^start",
+        "^@cmumaps/server#db-generate",
+        "^build"
+      ]
     },
     "@cmumaps/server#db-generate": {},
     "build": {
-      "dependsOn": ["^build", "@cmumaps/server#db-generate"],
+      "dependsOn": [
+        "^build",
+        "@cmumaps/server#db-generate"
+      ],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
