@@ -6,6 +6,11 @@ import * as ecsPatterns from "aws-cdk-lib/aws-ecs-patterns";
 import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import * as ecr from "aws-cdk-lib/aws-ecr";
+import * as iam from "aws-cdk-lib/aws-iam";
+import * as acm from "aws-cdk-lib/aws-certificatemanager";
+import * as route53 from "aws-cdk-lib/aws-route53";
+import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
+import * as elasticloadbalancingv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 interface ServerStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
@@ -63,7 +68,21 @@ export class ServerStack extends cdk.Stack {
       "cmumaps-data-visualization/prod/.env",
     );
 
-    // Create Fargate service
+    // Get hosted zone from context or use default
+    const domainName = "scottylabsapis.com";
+
+    // Look up the hosted zone
+    const hostedZone = route53.HostedZone.fromLookup(this, "HostedZone", {
+      domainName,
+    });
+
+    // Create a certificate for the domain
+    const certificate = new acm.Certificate(this, "Certificate", {
+      domainName,
+      validation: acm.CertificateValidation.fromDns(hostedZone),
+    });
+
+    // Create Fargate service with HTTPS
     const fargateService =
       new ecsPatterns.ApplicationLoadBalancedFargateService(
         this,
@@ -81,7 +100,7 @@ export class ServerStack extends cdk.Stack {
               DATABASE_HOST: props.database.instanceEndpoint.hostname,
               DATABASE_PORT: "5432",
               DATABASE_NAME: "postgres",
-              ALLOWED_ORIGINS: "https://floorsplans.scottylabs.org",
+              ALLOWED_ORIGINS: "https://floorplans.scottylabs.org",
               PORT: "3000",
             },
             secrets: {
@@ -105,6 +124,10 @@ export class ServerStack extends cdk.Stack {
             containerPort: 3000, // Adjust to match your server's port
           },
           securityGroups: [serviceSecurityGroup],
+          domainName,
+          domainZone: hostedZone,
+          certificate: certificate,
+          redirectHTTP: true,
         },
       );
 
@@ -114,10 +137,10 @@ export class ServerStack extends cdk.Stack {
       .defaultChild as cdk.aws_ecs.CfnTaskDefinition;
     cfnTaskDef.addPropertyOverride("Family", "cmumaps-server");
 
-    // Output the service URL
-    new cdk.CfnOutput(this, "ServiceURL", {
-      value: fargateService.loadBalancer.loadBalancerDnsName,
-      description: "URL of the load balancer",
+    // Output the HTTPS URL
+    new cdk.CfnOutput(this, "ApiEndpoint", {
+      value: `https://${domainName}`,
+      description: "HTTPS API endpoint",
     });
   }
 }
