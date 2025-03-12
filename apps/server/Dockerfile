@@ -53,11 +53,9 @@ RUN chown -R server $HOME
 USER server
 
 COPY --from=builder app/apps/server/package.json .
-COPY --from=builder --chown=server:nodejs app/apsps/server/dist ./apps/server/dist
-COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/prisma/libquery_engine-linux-musl-openssl-3.0.x.so.node /app/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
+COPY --from=builder --chown=server:nodejs app/apps/server/dist ./apps/server/dist
+COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/prisma /app/.prisma/client
 
-COPY --chown=node:node --from=build /usr/src/app/apps/server/node_modules/prisma/client  /app/.prisma/client
 
 EXPOSE $PORT
-RUN cd apps/server
-CMD ["node", "dist/index.cjs"]
+CMD ["node", "apps/server/dist/index.cjs"]
