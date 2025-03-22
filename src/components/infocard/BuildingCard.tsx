@@ -2,26 +2,35 @@ import React, { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-import { selectRoom } from '@/lib/features/uiSlice';
+import {
+  COLLAPSED,
+  EXPANDED,
+  HALF_OPEN,
+  selectRoom,
+} from '@/lib/features/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { Building, Document, Room } from '@/types';
 import { getEateryId, sortEateries } from '@/util/eateryUtils';
 
 import { zoomOnRoomById } from '../buildings/mapUtils';
 import ButtonsRow from './ButtonsRow';
-import CardWrapper from './CardWrapper';
 import EateryInfoDisplay from './EateryInfoDisplay';
 import InfoCardImage from './InfoCardImage';
 
 interface Props {
   map: mapkit.Map | null;
   building: Building;
+  initSnapPoint?: (number) => void;
 }
 
-const BuildingCard = ({ map, building }: Props) => {
+const BuildingCard = ({ map, building, initSnapPoint }: Props) => {
   const dispatch = useAppDispatch();
 
   const isMobile = useAppSelector((state) => state.ui.isMobile);
+
+  const cardWrapperStatus = useAppSelector(
+    (state) => state.ui.cardWrapperStatus,
+  );
 
   const buildings = useAppSelector((state) => state.data.buildings);
   const eateryData = useAppSelector((state) => state.data.eateryData);
@@ -47,7 +56,11 @@ const BuildingCard = ({ map, building }: Props) => {
       .flat();
 
     setEateries(newEateries);
-  }, [building.code, building.floors]);
+  }, [building.code, building.floors, floorPlanMap]);
+
+  useEffect(() => {
+    initSnapPoint?.(eateries.length > 0 ? 440 : 275);
+  }, [initSnapPoint, eateries]);
 
   const renderBuildingImage = () => {
     const url = `/assets/location_images/building_room_images/${building.code}/${building.code}.jpg`;
@@ -108,37 +121,78 @@ const BuildingCard = ({ map, building }: Props) => {
         );
       };
 
+      const handleClick = (eatery) => () => {
+        dispatch(selectRoom(eatery));
+        zoomOnRoomById(
+          map,
+          eatery.id,
+          eatery.floor,
+          buildings,
+          floorPlanMap,
+          dispatch,
+        );
+      };
+
       return (
         <div className="mb-1">
-          <p className="-mb-3 ml-3 text-base text-gray-500">Eateries nearby</p>
-          <Carousel
-            showDots
-            responsive={responsive}
-            arrows={false}
-            infinite={true}
-            containerClass="react-multi-carousel-list"
-            dotListClass="gap-2"
-            customDot={<CustomDot />}
-          >
-            {eateries.map((eatery) => {
-              const eateryInfo = eateryData[getEateryId(eatery)];
-              return (
-                <div
-                  key={eatery.id}
-                  className="mx-3 cursor-pointer border"
-                  onClick={() => dispatch(selectRoom(eatery))}
-                >
-                  <div className="carousel-item active">
+          {cardWrapperStatus != COLLAPSED && (
+            <p className="-mb-3 ml-3 text-base text-gray-500">
+              Eateries nearby
+            </p>
+          )}
+          {cardWrapperStatus == HALF_OPEN && (
+            <div>
+              <Carousel
+                showDots
+                responsive={responsive}
+                arrows={false}
+                infinite={true}
+                containerClass="react-multi-carousel-list"
+                dotListClass="gap-2"
+                customDot={<CustomDot />}
+              >
+                {eateries.map((eatery) => {
+                  const eateryInfo = eateryData[getEateryId(eatery)];
+                  return (
+                    <div
+                      key={eatery.id}
+                      className="mx-3 cursor-pointer border"
+                      onClick={() => dispatch(selectRoom(eatery))}
+                    >
+                      <div className="carousel-item active">
+                        <EateryInfoDisplay
+                          room={eatery}
+                          title={renderTitle(eatery)}
+                          eateryInfo={eateryInfo}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </Carousel>
+            </div>
+          )}
+          {cardWrapperStatus == EXPANDED && (
+            <div className="mt-4 max-h-96 space-y-3 overflow-y-auto px-2 pb-3">
+              {eateries.map((eatery) => {
+                const eateryInfo = eateryData[getEateryId(eatery)];
+
+                return (
+                  <div
+                    key={eatery.id}
+                    className="cursor-pointer rounded border p-1 transition duration-150 ease-out hover:bg-[#efefef]"
+                    onClick={handleClick(eatery)}
+                  >
                     <EateryInfoDisplay
                       room={eatery}
                       title={renderTitle(eatery)}
                       eateryInfo={eateryInfo}
                     />
                   </div>
-                </div>
-              );
-            })}
-          </Carousel>
+                );
+              })}
+            </div>
+          )}
         </div>
       );
     } else {
@@ -182,16 +236,14 @@ const BuildingCard = ({ map, building }: Props) => {
   };
 
   return (
-    <CardWrapper snapPoint={eateries.length > 0 ? 440 : 275}>
-      <>
-        {renderBuildingImage()}
-        <h2 className="ml-3 mt-2">
-          {building.name} ({building.code})
-        </h2>
-        {renderButtonsRow()}
-        {renderEateryCarousel()}
-      </>
-    </CardWrapper>
+    <>
+      {cardWrapperStatus != COLLAPSED && renderBuildingImage()}
+      <h2 className="ml-3 mt-2">
+        {building.name} ({building.code})
+      </h2>
+      {renderButtonsRow()}
+      {renderEateryCarousel()}
+    </>
   );
 };
 

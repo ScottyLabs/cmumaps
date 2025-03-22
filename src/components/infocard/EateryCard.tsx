@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ImSpoonKnife } from 'react-icons/im';
 
 import { useAppSelector } from '@/lib/hooks';
@@ -6,16 +6,20 @@ import { Room } from '@/types';
 import { getEateryId } from '@/util/eateryUtils';
 
 import ButtonsRow, { renderMiddleButtonHelper } from './ButtonsRow';
-import CardWrapper from './CardWrapper';
 import EateryInfoDisplay from './EateryInfoDisplay';
 import InfoCardImage from './InfoCardImage';
 
 interface Props {
   room: Room;
+  initSnapPoint?: (number) => void;
 }
 
-const Eaterycard = ({ room }: Props) => {
+const Eaterycard = ({ room, initSnapPoint }: Props) => {
   const eateryData = useAppSelector((state) => state.data.eateryData);
+
+  useEffect(() => {
+    initSnapPoint?.(340);
+  }, [initSnapPoint]);
 
   if (!eateryData) {
     return;
@@ -65,13 +69,11 @@ const Eaterycard = ({ room }: Props) => {
   };
 
   return (
-    <CardWrapper snapPoint={340}>
-      <>
-        {renderEateryImage()}
-        {renderInfo()}
-        {renderButtonsRow()}
-      </>
-    </CardWrapper>
+    <>
+      {renderEateryImage()}
+      {renderInfo()}
+      {renderButtonsRow()}
+    </>
   );
 };
 

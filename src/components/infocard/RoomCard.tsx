@@ -8,15 +8,15 @@ import { useAppSelector } from '@/lib/hooks';
 import { Room } from '@/types';
 
 import ButtonsRow, { renderMiddleButtonHelper } from './ButtonsRow';
-import CardWrapper from './CardWrapper';
 import InfoCardImage from './InfoCardImage';
 import RoomSchedule from './RoomSchedule';
 
 interface Props {
   room: Room;
+  initSnapPoint?: (number) => void;
 }
 
-const RoomCard = ({ room }: Props) => {
+const RoomCard = ({ room, initSnapPoint }: Props) => {
   const buildings = useAppSelector((state) => state.data.buildings);
   const availableRoomImages = useAppSelector(
     (state) => state.data.availableRoomImages,
@@ -27,6 +27,10 @@ const RoomCard = ({ room }: Props) => {
   useEffect(() => {
     getDbRoomExists(room).then((response) => setHasSchedule(response));
   }, [room]);
+
+  useEffect(() => {
+    initSnapPoint?.(hasSchedule ? 403 : 300);
+  }, [hasSchedule, initSnapPoint]);
 
   if (!buildings || hasSchedule === null) {
     return;
@@ -112,14 +116,12 @@ const RoomCard = ({ room }: Props) => {
   };
 
   return (
-    <CardWrapper snapPoint={hasSchedule ? 403 : 300}>
-      <>
-        {renderRoomImage()}
-        {renderRoomTitle()}
-        {renderButtonsRow()}
-        {hasSchedule && <RoomSchedule />}
-      </>
-    </CardWrapper>
+    <>
+      {renderRoomImage()}
+      {renderRoomTitle()}
+      {renderButtonsRow()}
+      {hasSchedule && <RoomSchedule />}
+    </>
   );
 };
 

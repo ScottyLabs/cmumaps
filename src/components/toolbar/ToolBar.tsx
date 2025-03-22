@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { getIsCardOpen } from '@/lib/features/uiSlice';
+import { COLLAPSED, getIsCardOpen } from '@/lib/features/uiSlice';
 import { useAppSelector } from '@/lib/hooks';
 
 import FloorSwitcher from '../buildings/FloorSwitcher';
+import CardWrapper from '../infocard/CardWrapper';
 import InfoCard from '../infocard/InfoCard';
 import NavCard from '../navigation/NavCard';
 import SearchBar from '../searchbar/SearchBar';
@@ -26,7 +27,7 @@ const ToolBar = ({ map }: Props) => {
   const isMobile = useAppSelector((state) => state.ui.isMobile);
 
   const isCardWrapperCollapsed = useAppSelector(
-    (state) => state.ui.isCardWrapperCollapsed,
+    (state) => state.ui.cardWrapperStatus == COLLAPSED,
   );
 
   let showSearchModeSelector =
@@ -57,6 +58,16 @@ const ToolBar = ({ map }: Props) => {
     return true;
   };
 
+  const [snapPoint, setSnapPoint] = useState(340);
+
+  const initSnapPoint = (sp) => {
+    if (sp != snapPoint) {
+      setSnapPoint(sp);
+    }
+  };
+
+  const [cardVisible, setCardVisibile] = useState(true);
+
   const mobileRender = () => {
     return (
       <div
@@ -69,9 +80,19 @@ const ToolBar = ({ map }: Props) => {
 
           {!isSearchOpen && !isCardOpen && <Schedule />}
 
-          {!isNavOpen && !isSearchOpen && <InfoCard map={map} />}
+          {!isNavOpen && !isSearchOpen && (
+            <CardWrapper snapPoint={snapPoint} isOpen={cardVisible}>
+              <InfoCard
+                map={map}
+                setCardVisibility={setCardVisibile}
+                initSnapPoint={initSnapPoint}
+              />
+            </CardWrapper>
+          )}
           {isNavOpen && isCardOpen && !choosingRoomMode && (
-            <NavCard map={map} />
+            <CardWrapper snapPoint={snapPoint} isOpen={cardVisible}>
+              <NavCard map={map} />
+            </CardWrapper>
           )}
         </div>
       </div>
@@ -91,10 +112,12 @@ const ToolBar = ({ map }: Props) => {
 
             {!isSearchOpen && !isCardOpen && <Schedule />}
 
-            {!isNavOpen && !isSearchOpen && <InfoCard map={map} />}
-            {isNavOpen && isCardOpen && !choosingRoomMode && (
-              <NavCard map={map} />
-            )}
+            <div className="flex w-96 flex-col overflow-hidden rounded-lg bg-white shadow-lg shadow-gray-400">
+              {!isNavOpen && !isSearchOpen && <InfoCard map={map} />}
+              {isNavOpen && isCardOpen && !choosingRoomMode && (
+                <NavCard map={map} />
+              )}
+            </div>
           </div>
         </div>
         <div className="fixed left-[25rem] my-4">

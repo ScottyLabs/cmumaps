@@ -3,6 +3,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SearchMode } from '@/components/searchbar/searchMode';
 import { Building, Floor, Room } from '@/types';
 
+export type InfoCardStatus = 'collapsed' | 'halfOpen' | 'expanded';
+
+export const COLLAPSED: InfoCardStatus = 'collapsed';
+export const HALF_OPEN: InfoCardStatus = 'halfOpen';
+export const EXPANDED: InfoCardStatus = 'expanded';
+
 interface UIState {
   isMobile: boolean;
 
@@ -14,7 +20,10 @@ interface UIState {
   focusedFloor: Floor | null;
   isSearchOpen: boolean;
 
-  isCardWrapperCollapsed: boolean;
+  // isCardWrapperCollapsed: boolean;
+  // isCardWrapperFullyOpen: boolean;
+
+  cardWrapperStatus: InfoCardStatus;
 
   showRoomNames: boolean;
 
@@ -31,7 +40,7 @@ const initialState: UIState = {
   selectedBuilding: null,
   focusedFloor: null,
   isSearchOpen: false,
-  isCardWrapperCollapsed: true,
+  cardWrapperStatus: COLLAPSED,
   showRoomNames: false,
   searchMode: 'rooms',
   isZooming: false,
@@ -47,10 +56,14 @@ const uiSlice = createSlice({
       state.selectedBuilding = null;
       state.isSearchOpen = false;
       if (action.payload && action.payload.id) {
-        let selectionHistoryStr = localStorage.getItem('selectionHistory') || "[]";
-        let selectionHistory = JSON.parse(selectionHistoryStr) as string[];
+        const selectionHistoryStr =
+          localStorage.getItem('selectionHistory') || '[]';
+        const selectionHistory = JSON.parse(selectionHistoryStr) as string[];
         selectionHistory.push(action.payload.id);
-        localStorage.setItem('selectionHistory', JSON.stringify(selectionHistory));
+        localStorage.setItem(
+          'selectionHistory',
+          JSON.stringify(selectionHistory),
+        );
       }
     },
     deselectRoom(state) {
@@ -71,8 +84,8 @@ const uiSlice = createSlice({
     setIsSearchOpen(state, action: PayloadAction<boolean>) {
       state.isSearchOpen = action.payload;
     },
-    setIsCardWrapperCollapsed(state, action: PayloadAction<boolean>) {
-      state.isCardWrapperCollapsed = action.payload;
+    setCardWrapperStatus(state, action: PayloadAction<InfoCardStatus>) {
+      state.cardWrapperStatus = action.payload;
     },
     setIsMobile(state, action: PayloadAction<boolean>) {
       state.isMobile = action.payload;
@@ -106,7 +119,7 @@ export const {
   deselectBuilding,
   setFocusedFloor,
   setIsSearchOpen,
-  setIsCardWrapperCollapsed,
+  setCardWrapperStatus,
   setIsMobile,
   setShowRoomNames,
   setSearchMode,

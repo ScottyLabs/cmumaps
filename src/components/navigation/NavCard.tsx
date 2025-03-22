@@ -1,3 +1,4 @@
+import indoorsIcon from '@icons/indoors.svg';
 import swapIcon from '@icons/nav/swap.svg';
 import endIcon from '@icons/path/end.svg';
 import startIcon from '@icons/path/start.svg';
@@ -6,7 +7,7 @@ import Image from 'next/image';
 
 import React, { useEffect } from 'react';
 import { BsFillLightningChargeFill } from 'react-icons/bs';
-import { FaRegSnowflake } from 'react-icons/fa';
+// import { FaRegSnowflake } from 'react-icons/fa';
 import { IoIosArrowBack } from 'react-icons/io';
 import { toast } from 'react-toastify';
 
@@ -25,12 +26,12 @@ import { setIsSearchOpen } from '@/lib/features/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { Waypoint } from '@/types';
 
-import CardWrapper from '../infocard/CardWrapper';
+// import CardWrapper from '../infocard/CardWrapper';
 import NavDirections from './NavDirections';
 
 const pathNumToIcon = [
   <BsFillLightningChargeFill key="fast" size={25} />,
-  <FaRegSnowflake key="snow" size={25} />,
+  <Image key="indoors" alt={'Indoors Icon'} src={indoorsIcon} />,
 ];
 const pathNumToName = ['Fastest', 'Indoor'];
 
@@ -282,7 +283,8 @@ const NavCard = ({ map }: Props) => {
   };
 
   return (
-    <CardWrapper snapPoint={0.4}>
+    //<CardWrapper isOpen={true} snapPoint={0.4}>
+    <>
       <div>
         {renderTop()}
         <div className="flex gap-4">
@@ -297,7 +299,8 @@ const NavCard = ({ map }: Props) => {
           !!recommendedPath &&
           renderNavInfo()}
       </div>
-    </CardWrapper>
+    </>
+    //</CardWrapper>
   );
 };
 
