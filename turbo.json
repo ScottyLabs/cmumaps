@@ -8,33 +8,15 @@
   ],
   "tasks": {
     "topo": {
-      "dependsOn": [
-        "^topo"
-      ]
+      "dependsOn": ["^topo"]
     },
     "start": {
-      "dependsOn": [
-        "^start",
-        "^@cmumaps/server#db-generate",
-        "^build"
-      ]
+      "dependsOn": ["^start", "^build"]
     },
     "@cmumaps/server#db-generate": {},
     "build": {
-      "dependsOn": [
-        "^build",
-        "@cmumaps/server#db-generate"
-      ],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "next-env.d.ts",
-        ".expo/**",
-        ".output/**",
-        ".vercel/output/**",
-        "dist/**",
-        "build/**"
-      ]
+      "dependsOn": ["^build", "@cmumaps/server#db-generate"],
+      "outputs": ["dist/**"]
     },
     "dev": {
       "cache": false,
