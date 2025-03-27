@@ -7,16 +7,21 @@
     "VITE_SERVER_URL"
   ],
   "tasks": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
     "start": {
-      "dependsOn": ["^start", "^build"]
+      "dependsOn": [
+        "^start",
+        "^build"
+      ]
     },
     "@cmumaps/server#db-generate": {},
     "build": {
-      "dependsOn": ["^build", "@cmumaps/server#db-generate"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build",
+        "@cmumaps/server#db-generate"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "dev": {
       "cache": false,
