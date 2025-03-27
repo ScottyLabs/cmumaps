@@ -28,4 +28,5 @@ export default [
       curly: ["error", "all"],
     },
   },
+  { ignores: ["dist/**", "node_modules/**"] },
 ];
