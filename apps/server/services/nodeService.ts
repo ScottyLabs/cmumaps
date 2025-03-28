@@ -8,7 +8,7 @@ export const nodeService = {
     floorCode: string,
     nodeId: string,
     nodeInfo: NodeInfo,
-    placement: Placement,
+    placement: Placement
   ) => {
     const { pos, roomId } = nodeInfo;
     const geoCoords = pdfCoordsToGeoCoords(placement)(pos);

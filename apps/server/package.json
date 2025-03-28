@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "dotenv run npx tsx watch index.ts",
+    "start": "node dist/index.js",
     "build": "esbuild index.ts --bundle --outdir=dist --platform=node --format=cjs --out-extension:.js=.cjs --sourcemap",
     "dev": "dotenv -e .env -- tsx watch index.ts",
     "db-generate": "prisma generate",

@@ -1,3 +1,4 @@
+import { NodeInfo } from "@cmumaps/common";
 import { prisma } from "../index";
 
 export const edgeService = {
@@ -18,6 +19,19 @@ export const edgeService = {
       where: {
         inNodeId_outNodeId: { inNodeId: outNodeId, outNodeId: inNodeId },
       },
+    });
+  },
+
+  createEdges: async (nodeId: string, neighborIds: string[]) => {
+    for (const neighborId of neighborIds) {
+      await edgeService.createEdge(nodeId, neighborId);
+    }
+  },
+
+  // delete all edges connected to a node
+  deleteEdges: async (nodeId: string) => {
+    await prisma.edge.deleteMany({
+      where: { OR: [{ inNodeId: nodeId }, { outNodeId: nodeId }] },
     });
   },
 };

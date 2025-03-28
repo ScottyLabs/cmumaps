@@ -3,6 +3,7 @@ import { nodeService } from "../services/nodeService";
 import { floorService } from "../services/floorService";
 import { handleControllerError } from "../errors/errorHandler";
 import { webSocketService } from "../index";
+import { edgeService } from "../services/edgeService";
 
 export const nodeController = {
   createNode: async (req: Request, res: Response) => {
@@ -14,6 +15,9 @@ export const nodeController = {
       // create node in database
       const placement = await floorService.getFloorPlacement(floorCode);
       await nodeService.upsertNode(floorCode, nodeId, nodeInfo, placement);
+
+      // create edges to neighbors if they don't already exist
+      await edgeService.createEdges(nodeId, Object.keys(nodeInfo.neighbors));
 
       // broadcast to all users on the floor
       const payload = { nodeId, nodeInfo };
@@ -30,6 +34,7 @@ export const nodeController = {
     const socketId = req.socketId;
 
     try {
+      await edgeService.deleteEdges(nodeId);
       await nodeService.deleteNode(nodeId);
       webSocketService.broadcastToUserFloor(socketId, "delete-node", {
         nodeId,
