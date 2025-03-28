@@ -31,6 +31,10 @@ export const createNode =
         floorCode,
         (draft) => {
           draft[nodeId] = nodeInfo;
+          // create edges to neighbors if they don't already exist
+          for (const neighborId in nodeInfo.neighbors) {
+            draft[neighborId].neighbors[nodeId] = {};
+          }
         },
       ),
     );
@@ -43,6 +47,16 @@ export const deleteNode =
         "getFloorGraph",
         floorCode,
         (draft) => {
+          // the node could be deleted when receiving websocket message
+          if (!draft[nodeId]) {
+            return;
+          }
+
+          // delete edges connected to the node        
+          for (const neighborId in draft[nodeId].neighbors) {
+            delete draft[neighborId].neighbors[nodeId];
+          }
+
           delete draft[nodeId];
         },
       ),

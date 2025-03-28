@@ -16,7 +16,7 @@ const EdgesDisplay = ({ floorCode, graph }: Props) => {
   const nodeIdOnDrag = useAppSelector((state) => state.mouseEvent.dragNodeId);
   const dragNodePos = useAppSelector((state) => state.mouseEvent.dragNodePos);
   const showEdges = useAppSelector((state) => state.visibility.showEdges);
-  const editPolygon = useAppSelector(selectEditPolygon);
+  const editPolygon = useAppSelector((state) => selectEditPolygon(state));
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
   const mst = useAppSelector((state) => state.data.mst);
 
