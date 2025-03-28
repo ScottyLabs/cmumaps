@@ -233,6 +233,9 @@ importers:
       '@eslint/js':
         specifier: ^9.21.0
         version: 9.22.0
+      '@trivago/prettier-plugin-sort-imports':
+        specifier: ^5.2.2
+        version: 5.2.2(prettier@3.5.3)
       '@types/react':
         specifier: ^19.0.10
         version: 19.0.10
@@ -254,6 +257,9 @@ importers:
       globals:
         specifier: ^15.15.0
         version: 15.15.0
+      prettier-plugin-tailwindcss:
+        specifier: ^0.6.11
+        version: 0.6.11(@trivago/prettier-plugin-sort-imports@5.2.2(prettier@3.5.3))(prettier@3.5.3)
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
