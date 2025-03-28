@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {  useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router";
 
@@ -45,9 +45,10 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     }
   }, [dispatch, navigate, nodeId, poiId, pois, roomId]);
 
-  if (!graph || !pois || !rooms) {
-    return {};
-  }
+  const result = useMemo(() => {
+    if (!graph || !pois || !rooms) {
+      return {};
+    }
 
   if (roomId && !rooms[roomId]) {
     return { error: "Invalid Room ID" };
@@ -86,9 +87,13 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     const roomId = graph[nodeId].roomId;
 
     return { nodeId, poiId, roomId };
-  }
+    }
 
-  return {};
+    return {};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeId, roomId, poiId]);
+
+  return result;
 };
 
 export default useValidatedFloorParams;
