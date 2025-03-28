@@ -11,10 +11,12 @@
   "scripts": {
     "start": "turbo run start",
     "build": "turbo build --parallel",
-    "dev": "turbo dev --parallel"
+    "dev": "turbo dev --parallel",
+    "format": "turbo format --parallel"
   },
   "devDependencies": {
     "eslint": "^9.21.0",
+    "prettier": "^3.5.3",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"
   }

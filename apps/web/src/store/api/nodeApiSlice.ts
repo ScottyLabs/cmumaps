@@ -52,7 +52,7 @@ export const deleteNode =
             return;
           }
 
-          // delete edges connected to the node        
+          // delete edges connected to the node
           for (const neighborId in draft[nodeId].neighbors) {
             delete draft[neighborId].neighbors[nodeId];
           }

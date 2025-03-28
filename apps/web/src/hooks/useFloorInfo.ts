@@ -1,7 +1,4 @@
-import {
-  extractBuildingCode,
-  extractFloorLevel,
-} from "@cmumaps/common";
+import { extractBuildingCode, extractFloorLevel } from "@cmumaps/common";
 
 const useFloorInfo = (floorCode: string) => {
   const buildingCode = extractBuildingCode(floorCode);

@@ -1,4 +1,4 @@
-import {  useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router";
 
@@ -50,47 +50,47 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
       return {};
     }
 
-  if (roomId && !rooms[roomId]) {
-    return { error: "Invalid Room ID" };
-  }
+    if (roomId && !rooms[roomId]) {
+      return { error: "Invalid Room ID" };
+    }
 
-  if (poiId && !pois[poiId]) {
-    return { error: "Invalid POI ID" };
-  }
+    if (poiId && !pois[poiId]) {
+      return { error: "Invalid POI ID" };
+    }
 
-  if (nodeId && !graph[nodeId]) {
-    return { error: "Invalid Node ID" };
-  }
+    if (nodeId && !graph[nodeId]) {
+      return { error: "Invalid Node ID" };
+    }
 
-  if (roomId) {
-    // no way to get the nodeId from the roomId since a room can have multiple nodes
-    return { roomId };
-  }
+    if (roomId) {
+      // no way to get the nodeId from the roomId since a room can have multiple nodes
+      return { roomId };
+    }
 
-  if (poiId) {
-    // nodeId can be the nodeId of the poi
-    const nodeId = pois[poiId].nodeId;
+    if (poiId) {
+      // nodeId can be the nodeId of the poi
+      const nodeId = pois[poiId].nodeId;
 
-    // roomId can be the roomId of the node
-    const roomId = graph[nodeId].roomId;
+      // roomId can be the roomId of the node
+      const roomId = graph[nodeId].roomId;
 
-    return { poiId, nodeId, roomId };
-  }
+      return { poiId, nodeId, roomId };
+    }
 
-  if (nodeId) {
-    // poiId can be the poiId of the node
-    const poiId = Object.entries(pois).find(
-      (poi) => poi[1].nodeId === nodeId,
-    )?.[0];
+    if (nodeId) {
+      // poiId can be the poiId of the node
+      const poiId = Object.entries(pois).find(
+        (poi) => poi[1].nodeId === nodeId,
+      )?.[0];
 
-    // roomId can be the roomId of the node
-    const roomId = graph[nodeId].roomId;
+      // roomId can be the roomId of the node
+      const roomId = graph[nodeId].roomId;
 
-    return { nodeId, poiId, roomId };
+      return { nodeId, poiId, roomId };
     }
 
     return {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodeId, roomId, poiId]);
 
   return result;

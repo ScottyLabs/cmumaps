@@ -8,22 +8,18 @@
   ],
   "tasks": {
     "start": {
-      "dependsOn": [
-        "^start",
-        "^build"
-      ]
+      "dependsOn": ["^start", "^build"]
     },
     "@cmumaps/server#db-generate": {},
     "build": {
-      "dependsOn": [
-        "^build",
-        "@cmumaps/server#db-generate"
-      ],
-      "outputs": [
-        "dist/**"
-      ]
+      "dependsOn": ["^build", "@cmumaps/server#db-generate"],
+      "outputs": ["dist/**"]
     },
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "format": {
       "cache": false,
       "persistent": true
     }
