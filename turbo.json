@@ -4,20 +4,34 @@
   "globalEnv": [
     "VITE_CLERK_PUBLISHABLE_KEY",
     "VITE_AWS_API_INVOKE_URL",
-    "VITE_SERVER_URL"
+    "VITE_SERVER_URL",
+    "ALLOWED_ORIGINS"
   ],
   "tasks": {
-    "start": {
-      "dependsOn": ["^start", "^build"]
-    },
-    "@cmumaps/server#db-generate": {},
-    "build": {
-      "dependsOn": ["^build", "@cmumaps/server#db-generate"],
-      "outputs": ["dist/**"]
-    },
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "@cmumaps/server#db-generate": {},
+    "@cmumaps/server#build": {
+      "dependsOn": [
+        "@cmumaps/server#build",
+        "@cmumaps/server#db-generate"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "start": {
+      "dependsOn": [
+        "^start",
+        "^build"
+      ]
     },
     "format": {
       "cache": false,
