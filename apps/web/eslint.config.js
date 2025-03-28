@@ -20,6 +20,7 @@ export default defineConfig([
   pluginReact.configs.flat.recommended,
 
   // custom
+  pluginReact.configs.flat["jsx-runtime"],
   reactHooks.configs["recommended-latest"],
   {
     rules: {
