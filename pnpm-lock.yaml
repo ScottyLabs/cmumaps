@@ -82,7 +82,7 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
 
-  apps/web:
+  apps/visualizer:
     dependencies:
       '@clerk/clerk-react':
         specifier: ^5.24.1
