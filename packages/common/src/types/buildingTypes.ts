@@ -3,6 +3,7 @@ import { GeoCoordinate, PdfCoordinate } from "./coordTypes";
 export interface Building {
   code: string;
   name: string;
+  isMapped: boolean;
   labelLatitude: number;
   labelLongitude: number;
   shape: GeoCoordinate[];

@@ -24,6 +24,8 @@ export const buildingService = {
         labelLongitude: dbBuilding.labelLongitude,
         shape: dbBuilding.shape as unknown as GeoCoordinate[],
         hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
+        // TODO: need to add isMapped field to the database
+        isMapped: true,
       });
     }
     return buildings;
