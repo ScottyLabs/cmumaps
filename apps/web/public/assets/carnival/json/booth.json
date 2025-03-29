@@ -1,31 +1,31 @@
 {
     "SSA, HKSA, FSA, KASA, and SIAM": {
-        "boothType": "blitz",
+        "boothType": "Blitz",
         "theme": "Monster's Inc",
         "orgType": "Club"
     },
     "SWE": {
-        "boothType": "blitz",
+        "boothType": "Blitz",
         "theme": "Pitch Perfect",
         "orgType": "Club"
     },
     "KGB and PRISM": {
-        "boothType": "blitz",
+        "boothType": "Blitz",
         "theme": "Sharknado",
         "orgType": "Club"
     },
     "MENASA + SPRIT": {
-        "boothType": "blitz",
+        "boothType": "Blitz",
         "theme": "Aladdin",
         "orgType": "Club"
     },
     "ASCE": {
-        "boothType": "blitz",
+        "boothType": "Blitz",
         "theme": "The Lego Movie",
         "orgType": "Club"
     },
     "Sustainable Earth and TPEG": {
-        "boothType": "blitz",
+        "boothType": "Blitz",
         "theme": "Jurassic Park",
         "orgType": "Club"
     },
