@@ -9,14 +9,17 @@ import {
   useGetBuildingsQuery,
   useGetFloorRoomsQuery,
 } from "@/store/features/api/apiSlice";
-import { setMidSnapPoint } from "@/store/features/cardSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { selectCardCollapsed, setBottomSnapPoint, setMidSnapPoint } from "@/store/features/cardSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const RoomCard = () => {
   const dispatch = useAppDispatch();
 
   const { data: buildings } = useGetBuildingsQuery();
   const { buildingCode, roomName, floor } = useLocationParams();
+  const isMobile = useIsMobile();
+  const cardCollapsed = useAppSelector(selectCardCollapsed);
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
   const { data: rooms } = useGetFloorRoomsQuery(
     floorCode ? floorCode : skipToken,
@@ -25,7 +28,9 @@ const RoomCard = () => {
   // set the mid snap point
   // TODO: should change based on if has schedule
   useEffect(() => {
-    dispatch(setMidSnapPoint(300));
+    dispatch(setMidSnapPoint(310));
+    dispatch(setBottomSnapPoint(166));
+    console.log("Instantiating Room Card");
   }, [dispatch]);
 
   if (!roomName || !rooms || !buildings) {
@@ -90,7 +95,7 @@ const RoomCard = () => {
 
   return (
     <>
-      {renderRoomImage()}
+      {(!cardCollapsed || !isMobile) && renderRoomImage()}
       {renderRoomTitle()}
       {renderButtonsRow()}
     </>

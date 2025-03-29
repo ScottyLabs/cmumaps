@@ -12,11 +12,13 @@ export type CardStatus = (typeof CardStates)[keyof typeof CardStates];
 
 interface CardState {
   midSnapPoint: number | null;
+  bottomSnapPoint: number | null;
   cardStatus: CardStatus;
 }
 
 const initialState: CardState = {
   midSnapPoint: null,
+  bottomSnapPoint: null,
   cardStatus: CardStates.HALF_OPEN,
 };
 
@@ -30,12 +32,16 @@ const cardSlice = createSlice({
     setMidSnapPoint(state, action: PayloadAction<number>) {
       state.midSnapPoint = action.payload;
     },
+    setBottomSnapPoint(state, action: PayloadAction<number>) {
+      state.bottomSnapPoint = action.payload;
+      console.log("Setting bottom snap point to " + action.payload);
+    },
   },
   selectors: {
     selectCardCollapsed: (state) => state.cardStatus === CardStates.COLLAPSED,
   },
 });
 
-export const { setInfoCardStatus, setMidSnapPoint } = cardSlice.actions;
+export const { setInfoCardStatus, setMidSnapPoint, setBottomSnapPoint } = cardSlice.actions;
 export const { selectCardCollapsed } = cardSlice.selectors;
 export default cardSlice.reducer;

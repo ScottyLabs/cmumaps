@@ -8,6 +8,7 @@ import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import {
   selectCardCollapsed,
   setMidSnapPoint,
+  setBottomSnapPoint,
 } from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
@@ -26,7 +27,9 @@ const BuildingCard = ({ map: _map }: Props) => {
   // set the mid snap point
   // TODO: should change based on if has food eateries
   useEffect(() => {
-    dispatch(setMidSnapPoint(300));
+    dispatch(setMidSnapPoint(288));//eateries.length > 0 ? 460 : 295));
+    dispatch(setBottomSnapPoint(142));
+    console.log("Instantiating Building Card");
   }, [dispatch]);
 
   if (!buildingCode || !buildings) {
