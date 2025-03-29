@@ -15,7 +15,6 @@
     "@cmumaps/common": "workspace:*",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
-    "@use-gesture/react": "^10.3.1",
     "mapkit-react": "^1.16.1",
     "motion": "^12.6.2",
     "react": "^19.0.0",

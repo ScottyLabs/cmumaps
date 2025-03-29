@@ -15,7 +15,11 @@ import {
   setShowRoomNames,
   unfocusFloor,
 } from "@/store/features/mapSlice";
-import { showLogin } from "@/store/features/uiSlice";
+import {
+  InfoCardStates,
+  setInfoCardStatus,
+  showLogin,
+} from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
@@ -92,6 +96,8 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
   const { onRegionChangeStart, onRegionChangeEnd } = useMapPosition(
     (region, density) => {
+      dispatch(setInfoCardStatus(InfoCardStates.COLLAPSED));
+
       const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
       setShowFloor(showFloor);
       dispatch(setShowRoomNames(density >= THRESHOLD_DENSITY_TO_SHOW_ROOMS));
