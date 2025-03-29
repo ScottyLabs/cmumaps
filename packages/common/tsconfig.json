@@ -10,6 +10,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "src/types/geoRoomTypes.ts"],
   "exclude": ["node_modules", "dist"]
 }

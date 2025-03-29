@@ -1,4 +1,4 @@
-import { Buildings, Rooms } from "@cmumaps/common";
+import { Buildings, GeoRooms } from "@cmumaps/common";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const getClerkToken = async () => {
@@ -26,8 +26,8 @@ export const apiSlice = createApi({
     getBuildings: builder.query<Buildings, void>({
       query: () => "/buildings",
     }),
-    getFloorRooms: builder.query<Rooms, string>({
-      query: (floorCode) => `/floors/${floorCode}/rooms`,
+    getFloorRooms: builder.query<GeoRooms, string>({
+      query: (floorCode) => `/floors/${floorCode}/floorplan`,
     }),
   }),
 });

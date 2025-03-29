@@ -1,6 +1,7 @@
 import type {
   EdgeInfo,
   GeoCoordinate,
+  GeoRooms,
   Graph,
   Placement,
   Pois,
@@ -154,5 +155,39 @@ export const floorService = {
       scale: floor.scale,
       angle: floor.angle,
     };
+  },
+
+  getFloorplan: async (floorCode: string) => {
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    // Get all rooms on the floor from the database
+    const dbRooms = await prisma.room.findMany({
+      where: {
+        buildingCode: buildingCode,
+        floorLevel: floorLevel,
+      },
+      include: {
+        aliases: true,
+      },
+    });
+
+    // Convert the rooms to the format expected by the frontend
+    const rooms: GeoRooms = {};
+    for (const room of dbRooms) {
+      rooms[room.roomId] = {
+        name: room.name,
+        labelPosition: {
+          latitude: room.labelLatitude,
+          longitude: room.labelLongitude,
+        },
+        type: room.type as RoomType,
+        displayAlias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
+        aliases: room.aliases.map((a) => a.alias),
+        points: room.polygon as unknown as GeoCoordinate[][],
+      };
+    }
+
+    return rooms;
   },
 };
