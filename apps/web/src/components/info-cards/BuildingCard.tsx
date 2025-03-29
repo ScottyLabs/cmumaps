@@ -1,4 +1,5 @@
 import ButtonsRow from "@/components/info-cards/ButtonsRow";
+import CardWrapper from "@/components/info-cards/CardWrapper";
 import InfoCardImage from "@/components/info-cards/InfoCardImage";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
@@ -23,8 +24,6 @@ const BuildingCard = ({ map: _map }: Props) => {
     return;
   }
 
-  // init point 295
-
   const renderBuildingImage = () => {
     const url = `/assets/location_images/building_room_images/${building.code}/${building.code}.jpg`;
 
@@ -36,13 +35,15 @@ const BuildingCard = ({ map: _map }: Props) => {
   };
 
   return (
-    <>
-      {!cardCollapsed && renderBuildingImage()}
-      <h2 className="ml-3 pt-2">
-        {building.name} ({building.code})
-      </h2>
-      {renderButtonsRow()}
-    </>
+    <CardWrapper snapPoint={295}>
+      <>
+        {!cardCollapsed && renderBuildingImage()}
+        <h2 className="ml-3 pt-2">
+          {building.name} ({building.code})
+        </h2>
+        {renderButtonsRow()}
+      </>
+    </CardWrapper>
   );
 };
 

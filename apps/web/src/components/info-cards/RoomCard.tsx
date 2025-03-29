@@ -1,6 +1,7 @@
 import { skipToken } from "@reduxjs/toolkit/query";
 
 import ButtonsRow from "@/components/info-cards/ButtonsRow";
+import CardWrapper from "@/components/info-cards/CardWrapper";
 import InfoCardImage from "@/components/info-cards/InfoCardImage";
 import useLocationParams from "@/hooks/useLocationParams";
 import {
@@ -9,8 +10,6 @@ import {
 } from "@/store/features/api/apiSlice";
 
 const RoomCard = () => {
-  // init point 320
-
   const { data: buildings } = useGetBuildingsQuery();
   const { buildingCode, roomName, floor } = useLocationParams();
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
@@ -79,11 +78,13 @@ const RoomCard = () => {
   };
 
   return (
-    <>
-      {renderRoomImage()}
-      {renderRoomTitle()}
-      {renderButtonsRow()}
-    </>
+    <CardWrapper snapPoint={320}>
+      <>
+        {renderRoomImage()}
+        {renderRoomTitle()}
+        {renderButtonsRow()}
+      </>
+    </CardWrapper>
   );
 };
 
