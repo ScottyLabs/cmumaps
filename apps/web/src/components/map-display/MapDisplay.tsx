@@ -1,8 +1,17 @@
-import { Map, MapType, FeatureVisibility } from "mapkit-react";
+import {
+  Map,
+  MapType,
+  FeatureVisibility,
+  MapInteractionEvent,
+} from "mapkit-react";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
+import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
+import { deselectBuilding, selectBuilding } from "@/store/features/mapUiSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { isInPolygonCoordinates } from "@/utils/geometry";
 
 // CMU Campus
 const INITIAL_REGION = {
@@ -20,7 +29,54 @@ const CAMERA_BOUNDARY = {
 };
 
 const MapDisplay = () => {
+  const dispatch = useAppDispatch();
+
+  const { data: buildings } = useGetBuildingsQuery();
+
   const mapRef = useRef<mapkit.Map | null>(null);
+  const [usedPanning, setUsedPanning] = useState<boolean>(false);
+  const [showFloor, setShowFloor] = useState<boolean>(false);
+
+  const handleLoad = () => {
+    if (mapRef.current) {
+      mapRef.current.addEventListener("scroll-end", () => {
+        setUsedPanning(true);
+      });
+    }
+  };
+
+  const handleClick = (e: MapInteractionEvent) => {
+    if (!buildings) {
+      return;
+    }
+
+    // skip if usedPanning is true since end of panning is a click
+    if (usedPanning) {
+      setUsedPanning(false);
+      return;
+    }
+
+    // check if a building is clicked
+    let clickedBuilding = false;
+    if (!showFloor) {
+      const coords = e.toCoordinates();
+
+      for (const building of buildings) {
+        if (
+          building.shape[0] &&
+          isInPolygonCoordinates(coords, building.shape[0])
+        ) {
+          dispatch(selectBuilding(building));
+          clickedBuilding = true;
+          break;
+        }
+      }
+    }
+
+    if (!clickedBuilding) {
+      dispatch(deselectBuilding());
+    }
+  };
 
   return (
     <Map
@@ -42,15 +98,15 @@ const MapDisplay = () => {
       // showsZoomControl={!isMobile}
       showsCompass={FeatureVisibility.Visible}
       allowWheelToZoom
+      onLoad={handleLoad}
+      onClick={handleClick}
       // onRegionChangeStart={onRegionChangeStart}
       // onRegionChangeEnd={() => {
       //   dispatch(setIsZooming(false));
       //   onRegionChangeEnd();
       // }}
-      // onClick={handleClick}
-      // onLoad={handleLoad}
     >
-      <BuildingsDisplay />
+      <BuildingsDisplay buildings={buildings} />
     </Map>
   );
 };

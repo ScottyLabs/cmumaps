@@ -6,7 +6,7 @@ export interface Building {
   isMapped: boolean;
   labelLatitude: number;
   labelLongitude: number;
-  shape: GeoCoordinate[];
+  shape: GeoCoordinate[][];
   hitbox: GeoCoordinate[];
 }
 
