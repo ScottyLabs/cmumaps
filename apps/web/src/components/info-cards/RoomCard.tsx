@@ -80,7 +80,7 @@ const RoomCard = () => {
 
   return (
     <>
-      {/* {renderRoomImage()} */}
+      {renderRoomImage()}
       {renderRoomTitle()}
       {renderButtonsRow()}
     </>

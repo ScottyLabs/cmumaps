@@ -4,6 +4,7 @@ import LoginModal from "@/components/login/LoginModal";
 import MapDisplay from "@/components/map-display/MapDisplay";
 import Toolbar from "@/components/toolbar/Toolbar";
 import IconsDisplay from "@/components/ui-layout/IconsDisplay";
+import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
@@ -14,6 +15,7 @@ const App = () => {
       <LoginModal />
       <IconsDisplay />
       <Toolbar map={mapRef.current} />
+      <MyToastContainer />
     </main>
   );
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 import shareIcon from "/public/assets/icons/infocard/share.svg";
 
@@ -9,11 +10,11 @@ const ShareButton = () => {
     <>
       <button
         type="button"
-        className={`flex items-center rounded-full p-1.5 ${clicked ? "bg-green-600" : "bg-[#b5b5b5]"}`}
+        className={`flex cursor-pointer items-center rounded-full p-1.5 ${clicked ? "bg-green-600" : "bg-[#b5b5b5]"}`}
         onClick={() => {
           navigator.clipboard.writeText(window.location.href);
           setClicked(true);
-          //   toast.success("Link copied!");
+          toast.success("Link copied!");
         }}
       >
         <img alt="Share Icon" src={shareIcon} className="size-5" />

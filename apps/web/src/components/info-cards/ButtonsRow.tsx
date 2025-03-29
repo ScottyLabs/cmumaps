@@ -1,5 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 import { TbXboxX } from "react-icons/tb";
+import { toast } from "react-toastify";
 
 import ShareButton from "@/components/info-cards/ShareButton";
 
@@ -18,7 +19,7 @@ const ButtonsRow = ({ middleButton }: Props) => {
         className="flex items-center gap-2 rounded-lg bg-[#56b57b] px-3 py-1 text-white disabled:bg-red-600"
         disabled={isRoomAcc}
         onClick={() => {
-          // TODO: add Toast
+          toast.warn("Will be implemented!");
         }}
       >
         {isRoomAcc ? <TbXboxX size={20} /> : <FaArrowRight size={12} />}
