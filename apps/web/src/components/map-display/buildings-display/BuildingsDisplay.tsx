@@ -4,10 +4,11 @@ import BuildingRoundel from "@/components/map-display/buildings-display/Building
 import BuildingShape from "@/components/map-display/buildings-display/BuildingShape";
 
 interface Props {
+  map: mapkit.Map | null;
   buildings: Buildings | undefined;
 }
 
-const BuildingsDisplay = ({ buildings }: Props) => {
+const BuildingsDisplay = ({ map, buildings }: Props) => {
   if (!buildings) {
     return;
   }
@@ -15,7 +16,7 @@ const BuildingsDisplay = ({ buildings }: Props) => {
   return Object.values(buildings).map((building) => (
     <div key={building.code}>
       <BuildingShape building={building} />
-      <BuildingRoundel building={building} />
+      <BuildingRoundel map={map} building={building} />
     </div>
   ));
 };

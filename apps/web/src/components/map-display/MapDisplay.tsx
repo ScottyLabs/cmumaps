@@ -102,7 +102,7 @@ const MapDisplay = () => {
         onRegionChangeEnd();
       }}
     >
-      <BuildingsDisplay buildings={buildings} />
+      <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
     </Map>
   );

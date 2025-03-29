@@ -4,7 +4,6 @@ import { Annotation, Polygon } from "mapkit-react";
 import RoomPin from "@/components/shared/RoomPin";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
 import { getFloorCode } from "@/utils/floorUtils";
-import { getIcon } from "@/utils/iconUtils";
 
 interface Props {
   floor: Floor;
