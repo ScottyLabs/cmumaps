@@ -11,6 +11,7 @@
     "tsc": "tsc -b"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.24.1",
     "@cmumaps/common": "workspace:*",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
@@ -23,6 +24,7 @@
     "tailwindcss": "^4.0.9"
   },
   "devDependencies": {
+    "@clerk/types": "^4.47.0",
     "@eslint/js": "^9.22.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/apple-mapkit-js-browser": "^5.78.1",
