@@ -16,7 +16,7 @@ const SearchInput = () => {
   const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // useAutofillSearchQuery();
+  useAutofillSearchQuery(setSearchQuery);
 
   // blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
