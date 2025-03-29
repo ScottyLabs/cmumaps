@@ -2,7 +2,7 @@ import { Map, MapType, FeatureVisibility } from "mapkit-react";
 
 import { useRef } from "react";
 
-import { useGetBuildingInfosQuery } from "@/store/features/api/apiSlice";
+import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 
 // CMU Campus
 const INITIAL_REGION = {
@@ -21,10 +21,6 @@ const CAMERA_BOUNDARY = {
 
 const MapDisplay = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
-
-  const { data: buildingInfos } = useGetBuildingInfosQuery();
-
-  console.log(buildingInfos);
 
   return (
     <Map
@@ -53,7 +49,9 @@ const MapDisplay = () => {
       // }}
       // onClick={handleClick}
       // onLoad={handleLoad}
-    />
+    >
+      <BuildingsDisplay />
+    </Map>
   );
 };
 

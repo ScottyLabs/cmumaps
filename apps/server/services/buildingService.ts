@@ -1,10 +1,10 @@
 import { prisma } from "../index";
 import { BuildingError } from "../errors/error";
-import { ERROR_CODES } from "@cmumaps/common";
+import { BuildingInfo, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 
 export const buildingService = {
   async getBuildingInfos() {
-    const buildings = await prisma.building.findMany({
+    const dbBuildings = await prisma.building.findMany({
       select: {
         buildingCode: true,
         name: true,
@@ -14,6 +14,18 @@ export const buildingService = {
         hitbox: true,
       },
     });
+
+    const buildings: BuildingInfo[] = [];
+    for (const dbBuilding of dbBuildings) {
+      buildings.push({
+        code: dbBuilding.buildingCode,
+        name: dbBuilding.name,
+        labelLatitude: dbBuilding.labelLatitude,
+        labelLongitude: dbBuilding.labelLongitude,
+        shape: dbBuilding.shape as unknown as GeoCoordinate[],
+        hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
+      });
+    }
     return buildings;
   },
 
