@@ -13,6 +13,7 @@ const useLocationParams = () => {
     buildingCode,
     floor,
     roomName,
+    isCardOpen: !!buildingCode,
   };
 };
 
