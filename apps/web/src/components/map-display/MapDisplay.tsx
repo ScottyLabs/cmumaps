@@ -2,6 +2,8 @@ import { Map, MapType, FeatureVisibility } from "mapkit-react";
 
 import { useRef } from "react";
 
+import { useGetBuildingInfosQuery } from "@/store/features/api/apiSlice";
+
 // CMU Campus
 const INITIAL_REGION = {
   centerLatitude: 40.444,
@@ -19,6 +21,10 @@ const CAMERA_BOUNDARY = {
 
 const MapDisplay = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
+
+  const { data: buildingInfos } = useGetBuildingInfosQuery();
+
+  console.log(buildingInfos);
 
   return (
     <Map
