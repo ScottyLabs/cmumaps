@@ -11,13 +11,11 @@ import { useNavigate } from "react-router";
 import {
   CAMERA_BOUNDARY,
   INITIAL_REGION,
-  THRESHOLD_DENSITY_TO_SHOW_FLOORS,
 } from "@/components/map-display/MapConstants";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
-import useMapPosition from "@/hooks/useMapPosition";
+import useMapRegionChange from "@/hooks/useMapRegionChange";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import { deselectBuilding, selectBuilding } from "@/store/features/mapSlice";
-import { showLogin } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygonCoordinates } from "@/utils/geometry";
 
@@ -29,22 +27,9 @@ const MapDisplay = () => {
 
   const mapRef = useRef<mapkit.Map | null>(null);
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
-  const [showFloor, setShowFloor] = useState<boolean>(false);
 
-  // React to pan/zoom events
-  const { onRegionChangeStart, onRegionChangeEnd } = useMapPosition(
-    (_region, density) => {
-      const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
-      setShowFloor(showFloor);
-
-      if (showFloor && !sessionStorage.getItem("showedLogin")) {
-        sessionStorage.setItem("showedLogin", "true");
-        dispatch(showLogin());
-      }
-    },
-    mapRef,
-    INITIAL_REGION,
-  );
+  const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
+    useMapRegionChange(mapRef);
 
   const handleLoad = () => {
     if (mapRef.current) {
