@@ -1,5 +1,7 @@
 import { SignInButton, useUser } from "@clerk/clerk-react";
 
+import { useEffect } from "react";
+
 import { hideLogin } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
@@ -8,6 +10,13 @@ const LoginModal = () => {
 
   const { isSignedIn } = useUser();
   const showLogin = useAppSelector((state) => state.ui.showLogin);
+
+  // If the user signed out, should try to show the login modal again
+  useEffect(() => {
+    if (!isSignedIn) {
+      sessionStorage.removeItem("showedLogin");
+    }
+  }, [isSignedIn]);
 
   // If the user is signed in, don't show the login modal
   if (!showLogin || isSignedIn) {
