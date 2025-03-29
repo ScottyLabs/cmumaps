@@ -1,18 +1,18 @@
 import { Building } from "@cmumaps/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface MapUiState {
+interface MapState {
   focusedFloor: string | null;
   selectedBuilding: Building | null;
 }
 
-const initialState: MapUiState = {
+const initialState: MapState = {
   focusedFloor: null,
   selectedBuilding: null,
 };
 
-const mapUiSlice = createSlice({
-  name: "mapUi",
+const mapSlice = createSlice({
+  name: "map",
   initialState,
   reducers: {
     focusFloor(state, action: PayloadAction<string>) {
@@ -28,5 +28,5 @@ const mapUiSlice = createSlice({
 });
 
 export const { focusFloor, selectBuilding, deselectBuilding } =
-  mapUiSlice.actions;
-export default mapUiSlice.reducer;
+  mapSlice.actions;
+export default mapSlice.reducer;

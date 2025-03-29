@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 
 import Roundel from "@/components/shared/Roundel";
-import { selectBuilding } from "@/store/features/mapUiSlice";
+import { selectBuilding } from "@/store/features/mapSlice";
 
 interface Props {
   building: Building;

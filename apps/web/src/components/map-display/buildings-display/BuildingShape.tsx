@@ -10,7 +10,7 @@ interface Props {
 
 const BuildingShape = ({ building }: Props) => {
   const selectedBuilding = useAppSelector(
-    (state) => state.mapUi.selectedBuilding,
+    (state) => state.map.selectedBuilding,
   );
   const isSelected = selectedBuilding?.code == building.code;
 

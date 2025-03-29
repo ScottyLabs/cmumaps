@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { apiSlice } from "@/store/features/api/apiSlice";
-
-import mapUiReducer from "./features/mapUiSlice";
+import mapReducer from "@/store/features/mapSlice";
+import uiReducer from "@/store/features/uiSlice";
 
 export const store = configureStore({
   reducer: {
-    mapUi: mapUiReducer,
+    map: mapReducer,
+    ui: uiReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
