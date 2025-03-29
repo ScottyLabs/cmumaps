@@ -1,4 +1,4 @@
-import buggyPath from "@public/assets/json/buggy-path.json";
+import buggyPath from "@public/assets/carnival/json/buggy-path.json";
 import { Polyline } from "mapkit-react";
 
 const BuggyPath = () => {

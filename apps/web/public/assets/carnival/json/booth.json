@@ -1,0 +1,46 @@
+{
+    "Org Name": {
+        "type": "Booth Type",
+        "theme": "Theme"
+    },
+    "SSA, HKSA, FSA, KASA, and SIAM": {
+        "type": "blitz",
+        "theme": "Monster's Inc"
+    },
+    "SWE": {
+        "type": "blitz",
+        "theme": "Pitch Perfect"
+    },
+    "KGB and PRISM": {
+        "type": "blitz",
+        "theme": "Sharknado"
+    },
+    "MENASA + SPRIT": {
+        "type": "blitz",
+        "theme": "Aladdin"
+    },
+    "ASCE": {
+        "type": "blitz",
+        "theme": "The Lego Movie"
+    },
+    "Sustainable Earth and TPEG": {
+        "type": "blitz",
+        "theme": "Jurassic Park"
+    },
+    "Alpha Chi Omega": {
+        "type": "1-story",
+        "theme": "Inside Out"
+    },
+    "Fringe": {
+        "type": "1-story",
+        "theme": "Muppet's Movie"
+    },
+    "Delta Delta Delta": {
+        "type": "1-story",
+        "theme": "Jaws"
+    },
+    "Alpha Phi": {
+        "type": "1-story",
+        "theme": "The Princess Bride"
+    }
+}
