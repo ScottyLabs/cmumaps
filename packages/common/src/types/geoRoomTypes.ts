@@ -1,13 +1,7 @@
 import { GeoCoordinate } from "./coordTypes";
-import { RoomInfo, RoomType } from "./roomTypes";
+import { RoomType } from "./roomTypes";
 
 export interface GeoRoom {
-  /**
-   * The short name of the room, without the building name but including the
-   * floor level (e.g. '121' for CUC 121)
-   */
-  name: string;
-
   /**
    * The coordinates of the label of the room
    */
@@ -30,4 +24,5 @@ export interface GeoRoom {
   points: GeoCoordinate[][];
 }
 
+// maps from name to room
 export type GeoRooms = Record<string, GeoRoom>;

@@ -14,15 +14,21 @@ import {
 } from "@/components/map-display/MapConstants";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
+import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import { deselectBuilding, selectBuilding } from "@/store/features/mapSlice";
+import {
+  deselectBuilding,
+  selectBuilding,
+  setIsZooming,
+} from "@/store/features/mapSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
 const MapDisplay = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const { data: buildings } = useGetBuildingsQuery();
 
@@ -91,14 +97,14 @@ const MapDisplay = () => {
       paddingLeft={4}
       paddingRight={4}
       paddingTop={10}
-      // showsZoomControl={!isMobile}
+      showsZoomControl={!isMobile}
       showsCompass={FeatureVisibility.Visible}
       allowWheelToZoom
       onLoad={handleLoad}
       onClick={handleClick}
       onRegionChangeStart={onRegionChangeStart}
       onRegionChangeEnd={() => {
-        // dispatch(setIsZooming(false));
+        dispatch(setIsZooming(false));
         onRegionChangeEnd();
       }}
     >

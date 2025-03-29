@@ -175,15 +175,13 @@ export const floorService = {
     // Convert the rooms to the format expected by the frontend
     const rooms: GeoRooms = {};
     for (const room of dbRooms) {
-      rooms[room.roomId] = {
-        name: room.name,
+      rooms[room.name] = {
         labelPosition: {
           latitude: room.labelLatitude,
           longitude: room.labelLongitude,
         },
         type: room.type as RoomType,
-        displayAlias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
-        aliases: room.aliases.map((a) => a.alias),
+        alias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
         points: room.polygon as unknown as GeoCoordinate[][],
       };
     }

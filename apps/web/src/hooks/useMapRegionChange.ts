@@ -56,6 +56,10 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       //     }
       //   }
 
+      if (!centerBuilding.defaultFloor) {
+        return;
+      }
+
       const focusedFloor = {
         buildingCode: centerBuilding.code,
         level: centerBuilding.defaultFloor,
