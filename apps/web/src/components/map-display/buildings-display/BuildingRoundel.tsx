@@ -2,6 +2,7 @@ import { Building } from "@cmumaps/common";
 import { Annotation } from "mapkit-react";
 
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 import Roundel from "@/components/shared/Roundel";
 import { selectBuilding } from "@/store/features/mapUiSlice";
@@ -12,6 +13,12 @@ interface Props {
 
 const BuildingRoundel = ({ building }: Props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/${building.code}`);
+    dispatch(selectBuilding(building));
+  };
 
   // TODO: Don't show when it is the buidling on focus
   return (
@@ -23,7 +30,7 @@ const BuildingRoundel = ({ building }: Props) => {
         <div
           className="translate-y-1/2 cursor-pointer"
           onClick={(e) => {
-            dispatch(selectBuilding(building));
+            handleClick();
             e.stopPropagation();
           }}
         >

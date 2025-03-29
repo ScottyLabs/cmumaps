@@ -6,6 +6,7 @@ import {
 } from "mapkit-react";
 
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
@@ -30,6 +31,7 @@ const CAMERA_BOUNDARY = {
 
 const MapDisplay = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { data: buildings } = useGetBuildingsQuery();
 
@@ -75,6 +77,7 @@ const MapDisplay = () => {
 
     if (!clickedBuilding) {
       dispatch(deselectBuilding());
+      navigate("/");
     }
   };
 
