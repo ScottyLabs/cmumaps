@@ -80,7 +80,9 @@ export default function FloorSwitcher() {
       <div className="border-x border-gray-300">
         <button
           title="Decrement floor"
-          className={buttonBaseClasses + (canGoDown ? "" : "text-gray-300")}
+          className={
+            buttonBaseClasses + (canGoDown ? "cursor-pointer" : "text-gray-300")
+          }
           disabled={!canGoDown}
           onClick={() => {
             const floorLevel = building.floors[floorIndex - 1];
@@ -119,7 +121,7 @@ export default function FloorSwitcher() {
           onClick={() => {
             setShowFloorPicker(true);
           }}
-          className="px-2"
+          className="cursor-pointer px-2"
           disabled={building.floors.length < 2}
         >
           <div className="text-center">{building.floors[floorIndex]}</div>
@@ -132,7 +134,9 @@ export default function FloorSwitcher() {
       <div className="flex items-center border-l border-gray-300">
         <button
           title="Increment floor"
-          className={buttonBaseClasses + (canGoUp ? "" : "text-gray-300")}
+          className={
+            buttonBaseClasses + (canGoUp ? "cursor-pointer" : "text-gray-300")
+          }
           disabled={!canGoUp}
           onClick={() => {
             const floorLevel = building.floors[floorIndex + 1];
@@ -212,7 +216,7 @@ export default function FloorSwitcher() {
     <Wrapper>
       <div className="btn-shadow flex items-stretch justify-center rounded bg-white">
         <button
-          className="p-1"
+          className="cursor-pointer p-1"
           onClick={() => {
             navigate(`/${building.code}`);
             dispatch(setIsSearchOpen(false));
