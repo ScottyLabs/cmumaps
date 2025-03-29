@@ -4,6 +4,9 @@ export interface Building {
   code: string;
   name: string;
   isMapped: boolean;
+  defaultOrdinal: number | null;
+  defaultFloor: string;
+  floors: string[];
   labelLatitude: number;
   labelLongitude: number;
   shape: GeoCoordinate[][];
@@ -16,3 +19,5 @@ export interface Placement {
   scale: number;
   angle: number;
 }
+
+export type Buildings = Record<string, Building>;

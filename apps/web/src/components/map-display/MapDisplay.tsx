@@ -17,7 +17,7 @@ import useMapRegionChange from "@/hooks/useMapRegionChange";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import { deselectBuilding, selectBuilding } from "@/store/features/mapSlice";
 import { useAppDispatch } from "@/store/hooks";
-import { isInPolygonCoordinates } from "@/utils/geometry";
+import { isInPolygon } from "@/utils/geometry";
 
 const MapDisplay = () => {
   const dispatch = useAppDispatch();
@@ -55,13 +55,13 @@ const MapDisplay = () => {
     if (!showFloor) {
       const coords = e.toCoordinates();
 
-      for (const building of buildings) {
-        if (
-          building.shape[0] &&
-          isInPolygonCoordinates(coords, building.shape[0])
-        ) {
-          dispatch(selectBuilding(building));
-          clickedBuilding = true;
+      for (const buildingCode in buildings) {
+        const building = buildings[buildingCode];
+        if (building?.shape[0] && isInPolygon(coords, building.shape[0])) {
+          if (building) {
+            dispatch(selectBuilding(building));
+            clickedBuilding = true;
+          }
           break;
         }
       }

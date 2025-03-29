@@ -1,14 +1,18 @@
-import { Building } from "@cmumaps/common";
+import { Buildings } from "@cmumaps/common";
 
 import BuildingRoundel from "@/components/map-display/buildings-display/BuildingRoundel";
 import BuildingShape from "@/components/map-display/buildings-display/BuildingShape";
 
 interface Props {
-  buildings: Building[] | undefined;
+  buildings: Buildings | undefined;
 }
 
 const BuildingsDisplay = ({ buildings }: Props) => {
-  return buildings?.map((building) => (
+  if (!buildings) {
+    return;
+  }
+
+  return Object.values(buildings).map((building) => (
     <div key={building.code}>
       <BuildingShape building={building} />
       <BuildingRoundel building={building} />

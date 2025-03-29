@@ -14,10 +14,7 @@ export const longitudeRatio = 84719.3945182816;
  * @param point The point
  * @returns true if the point is in the polygon; false otherwise
  */
-export function isInPolygonCoordinates(
-  point: Coordinate,
-  vertices: GeoCoordinate[],
-) {
+export function isInPolygon(point: Coordinate, vertices: GeoCoordinate[]) {
   const x = point.longitude;
   const y = point.latitude;
 

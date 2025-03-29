@@ -1,4 +1,4 @@
-import { Building, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
+import { Buildings, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 import { prisma } from "../index";
 import { BuildingError } from "../errors/error";
 
@@ -8,6 +8,7 @@ export const buildingService = {
       select: {
         buildingCode: true,
         name: true,
+        defaultOrdinal: true,
         labelLatitude: true,
         labelLongitude: true,
         shape: true,
@@ -15,18 +16,21 @@ export const buildingService = {
       },
     });
 
-    const buildings: Building[] = [];
+    const buildings: Buildings = {};
     for (const dbBuilding of dbBuildings) {
-      buildings.push({
+      buildings[dbBuilding.buildingCode] = {
         code: dbBuilding.buildingCode,
         name: dbBuilding.name,
+        defaultOrdinal: dbBuilding.defaultOrdinal,
+        defaultFloor: await this.getDefaultFloor(dbBuilding.buildingCode),
         labelLatitude: dbBuilding.labelLatitude,
         labelLongitude: dbBuilding.labelLongitude,
         shape: dbBuilding.shape as unknown as GeoCoordinate[][],
         hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
+        floors: await this.getBuildingFloors(dbBuilding.buildingCode),
         // TODO: need to add isMapped field to the database
         isMapped: true,
-      });
+      };
     }
     return buildings;
   },
