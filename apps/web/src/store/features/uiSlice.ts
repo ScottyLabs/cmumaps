@@ -18,7 +18,7 @@ interface UiState {
 const initialState: UiState = {
   showLogin: false,
   isSearchOpen: false,
-  infoCardStatus: InfoCardStates.COLLAPSED,
+  infoCardStatus: InfoCardStates.HALF_OPEN,
 };
 
 const uiSlice = createSlice({
