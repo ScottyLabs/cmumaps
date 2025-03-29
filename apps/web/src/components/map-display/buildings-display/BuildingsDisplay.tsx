@@ -1,15 +1,19 @@
+import BuildingRoundel from "@/components/map-display/buildings-display/BuildingRoundel";
 import BuildingShape from "@/components/map-display/buildings-display/BuildingShape";
-import { useGetBuildingInfosQuery } from "@/store/features/api/apiSlice";
+import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 
 const BuildingsDisplay = () => {
-  const { data: buildingInfos } = useGetBuildingInfosQuery();
+  const { data: buildings } = useGetBuildingsQuery();
 
-  if (!buildingInfos) {
+  if (!buildings) {
     return;
   }
 
-  return buildingInfos.map((buildingInfo) => (
-    <BuildingShape key={buildingInfo.code} buildingInfo={buildingInfo} />
+  return buildings.map((building) => (
+    <div key={building.code}>
+      <BuildingShape building={building} />
+      <BuildingRoundel building={building} />
+    </div>
   ));
 };
 

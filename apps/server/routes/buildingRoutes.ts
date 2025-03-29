@@ -4,7 +4,7 @@ import { checkAuth } from "../middleware/authMiddleware";
 
 const buildingRouter = express.Router();
 
-buildingRouter.get("/", buildingController.getBuildingInfos);
+buildingRouter.get("/", buildingController.getBuildings);
 
 buildingRouter.get(
   "/codes-and-names",

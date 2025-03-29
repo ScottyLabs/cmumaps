@@ -1,9 +1,9 @@
 import { prisma } from "../index";
 import { BuildingError } from "../errors/error";
-import { BuildingInfo, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
+import { Building, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 
 export const buildingService = {
-  async getBuildingInfos() {
+  async getBuildings() {
     const dbBuildings = await prisma.building.findMany({
       select: {
         buildingCode: true,
@@ -15,7 +15,7 @@ export const buildingService = {
       },
     });
 
-    const buildings: BuildingInfo[] = [];
+    const buildings: Building[] = [];
     for (const dbBuilding of dbBuildings) {
       buildings.push({
         code: dbBuilding.buildingCode,

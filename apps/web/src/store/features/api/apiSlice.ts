@@ -1,4 +1,4 @@
-import { BuildingInfo } from "@cmumaps/common";
+import { Building } from "@cmumaps/common";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
@@ -7,10 +7,10 @@ export const apiSlice = createApi({
     baseUrl: `${import.meta.env.VITE_SERVER_URL}/api/`,
   }),
   endpoints: (builder) => ({
-    getBuildingInfos: builder.query<BuildingInfo[], void>({
+    getBuildings: builder.query<Building[], void>({
       query: () => "/buildings",
     }),
   }),
 });
 
-export const { useGetBuildingInfosQuery } = apiSlice;
+export const { useGetBuildingsQuery } = apiSlice;

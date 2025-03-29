@@ -1,12 +1,12 @@
-import { BuildingInfo } from "@cmumaps/common";
+import { Building } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
 interface Props {
-  buildingInfo: BuildingInfo;
+  building: Building;
 }
 
-const BuildingShape = ({ buildingInfo }: Props) => {
-  return <Polygon points={buildingInfo.shape} enabled={false} />;
+const BuildingShape = ({ building }: Props) => {
+  return <Polygon points={building.shape} enabled={false} />;
 };
 
 export default BuildingShape;

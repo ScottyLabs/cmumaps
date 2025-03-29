@@ -1,6 +1,6 @@
 import { GeoCoordinate, PdfCoordinate } from "./coordTypes";
 
-export interface BuildingInfo {
+export interface Building {
   code: string;
   name: string;
   labelLatitude: number;

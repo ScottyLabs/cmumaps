@@ -1,10 +1,10 @@
-import { BuildingInfo } from "@cmumaps/common";
+import { Building } from "@cmumaps/common";
 import { Annotation } from "mapkit-react";
 
 import Roundel from "@/components/shared/Roundel";
 
 interface Props {
-  building: BuildingInfo;
+  building: Building;
 }
 
 const BuildingRoundel = ({ building }: Props) => {
