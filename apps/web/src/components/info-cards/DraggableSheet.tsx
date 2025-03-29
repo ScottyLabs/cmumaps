@@ -1,9 +1,13 @@
-import { motion, useAnimation } from "motion/react";
+import { motion, PanInfo, useAnimation } from "motion/react";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import { setInfoCardStatus, CardStates } from "@/store/features/cardSlice";
+import {
+  setInfoCardStatus,
+  CardStates,
+  CardStatesList,
+} from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
@@ -16,21 +20,44 @@ const DraggableSheet = ({ children }: Props) => {
 
   const controls = useAnimation();
 
-  const infoCardStatus = useAppSelector((state) => state.card.infoCardStatus);
-  const childRef = useRef<HTMLDivElement>(null);
-  const [childHeight, setChildHeight] = useState(0);
+  const cardStatus = useAppSelector((state) => state.card.cardStatus);
+  const midSnapPoint = useAppSelector((state) => state.card.midSnapPoint);
 
+  const snapIndex = useMemo(() => {
+    return CardStatesList.indexOf(cardStatus);
+  }, [cardStatus]);
+
+  // inialize the snap points based on the mid snap point
+  const snapPoints = useMemo(() => {
+    if (midSnapPoint) {
+      return [-100, midSnapPoint, 200];
+    } else {
+      return [-100, 200];
+    }
+  }, [midSnapPoint]);
+
+  // updates the snap index when the card status changes
   useEffect(() => {
-    if (childRef.current) {
-      const childHeight = childRef.current.clientHeight;
-      setChildHeight(childRef.current.clientHeight);
-      controls.start({ y: -childHeight });
-    }
+    controls.start({ y: -snapPoints[snapIndex]! });
+  }, [cardStatus, controls, snapIndex, snapPoints]);
 
-    if (!isCardOpen) {
-      controls.start({ y: 0 });
+  // updates the snap points when the isCardOpen changes
+  useEffect(() => {
+    if (isCardOpen) {
+      controls.start({ y: -snapPoints[1]! });
+    } else {
+      controls.start({ y: -snapPoints[0]! });
     }
-  }, [controls, infoCardStatus, isCardOpen]);
+  }, [isCardOpen, controls, snapPoints]);
+
+  const handleDragEnd = (
+    _e: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo,
+  ) => {
+    const infoCardStatus =
+      info.velocity.y < 0 ? CardStates.HALF_OPEN : CardStates.COLLAPSED;
+    dispatch(setInfoCardStatus(infoCardStatus));
+  };
 
   return (
     <div className="absolute inset-0">
@@ -39,23 +66,17 @@ const DraggableSheet = ({ children }: Props) => {
         transition={{ duration: 0.5 }}
         drag="y"
         dragConstraints={{
-          top: -childHeight,
+          top: -snapPoints[snapPoints.length - 1]!,
           bottom: 0,
         }}
         dragElastic={1}
-        onDragEnd={(_e, info) => {
-          const infoCardStatus =
-            info.velocity.y < 0 ? CardStates.HALF_OPEN : CardStates.COLLAPSED;
-
-          controls.start({ y: -childHeight });
-          dispatch(setInfoCardStatus(infoCardStatus));
-        }}
+        onDragEnd={handleDragEnd}
         className="flex flex-col rounded-t-xl bg-white text-center"
       >
         <div className="flex h-12 items-center justify-center rounded-t-xl">
           <div className="h-1 w-12 rounded-full bg-black" />
         </div>
-        <div ref={childRef}>{children}</div>
+        <div>{children}</div>
       </motion.div>
     </div>
   );
