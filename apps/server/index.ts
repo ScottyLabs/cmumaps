@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: process.env.ALLOWED_ORIGINS?.split(","),
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 
@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/floors", checkAuth, floorRoutes);
-app.use("/api/buildings", checkAuth, buildingRoutes);
+app.use("/api/buildings", buildingRoutes);
 app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 app.use("/api", checkAuth, requireSocketId, edgeRoutes);
 app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);

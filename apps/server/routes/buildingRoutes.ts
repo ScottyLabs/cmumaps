@@ -1,14 +1,26 @@
 import express from "express";
 import { buildingController } from "../controllers/buildingController";
+import { checkAuth } from "../middleware/authMiddleware";
 
 const buildingRouter = express.Router();
 
+buildingRouter.get("/", buildingController.getBuildingInfos);
+
 buildingRouter.get(
   "/codes-and-names",
-  buildingController.getBuildingCodesAndNames
+  checkAuth,
+  buildingController.getBuildingCodesAndNames,
 );
-buildingRouter.get("/:id/name", buildingController.getBuildingName);
-buildingRouter.get("/:id/defaultFloor", buildingController.getDefaultFloor);
-buildingRouter.get("/:id/floors", buildingController.getBuildingFloors);
+buildingRouter.get("/:id/name", checkAuth, buildingController.getBuildingName);
+buildingRouter.get(
+  "/:id/defaultFloor",
+  checkAuth,
+  buildingController.getDefaultFloor,
+);
+buildingRouter.get(
+  "/:id/floors",
+  checkAuth,
+  buildingController.getBuildingFloors,
+);
 
 export default buildingRouter;

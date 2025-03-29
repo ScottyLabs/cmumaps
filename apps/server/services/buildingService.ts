@@ -3,6 +3,20 @@ import { BuildingError } from "../errors/error";
 import { ERROR_CODES } from "@cmumaps/common";
 
 export const buildingService = {
+  async getBuildingInfos() {
+    const buildings = await prisma.building.findMany({
+      select: {
+        buildingCode: true,
+        name: true,
+        labelLatitude: true,
+        labelLongitude: true,
+        shape: true,
+        hitbox: true,
+      },
+    });
+    return buildings;
+  },
+
   async getAllBuildingCodesAndNames() {
     const buildings = await prisma.building.findMany({
       select: { buildingCode: true, name: true },

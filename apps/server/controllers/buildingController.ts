@@ -4,6 +4,15 @@ import { buildingService } from "../services/buildingService";
 import { handleControllerError } from "../errors/errorHandler";
 
 export const buildingController = {
+  async getBuildingInfos(req: Request, res: Response) {
+    try {
+      const buildingInfos = await buildingService.getBuildingInfos();
+      res.json(buildingInfos);
+    } catch (error) {
+      handleControllerError(res, error, "getting building infos");
+    }
+  },
+
   async getBuildingCodesAndNames(req: Request, res: Response) {
     try {
       const buildingCodesAndNames =
@@ -42,7 +51,7 @@ export const buildingController = {
   async getBuildingFloors(req: Request, res: Response) {
     try {
       const buildingFloors = await buildingService.getBuildingFloors(
-        req.params.id
+        req.params.id,
       );
 
       res.json(buildingFloors);
