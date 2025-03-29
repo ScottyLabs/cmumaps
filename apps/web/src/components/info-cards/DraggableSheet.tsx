@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useAnimation } from "motion/react";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -14,7 +14,8 @@ interface Props {
 const DraggableSheet = ({ snapPoint, children }: Props) => {
   const dispatch = useAppDispatch();
   const { isCardOpen } = useLocationParams();
-  console.log("isCardOpen", isCardOpen);
+  const controls = useAnimation();
+
   const infoCardStatus = useAppSelector((state) => state.ui.infoCardStatus);
 
   // initial snap points
@@ -30,7 +31,6 @@ const DraggableSheet = ({ snapPoint, children }: Props) => {
 
   // reset the card status when the card is reopened
   useEffect(() => {
-    console.log("isCardOpen", isCardOpen);
     if (isCardOpen) {
       dispatch(setInfoCardStatus(InfoCardStates.HALF_OPEN));
       setSnapIndex(1);
@@ -43,13 +43,14 @@ const DraggableSheet = ({ snapPoint, children }: Props) => {
   useEffect(() => {
     const snapIndex = Object.values(InfoCardStates).indexOf(infoCardStatus);
     setSnapIndex(snapIndex);
-  }, [infoCardStatus]);
+    controls.start({ y: -snapPoints[snapIndex]! });
+  }, [controls, infoCardStatus, snapPoints]);
 
   return (
     <div className="absolute inset-0">
       <motion.div
         initial={{ y: -snapPoints[snapIndex]! }}
-        animate={{ y: -snapPoints[snapIndex]! }}
+        animate={controls}
         transition={{ duration: 1 }}
         drag="y"
         dragConstraints={{
@@ -57,8 +58,10 @@ const DraggableSheet = ({ snapPoint, children }: Props) => {
           bottom: 0,
         }}
         dragElastic={1}
-        onDragEnd={(e) => {
+        onDragEnd={(e, info) => {
           console.log("drag end", e);
+          console.log("info", info.velocity.y);
+          controls.start({ y: -snapPoints[snapIndex]! });
         }}
         className="flex flex-col rounded-t-xl bg-white text-center"
       >
