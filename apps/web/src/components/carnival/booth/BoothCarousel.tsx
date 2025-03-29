@@ -52,24 +52,23 @@ const BoothCarousel = () => {
         key={boothName}
         className="rounded-lg border border-gray-200 bg-white p-2 shadow"
       >
-      <div className = "ml-2 mb-1">
-        <h3 className = "font-semibold text-lg">{boothName}</h3>
-          <p className="text-sm text-black font-medium">
-            Theme: {booth.theme}
-            <p className="block font-normal mt-1.5">
-              <div className = "flex gap-2">
-                <div className = "bg-red-100 text-red-500 p-1 pl-3 pr-3 rounded-3xl font-medium">
+        <div className="mb-1 ml-2">
+          <h3 className="text-lg font-semibold">{boothName}</h3>
+          <div className="text-sm font-medium text-black">
+            <p>Theme: {booth.theme}</p>
+            <div className="mt-1.5 block font-normal">
+              <div className="flex gap-2">
+                <div className="rounded-3xl bg-red-100 p-1 pr-3 pl-3 font-medium text-red-500">
                   {booth.orgType}
                 </div>
-                <div className = "bg-green-100 text-green-700 p-1 pl-3 pr-3 rounded-3xl font-medium">
+                <div className="rounded-3xl bg-green-100 p-1 pr-3 pl-3 font-medium text-green-700">
                   {booth.boothType}
                 </div>
               </div>
-            </p>
-          </p>
+            </div>
+          </div>
         </div>
       </div>
-        
     ));
 
   const renderMobile = () => {
