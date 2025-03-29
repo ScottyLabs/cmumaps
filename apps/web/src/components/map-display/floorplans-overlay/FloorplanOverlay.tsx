@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
+import { useAppSelector } from "@/store/hooks";
 import { getFloorCode } from "@/utils/floorUtils";
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 const FloorplanOverlay = ({ floor }: Props) => {
   const navigate = useNavigate();
   const { roomName: selectedRoomName } = useLocationParams();
-
+  const showRoomNames = useAppSelector((state) => state.map.showRoomNames);
   const { data: rooms } = useGetFloorRoomsQuery(
     getFloorCode(floor.buildingCode, floor.level),
   );
@@ -63,17 +64,14 @@ const FloorplanOverlay = ({ floor }: Props) => {
             }}
           >
             {showPin && <RoomPin room={{ ...room, name: roomName }} />}
-            {
-              // TODO: Add room name and alias
-              /* {(showRoomNames || room.alias) && (
+            {(showRoomNames || room.alias) && (
               <div className="text-center text-sm leading-[1.1] tracking-wide">
-                {showRoomNames && <p>{room.name}</p>}
+                {showRoomNames && <p>{roomName}</p>}
                 {room.alias && (
                   <p className="w-16 text-wrap italic">{room.alias}</p>
                 )}
               </div>
-            )} */
-            }
+            )}
           </div>
         </Annotation>
       </div>

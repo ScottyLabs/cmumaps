@@ -6,10 +6,15 @@ import { RefObject, useState } from "react";
 import {
   THRESHOLD_DENSITY_TO_SHOW_FLOORS,
   INITIAL_REGION,
+  THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import { focusFloor, unfocusFloor } from "@/store/features/mapSlice";
+import {
+  focusFloor,
+  setShowRoomNames,
+  unfocusFloor,
+} from "@/store/features/mapSlice";
 import { showLogin } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
@@ -89,6 +94,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
     (region, density) => {
       const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
       setShowFloor(showFloor);
+      dispatch(setShowRoomNames(density >= THRESHOLD_DENSITY_TO_SHOW_ROOMS));
 
       if (showFloor && !sessionStorage.getItem("showedLogin")) {
         sessionStorage.setItem("showedLogin", "true");

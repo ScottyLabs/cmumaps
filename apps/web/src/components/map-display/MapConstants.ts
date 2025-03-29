@@ -15,3 +15,4 @@ export const CAMERA_BOUNDARY = {
 
 // Thresholds
 export const THRESHOLD_DENSITY_TO_SHOW_FLOORS = 350_000;
+export const THRESHOLD_DENSITY_TO_SHOW_ROOMS = 750_000;

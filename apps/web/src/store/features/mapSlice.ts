@@ -5,12 +5,14 @@ interface MapState {
   isZooming: boolean;
   focusedFloor: Floor | null;
   selectedBuilding: Building | null;
+  showRoomNames: boolean;
 }
 
 const initialState: MapState = {
   isZooming: false,
   focusedFloor: null,
   selectedBuilding: null,
+  showRoomNames: false,
 };
 
 const mapSlice = createSlice({
@@ -32,6 +34,9 @@ const mapSlice = createSlice({
     deselectBuilding(state) {
       state.selectedBuilding = null;
     },
+    setShowRoomNames(state, action: PayloadAction<boolean>) {
+      state.showRoomNames = action.payload;
+    },
   },
 });
 
@@ -41,5 +46,6 @@ export const {
   selectBuilding,
   deselectBuilding,
   setIsZooming,
+  setShowRoomNames,
 } = mapSlice.actions;
 export default mapSlice.reducer;
