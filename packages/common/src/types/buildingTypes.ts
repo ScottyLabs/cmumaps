@@ -5,7 +5,7 @@ export interface Building {
   name: string;
   isMapped: boolean;
   defaultOrdinal: number | null;
-  defaultFloor: string;
+  defaultFloor: string | null;
   floors: string[];
   labelLatitude: number;
   labelLongitude: number;

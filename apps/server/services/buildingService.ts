@@ -4,15 +4,10 @@ import { BuildingError } from "../errors/error";
 
 export const buildingService = {
   async getBuildings() {
+    // get all buildings and their floors and default floor
     const dbBuildings = await prisma.building.findMany({
-      select: {
-        buildingCode: true,
-        name: true,
-        defaultOrdinal: true,
-        labelLatitude: true,
-        labelLongitude: true,
-        shape: true,
-        hitbox: true,
+      include: {
+        floors: true,
       },
     });
 
@@ -22,12 +17,14 @@ export const buildingService = {
         code: dbBuilding.buildingCode,
         name: dbBuilding.name,
         defaultOrdinal: dbBuilding.defaultOrdinal,
-        defaultFloor: await this.getDefaultFloor(dbBuilding.buildingCode),
+        defaultFloor:
+          dbBuilding.floors.find((floor) => floor.isDefault)?.floorLevel ??
+          null,
         labelLatitude: dbBuilding.labelLatitude,
         labelLongitude: dbBuilding.labelLongitude,
         shape: dbBuilding.shape as unknown as GeoCoordinate[][],
         hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
-        floors: await this.getBuildingFloors(dbBuilding.buildingCode),
+        floors: dbBuilding.floors.map((floor) => floor.floorLevel),
         // TODO: need to add isMapped field to the database
         isMapped: true,
       };
