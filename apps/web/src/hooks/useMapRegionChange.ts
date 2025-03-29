@@ -10,16 +10,13 @@ import {
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
+import { setInfoCardStatus, CardStates } from "@/store/features/cardSlice";
 import {
   focusFloor,
   setShowRoomNames,
   unfocusFloor,
 } from "@/store/features/mapSlice";
-import {
-  InfoCardStates,
-  setInfoCardStatus,
-  showLogin,
-} from "@/store/features/uiSlice";
+import { showLogin } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
@@ -96,7 +93,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
   const { onRegionChangeStart, onRegionChangeEnd } = useMapPosition(
     (region, density) => {
-      dispatch(setInfoCardStatus(InfoCardStates.COLLAPSED));
+      dispatch(setInfoCardStatus(CardStates.COLLAPSED));
 
       const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
       setShowFloor(showFloor);

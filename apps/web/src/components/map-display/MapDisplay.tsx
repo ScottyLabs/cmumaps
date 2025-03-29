@@ -17,16 +17,13 @@ import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/Floor
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
+import { setInfoCardStatus, CardStates } from "@/store/features/cardSlice";
 import {
   deselectBuilding,
   selectBuilding,
   setIsZooming,
 } from "@/store/features/mapSlice";
-import {
-  InfoCardStates,
-  setInfoCardStatus,
-  setIsSearchOpen,
-} from "@/store/features/uiSlice";
+import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
@@ -55,7 +52,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   };
 
   const handleClick = (e: MapInteractionEvent) => {
-    dispatch(setInfoCardStatus(InfoCardStates.COLLAPSED));
+    dispatch(setInfoCardStatus(CardStates.COLLAPSED));
 
     if (!buildings) {
       return;

@@ -1,24 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const InfoCardStates = {
-  COLLAPSED: "collapsed",
-  HALF_OPEN: "half-open",
-  EXPANDED: "expanded",
-} as const;
-
-export type InfoCardStatus =
-  (typeof InfoCardStates)[keyof typeof InfoCardStates];
-
 interface UiState {
   showLogin: boolean;
   isSearchOpen: boolean;
-  infoCardStatus: InfoCardStatus;
 }
 
 const initialState: UiState = {
   showLogin: false,
   isSearchOpen: false,
-  infoCardStatus: InfoCardStates.HALF_OPEN,
 };
 
 const uiSlice = createSlice({
@@ -34,17 +23,8 @@ const uiSlice = createSlice({
     setIsSearchOpen(state, action: PayloadAction<boolean>) {
       state.isSearchOpen = action.payload;
     },
-    setInfoCardStatus(state, action: PayloadAction<InfoCardStatus>) {
-      state.infoCardStatus = action.payload;
-    },
-  },
-  selectors: {
-    selectCardCollapsed: (state) =>
-      state.infoCardStatus === InfoCardStates.COLLAPSED,
   },
 });
 
-export const { showLogin, hideLogin, setIsSearchOpen, setInfoCardStatus } =
-  uiSlice.actions;
-export const { selectCardCollapsed } = uiSlice.selectors;
+export const { showLogin, hideLogin, setIsSearchOpen } = uiSlice.actions;
 export default uiSlice.reducer;

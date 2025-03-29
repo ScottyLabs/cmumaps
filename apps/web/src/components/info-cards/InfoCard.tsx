@@ -21,7 +21,7 @@ const InfoCard = ({ map }: Props) => {
     }
   };
 
-  return <CardWrapper snapPoint={320}>{renderCard()}</CardWrapper>;
+  return <CardWrapper>{renderCard()}</CardWrapper>;
 };
 
 export default InfoCard;

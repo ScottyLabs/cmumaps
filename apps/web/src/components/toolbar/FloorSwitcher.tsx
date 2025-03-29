@@ -8,8 +8,9 @@ import { useNavigate } from "react-router";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
+import { selectCardCollapsed } from "@/store/features/cardSlice";
 import { focusFloor } from "@/store/features/mapSlice";
-import { setIsSearchOpen, selectCardCollapsed } from "@/store/features/uiSlice";
+import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import Roundel from "../shared/Roundel";

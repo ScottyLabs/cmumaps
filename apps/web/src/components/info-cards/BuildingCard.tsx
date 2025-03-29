@@ -3,7 +3,7 @@ import InfoCardImage from "@/components/info-cards/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import { selectCardCollapsed } from "@/store/features/uiSlice";
+import { selectCardCollapsed } from "@/store/features/cardSlice";
 import { useAppSelector } from "@/store/hooks";
 
 interface Props {

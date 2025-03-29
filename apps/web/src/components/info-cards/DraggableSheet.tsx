@@ -3,7 +3,7 @@ import { motion, useAnimation } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import { InfoCardStates, setInfoCardStatus } from "@/store/features/uiSlice";
+import { setInfoCardStatus, CardStates } from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
@@ -16,7 +16,7 @@ const DraggableSheet = ({ children }: Props) => {
 
   const controls = useAnimation();
 
-  const infoCardStatus = useAppSelector((state) => state.ui.infoCardStatus);
+  const infoCardStatus = useAppSelector((state) => state.card.infoCardStatus);
   const childRef = useRef<HTMLDivElement>(null);
   const [childHeight, setChildHeight] = useState(0);
 
@@ -45,9 +45,7 @@ const DraggableSheet = ({ children }: Props) => {
         dragElastic={1}
         onDragEnd={(_e, info) => {
           const infoCardStatus =
-            info.velocity.y < 0
-              ? InfoCardStates.HALF_OPEN
-              : InfoCardStates.COLLAPSED;
+            info.velocity.y < 0 ? CardStates.HALF_OPEN : CardStates.COLLAPSED;
 
           controls.start({ y: -childHeight });
           dispatch(setInfoCardStatus(infoCardStatus));
