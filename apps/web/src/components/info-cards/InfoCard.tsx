@@ -1,3 +1,4 @@
+import RoomCard from "@/components/info-cards/RoomCard";
 import useLocationParams from "@/hooks/useLocationParams";
 
 import BuildingCard from "./BuildingCard";
@@ -10,8 +11,7 @@ const InfoCard = ({ map }: Props) => {
   const { buildingCode, roomName } = useLocationParams();
 
   if (roomName) {
-    return <></>;
-    // return <RoomCard />;
+    return <RoomCard />;
   } else if (buildingCode) {
     return <BuildingCard map={map} />;
   } else {
