@@ -1,5 +1,7 @@
 import { skipToken } from "@reduxjs/toolkit/query";
 
+import { useEffect } from "react";
+
 import ButtonsRow from "@/components/info-cards/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/InfoCardImage";
 import useLocationParams from "@/hooks/useLocationParams";
@@ -7,14 +9,24 @@ import {
   useGetBuildingsQuery,
   useGetFloorRoomsQuery,
 } from "@/store/features/api/apiSlice";
+import { setMidSnapPoint } from "@/store/features/cardSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 const RoomCard = () => {
+  const dispatch = useAppDispatch();
+
   const { data: buildings } = useGetBuildingsQuery();
   const { buildingCode, roomName, floor } = useLocationParams();
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
   const { data: rooms } = useGetFloorRoomsQuery(
     floorCode ? floorCode : skipToken,
   );
+
+  // set the mid snap point
+  // TODO: should change based on if has schedule
+  useEffect(() => {
+    dispatch(setMidSnapPoint(300));
+  }, [dispatch]);
 
   if (!roomName || !rooms || !buildings) {
     return;
