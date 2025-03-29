@@ -94,12 +94,13 @@ model Poi {
 }
 
 model EventOccurrences {
-  eventId    String    @id @unique
-  startTime  DateTime
-  endTime    DateTime
-  locationId String
-  Events     Events    @relation(fields: [eventId], references: [eventId])
-  Locations  Locations @relation(fields: [locationId], references: [locationId])
+  eventId           String
+  startTime         DateTime
+  endTime           DateTime
+  locationId        String
+  eventOccurrenceId String    @id
+  Events            Events    @relation(fields: [eventId], references: [eventId])
+  Locations         Locations @relation(fields: [locationId], references: [locationId])
 }
 
 model EventTracks {
@@ -112,11 +113,11 @@ model EventTracks {
 }
 
 model Events {
-  eventId          String            @id
+  eventId          String             @id
   title            String
   description      String
   req              String?
-  EventOccurrences EventOccurrences?
+  EventOccurrences EventOccurrences[]
   EventTracks      EventTracks[]
 }
 
