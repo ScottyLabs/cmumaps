@@ -14,6 +14,7 @@ interface Props {
 const DraggableSheet = ({ snapPoint, children }: Props) => {
   const dispatch = useAppDispatch();
   const { isCardOpen } = useLocationParams();
+  console.log("isCardOpen", isCardOpen);
   const infoCardStatus = useAppSelector((state) => state.ui.infoCardStatus);
 
   // initial snap points
@@ -29,8 +30,13 @@ const DraggableSheet = ({ snapPoint, children }: Props) => {
 
   // reset the card status when the card is reopened
   useEffect(() => {
-    dispatch(setInfoCardStatus(InfoCardStates.HALF_OPEN));
-    setSnapIndex(1);
+    console.log("isCardOpen", isCardOpen);
+    if (isCardOpen) {
+      dispatch(setInfoCardStatus(InfoCardStates.HALF_OPEN));
+      setSnapIndex(1);
+    } else {
+      setSnapIndex(0);
+    }
   }, [dispatch, isCardOpen]);
 
   // update the snap index when the card status changes
@@ -40,7 +46,7 @@ const DraggableSheet = ({ snapPoint, children }: Props) => {
   }, [infoCardStatus]);
 
   return (
-    <div hidden={!isCardOpen} className="absolute inset-0">
+    <div className="absolute inset-0">
       <motion.div
         initial={{ y: -snapPoints[snapIndex]! }}
         animate={{ y: -snapPoints[snapIndex]! }}

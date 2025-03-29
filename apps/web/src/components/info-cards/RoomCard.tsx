@@ -1,7 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/query";
 
 import ButtonsRow from "@/components/info-cards/ButtonsRow";
-import CardWrapper from "@/components/info-cards/CardWrapper";
 import InfoCardImage from "@/components/info-cards/InfoCardImage";
 import useLocationParams from "@/hooks/useLocationParams";
 import {
@@ -78,13 +77,11 @@ const RoomCard = () => {
   };
 
   return (
-    <CardWrapper snapPoint={320}>
-      <>
-        {renderRoomImage()}
-        {renderRoomTitle()}
-        {renderButtonsRow()}
-      </>
-    </CardWrapper>
+    <>
+      {renderRoomImage()}
+      {renderRoomTitle()}
+      {renderButtonsRow()}
+    </>
   );
 };
 

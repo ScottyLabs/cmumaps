@@ -1,3 +1,4 @@
+import CardWrapper from "@/components/info-cards/CardWrapper";
 import RoomCard from "@/components/info-cards/RoomCard";
 import useLocationParams from "@/hooks/useLocationParams";
 
@@ -10,13 +11,17 @@ interface Props {
 const InfoCard = ({ map }: Props) => {
   const { buildingCode, roomName } = useLocationParams();
 
-  if (roomName) {
-    return <RoomCard />;
-  } else if (buildingCode) {
-    return <BuildingCard map={map} />;
-  } else {
-    return <></>;
-  }
+  const renderCard = () => {
+    if (roomName) {
+      return <RoomCard />;
+    } else if (buildingCode) {
+      return <BuildingCard map={map} />;
+    } else {
+      return <></>;
+    }
+  };
+
+  return <CardWrapper snapPoint={320}>{renderCard()}</CardWrapper>;
 };
 
 export default InfoCard;
