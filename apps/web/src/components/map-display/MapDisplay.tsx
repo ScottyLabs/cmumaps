@@ -8,6 +8,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+import BuggyPath from "@/components/carnival/buggy/BuggyPath";
 import {
   CAMERA_BOUNDARY,
   INITIAL_REGION,
@@ -120,6 +121,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
+      <BuggyPath />
     </Map>
   );
 };
