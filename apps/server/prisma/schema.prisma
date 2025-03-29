@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -16,6 +16,7 @@ model Building {
   labelLongitude Float
   shape          Json
   hitbox         Json
+  defaultOrdinal Int?
   floors         Floor[]
 }
 
@@ -45,8 +46,8 @@ model Room {
   polygon        Json
   buildingCode   String?
   floorLevel     String?
-  nodes          Node[]
   aliases        Alias[]
+  nodes          Node[]
 
   @@index([buildingCode, floorLevel])
 }
@@ -89,5 +90,45 @@ model Poi {
   poiId  String @id
   type   String
   nodeId String @unique
-  node   Node?  @relation(fields: [nodeId], references: [nodeId])
+  node   Node   @relation(fields: [nodeId], references: [nodeId])
+}
+
+model EventOccurrences {
+  eventId    String    @id @unique
+  startTime  DateTime
+  endTime    DateTime
+  locationId String
+  Events     Events    @relation(fields: [eventId], references: [eventId])
+  Locations  Locations @relation(fields: [locationId], references: [locationId])
+}
+
+model EventTracks {
+  eventId   String
+  trackName String
+  Events    Events @relation(fields: [eventId], references: [eventId])
+  Tracks    Tracks @relation(fields: [trackName], references: [trackName])
+
+  @@id([eventId, trackName])
+}
+
+model Events {
+  eventId          String            @id
+  title            String
+  description      String
+  req              String?
+  EventOccurrences EventOccurrences?
+  EventTracks      EventTracks[]
+}
+
+model Locations {
+  locationId       String             @id
+  locationName     String
+  latitude         Float?
+  longitude        Float?
+  EventOccurrences EventOccurrences[]
+}
+
+model Tracks {
+  trackName   String        @id
+  EventTracks EventTracks[]
 }
