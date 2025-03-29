@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import { Server } from "socket.io";
 import { clerkMiddleware } from "@clerk/express";
+import { PrismaClient } from "@prisma/client";
 import http from "http";
 
-import { PrismaClient } from "@prisma/client";
 import buildingRoutes from "./routes/buildingRoutes";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 import nodeRoutes from "./routes/nodeRoutes";

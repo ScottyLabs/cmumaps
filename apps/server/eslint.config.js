@@ -1,14 +1,21 @@
+import { defineConfig } from "eslint/config";
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import pluginReact from "eslint-plugin-react";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
 import importPlugin from "eslint-plugin-import";
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  { languageOptions: { globals: globals.node } },
-  pluginJs.configs.recommended,
-  pluginReact.configs.flat.recommended,
+export default defineConfig([
+  { files: ["**/*.{js,mjs,cjs,ts}"] },
+  {
+    files: ["**/*.{js,mjs,cjs,ts}"],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+  },
+  tseslint.configs.recommended,
   importPlugin.flatConfigs.recommended,
   {
     rules: {
@@ -33,4 +40,15 @@ export default [
       ],
     },
   },
-];
+  // https://stackoverflow.com/a/29915728
+  {
+    settings: {
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
+        },
+      },
+    },
+  },
+  { ignores: ["dist/**", "node_modules/**"] },
+]);

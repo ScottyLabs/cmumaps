@@ -1,4 +1,3 @@
-import { NodeInfo } from "@cmumaps/common";
 import { prisma } from "../index";
 
 export const edgeService = {

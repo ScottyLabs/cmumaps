@@ -1,6 +1,6 @@
+import { Building, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 import { prisma } from "../index";
 import { BuildingError } from "../errors/error";
-import { Building, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 
 export const buildingService = {
   async getBuildings() {
@@ -22,7 +22,7 @@ export const buildingService = {
         name: dbBuilding.name,
         labelLatitude: dbBuilding.labelLatitude,
         labelLongitude: dbBuilding.labelLongitude,
-        shape: dbBuilding.shape as unknown as GeoCoordinate[],
+        shape: dbBuilding.shape as unknown as GeoCoordinate[][],
         hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
         // TODO: need to add isMapped field to the database
         isMapped: true,
