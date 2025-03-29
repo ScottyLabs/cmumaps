@@ -35,7 +35,7 @@ const MapDisplay = () => {
 
   const mapRef = useRef<mapkit.Map | null>(null);
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
-  const [showFloor, setShowFloor] = useState<boolean>(false);
+  const [showFloor, _setShowFloor] = useState<boolean>(false);
 
   const handleLoad = () => {
     if (mapRef.current) {

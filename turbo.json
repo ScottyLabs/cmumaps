@@ -40,6 +40,10 @@
     "lint": {
       "cache": false,
       "persistent": true
+    },
+    "tsc": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
