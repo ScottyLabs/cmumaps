@@ -22,7 +22,11 @@ import {
   selectBuilding,
   setIsZooming,
 } from "@/store/features/mapSlice";
-import { setIsSearchOpen } from "@/store/features/uiSlice";
+import {
+  InfoCardStates,
+  setInfoCardStatus,
+  setIsSearchOpen,
+} from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
@@ -51,6 +55,8 @@ const MapDisplay = ({ mapRef }: Props) => {
   };
 
   const handleClick = (e: MapInteractionEvent) => {
+    dispatch(setInfoCardStatus(InfoCardStates.COLLAPSED));
+
     if (!buildings) {
       return;
     }
