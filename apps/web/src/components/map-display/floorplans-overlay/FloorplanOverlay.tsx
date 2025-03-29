@@ -36,6 +36,19 @@ const FloorplanOverlay = ({ floor }: Props) => {
     const pinlessRoomTypes = ["Default", "Corridors"];
     const showPin = !pinlessRoomTypes.includes(room.type) || isSelected;
 
+    const renderRoomName = () => {
+      if (showRoomNames || room.alias) {
+        return (
+          <div className="text-center text-sm leading-[1.1] tracking-wide">
+            {showRoomNames && <p>{roomName}</p>}
+            {room.alias && (
+              <p className="w-16 text-wrap italic">{room.alias}</p>
+            )}
+          </div>
+        );
+      }
+    };
+
     return (
       <div key={roomName}>
         <Polygon
@@ -53,7 +66,6 @@ const FloorplanOverlay = ({ floor }: Props) => {
         <Annotation
           latitude={room.labelPosition.latitude}
           longitude={room.labelPosition.longitude}
-          // visible={showRoomNames || showIcon}
           displayPriority={"low"}
         >
           <div
@@ -64,14 +76,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
             }}
           >
             {showPin && <RoomPin room={{ ...room, name: roomName }} />}
-            {(showRoomNames || room.alias) && (
-              <div className="text-center text-sm leading-[1.1] tracking-wide">
-                {showRoomNames && <p>{roomName}</p>}
-                {room.alias && (
-                  <p className="w-16 text-wrap italic">{room.alias}</p>
-                )}
-              </div>
-            )}
+            {renderRoomName()}
           </div>
         </Annotation>
       </div>

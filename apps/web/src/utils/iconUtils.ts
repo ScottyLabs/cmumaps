@@ -28,10 +28,6 @@ const icons: Partial<Record<RoomType, string>> = {
   Store: pinIcon,
 };
 
-export function hasIcon(room: GeoRoom | Document) {
-  return room.type in icons;
-}
-
 export function getIcon(room: GeoRoom | Document) {
   if (room.type == "Building") {
     return null;
