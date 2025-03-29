@@ -1,4 +1,4 @@
-import { Floor } from "@cmumaps/common";
+import { Floor, getRoomTypeDetails } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
@@ -18,14 +18,17 @@ const FloorplanOverlay = ({ floor }: Props) => {
   }
 
   return Object.entries(rooms).map(([roomId, room]) => {
+    const roomColors = getRoomTypeDetails(room.type);
+
     return (
       <div key={roomId}>
         <Polygon
           points={room.points}
           //   selected={isSelected}
           enabled={true}
-          //   fillColor={roomColors.background}
+          fillColor={roomColors.background}
           fillOpacity={1}
+          strokeColor={roomColors.border}
           //   strokeColor={isSelected ? "#FFBD59" : roomColors.border}
           strokeOpacity={1}
           //   lineWidth={isSelected ? 5 : 1}
