@@ -180,6 +180,7 @@ export const floorService = {
           latitude: room.labelLatitude,
           longitude: room.labelLongitude,
         },
+        floor: { buildingCode, level: floorLevel },
         type: room.type as RoomType,
         alias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
         points: room.polygon as unknown as GeoCoordinate[][],

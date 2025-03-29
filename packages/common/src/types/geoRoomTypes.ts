@@ -1,4 +1,5 @@
 import { GeoCoordinate } from "./coordTypes";
+import { Floor } from "./floorTypes";
 import { RoomType } from "./roomTypes";
 
 export interface GeoRoom {
@@ -6,6 +7,11 @@ export interface GeoRoom {
    * The coordinates of the label of the room
    */
   labelPosition: GeoCoordinate;
+
+  /**
+   * the floor that the room is on
+   */
+  floor: Floor;
 
   /**
    * The type of the room

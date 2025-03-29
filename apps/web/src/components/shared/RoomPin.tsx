@@ -5,7 +5,7 @@ import { Document } from "@/types/searchTypes";
 import { getIcon } from "@/utils/iconUtils";
 
 interface Props {
-  room: GeoRoom | Document;
+  room: (GeoRoom & { name: string }) | Document;
 }
 
 /**

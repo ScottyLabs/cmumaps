@@ -1,5 +1,7 @@
-import { Floor, getRoomTypeDetails } from "@cmumaps/common";
+import { Floor, GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
 import { Annotation, Polygon } from "mapkit-react";
+
+import { useNavigate } from "react-router";
 
 import RoomPin from "@/components/shared/RoomPin";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
@@ -10,6 +12,8 @@ interface Props {
 }
 
 const FloorplanOverlay = ({ floor }: Props) => {
+  const navigate = useNavigate();
+
   const { data: rooms } = useGetFloorRoomsQuery(
     getFloorCode(floor.buildingCode, floor.level),
   );
@@ -18,7 +22,12 @@ const FloorplanOverlay = ({ floor }: Props) => {
     return null;
   }
 
-  return Object.entries(rooms).map(([roomId, room]) => {
+  const handleSelectRoom = (roomName: string, room: GeoRoom) => {
+    const floor = room.floor;
+    navigate(`/${floor.buildingCode}-${roomName}`);
+  };
+
+  return Object.entries(rooms).map(([roomName, room]) => {
     const roomColors = getRoomTypeDetails(room.type);
 
     const pinlessRoomTypes = ["Default", "Corridors"];
@@ -26,7 +35,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
     const showPin = !pinlessRoomTypes.includes(room.type); // || isSelected
 
     return (
-      <div key={roomId}>
+      <div key={roomName}>
         <Polygon
           points={room.points}
           //   selected={isSelected}
@@ -49,11 +58,11 @@ const FloorplanOverlay = ({ floor }: Props) => {
           <div
             className="flex flex-col items-center"
             onClick={(e) => {
-              //   handleSelectRoom(room)();
+              handleSelectRoom(roomName, room);
               e.stopPropagation();
             }}
           >
-            {showPin && <RoomPin room={{ ...room, id: roomId }} />}
+            {showPin && <RoomPin room={{ ...room, name: roomName }} />}
             {
               // TODO: Add room name and alias
               /* {(showRoomNames || room.alias) && (
