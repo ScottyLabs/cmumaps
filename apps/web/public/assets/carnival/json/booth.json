@@ -1,46 +1,107 @@
 {
-    "Org Name": {
-        "type": "Booth Type",
-        "theme": "Theme"
-    },
     "SSA, HKSA, FSA, KASA, and SIAM": {
-        "type": "blitz",
-        "theme": "Monster's Inc"
+        "boothType": "blitz",
+        "theme": "Monster's Inc",
+        "orgType": "Club"
     },
     "SWE": {
-        "type": "blitz",
-        "theme": "Pitch Perfect"
+        "boothType": "blitz",
+        "theme": "Pitch Perfect",
+        "orgType": "Club"
     },
     "KGB and PRISM": {
-        "type": "blitz",
-        "theme": "Sharknado"
+        "boothType": "blitz",
+        "theme": "Sharknado",
+        "orgType": "Club"
     },
     "MENASA + SPRIT": {
-        "type": "blitz",
-        "theme": "Aladdin"
+        "boothType": "blitz",
+        "theme": "Aladdin",
+        "orgType": "Club"
     },
     "ASCE": {
-        "type": "blitz",
-        "theme": "The Lego Movie"
+        "boothType": "blitz",
+        "theme": "The Lego Movie",
+        "orgType": "Club"
     },
     "Sustainable Earth and TPEG": {
-        "type": "blitz",
-        "theme": "Jurassic Park"
+        "boothType": "blitz",
+        "theme": "Jurassic Park",
+        "orgType": "Club"
     },
     "Alpha Chi Omega": {
-        "type": "1-story",
-        "theme": "Inside Out"
+        "boothType": "1-story",
+        "theme": "Inside Out",
+        "orgType": "Sorority"
     },
     "Fringe": {
-        "type": "1-story",
-        "theme": "Muppet's Movie"
+        "boothType": "1-story",
+        "theme": "Muppet's Movie",
+        "orgType": "Club"
     },
     "Delta Delta Delta": {
-        "type": "1-story",
-        "theme": "Jaws"
+        "boothType": "1-story",
+        "theme": "Jaws",
+        "orgType": "Sorority"
     },
     "Alpha Phi": {
-        "type": "1-story",
-        "theme": "The Princess Bride"
+        "boothType": "1-story",
+        "theme": "The Princess Bride",
+        "orgType": "Sorority"
+    },
+    "CSA": {
+        "boothType": "1-story",
+        "theme": "Mulan",
+        "orgType": "Club"
+    },
+    "TSA": {
+        "boothType": "1-story",
+        "theme": "La La Land",
+        "orgType": "Club"
+    },
+    "APhiO": {
+        "boothType": "1-story",
+        "theme": "Ratatoille",
+        "orgType": "Sorority"
+    },
+    "SDC": {
+        "boothType": "1-story",
+        "theme": "Wall-E",
+        "orgType": "Club"
+    },
+    "Delta Gamma": {
+        "boothType": "1.5/2-story",
+        "theme": "Charlie and the Chocolate Factory",
+        "orgType": "Sorority"
+    },
+    "Phi Delta Theta": {
+        "boothType": "1.5/2-story",
+        "theme": "Men in Black",
+        "orgType": "Fraternity"
+    },
+    "Asian Student Association": {
+        "boothType": "1.5/2-story",
+        "theme": "Howl's Moving Castle",
+        "orgType": "Club"
+    },
+    "Sigma Phi Epsilon": {
+        "boothType": "1.5/2-story",
+        "theme": "Indiana Jones",
+        "orgType": "Fraternity"
+    },
+    "Kappa Alpha Theta": {
+        "boothType": "1.5/2-story",
+        "theme": "Interstellar",
+        "orgType": "Sorority"
+    },
+    "Kappa Kappa Gamma": {
+        "boothType": "1.5/2-story",
+        "theme": "Toy Story",
+        "orgType": "Sorority"
+    },
+    "Alpha Epsilon Pi": {
+        "boothType": "1.5/2-story",
+        "theme": "The Simpson's Movie/Universe",
+        "orgType": "Fraternity"
     }
 }
