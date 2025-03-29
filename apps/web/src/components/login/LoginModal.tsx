@@ -27,16 +27,19 @@ const LoginModal = () => {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-white p-4">
-        <h2 className="text-2xl font-bold">
-          Login in with CMU email to access floor plans
+        <h2 className="text-2xl font-bold text-black">
+          CMU Maps
         </h2>
+        <p className = "text-sm text-gray-500">CMU Maps is built and maintained by ScottyLabs. Find out more about us <a href = "https://www.scottylabs.org/" className="underline">here</a>. 
+        Your feedback is appreciated.</p>
+        <p className = "text-sm">You are currently logged out.</p>
 
         <div className="flex justify-between">
-          <span className="w-fit cursor-pointer rounded-md bg-blue-500 p-2 text-white">
+          <span className="text-sm w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 hover:bg-blue-200">
             <SignInButton />
           </span>
           <button
-            className="cursor-pointer rounded-md bg-blue-500 p-2 text-white"
+            className="text-sm cursor-pointer rounded-md bg-red-200 p-2 text-red-700 hover:bg-red-300"
             onClick={() => dispatch(hideLogin())}
           >
             Close
