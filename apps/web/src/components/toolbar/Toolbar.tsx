@@ -1,9 +1,14 @@
+import InfoCard from "@/components/info-cards/InfoCard";
 import FloorSwitcher from "@/components/toolbar/FloorSwitcher";
 import SearchInput from "@/components/toolbar/SearchInput";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 
-const Toolbar = () => {
+interface Props {
+  map: mapkit.Map | null;
+}
+
+const Toolbar = ({ map }: Props) => {
   const isMobile = useIsMobile();
   const { isCardOpen } = useLocationParams();
 
@@ -18,7 +23,7 @@ const Toolbar = () => {
         >
           <div className="flex w-full flex-col space-y-2 overflow-hidden py-2">
             <SearchInput />
-            {/* <InfoCard map={map} /> */}
+            <InfoCard map={map} />
           </div>
         </div>
         <div
@@ -40,7 +45,7 @@ const Toolbar = () => {
         >
           <div className="flex w-full flex-col space-y-2 overflow-hidden">
             <SearchInput />
-            {/* <InfoCard map={map} /> */}
+            <InfoCard map={map} />
           </div>
         </div>
         <div className="fixed bottom-2 left-1/2 w-fit -translate-x-1/2 px-2">

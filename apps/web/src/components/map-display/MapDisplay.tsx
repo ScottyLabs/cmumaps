@@ -5,7 +5,7 @@ import {
   MapInteractionEvent,
 } from "mapkit-react";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import {
@@ -26,14 +26,17 @@ import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
-const MapDisplay = () => {
+interface Props {
+  mapRef: React.RefObject<mapkit.Map | null>;
+}
+
+const MapDisplay = ({ mapRef }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   const { data: buildings } = useGetBuildingsQuery();
 
-  const mapRef = useRef<mapkit.Map | null>(null);
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
 
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
