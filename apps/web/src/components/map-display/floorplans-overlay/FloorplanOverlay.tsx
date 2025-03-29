@@ -4,6 +4,7 @@ import { Annotation, Polygon } from "mapkit-react";
 import { useNavigate } from "react-router";
 
 import RoomPin from "@/components/shared/RoomPin";
+import useLocationParams from "@/hooks/useLocationParams";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
 import { getFloorCode } from "@/utils/floorUtils";
 
@@ -13,6 +14,7 @@ interface Props {
 
 const FloorplanOverlay = ({ floor }: Props) => {
   const navigate = useNavigate();
+  const { roomName: selectedRoomName } = useLocationParams();
 
   const { data: rooms } = useGetFloorRoomsQuery(
     getFloorCode(floor.buildingCode, floor.level),
@@ -28,31 +30,29 @@ const FloorplanOverlay = ({ floor }: Props) => {
   };
 
   return Object.entries(rooms).map(([roomName, room]) => {
+    const isSelected = roomName == selectedRoomName;
     const roomColors = getRoomTypeDetails(room.type);
-
     const pinlessRoomTypes = ["Default", "Corridors"];
-
-    const showPin = !pinlessRoomTypes.includes(room.type); // || isSelected
+    const showPin = !pinlessRoomTypes.includes(room.type) || isSelected;
 
     return (
       <div key={roomName}>
         <Polygon
           points={room.points}
-          //   selected={isSelected}
+          selected={isSelected}
           enabled={true}
           fillColor={roomColors.background}
           fillOpacity={1}
-          strokeColor={roomColors.border}
-          //   strokeColor={isSelected ? "#FFBD59" : roomColors.border}
+          strokeColor={isSelected ? "#FFBD59" : roomColors.border}
           strokeOpacity={1}
-          //   lineWidth={isSelected ? 5 : 1}
-          //   onSelect={handleSelectRoom(room)}
+          lineWidth={isSelected ? 5 : 1}
+          onSelect={() => handleSelectRoom(roomName, room)}
           fillRule="nonzero"
         />
         <Annotation
           latitude={room.labelPosition.latitude}
           longitude={room.labelPosition.longitude}
-          //   visible={showRoomNames || showIcon}
+          // visible={showRoomNames || showIcon}
           displayPriority={"low"}
         >
           <div
