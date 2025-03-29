@@ -1,6 +1,6 @@
 import lockIcon from "@icons/half-lock.svg";
 
-import { ReactElement, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
@@ -199,33 +199,18 @@ export default function FloorSwitcher() {
     );
   };
 
-  const Wrapper = ({ children }: { children: ReactElement }) => {
-    // farther from the bottom of the page when on mobile and the card is open
-    const bottomClass = isMobile && isCardOpen ? "bottom-10" : "bottom-2";
-
-    return (
-      <div
-        className={`fixed left-1/2 w-fit -translate-x-1/2 px-2 ${bottomClass}`}
-      >
-        {children}
-      </div>
-    );
-  };
-
   return (
-    <Wrapper>
-      <div className="btn-shadow flex items-stretch justify-center rounded bg-white">
-        <button
-          className="cursor-pointer p-1"
-          onClick={() => {
-            navigate(`/${building.code}`);
-            dispatch(setIsSearchOpen(false));
-          }}
-        >
-          <Roundel code={building.code} />
-        </button>
-        {showFloorPicker ? renderFloorPicker() : renderDefaultView()}
-      </div>
-    </Wrapper>
+    <div className="btn-shadow flex items-stretch justify-center rounded bg-white">
+      <button
+        className="cursor-pointer p-1"
+        onClick={() => {
+          navigate(`/${building.code}`);
+          dispatch(setIsSearchOpen(false));
+        }}
+      >
+        <Roundel code={building.code} />
+      </button>
+      {showFloorPicker ? renderFloorPicker() : renderDefaultView()}
+    </div>
   );
 }
