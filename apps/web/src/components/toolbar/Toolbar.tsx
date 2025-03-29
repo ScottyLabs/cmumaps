@@ -1,5 +1,7 @@
+import FloorSwitcher from "@/components/toolbar/FloorSwitcher";
+
 const Toolbar = () => {
-  return <div>Toolbar</div>;
+  return <FloorSwitcher />;
 };
 
 export default Toolbar;

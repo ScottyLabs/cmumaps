@@ -1,7 +1,6 @@
-import { Floor } from "@cmumaps/common";
 import lockIcon from "@icons/half-lock.svg";
 
-import { ReactElement, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
@@ -10,30 +9,45 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import { focusFloor } from "@/store/features/mapSlice";
-import { setIsSearchOpen } from "@/store/features/uiSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { setIsSearchOpen, selectCardCollapsed } from "@/store/features/uiSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import Roundel from "../shared/Roundel";
-
-interface FloorSwitcherProps {
-  floor: Floor;
-}
 
 /**
  * The interface component allowing an user to see the current building
  * and switch floors.
  */
-export default function FloorSwitcher({ floor }: FloorSwitcherProps) {
+export default function FloorSwitcher() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const isMobile = useIsMobile();
   const { isCardOpen } = useLocationParams();
   const { data: buildings } = useGetBuildingsQuery();
+  const floor = useAppSelector((state) => state.map.focusedFloor);
+  const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
+  const isCardCollapsed = useAppSelector(selectCardCollapsed);
 
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
-  if (!buildings) {
+  // mobile cases when we don't want to show the floor switcher
+  const showFloorSwitcherMobile = useMemo(() => {
+    if (isMobile) {
+      if (isCardOpen && !isCardCollapsed) {
+        return false;
+      }
+
+      if (isSearchOpen) {
+        return false;
+      }
+    }
+
+    return true;
+  }, [isCardCollapsed, isCardOpen, isMobile, isSearchOpen]);
+
+  // only show floor switcher if there is focused floor
+  if (!buildings || !floor || !showFloorSwitcherMobile) {
     return;
   }
 
