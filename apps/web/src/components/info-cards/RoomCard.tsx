@@ -56,8 +56,6 @@ const RoomCard = () => {
         return <h2>{room.type}</h2>;
       }
 
-      console.log(buildings[room.floor.buildingCode]?.name);
-
       return (
         <div className="flex items-center justify-between">
           <h2>

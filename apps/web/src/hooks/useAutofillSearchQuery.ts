@@ -1,23 +1,31 @@
+import { skipToken } from "@reduxjs/toolkit/query";
+
 import { useCallback, useEffect } from "react";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
+import {
+  useGetBuildingsQuery,
+  useGetFloorRoomsQuery,
+} from "@/store/features/api/apiSlice";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
-  const { buildingCode, roomName } = useLocationParams();
+  const { buildingCode, roomName, floor } = useLocationParams();
   const { data: buildings } = useGetBuildingsQuery();
+  const { data: rooms } = useGetFloorRoomsQuery(
+    buildingCode && floor ? `${buildingCode}-${floor}` : skipToken,
+  );
 
   const autoFillSearchQuery = useCallback(() => {
     // return the room name if a room is selected
-    if (roomName) {
+    if (rooms && roomName) {
       // the search query is the room alias if the room has an alias,
-      if (roomName) {
-        setSearchQuery(roomName);
+      if (rooms[roomName]?.alias) {
+        setSearchQuery(rooms[roomName].alias);
         return;
       }
       // otherwise it is the room floor name + the room name
       else {
-        setSearchQuery(roomName);
+        setSearchQuery(`${buildingCode} ${roomName}`);
         return;
       }
     }
@@ -30,7 +38,7 @@ const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
 
     // set the search query to empty when there is no room or building selected
     setSearchQuery("");
-  }, [buildingCode, buildings, roomName, setSearchQuery]);
+  }, [buildingCode, buildings, rooms, roomName, setSearchQuery]);
 
   // set the search query using room and building
   useEffect(() => {
