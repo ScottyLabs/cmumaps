@@ -13,6 +13,7 @@ import {
   INITIAL_REGION,
 } from "@/components/map-display/MapConstants";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
+import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import { deselectBuilding, selectBuilding } from "@/store/features/mapSlice";
@@ -102,6 +103,7 @@ const MapDisplay = () => {
       }}
     >
       <BuildingsDisplay buildings={buildings} />
+      <FloorPlansOverlay />
     </Map>
   );
 };
