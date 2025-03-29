@@ -21,5 +21,5 @@ const uiSlice = createSlice({
   },
 });
 
-export const { showLogin } = uiSlice.actions;
+export const { showLogin, hideLogin } = uiSlice.actions;
 export default uiSlice.reducer;
