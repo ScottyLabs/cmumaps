@@ -59,7 +59,7 @@ const DraggableSheet = ({ children }: Props) => {
       dispatch(setInfoCardStatus("collapsed"));
       controls.start({ y: 0 });
     }
-  }, [isCardOpen]);
+  }, [controls, dispatch, isCardOpen, snapPoints]);
 
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
