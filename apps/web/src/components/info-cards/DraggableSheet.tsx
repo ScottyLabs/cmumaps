@@ -1,10 +1,15 @@
 import { motion, PanInfo, useAnimation } from "motion/react";
 
 import { useCallback, useEffect, useMemo } from "react";
+
 // import { useDrag } from "react-use-gesture";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import { setInfoCardStatus, CardStatesList } from "@/store/features/cardSlice";
+import {
+  setInfoCardStatus,
+  CardStatesList,
+  CardStates,
+} from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
@@ -18,86 +23,61 @@ const DraggableSheet = ({ children }: Props) => {
   const controls = useAnimation();
 
   const cardStatus = useAppSelector((state) => state.card.cardStatus);
-  const midSnapPoint = useAppSelector((state) => state.card.midSnapPoint);
-  const bottomSnapPoint = useAppSelector((state) => state.card.bottomSnapPoint);
+  const snapPoints = useAppSelector((state) => state.card.snapPoints);
 
   const snapIndex = useMemo(() => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
 
-  // inialize the snap points based on the mid snap point
-  const snapPoints = useMemo(() => {
-    if (midSnapPoint) {
-      return [bottomSnapPoint, midSnapPoint, screen.availHeight];
-    } else {
-      return [142, 300, screen.availHeight];
-    }
-  }, [bottomSnapPoint, midSnapPoint]);
-
-  const snapTo = useCallback((index: number) => {
-    controls.start({ y: -snapPoints![index]!, height: snapPoints![index]! + 500 });
-  }, [controls, snapPoints]);
-
+  const snapTo = useCallback(
+    (snapPoints: number[], index: number) => {
+      controls.start({
+        y: -snapPoints[index]!,
+        height: snapPoints[index]! + 500,
+      });
+    },
+    [controls],
+  );
 
   // updates the snap index when the card status changes
   useEffect(() => {
-    snapTo(snapIndex);
+    if (snapPoints) {
+      snapTo(snapPoints, snapIndex);
+    }
   }, [controls, snapIndex, snapPoints, snapTo]);
-
-
-  
-
-  // useEffect(() => 
-  // {console.log(controls)}, [controls]);
 
   // updates the snap points when the isCardOpen changes
   useEffect(() => {
     if (isCardOpen) {
-      dispatch(setInfoCardStatus("half-open"));
-      controls.start({ y: -snapPoints[1]! });
+      dispatch(setInfoCardStatus(CardStates.HALF_OPEN));
     } else {
-      dispatch(setInfoCardStatus("collapsed"));
+      dispatch(setInfoCardStatus(CardStates.COLLAPSED));
       controls.start({ y: 0 });
     }
-  }, [isCardOpen]);
+  }, [controls, dispatch, isCardOpen, snapPoints]);
 
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
   ) => {
+    if (!snapPoints) {
+      return;
+    }
+
     if (snapPoints![snapIndex]) {
       const newPos = snapPoints![snapIndex] - info.offset.y;
-      // console.log(info.point.y);
-
-      const newPosAdj = newPos - Math.min(300, Math.max(-300, 400 * info.velocity.y));
-      console.log("At: " + newPosAdj + " among " + snapPoints);
+      const newPosAdj =
+        newPos - Math.min(300, Math.max(-300, 400 * info.velocity.y));
 
       const closestSnap = snapPoints.reduce((prev, curr) =>
         Math.abs(curr! - newPosAdj) < Math.abs(prev! - newPosAdj) ? curr : prev,
       );
 
-      console.log("Closest: " + closestSnap);
-
       const index = snapPoints.indexOf(closestSnap);
-
-      // const index = 2;
-
-      // const index = info.velocity.y < 0 ? Math.min(snapIndex + 1, 2) : Math.max(snapIndex - 1, 0);
-
-      console.log("EVENT");
-      // console.log(info.point.y);
-      
-
       if (CardStatesList[index]) {
         dispatch(setInfoCardStatus(CardStatesList[index]));
-        snapTo(index);
-        console.log("DISPATCH");
-        console.log(CardStatesList[index]);
+        snapTo(snapPoints, index);
       }
-
-      console.log(index);
-      console.log(snapIndex);
-      console.log(isCardOpen);
     }
   };
 
@@ -105,9 +85,11 @@ const DraggableSheet = ({ children }: Props) => {
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
   ) => {
-    const newPos = snapPoints![snapIndex]! - info.offset.y;
-    controls.set({ height: newPos + 500 });
-  }
+    if (snapPoints) {
+      const newPos = snapPoints[snapIndex]! - info.offset.y;
+      controls.set({ height: newPos + window.innerHeight });
+    }
+  };
 
   return (
     <div className="absolute inset-0">
@@ -115,14 +97,9 @@ const DraggableSheet = ({ children }: Props) => {
         animate={controls}
         transition={{ duration: 0.5 }}
         drag="y"
-        // dragConstraints={{
-        //   top: -snapPoints![snapPoints!.length - 1]!,
-        //   bottom: -snapPoints![0]!,
-        // }}
-        // dragElastic={1}
         onDragEnd={handleDragEnd}
         onDrag={handleDrag}
-        className="flex flex-col h-screen rounded-t-xl bg-white text-center"
+        className="flex h-screen flex-col rounded-t-xl bg-white text-center"
       >
         <div className="flex h-12 items-center justify-center rounded-t-xl">
           <div className="h-1 w-12 rounded-full bg-black" />
