@@ -2,8 +2,6 @@ import { motion, PanInfo, useAnimation } from "motion/react";
 
 import { useEffect, useMemo } from "react";
 
-// import { useDrag } from "react-use-gesture";
-
 import useLocationParams from "@/hooks/useLocationParams";
 import {
   setInfoCardStatus,
@@ -31,14 +29,8 @@ const DraggableSheet = ({ children }: Props) => {
 
   // updates the snap index when the card status changes
   useEffect(() => {
-<<<<<<< HEAD
-    console.log("Dependencies: ", [controls, snapIndex, snapPoints, snapTo]);
-    if (snapPoints) {
-      snapTo(snapPoints, snapIndex);
-=======
     if (snapPoints && snapPoints[snapIndex]) {
       controls.start({ y: -snapPoints[snapIndex] });
->>>>>>> d91bfa8b65fd09f0d76679e9fb86e2f29ee6841d
     }
   }, [controls, snapIndex, snapPoints]);
 
