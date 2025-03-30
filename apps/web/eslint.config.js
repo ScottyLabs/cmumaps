@@ -24,6 +24,7 @@ export default defineConfig([
   reactHooks.configs["recommended-latest"],
   {
     rules: {
+      "react/no-unescaped-entities": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },

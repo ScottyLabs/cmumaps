@@ -93,7 +93,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
   const { onRegionChangeStart, onRegionChangeEnd } = useMapPosition(
     (region, density) => {
-      dispatch(setInfoCardStatus(CardStates.COLLAPSED));
+      // dispatch(setInfoCardStatus(CardStates.COLLAPSED));
 
       const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
       setShowFloor(showFloor);

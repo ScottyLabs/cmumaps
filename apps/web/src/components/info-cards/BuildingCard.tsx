@@ -5,11 +5,7 @@ import InfoCardImage from "@/components/info-cards/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import {
-  selectCardCollapsed,
-  setMidSnapPoint,
-  setBottomSnapPoint,
-} from "@/store/features/cardSlice";
+import { selectCardCollapsed, setSnapPoints } from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
@@ -26,10 +22,9 @@ const BuildingCard = ({ map: _map }: Props) => {
 
   // set the mid snap point
   // TODO: should change based on if has food eateries
+  // eateries.length > 0 ? 460 : 288));
   useEffect(() => {
-    dispatch(setMidSnapPoint(288));//eateries.length > 0 ? 460 : 295));
-    dispatch(setBottomSnapPoint(142));
-    console.log("Instantiating Building Card");
+    dispatch(setSnapPoints([142, 288, screen.availHeight]));
   }, [dispatch]);
 
   if (!buildingCode || !buildings) {

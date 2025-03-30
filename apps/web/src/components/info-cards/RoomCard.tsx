@@ -4,14 +4,14 @@ import { useEffect } from "react";
 
 import ButtonsRow from "@/components/info-cards/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/InfoCardImage";
+import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import {
   useGetBuildingsQuery,
   useGetFloorRoomsQuery,
 } from "@/store/features/api/apiSlice";
-import { selectCardCollapsed, setBottomSnapPoint, setMidSnapPoint } from "@/store/features/cardSlice";
+import { selectCardCollapsed, setSnapPoints } from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import useIsMobile from "@/hooks/useIsMobile";
 
 const RoomCard = () => {
   const dispatch = useAppDispatch();
@@ -28,9 +28,7 @@ const RoomCard = () => {
   // set the mid snap point
   // TODO: should change based on if has schedule
   useEffect(() => {
-    dispatch(setMidSnapPoint(310));
-    dispatch(setBottomSnapPoint(166));
-    console.log("Instantiating Room Card");
+    dispatch(setSnapPoints([166, 310, screen.availHeight]));
   }, [dispatch]);
 
   if (!roomName || !rooms || !buildings) {

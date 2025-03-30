@@ -11,14 +11,12 @@ export const CardStatesList = Object.values(CardStates);
 export type CardStatus = (typeof CardStates)[keyof typeof CardStates];
 
 interface CardState {
-  midSnapPoint: number | null;
-  bottomSnapPoint: number | null;
   cardStatus: CardStatus;
+  snapPoints: number[] | null;
 }
 
 const initialState: CardState = {
-  midSnapPoint: null,
-  bottomSnapPoint: null,
+  snapPoints: null,
   cardStatus: CardStates.HALF_OPEN,
 };
 
@@ -29,12 +27,8 @@ const cardSlice = createSlice({
     setInfoCardStatus(state, action: PayloadAction<CardStatus>) {
       state.cardStatus = action.payload;
     },
-    setMidSnapPoint(state, action: PayloadAction<number>) {
-      state.midSnapPoint = action.payload;
-    },
-    setBottomSnapPoint(state, action: PayloadAction<number>) {
-      state.bottomSnapPoint = action.payload;
-      console.log("Setting bottom snap point to " + action.payload);
+    setSnapPoints(state, action: PayloadAction<number[]>) {
+      state.snapPoints = action.payload;
     },
   },
   selectors: {
@@ -42,6 +36,6 @@ const cardSlice = createSlice({
   },
 });
 
-export const { setInfoCardStatus, setMidSnapPoint, setBottomSnapPoint } = cardSlice.actions;
+export const { setInfoCardStatus, setSnapPoints } = cardSlice.actions;
 export const { selectCardCollapsed } = cardSlice.selectors;
 export default cardSlice.reducer;
