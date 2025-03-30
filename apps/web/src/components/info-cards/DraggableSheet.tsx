@@ -1,6 +1,6 @@
 import { motion, PanInfo, useAnimation } from "motion/react";
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 // import { useDrag } from "react-use-gesture";
 
@@ -29,22 +29,12 @@ const DraggableSheet = ({ children }: Props) => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
 
-  const snapTo = useCallback(
-    (snapPoints: number[], index: number) => {
-      controls.start({
-        y: -snapPoints[index]!,
-        height: snapPoints[index]! + 500,
-      });
-    },
-    [controls],
-  );
-
   // updates the snap index when the card status changes
   useEffect(() => {
-    if (snapPoints) {
-      snapTo(snapPoints, snapIndex);
+    if (snapPoints && snapPoints[snapIndex]) {
+      controls.start({ y: -snapPoints[snapIndex] });
     }
-  }, [controls, snapIndex, snapPoints, snapTo]);
+  }, [controls, snapIndex, snapPoints]);
 
   // updates the snap points when the isCardOpen changes
   useEffect(() => {
@@ -64,11 +54,10 @@ const DraggableSheet = ({ children }: Props) => {
       return;
     }
 
-    if (snapPoints![snapIndex]) {
-      const newPos = snapPoints![snapIndex] - info.offset.y;
+    if (snapPoints[snapIndex]) {
+      const newPos = snapPoints[snapIndex] - info.offset.y;
       const newPosAdj =
         newPos - Math.min(300, Math.max(-300, 400 * info.velocity.y));
-
       const closestSnap = snapPoints.reduce((prev, curr) =>
         Math.abs(curr! - newPosAdj) < Math.abs(prev! - newPosAdj) ? curr : prev,
       );
@@ -76,17 +65,18 @@ const DraggableSheet = ({ children }: Props) => {
       const index = snapPoints.indexOf(closestSnap);
       if (CardStatesList[index]) {
         dispatch(setInfoCardStatus(CardStatesList[index]));
-        snapTo(snapPoints, index);
+        controls.start({ y: -snapPoints[index]! });
       }
     }
   };
 
+  // extend the height of the card based on the drag
   const handleDrag = (
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
   ) => {
-    if (snapPoints) {
-      const newPos = snapPoints[snapIndex]! - info.offset.y;
+    if (snapPoints && snapPoints[snapIndex]) {
+      const newPos = snapPoints[snapIndex] - info.offset.y;
       controls.set({ height: newPos + window.innerHeight });
     }
   };
