@@ -8,9 +8,11 @@ import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 
 interface Props {
   timestamp: number;
+  filters: string[];
+  reqs: string[];
 }
 
-const InfiniteScrollWrapper = ({ timestamp }: Props) => {
+const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
   const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const {
@@ -20,10 +22,7 @@ const InfiniteScrollWrapper = ({ timestamp }: Props) => {
     fetchNextPage,
     fetchPreviousPage,
   } = useGetEventsInfiniteQuery(
-    {
-      filter: [],
-      reqs: [],
-    },
+    { filters, reqs },
     { initialPageParam: { timestamp } },
   );
 

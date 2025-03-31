@@ -32,8 +32,9 @@ const EventsDisplay = () => {
         setSelectedReqs={setSelectedReqs}
       />
       <InfiniteScrollWrapper
-        key={selectedDate}
         timestamp={getTimestampByDate(selectedDate)}
+        filters={selectedTypes}
+        reqs={selectedReqs}
       />
     </div>
   );

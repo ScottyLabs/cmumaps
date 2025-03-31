@@ -3,7 +3,7 @@ import { EventResponse } from "@cmumaps/common";
 import { apiSlice } from "@/store/features/api/apiSlice";
 
 interface GetEventsQuery {
-  filter: string[];
+  filters: string[];
   reqs: string[];
 }
 
@@ -23,13 +23,14 @@ export const eventApiSlice = apiSlice.injectEndpoints({
       query: ({ queryArg, pageParam }) => ({
         url: `/events`,
         params: {
-          filter: queryArg.filter,
-          startTime: pageParam.startTime,
-          endTime: pageParam.endTime,
           timestamp: pageParam.timestamp,
           eventId: pageParam.eventId,
+          startTime: pageParam.startTime,
+          endTime: pageParam.endTime,
           direction: pageParam.direction,
           limit: 10,
+          filters: queryArg.filters,
+          reqs: queryArg.reqs,
         },
       }),
       infiniteQueryOptions: {
