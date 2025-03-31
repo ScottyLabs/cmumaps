@@ -3,16 +3,16 @@ import { eventService } from "../services/eventService";
 
 export const eventController = {
   getEvents: async (req: Request, res: Response) => {
-    const { timestamp } = req.query;
+    const { timestamp, limit } = req.query;
 
-    console.log(req.query);
-    const events = await eventService.getEvents(Number(timestamp));
-
-    console.log(req.params);
+    const events = await eventService.getEvents(
+      Number(timestamp),
+      Number(limit),
+    );
 
     // infinite query will call this endpoint with the next index (depend on the direction)
-    const prevTimestamp = Number(timestamp) - 10;
-    const nextTimestamp = Number(timestamp) + 10;
+    const prevTimestamp = Number(timestamp) - Number(limit);
+    const nextTimestamp = Number(timestamp) + Number(limit);
     console.log(events);
     res.json({ events, prevTimestamp, nextTimestamp });
   },

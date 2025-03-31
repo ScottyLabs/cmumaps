@@ -1,6 +1,6 @@
 export const eventService = {
   // get next 10 numbers
-  async getEvents(index: number) {
-    return Array.from({ length: 10 }, (_, i) => index + i);
+  async getEvents(index: number, limit: number) {
+    return Array.from({ length: limit }, (_, i) => index + i);
   },
 };

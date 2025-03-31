@@ -19,6 +19,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
         params: {
           filter: queryArg.filter,
           timestamp: pageParam,
+          limit: 20,
         },
       }),
       infiniteQueryOptions: {
