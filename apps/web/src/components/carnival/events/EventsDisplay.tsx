@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import EventsDatePicker from "@/components/carnival/events/EventsDatePicker";
-import EventsFilter from "@/components/carnival/events/EventsFilter";
+import EventsDatePicker from "@/components/carnival/events/filters/EventsDatePicker";
+import EventsFilter from "@/components/carnival/events/filters/EventsFilter";
 
 const EventsDisplay = () => {
   const [selectedDate, setSelectedDate] = useState("3/28-4/6");
