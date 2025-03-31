@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { throttledHandleScroll } from "@/components/carnival/events/displays/handleScroll";
 import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 
 // Custom hook for better scroll handling
@@ -14,48 +15,38 @@ const InfiniteScrollWrapper = () => {
     fetchPreviousPage,
   } = useGetEventsInfiniteQuery({ filter: [] });
 
-  const fetchMoreTop = () => {
-    fetchPreviousPage();
-  };
-
-  const fetchMoreBottom = () => {
-    fetchNextPage();
-  };
-
-  // Create separate event handlers for top and bottom scrolling
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const container = event.target as HTMLDivElement;
-    const scrollDirection = container.scrollTop > lastScrollTop ? "down" : "up";
-
-    if (container.scrollTop <= 100 && scrollDirection === "up") {
-      fetchMoreTop();
-    }
-
-    if (
-      container.scrollHeight - container.scrollTop <=
-        container.clientHeight + 100 &&
-      scrollDirection === "down"
-    ) {
-      fetchMoreBottom();
-    }
-
-    setLastScrollTop(container.scrollTop);
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    throttledHandleScroll(
+      e,
+      fetchNextPage,
+      fetchPreviousPage,
+      lastScrollTop,
+      setLastScrollTop,
+    );
   };
 
   if (!data) {
     return <></>;
   }
 
-  console.log(data);
-
   const events = data.pages.map((page) => page.events).flat();
-  console.log(events);
 
   return (
-    <div
-      className="flex h-72 flex-col overflow-auto"
-      onScroll={(e) => handleScroll(e)}
-    >
+    <div className="flex h-72 flex-col overflow-auto" onScroll={handleScroll}>
+      {/* Loading indicators */}
+      {hasPreviousPage && (
+        <div className="py-2 text-center">
+          <h4>Loading more items above...</h4>
+        </div>
+      )}
+
+      {/* End messages */}
+      {!hasPreviousPage && (
+        <p className="py-2 text-center font-semibold">
+          This is the beginning of time
+        </p>
+      )}
+
       {/* Display your items directly without the InfiniteScroll components */}
       {events.map((event) => (
         <div
@@ -66,24 +57,10 @@ const InfiniteScrollWrapper = () => {
         </div>
       ))}
 
-      {/* Loading indicators */}
-      {hasPreviousPage && (
-        <div className="py-2 text-center">
-          <h4>Loading more items above...</h4>
-        </div>
-      )}
-
       {hasNextPage && (
         <div className="py-2 text-center">
           <h4>Loading more items below...</h4>
         </div>
-      )}
-
-      {/* End messages */}
-      {!hasPreviousPage && (
-        <p className="py-2 text-center font-semibold">
-          This is the beginning of time
-        </p>
       )}
 
       {!hasNextPage && (

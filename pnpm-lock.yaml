@@ -229,6 +229,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.9
         version: 4.0.12(vite@6.2.1(@types/node@20.17.24)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3))
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       mapkit-react:
         specifier: ^1.16.1
         version: 1.16.1(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -275,6 +278,9 @@ importers:
       '@types/apple-mapkit-js-browser':
         specifier: ^5.78.1
         version: 5.78.1
+      '@types/lodash':
+        specifier: ^4.17.16
+        version: 4.17.16
       '@types/node':
         specifier: ^20.11.24
         version: 20.17.24
