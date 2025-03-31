@@ -1,4 +1,3 @@
-// Create separate event handlers for top and bottom scrolling
 import { throttle } from "lodash";
 
 import { RefObject } from "react";
@@ -15,7 +14,7 @@ const handleScroll = (
     container.scrollTop > scrollTop.current ? "down" : "up";
 
   if (container.scrollTop <= 200 && scrollDirection === "up") {
-    fetchPrevious();
+    throttleFetchPrevious(fetchPrevious);
   }
 
   if (
@@ -30,3 +29,8 @@ const handleScroll = (
 };
 
 export const throttledHandleScroll = throttle(handleScroll, 500);
+
+export const throttleFetchPrevious = throttle(
+  (fetchPrevious: () => void) => fetchPrevious(),
+  1000,
+);

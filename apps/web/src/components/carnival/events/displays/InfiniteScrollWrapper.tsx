@@ -1,9 +1,11 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-import { throttledHandleScroll } from "@/components/carnival/events/displays/handleScroll";
+import {
+  throttledHandleScroll,
+  throttleFetchPrevious,
+} from "@/components/carnival/events/displays/handleScroll";
 import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 
-// Custom hook for better scroll handling
 const InfiniteScrollWrapper = () => {
   const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -15,17 +17,24 @@ const InfiniteScrollWrapper = () => {
     fetchPreviousPage,
   } = useGetEventsInfiniteQuery({ filter: [] });
 
-  const fetchNext = () => {
+  const fetchNext = useCallback(() => {
     if (hasNextPage) {
       fetchNextPage();
     }
-  };
+  }, [hasNextPage, fetchNextPage]);
 
-  const fetchPrevious = () => {
+  const fetchPrevious = useCallback(() => {
     if (hasPreviousPage) {
       fetchPreviousPage();
     }
-  };
+  }, [hasPreviousPage, fetchPreviousPage]);
+
+  // Continue to fetch previous page if the user is on the top with a throttle
+  useEffect(() => {
+    if (data?.pages && data.pages.length !== 1 && scrollTop.current === 0) {
+      throttleFetchPrevious(fetchPrevious);
+    }
+  }, [fetchPrevious, data?.pages]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     throttledHandleScroll(e, fetchNext, fetchPrevious, scrollTop);
