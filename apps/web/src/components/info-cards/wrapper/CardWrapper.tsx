@@ -1,4 +1,4 @@
-import DraggableSheet from "@/components/info-cards/DraggableSheet";
+import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
 import useIsMobile from "@/hooks/useIsMobile";
 
 interface CardWrapperProps {

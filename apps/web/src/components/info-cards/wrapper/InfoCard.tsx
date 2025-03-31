@@ -1,8 +1,8 @@
-import CardWrapper from "@/components/info-cards/CardWrapper";
-import RoomCard from "@/components/info-cards/RoomCard";
+import RoomCard from "@/components/info-cards/room-card/RoomCard";
+import CardWrapper from "@/components/info-cards/wrapper/CardWrapper";
 import useLocationParams from "@/hooks/useLocationParams";
 
-import BuildingCard from "./BuildingCard";
+import BuildingCard from "../building-card/BuildingCard";
 
 interface Props {
   map: mapkit.Map | null;

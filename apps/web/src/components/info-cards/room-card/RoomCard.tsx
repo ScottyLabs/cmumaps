@@ -2,8 +2,8 @@ import { skipToken } from "@reduxjs/toolkit/query";
 
 import { useEffect } from "react";
 
-import ButtonsRow from "@/components/info-cards/ButtonsRow";
-import InfoCardImage from "@/components/info-cards/InfoCardImage";
+import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
+import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import {

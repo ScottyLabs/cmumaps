@@ -1,4 +1,4 @@
-import InfoCard from "@/components/info-cards/InfoCard";
+import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import SearchInput from "@/components/toolbar/SearchInput";
 import useIsMobile from "@/hooks/useIsMobile";
 
