@@ -18,7 +18,6 @@ import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/Floor
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-// import { setInfoCardStatus, CardStates } from "@/store/features/cardSlice";
 import {
   deselectBuilding,
   selectBuilding,
@@ -53,9 +52,6 @@ const MapDisplay = ({ mapRef }: Props) => {
   };
 
   const handleClick = (e: MapInteractionEvent) => {
-    // dispatch(setInfoCardStatus(CardStates.COLLAPSED));
-    
-
     if (!buildings) {
       return;
     }

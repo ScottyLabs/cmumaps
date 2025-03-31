@@ -29,10 +29,10 @@ const DraggableSheet = ({ children }: Props) => {
 
   // updates the snap index when the card status changes
   useEffect(() => {
-    if (snapPoints && snapPoints[snapIndex]) {
+    if (isCardOpen && snapPoints && snapPoints[snapIndex]) {
       controls.start({ y: -snapPoints[snapIndex] });
     }
-  }, [controls, snapIndex, snapPoints]);
+  }, [controls, isCardOpen, snapIndex, snapPoints]);
 
   // updates the snap points when the isCardOpen changes
   useEffect(() => {
