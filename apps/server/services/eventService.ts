@@ -28,14 +28,18 @@ export const eventService = {
       location: dbEvent.Locations.locationName,
     }));
 
-    const nextEventId = dbEvents[limit].eventId;
+    const nextEventId = dbEvents[limit]?.eventId;
 
     const prevEvent = await prisma.eventOccurrences.findFirst({
       where: { endTime: { lt: new Date(timestamp) } },
       orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
     });
 
-    return { events, nextEventId, prevEventId: prevEvent?.eventId };
+    return {
+      events: events.slice(0, limit),
+      nextEventId,
+      prevEventId: prevEvent?.eventId,
+    };
   },
 
   async getEventsAfter(eventId: string, limit: number): Promise<EventResponse> {
@@ -55,14 +59,18 @@ export const eventService = {
       location: dbEvent.Locations.locationName,
     }));
 
-    const nextEventId = dbEvents[limit].eventId;
+    const nextEventId = dbEvents[limit]?.eventId;
 
     const prevEvent = await prisma.eventOccurrences.findFirst({
       where: { eventId: { lt: eventId } },
       orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
     });
 
-    return { events, nextEventId, prevEventId: prevEvent?.eventId };
+    return {
+      events: events.slice(0, limit),
+      nextEventId,
+      prevEventId: prevEvent?.eventId,
+    };
   },
 
   async getEventsBefore(
@@ -85,13 +93,17 @@ export const eventService = {
       location: dbEvent.Locations.locationName,
     }));
 
-    const prevEventId = dbEvents[limit].eventId;
+    const prevEventId = dbEvents[limit]?.eventId;
 
     const nextEvent = await prisma.eventOccurrences.findFirst({
       where: { eventId: { gt: eventId } },
       orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
     });
 
-    return { events, prevEventId, nextEventId: nextEvent?.eventId };
+    return {
+      events: events.slice(0, limit),
+      prevEventId,
+      nextEventId: nextEvent?.eventId,
+    };
   },
 };

@@ -14,6 +14,7 @@ export const eventController = {
         );
 
       res.json({ events, prevEventId, nextEventId });
+      return;
     }
 
     // get events by eventId
@@ -23,11 +24,13 @@ export const eventController = {
           await eventService.getEventsAfter(eventId, Number(limit));
 
         res.json({ prevEventId, events, nextEventId });
+        return;
       } else if (direction === "past") {
         const { prevEventId, events, nextEventId } =
           await eventService.getEventsBefore(eventId, Number(limit));
 
         res.json({ events, prevEventId, nextEventId });
+        return;
       }
     }
 

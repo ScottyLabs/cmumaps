@@ -29,6 +29,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
         params: {
           filter: queryArg.filter,
           timestamp: pageParam.timestamp,
+          eventId: pageParam.eventId,
           direction: pageParam.direction,
           limit: 10,
         },
@@ -40,7 +41,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
         getNextPageParam: (lastPage) => {
           if (lastPage.nextEventId) {
             return {
-              nextEventId: lastPage.nextEventId,
+              eventId: lastPage.nextEventId,
               direction: "future",
             };
           }
@@ -48,7 +49,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
         getPreviousPageParam: (firstPage) => {
           if (firstPage.prevEventId) {
             return {
-              prevEventId: firstPage.prevEventId,
+              eventId: firstPage.prevEventId,
               direction: "past",
             };
           }
