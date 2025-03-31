@@ -1,28 +1,34 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { throttledHandleScroll } from "@/components/carnival/events/displays/handleScroll";
 import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 
 // Custom hook for better scroll handling
 const InfiniteScrollWrapper = () => {
-  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const {
     data,
-    hasNextPage,
     hasPreviousPage,
+    hasNextPage,
     fetchNextPage,
     fetchPreviousPage,
   } = useGetEventsInfiniteQuery({ filter: [] });
 
+  const fetchNext = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  const fetchPrevious = () => {
+    if (hasPreviousPage) {
+      fetchPreviousPage();
+    }
+  };
+
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    throttledHandleScroll(
-      e,
-      fetchNextPage,
-      fetchPreviousPage,
-      lastScrollTop,
-      setLastScrollTop,
-    );
+    throttledHandleScroll(e, fetchNext, fetchPrevious, scrollTop);
   };
 
   if (!data) {
@@ -37,12 +43,6 @@ const InfiniteScrollWrapper = () => {
       onScroll={handleScroll}
       ref={scrollContainerRef}
     >
-      {hasPreviousPage && (
-        <div className="py-2 text-center">
-          <h4>Loading more items above...</h4>
-        </div>
-      )}
-
       {/* Display your items directly without the InfiniteScroll components */}
       {events.map((event) => (
         <div
@@ -52,12 +52,6 @@ const InfiniteScrollWrapper = () => {
           {event}
         </div>
       ))}
-
-      {hasNextPage && (
-        <div className="py-2 text-center">
-          <h4>Loading more items below...</h4>
-        </div>
-      )}
     </div>
   );
 };
