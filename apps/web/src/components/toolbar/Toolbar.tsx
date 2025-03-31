@@ -1,4 +1,4 @@
-import EventsDisplay from "@/components/carnival/EventsDisplay";
+import Events from "@/components/carnival/Events";
 import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import SearchInput from "@/components/toolbar/SearchInput";
 import ToolbarWrapper from "@/components/toolbar/ToolbarWrapper";
@@ -12,7 +12,7 @@ const Toolbar = ({ map }: Props) => {
     <ToolbarWrapper>
       <SearchInput />
       <InfoCard map={map} />
-      <EventsDisplay />
+      <Events />
     </ToolbarWrapper>
   );
 };
