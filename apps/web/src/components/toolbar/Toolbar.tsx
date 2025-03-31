@@ -1,5 +1,4 @@
 import Events from "@/components/carnival/events/Events";
-import InfiniteScrollWrapper from "@/components/carnival/events/displays/InfiniteScrollWrapper";
 import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import SearchInput from "@/components/toolbar/SearchInput";
 import ToolbarWrapper from "@/components/toolbar/ToolbarWrapper";
@@ -14,7 +13,6 @@ const Toolbar = ({ map }: Props) => {
       <SearchInput />
       <InfoCard map={map} />
       <Events />
-      {/* <InfiniteScrollWrapper /> */}
     </ToolbarWrapper>
   );
 };

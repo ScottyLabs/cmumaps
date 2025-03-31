@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import InfiniteScrollWrapper from "@/components/carnival/events/displays/InfiniteScrollWrapper";
 import EventsDatePicker from "@/components/carnival/events/filters/EventsDatePicker";
 import EventsFilter from "@/components/carnival/events/filters/EventsFilter";
 
@@ -15,11 +16,8 @@ const EventsDisplay = () => {
 
   return (
     <div
-      className="m-2 min-h-screen space-y-4"
-      onClick={() => {
-        setIsDropdownOpen(false);
-        console.log("clicked");
-      }}
+      className="m-2 flex flex-col space-y-4 overflow-auto"
+      onClick={() => setIsDropdownOpen(false)}
     >
       <EventsDatePicker
         selectedDate={selectedDate}
@@ -33,6 +31,7 @@ const EventsDisplay = () => {
         selectedReqs={selectedReqs}
         setSelectedReqs={setSelectedReqs}
       />
+      <InfiniteScrollWrapper />
     </div>
   );
 };

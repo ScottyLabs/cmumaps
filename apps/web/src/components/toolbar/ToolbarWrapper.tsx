@@ -27,7 +27,7 @@ const ToolbarWrapper = ({ children }: Props) => {
     return (
       <>
         <div
-          style={{ maxHeight: `calc(100vh)` }}
+          style={{ maxHeight: `calc(100vh - 2.5rem)` }}
           className="fixed top-2 left-2 box-content flex w-96"
         >
           <div className="flex w-full flex-col overflow-hidden">{children}</div>

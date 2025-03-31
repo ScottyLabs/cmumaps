@@ -39,7 +39,7 @@ const InfiniteScrollWrapper = () => {
 
   return (
     <div
-      className="flex h-72 flex-col overflow-auto"
+      className="flex flex-col overflow-auto"
       onScroll={handleScroll}
       ref={scrollContainerRef}
     >
