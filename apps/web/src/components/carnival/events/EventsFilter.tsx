@@ -1,24 +1,63 @@
 import filterSvg from "@/assets/carnival/icons/filter.svg";
 
-const EventsFilter = () => {
+import EventsTypesDropdown from "./EventsTypesDropdown";
+
+interface Props {
+  isDropdownOpen: boolean;
+  setIsDropdownOpen: (isDropdownOpen: boolean) => void;
+}
+
+const EventsFilter = ({ isDropdownOpen, setIsDropdownOpen }: Props) => {
   const filterTypes = ["Registration", "Fee", "Limited"];
 
-  return (
-    <div className="flex items-center gap-3">
-      <button className="flex items-center rounded-sm bg-red-600 p-1 text-white">
+  const renderDropdown = () => {
+    return (
+      isDropdownOpen && (
+        <div className="relative">
+          <div className="absolute top-4 left-0">
+            <EventsTypesDropdown />
+          </div>
+        </div>
+      )
+    );
+  };
+
+  const renderTypesFilter = () => {
+    return (
+      <button
+        className="flex cursor-pointer items-center rounded-sm bg-red-600 p-1 text-white"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsDropdownOpen(!isDropdownOpen);
+        }}
+      >
         <img src={filterSvg} alt="filter" className="h-4 w-4" />
         <span className="ml-1 text-left text-xs">Select Event Type</span>
       </button>
+    );
+  };
 
+  const renderRequirementsFilter = () => {
+    return (
       <div className="flex gap-3">
         {filterTypes.map((filterType) => (
           <label key={filterType} className="flex cursor-pointer items-center">
-            <input type="checkbox" />
+            <input type="checkbox" className="cursor-pointer" />
             <p className="ml-1 text-sm"> {filterType}</p>
           </label>
         ))}
       </div>
-    </div>
+    );
+  };
+
+  return (
+    <>
+      {renderDropdown()}
+      <div className="flex items-center gap-3">
+        {renderTypesFilter()}
+        {renderRequirementsFilter()}
+      </div>
+    </>
   );
 };
 

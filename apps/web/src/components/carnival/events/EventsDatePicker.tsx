@@ -12,7 +12,7 @@ const EventsDatePicker = ({ activeDate, setActiveDate }: Props) => {
       {dayOfWeek.map((day, index) => (
         <button
           key={index}
-          className={`flex-1 rounded-lg py-2 text-center ${activeDate === day ? "bg-red-600 text-white" : "bg-gray-200"}`}
+          className={`flex-1 cursor-pointer rounded-lg py-2 text-center ${activeDate === day ? "bg-red-600 text-white" : "bg-gray-200"}`}
           onClick={() => setActiveDate(day)}
         >
           <div className="text-sm font-bold">{day}</div>
