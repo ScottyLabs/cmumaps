@@ -27,4 +27,4 @@ const handleScroll = (
   setLastScrollTop(container.scrollTop);
 };
 
-export const throttledHandleScroll = throttle(handleScroll, 1000);
+export const throttledHandleScroll = throttle(handleScroll, 500);
