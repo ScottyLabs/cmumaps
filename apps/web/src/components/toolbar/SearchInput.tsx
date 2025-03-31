@@ -49,6 +49,32 @@ const SearchInput = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [dispatch, navigate]);
 
+  const renderSearchIcon = () => (
+    <img
+      alt="Search Icon"
+      src={searchIcon}
+      className="ml-4 size-4.5 opacity-60 invert"
+      width={20}
+    />
+  );
+
+  const renderInput = () => (
+    <input
+      type="text"
+      className="w-full rounded p-2 pr-6 outline-none"
+      placeholder={"Search..."}
+      ref={inputRef}
+      value={searchQuery}
+      onChange={(event) => {
+        setSearchQuery(event.target.value);
+      }}
+      title="Search query"
+      onFocus={() => {
+        dispatch(setIsSearchOpen(true));
+      }}
+    />
+  );
+
   const renderCloseButton = () => (
     <IoIosClose
       title="Close"
@@ -62,29 +88,9 @@ const SearchInput = () => {
   );
 
   return (
-    <div className="flex w-full items-center rounded bg-white p-1">
-      <img
-        alt="Search Icon"
-        src={searchIcon}
-        className="ml-4 size-4.5 opacity-60 invert"
-        width={20}
-      />
-
-      <input
-        type="text"
-        className="w-full rounded p-2 pr-6 outline-none"
-        placeholder={"Search..."}
-        ref={inputRef}
-        value={searchQuery}
-        onChange={(event) => {
-          setSearchQuery(event.target.value);
-        }}
-        title="Search query"
-        onFocus={() => {
-          dispatch(setIsSearchOpen(true));
-        }}
-      />
-
+    <div className="mb-2 flex w-full items-center rounded bg-white">
+      {renderSearchIcon()}
+      {renderInput()}
       {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
     </div>
   );
