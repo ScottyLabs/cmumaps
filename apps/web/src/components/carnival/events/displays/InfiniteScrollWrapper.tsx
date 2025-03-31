@@ -6,7 +6,11 @@ import {
 } from "@/components/carnival/events/displays/handleScroll";
 import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 
-const InfiniteScrollWrapper = () => {
+interface Props {
+  timestamp: number;
+}
+
+const InfiniteScrollWrapper = ({ timestamp }: Props) => {
   const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const {
@@ -15,7 +19,13 @@ const InfiniteScrollWrapper = () => {
     hasNextPage,
     fetchNextPage,
     fetchPreviousPage,
-  } = useGetEventsInfiniteQuery({ filter: [], reqs: [] });
+  } = useGetEventsInfiniteQuery(
+    {
+      filter: [],
+      reqs: [],
+    },
+    { initialPageParam: { timestamp } },
+  );
 
   const fetchNext = useCallback(() => {
     if (hasNextPage) {
