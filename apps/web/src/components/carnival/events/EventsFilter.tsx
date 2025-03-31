@@ -14,7 +14,7 @@ const EventsFilter = ({ isDropdownOpen, setIsDropdownOpen }: Props) => {
     return (
       isDropdownOpen && (
         <div className="relative">
-          <div className="absolute top-4 left-0">
+          <div className="absolute top-6 left-0">
             <EventsTypesDropdown />
           </div>
         </div>

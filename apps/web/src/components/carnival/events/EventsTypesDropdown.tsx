@@ -13,16 +13,14 @@ const eventTypes = [
 
 const EventsTypesDropdown = () => {
   return (
-    <div className="mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
+    <div className="w-full rounded-md border border-gray-200 bg-white shadow-lg">
       {eventTypes.map((eventType, index) => (
         <div
           key={index}
-          className={`flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50 ${
-            index !== eventTypes.length - 1 ? "border-b border-gray-200" : ""
-          }`}
+          className="flex cursor-pointer items-center justify-between gap-3 border-b border-gray-200 p-3 hover:bg-gray-50"
         >
           <span>{eventType}</span>
-          <div className="h-6 w-6 rounded border border-gray-300"></div>
+          <input type="checkbox" className="cursor-pointer" />
         </div>
       ))}
     </div>
