@@ -1,6 +1,6 @@
 import { GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
-import pinIcon from "@icons/search_results/pin.svg";
 
+import pinIcon from "@/assets/icons/search_results/pin.svg";
 import useLocationParams from "@/hooks/useLocationParams";
 import { Document } from "@/types/searchTypes";
 import { getIcon } from "@/utils/iconUtils";

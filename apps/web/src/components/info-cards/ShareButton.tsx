@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import shareIcon from "/public/assets/icons/infocard/share.svg";
+import shareIcon from "@/assets/icons/infocard/share.svg";
 
 const ShareButton = () => {
   const [clicked, setClicked] = useState<boolean>(false);

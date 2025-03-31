@@ -8,8 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": "/src",
-      "@public": "/public",
-      "@icons": "/public/assets/icons",
     },
   },
 });

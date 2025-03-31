@@ -1,10 +1,9 @@
-import lockIcon from "@icons/half-lock.svg";
-
 import { useMemo, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
 
+import lockIcon from "@/assets/icons/half-lock.svg";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";

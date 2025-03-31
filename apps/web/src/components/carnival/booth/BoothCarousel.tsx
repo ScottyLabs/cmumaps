@@ -1,9 +1,8 @@
-import booths from "@public/assets/carnival/json/booth.json";
-
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+import booths from "@/assets/carnival/json/booth.json";
 import useIsMobile from "@/hooks/useIsMobile";
 
 const BoothCarousel = () => {

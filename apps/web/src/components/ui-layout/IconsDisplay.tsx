@@ -1,6 +1,6 @@
 import { UserButton } from "@clerk/clerk-react";
-import questionMarkIcon from "@icons/question-mark.png";
 
+import questionMarkIcon from "@/assets/icons/question-mark.png";
 import useIsMobile from "@/hooks/useIsMobile";
 
 const IconsDisplay = () => {

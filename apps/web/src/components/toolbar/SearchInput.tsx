@@ -1,9 +1,8 @@
-import searchIcon from "@icons/search.svg";
-
 import { useRef, useState, useEffect } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
 
+import searchIcon from "@/assets/icons/search.svg";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
 import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
