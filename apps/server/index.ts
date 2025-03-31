@@ -15,6 +15,7 @@ import floorRoutes from "./routes/floorRoutes";
 import edgeRoutes from "./routes/edgeRoutes";
 import roomRoutes from "./routes/roomRoutes";
 import poiRoutes from "./routes/poiRoutes";
+import eventRoutes from "./routes/eventRoutes";
 
 export const prisma = new PrismaClient();
 const app = express();
@@ -49,6 +50,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", buildingRoutes);
+app.use("/api/events", checkAuth, eventRoutes);
 app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 app.use("/api", checkAuth, requireSocketId, edgeRoutes);
 app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);

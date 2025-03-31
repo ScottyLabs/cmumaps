@@ -1,20 +1,33 @@
 import { apiSlice } from "@/store/features/api/apiSlice";
 
+interface EventResponse {
+  events: number[];
+  prevTimestamp: number;
+  nextTimestamp: number;
+}
+
+interface GetEventsQuery {
+  filter: string[];
+}
+
 export const eventApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getEvents: builder.infiniteQuery<number[], void, number>({
-      query: (pageParam) => ({
+    getEvents: builder.infiniteQuery<EventResponse, GetEventsQuery, number>({
+      query: ({ queryArg, pageParam }) => ({
         url: `/events`,
-        params: { page: pageParam },
+        params: {
+          filter: queryArg.filter,
+          timestamp: pageParam,
+        },
       }),
       infiniteQueryOptions: {
         initialPageParam: 0,
-        getNextPageParam: (_lastPage, _allPages, firstPageParam) => {
-          return firstPageParam + 1;
+        getNextPageParam: (lastPage) => {
+          return lastPage.nextTimestamp;
         },
-        getPreviousPageParam: (_firstPage, _allPages, lastPageParam) => {
-          return lastPageParam - 1;
+        getPreviousPageParam: (firstPage) => {
+          return firstPage.prevTimestamp;
         },
       },
     }),

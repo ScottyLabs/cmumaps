@@ -7,12 +7,12 @@ const InfiniteScrollWrapper = () => {
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
   const {
-    data: events,
+    data,
     hasNextPage,
     hasPreviousPage,
     fetchNextPage,
     fetchPreviousPage,
-  } = useGetEventsInfiniteQuery();
+  } = useGetEventsInfiniteQuery({ filter: [] });
 
   const fetchMoreTop = () => {
     fetchPreviousPage();
@@ -42,26 +42,29 @@ const InfiniteScrollWrapper = () => {
     setLastScrollTop(container.scrollTop);
   };
 
-  if (!events) {
+  if (!data) {
     return <></>;
   }
 
+  console.log(data);
+
+  const events = data.pages.map((page) => page.events).flat();
+  console.log(events);
+
   return (
     <div
-      className="flex h-30 flex-col overflow-auto"
+      className="flex h-72 flex-col overflow-auto"
       onScroll={(e) => handleScroll(e)}
     >
       {/* Display your items directly without the InfiniteScroll components */}
-      {events.pages.map((events) =>
-        events.map((event) => (
-          <div
-            key={event}
-            className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
-          >
-            {event}
-          </div>
-        )),
-      )}
+      {events.map((event) => (
+        <div
+          key={event}
+          className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
+        >
+          {event}
+        </div>
+      ))}
 
       {/* Loading indicators */}
       {hasPreviousPage && (
