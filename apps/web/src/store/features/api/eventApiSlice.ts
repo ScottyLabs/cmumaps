@@ -6,6 +6,8 @@ interface EventResponse {
   events: EventType[];
   prevEventId: string;
   nextEventId: string;
+  prevTimestamp: number;
+  nextTimestamp: number;
 }
 
 interface GetEventsQuery {
@@ -15,8 +17,8 @@ interface GetEventsQuery {
 
 // either eventId or timestamp must be provided
 interface PageParam {
-  timestamp?: number;
   eventId?: string;
+  timestamp: number;
   direction?: "future" | "past";
 }
 
@@ -42,6 +44,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
           if (lastPage.nextEventId) {
             return {
               eventId: lastPage.nextEventId,
+              timestamp: lastPage.nextTimestamp,
               direction: "future",
             };
           }
@@ -50,6 +53,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
           if (firstPage.prevEventId) {
             return {
               eventId: firstPage.prevEventId,
+              timestamp: firstPage.prevTimestamp,
               direction: "past",
             };
           }

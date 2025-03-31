@@ -94,11 +94,11 @@ model Poi {
 }
 
 model EventOccurrences {
+  eventOccurrenceId String    @id
   eventId           String
   startTime         DateTime
   endTime           DateTime
   locationId        String
-  eventOccurrenceId String    @id
   Events            Events    @relation(fields: [eventId], references: [eventId])
   Locations         Locations @relation(fields: [locationId], references: [locationId])
 }
@@ -117,6 +117,7 @@ model Events {
   title            String
   description      String
   req              String?
+  tags             String[]
   EventOccurrences EventOccurrences[]
   EventTracks      EventTracks[]
 }

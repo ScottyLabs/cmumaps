@@ -6,28 +6,54 @@ export const eventController = {
     const { eventId, timestamp, limit, direction } = req.query;
 
     // get events by timestamp
-    if (timestamp) {
-      const { events, nextEventId, prevEventId } =
+    if (!eventId) {
+      const { events, nextEventId, prevEventId, nextTimestamp, prevTimestamp } =
         await eventService.getEventsByTimestamp(
           Number(timestamp),
           Number(limit),
         );
 
-      res.json({ events, prevEventId, nextEventId });
+      res.json({
+        events,
+        prevEventId,
+        nextEventId,
+        nextTimestamp,
+        prevTimestamp,
+      });
       return;
     }
 
     // get events by eventId
     if (eventId && typeof eventId === "string") {
       if (direction === "future") {
-        const { prevEventId, events, nextEventId } =
-          await eventService.getEventsAfter(eventId, Number(limit));
+        console.log("getting events after", eventId);
+        const {
+          prevEventId,
+          events,
+          nextEventId,
+          prevTimestamp,
+          nextTimestamp,
+        } = await eventService.getEventsAfter(
+          eventId,
+          Number(timestamp),
+          Number(limit),
+        );
 
-        res.json({ prevEventId, events, nextEventId });
+        res.json({
+          prevEventId,
+          events,
+          nextEventId,
+          prevTimestamp,
+          nextTimestamp,
+        });
         return;
       } else if (direction === "past") {
         const { prevEventId, events, nextEventId } =
-          await eventService.getEventsBefore(eventId, Number(limit));
+          await eventService.getEventsBefore(
+            eventId,
+            Number(timestamp),
+            Number(limit),
+          );
 
         res.json({ events, prevEventId, nextEventId });
         return;

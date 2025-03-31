@@ -56,7 +56,7 @@ const InfiniteScrollWrapper = () => {
       {/* Display your items directly without the InfiniteScroll components */}
       {events.map((event) => (
         <div
-          key={event.eventId}
+          key={event.id}
           className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
         >
           {event.name}

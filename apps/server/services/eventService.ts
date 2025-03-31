@@ -1,10 +1,11 @@
 import { EventType } from "@cmumaps/common";
 import { prisma } from "..";
-
 interface EventResponse {
   events: EventType[];
   nextEventId?: string;
+  nextTimestamp?: number;
   prevEventId?: string;
+  prevTimestamp?: number;
 }
 
 export const eventService = {
@@ -15,12 +16,20 @@ export const eventService = {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: { endTime: { gte: new Date(timestamp) } },
       include: { Events: true, Locations: true },
-      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
-      take: limit + 1,
+      orderBy: [
+        { startTime: "asc" },
+        { endTime: "asc" },
+        { eventOccurrenceId: "asc" },
+      ],
+      take: limit,
     });
 
+    const prevEventId = dbEvents[0]?.eventOccurrenceId;
+    const nextEventId = dbEvents[limit - 1]?.eventOccurrenceId;
+    const prevTimestamp = dbEvents[0]?.startTime.getTime();
+    const nextTimestamp = dbEvents[limit - 1]?.endTime.getTime();
     const events = dbEvents.map((dbEvent) => ({
-      eventId: dbEvent.eventId,
+      id: dbEvent.eventOccurrenceId,
       name: dbEvent.Events.title,
       description: dbEvent.Events.description,
       startTime: dbEvent.startTime,
@@ -28,64 +37,34 @@ export const eventService = {
       location: dbEvent.Locations.locationName,
     }));
 
-    const nextEventId = dbEvents[limit]?.eventId;
-
-    const prevEvent = await prisma.eventOccurrences.findFirst({
-      where: { endTime: { lt: new Date(timestamp) } },
-      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
-    });
-
-    return {
-      events: events.slice(0, limit),
-      nextEventId,
-      prevEventId: prevEvent?.eventId,
-    };
+    return { events, nextEventId, prevEventId, nextTimestamp, prevTimestamp };
   },
 
-  async getEventsAfter(eventId: string, limit: number): Promise<EventResponse> {
-    const dbEvents = await prisma.eventOccurrences.findMany({
-      where: { eventId: { gt: eventId } },
-      include: { Events: true, Locations: true },
-      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
-      take: limit + 1,
-    });
-
-    const events = dbEvents.map((dbEvent) => ({
-      eventId: dbEvent.eventId,
-      name: dbEvent.Events.title,
-      description: dbEvent.Events.description,
-      startTime: dbEvent.startTime,
-      endTime: dbEvent.endTime,
-      location: dbEvent.Locations.locationName,
-    }));
-
-    const nextEventId = dbEvents[limit]?.eventId;
-
-    const prevEvent = await prisma.eventOccurrences.findFirst({
-      where: { eventId: { lt: eventId } },
-      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
-    });
-
-    return {
-      events: events.slice(0, limit),
-      nextEventId,
-      prevEventId: prevEvent?.eventId,
-    };
-  },
-
-  async getEventsBefore(
-    eventId: string,
+  async getEventsAfter(
+    curId: string,
+    curTimestamp: number,
     limit: number,
   ): Promise<EventResponse> {
     const dbEvents = await prisma.eventOccurrences.findMany({
-      where: { eventId: { lt: eventId } },
+      where: {
+        startTime: { gt: new Date(curTimestamp) },
+        eventOccurrenceId: { gt: curId },
+      },
       include: { Events: true, Locations: true },
-      orderBy: [{ endTime: "desc" }, { eventId: "desc" }],
-      take: limit + 1,
+      orderBy: [
+        { startTime: "asc" },
+        { endTime: "asc" },
+        { eventOccurrenceId: "asc" },
+      ],
+      take: limit,
     });
 
+    const prevEventId = dbEvents[0]?.eventOccurrenceId;
+    const nextEventId = dbEvents[limit - 1]?.eventOccurrenceId;
+    const prevTimestamp = dbEvents[0]?.startTime.getTime();
+    const nextTimestamp = dbEvents[limit - 1]?.endTime.getTime();
     const events = dbEvents.map((dbEvent) => ({
-      eventId: dbEvent.eventId,
+      id: dbEvent.eventOccurrenceId,
       name: dbEvent.Events.title,
       description: dbEvent.Events.description,
       startTime: dbEvent.startTime,
@@ -93,17 +72,41 @@ export const eventService = {
       location: dbEvent.Locations.locationName,
     }));
 
-    const prevEventId = dbEvents[limit]?.eventId;
+    return { events, nextEventId, prevEventId, nextTimestamp, prevTimestamp };
+  },
 
-    const nextEvent = await prisma.eventOccurrences.findFirst({
-      where: { eventId: { gt: eventId } },
-      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
+  async getEventsBefore(
+    curId: string,
+    curTimestamp: number,
+    limit: number,
+  ): Promise<EventResponse> {
+    const dbEvents = await prisma.eventOccurrences.findMany({
+      where: {
+        endTime: { lt: new Date(curTimestamp) },
+        eventOccurrenceId: { lt: curId },
+      },
+      include: { Events: true, Locations: true },
+      orderBy: [
+        { startTime: "desc" },
+        { endTime: "desc" },
+        { eventOccurrenceId: "desc" },
+      ],
+      take: limit,
     });
 
-    return {
-      events: events.slice(0, limit),
-      prevEventId,
-      nextEventId: nextEvent?.eventId,
-    };
+    const prevEventId = dbEvents[limit - 1]?.eventOccurrenceId;
+    const nextEventId = dbEvents[0]?.eventOccurrenceId;
+    const prevTimestamp = dbEvents[limit - 1]?.startTime.getTime();
+    const nextTimestamp = dbEvents[0]?.endTime.getTime();
+    const events = dbEvents.map((dbEvent) => ({
+      id: dbEvent.eventOccurrenceId,
+      name: dbEvent.Events.title,
+      description: dbEvent.Events.description,
+      startTime: dbEvent.startTime,
+      endTime: dbEvent.endTime,
+      location: dbEvent.Locations.locationName,
+    }));
+
+    return { events, prevEventId, nextEventId, nextTimestamp, prevTimestamp };
   },
 };
