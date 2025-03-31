@@ -1,4 +1,4 @@
-import Events from "@/components/carnival/Events";
+import Events from "@/components/carnival/events/Events";
 import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import SearchInput from "@/components/toolbar/SearchInput";
 import ToolbarWrapper from "@/components/toolbar/ToolbarWrapper";

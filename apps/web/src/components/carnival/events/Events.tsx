@@ -1,3 +1,4 @@
+import EventsDisplay from "@/components/carnival/events/EventsDisplay";
 import CollapsibleWrapper from "@/components/shared/CollapsibleWrapper";
 import useLocationParams from "@/hooks/useLocationParams";
 
@@ -10,7 +11,7 @@ const Events = () => {
 
   return (
     <CollapsibleWrapper title="Spring Carnival">
-      <div>Events</div>
+      <EventsDisplay />
     </CollapsibleWrapper>
   );
 };

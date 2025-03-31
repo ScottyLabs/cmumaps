@@ -20,10 +20,13 @@ const CollapsibleWrapper = ({ title, children }: Props) => {
 
   return (
     <div className="rounded bg-white">
-      <div className="flex flex-col" onClick={() => setOpen(!open)}>
+      <div
+        className="flex cursor-pointer flex-col"
+        onClick={() => setOpen(!open)}
+      >
         {renderTrigger()}
-        {open && children}
       </div>
+      {open && children}
     </div>
   );
 };
