@@ -11,10 +11,10 @@ interface Props {
 const Toolbar = ({ map }: Props) => {
   return (
     <ToolbarWrapper>
-      {/* <SearchInput />
+      <SearchInput />
       <InfoCard map={map} />
-      <Events /> */}
-      <InfiniteScrollWrapper />
+      <Events />
+      {/* <InfiniteScrollWrapper /> */}
     </ToolbarWrapper>
   );
 };

@@ -75,6 +75,7 @@ const EventsFilter = ({
               type="checkbox"
               className="cursor-pointer"
               checked={selectedReqs.includes(filterType)}
+              readOnly
             />
             <p className="ml-1 text-sm"> {filterType}</p>
           </div>
