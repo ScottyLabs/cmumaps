@@ -38,16 +38,20 @@ export const eventApiSlice = apiSlice.injectEndpoints({
           timestamp: Date.now(),
         },
         getNextPageParam: (lastPage) => {
-          return {
-            nextEventId: lastPage.nextEventId,
-            direction: "future",
-          };
+          if (lastPage.nextEventId) {
+            return {
+              nextEventId: lastPage.nextEventId,
+              direction: "future",
+            };
+          }
         },
         getPreviousPageParam: (firstPage) => {
-          return {
-            prevEventId: firstPage.prevEventId,
-            direction: "past",
-          };
+          if (firstPage.prevEventId) {
+            return {
+              prevEventId: firstPage.prevEventId,
+              direction: "past",
+            };
+          }
         },
       },
     }),

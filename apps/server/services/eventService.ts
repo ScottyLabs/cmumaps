@@ -15,7 +15,7 @@ export const eventService = {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: { endTime: { gte: new Date(timestamp) } },
       include: { Events: true, Locations: true },
-      orderBy: { endTime: "asc", eventId: "asc" },
+      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
       take: limit + 1,
     });
 
@@ -32,7 +32,7 @@ export const eventService = {
 
     const prevEvent = await prisma.eventOccurrences.findFirst({
       where: { endTime: { lt: new Date(timestamp) } },
-      orderBy: { endTime: "asc", eventId: "asc" },
+      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
     });
 
     return { events, nextEventId, prevEventId: prevEvent?.eventId };
@@ -42,7 +42,7 @@ export const eventService = {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: { eventId: { gt: eventId } },
       include: { Events: true, Locations: true },
-      orderBy: { endTime: "asc", eventId: "asc" },
+      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
       take: limit + 1,
     });
 
@@ -59,7 +59,7 @@ export const eventService = {
 
     const prevEvent = await prisma.eventOccurrences.findFirst({
       where: { eventId: { lt: eventId } },
-      orderBy: { endTime: "asc", eventId: "asc" },
+      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
     });
 
     return { events, nextEventId, prevEventId: prevEvent?.eventId };
@@ -72,7 +72,7 @@ export const eventService = {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: { eventId: { lt: eventId } },
       include: { Events: true, Locations: true },
-      orderBy: { endTime: "desc", eventId: "desc" },
+      orderBy: [{ endTime: "desc" }, { eventId: "desc" }],
       take: limit + 1,
     });
 
@@ -89,7 +89,7 @@ export const eventService = {
 
     const nextEvent = await prisma.eventOccurrences.findFirst({
       where: { eventId: { gt: eventId } },
-      orderBy: { endTime: "asc", eventId: "asc" },
+      orderBy: [{ endTime: "asc" }, { eventId: "asc" }],
     });
 
     return { events, prevEventId, nextEventId: nextEvent?.eventId };
