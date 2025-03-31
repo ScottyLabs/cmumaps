@@ -1,14 +1,6 @@
-import { EventType } from "@cmumaps/common";
+import { EventResponse } from "@cmumaps/common";
 
 import { apiSlice } from "@/store/features/api/apiSlice";
-
-interface EventResponse {
-  events: EventType[];
-  prevEventId: string;
-  nextEventId: string;
-  prevTimestamp: number;
-  nextTimestamp: number;
-}
 
 interface GetEventsQuery {
   filter: string[];
@@ -18,7 +10,9 @@ interface GetEventsQuery {
 // either eventId or timestamp must be provided
 interface PageParam {
   eventId?: string;
-  timestamp: number;
+  timestamp?: number;
+  startTime?: number;
+  endTime?: number;
   direction?: "future" | "past";
 }
 
@@ -30,6 +24,8 @@ export const eventApiSlice = apiSlice.injectEndpoints({
         url: `/events`,
         params: {
           filter: queryArg.filter,
+          startTime: pageParam.startTime,
+          endTime: pageParam.endTime,
           timestamp: pageParam.timestamp,
           eventId: pageParam.eventId,
           direction: pageParam.direction,
@@ -41,19 +37,21 @@ export const eventApiSlice = apiSlice.injectEndpoints({
           timestamp: Date.now(),
         },
         getNextPageParam: (lastPage) => {
-          if (lastPage.nextEventId) {
+          if (lastPage.nextEvent) {
             return {
-              eventId: lastPage.nextEventId,
-              timestamp: lastPage.nextTimestamp,
+              eventId: lastPage.nextEvent.id,
+              startTime: new Date(lastPage.nextEvent.startTime).getTime(),
+              endTime: new Date(lastPage.nextEvent.endTime).getTime(),
               direction: "future",
             };
           }
         },
         getPreviousPageParam: (firstPage) => {
-          if (firstPage.prevEventId) {
+          if (firstPage.prevEvent) {
             return {
-              eventId: firstPage.prevEventId,
-              timestamp: firstPage.prevTimestamp,
+              eventId: firstPage.prevEvent.id,
+              startTime: new Date(firstPage.prevEvent.startTime).getTime(),
+              endTime: new Date(firstPage.prevEvent.endTime).getTime(),
               direction: "past",
             };
           }

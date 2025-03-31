@@ -6,3 +6,9 @@ export interface EventType {
   endTime: Date;
   location: string;
 }
+
+export interface EventResponse {
+  events: EventType[];
+  prevEvent?: EventType;
+  nextEvent?: EventType;
+}

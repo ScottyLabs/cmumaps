@@ -1,12 +1,5 @@
-import { EventType } from "@cmumaps/common";
+import { EventResponse } from "@cmumaps/common";
 import { prisma } from "..";
-interface EventResponse {
-  events: EventType[];
-  nextEventId?: string;
-  nextTimestamp?: number;
-  prevEventId?: string;
-  prevTimestamp?: number;
-}
 
 export const eventService = {
   async getEventsByTimestamp(
@@ -24,10 +17,6 @@ export const eventService = {
       take: limit,
     });
 
-    const prevEventId = dbEvents[0]?.eventOccurrenceId;
-    const nextEventId = dbEvents[limit - 1]?.eventOccurrenceId;
-    const prevTimestamp = dbEvents[0]?.startTime.getTime();
-    const nextTimestamp = dbEvents[limit - 1]?.endTime.getTime();
     const events = dbEvents.map((dbEvent) => ({
       id: dbEvent.eventOccurrenceId,
       name: dbEvent.Events.title,
@@ -36,19 +25,38 @@ export const eventService = {
       endTime: dbEvent.endTime,
       location: dbEvent.Locations.locationName,
     }));
-
-    return { events, nextEventId, prevEventId, nextTimestamp, prevTimestamp };
+    const prevEvent = events[0];
+    const nextEvent = events[limit - 1];
+    return { events, nextEvent, prevEvent };
   },
 
   async getEventsAfter(
     curId: string,
-    curTimestamp: number,
+    curStartTime: number,
+    curEndTime: number,
     limit: number,
   ): Promise<EventResponse> {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: {
-        startTime: { gt: new Date(curTimestamp) },
-        eventOccurrenceId: { gt: curId },
+        OR: [
+          { startTime: { gt: new Date(curStartTime) } },
+          {
+            AND: [
+              { startTime: { equals: new Date(curStartTime) } },
+              {
+                OR: [
+                  { endTime: { gt: new Date(curEndTime) } },
+                  {
+                    AND: [
+                      { endTime: { equals: new Date(curEndTime) } },
+                      { eventOccurrenceId: { gt: curId } },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       include: { Events: true, Locations: true },
       orderBy: [
@@ -59,10 +67,6 @@ export const eventService = {
       take: limit,
     });
 
-    const prevEventId = dbEvents[0]?.eventOccurrenceId;
-    const nextEventId = dbEvents[limit - 1]?.eventOccurrenceId;
-    const prevTimestamp = dbEvents[0]?.startTime.getTime();
-    const nextTimestamp = dbEvents[limit - 1]?.endTime.getTime();
     const events = dbEvents.map((dbEvent) => ({
       id: dbEvent.eventOccurrenceId,
       name: dbEvent.Events.title,
@@ -71,18 +75,21 @@ export const eventService = {
       endTime: dbEvent.endTime,
       location: dbEvent.Locations.locationName,
     }));
-
-    return { events, nextEventId, prevEventId, nextTimestamp, prevTimestamp };
+    const prevEvent = events[0];
+    const nextEvent = events[limit - 1];
+    return { events, nextEvent, prevEvent };
   },
 
   async getEventsBefore(
     curId: string,
-    curTimestamp: number,
+    curStartTime: number,
+    curEndTime: number,
     limit: number,
   ): Promise<EventResponse> {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: {
-        endTime: { lt: new Date(curTimestamp) },
+        endTime: { lte: new Date(curEndTime) },
+        startTime: { lte: new Date(curStartTime) },
         eventOccurrenceId: { lt: curId },
       },
       include: { Events: true, Locations: true },
@@ -94,10 +101,6 @@ export const eventService = {
       take: limit,
     });
 
-    const prevEventId = dbEvents[limit - 1]?.eventOccurrenceId;
-    const nextEventId = dbEvents[0]?.eventOccurrenceId;
-    const prevTimestamp = dbEvents[limit - 1]?.startTime.getTime();
-    const nextTimestamp = dbEvents[0]?.endTime.getTime();
     const events = dbEvents.map((dbEvent) => ({
       id: dbEvent.eventOccurrenceId,
       name: dbEvent.Events.title,
@@ -106,7 +109,8 @@ export const eventService = {
       endTime: dbEvent.endTime,
       location: dbEvent.Locations.locationName,
     }));
-
-    return { events, prevEventId, nextEventId, nextTimestamp, prevTimestamp };
+    const prevEvent = events[limit - 1];
+    const nextEvent = events[0];
+    return { events, prevEvent, nextEvent };
   },
 };

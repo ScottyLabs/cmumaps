@@ -3,59 +3,41 @@ import { eventService } from "../services/eventService";
 
 export const eventController = {
   getEvents: async (req: Request, res: Response) => {
-    const { eventId, timestamp, limit, direction } = req.query;
+    const { timestamp, eventId, startTime, endTime, limit, direction } =
+      req.query;
 
     // get events by timestamp
-    if (!eventId) {
-      const { events, nextEventId, prevEventId, nextTimestamp, prevTimestamp } =
-        await eventService.getEventsByTimestamp(
-          Number(timestamp),
-          Number(limit),
-        );
+    if (timestamp) {
+      const response = await eventService.getEventsByTimestamp(
+        Number(timestamp),
+        Number(limit),
+      );
 
-      res.json({
-        events,
-        prevEventId,
-        nextEventId,
-        nextTimestamp,
-        prevTimestamp,
-      });
+      res.json(response);
       return;
     }
 
     // get events by eventId
     if (eventId && typeof eventId === "string") {
       if (direction === "future") {
-        console.log("getting events after", eventId);
-        const {
-          prevEventId,
-          events,
-          nextEventId,
-          prevTimestamp,
-          nextTimestamp,
-        } = await eventService.getEventsAfter(
+        const response = await eventService.getEventsAfter(
           eventId,
-          Number(timestamp),
+          Number(startTime),
+          Number(endTime),
           Number(limit),
         );
 
-        res.json({
-          prevEventId,
-          events,
-          nextEventId,
-          prevTimestamp,
-          nextTimestamp,
-        });
+        res.json(response);
         return;
       } else if (direction === "past") {
-        const { prevEventId, events, nextEventId } =
-          await eventService.getEventsBefore(
-            eventId,
-            Number(timestamp),
-            Number(limit),
-          );
+        const response = await eventService.getEventsBefore(
+          eventId,
+          Number(startTime),
+          Number(endTime),
+          Number(limit),
+        );
 
-        res.json({ events, prevEventId, nextEventId });
+        res.json(response);
         return;
       }
     }
