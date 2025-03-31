@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-import DatePicker from "@/components/carnival/events/DatePicker";
+import EventsDatePicker from "@/components/carnival/events/EventsDatePicker";
+import EventsFilter from "@/components/carnival/events/EventsFilter";
 
 const EventsDisplay = () => {
   const [activeDate, setActiveDate] = useState("All Dates");
 
-  console.log(activeDate);
-
   return (
-    <div>
-      <DatePicker activeDate={activeDate} setActiveDate={setActiveDate} />
+    <div className="m-2 space-y-4">
+      <EventsDatePicker activeDate={activeDate} setActiveDate={setActiveDate} />
+      <EventsFilter />
     </div>
   );
 };
