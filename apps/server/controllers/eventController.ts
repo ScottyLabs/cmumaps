@@ -3,17 +3,35 @@ import { eventService } from "../services/eventService";
 
 export const eventController = {
   getEvents: async (req: Request, res: Response) => {
-    const { timestamp, limit } = req.query;
+    const { eventId, timestamp, limit, direction } = req.query;
 
-    const events = await eventService.getEvents(
-      Number(timestamp),
-      Number(limit),
-    );
+    // get events by timestamp
+    if (timestamp) {
+      const { events, nextEventId, prevEventId } =
+        await eventService.getEventsByTimestamp(
+          Number(timestamp),
+          Number(limit),
+        );
 
-    // infinite query will call this endpoint with the next index (depend on the direction)
-    const prevTimestamp = Number(timestamp) - Number(limit);
-    const nextTimestamp = Number(timestamp) + Number(limit);
-    console.log(events);
-    res.json({ events, prevTimestamp, nextTimestamp });
+      res.json({ events, prevEventId, nextEventId });
+    }
+
+    // get events by eventId
+    if (eventId && typeof eventId === "string") {
+      if (direction === "future") {
+        const { prevEventId, events, nextEventId } =
+          await eventService.getEventsAfter(eventId, Number(limit));
+
+        res.json({ prevEventId, events, nextEventId });
+      } else if (direction === "past") {
+        const { prevEventId, events, nextEventId } =
+          await eventService.getEventsBefore(eventId, Number(limit));
+
+        res.json({ events, prevEventId, nextEventId });
+      }
+    }
+
+    // no eventId or timestamp provided
+    res.json({ error: "No eventId or timestamp provided" });
   },
 };

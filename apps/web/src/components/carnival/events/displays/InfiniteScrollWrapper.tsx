@@ -15,7 +15,7 @@ const InfiniteScrollWrapper = () => {
     hasNextPage,
     fetchNextPage,
     fetchPreviousPage,
-  } = useGetEventsInfiniteQuery({ filter: [] });
+  } = useGetEventsInfiniteQuery({ filter: [], reqs: [] });
 
   const fetchNext = useCallback(() => {
     if (hasNextPage) {
