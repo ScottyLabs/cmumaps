@@ -1,60 +1,31 @@
-import { useMemo, useState } from "react";
+import { Building, Floor } from "@cmumaps/common";
+
+import { useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import lockIcon from "@/assets/icons/half-lock.svg";
-import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
-import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import { selectCardCollapsed } from "@/store/features/cardSlice";
 import { focusFloor } from "@/store/features/mapSlice";
 import { setIsSearchOpen } from "@/store/features/uiSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 
 import Roundel from "../shared/Roundel";
 
+interface Props {
+  building: Building;
+  floor: Floor;
+}
+
 /**
- * The interface component allowing an user to see the current building
- * and switch floors.
+ * This component allows an user to switch between floors of a building.
+ * Handles only the display logic.
  */
-export default function FloorSwitcher() {
+const FloorSwitcherDisplay = ({ building, floor }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const isMobile = useIsMobile();
-  const { isCardOpen } = useLocationParams();
-  const { data: buildings } = useGetBuildingsQuery();
-  const floor = useAppSelector((state) => state.map.focusedFloor);
-  const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
-  const isCardCollapsed = useAppSelector(selectCardCollapsed);
-
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
-
-  // mobile cases when we don't want to show the floor switcher
-  const showFloorSwitcherMobile = useMemo(() => {
-    if (isMobile) {
-      if (isCardOpen && !isCardCollapsed) {
-        return false;
-      }
-
-      if (isSearchOpen) {
-        return false;
-      }
-    }
-
-    return true;
-  }, [isCardCollapsed, isCardOpen, isMobile, isSearchOpen]);
-
-  // only show floor switcher if there is focused floor
-  if (!buildings || !floor || !showFloorSwitcherMobile) {
-    return;
-  }
-
-  const building = buildings[floor.buildingCode];
-  if (!building) {
-    return;
-  }
 
   const renderDefaultView = () => {
     if (building.floors.length === 0 || !floor) {
@@ -213,4 +184,6 @@ export default function FloorSwitcher() {
       {showFloorPicker ? renderFloorPicker() : renderDefaultView()}
     </div>
   );
-}
+};
+
+export default FloorSwitcherDisplay;

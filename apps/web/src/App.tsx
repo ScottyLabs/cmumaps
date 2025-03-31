@@ -1,5 +1,6 @@
 import { useRef } from "react";
 
+import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
 import LoginModal from "@/components/login/LoginModal";
 import MapDisplay from "@/components/map-display/MapDisplay";
 import Toolbar from "@/components/toolbar/Toolbar";
@@ -15,6 +16,7 @@ const App = () => {
       <LoginModal />
       <IconsDisplay />
       <Toolbar map={mapRef.current} />
+      <FloorSwitcher />
       <MyToastContainer />
     </main>
   );

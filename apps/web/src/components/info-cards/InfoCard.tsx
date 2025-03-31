@@ -1,4 +1,3 @@
-import BoothCard from "@/components/carnival/booth/BoothCard";
 import CardWrapper from "@/components/info-cards/CardWrapper";
 import RoomCard from "@/components/info-cards/RoomCard";
 import useLocationParams from "@/hooks/useLocationParams";
@@ -18,7 +17,7 @@ const InfoCard = ({ map }: Props) => {
     } else if (buildingCode) {
       return <BuildingCard map={map} />;
     } else {
-      return <BoothCard />;
+      return <></>;
     }
   };
 
