@@ -1,40 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 
 // Custom hook for better scroll handling
 const InfiniteScrollWrapper = () => {
-  const [hasMoreTop, _setHasMoreTop] = useState(true);
-  const [hasMoreBottom, _setHasMoreBottom] = useState(true);
-  const [items, setItems] = useState<{ id: string; value: string }[]>([]);
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
-  useEffect(() => {
-    const items = [];
-    for (let i = 0; i < 10; i++) {
-      items.push({ id: i.toString(), value: `Item ${i}` });
-    }
-    setItems(items);
-  }, []);
+  const {
+    data: events,
+    hasNextPage,
+    hasPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useGetEventsInfiniteQuery();
 
   const fetchMoreTop = () => {
-    const newItems = [];
-    for (let i = 0; i < 10; i++) {
-      newItems.push({
-        id: (items.length + i).toString(),
-        value: `Item -${items.length + i}`,
-      });
-    }
-    setItems([...newItems, ...items]);
+    fetchPreviousPage();
   };
 
   const fetchMoreBottom = () => {
-    const newItems = [];
-    for (let i = 0; i < 10; i++) {
-      newItems.push({
-        id: (items.length + i).toString(),
-        value: `Item ${items.length + i}`,
-      });
-    }
-    setItems([...items, ...newItems]);
+    fetchNextPage();
   };
 
   // Create separate event handlers for top and bottom scrolling
@@ -57,42 +42,48 @@ const InfiniteScrollWrapper = () => {
     setLastScrollTop(container.scrollTop);
   };
 
+  if (!events) {
+    return <></>;
+  }
+
   return (
     <div
       className="flex h-30 flex-col overflow-auto"
       onScroll={(e) => handleScroll(e)}
     >
       {/* Display your items directly without the InfiniteScroll components */}
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
-        >
-          {item.value}
-        </div>
-      ))}
+      {events.pages.map((events) =>
+        events.map((event) => (
+          <div
+            key={event}
+            className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
+          >
+            {event}
+          </div>
+        )),
+      )}
 
       {/* Loading indicators */}
-      {hasMoreTop && (
+      {hasPreviousPage && (
         <div className="py-2 text-center">
           <h4>Loading more items above...</h4>
         </div>
       )}
 
-      {hasMoreBottom && (
+      {hasNextPage && (
         <div className="py-2 text-center">
           <h4>Loading more items below...</h4>
         </div>
       )}
 
       {/* End messages */}
-      {!hasMoreTop && (
+      {!hasPreviousPage && (
         <p className="py-2 text-center font-semibold">
           This is the beginning of time
         </p>
       )}
 
-      {!hasMoreBottom && (
+      {!hasNextPage && (
         <p style={{ textAlign: "center" }}>
           <b>Yay! You have seen it all</b>
         </p>
