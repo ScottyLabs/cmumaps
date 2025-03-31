@@ -1,7 +1,9 @@
+import { EventType } from "@cmumaps/common";
+
 import { apiSlice } from "@/store/features/api/apiSlice";
 
 interface EventResponse {
-  events: number[];
+  events: EventType[];
   prevTimestamp: number;
   nextTimestamp: number;
 }
@@ -23,7 +25,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
         },
       }),
       infiniteQueryOptions: {
-        initialPageParam: 0,
+        initialPageParam: Date.now(),
         getNextPageParam: (lastPage) => {
           return lastPage.nextTimestamp;
         },

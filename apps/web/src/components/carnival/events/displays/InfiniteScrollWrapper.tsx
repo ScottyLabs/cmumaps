@@ -45,6 +45,7 @@ const InfiniteScrollWrapper = () => {
   }
 
   const events = data.pages.map((page) => page.events).flat();
+  console.log(events);
 
   return (
     <div
@@ -55,10 +56,10 @@ const InfiniteScrollWrapper = () => {
       {/* Display your items directly without the InfiniteScroll components */}
       {events.map((event) => (
         <div
-          key={event}
+          key={event.eventId}
           className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
         >
-          {event}
+          {event.name}
         </div>
       ))}
     </div>
