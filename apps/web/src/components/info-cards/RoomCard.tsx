@@ -44,13 +44,13 @@ const RoomCard = () => {
     const buildingCode = room.floor.buildingCode;
 
     // the default image is the building image
-    const url = `/assets/location_images/building_room_images/${buildingCode}/${buildingCode}.jpg`;
+    const url = `/location_images/building_room_images/${buildingCode}/${buildingCode}.jpg`;
     // // but get the room image if it exists
     // if (
     //   availableRoomImages &&
     //   availableRoomImages[buildingCode].includes(room.name + ".jpg")
     // ) {
-    //   url = `/assets/location_images/building_room_images/${buildingCode}/${room.name}.jpg`;
+    //   url = `/location_images/building_room_images/${buildingCode}/${room.name}.jpg`;
     // }
     return <InfoCardImage url={url} alt={roomName} />;
   };
