@@ -89,16 +89,16 @@ export const eventService = {
     const dbEvents = await prisma.eventOccurrences.findMany({
       where: {
         OR: [
-          { endTime: { lt: new Date(curEndTime) } },
+          { startTime: { lt: new Date(curStartTime) } },
           {
             AND: [
-              { endTime: { equals: new Date(curEndTime) } },
+              { startTime: { equals: new Date(curStartTime) } },
               {
                 OR: [
-                  { startTime: { lt: new Date(curStartTime) } },
+                  { endTime: { lt: new Date(curEndTime) } },
                   {
                     AND: [
-                      { startTime: { equals: new Date(curStartTime) } },
+                      { endTime: { equals: new Date(curEndTime) } },
                       { eventOccurrenceId: { lt: curId } },
                     ],
                   },
