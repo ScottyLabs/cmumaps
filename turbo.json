@@ -12,11 +12,11 @@
       "cache": false,
       "persistent": true
     },
-    "@cmumaps/server#db-generate": {},
+    "@cmumaps/db#generate": {},
     "@cmumaps/server#build": {
       "dependsOn": [
         "@cmumaps/server#build",
-        "@cmumaps/server#db-generate"
+        "@cmumaps/db#generate"
       ]
     },
     "build": {

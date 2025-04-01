@@ -1,0 +1,17 @@
+{
+    "name": "@cmumaps/db",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "index.ts",
+    "scripts": {
+        "generate": "prisma generate"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.4.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.24",
+        "typescript": "^5.8.2",
+        "prisma": "^6.4.1"
+    }
+}

@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { Server } from "socket.io";
 import { clerkMiddleware } from "@clerk/express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@cmumaps/db";
 import http from "http";
 
 import buildingRoutes from "./routes/buildingRoutes";
@@ -17,7 +17,6 @@ import roomRoutes from "./routes/roomRoutes";
 import poiRoutes from "./routes/poiRoutes";
 import eventRoutes from "./routes/eventRoutes";
 
-export const prisma = new PrismaClient();
 const app = express();
 app.use(
   cors({
