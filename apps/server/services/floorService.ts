@@ -14,7 +14,7 @@ import {
   geoCoordsToPdfCoords,
   geoPolygonToPdfPolygon,
 } from "../utils/coordinates";
-import { prisma } from "../index";
+import { prisma } from "@cmumaps/db";
 
 export const floorService = {
   getFloorGraph: async (floorCode: string, placement: Placement) => {

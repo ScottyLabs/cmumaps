@@ -5,7 +5,7 @@ import {
   extractFloorLevel,
 } from "@cmumaps/common";
 
-import { prisma } from "../index";
+import { prisma } from "@cmumaps/db";
 
 import {
   pdfCoordsToGeoCoords,

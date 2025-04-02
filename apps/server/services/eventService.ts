@@ -1,5 +1,5 @@
 import { EventResponse } from "@cmumaps/common";
-import { prisma } from "..";
+import { prisma } from "@cmumaps/db";
 
 export const eventService = {
   async getEventsByTimestamp(

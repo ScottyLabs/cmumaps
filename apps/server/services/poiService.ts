@@ -1,5 +1,5 @@
 import type { PoiInfo, PoiType } from "@cmumaps/common";
-import { prisma } from "../index";
+import { prisma } from "@cmumaps/db";
 
 export const poiService = {
   createPoi: async (floorCode: string, poiId: string, poiInfo: PoiInfo) => {
