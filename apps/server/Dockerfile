@@ -37,7 +37,7 @@ RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 
 # Generate Prisma Client
-RUN cd apps/server && pnpm prisma generate
+RUN cd packages/db && pnpm prisma generate
 
 RUN pnpm turbo build --filter=@cmumaps/server...
 RUN pnpm prune --prod --no-optional
