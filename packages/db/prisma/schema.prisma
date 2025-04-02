@@ -4,7 +4,7 @@ generator client {
 }
 
 generator pyClient {
-  provider             = "prisma-client-js"
+  provider             = "prisma-client-py"
   recursive_type_depth = "-1"
 }
 

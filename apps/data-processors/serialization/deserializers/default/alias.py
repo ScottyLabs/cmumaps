@@ -32,7 +32,7 @@ if __name__ == "__main__":
 async def create_alias(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "searchMap.json"
+    file_path = "json/searchMap.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 

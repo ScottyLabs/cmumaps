@@ -30,7 +30,7 @@ async def drop_node_table():
 
 
 def get_outside_rooms():
-    with open("floor_plan/outside/outside-1-graph.json", "r") as file:
+    with open("json/outside-graph.json", "r") as file:
         outside_data = json.load(file)
 
     outside_rooms = [outsideId for outsideId in outside_data]
@@ -40,7 +40,7 @@ def get_outside_rooms():
 async def create_nodes(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "all_graph.json"
+    file_path = "json/all_graph.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 
@@ -69,7 +69,7 @@ async def create_nodes(target_building=None, target_floor=None):
             node["roomId"] = roomId
 
         node_data.append(node)
-    
+
     # if target_building and/or target_floor specified
     for node in node_data:
         if target_building or target_floor:

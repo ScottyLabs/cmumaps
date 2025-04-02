@@ -31,13 +31,13 @@ async def create_floor(target_building=None, target_floor=None):
 
     floors_data = []
 
-    with open("buildings.json", "r") as file:
+    with open("json/buildings.json", "r") as file:
         buildings = json.load(file)
 
-    with open("placements.json", "r") as file:
+    with open("json/placements.json", "r") as file:
         data = json.load(file)
 
-    with open("floorCenters.json", "r") as file:
+    with open("json/floorCenters.json", "r") as file:
         floor_centers = json.load(file)
 
     for buildingCode in data:
