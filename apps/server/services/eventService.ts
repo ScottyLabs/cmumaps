@@ -6,9 +6,9 @@ export const eventService = {
     timestamp: number,
     limit: number,
   ): Promise<EventResponse> {
-    const dbEvents = await prisma.eventOccurrences.findMany({
+    const dbEvents = await prisma.eventOccurrence.findMany({
       where: { endTime: { gte: new Date(timestamp) } },
-      include: { Events: true, Locations: true },
+      include: { event: true, location: true },
       orderBy: [
         { startTime: "asc" },
         { endTime: "asc" },
@@ -19,11 +19,11 @@ export const eventService = {
 
     const events = dbEvents.map((dbEvent) => ({
       id: dbEvent.eventOccurrenceId,
-      name: dbEvent.Events.title,
-      description: dbEvent.Events.description,
+      name: dbEvent.event.title,
+      description: dbEvent.event.description,
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
-      location: dbEvent.Locations.locationName,
+      location: dbEvent.location.locationName,
     }));
     const prevEvent = events[0];
     const nextEvent = events[limit - 1];
@@ -36,7 +36,7 @@ export const eventService = {
     curEndTime: number,
     limit: number,
   ): Promise<EventResponse> {
-    const dbEvents = await prisma.eventOccurrences.findMany({
+    const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         OR: [
           { startTime: { gt: new Date(curStartTime) } },
@@ -58,7 +58,7 @@ export const eventService = {
           },
         ],
       },
-      include: { Events: true, Locations: true },
+      include: { event: true, location: true },
       orderBy: [
         { startTime: "asc" },
         { endTime: "asc" },
@@ -69,11 +69,11 @@ export const eventService = {
 
     const events = dbEvents.map((dbEvent) => ({
       id: dbEvent.eventOccurrenceId,
-      name: dbEvent.Events.title,
-      description: dbEvent.Events.description,
+      name: dbEvent.event.title,
+      description: dbEvent.event.description,
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
-      location: dbEvent.Locations.locationName,
+      location: dbEvent.location.locationName,
     }));
     const prevEvent = events[0];
     const nextEvent = events[limit - 1];
@@ -86,7 +86,7 @@ export const eventService = {
     curEndTime: number,
     limit: number,
   ): Promise<EventResponse> {
-    const dbEvents = await prisma.eventOccurrences.findMany({
+    const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         OR: [
           { startTime: { lt: new Date(curStartTime) } },
@@ -108,7 +108,7 @@ export const eventService = {
           },
         ],
       },
-      include: { Events: true, Locations: true },
+      include: { event: true, location: true },
       orderBy: [
         { startTime: "desc" },
         { endTime: "desc" },
@@ -119,11 +119,11 @@ export const eventService = {
 
     const events = dbEvents.map((dbEvent) => ({
       id: dbEvent.eventOccurrenceId,
-      name: dbEvent.Events.title,
-      description: dbEvent.Events.description,
+      name: dbEvent.event.title,
+      description: dbEvent.event.description,
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
-      location: dbEvent.Locations.locationName,
+      location: dbEvent.location.locationName,
     }));
     const prevEvent = events[limit - 1];
     const nextEvent = events[0];
