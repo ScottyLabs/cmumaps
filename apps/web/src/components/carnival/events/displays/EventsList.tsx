@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
+import EventDisplay from "@/components/carnival/events/displays/Event";
 import {
   throttledHandleScroll,
   throttleFetchPrevious,
@@ -54,8 +55,6 @@ const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
   }
 
   const events = data.pages.map((page) => page.events).flat();
-  console.log(events);
-
   return (
     <div
       className="flex flex-col overflow-auto"
@@ -66,9 +65,9 @@ const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
       {events.map((event) => (
         <div
           key={event.id}
-          className="my-2 h-12 rounded border border-blue-500 bg-gray-100 p-2"
+          className="my-2 rounded border border-blue-500 bg-gray-100 p-2"
         >
-          {event.name}
+          <EventDisplay event={event} />
         </div>
       ))}
     </div>
