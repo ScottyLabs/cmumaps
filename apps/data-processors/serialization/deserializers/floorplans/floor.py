@@ -1,7 +1,7 @@
 # Script to populate the Floor table of the database using placements.json
 # Precondition: Building table must be populated
 # excludes outside
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 
@@ -31,13 +31,13 @@ async def create_floor(target_building=None, target_floor=None):
 
     floors_data = []
 
-    with open("json/buildings.json", "r") as file:
+    with open("json/floorplans/buildings.json", "r") as file:
         buildings = json.load(file)
 
-    with open("json/placements.json", "r") as file:
+    with open("json/floorplans/placements.json", "r") as file:
         data = json.load(file)
 
-    with open("json/floorCenters.json", "r") as file:
+    with open("json/floorplans/floorCenters.json", "r") as file:
         floor_centers = json.load(file)
 
     for buildingCode in data:

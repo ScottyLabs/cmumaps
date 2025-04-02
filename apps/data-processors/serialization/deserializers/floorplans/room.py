@@ -1,6 +1,6 @@
 # Script to populate the Rooms table
 # skip empty buildings and outside
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 async def create_rooms(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "json/floorPlanMap.json"
+    file_path = "json/floorplans/floorPlanMap.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 

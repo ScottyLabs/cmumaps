@@ -1,5 +1,5 @@
 # Script to populate the Building table of the database using buildings.json
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 
@@ -31,7 +31,7 @@ async def create_building():
 
     buildings_data = []
 
-    with open("json/buildings.json", "r") as file:
+    with open("json/floorplans/buildings.json", "r") as file:
         data = json.load(file)
     # Iterate through all buildings
     for buildingCode in data:

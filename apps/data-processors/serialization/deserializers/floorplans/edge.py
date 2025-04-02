@@ -2,7 +2,7 @@
 # excludes outside, neigbors who are missing in node or out node,
 # edges whose in node or out node are missing a roomId
 # python scripts/json-to-database/edge.py
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 
@@ -29,7 +29,7 @@ async def drop_edge_table():
 
 
 def get_outside_rooms():
-    with open("json/outside-graph.json", "r") as file:
+    with open("json/floorplans/outside-graph.json", "r") as file:
         outside_data = json.load(file)
 
     outside_rooms = [outsideId for outsideId in outside_data]
@@ -39,7 +39,7 @@ def get_outside_rooms():
 async def create_edges(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "json/all_graph.json"
+    file_path = "json/floorplans/all_graph.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 
@@ -77,17 +77,19 @@ async def create_edges(target_building=None, target_floor=None):
                 target_building,
                 target_floor,
             )
-            target_nodes = [node["nodeId"] for node in nodes]  # Extract nodeId values
+            # Extract nodeId values
+            target_nodes = [node["nodeId"] for node in nodes]
             if node["inNodeId"] in target_nodes or node["outNodeId"] in target_nodes:
                 target_edges.append(node)
 
             edge_data = target_edges
 
-    # sometimes will get prisma.engine.errors.UnprocessableEntityError if not populate in batches
+    # sometimes will get prisma.engine.errors.UnprocessableEntityError
+    # if not populate in batches
     batch_size = 30000
 
     for i in range(0, len(edge_data), batch_size):
-        batch = edge_data[i : i + batch_size]  # Get current batch
+        batch = edge_data[i : i + batch_size]
 
         async with prisma.tx() as tx:
             await tx.edge.create_many(data=batch)

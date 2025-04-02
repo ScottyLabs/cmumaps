@@ -1,16 +1,14 @@
 # Script to populate Node table of the database using all_graph.json
 # skip outside nodes
 # python scripts/json-to-database/node.py
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
-import os
 
 prisma = Prisma()
 
+
 # Drop and populate Node table
-
-
 async def drop_node_table():
     await prisma.connect()
 
@@ -30,7 +28,7 @@ async def drop_node_table():
 
 
 def get_outside_rooms():
-    with open("json/outside-graph.json", "r") as file:
+    with open("json/floorplans/outside-graph.json", "r") as file:
         outside_data = json.load(file)
 
     outside_rooms = [outsideId for outsideId in outside_data]
@@ -40,7 +38,7 @@ def get_outside_rooms():
 async def create_nodes(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "json/all_graph.json"
+    file_path = "json/floorplans/all_graph.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 

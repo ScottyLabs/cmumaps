@@ -1,6 +1,6 @@
 # Script that resets (drops) every model of one floor and repopulates it
 # python scripts/json-to-database/reset_floor.py <buildingCode> <floorLevel>
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import sys
 from edge import create_edges
