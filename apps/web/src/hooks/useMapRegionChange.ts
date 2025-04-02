@@ -10,7 +10,6 @@ import {
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import { setInfoCardStatus, CardStates } from "@/store/features/cardSlice";
 import {
   focusFloor,
   setShowRoomNames,

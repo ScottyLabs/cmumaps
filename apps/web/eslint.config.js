@@ -31,6 +31,11 @@ export default defineConfig([
       ],
       curly: ["error", "all"],
     },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
   },
   { ignores: ["dist/**", "node_modules/**"] },
 ]);
