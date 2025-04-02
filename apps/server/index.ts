@@ -1,21 +1,21 @@
-import express from "express";
-import cors from "cors";
-import { Server } from "socket.io";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "@cmumaps/db";
+import cors from "cors";
+import express from "express";
 import http from "http";
+import { Server } from "socket.io";
 
-import buildingRoutes from "./routes/buildingRoutes";
-import { notFoundHandler } from "./middleware/notFoundHandler";
-import nodeRoutes from "./routes/nodeRoutes";
-import { WebSocketService } from "./services/webSocketService";
 import { checkAuth, socketAuth } from "./middleware/authMiddleware";
+import { notFoundHandler } from "./middleware/notFoundHandler";
 import { requireSocketId } from "./middleware/socketIdMiddleware";
-import floorRoutes from "./routes/floorRoutes";
+import buildingRoutes from "./routes/buildingRoutes";
 import edgeRoutes from "./routes/edgeRoutes";
-import roomRoutes from "./routes/roomRoutes";
-import poiRoutes from "./routes/poiRoutes";
 import eventRoutes from "./routes/eventRoutes";
+import floorRoutes from "./routes/floorRoutes";
+import nodeRoutes from "./routes/nodeRoutes";
+import poiRoutes from "./routes/poiRoutes";
+import roomRoutes from "./routes/roomRoutes";
+import { WebSocketService } from "./services/webSocketService";
 
 const app = express();
 app.use(

@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import { edgeService } from "../services/edgeService";
+
 import { handleControllerError } from "../errors/errorHandler";
 import { webSocketService } from "../index";
+import { edgeService } from "../services/edgeService";
 
 export const edgeController = {
   createEdge: async (req: Request, res: Response) => {
@@ -46,7 +47,7 @@ export const edgeController = {
       webSocketService.broadcastToUserFloor(
         socketId,
         "create-edge-across-floors",
-        payload
+        payload,
       );
 
       const inPayload = {
@@ -57,7 +58,7 @@ export const edgeController = {
       webSocketService.broadcastToFloor(
         outFloorCode,
         "create-edge-across-floors",
-        inPayload
+        inPayload,
       );
       res.json(null);
     } catch (error) {
@@ -75,7 +76,7 @@ export const edgeController = {
       webSocketService.broadcastToUserFloor(
         socketId,
         "delete-edge-across-floors",
-        payload
+        payload,
       );
 
       const inPayload = {
@@ -86,7 +87,7 @@ export const edgeController = {
       webSocketService.broadcastToFloor(
         outFloorCode,
         "delete-edge-across-floors",
-        inPayload
+        inPayload,
       );
       res.json(null);
     } catch (error) {

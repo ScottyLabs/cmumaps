@@ -1,5 +1,6 @@
 import { Buildings, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 import { prisma } from "@cmumaps/db";
+
 import { BuildingError } from "../errors/error";
 
 export const buildingService = {

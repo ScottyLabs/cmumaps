@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 export const requireSocketId = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const socketId = req.header("X-Socket-ID");
 

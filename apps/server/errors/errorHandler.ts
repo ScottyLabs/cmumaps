@@ -3,7 +3,7 @@ import type { Response } from "express";
 export const handleControllerError = (
   res: Response,
   error: unknown,
-  operation: string
+  operation: string,
 ) => {
   console.error(`Error ${operation}`, error);
   res.status(500).json({

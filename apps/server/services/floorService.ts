@@ -10,11 +10,12 @@ import type {
   RoomType,
 } from "@cmumaps/common";
 import { extractBuildingCode, extractFloorLevel } from "@cmumaps/common";
+import { prisma } from "@cmumaps/db";
+
 import {
   geoCoordsToPdfCoords,
   geoPolygonToPdfPolygon,
 } from "../utils/coordinates";
-import { prisma } from "@cmumaps/db";
 
 export const floorService = {
   getFloorGraph: async (floorCode: string, placement: Placement) => {

@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import { poiService } from "../services/poiService";
+
 import { handleControllerError } from "../errors/errorHandler";
 import { webSocketService } from "../index";
+import { poiService } from "../services/poiService";
 
 export const poiController = {
   createPoi: async (req: Request, res: Response) => {

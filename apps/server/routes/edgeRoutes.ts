@@ -1,4 +1,5 @@
 import express from "express";
+
 import { edgeController } from "../controllers/edgeController";
 
 const edgeRouter = express.Router();

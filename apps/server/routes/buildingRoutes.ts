@@ -1,4 +1,5 @@
 import express from "express";
+
 import { buildingController } from "../controllers/buildingController";
 import { checkAuth } from "../middleware/authMiddleware";
 

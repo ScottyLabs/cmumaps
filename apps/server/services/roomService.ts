@@ -4,7 +4,6 @@ import {
   extractBuildingCode,
   extractFloorLevel,
 } from "@cmumaps/common";
-
 import { prisma } from "@cmumaps/db";
 
 import {

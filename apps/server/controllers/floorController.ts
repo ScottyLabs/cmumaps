@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
-import { floorService } from "../services/floorService";
+
 import { handleControllerError } from "../errors/errorHandler";
+import { floorService } from "../services/floorService";
 
 export const floorController = {
   getFloorGraph: async (req: Request, res: Response) => {

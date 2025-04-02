@@ -1,8 +1,9 @@
 import type { Request, Response } from "express";
-import { roomService } from "../services/roomService";
+
 import { handleControllerError } from "../errors/errorHandler";
-import { floorService } from "../services/floorService";
 import { webSocketService } from "../index";
+import { floorService } from "../services/floorService";
+import { roomService } from "../services/roomService";
 
 export const roomController = {
   createRoom: async (req: Request, res: Response) => {
@@ -17,7 +18,7 @@ export const roomController = {
         roomId,
         roomNodes,
         roomInfo,
-        placement
+        placement,
       );
       const payload = { roomId, roomNodes, roomInfo };
       webSocketService.broadcastToUserFloor(socketId, "create-room", payload);
