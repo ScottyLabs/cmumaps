@@ -3,6 +3,11 @@ generator client {
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
+generator pyClient {
+  provider             = "prisma-client-js"
+  recursive_type_depth = "-1"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -93,44 +98,44 @@ model Poi {
   node   Node   @relation(fields: [nodeId], references: [nodeId])
 }
 
-model EventOccurrences {
-  eventOccurrenceId String    @id
+model EventOccurrence {
+  eventOccurrenceId String   @id
   eventId           String
   startTime         DateTime
   endTime           DateTime
   locationId        String
-  Events            Events    @relation(fields: [eventId], references: [eventId])
-  Locations         Locations @relation(fields: [locationId], references: [locationId])
+  event             Event    @relation(fields: [eventId], references: [eventId])
+  location          Location @relation(fields: [locationId], references: [locationId])
 }
 
-model EventTracks {
+model EventTrack {
   eventId   String
   trackName String
-  Events    Events @relation(fields: [eventId], references: [eventId])
-  Tracks    Tracks @relation(fields: [trackName], references: [trackName])
+  event     Event  @relation(fields: [eventId], references: [eventId])
+  track     Track  @relation(fields: [trackName], references: [trackName])
 
   @@id([eventId, trackName])
 }
 
-model Events {
-  eventId          String             @id
+model Event {
+  eventId          String            @id
   title            String
   description      String
   req              String?
   tags             String[]
-  EventOccurrences EventOccurrences[]
-  EventTracks      EventTracks[]
+  eventOccurrences EventOccurrence[]
+  eventTracks      EventTrack[]
 }
 
-model Locations {
-  locationId       String             @id
+model Location {
+  locationId       String            @id
   locationName     String
   latitude         Float?
   longitude        Float?
-  EventOccurrences EventOccurrences[]
+  eventOccurrences EventOccurrence[]
 }
 
-model Tracks {
-  trackName   String        @id
-  EventTracks EventTracks[]
+model Track {
+  trackName   String       @id
+  eventTracks EventTrack[]
 }
