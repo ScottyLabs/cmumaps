@@ -7,8 +7,12 @@ export interface EventType {
   location: string;
 }
 
-export interface EventResponse {
+export interface EventsResponse {
   events: EventType[];
   prevEvent?: EventType;
   nextEvent?: EventType;
+}
+
+export interface EventResponse {
+  event: EventType;
 }

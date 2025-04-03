@@ -1,13 +1,35 @@
-import { EventResponse } from "@cmumaps/common";
+import { EventResponse, EventsResponse } from "@cmumaps/common";
 import { prisma } from "@cmumaps/db";
 
 export const eventService = {
+  async getEventById(eventId: string): Promise<EventResponse> {
+    const dbEvent = await prisma.eventOccurrence.findUnique({
+      where: { eventOccurrenceId: eventId },
+      include: { event: true, location: true },
+    });
+
+    if (!dbEvent) {
+      throw new Error("Event not found");
+    }
+
+    const event = {
+      id: dbEvent.eventOccurrenceId,
+      name: dbEvent.event.title,
+      description: dbEvent.event.description,
+      startTime: dbEvent.startTime,
+      endTime: dbEvent.endTime,
+      location: dbEvent.location.locationName,
+    };
+
+    return { event };
+  },
+
   async getEventsByTimestamp(
     timestamp: number,
     limit: number,
     filters: string[],
     reqs: string[],
-  ): Promise<EventResponse> {
+  ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         endTime: { gte: new Date(timestamp) },
@@ -46,7 +68,7 @@ export const eventService = {
     limit: number,
     filters: string[],
     reqs: string[],
-  ): Promise<EventResponse> {
+  ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         event: {
@@ -102,7 +124,7 @@ export const eventService = {
     limit: number,
     filters: string[],
     reqs: string[],
-  ): Promise<EventResponse> {
+  ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         event: {
