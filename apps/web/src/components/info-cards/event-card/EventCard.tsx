@@ -23,7 +23,7 @@ const EventCard = ({ eventId }: Props) => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-auto">
       <InfoCardImage
         url={"/imgs/carnival/default.png"}
         alt={"Spring Carnival Image"}

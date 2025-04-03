@@ -70,7 +70,7 @@ export const eventService = {
   ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
-        endTime: { gte: new Date(timestamp) },
+        startTime: { gte: new Date(timestamp) },
         event: {
           OR: [{ req: { in: reqs } }, { req: null }],
           eventTracks: { some: { track: { trackName: { in: tracks } } } },
