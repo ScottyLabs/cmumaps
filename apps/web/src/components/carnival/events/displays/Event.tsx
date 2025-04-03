@@ -1,10 +1,14 @@
 import { EventType } from "@cmumaps/common";
 
+import { useNavigate } from "react-router";
+
 interface Props {
   event: EventType;
 }
 
-const EventDisplay = ({ event }: Props) => {
+const Event = ({ event }: Props) => {
+  const navigate = useNavigate();
+
   const formatTime = (date: Date) => {
     return new Date(date).toLocaleString("en-US", {
       hour: "2-digit",
@@ -30,7 +34,12 @@ const EventDisplay = ({ event }: Props) => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div
+      className="flex flex-col"
+      onClick={() => {
+        navigate(`/events/${event.id}`);
+      }}
+    >
       <div className="text-lg font-medium">{event.name}</div>
       <div className="text-sm text-black">Date: {renderDate(event)}</div>
       <div className="text-sm text-black">
@@ -41,4 +50,4 @@ const EventDisplay = ({ event }: Props) => {
   );
 };
 
-export default EventDisplay;
+export default Event;

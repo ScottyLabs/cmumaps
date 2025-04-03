@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-import EventDisplay from "@/components/carnival/events/displays/Event";
+import Event from "@/components/carnival/events/displays/Event";
 import {
   throttledHandleScroll,
   throttleFetchPrevious,
@@ -63,11 +63,8 @@ const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
     >
       {/* Display your items directly without the InfiniteScroll components */}
       {events.map((event) => (
-        <div
-          key={event.id}
-          className="my-2 rounded-lg bg-gray-200 p-3"
-        >
-          <EventDisplay event={event} />
+        <div key={event.id} className="my-2 rounded-lg bg-gray-200 p-3">
+          <Event event={event} />
         </div>
       ))}
     </div>
