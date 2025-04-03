@@ -1,18 +1,11 @@
-import { useEffect } from "react";
-
 import booths from "@/assets/carnival/json/booth.json";
 import useIsMobile from "@/hooks/useIsMobile";
-import { CardStates, setSnapPoints } from "@/store/features/cardSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { CardStates } from "@/store/features/cardSlice";
+import { useAppSelector } from "@/store/hooks";
 
 const BoothCarousel = () => {
-  const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const cardStatus = useAppSelector((state) => state.card.cardStatus);
-
-  useEffect(() => {
-    dispatch(setSnapPoints([142, 350, screen.availHeight]));
-  }, [dispatch]);
 
   if (Object.keys(booths).length === 0) {
     return <></>;
@@ -49,9 +42,11 @@ const BoothCarousel = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="flex flex-col overflow-hidden p-4">
       <h3 className="mb-2 font-bold">All Booths</h3>
-      {(!isMobile || cardStatus === CardStates.EXPANDED) && renderBooths()}
+      <div className="flex flex-col overflow-y-scroll scroll-smooth">
+        {(!isMobile || cardStatus === CardStates.EXPANDED) && renderBooths()}
+      </div>
     </div>
   );
 };

@@ -11,11 +11,11 @@ const BoothCard = () => {
   // set the mid snap point
   // TODO: should change based on if has food eateries
   useEffect(() => {
-    dispatch(setSnapPoints([170, 300, screen.availHeight]));
+    dispatch(setSnapPoints([170, 350, screen.availHeight]));
   }, [dispatch]);
 
   return (
-    <div className="max-h-screen overflow-y-auto scroll-smooth">
+    <div className="flex flex-col overflow-hidden">
       <InfoCardImage
         url={"/imgs/carnival/booth.png"}
         alt={"Spring Carnival Image"}

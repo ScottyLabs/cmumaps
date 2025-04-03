@@ -52,6 +52,8 @@ const DraggableSheet = ({ children }: Props) => {
       return;
     }
 
+    controls.set({ height: window.innerHeight });
+
     if (snapPoints[snapIndex]) {
       const newPos = snapPoints[snapIndex] - info.offset.y;
       const newPosAdj =
@@ -92,7 +94,7 @@ const DraggableSheet = ({ children }: Props) => {
         <div className="flex h-12 items-center justify-center rounded-t-xl">
           <div className="h-1 w-12 rounded-full bg-black" />
         </div>
-        <div>{children}</div>
+        {children}
       </motion.div>
     </div>
   );

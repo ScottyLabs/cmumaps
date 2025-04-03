@@ -1,5 +1,6 @@
 import Event from "@/components/carnival/events/displays/Event";
 import { useSearchQuery } from "@/store/features/api/apiSlice";
+import { useAppSelector } from "@/store/hooks";
 
 interface Props {
   searchQuery: string;
@@ -7,8 +8,9 @@ interface Props {
 
 const SearchResults = ({ searchQuery }: Props) => {
   const { data } = useSearchQuery(searchQuery);
+  const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
 
-  if (!data || searchQuery.length === 0) {
+  if (!data || searchQuery.length === 0 || !isSearchOpen) {
     return <></>;
   }
 
