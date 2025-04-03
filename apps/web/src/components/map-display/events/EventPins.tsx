@@ -8,7 +8,7 @@ import { useAppSelector } from "@/store/hooks";
 const EventPins = () => {
   const { eventId } = useLocationParams();
 
-  const [timestamp, setTimestamp] = useState(Date.now() + 12 * 60 * 60 * 1000);
+  const [timestamp, setTimestamp] = useState(Date.now());
   useEffect(() => {
     const interval = setInterval(() => {
       setTimestamp(Date.now());

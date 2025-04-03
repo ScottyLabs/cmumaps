@@ -7,6 +7,7 @@ interface Params {
   floor?: string;
   roomName?: string;
   eventId?: string;
+  carnivalEvent?: "booth" | "buggy" | "mobot";
   isCardOpen: boolean;
 }
 
@@ -17,6 +18,16 @@ const useLocationParams = (): Params => {
   if (path.split("/")?.[1] === "events") {
     return {
       eventId: path.split("/")?.[2],
+      isCardOpen: true,
+    };
+  }
+
+  if (path.split("/")?.[1] === "carnival") {
+    return {
+      carnivalEvent: path.split("/")?.[2]?.toLowerCase() as
+        | "booth"
+        | "buggy"
+        | "mobot",
       isCardOpen: true,
     };
   }

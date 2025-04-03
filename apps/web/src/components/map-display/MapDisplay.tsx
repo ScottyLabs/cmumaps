@@ -8,6 +8,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+import BoothPin from "@/components/carnival/booth/BoothPin";
 import BuggyPath from "@/components/carnival/buggy/BuggyPath";
 import {
   CAMERA_BOUNDARY,
@@ -121,6 +122,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       <FloorPlansOverlay />
       <BuggyPath />
       <EventPins />
+      <BoothPin />
     </Map>
   );
 };

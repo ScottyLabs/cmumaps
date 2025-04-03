@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import BoothCarousel from "@/components/carnival/booth/BoothCarousel";
+import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import { setSnapPoints } from "@/store/features/cardSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -15,6 +16,10 @@ const BoothCard = () => {
 
   return (
     <div className="max-h-screen overflow-y-auto scroll-smooth">
+      <InfoCardImage
+        url={"/imgs/carnival/booth.png"}
+        alt={"Spring Carnival Image"}
+      />
       <p className="m-5 text-sm font-medium">
         Booth is one of the biggest showpieces of Spring Carnival. Student
         organizations build multi-story structures around our chosen theme, such

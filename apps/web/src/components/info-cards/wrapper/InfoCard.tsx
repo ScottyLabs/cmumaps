@@ -1,3 +1,4 @@
+import CarnivalCard from "@/components/info-cards/event-card/CarnivalCard";
 import EventCard from "@/components/info-cards/event-card/EventCard";
 import RoomCard from "@/components/info-cards/room-card/RoomCard";
 import CardWrapper from "@/components/info-cards/wrapper/CardWrapper";
@@ -10,7 +11,8 @@ interface Props {
 }
 
 const InfoCard = ({ map }: Props) => {
-  const { buildingCode, roomName, eventId } = useLocationParams();
+  const { buildingCode, roomName, eventId, carnivalEvent } =
+    useLocationParams();
 
   const renderCard = () => {
     if (roomName) {
@@ -19,6 +21,8 @@ const InfoCard = ({ map }: Props) => {
       return <BuildingCard map={map} />;
     } else if (eventId) {
       return <EventCard eventId={eventId} />;
+    } else if (carnivalEvent) {
+      return <CarnivalCard carnivalEvent={carnivalEvent} />;
     } else {
       return <></>;
     }
