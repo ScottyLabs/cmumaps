@@ -54,7 +54,7 @@ USER server
 
 COPY --from=builder app/apps/server/package.json .
 COPY --from=builder --chown=server:nodejs app/apps/server/dist ./apps/server/dist
-COPY --from=builder --chown=server:nodejs app/apps/server/node_modules/prisma /app/.prisma/client
+COPY --from=builder --chown=server:nodejs app/packages/db/node_modules/prisma /app/.prisma/client
 
 
 EXPOSE $PORT
