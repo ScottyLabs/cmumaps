@@ -1,4 +1,4 @@
-import { Buildings, GeoRooms } from "@cmumaps/common";
+import { Buildings, EventType, GeoRooms } from "@cmumaps/common";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const getClerkToken = async () => {
@@ -29,7 +29,16 @@ export const apiSlice = createApi({
     getFloorRooms: builder.query<GeoRooms, string>({
       query: (floorCode) => `/floors/${floorCode}/floorplan`,
     }),
+    search: builder.query<EventType[], string>({
+      query: (searchQuery) => ({
+        url: "https://lzy9qzekt7.execute-api.us-east-2.amazonaws.com/default/carnival-search",
+        params: {
+          query: searchQuery,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetBuildingsQuery, useGetFloorRoomsQuery } = apiSlice;
+export const { useGetBuildingsQuery, useGetFloorRoomsQuery, useSearchQuery } =
+  apiSlice;

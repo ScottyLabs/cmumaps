@@ -3,11 +3,12 @@ import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import searchIcon from "@/assets/icons/search.svg";
+import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
 import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-const SearchInput = () => {
+const Searchbar = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -88,12 +89,15 @@ const SearchInput = () => {
   );
 
   return (
-    <div className="mb-2 flex w-full items-center rounded bg-white">
-      {renderSearchIcon()}
-      {renderInput()}
-      {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
+    <div>
+      <div className="mb-2 flex w-full items-center rounded bg-white">
+        {renderSearchIcon()}
+        {renderInput()}
+        {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
+      </div>
+      <SearchResults searchQuery={searchQuery} />
     </div>
   );
 };
 
-export default SearchInput;
+export default Searchbar;
