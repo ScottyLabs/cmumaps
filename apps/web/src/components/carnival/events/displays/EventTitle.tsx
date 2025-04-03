@@ -34,7 +34,10 @@ const EventTitle = ({ event, isOpen, handleClick }: Props) => {
   };
 
   return (
-    <div className="flex flex-row justify-between" onClick={handleClick}>
+    <div
+      className="flex cursor-pointer flex-row justify-between"
+      onClick={handleClick}
+    >
       <div className="flex flex-col">
         <div className="text-lg font-medium">{event.name}</div>
         <div className="text-sm text-black">Date: {renderDate(event)}</div>
