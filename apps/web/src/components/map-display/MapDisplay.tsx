@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 
 import BoothPin from "@/components/carnival/booth/BoothPin";
 import BuggyPath from "@/components/carnival/buggy/BuggyPath";
+import BuggyPin from "@/components/carnival/buggy/BuggyPin";
 import {
   CAMERA_BOUNDARY,
   INITIAL_REGION,
@@ -123,6 +124,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       <BuggyPath />
       <EventPins />
       <BoothPin />
+      <BuggyPin />
     </Map>
   );
 };
