@@ -1,51 +1,31 @@
 import { EventType } from "@cmumaps/common";
 
-import { useNavigate } from "react-router";
+import { useState } from "react";
+
+import EventDisplay from "@/components/carnival/events/displays/EventBody";
+import EventTitle from "@/components/carnival/events/displays/EventTitle";
 
 interface Props {
   event: EventType;
 }
 
 const Event = ({ event }: Props) => {
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const formatTime = (date: Date) => {
-    return new Date(date).toLocaleString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const handleClick = () => {
+    setIsOpen(!isOpen);
   };
 
-  const renderDate = (event: EventType) => {
-    if (
-      new Date(event.startTime).getDate() == new Date(event.endTime).getDate()
-    ) {
-      return formatDate(event.startTime);
-    } else {
-      return `${formatDate(event.startTime)} - ${formatDate(event.endTime)}`;
-    }
-  };
-
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-    });
+  const renderTrigger = () => {
+    return (
+      <EventTitle event={event} isOpen={isOpen} handleClick={handleClick} />
+    );
   };
 
   return (
-    <div
-      className="flex flex-col"
-      onClick={() => {
-        // navigate(`/events/${event.id}`);
-      }}
-    >
-      <div className="text-lg font-medium">{event.name}</div>
-      <div className="text-sm text-black">Date: {renderDate(event)}</div>
-      <div className="text-sm text-black">
-        Time: {formatTime(event.startTime)} - {formatTime(event.endTime)}
-      </div>
-      <div className="text-sm text-black">Location: {event.location}</div>
+    <div className="flex flex-col">
+      {renderTrigger()}
+      {isOpen && <EventDisplay event={event} />}
     </div>
   );
 };
