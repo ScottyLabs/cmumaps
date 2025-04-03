@@ -43,7 +43,9 @@ const EventsFilter = ({ isDropdownOpen, setIsDropdownOpen }: Props) => {
   const renderRequirementsFilter = () => {
     const handleChange = (req: string) => {
       if (selectedReqs.includes(req)) {
-        dispatch(setSelectedReqs(selectedReqs.filter((req) => req !== req)));
+        dispatch(
+          setSelectedReqs(selectedReqs.filter((curReq) => curReq !== req)),
+        );
       } else {
         dispatch(setSelectedReqs([...selectedReqs, req]));
       }
