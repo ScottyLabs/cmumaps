@@ -30,9 +30,9 @@ const LoginModal = () => {
         <h2 className="text-2xl font-bold text-black">
           CMU Maps
         </h2>
-        <p className = "text-sm text-gray-500">CMU Maps is built and maintained by ScottyLabs. Find out more about us <a href = "https://www.scottylabs.org/" className="underline">here</a>. 
+        <p className = "text-sm text-gray-500">CMU Maps is built with ❤️ by ScottyLabs. Find out more about us <a href = "https://www.scottylabs.org/" className="underline">here</a>. 
         Your feedback is appreciated.</p>
-        <p className = "text-sm">You are currently logged out.</p>
+        <p className = "text-sm">Log in to see floor plans.</p>
 
         <div className="flex justify-between">
           <span className="text-sm w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 hover:bg-blue-200">
