@@ -8,12 +8,13 @@ export const eventService = {
     filters: string[],
     reqs: string[],
   ): Promise<EventResponse> {
-    console.log(reqs);
-
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         endTime: { gte: new Date(timestamp) },
-        event: { OR: [{ req: { in: reqs } }, { req: null }] },
+        event: {
+          OR: [{ req: { in: reqs } }, { req: null }],
+          eventTracks: { some: { track: { trackName: { in: filters } } } },
+        },
       },
       include: { event: true, location: true },
       orderBy: [
@@ -43,9 +44,15 @@ export const eventService = {
     curStartTime: number,
     curEndTime: number,
     limit: number,
+    filters: string[],
+    reqs: string[],
   ): Promise<EventResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
+        event: {
+          OR: [{ req: { in: reqs } }, { req: null }],
+          eventTracks: { some: { track: { trackName: { in: filters } } } },
+        },
         OR: [
           { startTime: { gt: new Date(curStartTime) } },
           {
@@ -93,9 +100,15 @@ export const eventService = {
     curStartTime: number,
     curEndTime: number,
     limit: number,
+    filters: string[],
+    reqs: string[],
   ): Promise<EventResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
+        event: {
+          OR: [{ req: { in: reqs } }, { req: null }],
+          eventTracks: { some: { track: { trackName: { in: filters } } } },
+        },
         OR: [
           { startTime: { lt: new Date(curStartTime) } },
           {
