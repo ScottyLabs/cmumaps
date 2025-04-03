@@ -9,7 +9,6 @@ const BoothCard = () => {
   const dispatch = useAppDispatch();
 
   // set the mid snap point
-  // TODO: should change based on if has food eateries
   useEffect(() => {
     dispatch(setSnapPoints([170, 350, screen.availHeight]));
   }, [dispatch]);
