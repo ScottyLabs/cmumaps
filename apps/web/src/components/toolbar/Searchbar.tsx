@@ -82,6 +82,7 @@ const Searchbar = () => {
       size={25}
       className="absolute right-3"
       onClick={() => {
+        setSearchQuery("");
         dispatch(setIsSearchOpen(false));
         navigate("/");
       }}
@@ -89,14 +90,14 @@ const Searchbar = () => {
   );
 
   return (
-    <div>
-      <div className="mb-2 flex w-full items-center rounded bg-white">
+    <>
+      <div className="mb-2 flex w-full items-center overflow-hidden rounded bg-white">
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
       </div>
       <SearchResults searchQuery={searchQuery} />
-    </div>
+    </>
   );
 };
 

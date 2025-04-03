@@ -7,8 +7,6 @@ interface Props {
 }
 
 const DesktopToolbar = ({ map }: Props) => {
-  console.log("DesktopToolbar");
-
   return (
     <div
       style={{ maxHeight: `calc(100vh - 2.5rem)` }}

@@ -23,7 +23,7 @@ const Event = ({ event }: Props) => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="my-2 flex flex-col rounded-lg bg-gray-200 p-3">
       {renderTrigger()}
       {isOpen && <EventDisplay event={event} />}
     </div>

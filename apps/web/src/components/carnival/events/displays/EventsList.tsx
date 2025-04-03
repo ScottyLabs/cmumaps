@@ -65,9 +65,7 @@ const EventsList = ({ timestamp }: Props) => {
     >
       {/* Display your items directly without the InfiniteScroll components */}
       {events.map((event) => (
-        <div key={event.id} className="my-2 rounded-lg bg-gray-200 p-3">
-          <Event event={event} />
-        </div>
+        <Event key={event.id} event={event} />
       ))}
     </div>
   );
