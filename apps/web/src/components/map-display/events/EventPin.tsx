@@ -1,5 +1,7 @@
 import { Annotation } from "mapkit-react";
 
+import { useNavigate } from "react-router";
+
 import eventPin from "@/assets/carnival/icons/ticket-booth-default.svg";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
 
@@ -8,11 +10,8 @@ interface Props {
 }
 
 const EventPin = ({ eventId }: Props) => {
+  const navigate = useNavigate();
   const { data, isFetching } = useGetEventQuery(eventId);
-
-  const handleSelect = () => {
-    console.log("event pin clicked");
-  };
 
   if (!data || !eventId || isFetching) {
     return <></>;
@@ -31,9 +30,13 @@ const EventPin = ({ eventId }: Props) => {
     <Annotation
       latitude={coordinate.latitude}
       longitude={coordinate.longitude}
-      onSelect={handleSelect}
+      onSelect={() => navigate(`/events/${eventId}`)}
     >
-      <img src={eventPin} alt="Event Pin" className="h-10 w-10" />
+      <img
+        src={eventPin}
+        alt="Event Pin"
+        className="h-10 w-10 cursor-pointer"
+      />
     </Annotation>
   );
 };

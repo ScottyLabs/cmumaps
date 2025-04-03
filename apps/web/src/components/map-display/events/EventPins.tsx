@@ -5,7 +5,8 @@ import { useGetCurrentEventQuery } from "@/store/features/api/eventApiSlice";
 import { useAppSelector } from "@/store/hooks";
 
 const EventPins = () => {
-  const [timestamp, setTimestamp] = useState(Date.now());
+  // 12 hours from now
+  const [timestamp, setTimestamp] = useState(Date.now() + 12 * 60 * 60 * 1000);
   useEffect(() => {
     const interval = setInterval(() => {
       setTimestamp(Date.now());
