@@ -39,7 +39,7 @@ const EventsFilter = ({
   const renderTypesFilter = () => {
     return (
       <button
-        className="flex cursor-pointer items-center rounded-lg bg-red-700 py-2 p-1 text-white"
+        className="flex cursor-pointer items-center rounded-lg bg-red-700 p-1 py-2 text-white"
         onClick={(e) => {
           e.stopPropagation();
           setIsDropdownOpen(!isDropdownOpen);
@@ -86,10 +86,12 @@ const EventsFilter = ({
 
   return (
     <>
-      {renderDropdown()}
-      <div className="flex items-center gap-3">
-        {renderTypesFilter()}
-        {renderRequirementsFilter()}
+      <div>
+        {renderDropdown()}
+        <div className="flex items-center gap-3">
+          {renderTypesFilter()}
+          {renderRequirementsFilter()}
+        </div>
       </div>
     </>
   );

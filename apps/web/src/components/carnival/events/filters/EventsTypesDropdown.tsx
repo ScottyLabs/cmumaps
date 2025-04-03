@@ -4,16 +4,13 @@ interface Props {
 }
 
 const eventTypes = [
-  "Alumni",
-  "Booth/Dog House",
-  "Buggy",
-  "Mobot",
-  "Performance",
-  "Tent",
+  "CMU Tradition",
+  "Food",
   "Awards/Celebration",
   "Exhibit/Tour",
-  "CMU Tradition",
-  "Open House",
+  "Health/Wellness",
+  "Alumni",
+  "Performance",
 ];
 
 const EventsTypesDropdown = ({ selectedTypes, setSelectedTypes }: Props) => {

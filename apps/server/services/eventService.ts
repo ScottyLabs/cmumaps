@@ -5,9 +5,16 @@ export const eventService = {
   async getEventsByTimestamp(
     timestamp: number,
     limit: number,
+    filters: string[],
+    reqs: string[],
   ): Promise<EventResponse> {
+    console.log(reqs);
+
     const dbEvents = await prisma.eventOccurrence.findMany({
-      where: { endTime: { gte: new Date(timestamp) } },
+      where: {
+        endTime: { gte: new Date(timestamp) },
+        event: { OR: [{ req: { in: reqs } }, { req: null }] },
+      },
       include: { event: true, location: true },
       orderBy: [
         { startTime: "asc" },
@@ -24,6 +31,7 @@ export const eventService = {
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
       location: dbEvent.location.locationName,
+      req: dbEvent.event.req,
     }));
     const prevEvent = events[0];
     const nextEvent = events[limit - 1];
