@@ -59,6 +59,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: prod-cmumaps-backend
+          service: cmumaps
           cluster: prod-scottylabs-cluster
           wait-for-service-stability: false
