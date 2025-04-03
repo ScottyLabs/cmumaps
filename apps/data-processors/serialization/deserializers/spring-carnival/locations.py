@@ -1,4 +1,4 @@
-# Script to populate Location table using data from the file carnival_events.json
+# Script to populate Location table using data from the file cmumaps-data/spring-carnival/carnival_events.json
 # python scripts/json-to-database-carnival/locations.py
 
 from prisma import Prisma  # type: ignore
@@ -14,7 +14,7 @@ async def create_locations():
 
     location_set = set()
 
-    with open("carnival_events.json", "r") as file:
+    with open("cmumaps-data/spring-carnival/carnival_events.json", "r") as file:
         data = json.load(file)
 
     location_data = []

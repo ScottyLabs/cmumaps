@@ -1,14 +1,14 @@
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
-}
+// generator client {
+//   provider      = "prisma-client-js"
+//   binaryTargets = ["native", "debian-openssl-3.0.x"]
+// }
 
 // Removing the Python client generator that's causing issues
 // If you need this generator, you'll need to install it in your Dockerfile
-// generator pyClient {
-//   provider             = "prisma-client-py"
-//   recursive_type_depth = "-1"
-// }
+generator pyClient {
+  provider             = "prisma-client-py"
+  recursive_type_depth = "-1"
+}
 
 datasource db {
   provider = "postgresql"

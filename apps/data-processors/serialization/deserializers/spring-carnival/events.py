@@ -1,4 +1,4 @@
-# Script to populate Event table using data from the file carnival_events.json
+# Script to populate Event table using data from the file cmumaps-data/spring-carnival/carnival_events.json
 # python scripts/json-to-database-carnival/events.py
 
 from prisma import Prisma  # type: ignore
@@ -42,7 +42,7 @@ async def create_events():
     events_data = []
     eventId_set = set()
 
-    with open("carnival_events.json", "r") as file:
+    with open("cmumaps-data/spring-carnival/carnival_events.json", "r") as file:
         data = json.load(file)
     # Iterate through all events
     for event in data:

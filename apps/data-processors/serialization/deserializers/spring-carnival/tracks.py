@@ -1,4 +1,4 @@
-# Script to populate Track table using data from the file carnival_events.json
+# Script to populate Track table using data from the file cmumaps-data/spring-carnival/carnival_events.json
 # Run this script first before events.py!
 # python scripts/json-to-database-carnival/tracks.py
 
@@ -30,7 +30,7 @@ async def create_tracks():
 
     tracks_set = set()
 
-    with open("carnival_events.json", "r") as file:
+    with open("cmumaps-data/spring-carnival/carnival_events.json", "r") as file:
         data = json.load(file)
 
     # Iterate through all events to put tracks in a set
