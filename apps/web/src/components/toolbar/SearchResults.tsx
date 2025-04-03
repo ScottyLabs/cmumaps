@@ -12,6 +12,14 @@ const SearchResults = ({ searchQuery }: Props) => {
     return <></>;
   }
 
+  if (data.length === 0) {
+    return (
+      <div className="flex h-32 flex-col items-center justify-center bg-white p-2 text-lg">
+        No results found
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col overflow-auto bg-white p-2">
       {data.map((event) => {

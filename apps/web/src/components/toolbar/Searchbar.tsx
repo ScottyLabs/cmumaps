@@ -91,7 +91,7 @@ const Searchbar = () => {
 
   return (
     <>
-      <div className="mb-2 flex w-full items-center overflow-hidden rounded bg-white">
+      <div className="mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white">
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}

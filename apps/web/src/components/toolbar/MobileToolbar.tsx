@@ -10,7 +10,7 @@ const Toolbar = ({ map }: Props) => {
   return (
     <>
       <div
-        style={{ maxHeight: `calc(100vh)` }}
+        style={{ maxHeight: `calc(100vh - 0.5rem)` }}
         className="fixed top-2 flex w-full px-2"
       >
         <div className="flex w-full flex-col overflow-hidden py-2">
