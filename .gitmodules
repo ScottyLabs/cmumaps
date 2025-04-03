@@ -1,0 +1,3 @@
+[submodule "apps/data-processors/cmumaps-data"]
+	path = apps/data-processors/cmumaps-data
+	url = https://github.com/ScottyLabs/cmumaps-data
