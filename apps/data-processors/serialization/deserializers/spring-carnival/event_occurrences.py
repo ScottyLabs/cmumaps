@@ -35,7 +35,7 @@ async def create_event_occurrences():
         event_occurrences_data.append(event)
     # Create all Events entries
     async with prisma.tx() as tx:
-        await tx.eventOccurrence.create_many(data=event_occurrences_data)
+        await tx.eventoccurrence.create_many(data=event_occurrences_data)
 
     await prisma.disconnect()
 

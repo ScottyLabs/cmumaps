@@ -28,22 +28,21 @@ async def drop_specified_tables(table_names):
 async def create_tracks():
     await prisma.connect()
 
-    tracks_set = set()
-
-    with open("cmumaps-data/spring-carnival/carnival_events.json", "r") as file:
-        data = json.load(file)
-
-    # Iterate through all events to put tracks in a set
-    for event in data:
-        tracks = data[event]["tracks"]
-        for track in tracks:
-            tracks_set.add(track)
+    tracks_set = {
+        "CMU Tradition",
+        "Food",
+        "Awards/Celebration",
+        "Exhibit/Tour",
+        "Health/Wellness",
+        "Alumni",
+        "Performance",
+    }
 
     tracks_data = [{"trackName": track} for track in tracks_set]
 
     # Create all Tracks
     async with prisma.tx() as tx:
-        await tx.tracks.create_many(data=tracks_data)
+        await tx.track.create_many(data=tracks_data)
 
     await prisma.disconnect()
 
