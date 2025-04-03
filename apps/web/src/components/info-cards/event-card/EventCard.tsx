@@ -20,7 +20,12 @@ const EventCard = ({ eventId }: Props) => {
         alt={"Spring Carnival Image"}
       />
       <div className="mt-2 space-y-2 bg-white p-3 text-sm">
-        <EventTitle event={data.event} isOpen={false} handleClick={() => {}} />
+        <EventTitle
+          event={data.event}
+          isOpen={false}
+          showTrigger={false}
+          handleClick={() => {}}
+        />
         <div className="h-2 w-full bg-gray-200" />
         <div dangerouslySetInnerHTML={{ __html: data.event.description }} />
       </div>

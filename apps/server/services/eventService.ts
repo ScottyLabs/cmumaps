@@ -19,6 +19,8 @@ export const eventService = {
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
       location: dbEvent.location.locationName,
+      latitude: dbEvent.location.latitude,
+      longitude: dbEvent.location.longitude,
     };
 
     return { event };

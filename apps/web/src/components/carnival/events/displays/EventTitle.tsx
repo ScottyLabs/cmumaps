@@ -5,10 +5,16 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 interface Props {
   event: EventType;
   isOpen: boolean;
+  showTrigger?: boolean;
   handleClick: () => void;
 }
 
-const EventTitle = ({ event, isOpen, handleClick }: Props) => {
+const EventTitle = ({
+  event,
+  isOpen,
+  showTrigger = true,
+  handleClick,
+}: Props) => {
   const formatTime = (date: Date) => {
     return new Date(date).toLocaleString("en-US", {
       hour: "2-digit",
@@ -46,9 +52,11 @@ const EventTitle = ({ event, isOpen, handleClick }: Props) => {
         </div>
         <div className="text-sm text-black">Location: {event.location}</div>
       </div>
-      <div>
-        {isOpen ? <IoIosArrowUp size={15} /> : <IoIosArrowDown size={15} />}
-      </div>
+      {showTrigger && (
+        <div>
+          {isOpen ? <IoIosArrowUp size={15} /> : <IoIosArrowDown size={15} />}
+        </div>
+      )}
     </div>
   );
 };
