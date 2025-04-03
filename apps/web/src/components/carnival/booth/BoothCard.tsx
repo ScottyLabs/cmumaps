@@ -14,7 +14,7 @@ const BoothCard = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-y-scroll scroll-smooth">
       <InfoCardImage
         url={"/imgs/carnival/booth.png"}
         alt={"Spring Carnival Image"}
