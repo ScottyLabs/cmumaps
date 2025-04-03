@@ -16,7 +16,7 @@ const EventsDatePicker = ({ selectedDate, setSelectedDate }: Props) => {
       {carnivalDates.map((date, index) => (
         <button
           key={index}
-          className={`flex-1 cursor-pointer rounded-lg py-2 text-center ${selectedDate === date ? "bg-red-600 text-white" : "bg-gray-200"}`}
+          className={`flex-1 cursor-pointer rounded-lg py-2 text-center ${selectedDate === date ? "bg-red-700 text-white" : "bg-gray-200"}`}
           onClick={() => setSelectedDate(date)}
         >
           <div className="text-sm font-bold">{dayOfWeek[index]}</div>

@@ -39,7 +39,7 @@ const EventsFilter = ({
   const renderTypesFilter = () => {
     return (
       <button
-        className="flex cursor-pointer items-center rounded-sm bg-red-600 p-1 text-white"
+        className="flex cursor-pointer items-center rounded-lg bg-red-700 py-2 p-1 text-white"
         onClick={(e) => {
           e.stopPropagation();
           setIsDropdownOpen(!isDropdownOpen);

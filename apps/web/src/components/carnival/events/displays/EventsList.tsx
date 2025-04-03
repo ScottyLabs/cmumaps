@@ -65,7 +65,7 @@ const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
       {events.map((event) => (
         <div
           key={event.id}
-          className="my-2 rounded border border-blue-500 bg-gray-100 p-2"
+          className="my-2 rounded-lg bg-gray-200 p-3"
         >
           <EventDisplay event={event} />
         </div>

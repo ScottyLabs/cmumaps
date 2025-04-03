@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", buildingRoutes);
-app.use("/api/events", checkAuth, eventRoutes);
+app.use("/api/events", eventRoutes);
 app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 app.use("/api", checkAuth, requireSocketId, edgeRoutes);
 app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
