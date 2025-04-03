@@ -42,11 +42,9 @@ const BoothCarousel = () => {
   };
 
   return (
-    <div className="flex flex-col overflow-hidden p-4">
+    <div className="p-4">
       <h3 className="mb-2 font-bold">All Booths</h3>
-      <div className="flex flex-col overflow-y-scroll scroll-smooth">
-        {(!isMobile || cardStatus === CardStates.EXPANDED) && renderBooths()}
-      </div>
+      {(!isMobile || cardStatus === CardStates.EXPANDED) && renderBooths()}
     </div>
   );
 };

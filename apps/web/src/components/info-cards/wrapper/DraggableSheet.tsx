@@ -91,7 +91,7 @@ const DraggableSheet = ({ children }: Props) => {
         onDrag={handleDrag}
         className="flex h-screen flex-col rounded-t-xl bg-white"
       >
-        <div className="flex h-12 items-center justify-center rounded-t-xl">
+        <div className="flex h-12 shrink-0 items-center justify-center rounded-t-xl">
           <div className="h-1 w-12 rounded-full bg-black" />
         </div>
         {children}
