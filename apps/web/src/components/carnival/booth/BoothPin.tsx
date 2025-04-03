@@ -3,6 +3,7 @@ import { Annotation } from "mapkit-react";
 import { useNavigate } from "react-router";
 
 import boothPin from "@/assets/carnival/icons/booth-default.svg";
+import useLocationParams from "@/hooks/useLocationParams";
 
 const coords = {
   latitude: 40.44178556205064,
@@ -11,12 +12,14 @@ const coords = {
 
 const BoothPin = () => {
   const navigate = useNavigate();
+  const { carnivalEvent } = useLocationParams();
 
   return (
     <Annotation
       latitude={coords.latitude}
       longitude={coords.longitude}
       displayPriority="required"
+      selected={carnivalEvent === "booth"}
       onSelect={() => navigate("/carnival/booth")}
     >
       <img
