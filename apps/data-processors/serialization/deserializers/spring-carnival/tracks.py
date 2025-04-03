@@ -2,7 +2,7 @@
 # Run this script first before events.py!
 # python scripts/json-to-database-carnival/tracks.py
 
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 

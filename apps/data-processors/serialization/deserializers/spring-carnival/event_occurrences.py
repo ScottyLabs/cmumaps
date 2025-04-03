@@ -1,7 +1,7 @@
 # Script to populate EventOccurrence table using data from the file carnival_events.json
 # python scripts/json-to-database-carnival/event_occurrences.py
 
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 from tracks import drop_specified_tables
@@ -35,13 +35,13 @@ async def create_event_occurrences():
         event_occurrences_data.append(event)
     # Create all Events entries
     async with prisma.tx() as tx:
-        await tx.eventoccurrences.create_many(data=event_occurrences_data)
+        await tx.eventOccurrence.create_many(data=event_occurrences_data)
 
     await prisma.disconnect()
 
 
 if __name__ == "__main__":
     # Drop Event table
-    asyncio.run(drop_specified_tables(["EventOccurrences"]))
+    asyncio.run(drop_specified_tables(["EventOccurrence"]))
     asyncio.run(create_event_occurrences())
-    print("Created table: EventOccurrences")
+    print("Created table: EventOccurrence")

@@ -1,7 +1,7 @@
 # Script to populate Event table using data from the file carnival_events.json
 # python scripts/json-to-database-carnival/events.py
 
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 from tracks import drop_specified_tables
@@ -68,14 +68,13 @@ async def create_events():
 
     # Create all Events entries
     async with prisma.tx() as tx:
-        await tx.events.create_many(data=events_data)
+        await tx.event.create_many(data=events_data)
 
     await prisma.disconnect()
 
 
 if __name__ == "__main__":
     # Drop Event table
-    asyncio.run(drop_specified_tables(["Events"]))
+    asyncio.run(drop_specified_tables(["Event"]))
     asyncio.run(create_events())
-    print("Created table: Events")
-    
+    print("Created table: Event")

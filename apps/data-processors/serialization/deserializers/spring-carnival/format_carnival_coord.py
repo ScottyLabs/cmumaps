@@ -1,7 +1,7 @@
 # python3 scripts/json-to-database-carnival/format_carnival_coord.py
 
 import json
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 
 prisma = Prisma()

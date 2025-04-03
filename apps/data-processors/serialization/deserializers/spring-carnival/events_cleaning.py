@@ -1,8 +1,8 @@
 # Script to extract descriptions for Events table
 # python scripts/json-to-database-carnival/events_cleaning.py
 
-from bs4 import BeautifulSoup
-from prisma import Prisma
+from bs4 import BeautifulSoup  # type: ignore
+from prisma import Prisma  # type: ignore
 import asyncio
 
 
@@ -32,7 +32,7 @@ async def extract_event_descriptions():
         print(extracted_description)
 
         # Update the description using eventId as the identifier
-        await prisma.events.update(
+        await prisma.event.update(
             where={"eventId": eventId}, data={"description": extracted_description}
         )
     print("Edited descriptions for Events table!")

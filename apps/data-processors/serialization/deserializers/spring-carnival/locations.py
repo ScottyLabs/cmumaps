@@ -1,7 +1,7 @@
 # Script to populate Location table using data from the file carnival_events.json
 # python scripts/json-to-database-carnival/locations.py
 
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 from tracks import drop_specified_tables
@@ -39,12 +39,12 @@ async def create_locations():
 
     # Create all Location entries
     async with prisma.tx() as tx:
-        await tx.locations.create_many(data=location_data)
+        await tx.location.create_many(data=location_data)
     await prisma.disconnect()
 
 
 if __name__ == "__main__":
     # Drop Location table
-    asyncio.run(drop_specified_tables(["Locations"]))
+    asyncio.run(drop_specified_tables(["Location"]))
     asyncio.run(create_locations())
-    print("Created table: Locations")
+    print("Created table: Location")

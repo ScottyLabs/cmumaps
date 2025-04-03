@@ -1,7 +1,7 @@
 # Script to populate EventTracks table using data from the file carnival_events.json
 # python scripts/json-to-database-carnival/event_tracks.py
 
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 import asyncio
 import json
 from tracks import drop_specified_tables
@@ -35,12 +35,12 @@ async def create_event_tracks():
 
     # Create all Events entries
     async with prisma.tx() as tx:
-        await tx.eventtracks.create_many(data=eventTracks_data)
+        await tx.eventTrack.create_many(data=eventTracks_data)
 
     await prisma.disconnect()
 
 
 if __name__ == "__main__":
-    asyncio.run(drop_specified_tables(["EventTracks"]))
+    asyncio.run(drop_specified_tables(["EventTrack"]))
     asyncio.run(create_event_tracks())
-    print("Created table: EventTracks")
+    print("Created table: EventTrack")
