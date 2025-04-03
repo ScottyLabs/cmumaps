@@ -1,14 +1,14 @@
 import { Annotation } from "mapkit-react";
 
 import eventPin from "@/assets/carnival/icons/ticket-booth-default.svg";
-import useLocationParams from "@/hooks/useLocationParams";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
 
-const EventPin = () => {
-  const { eventId } = useLocationParams();
-  const { data, isFetching } = useGetEventQuery(eventId ?? "", {
-    skip: !eventId,
-  });
+interface Props {
+  eventId: string;
+}
+
+const EventPin = ({ eventId }: Props) => {
+  const { data, isFetching } = useGetEventQuery(eventId);
 
   const handleSelect = () => {
     console.log("event pin clicked");

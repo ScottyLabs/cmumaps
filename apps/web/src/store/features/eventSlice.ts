@@ -17,7 +17,7 @@ interface EventState {
 }
 
 const initialState: EventState = {
-  selectedTracks: [],
+  selectedTracks: eventTracks,
   selectedReqs: [],
 };
 

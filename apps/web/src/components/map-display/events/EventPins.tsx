@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import EventPin from "@/components/map-display/events/EventPin";
 import { useGetCurrentEventQuery } from "@/store/features/api/eventApiSlice";
 import { useAppSelector } from "@/store/hooks";
 
@@ -21,9 +22,9 @@ const EventPins = () => {
     reqs: selectedReqs,
   });
 
-  console.log(data);
-
-  return <div>EventPins</div>;
+  return data?.events.map((event) => (
+    <EventPin key={event.id} eventId={event.id} />
+  ));
 };
 
 export default EventPins;

@@ -14,6 +14,7 @@ import {
   INITIAL_REGION,
 } from "@/components/map-display/MapConstants";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
+import EventPins from "@/components/map-display/events/EventPins";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
@@ -27,8 +28,7 @@ import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
-import EventPin from "./events/EventPin";
-import EventPins from "@/components/map-display/events/EventPins";
+import SelectedEventPin from "./events/SelectedEventPin";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -123,7 +123,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       <FloorPlansOverlay />
       <BuggyPath />
       <EventPins />
-      <EventPin />
+      <SelectedEventPin />
     </Map>
   );
 };

@@ -32,7 +32,7 @@ export const eventService = {
 
   async getCurrentEvent(
     timestamp: number,
-    types: string[],
+    tracks: string[],
     reqs: string[],
   ): Promise<CurrentEventResponse> {
     // fetch event that are currently happening or will happen in the next 15 minutes
@@ -42,7 +42,7 @@ export const eventService = {
         endTime: { gte: new Date(timestamp) },
         event: {
           OR: [{ req: { in: reqs } }, { req: null }],
-          eventTracks: { some: { track: { trackName: { in: types } } } },
+          eventTracks: { some: { track: { trackName: { in: tracks } } } },
         },
       },
       include: { event: true, location: true },
@@ -65,7 +65,7 @@ export const eventService = {
   async getEventsByTimestamp(
     timestamp: number,
     limit: number,
-    filters: string[],
+    tracks: string[],
     reqs: string[],
   ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
@@ -73,7 +73,7 @@ export const eventService = {
         endTime: { gte: new Date(timestamp) },
         event: {
           OR: [{ req: { in: reqs } }, { req: null }],
-          eventTracks: { some: { track: { trackName: { in: filters } } } },
+          eventTracks: { some: { track: { trackName: { in: tracks } } } },
         },
       },
       include: { event: true, location: true },
@@ -104,14 +104,14 @@ export const eventService = {
     curStartTime: number,
     curEndTime: number,
     limit: number,
-    filters: string[],
+    tracks: string[],
     reqs: string[],
   ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         event: {
           OR: [{ req: { in: reqs } }, { req: null }],
-          eventTracks: { some: { track: { trackName: { in: filters } } } },
+          eventTracks: { some: { track: { trackName: { in: tracks } } } },
         },
         OR: [
           { startTime: { gt: new Date(curStartTime) } },
@@ -160,14 +160,14 @@ export const eventService = {
     curStartTime: number,
     curEndTime: number,
     limit: number,
-    filters: string[],
+    tracks: string[],
     reqs: string[],
   ): Promise<EventsResponse> {
     const dbEvents = await prisma.eventOccurrence.findMany({
       where: {
         event: {
           OR: [{ req: { in: reqs } }, { req: null }],
-          eventTracks: { some: { track: { trackName: { in: filters } } } },
+          eventTracks: { some: { track: { trackName: { in: tracks } } } },
         },
         OR: [
           { startTime: { lt: new Date(curStartTime) } },

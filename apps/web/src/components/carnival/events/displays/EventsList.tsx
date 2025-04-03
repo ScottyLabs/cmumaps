@@ -18,7 +18,6 @@ const EventsList = ({ timestamp }: Props) => {
 
   const tracks = useAppSelector((state) => state.event.selectedTracks);
   const reqs = useAppSelector((state) => state.event.selectedReqs);
-
   const {
     data,
     hasPreviousPage,
