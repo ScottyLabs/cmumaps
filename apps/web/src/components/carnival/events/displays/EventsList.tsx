@@ -13,7 +13,7 @@ interface Props {
   reqs: string[];
 }
 
-const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
+const EventsList = ({ timestamp, filters, reqs }: Props) => {
   const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const {
@@ -71,4 +71,4 @@ const InfiniteScrollWrapper = ({ timestamp, filters, reqs }: Props) => {
   );
 };
 
-export default InfiniteScrollWrapper;
+export default EventsList;

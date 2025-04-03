@@ -37,7 +37,7 @@ const Event = ({ event }: Props) => {
     <div
       className="flex flex-col"
       onClick={() => {
-        navigate(`/events/${event.id}`);
+        // navigate(`/events/${event.id}`);
       }}
     >
       <div className="text-lg font-medium">{event.name}</div>

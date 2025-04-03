@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-import InfiniteScrollWrapper from "@/components/carnival/events/displays/EventsList";
+import EventsList from "@/components/carnival/events/displays/EventsList";
 import EventsDatePicker from "@/components/carnival/events/filters/EventsDatePicker";
 import EventsFilter from "@/components/carnival/events/filters/EventsFilter";
+import { eventTypes } from "@/components/carnival/events/filters/EventsTypesDropdown";
 import {
   CarnivalDate,
   getTimestampByDate,
@@ -11,7 +12,7 @@ import {
 const EventsDisplay = () => {
   const [selectedDate, setSelectedDate] = useState<CarnivalDate>("3/28-4/6");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(eventTypes);
   const [selectedReqs, setSelectedReqs] = useState<string[]>([]);
 
   return (
@@ -31,7 +32,7 @@ const EventsDisplay = () => {
         selectedReqs={selectedReqs}
         setSelectedReqs={setSelectedReqs}
       />
-      <InfiniteScrollWrapper
+      <EventsList
         timestamp={getTimestampByDate(selectedDate)}
         filters={selectedTypes}
         reqs={selectedReqs}

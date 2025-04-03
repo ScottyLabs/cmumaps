@@ -3,7 +3,7 @@ interface Props {
   setSelectedTypes: (selectedTypes: string[]) => void;
 }
 
-const eventTypes = [
+export const eventTypes = [
   "CMU Tradition",
   "Food",
   "Awards/Celebration",
