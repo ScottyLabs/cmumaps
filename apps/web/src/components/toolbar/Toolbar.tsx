@@ -1,20 +1,19 @@
-import Events from "@/components/carnival/events/Events";
-import InfoCard from "@/components/info-cards/wrapper/InfoCard";
-import SearchInput from "@/components/toolbar/SearchInput";
-import ToolbarWrapper from "@/components/toolbar/ToolbarWrapper";
+import DesktopToolbar from "@/components/toolbar/DesktopToolbar";
+import MobileToolbar from "@/components/toolbar/MobileToolbar";
+import useIsMobile from "@/hooks/useIsMobile";
 
 interface Props {
   map: mapkit.Map | null;
 }
 
 const Toolbar = ({ map }: Props) => {
-  return (
-    <ToolbarWrapper>
-      <SearchInput />
-      <InfoCard map={map} />
-      <Events />
-    </ToolbarWrapper>
-  );
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <MobileToolbar map={map} />;
+  } else {
+    return <DesktopToolbar map={map} />;
+  }
 };
 
 export default Toolbar;
