@@ -42,9 +42,9 @@ jobs:
           file: ./apps/server/Dockerfile
           push: true
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/prod/cmumaps-backend:${{ github.sha }}
-            ${{ steps.login-ecr.outputs.registry }}/prod/cmumaps-backend:latest
-          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/prod/cmumaps-backend:latest
+            ${{ steps.login-ecr.outputs.registry }}/prod/cmumaps:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/prod/cmumaps:latest
+          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/prod/cmumaps:latest
           cache-to: type=inline
 
       - name: Fill in the new image ID in the Amazon ECS task definition
@@ -53,7 +53,7 @@ jobs:
         with:
           task-definition: apps/server/infra/task-definition.prod.json
           container-name: cmumaps
-          image: ${{ steps.login-ecr.outputs.registry }}/prod/cmumaps-backend:${{ github.sha }}
+          image: ${{ steps.login-ecr.outputs.registry }}/prod/cmumaps:${{ github.sha }}
 
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
