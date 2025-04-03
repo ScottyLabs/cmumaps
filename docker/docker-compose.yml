@@ -7,6 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: donotuseinprod
+      POSTGRES_DB: cmumaps
     ports:
       - "127.0.0.1:5432:5432"
     volumes:

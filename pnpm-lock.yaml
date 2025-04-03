@@ -342,9 +342,12 @@ importers:
       '@prisma/client':
         specifier: ^6.4.1
         version: 6.4.1(prisma@6.4.1(typescript@5.8.2))(typescript@5.8.2)
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
     devDependencies:
       '@types/node':
-        specifier: ^20.11.24
+        specifier: ^20.17.24
         version: 20.17.24
       prisma:
         specifier: ^6.4.1
