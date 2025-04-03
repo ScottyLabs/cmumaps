@@ -1,3 +1,4 @@
+import EventTitle from "@/components/carnival/events/displays/EventTitle";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
 
@@ -7,7 +8,10 @@ interface Props {
 
 const EventCard = ({ eventId }: Props) => {
   const { data } = useGetEventQuery(eventId);
-  console.log(data);
+
+  if (!data) {
+    return <></>;
+  }
 
   return (
     <div className="flex flex-col">
@@ -15,7 +19,11 @@ const EventCard = ({ eventId }: Props) => {
         url={"/imgs/carnival/default.png"}
         alt={"Spring Carnival Image"}
       />
-      {eventId}
+      <div className="mt-2 space-y-2 bg-white p-3 text-sm">
+        <EventTitle event={data.event} isOpen={false} handleClick={() => {}} />
+        <div className="h-2 w-full bg-gray-200" />
+        <div dangerouslySetInnerHTML={{ __html: data.event.description }} />
+      </div>
     </div>
   );
 };

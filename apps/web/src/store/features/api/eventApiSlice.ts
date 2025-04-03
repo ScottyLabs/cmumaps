@@ -1,4 +1,4 @@
-import { EventsResponse } from "@cmumaps/common";
+import { EventResponse, EventsResponse } from "@cmumaps/common";
 
 import { apiSlice } from "@/store/features/api/apiSlice";
 
@@ -20,7 +20,7 @@ interface PageParam {
 export const eventApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getEvent: builder.query<EventsResponse, string>({
+    getEvent: builder.query<EventResponse, string>({
       query: (eventId) => ({
         url: `/events/${eventId}`,
       }),
