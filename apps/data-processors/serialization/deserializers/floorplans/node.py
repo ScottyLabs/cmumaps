@@ -28,7 +28,7 @@ async def drop_node_table():
 
 
 def get_outside_rooms():
-    with open("cmumaps-datamaps-data/floorplans/outside-graph.json", "r") as file:
+    with open("cmumaps-data/floorplans/outside-graph.json", "r") as file:
         outside_data = json.load(file)
 
     outside_rooms = [outsideId for outsideId in outside_data]
