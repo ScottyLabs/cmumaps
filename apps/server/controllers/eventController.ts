@@ -14,6 +14,28 @@ export const eventController = {
     }
   },
 
+  getCurrentEvent: async (req: Request, res: Response) => {
+    const { timestamp, filters, reqs } = req.query;
+
+    try {
+      const filtersArray: string[] = filters
+        ? (filters as string).split(",")
+        : [];
+      const reqsArray: string[] = reqs
+        ? (reqs as string).split(",").map((req) => req.toLowerCase())
+        : [];
+
+      const response = await eventService.getCurrentEvent(
+        Number(timestamp),
+        filtersArray,
+        reqsArray,
+      );
+      res.json(response);
+    } catch (error) {
+      handleControllerError(res, error, "getting current event");
+    }
+  },
+
   getEvents: async (req: Request, res: Response) => {
     const {
       timestamp,

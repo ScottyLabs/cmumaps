@@ -1,4 +1,8 @@
-import { EventResponse, EventsResponse } from "@cmumaps/common";
+import {
+  CurrentEventResponse,
+  EventResponse,
+  EventsResponse,
+} from "@cmumaps/common";
 import { prisma } from "@cmumaps/db";
 
 export const eventService = {
@@ -24,6 +28,38 @@ export const eventService = {
     };
 
     return { event };
+  },
+
+  async getCurrentEvent(
+    timestamp: number,
+    filters: string[],
+    reqs: string[],
+  ): Promise<CurrentEventResponse> {
+    // fetch event that are currently happening or will happen in the next 15 minutes
+    const dbEvents = await prisma.eventOccurrence.findMany({
+      where: {
+        startTime: { lte: new Date(timestamp + 15 * 60 * 1000) },
+        endTime: { gte: new Date(timestamp) },
+        event: {
+          OR: [{ req: { in: reqs } }, { req: null }],
+          eventTracks: { some: { track: { trackName: { in: filters } } } },
+        },
+      },
+      include: { event: true, location: true },
+    });
+
+    if (!dbEvents) {
+      throw new Error("Event not found");
+    }
+
+    const events = dbEvents.map((dbEvent) => ({
+      id: dbEvent.eventOccurrenceId,
+      location: dbEvent.location.locationName,
+      latitude: dbEvent.location.latitude,
+      longitude: dbEvent.location.longitude,
+    }));
+
+    return { events };
   },
 
   async getEventsByTimestamp(

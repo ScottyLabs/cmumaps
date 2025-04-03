@@ -1,11 +1,15 @@
-import { EventResponse, EventsResponse } from "@cmumaps/common";
+import {
+  CurrentEventResponse,
+  EventResponse,
+  EventsResponse,
+} from "@cmumaps/common";
 
 import { apiSlice } from "@/store/features/api/apiSlice";
 
 interface GetEventsQuery {
   filters: string[];
   reqs: string[];
-  timestamp: number;
+  timestamp?: number;
 }
 
 // either eventId or timestamp must be provided
@@ -23,6 +27,12 @@ export const eventApiSlice = apiSlice.injectEndpoints({
     getEvent: builder.query<EventResponse, string>({
       query: (eventId) => ({
         url: `/events/${eventId}`,
+      }),
+    }),
+    getCurrentEvent: builder.query<CurrentEventResponse, GetEventsQuery>({
+      query: ({ timestamp, filters, reqs }) => ({
+        url: `/events/current`,
+        params: { timestamp, filters, reqs },
       }),
     }),
     getEvents: builder.infiniteQuery<EventsResponse, GetEventsQuery, PageParam>(
@@ -70,4 +80,8 @@ export const eventApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetEventsInfiniteQuery, useGetEventQuery } = eventApiSlice;
+export const {
+  useGetEventsInfiniteQuery,
+  useGetEventQuery,
+  useGetCurrentEventQuery,
+} = eventApiSlice;

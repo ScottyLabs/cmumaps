@@ -28,6 +28,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
 import EventPin from "./events/EventPin";
+import EventPins from "@/components/map-display/events/EventPins";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -121,6 +122,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
       <BuggyPath />
+      <EventPins />
       <EventPin />
     </Map>
   );

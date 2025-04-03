@@ -27,3 +27,13 @@ export interface DetailedEventType {
 export interface EventResponse {
   event: DetailedEventType;
 }
+
+export interface EventCoordinates {
+  id: string;
+  latitude: number | null;
+  longitude: number | null;
+}
+
+export interface CurrentEventResponse {
+  events: EventCoordinates[];
+}
