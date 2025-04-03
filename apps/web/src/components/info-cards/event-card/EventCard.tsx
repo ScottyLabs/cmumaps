@@ -1,4 +1,4 @@
-import EventTitle from "@/components/carnival/events/displays/EventTitle";
+import EventInfo from "@/components/carnival/events/displays/EventInfo";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
 
@@ -20,12 +20,7 @@ const EventCard = ({ eventId }: Props) => {
         alt={"Spring Carnival Image"}
       />
       <div className="mt-2 space-y-2 bg-white p-3 text-sm">
-        <EventTitle
-          event={data.event}
-          isOpen={false}
-          showTrigger={false}
-          handleClick={() => {}}
-        />
+        <EventInfo event={data.event} />
         <div className="h-2 w-full bg-gray-200" />
         <div dangerouslySetInnerHTML={{ __html: data.event.description }} />
       </div>
