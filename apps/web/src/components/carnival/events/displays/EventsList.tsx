@@ -6,16 +6,19 @@ import {
   throttleFetchPrevious,
 } from "@/components/carnival/events/displays/handleScroll";
 import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
+import { useAppSelector } from "@/store/hooks";
 
 interface Props {
   timestamp: number;
-  filters: string[];
-  reqs: string[];
 }
 
-const EventsList = ({ timestamp, filters, reqs }: Props) => {
+const EventsList = ({ timestamp }: Props) => {
   const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const tracks = useAppSelector((state) => state.event.selectedTracks);
+  const reqs = useAppSelector((state) => state.event.selectedReqs);
+
   const {
     data,
     hasPreviousPage,
@@ -23,7 +26,7 @@ const EventsList = ({ timestamp, filters, reqs }: Props) => {
     fetchNextPage,
     fetchPreviousPage,
   } = useGetEventsInfiniteQuery(
-    { filters, reqs, timestamp },
+    { tracks, reqs, timestamp },
     { initialPageParam: { timestamp } },
   );
 

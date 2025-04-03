@@ -1,35 +1,24 @@
 import filterSvg from "@/assets/carnival/icons/filter.svg";
+import { eventReqs, setSelectedReqs } from "@/store/features/eventSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-import EventsTypesDropdown from "./EventsTypesDropdown";
+import EventsTracksDropdown from "./EventsTracksDropdown";
 
 interface Props {
   isDropdownOpen: boolean;
   setIsDropdownOpen: (isDropdownOpen: boolean) => void;
-  selectedTypes: string[];
-  setSelectedTypes: (selectedTypes: string[]) => void;
-  selectedReqs: string[];
-  setSelectedReqs: (selectedReqs: string[]) => void;
 }
 
-const EventsFilter = ({
-  isDropdownOpen,
-  setIsDropdownOpen,
-  selectedTypes,
-  setSelectedTypes,
-  selectedReqs,
-  setSelectedReqs,
-}: Props) => {
-  const filterTypes = ["Registration", "Fee", "Limited"];
+const EventsFilter = ({ isDropdownOpen, setIsDropdownOpen }: Props) => {
+  const dispatch = useAppDispatch();
+  const selectedReqs = useAppSelector((state) => state.event.selectedReqs);
 
   const renderDropdown = () => {
     return (
       isDropdownOpen && (
         <div className="relative">
           <div className="absolute top-6 left-0">
-            <EventsTypesDropdown
-              selectedTypes={selectedTypes}
-              setSelectedTypes={setSelectedTypes}
-            />
+            <EventsTracksDropdown />
           </div>
         </div>
       )
@@ -52,32 +41,32 @@ const EventsFilter = ({
   };
 
   const renderRequirementsFilter = () => {
-    const handleChange = (filterType: string) => {
-      if (selectedReqs.includes(filterType)) {
-        setSelectedReqs(selectedReqs.filter((req) => req !== filterType));
+    const handleChange = (req: string) => {
+      if (selectedReqs.includes(req)) {
+        dispatch(setSelectedReqs(selectedReqs.filter((req) => req !== req)));
       } else {
-        setSelectedReqs([...selectedReqs, filterType]);
+        dispatch(setSelectedReqs([...selectedReqs, req]));
       }
     };
 
     return (
       <div className="flex gap-3">
-        {filterTypes.map((filterType) => (
+        {eventReqs.map((req) => (
           <div
-            key={filterType}
+            key={req}
             className="flex cursor-pointer items-center"
             onClick={(e) => {
               e.stopPropagation();
-              handleChange(filterType);
+              handleChange(req);
             }}
           >
             <input
               type="checkbox"
               className="cursor-pointer"
-              checked={selectedReqs.includes(filterType)}
+              checked={selectedReqs.includes(req)}
               readOnly
             />
-            <p className="ml-1 text-sm"> {filterType}</p>
+            <p className="ml-1 text-sm"> {req}</p>
           </div>
         ))}
       </div>

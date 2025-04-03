@@ -7,9 +7,9 @@ import {
 import { apiSlice } from "@/store/features/api/apiSlice";
 
 interface GetEventsQuery {
-  filters: string[];
+  tracks: string[];
   reqs: string[];
-  timestamp?: number;
+  timestamp: number;
 }
 
 // either eventId or timestamp must be provided
@@ -30,9 +30,9 @@ export const eventApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getCurrentEvent: builder.query<CurrentEventResponse, GetEventsQuery>({
-      query: ({ timestamp, filters, reqs }) => ({
+      query: ({ timestamp, tracks, reqs }) => ({
         url: `/events/current`,
-        params: { timestamp, filters, reqs },
+        params: { timestamp, tracks, reqs },
       }),
     }),
     getEvents: builder.infiniteQuery<EventsResponse, GetEventsQuery, PageParam>(
@@ -46,7 +46,7 @@ export const eventApiSlice = apiSlice.injectEndpoints({
             endTime: pageParam.endTime,
             direction: pageParam.direction,
             limit: 10,
-            filters: queryArg.filters,
+            tracks: queryArg.tracks,
             reqs: queryArg.reqs,
           },
         }),

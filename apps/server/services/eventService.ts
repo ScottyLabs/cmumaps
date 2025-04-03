@@ -32,7 +32,7 @@ export const eventService = {
 
   async getCurrentEvent(
     timestamp: number,
-    filters: string[],
+    types: string[],
     reqs: string[],
   ): Promise<CurrentEventResponse> {
     // fetch event that are currently happening or will happen in the next 15 minutes
@@ -42,7 +42,7 @@ export const eventService = {
         endTime: { gte: new Date(timestamp) },
         event: {
           OR: [{ req: { in: reqs } }, { req: null }],
-          eventTracks: { some: { track: { trackName: { in: filters } } } },
+          eventTracks: { some: { track: { trackName: { in: types } } } },
         },
       },
       include: { event: true, location: true },

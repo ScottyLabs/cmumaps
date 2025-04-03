@@ -15,19 +15,17 @@ export const eventController = {
   },
 
   getCurrentEvent: async (req: Request, res: Response) => {
-    const { timestamp, filters, reqs } = req.query;
+    const { timestamp, tracks, reqs } = req.query;
 
     try {
-      const filtersArray: string[] = filters
-        ? (filters as string).split(",")
-        : [];
+      const tracksArray: string[] = tracks ? (tracks as string).split(",") : [];
       const reqsArray: string[] = reqs
         ? (reqs as string).split(",").map((req) => req.toLowerCase())
         : [];
 
       const response = await eventService.getCurrentEvent(
         Number(timestamp),
-        filtersArray,
+        tracksArray,
         reqsArray,
       );
       res.json(response);
@@ -44,14 +42,12 @@ export const eventController = {
       endTime,
       limit,
       direction,
-      filters,
+      tracks,
       reqs,
     } = req.query;
 
     try {
-      const filtersArray: string[] = filters
-        ? (filters as string).split(",")
-        : [];
+      const tracksArray: string[] = tracks ? (tracks as string).split(",") : [];
       const reqsArray: string[] = reqs
         ? (reqs as string).split(",").map((req) => req.toLowerCase())
         : [];
@@ -61,7 +57,7 @@ export const eventController = {
         const response = await eventService.getEventsByTimestamp(
           Number(timestamp),
           Number(limit),
-          filtersArray,
+          tracksArray,
           reqsArray,
         );
 
@@ -77,7 +73,7 @@ export const eventController = {
             Number(startTime),
             Number(endTime),
             Number(limit),
-            filtersArray,
+            tracksArray,
             reqsArray,
           );
 
@@ -89,7 +85,7 @@ export const eventController = {
             Number(startTime),
             Number(endTime),
             Number(limit),
-            filtersArray,
+            tracksArray,
             reqsArray,
           );
 

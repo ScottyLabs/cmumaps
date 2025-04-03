@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useGetCurrentEventQuery } from "@/store/features/api/eventApiSlice";
+import { useAppSelector } from "@/store/hooks";
 
 const EventPins = () => {
   const [timestamp, setTimestamp] = useState(Date.now());
@@ -12,10 +13,12 @@ const EventPins = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const selectedTracks = useAppSelector((state) => state.event.selectedTracks);
+  const selectedReqs = useAppSelector((state) => state.event.selectedReqs);
   const { data } = useGetCurrentEventQuery({
     timestamp,
-    filters: [],
-    reqs: [],
+    tracks: selectedTracks,
+    reqs: selectedReqs,
   });
 
   console.log(data);
