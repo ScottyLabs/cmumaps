@@ -5,6 +5,7 @@ import { apiSlice } from "@/store/features/api/apiSlice";
 interface GetEventsQuery {
   filters: string[];
   reqs: string[];
+  timestamp: number;
 }
 
 // either eventId or timestamp must be provided

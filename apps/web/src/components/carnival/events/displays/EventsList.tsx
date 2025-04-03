@@ -23,7 +23,7 @@ const EventsList = ({ timestamp, filters, reqs }: Props) => {
     fetchNextPage,
     fetchPreviousPage,
   } = useGetEventsInfiniteQuery(
-    { filters, reqs },
+    { filters, reqs, timestamp },
     { initialPageParam: { timestamp } },
   );
 

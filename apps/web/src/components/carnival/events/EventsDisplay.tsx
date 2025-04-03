@@ -17,7 +17,7 @@ const EventsDisplay = () => {
 
   return (
     <div
-      className="m-2 flex flex-col space-y-4 overflow-auto"
+      className="m-2 flex min-h-screen flex-col space-y-4 overflow-auto"
       onClick={() => setIsDropdownOpen(false)}
     >
       <EventsDatePicker
