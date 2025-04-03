@@ -28,8 +28,6 @@ import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
-import SelectedEventPin from "./events/SelectedEventPin";
-
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
 }
@@ -123,7 +121,6 @@ const MapDisplay = ({ mapRef }: Props) => {
       <FloorPlansOverlay />
       <BuggyPath />
       <EventPins />
-      <SelectedEventPin />
     </Map>
   );
 };

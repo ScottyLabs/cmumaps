@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
 import EventPin from "@/components/map-display/events/EventPin";
+import useLocationParams from "@/hooks/useLocationParams";
 import { useGetCurrentEventQuery } from "@/store/features/api/eventApiSlice";
 import { useAppSelector } from "@/store/hooks";
 
 const EventPins = () => {
-  // 12 hours from now
+  const { eventId } = useLocationParams();
+
   const [timestamp, setTimestamp] = useState(Date.now() + 12 * 60 * 60 * 1000);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,6 +24,10 @@ const EventPins = () => {
     tracks: selectedTracks,
     reqs: selectedReqs,
   });
+
+  if (eventId) {
+    return <EventPin eventId={eventId} />;
+  }
 
   return data?.events.map((event) => (
     <EventPin key={event.id} eventId={event.id} />
