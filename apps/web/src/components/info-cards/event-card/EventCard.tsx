@@ -1,13 +1,22 @@
+import { useEffect } from "react";
+
 import EventInfo from "@/components/carnival/events/displays/EventInfo";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
+import { setSnapPoints } from "@/store/features/cardSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 interface Props {
   eventId: string;
 }
 
 const EventCard = ({ eventId }: Props) => {
+  const dispatch = useAppDispatch();
   const { data } = useGetEventQuery(eventId);
+
+  useEffect(() => {
+    dispatch(setSnapPoints([142, 350, screen.availHeight]));
+  }, [dispatch]);
 
   if (!data) {
     return <></>;
