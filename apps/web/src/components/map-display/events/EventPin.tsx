@@ -39,6 +39,7 @@ const EventPin = ({ eventId }: Props) => {
       latitude={coordinate.latitude}
       longitude={coordinate.longitude}
       onSelect={() => navigate(`/events/${eventId}`)}
+      displayPriority="required"
     >
       <img
         src={getIcon()}

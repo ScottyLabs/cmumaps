@@ -44,6 +44,7 @@ const BuildingRoundel = ({ map, building }: Props) => {
       <Annotation
         latitude={building.labelLatitude}
         longitude={building.labelLongitude}
+        displayPriority="high"
       >
         <div
           className="translate-y-1/2 cursor-pointer"
