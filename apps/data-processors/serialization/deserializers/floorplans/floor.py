@@ -31,13 +31,13 @@ async def create_floor(target_building=None, target_floor=None):
 
     floors_data = []
 
-    with open("json/floorplans/buildings.json", "r") as file:
+    with open("cmumaps-data/floorplans/buildings.json", "r") as file:
         buildings = json.load(file)
 
-    with open("json/floorplans/placements.json", "r") as file:
+    with open("cmumaps-data/floorplans/placements.json", "r") as file:
         data = json.load(file)
 
-    with open("json/floorplans/floorCenters.json", "r") as file:
+    with open("cmumaps-data/floorplans/floorCenters.json", "r") as file:
         floor_centers = json.load(file)
 
     for buildingCode in data:

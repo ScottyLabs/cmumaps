@@ -31,7 +31,7 @@ async def create_building():
 
     buildings_data = []
 
-    with open("json/floorplans/buildings.json", "r") as file:
+    with open("cmumaps-data/floorplans/buildings.json", "r") as file:
         data = json.load(file)
     # Iterate through all buildings
     for buildingCode in data:

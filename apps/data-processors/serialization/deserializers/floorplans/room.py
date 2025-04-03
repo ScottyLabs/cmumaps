@@ -33,7 +33,7 @@ if __name__ == "__main__":
 async def create_rooms(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "json/floorplans/floorPlanMap.json"
+    file_path = "cmumaps-data/floorplans/floorPlanMap.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 
