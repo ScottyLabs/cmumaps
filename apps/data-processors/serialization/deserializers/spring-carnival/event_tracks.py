@@ -1,7 +1,7 @@
 # Script to populate EventTracks table using data from the file carnival_events.json
 # python scripts/json-to-database-carnival/event_tracks.py
 
-from prisma import Prisma  # type: ignore
+from prisma import Prisma
 import asyncio
 import json
 from tracks import drop_specified_tables
@@ -15,25 +15,27 @@ async def create_event_tracks():
     eventTracks_data = []
     eventId_set = set()
 
-    with open("json/spring-carnival/carnival_events.json", "r") as file:
+    with open("carnival_events.json", "r") as file:
         data = json.load(file)
     # Iterate through all events
     for event in data:
         eventId = data[event]["eventId"]
         tracks = data[event]["tracks"]
-        for track in tracks:
-            # Create EventTrack entry
-            eventTrack = {
-                "eventId": eventId,
-                "trackName": track,
-            }
-            if eventId not in eventId_set:
-                eventTracks_data.append(eventTrack)
+        if eventId not in eventId_set:
+            # only create eventTracks if that eventId has not been seen before,
+            # therefore making each eventTrack pair unique
+            for track in tracks:
+                # Create EventTrack entry
+                eventTrack = {
+                    "eventId": eventId,
+                    "trackName": track,
+                }
                 eventId_set.add(eventId)
+                eventTracks_data.append(eventTrack)
 
     # Create all Events entries
     async with prisma.tx() as tx:
-        await tx.eventtrack.create_many(data=eventTracks_data)
+        await tx.eventtracks.create_many(data=eventTracks_data)
 
     await prisma.disconnect()
 

@@ -2,7 +2,7 @@
 # Run this script first before events.py!
 # python scripts/json-to-database-carnival/tracks.py
 
-from prisma import Prisma  # type: ignore
+from prisma import Prisma
 import asyncio
 import json
 
@@ -30,7 +30,7 @@ async def create_tracks():
 
     tracks_set = set()
 
-    with open("json/spring-carnival/carnival_events.json", "r") as file:
+    with open("carnival_events.json", "r") as file:
         data = json.load(file)
 
     # Iterate through all events to put tracks in a set
@@ -43,7 +43,7 @@ async def create_tracks():
 
     # Create all Tracks
     async with prisma.tx() as tx:
-        await tx.track.create_many(data=tracks_data)
+        await tx.tracks.create_many(data=tracks_data)
 
     await prisma.disconnect()
 

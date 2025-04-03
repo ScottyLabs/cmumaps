@@ -1,7 +1,7 @@
 # Script to populate Location table using data from the file carnival_events.json
 # python scripts/json-to-database-carnival/locations.py
 
-from prisma import Prisma  # type: ignore
+from prisma import Prisma
 import asyncio
 import json
 from tracks import drop_specified_tables
@@ -14,27 +14,32 @@ async def create_locations():
 
     location_set = set()
 
-    with open("json/spring-carnival/carnival_events.json", "r") as file:
+    with open("carnival_events.json", "r") as file:
         data = json.load(file)
 
     location_data = []
     for event in data:
         locationId = data[event]["locationId"]
         locationName = data[event]["locationName"]
+        latitude = data[event]["latitude"]
+        longitude = data[event]["longitude"]
 
         # Create Event Occurence entry
         location = {
             "locationId": locationId,
             "locationName": locationName,
         }
+        if latitude != "" and longitude != "":
+            location["latitude"] = latitude
+            location["longitude"] = longitude
+
         if locationId not in location_set:
             location_data.append(location)
             location_set.add(locationId)
 
     # Create all Location entries
     async with prisma.tx() as tx:
-        await tx.location.create_many(data=location_data)
-
+        await tx.locations.create_many(data=location_data)
     await prisma.disconnect()
 
 
