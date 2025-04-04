@@ -62,18 +62,16 @@ const BoothCarousel = () => {
         className="flex flex-col overflow-y-hidden"
         dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
       >
-        <div className="flex flex-col overflow-y-scroll">{children}</div>
+        <div className="flex flex-col overflow-y-hidden">{children}</div>
       </motion.div>
     );
   };
 
   return (
-    <Wrapper>
-      <div className="p-4">
-        <h3 className="mb-2 font-bold">All Booths</h3>
-        {renderBooths()}
-      </div>
-    </Wrapper>
+    <div className="p-4">
+      <h3 className="mb-2 font-bold">All Booths</h3>
+      <Wrapper>{renderBooths()}</Wrapper>
+    </div>
   );
 };
 
