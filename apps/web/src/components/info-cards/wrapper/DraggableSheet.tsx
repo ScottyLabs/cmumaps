@@ -22,9 +22,6 @@ const DraggableSheet = ({ children }: Props) => {
   const { isCardOpen } = useLocationParams();
 
   const controls = useAnimation();
-
-  // contraint the children so it doesn't trigger the drag
-  // needed when you want to scroll the children
   const childConstraint = useRef(null);
 
   const cardStatus = useAppSelector((state) => state.card.cardStatus);
@@ -34,22 +31,25 @@ const DraggableSheet = ({ children }: Props) => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
 
-  // updates the snap index when the card status changes
-  useEffect(() => {
-    if (isCardOpen && snapPoints && snapPoints[snapIndex]) {
-      controls.start({ y: -snapPoints[snapIndex] });
-    }
-  }, [controls, isCardOpen, snapIndex, snapPoints]);
-
-  // updates the snap points when the isCardOpen changes
+  // updates the card status when the isCardOpen changes
   useEffect(() => {
     if (isCardOpen) {
       dispatch(setInfoCardStatus(CardStates.HALF_OPEN));
     } else {
       dispatch(setInfoCardStatus(CardStates.COLLAPSED));
-      controls.start({ y: 0 });
     }
-  }, [controls, dispatch, isCardOpen, snapPoints]);
+  }, [controls, dispatch, isCardOpen]);
+
+  // updates the snapping when isCardOpen or snapIndex changes
+  useEffect(() => {
+    if (snapPoints && snapPoints[snapIndex]) {
+      if (isCardOpen) {
+        controls.start({ y: -snapPoints[snapIndex] });
+      } else {
+        controls.start({ y: 0 });
+      }
+    }
+  }, [controls, isCardOpen, snapIndex, snapPoints]);
 
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
@@ -93,26 +93,30 @@ const DraggableSheet = ({ children }: Props) => {
   const renderHandle = () => {
     return (
       <div className="flex h-12 shrink-0 items-center justify-between px-2">
-        <div />
+        <div className="w-8" />
         <div className="h-1 w-12 rounded-full rounded-t-xl bg-black" />
-        <IoIosClose title="Close" size={30} onClick={() => navigate("/")} />
+        <IoIosClose title="Close" size={32} onClick={() => navigate("/")} />
       </div>
     );
   };
 
-  const renderChildren = () => (
-    <div ref={childConstraint} className="flex flex-col overflow-hidden">
-      <motion.div
-        drag
-        dragMomentum={false}
-        dragElastic={false}
-        dragConstraints={childConstraint}
-        className="flex flex-col overflow-hidden"
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
+  const renderChildren = () => {
+    // contraint the children so it doesn't trigger the drag
+    // needed when you want to scroll the children
+    return (
+      <div ref={childConstraint} className="flex flex-col overflow-hidden">
+        <motion.div
+          drag
+          dragMomentum={false}
+          dragElastic={false}
+          dragConstraints={childConstraint}
+          className="flex flex-col overflow-hidden"
+        >
+          {children}
+        </motion.div>
+      </div>
+    );
+  };
 
   return (
     <div className="absolute inset-0">

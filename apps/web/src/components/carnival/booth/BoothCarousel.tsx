@@ -11,6 +11,10 @@ const BoothCarousel = () => {
     return <></>;
   }
 
+  if (isMobile && cardStatus !== CardStates.EXPANDED) {
+    return <></>;
+  }
+
   const renderBooths = () => {
     return (
       <div className="space-y-3">
@@ -44,7 +48,7 @@ const BoothCarousel = () => {
   return (
     <div className="p-4">
       <h3 className="mb-2 font-bold">All Booths</h3>
-      {(!isMobile || cardStatus === CardStates.EXPANDED) && renderBooths()}
+      {renderBooths()}
     </div>
   );
 };
