@@ -25,13 +25,16 @@ const EventPins = () => {
     reqs: selectedReqs,
   });
 
-  if (eventId && !data?.events.some((event) => event.id === eventId)) {
-    return <EventPin eventId={eventId} />;
-  }
-
-  return data?.events.map((event) => (
-    <EventPin key={event.id} eventId={event.id} />
-  ));
+  return (
+    <>
+      {eventId && !data?.events.some((event) => event.id === eventId) && (
+        <EventPin eventId={eventId} />
+      )}
+      {data?.events.map((event) => (
+        <EventPin key={event.id} eventId={event.id} />
+      ))}
+    </>
+  );
 };
 
 export default EventPins;

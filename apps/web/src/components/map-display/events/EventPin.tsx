@@ -2,8 +2,7 @@ import { Annotation } from "mapkit-react";
 
 import { useNavigate } from "react-router";
 
-import eventPin from "@/assets/carnival/icons/ticket-booth-default.svg";
-import greyEventPin from "@/assets/carnival/icons/ticket-booth-grey.svg";
+import EventIcon from "@/components/map-display/events/EventIcon";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
 
@@ -40,13 +39,6 @@ const EventPin = ({ eventId }: Props) => {
     return <></>;
   }
 
-  const getIcon = () => {
-    if (new Date(data.event.startTime) > new Date()) {
-      return greyEventPin;
-    }
-    return eventPin;
-  };
-
   return (
     <Annotation
       latitude={coordinate.latitude}
@@ -57,7 +49,7 @@ const EventPin = ({ eventId }: Props) => {
       size={selected ? pinSize.selected : pinSize.default}
       selected={selected}
     >
-      <img src={getIcon()} alt="Event Pin" className="cursor-pointer" />
+      <EventIcon event={data.event} />
     </Annotation>
   );
 };

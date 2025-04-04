@@ -2,6 +2,7 @@ import {
   CurrentEventResponse,
   EventResponse,
   EventsResponse,
+  EventTrack,
 } from "@cmumaps/common";
 import { prisma } from "@cmumaps/db";
 
@@ -9,7 +10,10 @@ export const eventService = {
   async getEventById(eventId: string): Promise<EventResponse> {
     const dbEvent = await prisma.eventOccurrence.findUnique({
       where: { eventOccurrenceId: eventId },
-      include: { event: true, location: true },
+      include: {
+        event: { include: { eventTracks: { include: { track: true } } } },
+        location: true,
+      },
     });
 
     if (!dbEvent) {
@@ -25,6 +29,9 @@ export const eventService = {
       location: dbEvent.location.locationName,
       latitude: dbEvent.location.latitude,
       longitude: dbEvent.location.longitude,
+      tracks: dbEvent.event.eventTracks.map(
+        (track) => track.track.trackName,
+      ) as EventTrack[],
     };
 
     return { event };
@@ -45,7 +52,10 @@ export const eventService = {
           eventTracks: { some: { track: { trackName: { in: tracks } } } },
         },
       },
-      include: { event: true, location: true },
+      include: {
+        event: { include: { eventTracks: { include: { track: true } } } },
+        location: true,
+      },
     });
 
     if (!dbEvents) {
@@ -57,6 +67,9 @@ export const eventService = {
       location: dbEvent.location.locationName,
       latitude: dbEvent.location.latitude,
       longitude: dbEvent.location.longitude,
+      tracks: dbEvent.event.eventTracks.map(
+        (track) => track.track.trackName,
+      ) as EventTrack[],
     }));
 
     return { events };

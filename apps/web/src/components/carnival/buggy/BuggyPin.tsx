@@ -26,7 +26,12 @@ const BuggyPin = () => {
       selected={selected}
       onSelect={() => navigate("/carnival/buggy")}
     >
-      <img src={buggyPin} alt="Buggy Pin" className="cursor-pointer" />
+      <img
+        src={buggyPin}
+        alt="Buggy Pin"
+        className="cursor-pointer"
+        onClick={(e) => e.stopPropagation()}
+      />
     </Annotation>
   );
 };

@@ -26,7 +26,12 @@ const BoothPin = () => {
       selected={selected}
       onSelect={() => navigate("/carnival/booth")}
     >
-      <img src={boothPin} alt="Booth Pin" className="cursor-pointer" />
+      <img
+        src={boothPin}
+        alt="Booth Pin"
+        className="cursor-pointer"
+        onClick={(e) => e.stopPropagation()}
+      />
     </Annotation>
   );
 };

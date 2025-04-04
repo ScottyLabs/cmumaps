@@ -13,6 +13,18 @@ export interface EventsResponse {
   nextEvent?: EventType;
 }
 
+const eventTracks = [
+  "CMU Tradition",
+  "Food",
+  "Awards/Celebration",
+  "Exhibit/Tour",
+  "Health/Wellness",
+  "Alumni",
+  "Performance",
+] as const;
+
+export type EventTrack = (typeof eventTracks)[number];
+
 export interface DetailedEventType {
   id: string;
   name: string;
@@ -22,6 +34,7 @@ export interface DetailedEventType {
   location: string;
   latitude: number | null;
   longitude: number | null;
+  tracks: EventTrack[];
 }
 
 export interface EventResponse {
@@ -32,6 +45,7 @@ export interface EventCoordinates {
   id: string;
   latitude: number | null;
   longitude: number | null;
+  tracks: EventTrack[];
 }
 
 export interface CurrentEventResponse {
