@@ -19,9 +19,6 @@ import performanceIconGray from "@/assets/carnival/icons/performance-grey.svg";
 import tentIcon from "@/assets/carnival/icons/tent-default.svg";
 import tentIconGray from "@/assets/carnival/icons/tent-grey.svg";
 
-// import ticketBoothIcon from "@/assets/carnival/icons/ticket-booth-default.svg";
-// import ticketBoothIconGray from "@/assets/carnival/icons/ticket-booth-grey.svg";
-
 interface Props {
   event: DetailedEventType;
 }
@@ -50,15 +47,6 @@ const EventIcon = ({ event }: Props) => {
         return tentIconGray;
       } else {
         return tentIcon;
-      }
-    }
-
-    // fallback
-    if (!event.tracks) {
-      if (new Date(event.startTime) > new Date()) {
-        return eventIconGray;
-      } else {
-        return eventIcon;
       }
     }
 
