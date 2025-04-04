@@ -1,6 +1,8 @@
 import { motion, PanInfo, useAnimation } from "motion/react";
 
 import { useEffect, useMemo, useRef } from "react";
+import { IoIosClose } from "react-icons/io";
+import { useNavigate } from "react-router";
 
 import useLocationParams from "@/hooks/useLocationParams";
 import {
@@ -16,6 +18,7 @@ interface Props {
 
 const DraggableSheet = ({ children }: Props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { isCardOpen } = useLocationParams();
 
   const controls = useAnimation();
@@ -56,8 +59,7 @@ const DraggableSheet = ({ children }: Props) => {
       return;
     }
 
-    controls.set({ height: window.innerHeight });
-
+    // snapping logic
     if (snapPoints[snapIndex]) {
       const newPos = snapPoints[snapIndex] - info.offset.y;
       const newPosAdj =
@@ -72,6 +74,9 @@ const DraggableSheet = ({ children }: Props) => {
         controls.start({ y: -snapPoints[index]! });
       }
     }
+
+    // set the height to full height to limit height of child for scrolling
+    controls.set({ height: window.innerHeight });
   };
 
   // extend the height of the card based on the drag
@@ -85,6 +90,30 @@ const DraggableSheet = ({ children }: Props) => {
     }
   };
 
+  const renderHandle = () => {
+    return (
+      <div className="flex h-12 shrink-0 items-center justify-between px-2">
+        <div />
+        <div className="h-1 w-12 rounded-full rounded-t-xl bg-black" />
+        <IoIosClose title="Close" size={30} onClick={() => navigate("/")} />
+      </div>
+    );
+  };
+
+  const renderChildren = () => (
+    <div ref={childConstraint} className="flex flex-col overflow-hidden">
+      <motion.div
+        drag
+        dragMomentum={false}
+        dragElastic={false}
+        dragConstraints={childConstraint}
+        className="flex flex-col overflow-hidden"
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+
   return (
     <div className="absolute inset-0">
       <motion.div
@@ -95,20 +124,8 @@ const DraggableSheet = ({ children }: Props) => {
         onDrag={handleDrag}
         className="flex h-screen flex-col rounded-t-xl bg-white"
       >
-        <div className="flex h-12 shrink-0 items-center justify-center rounded-t-xl">
-          <div className="h-1 w-12 rounded-full bg-black" />
-        </div>
-        <div ref={childConstraint} className="flex flex-col overflow-hidden">
-          <motion.div
-            drag
-            dragMomentum={false}
-            dragElastic={false}
-            dragConstraints={childConstraint}
-            className="flex flex-col overflow-hidden"
-          >
-            {children}
-          </motion.div>
-        </div>
+        {renderHandle()}
+        {renderChildren()}
       </motion.div>
     </div>
   );
