@@ -52,9 +52,7 @@ const DraggableSheet = ({ children }: Props) => {
   }, [controls, isCardOpen, snapIndex, snapPoints]);
 
   const handleUpdateHeight = () => {
-    if (snapPoints && snapPoints[snapIndex]) {
-      controls.set({ height: snapPoints[snapIndex] });
-    }
+    controls.set({ height: window.innerHeight });
   };
 
   const handleDragEnd = (
