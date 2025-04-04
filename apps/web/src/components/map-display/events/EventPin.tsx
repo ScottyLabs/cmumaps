@@ -11,10 +11,21 @@ interface Props {
   eventId: string;
 }
 
+export const pinSize = {
+  default: { width: 40, height: 40 },
+  selected: { width: 60, height: 60 },
+};
+
+export const pinOffsetY = {
+  default: -20,
+  selected: -30,
+};
+
 const EventPin = ({ eventId }: Props) => {
   const navigate = useNavigate();
   const { data, isFetching } = useGetEventQuery(eventId);
   const { eventId: selectedEventId } = useLocationParams();
+  const selected = selectedEventId === eventId;
 
   if (!data || !eventId || isFetching) {
     return <></>;
@@ -42,12 +53,9 @@ const EventPin = ({ eventId }: Props) => {
       longitude={coordinate.longitude}
       onSelect={() => navigate(`/events/${eventId}`)}
       displayPriority="required"
-      anchorOffsetY={selectedEventId === eventId ? -30 : -20}
-      size={
-        selectedEventId === eventId
-          ? { width: 60, height: 60 }
-          : { width: 40, height: 40 }
-      }
+      anchorOffsetY={selected ? pinOffsetY.selected : pinOffsetY.default}
+      size={selected ? pinSize.selected : pinSize.default}
+      selected={selected}
     >
       <img src={getIcon()} alt="Event Pin" className="cursor-pointer" />
     </Annotation>
