@@ -219,8 +219,9 @@ export const eventService = {
       endTime: dbEvent.endTime,
       location: dbEvent.location.locationName,
     }));
-    const prevEvent = events[limit - 1];
-    const nextEvent = events[0];
-    return { events, prevEvent, nextEvent };
+    const reversedEvents = events.reverse();
+    const prevEvent = reversedEvents[0];
+    const nextEvent = reversedEvents[limit - 1];
+    return { events: reversedEvents, prevEvent, nextEvent };
   },
 };
