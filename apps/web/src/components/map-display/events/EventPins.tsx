@@ -25,7 +25,7 @@ const EventPins = () => {
     reqs: selectedReqs,
   });
 
-  if (eventId) {
+  if (eventId && !data?.events.some((event) => event.id === eventId)) {
     return <EventPin eventId={eventId} />;
   }
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 
 import eventPin from "@/assets/carnival/icons/ticket-booth-default.svg";
 import greyEventPin from "@/assets/carnival/icons/ticket-booth-grey.svg";
+import useLocationParams from "@/hooks/useLocationParams";
 import { useGetEventQuery } from "@/store/features/api/eventApiSlice";
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 const EventPin = ({ eventId }: Props) => {
   const navigate = useNavigate();
   const { data, isFetching } = useGetEventQuery(eventId);
+  const { eventId: selectedEventId } = useLocationParams();
 
   if (!data || !eventId || isFetching) {
     return <></>;
@@ -40,12 +42,14 @@ const EventPin = ({ eventId }: Props) => {
       longitude={coordinate.longitude}
       onSelect={() => navigate(`/events/${eventId}`)}
       displayPriority="required"
+      anchorOffsetY={selectedEventId === eventId ? -30 : -20}
+      size={
+        selectedEventId === eventId
+          ? { width: 60, height: 60 }
+          : { width: 40, height: 40 }
+      }
     >
-      <img
-        src={getIcon()}
-        alt="Event Pin"
-        className="h-10 w-10 cursor-pointer"
-      />
+      <img src={getIcon()} alt="Event Pin" className="cursor-pointer" />
     </Annotation>
   );
 };
