@@ -15,7 +15,7 @@ const EventCard = ({ eventId }: Props) => {
   const { data } = useGetEventQuery(eventId);
 
   useEffect(() => {
-    dispatch(setSnapPoints([142, 350, screen.availHeight]));
+    dispatch(setSnapPoints([142, 350, window.innerHeight]));
   }, [dispatch]);
 
   if (!data) {

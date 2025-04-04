@@ -12,16 +12,29 @@
       "cache": false,
       "persistent": true
     },
+    "dev:host": {
+      "cache": false,
+      "persistent": true
+    },
     "@cmumaps/db#generate": {},
     "@cmumaps/server#build": {
-      "dependsOn": ["@cmumaps/db#generate"]
+      "dependsOn": [
+        "@cmumaps/db#generate"
+      ]
     },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "start": {
-      "dependsOn": ["^start", "^build"]
+      "dependsOn": [
+        "^start",
+        "^build"
+      ]
     },
     "format": {
       "cache": false,

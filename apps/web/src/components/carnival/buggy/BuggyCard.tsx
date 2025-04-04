@@ -8,7 +8,7 @@ const BuggyCard = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setSnapPoints([170, 350, screen.availHeight]));
+    dispatch(setSnapPoints([170, 350, window.innerHeight]));
   }, [dispatch]);
 
   return (

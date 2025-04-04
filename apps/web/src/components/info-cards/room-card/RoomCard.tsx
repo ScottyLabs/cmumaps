@@ -28,7 +28,7 @@ const RoomCard = () => {
   // set the mid snap point
   // TODO: should change based on if has schedule
   useEffect(() => {
-    dispatch(setSnapPoints([166, 310, screen.availHeight]));
+    dispatch(setSnapPoints([166, 310, window.innerHeight]));
   }, [dispatch]);
 
   if (!roomName || !rooms || !buildings) {

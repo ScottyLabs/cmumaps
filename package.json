@@ -13,6 +13,7 @@
     "build": "turbo build --parallel",
     "dev": "turbo dev --parallel",
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
+    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",

@@ -6,6 +6,7 @@
     "start": "node dist/index.cjs",
     "build": "esbuild index.ts --bundle --outdir=dist --platform=node --format=cjs --out-extension:.js=.cjs --sourcemap",
     "dev": "dotenv -e .env -- tsx watch index.ts",
+    "dev:host": "dotenv -e .env -- tsx watch index.ts",
     "lint": "eslint .",
     "tsc": "tsc -b"
   },

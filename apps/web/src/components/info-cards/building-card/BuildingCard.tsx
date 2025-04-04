@@ -24,7 +24,7 @@ const BuildingCard = ({ map: _map }: Props) => {
   // TODO: should change based on if has food eateries
   // eateries.length > 0 ? 460 : 288));
   useEffect(() => {
-    dispatch(setSnapPoints([142, 288, screen.availHeight]));
+    dispatch(setSnapPoints([142, 288, window.innerHeight]));
   }, [dispatch]);
 
   if (!buildingCode || !buildings) {
