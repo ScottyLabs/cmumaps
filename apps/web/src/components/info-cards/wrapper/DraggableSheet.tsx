@@ -51,6 +51,12 @@ const DraggableSheet = ({ children }: Props) => {
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
 
+  const handleUpdateHeight = () => {
+    if (snapPoints && snapPoints[snapIndex]) {
+      controls.set({ height: snapPoints[snapIndex] });
+    }
+  };
+
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
@@ -74,9 +80,6 @@ const DraggableSheet = ({ children }: Props) => {
         controls.start({ y: -snapPoints[index]! });
       }
     }
-
-    // set the height to full height to limit height of child for scrolling
-    controls.set({ height: window.innerHeight });
   };
 
   // extend the height of the card based on the drag
@@ -122,11 +125,12 @@ const DraggableSheet = ({ children }: Props) => {
     <div className="absolute inset-0">
       <motion.div
         animate={controls}
+        onAnimationComplete={handleUpdateHeight}
         transition={{ duration: 0.5 }}
         drag="y"
         onDragEnd={handleDragEnd}
         onDrag={handleDrag}
-        className="flex h-screen flex-col rounded-t-xl bg-white"
+        className="flex flex-col overflow-hidden rounded-t-xl bg-white"
       >
         {renderHandle()}
         {renderChildren()}
