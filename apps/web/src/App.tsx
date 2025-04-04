@@ -25,7 +25,7 @@ const App = () => {
   }, [posthog, user]);
 
   return (
-    <main className="relative h-screen">
+    <main className="relative h-dvh">
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
