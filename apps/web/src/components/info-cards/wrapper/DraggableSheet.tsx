@@ -1,6 +1,6 @@
 import { motion, PanInfo, useAnimation } from "motion/react";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import useLocationParams from "@/hooks/useLocationParams";
 import {
@@ -19,6 +19,10 @@ const DraggableSheet = ({ children }: Props) => {
   const { isCardOpen } = useLocationParams();
 
   const controls = useAnimation();
+
+  // contraint the children so it doesn't trigger the drag
+  // needed when you want to scroll the children
+  const childConstraint = useRef(null);
 
   const cardStatus = useAppSelector((state) => state.card.cardStatus);
   const snapPoints = useAppSelector((state) => state.card.snapPoints);
@@ -94,7 +98,17 @@ const DraggableSheet = ({ children }: Props) => {
         <div className="flex h-12 shrink-0 items-center justify-center rounded-t-xl">
           <div className="h-1 w-12 rounded-full bg-black" />
         </div>
-        {children}
+        <div ref={childConstraint} className="flex flex-col overflow-hidden">
+          <motion.div
+            drag
+            dragMomentum={false}
+            dragElastic={false}
+            dragConstraints={childConstraint}
+            className="flex flex-col overflow-hidden"
+          >
+            {children}
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );
