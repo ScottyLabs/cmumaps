@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+
 import booths from "@/assets/carnival/json/booth.json";
 import useIsMobile from "@/hooks/useIsMobile";
 import { CardStates } from "@/store/features/cardSlice";
@@ -45,11 +47,33 @@ const BoothCarousel = () => {
     );
   };
 
+  const Wrapper = ({ children }: { children: React.ReactNode }) => {
+    // contraint the children so it doesn't trigger the drag
+    // needed when you want to scroll the children
+    if (!isMobile) {
+      return children;
+    }
+
+    return (
+      <motion.div
+        drag
+        dragMomentum={false}
+        dragElastic={false}
+        className="flex flex-col overflow-y-hidden"
+        dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
+      >
+        <div className="flex flex-col overflow-y-scroll">{children}</div>
+      </motion.div>
+    );
+  };
+
   return (
-    <div className="p-4">
-      <h3 className="mb-2 font-bold">All Booths</h3>
-      {renderBooths()}
-    </div>
+    <Wrapper>
+      <div className="p-4">
+        <h3 className="mb-2 font-bold">All Booths</h3>
+        {renderBooths()}
+      </div>
+    </Wrapper>
   );
 };
 
