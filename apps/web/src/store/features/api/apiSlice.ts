@@ -36,6 +36,30 @@ export const apiSlice = createApi({
           query: searchQuery,
         },
       }),
+      transformResponse: (response: EventType[]) =>
+        response.map((event) => ({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          id: event.eventId,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          name: event.title,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          startTime: event.startDateTime,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          endTime: event.endDateTime,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          location: event.locationName,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          description: event.description,
+          latitude: event.latitude,
+          longitude: event.longitude,
+          tracks: event.tracks,
+        })),
     }),
   }),
 });
