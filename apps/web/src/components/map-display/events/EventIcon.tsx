@@ -1,5 +1,6 @@
 import { DetailedEventType } from "@cmumaps/common";
 
+import scottyLabsIcon from "@/assets/carnival/icons/ScottyLabs.png";
 import awardsIcon from "@/assets/carnival/icons/award-default.svg";
 import awardsIconGray from "@/assets/carnival/icons/award-grey.svg";
 import dogHouseIcon from "@/assets/carnival/icons/doghouse-default.svg";
@@ -16,7 +17,6 @@ import mobotIcon from "@/assets/carnival/icons/mobot-default.svg";
 import mobotIconGray from "@/assets/carnival/icons/mobot-grey.svg";
 import performanceIcon from "@/assets/carnival/icons/performance-default.svg";
 import performanceIconGray from "@/assets/carnival/icons/performance-grey.svg";
-import scottyLabsIcon from "@/assets/carnival/icons/scottylabs.png";
 import tentIcon from "@/assets/carnival/icons/tent-default.svg";
 import tentIconGray from "@/assets/carnival/icons/tent-grey.svg";
 
