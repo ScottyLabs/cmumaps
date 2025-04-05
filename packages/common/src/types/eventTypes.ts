@@ -5,6 +5,9 @@ export interface EventType {
   startTime: Date;
   endTime: Date;
   location: string;
+  latitude: number | null;
+  longitude: number | null;
+  tracks: EventTrack[];
 }
 
 export interface EventsResponse {
@@ -25,20 +28,8 @@ const eventTracks = [
 
 export type EventTrack = (typeof eventTracks)[number];
 
-export interface DetailedEventType {
-  id: string;
-  name: string;
-  description: string;
-  startTime: Date;
-  endTime: Date;
-  location: string;
-  latitude: number | null;
-  longitude: number | null;
-  tracks: EventTrack[];
-}
-
 export interface EventResponse {
-  event: DetailedEventType;
+  event: EventType;
 }
 
 export interface EventCoordinates {

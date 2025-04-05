@@ -42,3 +42,15 @@ export const zoomOnObject = (map: mapkit.Map, points: Coordinate[]) => {
     !prefersReducedMotion(),
   );
 };
+
+export const zoomOnPoint = (map: mapkit.Map, point: Coordinate) => {
+  map.setRegionAnimated(
+    new mapkit.BoundingRegion(
+      point.latitude + 0.001,
+      point.longitude + 0.001,
+      point.latitude - 0.001,
+      point.longitude - 0.001,
+    ).toCoordinateRegion(),
+    !prefersReducedMotion(),
+  );
+};

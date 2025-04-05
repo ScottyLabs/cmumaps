@@ -4,12 +4,14 @@ import { useNavigate } from "react-router";
 
 import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface Props {
+  map: mapkit.Map | null;
   event: EventType;
 }
 
-const EventBody = ({ event }: Props) => {
+const EventBody = ({ event, map }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -20,6 +22,12 @@ const EventBody = ({ event }: Props) => {
         <button
           className="cursor-pointer rounded-lg border-2 bg-blue-500 p-1 text-white"
           onClick={() => {
+            if (map && event.latitude && event.longitude) {
+              zoomOnPoint(map, {
+                latitude: event.latitude,
+                longitude: event.longitude,
+              });
+            }
             dispatch(setIsSearchOpen(false));
             navigate(`/events/${event.id}`);
           }}

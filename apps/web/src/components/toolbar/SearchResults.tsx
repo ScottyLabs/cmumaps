@@ -44,6 +44,9 @@ const SearchResults = ({ searchQuery }: Props) => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           description: event.description,
+          latitude: event.latitude,
+          longitude: event.longitude,
+          tracks: event.tracks,
         };
 
         return <Event key={fixedEvent.id} event={fixedEvent} />;

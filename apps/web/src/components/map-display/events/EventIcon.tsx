@@ -1,4 +1,4 @@
-import { DetailedEventType } from "@cmumaps/common";
+import { EventType } from "@cmumaps/common";
 
 import scottyLabsIcon from "@/assets/carnival/icons/ScottyLabs.png";
 import awardsIcon from "@/assets/carnival/icons/award-default.svg";
@@ -21,11 +21,11 @@ import tentIcon from "@/assets/carnival/icons/tent-default.svg";
 import tentIconGray from "@/assets/carnival/icons/tent-grey.svg";
 
 interface Props {
-  event: DetailedEventType;
+  event: EventType;
 }
 
 const EventIcon = ({ event }: Props) => {
-  const getIconSrc = (event: DetailedEventType) => {
+  const getIconSrc = (event: EventType) => {
     // special cases
     if (event.name.includes("ScottyLabs")) {
       return scottyLabsIcon;

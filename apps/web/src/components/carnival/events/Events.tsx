@@ -3,7 +3,11 @@ import CollapsibleWrapper from "@/components/shared/CollapsibleWrapper";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useAppSelector } from "@/store/hooks";
 
-const Events = () => {
+interface Props {
+  map: mapkit.Map | null;
+}
+
+const Events = ({ map }: Props) => {
   const { isCardOpen } = useLocationParams();
   const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
 
@@ -13,7 +17,7 @@ const Events = () => {
 
   return (
     <CollapsibleWrapper title="Spring Carnival">
-      <EventsDisplay />
+      <EventsDisplay map={map} />
     </CollapsibleWrapper>
   );
 };

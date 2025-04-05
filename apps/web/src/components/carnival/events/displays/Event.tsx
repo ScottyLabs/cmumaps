@@ -2,14 +2,15 @@ import { EventType } from "@cmumaps/common";
 
 import { useState } from "react";
 
-import EventDisplay from "@/components/carnival/events/displays/EventBody";
+import EventBody from "@/components/carnival/events/displays/EventBody";
 import EventTitle from "@/components/carnival/events/displays/EventTitle";
 
 interface Props {
+  map: mapkit.Map | null;
   event: EventType;
 }
 
-const Event = ({ event }: Props) => {
+const Event = ({ map, event }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = () => {
@@ -31,7 +32,7 @@ const Event = ({ event }: Props) => {
       }`}
     >
       {renderTrigger()}
-      {isOpen && <EventDisplay event={event} />}
+      {isOpen && <EventBody event={event} map={map} />}
     </div>
   );
 };

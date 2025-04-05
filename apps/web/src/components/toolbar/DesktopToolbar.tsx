@@ -15,7 +15,7 @@ const DesktopToolbar = ({ map }: Props) => {
       <div className="flex w-full flex-col overflow-hidden">
         <Searchbar />
         <InfoCard map={map} />
-        <Events />
+        <Events map={map} />
       </div>
     </div>
   );

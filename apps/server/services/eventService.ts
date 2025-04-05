@@ -89,7 +89,10 @@ export const eventService = {
           eventTracks: { some: { track: { trackName: { in: tracks } } } },
         },
       },
-      include: { event: true, location: true },
+      include: {
+        event: { include: { eventTracks: { include: { track: true } } } },
+        location: true,
+      },
       orderBy: [
         { startTime: "asc" },
         { endTime: "asc" },
@@ -105,6 +108,11 @@ export const eventService = {
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
       location: dbEvent.location.locationName,
+      latitude: dbEvent.location.latitude,
+      longitude: dbEvent.location.longitude,
+      tracks: dbEvent.event.eventTracks.map(
+        (track) => track.track.trackName,
+      ) as EventTrack[],
       req: dbEvent.event.req,
     }));
     const prevEvent = events[0];
@@ -146,7 +154,10 @@ export const eventService = {
           },
         ],
       },
-      include: { event: true, location: true },
+      include: {
+        event: { include: { eventTracks: { include: { track: true } } } },
+        location: true,
+      },
       orderBy: [
         { startTime: "asc" },
         { endTime: "asc" },
@@ -162,6 +173,11 @@ export const eventService = {
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
       location: dbEvent.location.locationName,
+      latitude: dbEvent.location.latitude,
+      longitude: dbEvent.location.longitude,
+      tracks: dbEvent.event.eventTracks.map(
+        (track) => track.track.trackName,
+      ) as EventTrack[],
     }));
     const prevEvent = events[0];
     const nextEvent = events[limit - 1];
@@ -202,7 +218,10 @@ export const eventService = {
           },
         ],
       },
-      include: { event: true, location: true },
+      include: {
+        event: { include: { eventTracks: { include: { track: true } } } },
+        location: true,
+      },
       orderBy: [
         { startTime: "desc" },
         { endTime: "desc" },
@@ -218,6 +237,11 @@ export const eventService = {
       startTime: dbEvent.startTime,
       endTime: dbEvent.endTime,
       location: dbEvent.location.locationName,
+      latitude: dbEvent.location.latitude,
+      longitude: dbEvent.location.longitude,
+      tracks: dbEvent.event.eventTracks.map(
+        (track) => track.track.trackName,
+      ) as EventTrack[],
     }));
     const reversedEvents = events.reverse();
     const prevEvent = reversedEvents[0];

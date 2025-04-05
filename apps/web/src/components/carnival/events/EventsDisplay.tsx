@@ -8,7 +8,11 @@ import {
   getTimestampByDate,
 } from "@/components/carnival/events/utils/timeUtils";
 
-const EventsDisplay = () => {
+interface Props {
+  map: mapkit.Map | null;
+}
+
+const EventsDisplay = ({ map }: Props) => {
   const [selectedDate, setSelectedDate] = useState<CarnivalDate>("3/28-4/6");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -25,7 +29,7 @@ const EventsDisplay = () => {
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
       />
-      <EventsList timestamp={getTimestampByDate(selectedDate)} />
+      <EventsList timestamp={getTimestampByDate(selectedDate)} map={map} />
     </div>
   );
 };
