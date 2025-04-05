@@ -5,6 +5,7 @@ import {
   throttledHandleScroll,
   throttleFetchPrevious,
 } from "@/components/carnival/events/displays/handleScroll";
+import Loader from "@/components/shared/Loader";
 import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 import { useAppSelector } from "@/store/hooks";
 
@@ -20,6 +21,8 @@ const EventsList = ({ timestamp }: Props) => {
   const reqs = useAppSelector((state) => state.event.selectedReqs);
   const {
     data,
+    isFetchingPreviousPage,
+    isFetchingNextPage,
     hasPreviousPage,
     hasNextPage,
     fetchNextPage,
@@ -63,10 +66,15 @@ const EventsList = ({ timestamp }: Props) => {
       onScroll={handleScroll}
       ref={scrollContainerRef}
     >
-      {/* Display your items directly without the InfiniteScroll components */}
+      <div className="flex justify-center">
+        {isFetchingPreviousPage && <Loader />}
+      </div>
       {events.map((event) => (
         <Event key={event.id} event={event} />
       ))}
+      <div className="flex justify-center">
+        {isFetchingNextPage && <Loader />}
+      </div>
     </div>
   );
 };
