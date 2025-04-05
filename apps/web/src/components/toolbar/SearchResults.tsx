@@ -3,10 +3,11 @@ import { useSearchQuery } from "@/store/features/api/apiSlice";
 import { useAppSelector } from "@/store/hooks";
 
 interface Props {
+  map: mapkit.Map | null;
   searchQuery: string;
 }
 
-const SearchResults = ({ searchQuery }: Props) => {
+const SearchResults = ({ map, searchQuery }: Props) => {
   const { data } = useSearchQuery(searchQuery);
   const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
 
@@ -49,7 +50,7 @@ const SearchResults = ({ searchQuery }: Props) => {
           tracks: event.tracks,
         };
 
-        return <Event key={fixedEvent.id} event={fixedEvent} />;
+        return <Event key={fixedEvent.id} map={map} event={fixedEvent} />;
       })}
     </div>
   );

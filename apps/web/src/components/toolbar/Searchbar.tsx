@@ -8,7 +8,11 @@ import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
 import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-const Searchbar = () => {
+interface Props {
+  map: mapkit.Map | null;
+}
+
+const Searchbar = ({ map }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -96,7 +100,7 @@ const Searchbar = () => {
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
       </div>
-      <SearchResults searchQuery={searchQuery} />
+      <SearchResults map={map} searchQuery={searchQuery} />
     </>
   );
 };

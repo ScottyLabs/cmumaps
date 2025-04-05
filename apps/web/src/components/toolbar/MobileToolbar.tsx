@@ -14,7 +14,7 @@ const MobileToolbar = ({ map }: Props) => {
         className="fixed top-2 flex w-full px-2"
       >
         <div className="flex w-full flex-col overflow-hidden py-2">
-          <Searchbar />
+          <Searchbar map={map} />
           <Events map={map} />
         </div>
       </div>

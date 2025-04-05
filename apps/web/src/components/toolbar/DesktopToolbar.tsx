@@ -13,7 +13,7 @@ const DesktopToolbar = ({ map }: Props) => {
       className="fixed top-2 left-2 box-content flex w-96"
     >
       <div className="flex w-full flex-col overflow-hidden">
-        <Searchbar />
+        <Searchbar map={map} />
         <InfoCard map={map} />
         <Events map={map} />
       </div>
