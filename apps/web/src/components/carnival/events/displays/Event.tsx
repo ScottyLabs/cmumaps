@@ -22,8 +22,14 @@ const Event = ({ event }: Props) => {
     );
   };
 
+  const isPastEvent = new Date(event.endTime) < new Date();
+
   return (
-    <div className="my-2 flex flex-col rounded-lg bg-gray-200 p-3">
+    <div
+      className={`my-2 flex flex-col rounded-lg p-3 ${
+        isPastEvent ? "bg-gray-400" : "bg-gray-200"
+      }`}
+    >
       {renderTrigger()}
       {isOpen && <EventDisplay event={event} />}
     </div>
