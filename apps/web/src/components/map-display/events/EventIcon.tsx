@@ -16,6 +16,7 @@ import mobotIcon from "@/assets/carnival/icons/mobot-default.svg";
 import mobotIconGray from "@/assets/carnival/icons/mobot-grey.svg";
 import performanceIcon from "@/assets/carnival/icons/performance-default.svg";
 import performanceIconGray from "@/assets/carnival/icons/performance-grey.svg";
+import scottyLabsIcon from "@/assets/carnival/icons/scottylabs.png";
 import tentIcon from "@/assets/carnival/icons/tent-default.svg";
 import tentIconGray from "@/assets/carnival/icons/tent-grey.svg";
 
@@ -26,6 +27,10 @@ interface Props {
 const EventIcon = ({ event }: Props) => {
   const getIconSrc = (event: DetailedEventType) => {
     // special cases
+    if (event.name.includes("ScottyLabs")) {
+      return scottyLabsIcon;
+    }
+
     if (event.name.includes("Dog House")) {
       if (new Date(event.startTime) > new Date()) {
         return dogHouseIconGray;
@@ -103,7 +108,7 @@ const EventIcon = ({ event }: Props) => {
     <img
       src={getIconSrc(event)}
       alt="Event Pin"
-      className="cursor-pointer"
+      className="cursor-pointer rounded-full"
       onClick={(e) => e.stopPropagation()}
     />
   );
