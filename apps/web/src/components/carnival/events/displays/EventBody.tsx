@@ -2,11 +2,15 @@ import { EventType } from "@cmumaps/common";
 
 import { useNavigate } from "react-router";
 
+import { setIsSearchOpen } from "@/store/features/uiSlice";
+import { useAppDispatch } from "@/store/hooks";
+
 interface Props {
   event: EventType;
 }
 
 const EventBody = ({ event }: Props) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   return (
@@ -15,7 +19,10 @@ const EventBody = ({ event }: Props) => {
       <div className="flex justify-end">
         <button
           className="cursor-pointer rounded-lg border-2 bg-blue-500 p-1 text-white"
-          onClick={() => navigate(`/events/${event.id}`)}
+          onClick={() => {
+            dispatch(setIsSearchOpen(false));
+            navigate(`/events/${event.id}`);
+          }}
         >
           View on map
         </button>

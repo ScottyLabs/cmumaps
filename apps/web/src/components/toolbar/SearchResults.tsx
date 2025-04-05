@@ -46,7 +46,7 @@ const SearchResults = ({ searchQuery }: Props) => {
           description: event.description,
         };
 
-        return <Event key={event.id} event={fixedEvent} />;
+        return <Event key={fixedEvent.id} event={fixedEvent} />;
       })}
     </div>
   );
