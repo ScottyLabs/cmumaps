@@ -3,11 +3,11 @@ import { useSearchQuery } from "@/store/features/api/apiSlice";
 import { useAppSelector } from "@/store/hooks";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
   searchQuery: string;
 }
 
-const SearchResults = ({ map, searchQuery }: Props) => {
+const SearchResults = ({ mapRef, searchQuery }: Props) => {
   const { data } = useSearchQuery(searchQuery);
   const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
 
@@ -26,7 +26,7 @@ const SearchResults = ({ map, searchQuery }: Props) => {
   return (
     <div className="flex flex-col overflow-auto bg-white p-2">
       {data.map((event) => {
-        return <Event key={event.id} map={map} event={event} />;
+        return <Event key={event.id} mapRef={mapRef} event={event} />;
       })}
     </div>
   );

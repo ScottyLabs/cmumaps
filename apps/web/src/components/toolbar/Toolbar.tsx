@@ -3,16 +3,16 @@ import MobileToolbar from "@/components/toolbar/MobileToolbar";
 import useIsMobile from "@/hooks/useIsMobile";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const Toolbar = ({ map }: Props) => {
+const Toolbar = ({ mapRef }: Props) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <MobileToolbar map={map} />;
+    return <MobileToolbar mapRef={mapRef} />;
   } else {
-    return <DesktopToolbar map={map} />;
+    return <DesktopToolbar mapRef={mapRef} />;
   }
 };
 

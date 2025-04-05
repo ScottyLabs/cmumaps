@@ -4,10 +4,10 @@ import useLocationParams from "@/hooks/useLocationParams";
 import { useAppSelector } from "@/store/hooks";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const Events = ({ map }: Props) => {
+const Events = ({ mapRef }: Props) => {
   const { isCardOpen } = useLocationParams();
   const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
 
@@ -17,7 +17,7 @@ const Events = ({ map }: Props) => {
 
   return (
     <CollapsibleWrapper title="Spring Carnival">
-      <EventsDisplay map={map} />
+      <EventsDisplay mapRef={mapRef} />
     </CollapsibleWrapper>
   );
 };

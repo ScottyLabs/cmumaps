@@ -9,10 +9,10 @@ import { selectCardCollapsed, setSnapPoints } from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const BuildingCard = ({ map: _map }: Props) => {
+const BuildingCard = ({ mapRef: _mapRef }: Props) => {
   const dispatch = useAppDispatch();
 
   const { buildingCode } = useLocationParams();

@@ -10,11 +10,11 @@ import { useGetEventsInfiniteQuery } from "@/store/features/api/eventApiSlice";
 import { useAppSelector } from "@/store/hooks";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
   timestamp: number;
 }
 
-const EventsList = ({ map, timestamp }: Props) => {
+const EventsList = ({ mapRef, timestamp }: Props) => {
   const scrollTop = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -71,7 +71,7 @@ const EventsList = ({ map, timestamp }: Props) => {
         {isFetchingPreviousPage && <Loader />}
       </div>
       {events.map((event) => (
-        <Event key={event.id} map={map} event={event} />
+        <Event key={event.id} mapRef={mapRef} event={event} />
       ))}
       <div className="flex justify-center">
         {isFetchingNextPage && <Loader />}

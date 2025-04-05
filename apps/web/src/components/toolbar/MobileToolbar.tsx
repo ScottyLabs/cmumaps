@@ -3,10 +3,10 @@ import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import Searchbar from "@/components/toolbar/Searchbar";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const MobileToolbar = ({ map }: Props) => {
+const MobileToolbar = ({ mapRef }: Props) => {
   return (
     <>
       <div
@@ -14,12 +14,12 @@ const MobileToolbar = ({ map }: Props) => {
         className="fixed top-2 flex w-full px-2"
       >
         <div className="flex w-full flex-col overflow-hidden py-2">
-          <Searchbar map={map} />
-          <Events map={map} />
+          <Searchbar mapRef={mapRef} />
+          <Events mapRef={mapRef} />
         </div>
       </div>
       <div className="fixed w-full">
-        <InfoCard map={map} />
+        <InfoCard mapRef={mapRef} />
       </div>
     </>
   );

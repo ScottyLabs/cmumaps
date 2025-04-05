@@ -7,11 +7,11 @@ import { useAppDispatch } from "@/store/hooks";
 import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
   event: EventType;
 }
 
-const EventBody = ({ event, map }: Props) => {
+const EventBody = ({ event, mapRef }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -22,8 +22,8 @@ const EventBody = ({ event, map }: Props) => {
         <button
           className="cursor-pointer rounded-lg border-2 bg-blue-500 p-1 text-white"
           onClick={() => {
-            if (map && event.latitude && event.longitude) {
-              zoomOnPoint(map, {
+            if (mapRef.current && event.latitude && event.longitude) {
+              zoomOnPoint(mapRef.current, {
                 latitude: event.latitude,
                 longitude: event.longitude,
               });

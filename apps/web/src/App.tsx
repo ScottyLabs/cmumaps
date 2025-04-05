@@ -29,7 +29,7 @@ const App = () => {
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
-      <Toolbar map={mapRef.current} />
+      <Toolbar mapRef={mapRef} />
       <FloorSwitcher />
       <MyToastContainer />
     </main>

@@ -6,11 +6,11 @@ import EventBody from "@/components/carnival/events/displays/EventBody";
 import EventTitle from "@/components/carnival/events/displays/EventTitle";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
   event: EventType;
 }
 
-const Event = ({ map, event }: Props) => {
+const Event = ({ mapRef, event }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = () => {
@@ -32,7 +32,7 @@ const Event = ({ map, event }: Props) => {
       }`}
     >
       {renderTrigger()}
-      {isOpen && <EventBody event={event} map={map} />}
+      {isOpen && <EventBody event={event} mapRef={mapRef} />}
     </div>
   );
 };

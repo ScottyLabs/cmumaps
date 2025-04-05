@@ -3,19 +3,19 @@ import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import Searchbar from "@/components/toolbar/Searchbar";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const DesktopToolbar = ({ map }: Props) => {
+const DesktopToolbar = ({ mapRef }: Props) => {
   return (
     <div
       style={{ maxHeight: `calc(100dvh - 2.5rem)` }}
       className="fixed top-2 left-2 box-content flex w-96"
     >
       <div className="flex w-full flex-col overflow-hidden">
-        <Searchbar map={map} />
-        <InfoCard map={map} />
-        <Events map={map} />
+        <Searchbar mapRef={mapRef} />
+        <InfoCard mapRef={mapRef} />
+        <Events mapRef={mapRef} />
       </div>
     </div>
   );

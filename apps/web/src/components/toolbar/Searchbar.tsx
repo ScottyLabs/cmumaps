@@ -9,10 +9,10 @@ import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const Searchbar = ({ map }: Props) => {
+const Searchbar = ({ mapRef }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -100,7 +100,7 @@ const Searchbar = ({ map }: Props) => {
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
       </div>
-      <SearchResults map={map} searchQuery={searchQuery} />
+      <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
     </>
   );
 };

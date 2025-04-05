@@ -8,10 +8,10 @@ import { useAppSelector } from "@/store/hooks";
 import BuildingCard from "../building-card/BuildingCard";
 
 interface Props {
-  map: mapkit.Map | null;
+  mapRef: React.RefObject<mapkit.Map | null>;
 }
 
-const InfoCard = ({ map }: Props) => {
+const InfoCard = ({ mapRef }: Props) => {
   const { buildingCode, roomName, eventId, carnivalEvent } =
     useLocationParams();
 
@@ -24,7 +24,7 @@ const InfoCard = ({ map }: Props) => {
     if (roomName) {
       return <RoomCard />;
     } else if (buildingCode) {
-      return <BuildingCard map={map} />;
+      return <BuildingCard mapRef={mapRef} />;
     } else if (eventId) {
       return <EventCard eventId={eventId} />;
     } else if (carnivalEvent) {
