@@ -8,15 +8,11 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import BoothPin from "@/components/carnival/booth/BoothPin";
-import BuggyPath from "@/components/carnival/buggy/BuggyPath";
-import BuggyPin from "@/components/carnival/buggy/BuggyPin";
 import {
   CAMERA_BOUNDARY,
   INITIAL_REGION,
 } from "@/components/map-display/MapConstants";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
-import EventPins from "@/components/map-display/events/EventPins";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
@@ -121,10 +117,6 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
-      <BuggyPath />
-      <EventPins />
-      <BoothPin />
-      <BuggyPin />
     </Map>
   );
 };

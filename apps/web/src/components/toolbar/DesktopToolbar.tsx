@@ -1,4 +1,3 @@
-import Events from "@/components/carnival/events/Events";
 import InfoCard from "@/components/info-cards/wrapper/InfoCard";
 import Searchbar from "@/components/toolbar/Searchbar";
 
@@ -15,7 +14,6 @@ const DesktopToolbar = ({ mapRef }: Props) => {
       <div className="flex w-full flex-col overflow-hidden">
         <Searchbar mapRef={mapRef} />
         <InfoCard mapRef={mapRef} />
-        <Events mapRef={mapRef} />
       </div>
     </div>
   );
