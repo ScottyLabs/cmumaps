@@ -1,12 +1,11 @@
 {
   "name": "cmumaps",
   "private": true,
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "bun@1.2.10",
   "type": "module",
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "infrastructure"
+    "packages/*"
   ],
   "scripts": {
     "start": "turbo run start",
@@ -18,12 +17,13 @@
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",
     "tsc": "turbo tsc --parallel",
-    "db-generate": "turbo run generate --filter=@cmumaps/db"
+    "db-generate": "turbo run generate --filter=@cmumaps/db",
+    "preinstall": "npx only-allow bun"
   },
   "devDependencies": {
-    "eslint": "^9.21.0",
+    "eslint": "^9.25.1",
     "prettier": "^3.5.3",
-    "turbo": "^2.4.4",
-    "typescript": "^5.8.2"
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.3"
   }
 }
