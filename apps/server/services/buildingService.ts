@@ -8,7 +8,9 @@ export const buildingService = {
     // get all buildings and their floors and default floor
     const dbBuildings = await prisma.building.findMany({
       include: {
-        floors: true,
+        floors: {
+          orderBy: { floorLevel: "asc" },
+        }
       },
     });
 
