@@ -1,42 +1,32 @@
 # Script to populate the Rooms table
 # skip empty buildings and outside
-from prisma import Prisma  # type: ignore
-import asyncio
-import json
+import os
+import sys
 
-prisma = Prisma()
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+import json
+import requests  # type: ignore
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 
 # Drop and populate Element and Room tables
-async def drop_room_tables():
-    await prisma.connect()
-
-    table_names = ["Room"]
-
-    for table_name in table_names:
-        try:
-            # Truncate each table
-            await prisma.query_raw(
-                f'TRUNCATE TABLE "{table_name}" RESTART IDENTITY CASCADE'
-            )
-            print(f"Cleared table: {table_name}")
-        except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
-
-    await prisma.disconnect()
+def drop_room_table():
+    server_url = os.getenv("SERVER_URL")
+    response = requests.delete(
+        f"{server_url}/api/drop-tables",
+        json={"tableNames": ["Room"]},
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
-if __name__ == "__main__":
-    asyncio.run(drop_room_tables())
-
-
-async def create_rooms(target_building=None, target_floor=None):
-    await prisma.connect()
-
-    file_path = "cmumaps-data/floorplans/floorPlans.json"
+def create_rooms():
+    file_path = "cmumaps-data/floorplans/floorplans.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 
+    # Populate Room data
     for building in data:
         # skip empty buildings
         if not data[building]:
@@ -47,7 +37,6 @@ async def create_rooms(target_building=None, target_floor=None):
             continue
 
         rooms_data = []
-
         for floor in data[building]:
             for room in data[building][floor]:
                 roomdata = data[building][floor][room]
@@ -73,24 +62,17 @@ async def create_rooms(target_building=None, target_floor=None):
 
                 rooms_data.append(room)
 
-        # if target_building and/or target_floor specified
-        for node in rooms_data:
-            if target_building or target_floor:
-                target_nodes = []
-
-                if (
-                    node["buildingCode"] == target_building
-                    and node["floorLevel"] == target_floor
-                ):
-                    target_nodes.append(node)
-
-                rooms_data = target_nodes
-
-        async with prisma.tx() as tx:
-            await tx.room.create_many(data=rooms_data)
-
-    await prisma.disconnect()
+        # Send request to server to populate Room table
+        server_url = os.getenv("SERVER_URL")
+        response = requests.post(
+            f"{server_url}/api/populate-table/rooms",
+            json=rooms_data,
+            headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        )
+        print(building)
+        print(response.json())
 
 
 if __name__ == "__main__":
-    asyncio.run(create_rooms())
+    drop_room_table()
+    create_rooms()

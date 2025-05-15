@@ -9,4 +9,20 @@ export const populateTableService = {
   populateFloors: async (data: any) => {
     await prisma.floor.createMany({ data });
   },
+
+  populateRooms: async (data: any) => {
+    await prisma.room.createMany({ data });
+  },
+
+  populateAlias: async (data: any) => {
+    await prisma.alias.createMany({ data });
+  },
+
+  populateNodes: async (data: any) => {
+    await prisma.node.createMany({ data });
+  },
+
+  populateEdges: async (data: any) => {
+    await prisma.edge.createMany({ data });
+  },
 };

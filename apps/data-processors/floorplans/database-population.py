@@ -8,10 +8,11 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import asyncio
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
-from building import create_building
-from floor import create_floor
+
+from building import create_buildings
+from floor import create_floors
 from room import create_rooms
-from alias import create_alias
+from alias import create_aliases
 from node import create_nodes
 from edge import create_edges
 
@@ -31,9 +32,9 @@ if __name__ == "__main__":
     drop_all_tables()
 
     # Populate all tables
-    asyncio.run(create_building())
+    asyncio.run(create_buildings())
     print("created buildings")
-    asyncio.run(create_floor())
+    asyncio.run(create_floors())
     print("created floors")
     asyncio.run(create_rooms())
     print("created rooms")
