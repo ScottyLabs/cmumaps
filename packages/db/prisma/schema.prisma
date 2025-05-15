@@ -21,7 +21,7 @@ model Building {
   labelLatitude  Float
   labelLongitude Float
   shape          Json
-  hitbox         Json
+  hitbox         Json?
   defaultOrdinal Int?
   floors         Floor[]
 }
