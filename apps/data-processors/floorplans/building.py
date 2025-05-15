@@ -10,7 +10,7 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 
 # Drop Building table
-def drop_buildings_tables():
+def drop_building_table():
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
         f"{server_url}/api/drop-tables",
@@ -21,7 +21,7 @@ def drop_buildings_tables():
 
 
 # Populate Building table
-def create_building():
+def create_buildings():
     with open("cmumaps-data/floorplans/buildings.json", "r") as file:
         data = json.load(file)
 
@@ -62,5 +62,5 @@ def create_building():
 
 
 if __name__ == "__main__":
-    drop_buildings_tables()
-    create_building()
+    drop_building_table()
+    create_buildings()

@@ -8,7 +8,7 @@ export const dropTablesController = {
     try {
       const { tableNames } = req.body;
       await dropTablesService.dropTables(tableNames);
-      res.json(null);
+      res.json({ message: `Tables dropped: ${tableNames.join(", ")}` });
     } catch (error) {
       handleControllerError(res, error, "dropping tables");
     }

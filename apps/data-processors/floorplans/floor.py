@@ -1,34 +1,28 @@
 # Script to populate the Floor table of the database using placements.json
 # Precondition: Building table must be populated
 # excludes outside
-from prisma import Prisma  # type: ignore
-import asyncio
+
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 import json
-
-prisma = Prisma()
-
-
-async def drop_floor_tables():
-    await prisma.connect()
-
-    table_names = ["Floor"]
-
-    for table_name in table_names:
-        try:
-            # Truncate each table
-            await prisma.query_raw(
-                f'TRUNCATE TABLE "{table_name}" RESTART IDENTITY CASCADE'
-            )
-            print(f"Cleared table: {table_name}")
-        except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
-
-    await prisma.disconnect()
+import requests  # type: ignore
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 
-async def create_floor(target_building=None, target_floor=None):
-    await prisma.connect()
+def drop_floor_table():
+    server_url = os.getenv("SERVER_URL")
+    response = requests.delete(
+        f"{server_url}/api/drop-tables",
+        json={"tableNames": ["Floor"]},
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
+
+def create_floors():
     floors_data = []
 
     with open("cmumaps-data/floorplans/buildings.json", "r") as file:
@@ -65,25 +59,16 @@ async def create_floor(target_building=None, target_floor=None):
 
             floors_data.append(floor)
 
-    # if target_building and/or target_floor specified
-    for node in floors_data:
-        if target_building or target_floor:
-            target_nodes = []
-
-            if (
-                node["buildingCode"] == target_building
-                and node["floorLevel"] == target_floor
-            ):
-                target_nodes.append(node)
-
-            floors_data = target_nodes
-
-    async with prisma.tx() as tx:
-        await tx.floor.create_many(data=floors_data)
-
-    await prisma.disconnect()
+    # Send request to server to populate Floor table
+    server_url = os.getenv("SERVER_URL")
+    response = requests.post(
+        f"{server_url}/api/populate-table/floors",
+        json=floors_data,
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
 if __name__ == "__main__":
-    asyncio.run(drop_floor_tables())
-    asyncio.run(create_floor())
+    drop_floor_table()
+    create_floors()
