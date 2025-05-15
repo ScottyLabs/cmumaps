@@ -13,19 +13,16 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 interface Props {
+  snapPoints: number[];
   children: React.ReactElement;
 }
 
-const DraggableSheet = ({ children }: Props) => {
+const DraggableSheet = ({ snapPoints, children }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isCardOpen } = useLocationParams();
-
   const controls = useAnimation();
-
+  const { isCardOpen } = useLocationParams();
   const cardStatus = useAppSelector((state) => state.card.cardStatus);
-  const snapPoints = useAppSelector((state) => state.card.snapPoints);
-
   const snapIndex = useMemo(() => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
@@ -41,12 +38,12 @@ const DraggableSheet = ({ children }: Props) => {
 
   // updates the snapping when isCardOpen or snapIndex changes
   useEffect(() => {
-    if (snapPoints && snapPoints[snapIndex]) {
-      if (isCardOpen) {
+    if (isCardOpen) {
+      if (snapPoints[snapIndex]) {
         controls.start({ y: -snapPoints[snapIndex] });
-      } else {
-        controls.start({ y: 0 });
       }
+    } else {
+      controls.start({ y: 0 });
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
 
@@ -54,11 +51,7 @@ const DraggableSheet = ({ children }: Props) => {
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
   ) => {
-    if (!snapPoints) {
-      return;
-    }
-
-    // snapping logic
+    // find the closest snap point based on the velocity and offset
     if (snapPoints[snapIndex]) {
       const newPos = snapPoints[snapIndex] - info.offset.y;
       const newPosAdj =
@@ -83,7 +76,7 @@ const DraggableSheet = ({ children }: Props) => {
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
   ) => {
-    if (snapPoints && snapPoints[snapIndex]) {
+    if (snapPoints[snapIndex]) {
       const newPos = snapPoints[snapIndex] - info.offset.y;
       controls.set({ height: newPos + window.innerHeight });
     }

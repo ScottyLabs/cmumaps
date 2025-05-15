@@ -6,7 +6,8 @@ import { useNavigate } from "react-router";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
-import { useAppSelector } from "@/store/hooks";
+import { CardStates, setInfoCardStatus } from "@/store/features/cardSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getFloorCode } from "@/utils/floorUtils";
 
 interface Props {
@@ -14,6 +15,8 @@ interface Props {
 }
 
 const FloorplanOverlay = ({ floor }: Props) => {
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
   const { roomName: selectedRoomName } = useLocationParams();
   const showRoomNames = useAppSelector((state) => state.map.showRoomNames);
@@ -28,6 +31,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
   const handleSelectRoom = (roomName: string, room: GeoRoom) => {
     const floor = room.floor;
     navigate(`/${floor.buildingCode}-${roomName}`);
+    dispatch(setInfoCardStatus(CardStates.HALF_OPEN));
   };
 
   return Object.entries(rooms).map(([roomName, room]) => {

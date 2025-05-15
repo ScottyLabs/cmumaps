@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 
 import Roundel from "@/components/shared/Roundel";
+import { CardStates, setInfoCardStatus } from "@/store/features/cardSlice";
 import { selectBuilding } from "@/store/features/mapSlice";
 import { useAppSelector } from "@/store/hooks";
 import { zoomOnObject } from "@/utils/zoomUtils";
@@ -37,6 +38,7 @@ const BuildingRoundel = ({ map, building }: Props) => {
 
     navigate(`/${building.code}`);
     dispatch(selectBuilding(building));
+    dispatch(setInfoCardStatus(CardStates.HALF_OPEN));
   };
 
   return (

@@ -1,31 +1,20 @@
-import { useEffect } from "react";
-
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
-import { selectCardCollapsed, setSnapPoints } from "@/store/features/cardSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectCardCollapsed } from "@/store/features/cardSlice";
+import { useAppSelector } from "@/store/hooks";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
 }
 
 const BuildingCard = ({ mapRef: _mapRef }: Props) => {
-  const dispatch = useAppDispatch();
-
   const { buildingCode } = useLocationParams();
   const { data: buildings } = useGetBuildingsQuery();
   const isMobile = useIsMobile();
   const cardCollapsed = useAppSelector(selectCardCollapsed);
-
-  // set the mid snap point
-  // TODO: should change based on if has food eateries
-  // eateries.length > 0 ? 460 : 288));
-  useEffect(() => {
-    dispatch(setSnapPoints([142, 288, window.innerHeight]));
-  }, [dispatch]);
 
   if (!buildingCode || !buildings) {
     return;

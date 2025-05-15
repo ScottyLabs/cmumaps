@@ -1,7 +1,8 @@
-import CarnivalCard from "@/components/info-cards/event-card/CarnivalCard";
-import EventCard from "@/components/info-cards/event-card/EventCard";
+import React from "react";
+
 import RoomCard from "@/components/info-cards/room-card/RoomCard";
-import CardWrapper from "@/components/info-cards/wrapper/CardWrapper";
+import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
+import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useAppSelector } from "@/store/hooks";
 
@@ -12,8 +13,8 @@ interface Props {
 }
 
 const InfoCard = ({ mapRef }: Props) => {
-  const { buildingCode, roomName, eventId, carnivalEvent } =
-    useLocationParams();
+  const isMobile = useIsMobile();
+  const { buildingCode, roomName } = useLocationParams();
 
   const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
   if (isSearchOpen) {
@@ -22,19 +23,41 @@ const InfoCard = ({ mapRef }: Props) => {
 
   const renderCard = () => {
     if (roomName) {
-      return <RoomCard />;
+      // TODO: should change based on if has schedule
+      return {
+        snapPoints: [166, 310, window.innerHeight],
+        element: () => <RoomCard />,
+      };
     } else if (buildingCode) {
-      return <BuildingCard mapRef={mapRef} />;
-    } else if (eventId) {
-      return <EventCard eventId={eventId} />;
-    } else if (carnivalEvent) {
-      return <CarnivalCard carnivalEvent={carnivalEvent} />;
+      // TODO: should change based on if has food eateries
+      // eateries.length > 0 ? 460 : 288));
+      return {
+        snapPoints: [142, 288, window.innerHeight],
+        element: () => <BuildingCard mapRef={mapRef} />,
+      };
     } else {
-      return <></>;
+      return {
+        snapPoints: [],
+        element: () => <></>,
+      };
     }
   };
 
-  return <CardWrapper>{renderCard()}</CardWrapper>;
+  const { snapPoints, element } = renderCard();
+
+  if (isMobile) {
+    return (
+      <DraggableSheet snapPoints={snapPoints}>
+        {React.createElement(element)}
+      </DraggableSheet>
+    );
+  } else {
+    return (
+      <div className="flex w-96 flex-col overflow-hidden rounded-lg bg-white shadow-lg shadow-gray-400">
+        {React.createElement(element)}
+      </div>
+    );
+  }
 };
 
 export default InfoCard;
