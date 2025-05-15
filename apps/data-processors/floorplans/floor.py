@@ -66,6 +66,7 @@ def create_floors():
         json=floors_data,
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
+    print(response)
     print(response.json())
 
 

@@ -7,13 +7,9 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from prisma import Prisma  # type: ignore
 import json
 import requests  # type: ignore
-
 from auth_utils.get_clerk_jwt import get_clerk_jwt
-
-prisma = Prisma()
 
 
 # Drop and populate Edge table
@@ -27,15 +23,11 @@ def drop_edge_table():
     print(response.json())
 
 
-async def create_edges(target_building=None, target_floor=None):
-    await prisma.connect()
-
-    file_path = "cmumaps-data/floorplans/all-graph.json"
-    with open(file_path, "r") as file:
+def create_edges():
+    with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
         data = json.load(file)
 
     edge_data = []
-
     for nodeId in data:
         if "neighbors" not in data[nodeId]:
             continue
@@ -61,18 +53,17 @@ async def create_edges(target_building=None, target_floor=None):
 
             edge_data.append(edge_node)
 
-    # will get prisma.engine.errors.UnprocessableEntityError if not create in batches
-    batch_size = 30000
-
-    for i in range(0, len(edge_data), batch_size):
-        batch = edge_data[i : i + batch_size]
-
-        async with prisma.tx() as tx:
-            await tx.edge.create_many(data=batch)
-
-    await prisma.disconnect()
+    # Send request to server to populate Edge table
+    server_url = os.getenv("SERVER_URL")
+    response = requests.post(
+        f"{server_url}/api/populate-table/edges",
+        json=edge_data,
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response)
+    print(response.json())
 
 
 if __name__ == "__main__":
     drop_edge_table()
-    # asyncio.run(create_edges())
+    create_edges()

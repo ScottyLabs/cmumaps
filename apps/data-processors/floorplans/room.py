@@ -70,6 +70,7 @@ def create_rooms():
             headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
         )
         print(building)
+        print(response)
         print(response.json())
 
 

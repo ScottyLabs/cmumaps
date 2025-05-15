@@ -1,37 +1,29 @@
 # Script to populate Node table of the database using all_graph.json
 # skip outside nodes
 # python scripts/json-to-database/node.py
-from prisma import Prisma  # type: ignore
-import asyncio
-import json
+import os
+import sys
 
-prisma = Prisma()
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+import json
+import requests  # type: ignore
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 
 # Drop and populate Node table
-async def drop_node_table():
-    await prisma.connect()
-
-    table_names = ["Node"]
-
-    for table_name in table_names:
-        try:
-            # Truncate each table
-            await prisma.query_raw(
-                f'TRUNCATE TABLE "{table_name}" RESTART IDENTITY CASCADE'
-            )
-            print(f"Cleared table: {table_name}")
-        except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
-
-    await prisma.disconnect()
+def drop_node_table():
+    server_url = os.getenv("SERVER_URL")
+    response = requests.delete(
+        f"{server_url}/api/drop-tables",
+        json={"tableNames": ["Node"]},
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
-async def create_nodes(target_building=None, target_floor=None):
-    await prisma.connect()
-
-    file_path = "cmumaps-data/floorplans/all-graph.json"
-    with open(file_path, "r") as file:
+def create_nodes():
+    with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
         data = json.load(file)
 
     node_data = []
@@ -60,25 +52,17 @@ async def create_nodes(target_building=None, target_floor=None):
 
         node_data.append(node)
 
-    # if target_building and/or target_floor specified
-    for node in node_data:
-        if target_building or target_floor:
-            target_nodes = []
-
-            if (
-                node["buildingCode"] == target_building
-                and node["floorLevel"] == target_floor
-            ):
-                target_nodes.append(node)
-
-            node_data = target_nodes
-
-    async with prisma.tx() as tx:
-        await tx.node.create_many(data=node_data)
-
-    await prisma.disconnect()
+    # Send request to server to populate Node table
+    server_url = os.getenv("SERVER_URL")
+    response = requests.post(
+        f"{server_url}/api/populate-table/nodes",
+        json=node_data,
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response)
+    print(response.json())
 
 
 if __name__ == "__main__":
-    asyncio.run(drop_node_table())
-    asyncio.run(create_nodes())
+    drop_node_table()
+    create_nodes()

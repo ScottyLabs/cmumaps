@@ -1,41 +1,30 @@
 # create Alias table of the database using floorPlanMap.json
-from prisma import Prisma  # type: ignore
-import asyncio
-import json
+import os
+import sys
 
-prisma = Prisma()
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+import json
+import requests  # type: ignore
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 
 # Drop and populate Alias table
-async def drop_alias_table():
-    await prisma.connect()
-
-    table_names = ["Alias"]
-
-    for table_name in table_names:
-        try:
-            # Truncate each table
-            await prisma.query_raw(
-                f'TRUNCATE TABLE "{table_name}" RESTART IDENTITY CASCADE'
-            )
-            print(f"Cleared table: {table_name}")
-        except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
-
-    await prisma.disconnect()
+def drop_alias_table():
+    server_url = os.getenv("SERVER_URL")
+    response = requests.delete(
+        f"{server_url}/api/drop-tables",
+        json={"tableNames": ["Alias"]},
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
-if __name__ == "__main__":
-    asyncio.run(drop_alias_table())
-
-
-async def create_alias(target_building=None, target_floor=None):
-    await prisma.connect()
-
-    file_path = "cmumaps-data/floorplans/floorplans.json"
-    with open(file_path, "r") as file:
+def create_aliases():
+    with open("cmumaps-data/floorplans/floorplans.json", "r") as file:
         data = json.load(file)
 
+    alias_data = []
     for building in data:
         # skip empty buildings
         if not data[building]:
@@ -45,7 +34,6 @@ async def create_alias(target_building=None, target_floor=None):
         if building == "outside":
             continue
 
-        alias_data = []
         for floor in data[building]:
             for room_id in data[building][floor]:
                 room = data[building][floor][room_id]
@@ -62,29 +50,17 @@ async def create_alias(target_building=None, target_floor=None):
                             }
                         )
 
-        # if target_building and/or target_floor specified
-        for node in alias_data:
-            if target_building or target_floor:
-                target_alias = []
-
-                nodes = await prisma.query_raw(
-                    'SELECT "roomId" FROM "Room" WHERE "buildingCode" = $1 AND "floorLevel" = $2;',
-                    target_building,
-                    target_floor,
-                )
-                target_nodes = [
-                    room["roomId"] for room in nodes
-                ]  # Extract nodeId values
-                if node["roomId"] in target_nodes:
-                    target_alias.append(node)
-
-                alias_data = target_alias
-
-        async with prisma.tx() as tx:
-            await tx.alias.create_many(data=alias_data)
-
-    await prisma.disconnect()
+    # Send request to server to populate Alias table
+    server_url = os.getenv("SERVER_URL")
+    response = requests.post(
+        f"{server_url}/api/populate-table/alias",
+        json=alias_data,
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response)
+    print(response.json())
 
 
 if __name__ == "__main__":
-    asyncio.run(create_alias())
+    drop_alias_table()
+    create_aliases()

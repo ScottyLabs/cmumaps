@@ -26,7 +26,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json({ limit: "64mb" }));
+app.use(express.json({ limit: "8mb" }));
 
 // Create HTTP server with Express app attached
 const server = http.createServer(app);
