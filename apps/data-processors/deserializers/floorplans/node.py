@@ -27,22 +27,12 @@ async def drop_node_table():
     await prisma.disconnect()
 
 
-def get_outside_rooms():
-    with open("cmumaps-data/floorplans/outside-graph.json", "r") as file:
-        outside_data = json.load(file)
-
-    outside_rooms = [outsideId for outsideId in outside_data]
-    return outside_rooms
-
-
 async def create_nodes(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "cmumaps-data/floorplans/all_graph.json"
+    file_path = "cmumaps-data/floorplans/all-graph.json"
     with open(file_path, "r") as file:
         data = json.load(file)
-
-    outside_rooms = get_outside_rooms()
 
     node_data = []
     for nodeId in data:
@@ -60,7 +50,9 @@ async def create_nodes(target_building=None, target_floor=None):
             "buildingCode": buildingCode,
             "floorLevel": floorLevel,
         }
-        if node["nodeId"] in outside_rooms:
+
+        # skip outside nodes
+        if node["buildingCode"] == "outside":
             continue
 
         if roomId:

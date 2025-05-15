@@ -37,9 +37,6 @@ async def create_floor(target_building=None, target_floor=None):
     with open("cmumaps-data/floorplans/placements.json", "r") as file:
         data = json.load(file)
 
-    with open("cmumaps-data/floorplans/floorCenters.json", "r") as file:
-        floor_centers = json.load(file)
-
     for buildingCode in data:
         if buildingCode == "outside":
             continue
@@ -49,7 +46,7 @@ async def create_floor(target_building=None, target_floor=None):
             centerLongitude = data[buildingCode][floorLevel]["center"]["longitude"]
             scale = data[buildingCode][floorLevel]["scale"]
             angle = data[buildingCode][floorLevel]["angle"]
-            center = floor_centers[buildingCode][floorLevel]
+            pdf_center = data[buildingCode][floorLevel]["pdfCenter"]
 
             defaultFloor = buildings[buildingCode]["defaultFloor"]
             isDefault = floorLevel == defaultFloor
@@ -58,8 +55,8 @@ async def create_floor(target_building=None, target_floor=None):
                 "buildingCode": buildingCode,
                 "floorLevel": floorLevel,
                 "isDefault": isDefault,
-                "centerX": center[0],
-                "centerY": center[1],
+                "centerX": pdf_center["x"],
+                "centerY": pdf_center["y"],
                 "centerLatitude": centerLatitude,
                 "centerLongitude": centerLongitude,
                 "scale": scale,

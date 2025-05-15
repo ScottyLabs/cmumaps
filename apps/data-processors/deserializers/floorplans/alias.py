@@ -32,7 +32,7 @@ if __name__ == "__main__":
 async def create_alias(target_building=None, target_floor=None):
     await prisma.connect()
 
-    file_path = "cmumaps-data/floorplans/searchMap.json"
+    file_path = "cmumaps-data/floorplans/floorplans.json"
     with open(file_path, "r") as file:
         data = json.load(file)
 
@@ -47,8 +47,10 @@ async def create_alias(target_building=None, target_floor=None):
 
         alias_data = []
         for floor in data[building]:
-            for room in data[building][floor]:
-                displayAlias = room["alias"]
+            for room_id in data[building][floor]:
+                room = data[building][floor][room_id]
+                displayAlias = "" if not room["aliases"] else room["aliases"][0]
+
                 roomId = room["id"]
                 for alias in room["aliases"]:
                     if alias:
