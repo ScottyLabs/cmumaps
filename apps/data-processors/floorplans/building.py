@@ -1,39 +1,32 @@
 # Script to populate the Building table of the database using buildings.json
-from prisma import Prisma  # type: ignore
-import asyncio
-import json
+import os
+import sys
 
-prisma = Prisma()
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+import json
+import requests  # type: ignore
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 
 # Drop Building table
-async def drop_buildings_tables():
-    await prisma.connect()
-
-    table_names = ["Building"]
-
-    for table_name in table_names:
-        try:
-            # Truncate each table
-            await prisma.query_raw(
-                f'TRUNCATE TABLE "{table_name}" RESTART IDENTITY CASCADE'
-            )
-            print(f"Cleared table: {table_name}")
-        except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
-
-    await prisma.disconnect()
+def drop_buildings_tables():
+    server_url = os.getenv("SERVER_URL")
+    response = requests.delete(
+        f"{server_url}/api/drop-tables",
+        json={"tableNames": ["Building"]},
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
 # Populate Building table
-async def create_building():
-    await prisma.connect()
-
-    buildings_data = []
-
+def create_building():
     with open("cmumaps-data/floorplans/buildings.json", "r") as file:
         data = json.load(file)
+
     # Iterate through all buildings
+    buildings_data = []
     for buildingCode in data:
         name = data[buildingCode]["name"]
         osmId = data[buildingCode]["osmId"]
@@ -57,13 +50,17 @@ async def create_building():
             "hitbox": hitbox,
         }
         buildings_data.append(building)
-    # Create all building entries
-    async with prisma.tx() as tx:
-        await tx.building.create_many(data=buildings_data)
 
-    await prisma.disconnect()
+    # Send request to server to populate Building table
+    server_url = os.getenv("SERVER_URL")
+    response = requests.post(
+        f"{server_url}/api/populate-table/buildings",
+        json=buildings_data,
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
 if __name__ == "__main__":
-    asyncio.run(drop_buildings_tables())
-    asyncio.run(create_building())
+    drop_buildings_tables()
+    create_building()

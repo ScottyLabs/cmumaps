@@ -15,6 +15,7 @@ import eventRoutes from "./routes/eventRoutes";
 import floorRoutes from "./routes/floorRoutes";
 import nodeRoutes from "./routes/nodeRoutes";
 import poiRoutes from "./routes/poiRoutes";
+import populateTableRoutes from "./routes/populateTableRoutes";
 import roomRoutes from "./routes/roomRoutes";
 import { WebSocketService } from "./services/webSocketService";
 
@@ -50,7 +51,7 @@ app.get("/", (req, res) => {
 
 // Routes for database population
 app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
-// app.use("/api/populate-tables", checkAuth, populateTablesRoutes);
+app.use("/api/populate-table", checkAuth, populateTableRoutes);
 
 app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", buildingRoutes);
