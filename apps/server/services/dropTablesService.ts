@@ -2,6 +2,7 @@ import { prisma } from "@cmumaps/db";
 
 export const dropTablesService = {
   dropTables: async (tableNames: string[]) => {
-    await prisma.$executeRaw`TRUNCATE TABLE ${tableNames.join(", ")} RESTART IDENTITY CASCADE`;
+    const sql = `TRUNCATE TABLE ${tableNames.map((t) => `"${t}"`).join(", ")} RESTART IDENTITY CASCADE`;
+    await prisma.$executeRawUnsafe(sql);
   },
 };

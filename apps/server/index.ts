@@ -56,7 +56,7 @@ app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", buildingRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
-app.use("/api", checkAuth, requireSocketId, edgeRoutes);
+app.use("/api", checkAuth, edgeRoutes);
 app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
 app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
 app.use(notFoundHandler);

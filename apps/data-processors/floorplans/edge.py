@@ -8,7 +8,6 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from prisma import Prisma  # type: ignore
-import asyncio
 import json
 import requests  # type: ignore
 
@@ -18,9 +17,9 @@ prisma = Prisma()
 
 
 # Drop and populate Edge table
-async def drop_edge_table():
+def drop_edge_table():
     server_url = os.getenv("SERVER_URL")
-    response = requests.post(
+    response = requests.delete(
         f"{server_url}/api/drop-tables",
         json={"tableNames": ["Edge"]},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
@@ -75,5 +74,5 @@ async def create_edges(target_building=None, target_floor=None):
 
 
 if __name__ == "__main__":
-    asyncio.run(drop_edge_table())
+    drop_edge_table()
     # asyncio.run(create_edges())
