@@ -1,4 +1,5 @@
-import { Building } from "@cmumaps/common";
+import { Building, Buildings } from "@cmumaps/common";
+import { useQuery } from "@tanstack/react-query";
 import { CoordinateRegion } from "mapkit-react";
 
 import { RefObject, useState } from "react";
@@ -9,7 +10,6 @@ import {
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
-import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import {
   focusFloor,
   setShowRoomNames,
@@ -17,14 +17,17 @@ import {
 } from "@/store/features/mapSlice";
 import { showLogin } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { apiClient } from "@/utils/apiClient";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   const dispatch = useAppDispatch();
-
-  const { data: buildings } = useGetBuildingsQuery();
   const focusedFloor = useAppSelector((state) => state.map.focusedFloor);
+  const { data: buildings } = useQuery<Buildings>({
+    queryKey: ["buildings"],
+    queryFn: apiClient("buildings"),
+  });
 
   const [showFloor, setShowFloor] = useState<boolean>(false);
 

@@ -16,6 +16,7 @@
     "@cmumaps/common": "workspace:*",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
+    "@tanstack/react-query": "^5.76.1",
     "lodash": "^4.17.21",
     "mapkit-react": "^1.16.1",
     "motion": "^12.6.2",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@clerk/types": "^4.47.0",
     "@eslint/js": "^9.22.0",
+    "@tanstack/eslint-plugin-query": "^5.74.7",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/apple-mapkit-js-browser": "^5.78.1",
     "@types/lodash": "^4.17.16",

@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 import pluginReact from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig } from "eslint/config";
@@ -20,6 +21,7 @@ export default defineConfig([
   pluginReact.configs.flat.recommended,
 
   // custom
+  ...pluginQuery.configs["flat/recommended"],
   pluginReact.configs.flat["jsx-runtime"],
   reactHooks.configs["recommended-latest"],
   {
@@ -29,7 +31,6 @@ export default defineConfig([
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      curly: ["error", "all"],
     },
     settings: {
       react: {

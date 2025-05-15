@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   Map,
   MapType,
@@ -16,7 +17,6 @@ import BuildingsDisplay from "@/components/map-display/buildings-display/Buildin
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
-import { useGetBuildingsQuery } from "@/store/features/api/apiSlice";
 import {
   deselectBuilding,
   selectBuilding,
@@ -24,6 +24,7 @@ import {
 } from "@/store/features/mapSlice";
 import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { apiClient } from "@/utils/apiClient";
 import { isInPolygon } from "@/utils/geometry";
 
 interface Props {
@@ -34,13 +35,14 @@ const MapDisplay = ({ mapRef }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-
-  const { data: buildings } = useGetBuildingsQuery();
-
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
-
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
+
+  const { data: buildings } = useQuery({
+    queryKey: ["buildings"],
+    queryFn: apiClient("buildings"),
+  });
 
   const handleLoad = () => {
     if (mapRef.current) {

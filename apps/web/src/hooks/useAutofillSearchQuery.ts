@@ -1,16 +1,18 @@
 import { skipToken } from "@reduxjs/toolkit/query";
+import { useQuery } from "@tanstack/react-query";
 
 import { useCallback, useEffect } from "react";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import {
-  useGetBuildingsQuery,
-  useGetFloorRoomsQuery,
-} from "@/store/features/api/apiSlice";
+import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
+import { apiClient } from "@/utils/apiClient";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
   const { buildingCode, roomName, floor } = useLocationParams();
-  const { data: buildings } = useGetBuildingsQuery();
+  const { data: buildings } = useQuery({
+    queryKey: ["buildings"],
+    queryFn: apiClient("buildings"),
+  });
   const { data: rooms } = useGetFloorRoomsQuery(
     buildingCode && floor ? `${buildingCode}-${floor}` : skipToken,
   );
