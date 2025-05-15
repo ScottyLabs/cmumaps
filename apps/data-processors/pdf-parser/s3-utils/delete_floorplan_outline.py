@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import requests  # type: ignore
 
-from get_clerk_jwt import get_clerk_jwt
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 load_dotenv()
 AWS_API_INVOKE_URL = os.getenv("NEXT_PUBLIC_AWS_API_INVOKE_URL")

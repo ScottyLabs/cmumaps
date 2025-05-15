@@ -9,6 +9,7 @@ import { checkAuth, socketAuth } from "./middleware/authMiddleware";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 import { requireSocketId } from "./middleware/socketIdMiddleware";
 import buildingRoutes from "./routes/buildingRoutes";
+import dropTablesRoutes from "./routes/dropTablesRoutes";
 import edgeRoutes from "./routes/edgeRoutes";
 import eventRoutes from "./routes/eventRoutes";
 import floorRoutes from "./routes/floorRoutes";
@@ -46,6 +47,10 @@ app.use(clerkMiddleware());
 app.get("/", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
+
+// Routes for database population
+app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
+// app.use("/api/populate-tables", checkAuth, populateTablesRoutes);
 
 app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", buildingRoutes);
