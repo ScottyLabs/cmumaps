@@ -38,7 +38,8 @@ model Floor {
   angle           Float
   altitude        Float?
   building        Building @relation(fields: [buildingCode], references: [buildingCode])
-  Node            Node[]
+  nodes           Node[]
+  rooms           Room[]
 
   @@id([buildingCode, floorLevel])
 }
@@ -54,7 +55,8 @@ model Room {
   floorLevel     String?
   aliases        Alias[]
   nodes          Node[]
-
+  floor          Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+  
   @@index([buildingCode, floorLevel])
 }
 
@@ -97,45 +99,4 @@ model Poi {
   type   String
   nodeId String @unique
   node   Node   @relation(fields: [nodeId], references: [nodeId])
-}
-
-model EventOccurrence {
-  eventOccurrenceId String   @id
-  eventId           String
-  startTime         DateTime
-  endTime           DateTime
-  locationId        String
-  event             Event    @relation(fields: [eventId], references: [eventId])
-  location          Location @relation(fields: [locationId], references: [locationId])
-}
-
-model EventTrack {
-  eventId   String
-  trackName String
-  event     Event  @relation(fields: [eventId], references: [eventId])
-  track     Track  @relation(fields: [trackName], references: [trackName])
-
-  @@id([eventId, trackName])
-}
-
-model Event {
-  eventId          String            @id
-  title            String
-  description      String
-  req              String?
-  eventOccurrences EventOccurrence[]
-  eventTracks      EventTrack[]
-}
-
-model Location {
-  locationId       String            @id
-  locationName     String
-  latitude         Float?
-  longitude        Float?
-  eventOccurrences EventOccurrence[]
-}
-
-model Track {
-  trackName   String       @id
-  eventTracks EventTrack[]
 }
