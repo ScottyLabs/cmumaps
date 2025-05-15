@@ -2,30 +2,30 @@
 # excludes outside, neigbors who are missing in node or out node,
 # edges whose in node or out node are missing a roomId
 # python scripts/json-to-database/edge.py
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from prisma import Prisma  # type: ignore
 import asyncio
 import json
+import requests  # type: ignore
+
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 prisma = Prisma()
 
 
 # Drop and populate Edge table
 async def drop_edge_table():
-    await prisma.connect()
-
-    table_names = ["Edge"]
-
-    for table_name in table_names:
-        try:
-            # Truncate each table
-            await prisma.query_raw(
-                f'TRUNCATE TABLE "{table_name}" RESTART IDENTITY CASCADE'
-            )
-            print(f"Cleared table: {table_name}")
-        except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
-
-    await prisma.disconnect()
+    server_url = os.getenv("SERVER_URL")
+    response = requests.post(
+        f"{server_url}/api/drop-tables",
+        json={"tableNames": ["Edge"]},
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    print(response.json())
 
 
 async def create_edges(target_building=None, target_floor=None):
@@ -76,4 +76,4 @@ async def create_edges(target_building=None, target_floor=None):
 
 if __name__ == "__main__":
     asyncio.run(drop_edge_table())
-    asyncio.run(create_edges())
+    # asyncio.run(create_edges())
