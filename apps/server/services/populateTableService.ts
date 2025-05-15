@@ -3,7 +3,13 @@ import { prisma } from "@cmumaps/db";
 
 export const populateTableService = {
   populateBuildings: async (data: any) => {
-    await prisma.building.createMany({ data });
+    await prisma.building.createMany({
+      data: data.map((building: any) => ({
+        ...building,
+        shape: JSON.parse(building.shape),
+        hitbox: JSON.parse(building.hitbox),
+      })),
+    });
   },
 
   populateFloors: async (data: any) => {
@@ -11,7 +17,12 @@ export const populateTableService = {
   },
 
   populateRooms: async (data: any) => {
-    await prisma.room.createMany({ data });
+    await prisma.room.createMany({
+      data: data.map((room: any) => ({
+        ...room,
+        polygon: JSON.parse(room.polygon),
+      })),
+    });
   },
 
   populateAlias: async (data: any) => {
