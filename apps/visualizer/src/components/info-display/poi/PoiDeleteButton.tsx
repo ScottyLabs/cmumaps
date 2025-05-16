@@ -11,9 +11,8 @@ interface Props {
 
 const PoiDeleteButton = ({ floorCode, poiId }: Props) => {
   const [deletePoi] = useDeletePoiMutation();
-  const deletePoiHelper = () => {
+  const deletePoiHelper = () =>
     deletePoi({ floorCode, poiId, batchId: uuidv4() });
-  };
 
   return (
     <div className="mt-2 flex flex-row-reverse">

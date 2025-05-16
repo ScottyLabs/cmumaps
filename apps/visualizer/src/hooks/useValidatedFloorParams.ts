@@ -90,9 +90,11 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     }
 
     return {};
-    // Graph shouldn't trigger param update because of delete node
+    // pois should trigger param update to update if the node is a poi
+    // rooms should trigger param update to update if the node belongs to a room
+    // graph shouldn't trigger param update because of delete node
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId, poiId, nodeId]);
+  }, [roomId, poiId, nodeId, pois, rooms]);
 
   return result;
 };
