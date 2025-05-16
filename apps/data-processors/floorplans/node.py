@@ -31,24 +31,18 @@ def create_nodes():
         nodeDict = data[nodeId]
         latitude = nodeDict["coordinate"]["latitude"]
         longitude = nodeDict["coordinate"]["longitude"]
-        roomId = nodeDict["roomId"]
         buildingCode = nodeDict["floor"]["buildingCode"]
         floorLevel = nodeDict["floor"]["level"]
+        roomId = nodeDict["roomId"] if buildingCode != "outside" else ""
 
         node = {
             "nodeId": nodeDict["id"],
             "latitude": latitude,
             "longitude": longitude,
-            "buildingCode": buildingCode,
-            "floorLevel": floorLevel,
+            "buildingCode": buildingCode if buildingCode != "outside" else None,
+            "floorLevel": floorLevel if buildingCode != "outside" else None,
+            "roomId": roomId if roomId else None,
         }
-
-        # skip outside nodes
-        if node["buildingCode"] == "outside":
-            continue
-
-        if roomId:
-            node["roomId"] = roomId
 
         node_data.append(node)
 

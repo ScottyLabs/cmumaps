@@ -1,5 +1,5 @@
 # Script to populate Edge table of the database using all_graph.json
-# excludes outside, neigbors who are missing in node or out node,
+# excludes outside, neighbors who are missing in node or out node,
 # edges whose in node or out node are missing a roomId
 # python scripts/json-to-database/edge.py
 import sys
@@ -10,7 +10,6 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
-
 
 # Drop and populate Edge table
 def drop_edge_table():
@@ -30,11 +29,8 @@ def create_edges():
     edge_data = []
     for nodeId in data:
         if "neighbors" not in data[nodeId]:
+            print(f"Node {nodeId} has no neighbors")
             continue
-
-        if data[nodeId]["floor"]["buildingCode"] == "outside":
-            continue
-
         neighbors = data[nodeId]["neighbors"]
         for neighbor_id in neighbors:
             inNodeId = nodeId
@@ -44,12 +40,6 @@ def create_edges():
 
             if outNodeId not in data:
                 continue
-
-            # skip edges that are outside
-            if "toFloorInfo" in neighbors[neighbor_id]:
-                toFloorInfo = neighbors[neighbor_id]["toFloorInfo"]
-                if toFloorInfo and toFloorInfo["toFloor"] == "outside 1":
-                    continue
 
             edge_data.append(edge_node)
 
