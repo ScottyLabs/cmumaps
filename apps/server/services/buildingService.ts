@@ -1,4 +1,4 @@
-import { Buildings, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
+import { Buildings, ERROR_CODES, Floor, GeoCoordinate } from "@cmumaps/common";
 import { prisma } from "@cmumaps/db";
 
 import { BuildingError } from "../errors/error";
@@ -8,9 +8,7 @@ export const buildingService = {
     // get all buildings and their floors and default floor
     const dbBuildings = await prisma.building.findMany({
       include: {
-        floors: {
-          orderBy: { floorLevel: "asc" },
-        }
+        floors: true
       },
     });
 
@@ -27,7 +25,7 @@ export const buildingService = {
         labelLongitude: dbBuilding.labelLongitude,
         shape: dbBuilding.shape as unknown as GeoCoordinate[][],
         hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
-        floors: dbBuilding.floors.map((floor) => floor.floorLevel),
+        floors: this.sortFloors(dbBuilding.floors.map((floor) => floor.floorLevel)),
         // TODO: need to add isMapped field to the database
         isMapped: true,
       };
@@ -62,7 +60,7 @@ export const buildingService = {
     return floor.floorLevel;
   },
 
-  async getBuildingFloors(buildingCode: string) {
+  sortFloors(floors: string[]) {
     const floorCodeOrder = [
       "PH",
       "9",
@@ -84,16 +82,20 @@ export const buildingService = {
       "LL",
       "EV",
     ];
+    const floorLevelSort = (f1: string, f2: string) => {
+      return floorCodeOrder.indexOf(f2) - floorCodeOrder.indexOf(f1);
+    };
+
+    return floors.sort(floorLevelSort);
+  },
+
+  async getBuildingFloors(buildingCode: string) {
 
     const floors = await prisma.floor.findMany({
       where: { buildingCode },
       select: { floorLevel: true },
     });
 
-    const floorLevelSort = (f1: string, f2: string) => {
-      return floorCodeOrder.indexOf(f2) - floorCodeOrder.indexOf(f1);
-    };
-
-    return floors.map((floor) => floor.floorLevel).sort(floorLevelSort);
+    return this.sortFloors(floors.map(floor => floor.floorLevel));
   },
 };
