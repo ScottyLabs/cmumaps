@@ -90,10 +90,9 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     }
 
     return {};
-    // Should update param when pois or rooms change so adding poi or delete room is reactive
-    // However graph should trigger update because of delete node
+    // Graph shouldn't trigger param update because of delete node
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pois, rooms, roomId, poiId, nodeId]);
+  }, [roomId, poiId, nodeId]);
 
   return result;
 };
