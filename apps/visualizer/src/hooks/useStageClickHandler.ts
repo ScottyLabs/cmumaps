@@ -23,6 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCursorPos } from "../utils/canvasUtils";
 import { distPointToLine } from "../utils/geometryUtils";
+import { posToRoomId } from "../utils/roomUtils";
 import useSavePolygonEdit from "./useSavePolygonEdit";
 import useValidatedFloorParams from "./useValidatedFloorParams";
 
@@ -44,21 +45,13 @@ const useStageClickHandler = (
   const { nodeId: selectedNodeId, roomId } = useValidatedFloorParams(floorCode);
   const savePolygonEdit = useSavePolygonEdit(floorCode, roomId);
 
-  // // errors for each mode relative to stage clicking
-  //    } else if (mode == ADD_DOOR_NODE) {
-  //       if (clickedOnStage) {
-  //         // addDoorNodeErrToast();
-  //         return false;
-  //       }
-  //     }
-
   const handleCreateNode = (e: Konva.KonvaEventObject<MouseEvent>) => {
     getCursorPos(e, offset, scale, async (pos) => {
       const nodeId = uuidv4();
       const nodeInfo: NodeInfo = {
         pos,
         neighbors: {},
-        roomId: null,
+        roomId: posToRoomId(pos, rooms),
       };
 
       const batchId = uuidv4();
