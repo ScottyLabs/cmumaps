@@ -9,19 +9,18 @@ const LoginModal = () => {
   const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
   const hideLogin = useBoundStore((state) => state.hideLogin);
 
-  // If the user signed out, should try to show the login modal again
+  // Should try to show the login modal again if the user signed out
   useEffect(() => {
     if (!isSignedIn) {
       sessionStorage.removeItem("showedLogin");
     }
   }, [isSignedIn]);
 
-  // If the user is signed in, don't show the login modal
+  // Don't show the login modal if the user is signed in
   if (!isLoginOpen || isSignedIn) {
     return null;
   }
 
-  // TODO: Improve UI
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-white p-4">

@@ -2,15 +2,19 @@ import { UserButton } from "@clerk/clerk-react";
 
 import questionMarkIcon from "@/assets/icons/question-mark.png";
 import useIsMobile from "@/hooks/useIsMobile";
+import useLocationParams from "@/hooks/useLocationParams";
+import useBoundStore from "@/store";
 
 const IconsDisplay = () => {
   const isMobile = useIsMobile();
+  const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const { isCardOpen } = useLocationParams();
 
-  // don't show icons if in mobile and
-  // either the search is open or the card is open
-  //   if (isMobile && (isSearchOpen || isCardOpen)) {
-  //     return <></>;
-  //   }
+  // Don't show icons in mobile
+  // if either the card is open or the search is open
+  if (isMobile && (isSearchOpen || isCardOpen)) {
+    return <></>;
+  }
 
   const renderClerkIcon = () => {
     if (isMobile) {

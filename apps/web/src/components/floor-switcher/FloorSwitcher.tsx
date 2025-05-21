@@ -1,8 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 
-import { useMemo } from "react";
-
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
@@ -29,12 +27,8 @@ const FloorSwitcher = () => {
   const { isCardOpen } = useLocationParams();
 
   // Don't show the floor switcher in mobile
-  // if the card is open or the search is open
-  const showFloorSwitcherMobile = useMemo(() => {
-    return !(isMobile && (isCardOpen || isSearchOpen));
-  }, [isCardOpen, isMobile, isSearchOpen]);
-
-  if (!showFloorSwitcherMobile) {
+  // if either the card is open or the search is open
+  if (isMobile && (isCardOpen || isSearchOpen)) {
     return <></>;
   }
 
@@ -43,17 +37,17 @@ const FloorSwitcher = () => {
     return <></>;
   }
 
-  // TODO: should show the floor switcher if hovering over unmapped building!
-
   // Don't show the floor switcher if there is no focused floor
   if (!floor) {
     return <></>;
   }
 
-  // Don't show the floor switcher if invalid building code
+  // Don't show the floor switcher if building data is not loaded
   if (!buildings) {
     return <></>;
   }
+
+  // Don't show the floor switcher if invalid building code
   const building = buildings[floor.buildingCode];
   if (!building) {
     return <></>;
