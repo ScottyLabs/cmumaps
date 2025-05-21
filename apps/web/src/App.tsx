@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
-  // Identify posthog user with Clerk id
+  // Identify PostHog user with Clerk ID
   const { user } = useUser();
   const posthog = usePostHog();
   useEffect(() => {

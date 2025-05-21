@@ -11,10 +11,7 @@ import useBoundStore from "@/store";
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 
 /**
- * Responsibilities:
- * - Authentication
- * - Distinction between mobile and desktop (Positioning of the floor switcher)
- * - When to show the floor switcher
+ * This component determines if the floor switcher should be shown.
  */
 const FloorSwitcher = () => {
   // Library hooks
@@ -31,22 +28,30 @@ const FloorSwitcher = () => {
   // Custom hooks
   const { isCardOpen } = useLocationParams();
 
-  // Don't show floor switcher in mobile if the card is open or the search is open
+  // Don't show the floor switcher in mobile
+  // if the card is open or the search is open
   const showFloorSwitcherMobile = useMemo(() => {
     return !(isMobile && (isCardOpen || isSearchOpen));
   }, [isCardOpen, isMobile, isSearchOpen]);
 
-  // Don't show floor switcher if the user is not signed in
+  if (!showFloorSwitcherMobile) {
+    return <></>;
+  }
+
+  // Don't show the floor switcher if the user is not signed in
   if (!isSignedIn) {
     return <></>;
   }
 
-  // Only show floor switcher if there is focused floor
-  if (!buildings || !floor || !showFloorSwitcherMobile) {
+  // Don't show the floor switcher if there is no focused floor
+  if (!floor) {
     return <></>;
   }
 
-  // Only show floor switcher if there is focused floor
+  // Don't show the floor switcher if invalid building code
+  if (!buildings) {
+    return <></>;
+  }
   const building = buildings[floor.buildingCode];
   if (!building) {
     return <></>;
