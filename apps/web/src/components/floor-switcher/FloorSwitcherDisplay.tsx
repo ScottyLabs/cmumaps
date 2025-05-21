@@ -1,12 +1,10 @@
 import { Building, Floor } from "@cmumaps/common";
 
 import { useState } from "react";
-import { useNavigate } from "react-router";
 
-import useBoundStore from "@/store";
-
-import Roundel from "../shared/Roundel";
-import DefaultView from "./DefaultView";
+import DefaultView from "@/components/floor-switcher/DefaultView";
+import FloorPicker from "@/components/floor-switcher/FloorPicker";
+import RoundelButton from "@/components/floor-switcher/RoundelButton";
 
 interface Props {
   building: Building;
@@ -18,62 +16,17 @@ interface Props {
  * Note: handles only the display logic.
  */
 const FloorSwitcherDisplay = ({ building, floor }: Props) => {
-  // Library hooks
-  const navigate = useNavigate();
-
-  // Global state
-  const hideSearch = useBoundStore((state) => state.hideSearch);
-  const focusFloor = useBoundStore((state) => state.focusFloor);
-
-  // Local state
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
-  const renderFloorPicker = () => {
-    if (!floor) {
-      return;
-    }
-
-    return (
-      <div className="ml-2 flex items-stretch">
-        {building.floors.map((floorLevel) => (
-          <div
-            key={floorLevel}
-            className="flex items-center border-l border-gray-300"
-          >
-            <div
-              className={
-                "cursor-pointer px-4 " +
-                (floorLevel === floor.level ? "font-bold" : "")
-              }
-              onClick={() => {
-                setShowFloorPicker(false);
-                focusFloor({
-                  buildingCode: building.code,
-                  level: floorLevel,
-                });
-              }}
-            >
-              {floorLevel}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
-    <div className="btn-shadow flex items-stretch justify-center rounded bg-white">
-      <button
-        className="cursor-pointer p-1"
-        onClick={() => {
-          navigate(`/${building.code}`);
-          hideSearch();
-        }}
-      >
-        <Roundel code={building.code} />
-      </button>
+    <div className="btn-shadow flex rounded bg-white">
+      <RoundelButton building={building} />
       {showFloorPicker ? (
-        renderFloorPicker()
+        <FloorPicker
+          building={building}
+          floor={floor}
+          setShowFloorPicker={setShowFloorPicker}
+        />
       ) : (
         <DefaultView
           building={building}

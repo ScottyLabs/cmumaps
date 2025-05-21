@@ -43,6 +43,8 @@ const FloorSwitcher = () => {
     return <></>;
   }
 
+  // TODO: should show the floor switcher if hovering over unmapped building!
+
   // Don't show the floor switcher if there is no focused floor
   if (!floor) {
     return <></>;
