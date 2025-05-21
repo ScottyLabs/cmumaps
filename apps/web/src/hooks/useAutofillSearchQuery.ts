@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useCallback, useEffect } from "react";
 
+import { apiClient } from "@/api/apiClient";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
-import { apiClient } from "@/utils/apiClient";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
   const { buildingCode, roomName, floor } = useLocationParams();

@@ -3,10 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useMemo } from "react";
 
+import { apiClient } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import { useAppSelector } from "@/store/hooks";
-import { apiClient } from "@/utils/apiClient";
 
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 

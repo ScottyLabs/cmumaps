@@ -4,6 +4,7 @@ import { CoordinateRegion } from "mapkit-react";
 
 import { RefObject, useState } from "react";
 
+import { apiClient } from "@/api/apiClient";
 import {
   THRESHOLD_DENSITY_TO_SHOW_FLOORS,
   INITIAL_REGION,
@@ -17,7 +18,6 @@ import {
 } from "@/store/features/mapSlice";
 import { showLogin } from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { apiClient } from "@/utils/apiClient";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 

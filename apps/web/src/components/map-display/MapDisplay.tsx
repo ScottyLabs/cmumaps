@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+import { apiClient } from "@/api/apiClient";
 import {
   CAMERA_BOUNDARY,
   INITIAL_REGION,
@@ -24,7 +25,6 @@ import {
 } from "@/store/features/mapSlice";
 import { setIsSearchOpen } from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
-import { apiClient } from "@/utils/apiClient";
 import { isInPolygon } from "@/utils/geometry";
 
 interface Props {

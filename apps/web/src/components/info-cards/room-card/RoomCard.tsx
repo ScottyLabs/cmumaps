@@ -1,6 +1,7 @@
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useQuery } from "@tanstack/react-query";
 
+import { apiClient } from "@/api/apiClient";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
@@ -8,7 +9,6 @@ import useLocationParams from "@/hooks/useLocationParams";
 import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
 import { selectCardCollapsed } from "@/store/features/cardSlice";
 import { useAppSelector } from "@/store/hooks";
-import { apiClient } from "@/utils/apiClient";
 
 const RoomCard = () => {
   const { buildingCode, roomName, floor } = useLocationParams();
