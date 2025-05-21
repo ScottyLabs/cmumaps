@@ -35,8 +35,8 @@ export const getFloorByOrdinal = (
 export const buildFloorCode = (
   buildingCode: string | undefined,
   floorLevel: string | undefined,
-) => {
-  if (!buildingCode || !floorLevel) return undefined;
+): string | null => {
+  if (!buildingCode || !floorLevel) return null;
   return `${buildingCode}-${floorLevel}`;
 };
 
@@ -45,6 +45,7 @@ export const getFloorCode = (floor: Floor) => {
 };
 
 const FLOOR_REGEX = /^[A-F0-9]|LL|M|EV|PH/; // matches A-F, 0-9, and LL at the start of a string
-export const getFloorLevelFromRoomName = (roomName: string) => {
+export const getFloorLevelFromRoomName = (roomName: string | undefined) => {
+  if (!roomName) return undefined;
   return roomName.match(FLOOR_REGEX)?.[0] || "";
 };

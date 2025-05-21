@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useMemo } from "react";
 
-import { apiClient } from "@/api/apiClient";
+import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useUiStore from "@/store/features/uiSlice";
@@ -24,10 +24,7 @@ const FloorSwitcher = () => {
   const isMobile = useIsMobile();
 
   // query data
-  const { data: buildings } = useQuery({
-    queryKey: ["buildings"],
-    queryFn: apiClient("buildings"),
-  });
+  const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   // store states
   const floor = useAppSelector((state) => state.map.focusedFloor);

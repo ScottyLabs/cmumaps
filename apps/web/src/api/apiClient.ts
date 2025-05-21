@@ -1,9 +1,11 @@
-type QueryKey = ["buildings"] | ["rooms", string] | [];
+import { Buildings, GeoRooms } from "@cmumaps/common";
+import { queryOptions, skipToken } from "@tanstack/react-query";
+
+type QueryKey = ["buildings"] | ["rooms", string | null] | [];
 
 declare module "@tanstack/react-query" {
   interface Register {
     queryKey: QueryKey;
-    mutationKey: QueryKey;
   }
 }
 
@@ -14,7 +16,7 @@ const getClerkToken = async () => {
   return null;
 };
 
-export const apiClient = (endpoint: string) => async () => {
+const apiClient = async (endpoint: string) => {
   const token = await getClerkToken();
   const headers = { Authorization: `Bearer ${token}` };
   const endpointUrl = `${import.meta.env.VITE_SERVER_URL}/api/${endpoint}`;
@@ -22,3 +24,17 @@ export const apiClient = (endpoint: string) => async () => {
   if (!response.ok) throw new Error(`API error: ${response.status}`);
   return response.json();
 };
+
+export const getBuildingsQueryOptions = () =>
+  queryOptions<Buildings>({
+    queryKey: ["buildings"],
+    queryFn: () => apiClient("buildings"),
+  });
+
+export const getRoomsQueryOptions = (floorCode: string | null) =>
+  queryOptions<GeoRooms>({
+    queryKey: ["rooms", floorCode],
+    queryFn: floorCode
+      ? () => apiClient(`floors/${floorCode}/floorplan`)
+      : skipToken,
+  });

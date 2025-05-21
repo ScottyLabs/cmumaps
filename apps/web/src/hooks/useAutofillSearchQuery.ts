@@ -1,23 +1,19 @@
-import { GeoRooms } from "@cmumaps/common";
-import { skipToken, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { useCallback, useEffect } from "react";
 
-import { apiClient } from "@/api/apiClient";
+import {
+  getBuildingsQueryOptions,
+  getRoomsQueryOptions,
+} from "@/api/apiClient";
 import useLocationParams from "@/hooks/useLocationParams";
 import { buildFloorCode } from "@/utils/floorUtils";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
   const { buildingCode, roomName, floor } = useLocationParams();
-  const { data: buildings } = useQuery({
-    queryKey: ["buildings"],
-    queryFn: apiClient("buildings"),
-  });
+  const { data: buildings } = useQuery(getBuildingsQueryOptions());
   const floorCode = buildFloorCode(buildingCode, floor);
-  const { data: rooms } = useQuery<GeoRooms>({
-    queryKey: floorCode ? ["rooms", floorCode] : [],
-    queryFn: floorCode ? apiClient(`floors/${floorCode}/floorplan`) : skipToken,
-  });
+  const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
 
   const autoFillSearchQuery = useCallback(() => {
     // return the room name if a room is selected

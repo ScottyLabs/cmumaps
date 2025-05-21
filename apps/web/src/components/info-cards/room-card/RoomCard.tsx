@@ -1,7 +1,9 @@
-import { GeoRooms } from "@cmumaps/common";
-import { skipToken, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-import { apiClient } from "@/api/apiClient";
+import {
+  getBuildingsQueryOptions,
+  getRoomsQueryOptions,
+} from "@/api/apiClient";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
@@ -14,14 +16,8 @@ const RoomCard = () => {
   const isMobile = useIsMobile();
   const cardCollapsed = useAppSelector(selectCardCollapsed);
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
-  const { data: buildings } = useQuery({
-    queryKey: ["buildings"],
-    queryFn: apiClient("buildings"),
-  });
-  const { data: rooms } = useQuery<GeoRooms>({
-    queryKey: floorCode ? ["rooms", floorCode] : [],
-    queryFn: floorCode ? apiClient(`floors/${floorCode}/floorplan`) : skipToken,
-  });
+  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
 
   if (!roomName || !rooms || !buildings) {
     return;

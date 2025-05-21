@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { apiClient } from "@/api/apiClient";
+import { getBuildingsQueryOptions } from "@/api/apiClient";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
@@ -16,10 +16,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
   const { buildingCode } = useLocationParams();
   const isMobile = useIsMobile();
   const cardCollapsed = useAppSelector(selectCardCollapsed);
-  const { data: buildings } = useQuery({
-    queryKey: ["buildings"],
-    queryFn: apiClient("buildings"),
-  });
+  const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   if (!buildingCode || !buildings) {
     return;

@@ -32,7 +32,7 @@ const useLocationParams = (): Params => {
     };
   }
   const [buildingCode, roomName] = path.split("/")?.[1]?.split("-") || [];
-  const floor = roomName ? getFloorLevelFromRoomName(roomName) : undefined;
+  const floor = getFloorLevelFromRoomName(roomName);
 
   return {
     buildingCode,

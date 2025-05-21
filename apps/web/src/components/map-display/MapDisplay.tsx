@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import { apiClient } from "@/api/apiClient";
+import { getBuildingsQueryOptions } from "@/api/apiClient";
 import {
   CAMERA_BOUNDARY,
   INITIAL_REGION,
@@ -42,10 +42,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
 
-  const { data: buildings } = useQuery({
-    queryKey: ["buildings"],
-    queryFn: apiClient("buildings"),
-  });
+  const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   const handleLoad = () => {
     if (mapRef.current) {
