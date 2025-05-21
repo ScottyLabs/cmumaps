@@ -25,7 +25,7 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const setIsSearchOpen = useUiStore((state) => state.setIsSearchOpen);
+  const hideSearch = useUiStore((state) => state.hideSearch);
 
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
@@ -178,7 +178,7 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
         className="cursor-pointer p-1"
         onClick={() => {
           navigate(`/${building.code}`);
-          setIsSearchOpen(false);
+          hideSearch();
         }}
       >
         <Roundel code={building.code} />

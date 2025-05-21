@@ -18,7 +18,8 @@ const Searchbar = ({ mapRef }: Props) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const isSearchOpen = useUiStore((state) => state.isSearchOpen);
-  const setIsSearchOpen = useUiStore((state) => state.setIsSearchOpen);
+  const showSearch = useUiStore((state) => state.showSearch);
+  const hideSearch = useUiStore((state) => state.hideSearch);
 
   const [searchQuery, setSearchQuery] = useState("");
   useAutofillSearchQuery(setSearchQuery);
@@ -38,14 +39,14 @@ const Searchbar = ({ mapRef }: Props) => {
       if (inputRef.current) {
         // focus on the input if command f is pressed
         if ((event.metaKey || event.ctrlKey) && event.key === "f") {
-          setIsSearchOpen(true);
+          showSearch();
           inputRef.current.focus();
           event.preventDefault();
         }
 
         // close search if escape is pressed
         if (event.key === "Escape") {
-          setIsSearchOpen(false);
+          hideSearch();
           navigate("/");
         }
       }
@@ -53,7 +54,7 @@ const Searchbar = ({ mapRef }: Props) => {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [dispatch, navigate, setIsSearchOpen]);
+  }, [dispatch, navigate, hideSearch, showSearch]);
 
   const renderSearchIcon = () => (
     <img
@@ -76,7 +77,7 @@ const Searchbar = ({ mapRef }: Props) => {
       }}
       title="Search query"
       onFocus={() => {
-        setIsSearchOpen(true);
+        showSearch();
       }}
     />
   );
@@ -88,7 +89,7 @@ const Searchbar = ({ mapRef }: Props) => {
       className="absolute right-3"
       onClick={() => {
         setSearchQuery("");
-        setIsSearchOpen(false);
+        hideSearch();
         navigate("/");
       }}
     />

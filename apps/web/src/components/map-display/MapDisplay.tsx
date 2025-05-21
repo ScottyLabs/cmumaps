@@ -35,7 +35,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const setIsSearchOpen = useUiStore((state) => state.setIsSearchOpen);
+  const hideSearch = useUiStore((state) => state.hideSearch);
 
   const isMobile = useIsMobile();
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
@@ -67,7 +67,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     }
 
     // close search when clicking on the map
-    setIsSearchOpen(false);
+    hideSearch();
 
     // check if a building is clicked
     let clickedBuilding = false;
