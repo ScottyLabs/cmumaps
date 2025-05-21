@@ -1,4 +1,4 @@
-import { Buildings, ERROR_CODES, Floor, GeoCoordinate } from "@cmumaps/common";
+import { Buildings, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
 import { prisma } from "@cmumaps/db";
 
 import { BuildingError } from "../errors/error";
@@ -7,9 +7,7 @@ export const buildingService = {
   async getBuildings() {
     // get all buildings and their floors and default floor
     const dbBuildings = await prisma.building.findMany({
-      include: {
-        floors: true
-      },
+      include: { floors: true },
     });
 
     const buildings: Buildings = {};
@@ -25,7 +23,9 @@ export const buildingService = {
         labelLongitude: dbBuilding.labelLongitude,
         shape: dbBuilding.shape as unknown as GeoCoordinate[][],
         hitbox: dbBuilding.hitbox as unknown as GeoCoordinate[],
-        floors: this.sortFloors(dbBuilding.floors.map((floor) => floor.floorLevel)),
+        floors: this.sortFloors(
+          dbBuilding.floors.map((floor) => floor.floorLevel),
+        ),
         // TODO: need to add isMapped field to the database
         isMapped: true,
       };
@@ -90,12 +90,11 @@ export const buildingService = {
   },
 
   async getBuildingFloors(buildingCode: string) {
-
     const floors = await prisma.floor.findMany({
       where: { buildingCode },
       select: { floorLevel: true },
     });
 
-    return this.sortFloors(floors.map(floor => floor.floorLevel));
+    return this.sortFloors(floors.map((floor) => floor.floorLevel));
   },
 };
