@@ -15,7 +15,6 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.24.1",
     "@cmumaps/common": "workspace:*",
-    "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.9",
     "@tanstack/react-query": "^5.76.1",
     "lodash": "^4.17.21",
@@ -27,7 +26,6 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-multi-carousel": "^2.8.5",
-    "react-redux": "^9.2.0",
     "react-router": "^7.2.0",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.0.9",
