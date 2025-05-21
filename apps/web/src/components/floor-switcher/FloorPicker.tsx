@@ -10,42 +10,29 @@ interface Props {
 }
 
 const FloorPicker = ({ building, floor, setShowFloorPicker }: Props) => {
-  // Global state
   const focusFloor = useBoundStore((state) => state.focusFloor);
 
-  if (!floor) {
-    return;
-  }
+  return building.floors.map((floorLevel) => {
+    const handleClick = () => {
+      setShowFloorPicker(false);
+      focusFloor({
+        buildingCode: building.code,
+        level: floorLevel,
+      });
+    };
 
-  return (
-    <div className="flex items-stretch">
-      {building.floors.map((floorLevel) => {
-        const handleClick = () => {
-          setShowFloorPicker(false);
-          focusFloor({
-            buildingCode: building.code,
-            level: floorLevel,
-          });
-        };
-
-        return (
-          <div
-            key={floorLevel}
-            className="flex items-center border-l border-gray-300"
-          >
-            <div
-              className={`cursor-pointer px-4 ${
-                floorLevel === floor.level ? "font-bold" : ""
-              }`}
-              onClick={handleClick}
-            >
-              {floorLevel}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+    return (
+      <button
+        key={floorLevel}
+        className={`cursor-pointer border-l border-gray-300 px-4 ${
+          floorLevel === floor.level ? "font-bold" : ""
+        }`}
+        onClick={handleClick}
+      >
+        {floorLevel}
+      </button>
+    );
+  });
 };
 
 export default FloorPicker;

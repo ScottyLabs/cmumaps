@@ -11,10 +11,6 @@ interface Props {
   floor: Floor;
 }
 
-/**
- * This component allows an user to switch between floors of a building.
- * Note: handles only the display logic.
- */
 const FloorSwitcherDisplay = ({ building, floor }: Props) => {
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
