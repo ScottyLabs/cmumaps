@@ -5,8 +5,8 @@ import { useNavigate } from "react-router";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
-import { setIsSearchOpen } from "@/store/features/uiSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import useUiStore from "@/store/features/uiSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -17,9 +17,10 @@ const Searchbar = ({ mapRef }: Props) => {
   const navigate = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
-  const [searchQuery, setSearchQuery] = useState("");
+  const isSearchOpen = useUiStore((state) => state.isSearchOpen);
+  const setIsSearchOpen = useUiStore((state) => state.setIsSearchOpen);
 
+  const [searchQuery, setSearchQuery] = useState("");
   useAutofillSearchQuery(setSearchQuery);
 
   // blur the input field when not searching (mainly used for clicking on the map to close search)
@@ -37,14 +38,14 @@ const Searchbar = ({ mapRef }: Props) => {
       if (inputRef.current) {
         // focus on the input if command f is pressed
         if ((event.metaKey || event.ctrlKey) && event.key === "f") {
-          dispatch(setIsSearchOpen(true));
+          setIsSearchOpen(true);
           inputRef.current.focus();
           event.preventDefault();
         }
 
         // close search if escape is pressed
         if (event.key === "Escape") {
-          dispatch(setIsSearchOpen(false));
+          setIsSearchOpen(false);
           navigate("/");
         }
       }
@@ -52,7 +53,7 @@ const Searchbar = ({ mapRef }: Props) => {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, setIsSearchOpen]);
 
   const renderSearchIcon = () => (
     <img
@@ -75,7 +76,7 @@ const Searchbar = ({ mapRef }: Props) => {
       }}
       title="Search query"
       onFocus={() => {
-        dispatch(setIsSearchOpen(true));
+        setIsSearchOpen(true);
       }}
     />
   );
@@ -87,7 +88,7 @@ const Searchbar = ({ mapRef }: Props) => {
       className="absolute right-3"
       onClick={() => {
         setSearchQuery("");
-        dispatch(setIsSearchOpen(false));
+        setIsSearchOpen(false);
         navigate("/");
       }}
     />

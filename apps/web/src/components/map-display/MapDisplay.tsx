@@ -23,7 +23,7 @@ import {
   selectBuilding,
   setIsZooming,
 } from "@/store/features/mapSlice";
-import { setIsSearchOpen } from "@/store/features/uiSlice";
+import useUiStore from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { isInPolygon } from "@/utils/geometry";
 
@@ -34,6 +34,9 @@ interface Props {
 const MapDisplay = ({ mapRef }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const setIsSearchOpen = useUiStore((state) => state.setIsSearchOpen);
+
   const isMobile = useIsMobile();
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
@@ -64,7 +67,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     }
 
     // close search when clicking on the map
-    dispatch(setIsSearchOpen(false));
+    setIsSearchOpen(false);
 
     // check if a building is clicked
     let clickedBuilding = false;

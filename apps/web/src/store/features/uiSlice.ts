@@ -1,30 +1,19 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { create } from "zustand";
 
 interface UiState {
-  showLogin: boolean;
+  isLoginOpen: boolean;
   isSearchOpen: boolean;
+  showLogin: () => void;
+  hideLogin: () => void;
+  setIsSearchOpen: (isOpen: boolean) => void;
 }
 
-const initialState: UiState = {
-  showLogin: false,
+const useUiStore = create<UiState>((set) => ({
+  isLoginOpen: false,
   isSearchOpen: false,
-};
+  showLogin: () => set({ isLoginOpen: true }),
+  hideLogin: () => set({ isLoginOpen: false }),
+  setIsSearchOpen: (isOpen: boolean) => set({ isSearchOpen: isOpen }),
+}));
 
-const uiSlice = createSlice({
-  name: "ui",
-  initialState,
-  reducers: {
-    showLogin(state) {
-      state.showLogin = true;
-    },
-    hideLogin(state) {
-      state.showLogin = false;
-    },
-    setIsSearchOpen(state, action: PayloadAction<boolean>) {
-      state.isSearchOpen = action.payload;
-    },
-  },
-});
-
-export const { showLogin, hideLogin, setIsSearchOpen } = uiSlice.actions;
-export default uiSlice.reducer;
+export default useUiStore;

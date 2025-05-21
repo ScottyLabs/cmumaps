@@ -30,7 +30,8 @@
     "react-redux": "^9.2.0",
     "react-router": "^7.2.0",
     "react-toastify": "^11.0.5",
-    "tailwindcss": "^4.0.9"
+    "tailwindcss": "^4.0.9",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@clerk/types": "^4.47.0",

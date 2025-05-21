@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 
 import lockIcon from "@/assets/icons/half-lock.svg";
 import { focusFloor } from "@/store/features/mapSlice";
-import { setIsSearchOpen } from "@/store/features/uiSlice";
+import useUiStore from "@/store/features/uiSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 import Roundel from "../shared/Roundel";
@@ -24,6 +24,8 @@ interface Props {
 const FloorSwitcherDisplay = ({ building, floor }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const setIsSearchOpen = useUiStore((state) => state.setIsSearchOpen);
 
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
@@ -176,7 +178,7 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
         className="cursor-pointer p-1"
         onClick={() => {
           navigate(`/${building.code}`);
-          dispatch(setIsSearchOpen(false));
+          setIsSearchOpen(false);
         }}
       >
         <Roundel code={building.code} />

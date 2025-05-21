@@ -16,7 +16,7 @@ import {
   setShowRoomNames,
   unfocusFloor,
 } from "@/store/features/mapSlice";
-import { showLogin } from "@/store/features/uiSlice";
+import useUiStore from "@/store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
@@ -28,6 +28,8 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
     queryKey: ["buildings"],
     queryFn: apiClient("buildings"),
   });
+
+  const showLogin = useUiStore((state) => state.showLogin);
 
   const [showFloor, setShowFloor] = useState<boolean>(false);
 
@@ -103,7 +105,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
       if (showFloor && !sessionStorage.getItem("showedLogin")) {
         sessionStorage.setItem("showedLogin", "true");
-        dispatch(showLogin());
+        showLogin();
       }
 
       if (!showFloor) {

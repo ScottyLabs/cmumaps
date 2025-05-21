@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { apiClient } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
+import useUiStore from "@/store/features/uiSlice";
 import { useAppSelector } from "@/store/hooks";
 
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
@@ -30,7 +31,7 @@ const FloorSwitcher = () => {
 
   // store states
   const floor = useAppSelector((state) => state.map.focusedFloor);
-  const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
+  const isSearchOpen = useUiStore((state) => state.isSearchOpen);
 
   // don't show floor switcher in mobile if the card is open or the search is open
   const showFloorSwitcherMobile = useMemo(() => {
