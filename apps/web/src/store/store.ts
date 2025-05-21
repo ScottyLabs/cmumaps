@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { apiSlice } from "@/store/features/api/apiSlice";
 import cardReducer from "@/store/features/cardSlice";
 import eventReducer from "@/store/features/eventSlice";
 import mapReducer from "@/store/features/mapSlice";
@@ -12,10 +11,7 @@ export const store = configureStore({
     ui: uiReducer,
     card: cardReducer,
     event: eventReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

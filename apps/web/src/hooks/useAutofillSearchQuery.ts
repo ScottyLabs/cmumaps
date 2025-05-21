@@ -5,7 +5,7 @@ import { useCallback, useEffect } from "react";
 
 import { apiClient } from "@/api/apiClient";
 import useLocationParams from "@/hooks/useLocationParams";
-import { getFloorCode } from "@/utils/floorUtils";
+import { buildFloorCode } from "@/utils/floorUtils";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
   const { buildingCode, roomName, floor } = useLocationParams();
@@ -13,7 +13,7 @@ const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
     queryKey: ["buildings"],
     queryFn: apiClient("buildings"),
   });
-  const floorCode = getFloorCode(buildingCode, floor);
+  const floorCode = buildFloorCode(buildingCode, floor);
   const { data: rooms } = useQuery<GeoRooms>({
     queryKey: floorCode ? ["rooms", floorCode] : [],
     queryFn: floorCode ? apiClient(`floors/${floorCode}/floorplan`) : skipToken,

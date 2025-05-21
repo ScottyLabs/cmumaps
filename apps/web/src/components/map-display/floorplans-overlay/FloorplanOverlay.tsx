@@ -1,4 +1,4 @@
-import { Floor, GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
+import { Floor, GeoRoom, GeoRooms, getRoomTypeDetails } from "@cmumaps/common";
 import { useQuery } from "@tanstack/react-query";
 import { Annotation, Polygon } from "mapkit-react";
 
@@ -21,8 +21,8 @@ const FloorplanOverlay = ({ floor }: Props) => {
 
   const { roomName: selectedRoomName } = useLocationParams();
   const showRoomNames = useAppSelector((state) => state.map.showRoomNames);
-  const floorCode = getFloorCode(floor.buildingCode, floor.level);
-  const { data: rooms } = useQuery({
+  const floorCode = getFloorCode(floor);
+  const { data: rooms } = useQuery<GeoRooms>({
     queryKey: ["rooms", floorCode],
     queryFn: apiClient(`floors/${floorCode}/floorplan`),
   });

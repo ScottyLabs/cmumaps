@@ -32,12 +32,16 @@ export const getFloorByOrdinal = (
   };
 };
 
-export const getFloorCode = (
+export const buildFloorCode = (
   buildingCode: string | undefined,
   floorLevel: string | undefined,
 ) => {
   if (!buildingCode || !floorLevel) return undefined;
   return `${buildingCode}-${floorLevel}`;
+};
+
+export const getFloorCode = (floor: Floor) => {
+  return `${floor.buildingCode}-${floor.level}`;
 };
 
 const FLOOR_REGEX = /^[A-F0-9]|LL|M|EV|PH/; // matches A-F, 0-9, and LL at the start of a string

@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "tsc": "tsc -b"
+    "tsc": "tsc -b",
+    "check": "tsc -b && eslint ."
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.24.1",
