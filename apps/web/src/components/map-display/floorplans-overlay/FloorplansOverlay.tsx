@@ -1,11 +1,11 @@
 import { useUser } from "@clerk/clerk-react";
 
 import FloorplanOverlay from "@/components/map-display/floorplans-overlay/FloorplanOverlay";
-import { useAppSelector } from "@/store/hooks";
+import useMapStore from "@/store/mapSlice";
 
 const FloorPlansOverlay = () => {
   const { isSignedIn } = useUser();
-  const focusedFloor = useAppSelector((state) => state.map.focusedFloor);
+  const focusedFloor = useMapStore((state) => state.focusedFloor);
 
   // only show floor plans if user is signed in and a floor is focused
   if (!focusedFloor || !isSignedIn) {

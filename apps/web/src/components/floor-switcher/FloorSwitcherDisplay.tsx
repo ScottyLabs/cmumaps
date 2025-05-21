@@ -6,9 +6,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import lockIcon from "@/assets/icons/half-lock.svg";
-import { focusFloor } from "@/store/features/mapSlice";
-import useUiStore from "@/store/features/uiSlice";
-import { useAppDispatch } from "@/store/hooks";
+import useMapStore from "@/store/mapSlice";
+import useUiStore from "@/store/uiSlice";
 
 import Roundel from "../shared/Roundel";
 
@@ -22,10 +21,10 @@ interface Props {
  * Handles only the display logic.
  */
 const FloorSwitcherDisplay = ({ building, floor }: Props) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const hideSearch = useUiStore((state) => state.hideSearch);
+  const focusFloor = useMapStore((state) => state.focusFloor);
 
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
@@ -64,7 +63,7 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
                 buildingCode: building.code,
                 level: floorLevel,
               };
-              dispatch(focusFloor(focusedFloor));
+              focusFloor(focusedFloor);
             }
           }}
         >
@@ -118,7 +117,7 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
                 buildingCode: building.code,
                 level: floorLevel,
               };
-              dispatch(focusFloor(focusedFloor));
+              focusFloor(focusedFloor);
             }
           }}
         >
@@ -156,12 +155,10 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
               }
               onClick={() => {
                 setShowFloorPicker(false);
-                dispatch(
-                  focusFloor({
-                    buildingCode: building.code,
-                    level: floorLevel,
-                  }),
-                );
+                focusFloor({
+                  buildingCode: building.code,
+                  level: floorLevel,
+                });
               }}
             >
               {floorLevel}

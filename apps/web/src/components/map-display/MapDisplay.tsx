@@ -18,13 +18,8 @@ import BuildingsDisplay from "@/components/map-display/buildings-display/Buildin
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
-import {
-  deselectBuilding,
-  selectBuilding,
-  setIsZooming,
-} from "@/store/features/mapSlice";
-import useUiStore from "@/store/features/uiSlice";
-import { useAppDispatch } from "@/store/hooks";
+import useMapStore from "@/store/mapSlice";
+import useUiStore from "@/store/uiSlice";
 import { isInPolygon } from "@/utils/geometry";
 
 interface Props {
@@ -32,10 +27,12 @@ interface Props {
 }
 
 const MapDisplay = ({ mapRef }: Props) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const hideSearch = useUiStore((state) => state.hideSearch);
+  const selectBuilding = useMapStore((state) => state.selectBuilding);
+  const deselectBuilding = useMapStore((state) => state.deselectBuilding);
+  const setIsZooming = useMapStore((state) => state.setIsZooming);
 
   const isMobile = useIsMobile();
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
@@ -75,7 +72,7 @@ const MapDisplay = ({ mapRef }: Props) => {
         const building = buildings[buildingCode];
         if (building?.shape[0] && isInPolygon(coords, building.shape[0])) {
           if (building) {
-            dispatch(selectBuilding(building));
+            selectBuilding(building);
             clickedBuilding = true;
           }
           break;
@@ -84,7 +81,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     }
 
     if (!clickedBuilding) {
-      dispatch(deselectBuilding());
+      deselectBuilding();
       navigate("/");
     }
   };
@@ -113,7 +110,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       onClick={handleClick}
       onRegionChangeStart={onRegionChangeStart}
       onRegionChangeEnd={() => {
-        dispatch(setIsZooming(false));
+        setIsZooming(false);
         onRegionChangeEnd();
       }}
     >

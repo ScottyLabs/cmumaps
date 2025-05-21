@@ -6,8 +6,8 @@ import { useMemo } from "react";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore from "@/store/features/uiSlice";
-import { useAppSelector } from "@/store/hooks";
+import useMapStore from "@/store/mapSlice";
+import useUiStore from "@/store/uiSlice";
 
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 
@@ -27,7 +27,7 @@ const FloorSwitcher = () => {
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   // store states
-  const floor = useAppSelector((state) => state.map.focusedFloor);
+  const floor = useMapStore((state) => state.focusedFloor);
   const isSearchOpen = useUiStore((state) => state.isSearchOpen);
 
   // don't show floor switcher in mobile if the card is open or the search is open

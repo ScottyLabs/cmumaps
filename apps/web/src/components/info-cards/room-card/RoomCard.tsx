@@ -8,13 +8,12 @@ import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import { selectCardCollapsed } from "@/store/features/cardSlice";
-import { useAppSelector } from "@/store/hooks";
+import useUiStore from "@/store/uiSlice";
 
 const RoomCard = () => {
   const { buildingCode, roomName, floor } = useLocationParams();
   const isMobile = useIsMobile();
-  const cardCollapsed = useAppSelector(selectCardCollapsed);
+  const isCardCollapsed = useUiStore((state) => state.isCardCollapsed);
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
   const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
@@ -81,7 +80,7 @@ const RoomCard = () => {
 
   return (
     <>
-      {(!cardCollapsed || !isMobile) && renderRoomImage()}
+      {(!isCardCollapsed || !isMobile) && renderRoomImage()}
       {renderRoomTitle()}
       {renderButtonsRow()}
     </>

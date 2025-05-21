@@ -1,27 +1,23 @@
 import { Buildings, Floor } from "@cmumaps/common";
-import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import { Coordinate } from "mapkit-react";
 
-import { setIsZooming } from "@/store/features/mapSlice";
 import prefersReducedMotion from "@/utils/prefersReducedMotion";
 
-const setIsZoomingAsync = (isZooming: boolean) => {
-  return (dispatch: Dispatch) => {
-    return new Promise<void>((resolve) => {
-      dispatch(setIsZooming(isZooming));
+const setIsZoomingAsync =
+  (setIsZooming: (isZooming: boolean) => void) => (isZooming: boolean) =>
+    new Promise<void>((resolve) => {
+      setIsZooming(isZooming);
       resolve();
     });
-  };
-};
 
 export const zoomOnFloor = (
   map: mapkit.Map,
   buildings: Buildings,
   floor: Floor,
-  dispatch: Dispatch<UnknownAction>,
+  setIsZooming: (isZooming: boolean) => void,
 ) => {
   // zoom after finish setting the floor
-  setIsZoomingAsync(true)(dispatch).then(() => {
+  setIsZoomingAsync(setIsZooming)(true).then(() => {
     const shape = buildings[floor.buildingCode]?.shape;
     if (shape) {
       zoomOnObject(map, shape.flat());

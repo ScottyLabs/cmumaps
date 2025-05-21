@@ -5,12 +5,7 @@ import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import {
-  setInfoCardStatus,
-  CardStatesList,
-  CardStates,
-} from "@/store/features/cardSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import useUiStore, { CardStates, CardStatesList } from "@/store/uiSlice";
 
 interface Props {
   snapPoints: number[];
@@ -18,11 +13,12 @@ interface Props {
 }
 
 const DraggableSheet = ({ snapPoints, children }: Props) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const controls = useAnimation();
+
   const { isCardOpen } = useLocationParams();
-  const cardStatus = useAppSelector((state) => state.card.cardStatus);
+  const cardStatus = useUiStore((state) => state.cardStatus);
+  const setCardStatus = useUiStore((state) => state.setCardStatus);
   const snapIndex = useMemo(() => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
@@ -30,11 +26,11 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   // updates the card status when the isCardOpen changes
   useEffect(() => {
     if (isCardOpen) {
-      dispatch(setInfoCardStatus(CardStates.HALF_OPEN));
+      setCardStatus(CardStates.HALF_OPEN);
     } else {
-      dispatch(setInfoCardStatus(CardStates.COLLAPSED));
+      setCardStatus(CardStates.COLLAPSED);
     }
-  }, [controls, dispatch, isCardOpen]);
+  }, [controls, isCardOpen, setCardStatus]);
 
   // updates the snapping when isCardOpen or snapIndex changes
   useEffect(() => {
@@ -62,7 +58,7 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
 
       const index = snapPoints.indexOf(closestSnap);
       if (CardStatesList[index]) {
-        dispatch(setInfoCardStatus(CardStatesList[index]));
+        setCardStatus(CardStatesList[index]);
         controls.start({ y: -snapPoints[index]! });
       }
     }

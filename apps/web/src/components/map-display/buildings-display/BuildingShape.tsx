@@ -2,16 +2,14 @@ import { Building } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
 import { getBuildingShapeFillColor } from "@/components/map-display/buildings-display/colorUtils";
-import { useAppSelector } from "@/store/hooks";
+import useMapStore from "@/store/mapSlice";
 
 interface Props {
   building: Building;
 }
 
 const BuildingShape = ({ building }: Props) => {
-  const selectedBuilding = useAppSelector(
-    (state) => state.map.selectedBuilding,
-  );
+  const selectedBuilding = useMapStore((state) => state.selectedBuilding);
   const isSelected = selectedBuilding?.code == building.code;
 
   const getStrokeColor = () => {

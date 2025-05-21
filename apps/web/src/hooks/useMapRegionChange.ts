@@ -11,19 +11,18 @@ import {
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
-import {
-  focusFloor,
-  setShowRoomNames,
-  unfocusFloor,
-} from "@/store/features/mapSlice";
-import useUiStore from "@/store/features/uiSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import useMapStore from "@/store/mapSlice";
+import useUiStore from "@/store/uiSlice";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
-  const dispatch = useAppDispatch();
-  const focusedFloor = useAppSelector((state) => state.map.focusedFloor);
+  const focusedFloor = useMapStore((state) => state.focusedFloor);
+  const focusFloor = useMapStore((state) => state.focusFloor);
+  const unfocusFloor = useMapStore((state) => state.unfocusFloor);
+
+  const setShowRoomNames = useMapStore((state) => state.setShowRoomNames);
+
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   const showLogin = useUiStore((state) => state.showLogin);
@@ -72,7 +71,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
         level: centerBuilding.defaultFloor,
       };
 
-      dispatch(focusFloor(focusedFloor));
+      focusFloor(focusedFloor);
       return;
     }
 
@@ -87,7 +86,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       );
 
       if (newFocusedFloor) {
-        dispatch(focusFloor(newFocusedFloor));
+        focusFloor(newFocusedFloor);
       }
     }
   };
@@ -98,7 +97,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
       const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
       setShowFloor(showFloor);
-      dispatch(setShowRoomNames(density >= THRESHOLD_DENSITY_TO_SHOW_ROOMS));
+      setShowRoomNames(density >= THRESHOLD_DENSITY_TO_SHOW_ROOMS);
 
       if (showFloor && !sessionStorage.getItem("showedLogin")) {
         sessionStorage.setItem("showedLogin", "true");
@@ -106,7 +105,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       }
 
       if (!showFloor) {
-        dispatch(unfocusFloor());
+        unfocusFloor();
         return;
       }
 

@@ -5,15 +5,13 @@ import { useNavigate } from "react-router";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
-import useUiStore from "@/store/features/uiSlice";
-import { useAppDispatch } from "@/store/hooks";
+import useUiStore from "@/store/uiSlice";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
 }
 
 const Searchbar = ({ mapRef }: Props) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +52,7 @@ const Searchbar = ({ mapRef }: Props) => {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [dispatch, navigate, hideSearch, showSearch]);
+  }, [navigate, hideSearch, showSearch]);
 
   const renderSearchIcon = () => (
     <img

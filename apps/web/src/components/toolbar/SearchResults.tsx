@@ -1,4 +1,4 @@
-import useUiStore from "@/store/features/uiSlice";
+import useUiStore from "@/store/uiSlice";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;

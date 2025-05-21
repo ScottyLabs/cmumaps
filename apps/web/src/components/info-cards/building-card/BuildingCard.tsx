@@ -5,8 +5,7 @@ import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import { selectCardCollapsed } from "@/store/features/cardSlice";
-import { useAppSelector } from "@/store/hooks";
+import useUiStore from "@/store/uiSlice";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -15,7 +14,7 @@ interface Props {
 const BuildingCard = ({ mapRef: _mapRef }: Props) => {
   const { buildingCode } = useLocationParams();
   const isMobile = useIsMobile();
-  const cardCollapsed = useAppSelector(selectCardCollapsed);
+  const isCardCollapsed = useUiStore((state) => state.isCardCollapsed);
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   if (!buildingCode || !buildings) {
@@ -39,7 +38,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
 
   return (
     <>
-      {(!cardCollapsed || !isMobile) && renderBuildingImage()}
+      {(!isCardCollapsed || !isMobile) && renderBuildingImage()}
       <h2 className="ml-3 pt-2">
         {building.name} ({building.code})
       </h2>
