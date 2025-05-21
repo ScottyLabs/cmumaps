@@ -6,8 +6,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import lockIcon from "@/assets/icons/half-lock.svg";
-import useMapStore from "@/store/mapSlice";
-import useUiStore from "@/store/uiSlice";
+import useMapStore from "@/store/roomSlice";
+import useUiStore from "@/store/searchSlice";
 
 import Roundel from "../shared/Roundel";
 

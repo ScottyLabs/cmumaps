@@ -5,7 +5,7 @@ import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore, { CardStates, CardStatesList } from "@/store/uiSlice";
+import useUiStore, { CardStates, CardStatesList } from "@/store/searchSlice";
 
 interface Props {
   snapPoints: number[];

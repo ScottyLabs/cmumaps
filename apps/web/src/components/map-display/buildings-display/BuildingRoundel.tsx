@@ -4,8 +4,8 @@ import { Annotation } from "mapkit-react";
 import { useLocation, useNavigate } from "react-router";
 
 import Roundel from "@/components/shared/Roundel";
-import useMapStore from "@/store/mapSlice";
-import useUiStore, { CardStates } from "@/store/uiSlice";
+import useMapStore from "@/store/roomSlice";
+import useUiStore, { CardStates } from "@/store/searchSlice";
 import { zoomOnObject } from "@/utils/zoomUtils";
 
 interface Props {

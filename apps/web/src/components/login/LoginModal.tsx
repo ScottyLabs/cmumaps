@@ -2,7 +2,7 @@ import { SignInButton, useUser } from "@clerk/clerk-react";
 
 import { useEffect } from "react";
 
-import useUiStore from "@/store/uiSlice";
+import useUiStore from "@/store/searchSlice";
 
 const LoginModal = () => {
   const { isSignedIn } = useUser();

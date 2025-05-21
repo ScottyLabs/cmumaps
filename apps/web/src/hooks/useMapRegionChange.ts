@@ -11,15 +11,14 @@ import {
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
-import useMapStore from "@/store/mapSlice";
-import useUiStore from "@/store/uiSlice";
+import { useFloorStore } from "@/store/floorSlice";
+import useMapStore from "@/store/roomSlice";
+import useUiStore from "@/store/searchSlice";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
-  const focusedFloor = useMapStore((state) => state.focusedFloor);
-  const focusFloor = useMapStore((state) => state.focusFloor);
-  const unfocusFloor = useMapStore((state) => state.unfocusFloor);
+  const { focusedFloor, focusFloor, unfocusFloor } = useFloorStore();
 
   const setShowRoomNames = useMapStore((state) => state.setShowRoomNames);
 

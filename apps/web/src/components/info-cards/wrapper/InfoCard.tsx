@@ -4,7 +4,7 @@ import RoomCard from "@/components/info-cards/room-card/RoomCard";
 import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore from "@/store/uiSlice";
+import useUiStore from "@/store/searchSlice";
 
 import BuildingCard from "../building-card/BuildingCard";
 

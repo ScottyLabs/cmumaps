@@ -1,4 +1,4 @@
-import useUiStore from "@/store/uiSlice";
+import { useSearchStore } from "@/store/searchSlice";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -6,7 +6,7 @@ interface Props {
 }
 
 const SearchResults = ({ searchQuery }: Props) => {
-  const isSearchOpen = useUiStore((state) => state.isSearchOpen);
+  const isSearchOpen = useSearchStore((state) => state.isSearchOpen);
 
   if (searchQuery.length === 0 || !isSearchOpen) {
     return <></>;

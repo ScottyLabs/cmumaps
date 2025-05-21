@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
-import useUiStore from "@/store/uiSlice";
+import useUiStore from "@/store/searchSlice";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;

@@ -7,8 +7,8 @@ import { useNavigate } from "react-router";
 import { getRoomsQueryOptions } from "@/api/apiClient";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
-import useMapStore from "@/store/mapSlice";
-import useUiStore, { CardStates } from "@/store/uiSlice";
+import useMapStore from "@/store/roomSlice";
+import useUiStore, { CardStates } from "@/store/searchSlice";
 import { getFloorCode } from "@/utils/floorUtils";
 
 interface Props {

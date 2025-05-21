@@ -8,7 +8,7 @@ import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore from "@/store/uiSlice";
+import useUiStore from "@/store/searchSlice";
 
 const RoomCard = () => {
   const { buildingCode, roomName, floor } = useLocationParams();

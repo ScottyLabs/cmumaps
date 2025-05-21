@@ -18,8 +18,8 @@ import BuildingsDisplay from "@/components/map-display/buildings-display/Buildin
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
-import useMapStore from "@/store/mapSlice";
-import useUiStore from "@/store/uiSlice";
+import useMapStore from "@/store/roomSlice";
+import useUiStore from "@/store/searchSlice";
 import { isInPolygon } from "@/utils/geometry";
 
 interface Props {

@@ -6,8 +6,8 @@ import { useMemo } from "react";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useMapStore from "@/store/mapSlice";
-import useUiStore from "@/store/uiSlice";
+import useMapStore from "@/store/roomSlice";
+import useUiStore from "@/store/searchSlice";
 
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 
