@@ -1,8 +1,8 @@
 import { Building } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
-import { getBuildingShapeFillColor } from "@/components/map-display/buildings-display/colorUtils";
 import useBoundStore from "@/store";
+import { getBuildingShapeFillColor } from "@/utils/buildingColorUtils";
 
 interface Props {
   building: Building;
