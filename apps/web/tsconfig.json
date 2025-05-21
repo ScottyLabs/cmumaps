@@ -29,5 +29,5 @@
     "noUncheckedSideEffectImports": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src", "../../packages/common/src/types/geoRoomTypes.ts"]
+  "include": ["src"]
 }
