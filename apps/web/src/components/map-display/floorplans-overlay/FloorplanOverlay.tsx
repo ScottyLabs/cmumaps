@@ -1,11 +1,12 @@
 import { Floor, GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
+import { useQuery } from "@tanstack/react-query";
 import { Annotation, Polygon } from "mapkit-react";
 
 import { useNavigate } from "react-router";
 
+import { apiClient } from "@/api/apiClient";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
-import { useGetFloorRoomsQuery } from "@/store/features/api/apiSlice";
 import { CardStates, setInfoCardStatus } from "@/store/features/cardSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getFloorCode } from "@/utils/floorUtils";
@@ -16,13 +17,15 @@ interface Props {
 
 const FloorplanOverlay = ({ floor }: Props) => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
+
   const { roomName: selectedRoomName } = useLocationParams();
   const showRoomNames = useAppSelector((state) => state.map.showRoomNames);
-  const { data: rooms } = useGetFloorRoomsQuery(
-    getFloorCode(floor.buildingCode, floor.level),
-  );
+  const floorCode = getFloorCode(floor.buildingCode, floor.level);
+  const { data: rooms } = useQuery({
+    queryKey: ["rooms", floorCode],
+    queryFn: apiClient(`floors/${floorCode}/floorplan`),
+  });
 
   if (!rooms) {
     return null;

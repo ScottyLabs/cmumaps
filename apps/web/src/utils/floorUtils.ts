@@ -32,7 +32,11 @@ export const getFloorByOrdinal = (
   };
 };
 
-export const getFloorCode = (buildingCode: string, floorLevel: string) => {
+export const getFloorCode = (
+  buildingCode: string | undefined,
+  floorLevel: string | undefined,
+) => {
+  if (!buildingCode || !floorLevel) return undefined;
   return `${buildingCode}-${floorLevel}`;
 };
 

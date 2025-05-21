@@ -1,3 +1,12 @@
+type QueryKey = ["buildings"] | ["rooms", string] | [];
+
+declare module "@tanstack/react-query" {
+  interface Register {
+    queryKey: QueryKey;
+    mutationKey: QueryKey;
+  }
+}
+
 const getClerkToken = async () => {
   if (window.Clerk && window.Clerk.session) {
     return await window.Clerk.session.getToken();
