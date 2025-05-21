@@ -1,22 +1,18 @@
 import { useUser } from "@clerk/clerk-react";
 
 import FloorplanOverlay from "@/components/map-display/floorplans-overlay/FloorplanOverlay";
-import useMapStore from "@/store/roomSlice";
+import useBoundStore from "@/store";
 
 const FloorPlansOverlay = () => {
   const { isSignedIn } = useUser();
-  const focusedFloor = useMapStore((state) => state.focusedFloor);
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
-  // only show floor plans if user is signed in and a floor is focused
+  // Only show floorplans if user is signed in and a floor is focused
   if (!focusedFloor || !isSignedIn) {
-    return;
+    return <></>;
   }
 
-  return (
-    <div>
-      <FloorplanOverlay floor={focusedFloor} />
-    </div>
-  );
+  return <FloorplanOverlay floor={focusedFloor} />;
 };
 
 export default FloorPlansOverlay;

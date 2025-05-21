@@ -1,10 +1,14 @@
 import { Building } from "@cmumaps/common";
-import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { StateCreator } from "zustand";
 
-export const useBuildingStore = create(
-  combine({ selectedBuilding: null as Building | null }, (set) => ({
-    selectBuilding: (building: Building) => set({ selectedBuilding: building }),
-    deselectBuilding: () => set({ selectedBuilding: null }),
-  })),
-);
+export interface BuildingSlice {
+  selectedBuilding: Building | null;
+  selectBuilding: (building: Building) => void;
+  deselectBuilding: () => void;
+}
+
+export const createBuildingSlice: StateCreator<BuildingSlice> = (set) => ({
+  selectedBuilding: null,
+  selectBuilding: (building: Building) => set({ selectedBuilding: building }),
+  deselectBuilding: () => set({ selectedBuilding: null }),
+});

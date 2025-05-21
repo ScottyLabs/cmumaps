@@ -7,8 +7,8 @@ import { useNavigate } from "react-router";
 import { getRoomsQueryOptions } from "@/api/apiClient";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
-import useMapStore from "@/store/roomSlice";
-import useUiStore, { CardStates } from "@/store/searchSlice";
+import useBoundStore from "@/store";
+import { CardStates } from "@/store/cardSlice";
 import { getFloorCode } from "@/utils/floorUtils";
 
 interface Props {
@@ -16,14 +16,19 @@ interface Props {
 }
 
 const FloorplanOverlay = ({ floor }: Props) => {
+  // Library hooks
   const navigate = useNavigate();
 
-  const { roomName: selectedRoomName } = useLocationParams();
-  const showRoomNames = useMapStore((state) => state.showRoomNames);
-  const setCardStatus = useUiStore((state) => state.setCardStatus);
+  // Global state
+  const showRoomNames = useBoundStore((state) => state.showRoomNames);
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
+  // Query data
   const floorCode = getFloorCode(floor);
   const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
+
+  // Custom hooks
+  const { roomName: selectedRoomName } = useLocationParams();
 
   if (!rooms) {
     return null;

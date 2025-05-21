@@ -1,5 +1,4 @@
-import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { StateCreator } from "zustand";
 
 export const CardStates = {
   COLLAPSED: "collapsed",
@@ -9,9 +8,14 @@ export const CardStates = {
 export type CardStatus = (typeof CardStates)[keyof typeof CardStates];
 export const CardStatesList = Object.values(CardStates);
 
-export const useCardStore = create(
-  combine({ cardStatus: CardStates.HALF_OPEN as CardStatus }, (set, get) => ({
-    setCardStatus: (status: CardStatus) => set({ cardStatus: status }),
-    isCardCollapsed: () => get().cardStatus === CardStates.COLLAPSED,
-  })),
-);
+export interface CardSlice {
+  cardStatus: CardStatus;
+  setCardStatus: (status: CardStatus) => void;
+  isCardCollapsed: () => boolean;
+}
+
+export const createCardSlice: StateCreator<CardSlice> = (set, get) => ({
+  cardStatus: CardStates.HALF_OPEN as CardStatus,
+  setCardStatus: (status: CardStatus) => set({ cardStatus: status }),
+  isCardCollapsed: () => get().cardStatus === CardStates.COLLAPSED,
+});

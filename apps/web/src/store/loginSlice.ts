@@ -1,9 +1,13 @@
-import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { StateCreator } from "zustand";
 
-export const useLoginStore = create(
-  combine({ isLoginOpen: false }, (set) => ({
-    showLogin: () => set({ isLoginOpen: true }),
-    hideLogin: () => set({ isLoginOpen: false }),
-  })),
-);
+export interface LoginSlice {
+  isLoginOpen: boolean;
+  showLogin: () => void;
+  hideLogin: () => void;
+}
+
+export const createLoginSlice: StateCreator<LoginSlice> = (set) => ({
+  isLoginOpen: false,
+  showLogin: () => set({ isLoginOpen: true }),
+  hideLogin: () => set({ isLoginOpen: false }),
+});

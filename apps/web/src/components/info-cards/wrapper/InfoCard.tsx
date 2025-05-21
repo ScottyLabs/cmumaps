@@ -4,7 +4,7 @@ import RoomCard from "@/components/info-cards/room-card/RoomCard";
 import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 
 import BuildingCard from "../building-card/BuildingCard";
 
@@ -15,7 +15,7 @@ interface Props {
 const InfoCard = ({ mapRef }: Props) => {
   const isMobile = useIsMobile();
   const { buildingCode, roomName } = useLocationParams();
-  const isSearchOpen = useUiStore((state) => state.isSearchOpen);
+  const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
 
   if (isSearchOpen) {
     return <></>;

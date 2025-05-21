@@ -5,7 +5,8 @@ import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore, { CardStates, CardStatesList } from "@/store/searchSlice";
+import useBoundStore from "@/store";
+import { CardStates, CardStatesList } from "@/store/cardSlice";
 
 interface Props {
   snapPoints: number[];
@@ -13,15 +14,21 @@ interface Props {
 }
 
 const DraggableSheet = ({ snapPoints, children }: Props) => {
+  // Library hooks
   const navigate = useNavigate();
   const controls = useAnimation();
 
-  const { isCardOpen } = useLocationParams();
-  const cardStatus = useUiStore((state) => state.cardStatus);
-  const setCardStatus = useUiStore((state) => state.setCardStatus);
+  // Global state
+  const cardStatus = useBoundStore((state) => state.cardStatus);
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
+
+  // Local state
   const snapIndex = useMemo(() => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
+
+  // Custom hooks
+  const { isCardOpen } = useLocationParams();
 
   // updates the card status when the isCardOpen changes
   useEffect(() => {

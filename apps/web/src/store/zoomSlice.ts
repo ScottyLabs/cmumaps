@@ -1,14 +1,17 @@
-import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { StateCreator } from "zustand";
 
-export const useZoomStore = create(
-  combine({ isZooming: false }, (set) => ({
-    setIsZooming: (isZooming: boolean) => set({ isZooming }),
-  })),
-);
+export interface ZoomSlice {
+  isZooming: boolean;
+  setIsZooming: (isZooming: boolean) => void;
 
-export const useRoomNamesStore = create(
-  combine({ showRoomNames: false }, (set) => ({
-    setShowRoomNames: (showRoomNames: boolean) => set({ showRoomNames }),
-  })),
-);
+  showRoomNames: boolean;
+  setShowRoomNames: (showRoomNames: boolean) => void;
+}
+
+export const createZoomSlice: StateCreator<ZoomSlice> = (set) => ({
+  isZooming: false,
+  setIsZooming: (isZooming: boolean) => set({ isZooming }),
+
+  showRoomNames: false,
+  setShowRoomNames: (showRoomNames: boolean) => set({ showRoomNames }),
+});

@@ -11,23 +11,25 @@ import {
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
-import { useFloorStore } from "@/store/floorSlice";
-import useMapStore from "@/store/roomSlice";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
-  const { focusedFloor, focusFloor, unfocusFloor } = useFloorStore();
-
-  const setShowRoomNames = useMapStore((state) => state.setShowRoomNames);
-
+  // Query data
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
-  const showLogin = useUiStore((state) => state.showLogin);
+  // Global state
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
+  const focusFloor = useBoundStore((state) => state.focusFloor);
+  const unfocusFloor = useBoundStore((state) => state.unfocusFloor);
+  const showLogin = useBoundStore((state) => state.showLogin);
+  const setShowRoomNames = useBoundStore((state) => state.setShowRoomNames);
 
+  // Local state
   const [showFloor, setShowFloor] = useState<boolean>(false);
 
+  // Calculates the focused floor based on the region
   const calcFocusedFloor = (region: CoordinateRegion) => {
     if (!buildings) {
       return;

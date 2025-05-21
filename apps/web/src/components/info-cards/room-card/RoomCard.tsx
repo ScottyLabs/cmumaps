@@ -8,12 +8,12 @@ import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 
 const RoomCard = () => {
   const { buildingCode, roomName, floor } = useLocationParams();
   const isMobile = useIsMobile();
-  const isCardCollapsed = useUiStore((state) => state.isCardCollapsed);
+  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed);
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
   const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));

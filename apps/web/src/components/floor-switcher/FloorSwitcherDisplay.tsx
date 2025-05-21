@@ -6,8 +6,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 import lockIcon from "@/assets/icons/half-lock.svg";
-import useMapStore from "@/store/roomSlice";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 
 import Roundel from "../shared/Roundel";
 
@@ -23,8 +22,8 @@ interface Props {
 const FloorSwitcherDisplay = ({ building, floor }: Props) => {
   const navigate = useNavigate();
 
-  const hideSearch = useUiStore((state) => state.hideSearch);
-  const focusFloor = useMapStore((state) => state.focusFloor);
+  const hideSearch = useBoundStore((state) => state.hideSearch);
+  const focusFloor = useBoundStore((state) => state.focusFloor);
 
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 

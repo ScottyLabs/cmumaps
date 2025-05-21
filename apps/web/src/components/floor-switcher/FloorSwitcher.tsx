@@ -6,8 +6,7 @@ import { useMemo } from "react";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
-import useMapStore from "@/store/roomSlice";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 
@@ -18,34 +17,36 @@ import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
  * - When to show the floor switcher
  */
 const FloorSwitcher = () => {
-  // hooks
+  // Library hooks
   const { isSignedIn } = useUser();
-  const { isCardOpen } = useLocationParams();
   const isMobile = useIsMobile();
 
-  // query data
+  // Global states
+  const floor = useBoundStore((state) => state.focusedFloor);
+  const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+
+  // Query data
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
-  // store states
-  const floor = useMapStore((state) => state.focusedFloor);
-  const isSearchOpen = useUiStore((state) => state.isSearchOpen);
+  // Custom hooks
+  const { isCardOpen } = useLocationParams();
 
-  // don't show floor switcher in mobile if the card is open or the search is open
+  // Don't show floor switcher in mobile if the card is open or the search is open
   const showFloorSwitcherMobile = useMemo(() => {
     return !(isMobile && (isCardOpen || isSearchOpen));
   }, [isCardOpen, isMobile, isSearchOpen]);
 
-  // don't show floor switcher if the user is not signed in
+  // Don't show floor switcher if the user is not signed in
   if (!isSignedIn) {
     return <></>;
   }
 
-  // only show floor switcher if there is focused floor
+  // Only show floor switcher if there is focused floor
   if (!buildings || !floor || !showFloorSwitcherMobile) {
     return <></>;
   }
 
-  // only show floor switcher if there is focused floor
+  // Only show floor switcher if there is focused floor
   const building = buildings[floor.buildingCode];
   if (!building) {
     return <></>;

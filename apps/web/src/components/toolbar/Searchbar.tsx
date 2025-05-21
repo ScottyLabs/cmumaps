@@ -5,24 +5,29 @@ import { useNavigate } from "react-router";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
 }
 
 const Searchbar = ({ mapRef }: Props) => {
+  // Hooks
   const navigate = useNavigate();
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const isSearchOpen = useUiStore((state) => state.isSearchOpen);
-  const showSearch = useUiStore((state) => state.showSearch);
-  const hideSearch = useUiStore((state) => state.hideSearch);
+  // Global state
+  const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const showSearch = useBoundStore((state) => state.showSearch);
+  const hideSearch = useBoundStore((state) => state.hideSearch);
 
+  // Local state
+  const inputRef = useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
 
-  // blur the input field when not searching (mainly used for clicking on the map to close search)
+  // Blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
     if (!isSearchOpen) {
       if (inputRef.current) {

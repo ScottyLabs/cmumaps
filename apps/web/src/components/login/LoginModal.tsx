@@ -2,12 +2,12 @@ import { SignInButton, useUser } from "@clerk/clerk-react";
 
 import { useEffect } from "react";
 
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 
 const LoginModal = () => {
   const { isSignedIn } = useUser();
-  const isLoginOpen = useUiStore((state) => state.isLoginOpen);
-  const hideLogin = useUiStore((state) => state.hideLogin);
+  const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
+  const hideLogin = useBoundStore((state) => state.hideLogin);
 
   // If the user signed out, should try to show the login modal again
   useEffect(() => {

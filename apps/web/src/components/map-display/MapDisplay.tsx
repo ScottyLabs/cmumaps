@@ -18,8 +18,7 @@ import BuildingsDisplay from "@/components/map-display/buildings-display/Buildin
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
-import useMapStore from "@/store/roomSlice";
-import useUiStore from "@/store/searchSlice";
+import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
 
 interface Props {
@@ -27,25 +26,31 @@ interface Props {
 }
 
 const MapDisplay = ({ mapRef }: Props) => {
+  // Library hooks
   const navigate = useNavigate();
 
-  const hideSearch = useUiStore((state) => state.hideSearch);
-  const selectBuilding = useMapStore((state) => state.selectBuilding);
-  const deselectBuilding = useMapStore((state) => state.deselectBuilding);
-  const setIsZooming = useMapStore((state) => state.setIsZooming);
+  // Query data
+  const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
+  // Global state
+  const hideSearch = useBoundStore((state) => state.hideSearch);
+  const selectBuilding = useBoundStore((state) => state.selectBuilding);
+  const deselectBuilding = useBoundStore((state) => state.deselectBuilding);
+  const setIsZooming = useBoundStore((state) => state.setIsZooming);
+
+  // Local state
   const isMobile = useIsMobile();
   const [usedPanning, setUsedPanning] = useState<boolean>(false);
+
+  // Custom hooks
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
 
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
-
+  // Need to keep track of usedPanning because the end of panning is a click
+  // and we don't want to trigger a click when the user is panning
   const handleLoad = () => {
     if (mapRef.current) {
-      mapRef.current.addEventListener("scroll-end", () => {
-        setUsedPanning(true);
-      });
+      mapRef.current.addEventListener("scroll-end", () => setUsedPanning(true));
     }
   };
 
@@ -80,6 +85,8 @@ const MapDisplay = ({ mapRef }: Props) => {
       }
     }
 
+    // If no building is clicked, deselect the building and navigate to the home page
+    // TODO: do we need to deselect the room?
     if (!clickedBuilding) {
       deselectBuilding();
       navigate("/");

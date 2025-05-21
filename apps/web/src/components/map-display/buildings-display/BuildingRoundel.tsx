@@ -4,8 +4,8 @@ import { Annotation } from "mapkit-react";
 import { useLocation, useNavigate } from "react-router";
 
 import Roundel from "@/components/shared/Roundel";
-import useMapStore from "@/store/roomSlice";
-import useUiStore, { CardStates } from "@/store/searchSlice";
+import useBoundStore from "@/store";
+import { CardStates } from "@/store/cardSlice";
 import { zoomOnObject } from "@/utils/zoomUtils";
 
 interface Props {
@@ -18,10 +18,10 @@ const BuildingRoundel = ({ map, building }: Props) => {
 
   const location = useLocation();
   const floorCode = location.pathname.split("/")[1];
-  const selectBuilding = useMapStore((state) => state.selectBuilding);
-  const setCardStatus = useUiStore((state) => state.setCardStatus);
+  const selectBuilding = useBoundStore((state) => state.selectBuilding);
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
-  const focusedFloor = useMapStore((state) => state.focusedFloor);
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
   if (focusedFloor || !map) {
     return null;
   }
