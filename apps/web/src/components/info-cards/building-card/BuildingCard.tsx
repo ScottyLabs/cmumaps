@@ -12,9 +12,9 @@ interface Props {
 }
 
 const BuildingCard = ({ mapRef: _mapRef }: Props) => {
-  const { buildingCode } = useLocationParams();
   const isMobile = useIsMobile();
   const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed);
+  const { buildingCode } = useLocationParams();
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   if (!buildingCode || !buildings) {
@@ -28,12 +28,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
 
   const renderBuildingImage = () => {
     const url = `/location_images/building_room_images/${building.code}/${building.code}.jpg`;
-
     return <InfoCardImage url={url} alt={`${building.name} Image`} />;
-  };
-
-  const renderButtonsRow = () => {
-    return <ButtonsRow middleButton={<></>} />;
   };
 
   return (
@@ -42,7 +37,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
       <h2 className="ml-3 pt-2">
         {building.name} ({building.code})
       </h2>
-      {renderButtonsRow()}
+      <ButtonsRow middleButton={<></>} />
     </>
   );
 };
