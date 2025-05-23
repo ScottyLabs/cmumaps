@@ -1,4 +1,4 @@
-import { prisma } from "@cmumaps/db";
+import { prisma } from "../prisma";
 
 export const edgeService = {
   createEdge: async (inNodeId: string, outNodeId: string) => {

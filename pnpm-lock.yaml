@@ -29,9 +29,9 @@ importers:
       '@cmumaps/common':
         specifier: workspace:*
         version: link:../../packages/common
-      '@cmumaps/db':
-        specifier: workspace:*
-        version: link:../../packages/db
+      '@prisma/client':
+        specifier: ^6.4.1
+        version: 6.4.1(prisma@6.4.1(typescript@5.8.2))(typescript@5.8.2)
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2
         version: 5.2.2(prettier@3.5.3)
@@ -72,6 +72,9 @@ importers:
       globals:
         specifier: ^16.0.0
         version: 16.0.0
+      prisma:
+        specifier: ^6.4.1
+        version: 6.4.1(typescript@5.8.2)
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
@@ -339,25 +342,6 @@ importers:
       '@types/node':
         specifier: ^20.11.24
         version: 20.17.24
-      typescript:
-        specifier: ^5.8.2
-        version: 5.8.2
-
-  packages/db:
-    dependencies:
-      '@prisma/client':
-        specifier: ^6.4.1
-        version: 6.4.1(prisma@6.4.1(typescript@5.8.2))(typescript@5.8.2)
-      dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
-    devDependencies:
-      '@types/node':
-        specifier: ^20.17.24
-        version: 20.17.24
-      prisma:
-        specifier: ^6.4.1
-        version: 6.4.1(typescript@5.8.2)
       typescript:
         specifier: ^5.8.2
         version: 5.8.2

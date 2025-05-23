@@ -1,5 +1,4 @@
 import { clerkMiddleware } from "@clerk/express";
-import { prisma } from "@cmumaps/db";
 import cors from "cors";
 import express from "express";
 import http from "http";
@@ -8,10 +7,10 @@ import { Server } from "socket.io";
 import { checkAuth, socketAuth } from "./middleware/authMiddleware";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 import { requireSocketId } from "./middleware/socketIdMiddleware";
+import { prisma } from "./prisma";
 import buildingRoutes from "./routes/buildingRoutes";
 import dropTablesRoutes from "./routes/dropTablesRoutes";
 import edgeRoutes from "./routes/edgeRoutes";
-import eventRoutes from "./routes/eventRoutes";
 import floorRoutes from "./routes/floorRoutes";
 import nodeRoutes from "./routes/nodeRoutes";
 import poiRoutes from "./routes/poiRoutes";
@@ -55,7 +54,6 @@ app.use("/api/populate-table", checkAuth, populateTableRoutes);
 
 app.use("/api/floors", checkAuth, floorRoutes);
 app.use("/api/buildings", buildingRoutes);
-app.use("/api/events", eventRoutes);
 app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 app.use("/api", checkAuth, edgeRoutes);
 app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);

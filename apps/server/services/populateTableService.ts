@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma } from "@cmumaps/db";
+import { prisma } from "../prisma";
 
 export const populateTableService = {
   populateBuildings: async (data: any) => {

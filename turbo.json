@@ -16,10 +16,10 @@
       "cache": false,
       "persistent": true
     },
-    "@cmumaps/db#generate": {},
+    "@cmumaps/server#db-generate": {},
     "@cmumaps/server#build": {
       "dependsOn": [
-        "@cmumaps/db#generate"
+        "@cmumaps/server#db-generate"
       ]
     },
     "build": {

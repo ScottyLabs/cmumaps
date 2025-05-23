@@ -18,7 +18,7 @@
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",
     "tsc": "turbo tsc --parallel",
-    "db-generate": "turbo run generate --filter=@cmumaps/db"
+    "db-generate": "turbo run db-generate --filter=@cmumaps/server"
   },
   "devDependencies": {
     "eslint": "^9.21.0",
