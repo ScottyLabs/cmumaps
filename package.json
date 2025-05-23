@@ -1,12 +1,11 @@
 {
   "name": "cmumaps",
   "private": true,
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "bun@1.2.10",
   "type": "module",
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "infrastructure"
+    "packages/*"
   ],
   "scripts": {
     "start": "turbo run start",
@@ -24,6 +23,7 @@
     "eslint": "^9.21.0",
     "prettier": "^3.5.3",
     "turbo": "^2.4.4",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "@types/bun": "latest"
   }
 }
