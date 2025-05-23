@@ -5,7 +5,7 @@ import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 load_dotenv()
-AWS_API_INVOKE_URL = os.getenv("NEXT_PUBLIC_AWS_API_INVOKE_URL")
+AWS_API_INVOKE_URL = os.getenv("AWS_API_INVOKE_URL")
 
 headers = {
     "Authorization": f"Bearer {get_clerk_jwt()}",
