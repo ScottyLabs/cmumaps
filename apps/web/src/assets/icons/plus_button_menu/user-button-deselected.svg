@@ -1,18 +1,23 @@
-<svg width="65" height="65" viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_d_1_845)">
-<circle cx="32.5" cy="28.5" r="28.5" fill="#979797"/>
-<path d="M41.92 29.32L41.9067 29.3467C41.96 28.9067 42.0133 28.4533 42.0133 28C42.0133 27.5467 41.9733 27.12 41.92 26.68L41.9333 26.7067L45.1867 24.1467L41.9467 18.52L38.12 20.0667L38.1333 20.08C37.44 19.5467 36.68 19.0933 35.8533 18.7467H35.8667L35.2533 14.6667H28.76L28.1733 18.76H28.1867C27.36 19.1067 26.6 19.56 25.9067 20.0933L25.92 20.08L22.08 18.52L18.8267 24.1467L22.08 26.7067L22.0933 26.68C22.04 27.12 22 27.5467 22 28C22 28.4533 22.04 28.9067 22.1067 29.3467L22.0933 29.32L19.2933 31.52L18.8533 31.8667L22.0933 37.4667L25.9333 35.9333L25.9067 35.88C26.6133 36.4267 27.3733 36.88 28.2133 37.2267H28.1733L28.7733 41.3333H35.24C35.24 41.3333 35.28 41.0933 35.32 40.7733L35.8267 37.24H35.8133C36.64 36.8933 37.4133 36.44 38.12 35.8933L38.0933 35.9467L41.9333 37.48L45.1733 31.88C45.1733 31.88 44.9867 31.72 44.7333 31.5333L41.92 29.32ZM32 32.6667C29.4267 32.6667 27.3333 30.5733 27.3333 28C27.3333 25.4267 29.4267 23.3333 32 23.3333C34.5733 23.3333 36.6667 25.4267 36.6667 28C36.6667 30.5733 34.5733 32.6667 32 32.6667Z" fill="#F0F0F0"/>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="57" height="57" viewBox="0 0 57 57" xml:space="preserve">
+<desc>Created with Fabric.js 5.2.4</desc>
 <defs>
-<filter id="filter0_d_1_845" x="0" y="0" width="65" height="65" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="4"/>
-<feGaussianBlur stdDeviation="2"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_845"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_845" result="shape"/>
-</filter>
 </defs>
+<rect x="0" y="0" width="100%" height="100%" fill="transparent"></rect>
+<g transform="matrix(1 0 0 1 28.5 28.5)" id="f945a92a-191e-4ea9-b49f-cf5860cb5db9"  >
+<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-28.5" y="-28.5" rx="0" ry="0" width="57" height="57" />
+</g>
+<g transform="matrix(Infinity NaN NaN Infinity 0 0)" id="cb306681-4441-47e0-a448-6dcfe0ad10e6"  >
+</g>
+<g transform="matrix(1 0 0 1 28.5 28.5)"  >
+<g style="" vector-effect="non-scaling-stroke"   >
+		<g transform="matrix(1 0 0 1 0 0)"  >
+<circle style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(151,151,151); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  cx="0" cy="0" r="28.5" />
+</g>
+		<g transform="matrix(1 0 0 1 -0.49 -0.5)"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(240,240,240); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-32.01, -28)" d="M 41.92 29.32 L 41.9067 29.3467 C 41.96 28.9067 42.0133 28.4533 42.0133 28 C 42.0133 27.5467 41.9733 27.12 41.92 26.68 L 41.9333 26.7067 L 45.1867 24.1467 L 41.9467 18.52 L 38.12 20.0667 L 38.1333 20.08 C 37.44 19.5467 36.68 19.0933 35.8533 18.7467 L 35.8667 18.7467 L 35.2533 14.6667 L 28.76 14.6667 L 28.1733 18.76 L 28.1867 18.76 C 27.36 19.1067 26.6 19.56 25.9067 20.0933 L 25.92 20.08 L 22.08 18.52 L 18.8267 24.1467 L 22.08 26.7067 L 22.0933 26.68 C 22.04 27.12 22 27.5467 22 28 C 22 28.4533 22.04 28.9067 22.1067 29.3467 L 22.0933 29.32 L 19.2933 31.52 L 18.8533 31.8667 L 22.0933 37.4667 L 25.9333 35.9333 L 25.9067 35.88 C 26.6133 36.4267 27.3733 36.88 28.2133 37.2267 L 28.1733 37.2267 L 28.7733 41.3333 L 35.24 41.3333 C 35.24 41.3333 35.28 41.0933 35.32 40.7733 L 35.8267 37.24 L 35.8133 37.24 C 36.64 36.8933 37.4133 36.44 38.12 35.8933 L 38.0933 35.9467 L 41.9333 37.48 L 45.1733 31.88 C 45.1733 31.88 44.9867 31.72 44.7333 31.5333 L 41.92 29.32 Z M 32 32.6667 C 29.4267 32.6667 27.3333 30.5733 27.3333 28 C 27.3333 25.4267 29.4267 23.3333 32 23.3333 C 34.5733 23.3333 36.6667 25.4267 36.6667 28 C 36.6667 30.5733 34.5733 32.6667 32 32.6667 Z" stroke-linecap="round" />
+</g>
+</g>
+</g>
 </svg>

@@ -1,5 +1,8 @@
-import { UserButton, UserProfile } from "@clerk/clerk-react";
+import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 
+import settingsIcon from "@/assets/icons/plus_button_menu/settings.svg";
+import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
+import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import questionMarkIcon from "@/assets/icons/question-mark.png";
 import plusButtonSelected from "@/assets/icons/plus_button_menu/plus-button-selected.svg";
 import plusButtonDeselected from "@/assets/icons/plus_button_menu/plus-button-deselected.svg";
@@ -12,8 +15,8 @@ import userButtonDeselected from "@/assets/icons/plus_button_menu/user-button-de
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import { AnimationControls, motion, TargetAndTransition, useAnimation, VariantLabels } from "motion/react";
-import { ReactElement, useRef, useState } from "react";
+import { motion, useAnimation } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 const IconsDisplay = () => {
   const isMobile = useIsMobile();
@@ -24,6 +27,9 @@ const IconsDisplay = () => {
   const coursesButtonControls = useAnimation();
   const questionMarkButtonControls = useAnimation();
   const userButtonControls = useAnimation(); 
+
+  const { isLoaded, isSignedIn, user } = useUser();
+  const { signOut, openUserProfile, openSignIn } = useClerk();
 
   const userButtonRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,43 +42,38 @@ const IconsDisplay = () => {
   }
 
   const [plusButtonMenuState, setPlusButtonMenuState] = useState(PlusButtonMenuState.CLOSED);
-  // const [isRenderingButtons, setIsRenderingButtons] = useState(false);
 
-  // Don't show icons in mobile
-  // if either the card is open or the search is open
-  if (isMobile && (isSearchOpen || isCardOpen)) {
-    return <></>;
-  }
-
-  const plusButtonOnClick = () => {
-    // if (!isPlusButtonMenuOpen) {
-    //   setIsRenderingButtons(true);
-    // }
+  useEffect(() => {
     plusButtonControls.start({
-      rotate: plusButtonMenuState == PlusButtonMenuState.CLOSED ? 0 : 45,
+      rotate: plusButtonMenuState != PlusButtonMenuState.CLOSED ? 0 : 45,
       transition: {
         bounce: 0
       },
     });
     ([coursesButtonControls, questionMarkButtonControls, userButtonControls]).forEach((control, i) => {
       control?.start({
-        y: plusButtonMenuState == PlusButtonMenuState.CLOSED ? -54 * (i+1) : 0,
+        y: plusButtonMenuState != PlusButtonMenuState.CLOSED ? -54 * (i+1) : 0,
         transition: {
           bounce: 0
         }
       })
     });
+  }, [plusButtonMenuState]);
+
+  if (isMobile && (isSearchOpen || isCardOpen)) {
+    return <></>;
+  }
+
+  const plusButtonOnClick = () => {
     setPlusButtonMenuState(plusButtonMenuState == PlusButtonMenuState.CLOSED ? PlusButtonMenuState.OPEN : PlusButtonMenuState.CLOSED);
   }
 
-  const renderPlusButton = (children : ReactElement[]) => {
+  const renderPlusButton = () => {
     return (
-      <div className="btn-shadow fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full" onClick={plusButtonOnClick}>
-        {children}
+      <div className="btn-shadow fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50" onClick={plusButtonOnClick}>
         <motion.div 
         animate={plusButtonControls} 
         initial={{ rotate: 45 }}
-        // onAnimationComplete={() => {if (!isPlusButtonMenuOpen) {setIsRenderingButtons(false); console.log("CLOSING");}}}
         >
             <img
               alt="Plus Button"
@@ -86,48 +87,145 @@ const IconsDisplay = () => {
     );
   };
 
-  // const renderButton1 = () => {
-  //   return (
-  //     <motion.div animate={button1Controls} className="btn-shadow fixed">
-  //       <UserButton />
-  //     </motion.div>
-  //   );
-    
-  // };
-
   const renderQuestionMarkButton = () => {
+    const onClick = () => {
+      if (plusButtonMenuState == PlusButtonMenuState.QUESTION_MARK_SELECTED) {
+        setPlusButtonMenuState(PlusButtonMenuState.OPEN);
+      } else if (plusButtonMenuState != PlusButtonMenuState.CLOSED) {
+        setPlusButtonMenuState(PlusButtonMenuState.QUESTION_MARK_SELECTED);
+      }
+    }
+
     return (
-      <motion.div 
-        animate={questionMarkButtonControls} 
-        className="btn-shadow fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full"
-        // hidden={!isRenderingButtons
-        >
-          <img
-            alt="Question Mark"
-            src={(plusButtonMenuState == PlusButtonMenuState.QUESTION_MARK_SELECTED) ? questionMarkButtonSelected : questionMarkButtonDeselected}
-            height={isMobile ? 43 : 50}
-            width={isMobile ? 43 : 50}
-          />
-      </motion.div>
+      <>
+        <motion.div 
+          animate={questionMarkButtonControls} 
+          className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
+          onClick={onClick}
+          >
+            <img
+              alt="Question Mark"
+              src={(plusButtonMenuState == PlusButtonMenuState.QUESTION_MARK_SELECTED) ? questionMarkButtonSelected : questionMarkButtonDeselected}
+              height={isMobile ? 43 : 50}
+              width={isMobile ? 43 : 50}
+            />
+        </motion.div>
+        {plusButtonMenuState == PlusButtonMenuState.QUESTION_MARK_SELECTED && (
+          <div className="fixed inset-x-4 bottom-56 top-4 bg-white rounded-lg shadow-lg overflow-auto z-50">
+            <h5 className="py-1 px-2">About CMUMaps</h5>
+          </div>
+        )}
+      </>
     );
   };
 
   const renderCoursesButton = () => {
+    const onClick = () => {
+      if (plusButtonMenuState == PlusButtonMenuState.COURSES_SELECTED) {
+        setPlusButtonMenuState(PlusButtonMenuState.OPEN);
+      } else if (plusButtonMenuState != PlusButtonMenuState.CLOSED) {
+        setPlusButtonMenuState(PlusButtonMenuState.COURSES_SELECTED);
+      }
+    }
+
     return (
-      <motion.div 
-        animate={coursesButtonControls} 
-        className="btn-shadow fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full"
-        // hidden={!isRenderingButtons
-        >
-          <img
-            alt="Question Mark"
-            src={(plusButtonMenuState == PlusButtonMenuState.COURSES_SELECTED) ? coursesButtonSelected : coursesButtonDeselected}
-            height={isMobile ? 43 : 50}
-            width={isMobile ? 43 : 50}
-          />
-      </motion.div>
+      <>
+        <motion.div 
+          animate={coursesButtonControls} 
+          className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
+          onClick={onClick}
+          >
+            <img
+              alt="Courses"
+              src={(plusButtonMenuState == PlusButtonMenuState.COURSES_SELECTED) ? coursesButtonSelected : coursesButtonDeselected}
+              height={isMobile ? 43 : 50}
+              width={isMobile ? 43 : 50}
+            />
+        </motion.div>
+        {plusButtonMenuState == PlusButtonMenuState.COURSES_SELECTED && (
+            <div className="fixed inset-x-4 bottom-56 top-4 bg-white rounded-lg shadow-lg overflow-auto z-50">
+              <h5 className="py-1 px-2">Schedule</h5>
+            </div>
+        )}
+      </>
     );
   };
+
+  const renderUserMenu = () => {
+    const text = isLoaded ? (isSignedIn ? `Signed in as ${user.firstName} ${user.lastName}` : "Not signed in") : "Loading user...";
+
+    if (!isLoaded || !isSignedIn) return (
+      <div className="fixed inset-x-4 bottom-56 bg-white border border-gray-200 rounded-lg shadow-lg px-4 pt-4 pb-1 font-sans z-50">
+        <div className="flex items-center gap-3 mb-4">
+          <div>
+            <div className="text-center text-sm font-semibold text-gray-800">
+              {text}
+            </div>
+          </div>
+        </div>
+
+        {
+          isLoaded && (
+            <>
+              <hr className="-mx-4 my-1 border-gray-200" />
+              <button
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 bg-white active:bg-gray-100 rounded-md"
+                onClick={() => openSignIn()}
+              >
+                <img src={signInIcon} width={24} height={24}/>
+                <span>Sign In</span>
+              </button>
+            </>
+          )
+        }
+
+      </div>
+    );
+
+    const avatarUrl = user.imageUrl;
+    const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+    const email = user.primaryEmailAddress?.emailAddress;
+
+    return (
+      <div className="fixed inset-x-4 bottom-56 bg-white border border-gray-200 rounded-lg shadow-lg px-4 pt-4 pb-1 font-sans z-50">
+        <div className="flex items-center gap-3 mb-4">
+          <img
+            src={avatarUrl}
+            alt="User Avatar"
+            className="w-12 h-12 rounded-full"
+          />
+          <div>
+            <div className="text-sm font-semibold text-gray-800">
+              {fullName || 'No name'}
+            </div>
+            <div className="text-sm text-gray-500">
+              {email || 'No email'}
+            </div>
+          </div>
+        </div>
+
+        <hr className="-mx-4 my-1 border-gray-200" />
+
+        <button
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 bg-white active:bg-gray-100 rounded-md"
+          onClick={() => openUserProfile()}
+        >
+          <img src={settingsIcon} width={24} height={24}/>
+          <span>Manage Account</span>
+        </button>
+
+        <hr className="-mx-4 my-1 border-gray-200"/>
+        
+        <button
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 bg-white focus:bg-gray-100 rounded-md"
+          onClick={() => signOut()}
+        >
+          <img src={signOutIcon} width={24} height={24}/>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    );
+  }
 
   const renderUserButton = () => {
     
@@ -139,29 +237,22 @@ const IconsDisplay = () => {
         setPlusButtonMenuState(PlusButtonMenuState.USER_SELECTED);
       }
 
-      // Find the button inside the Clerk UserButton and click it
-      const internalButton = userButtonRef.current?.querySelector('button');
-      internalButton?.click();
     };
 
     return (
+      <>
       <motion.div 
         animate={userButtonControls} 
-        className="btn-shadow fixed flex right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full"
-        // hidden={!isRenderingButtons
+        className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow ") + "fixed flex right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
         >
-          {/* <div className="fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5"> */}
-      {/* Hidden UserButton (still renders menu logic) */}
-      <div ref={userButtonRef} className="absolute right-[4px] -z-10 opacity-0 pointer-events-none">
+
+      <div ref={userButtonRef} className="absolute right-[4px] -z-10 opacity-0 pointer-events-none z-50">
         <UserButton />
       </div>
 
-      {/* Custom Button */}
       <div
         onClick={handleClick}
-        // className="w-[43px] h-[43px] rounded-full flex items-center justify-center bg-white shadow-md"
       >
-        {/* Replace with your own SVG */}
         <img
           alt="Question Mark"
           src={(plusButtonMenuState == PlusButtonMenuState.USER_SELECTED) ? userButtonSelected : userButtonDeselected}
@@ -169,37 +260,12 @@ const IconsDisplay = () => {
           width={isMobile ? 43 : 50}
         />
       </div>
-    {/* </div> */}
-          {/* <UserButton appearance={{ elements: { userButtonAvatarBox: { width: 43, height: 43 } } }} /> */}
-          {/* <UserButton
-          
-    
-            appearance={{
-              elements: {
-                userButtonAvatarBox: { 
-                  display: 'none',
-                },
-                userButtonBox: {
-                  width: 43,
-                  height: 43,
 
-                  // backgroundColor: 'transparent',
-                  // position: 'absolute',
-                  inset: 0,
-                },
-              },
-            }}
-          />
-        <img
-            className="fixed"
-            style={{pointerEvents: 'none'}}
-            alt="Question Mark"
-            src={questionMarkIcon}
-            height={isMobile ? 43 : 50}
-            width={isMobile ? 43 : 50}
-          /> */}
-          {/* {plusButtonMenuState == PlusButtonMenuState.USER_SELECTED && <UserProfile/>} */}
       </motion.div>
+      {plusButtonMenuState == PlusButtonMenuState.USER_SELECTED && (
+            renderUserMenu()
+        )}
+      </>
     );
   };
 
@@ -238,17 +304,23 @@ const IconsDisplay = () => {
     );
   };
 
+  const onClickBackground = () => {
+    if (plusButtonMenuState == PlusButtonMenuState.OPEN)
+      setPlusButtonMenuState(PlusButtonMenuState.CLOSED);
+    else
+      setPlusButtonMenuState(PlusButtonMenuState.OPEN);
+  }
+
   if (isMobile) {
   return (
     <>
+        {plusButtonMenuState != PlusButtonMenuState.CLOSED && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-md z-50" onClick={onClickBackground}></div>
+      )}
         {renderUserButton()}
         {renderQuestionMarkButton()}
         {renderCoursesButton()}
-        {renderPlusButton([])}
-        
-        {/* {renderButton1()} */}
-      {/* {renderClerkIcon()}
-      {renderQuestionMarkIcon()} */}
+        {renderPlusButton()}
     </>
   );
   }
