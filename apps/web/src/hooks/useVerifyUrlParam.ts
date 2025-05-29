@@ -1,42 +1,27 @@
-import { useLocation } from "react-router";
-
-import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
-
 import { useQuery } from "@tanstack/react-query";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 
+import { useLocation } from "react-router";
+
+import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { toast } from "react-toastify";
 
-import { useNavigate } from "react-router";
 
-interface Params {
-  buildingCode?: string;
-  floor?: string;
-  roomName?: string;
-  eventId?: string;
-  carnivalEvent?: "booth" | "buggy" | "mobot";
-  isCardOpen: boolean;
-}
-
-const useLocationParams = (): Params => {
+const useVerifyUrlParam = () => {
   const location = useLocation();
   const path = location.pathname;
 
-  const navigate = useNavigate();
-
-  let [buildingCode, roomName] = path.split("/")?.[1]?.split("-") || [];
+  const [buildingCode, roomName] = path.split("/")?.[1]?.split("-") || [];
   const floor = getFloorLevelFromRoomName(roomName);
 
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   const building = buildings && buildingCode && buildings[buildingCode];
 
-  if (path.split("/")?.[1] === "events") {
-    return {
-      eventId: path.split("/")?.[2],
-      isCardOpen: true,
-    };
+  if (!building) {
+    toast.error("Invalid building code");
   }
+
 
   if (path.split("/")?.[1] === "events") {
     return {
@@ -54,12 +39,7 @@ const useLocationParams = (): Params => {
       isCardOpen: true,
     };
   }
-
-  if (path.split("/")?.[1] && path.split("/")?.[1] != "" && !building) {
-    // toast.error("Invalid building code");
-    navigate("/");
-    buildingCode = undefined;
-  }
+  
 
   return {
     buildingCode,
@@ -69,4 +49,4 @@ const useLocationParams = (): Params => {
   };
 };
 
-export default useLocationParams;
+export default useVerifyUrlParam;
