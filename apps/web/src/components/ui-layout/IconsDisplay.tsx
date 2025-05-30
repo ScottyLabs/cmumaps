@@ -70,7 +70,7 @@ const IconsDisplay = () => {
 
   const renderPlusButton = () => {
     return (
-      <div className="btn-shadow fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50" onClick={plusButtonOnClick}>
+      <div className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "btn-shadow " : "btn-shadow-dark ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"} onClick={plusButtonOnClick}>
         <motion.div 
         animate={plusButtonControls} 
         initial={{ rotate: 45 }}
@@ -100,7 +100,7 @@ const IconsDisplay = () => {
       <>
         <motion.div 
           animate={questionMarkButtonControls} 
-          className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
+          className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow-dark ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
           onClick={onClick}
           >
             <img
@@ -111,7 +111,7 @@ const IconsDisplay = () => {
             />
         </motion.div>
         {plusButtonMenuState == PlusButtonMenuState.QUESTION_MARK_SELECTED && (
-          <div className="fixed inset-x-[21px] bottom-[227px] top-[21px] bg-white rounded-lg shadow-lg overflow-auto z-50">
+          <div className="btn-shadow-dark fixed inset-x-[21px] bottom-[227px] top-[21px] bg-white rounded-lg shadow-lg overflow-auto z-50">
             <h5 className="py-1 px-2">About CMUMaps</h5>
           </div>
         )}
@@ -132,7 +132,7 @@ const IconsDisplay = () => {
       <>
         <motion.div 
           animate={coursesButtonControls} 
-          className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
+          className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow-dark ") + "fixed right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
           onClick={onClick}
           >
             <img
@@ -143,7 +143,7 @@ const IconsDisplay = () => {
             />
         </motion.div>
         {plusButtonMenuState == PlusButtonMenuState.COURSES_SELECTED && (
-            <div className="fixed inset-x-[21px] bottom-[227px] top-[21px] bg-white rounded-lg shadow-lg overflow-auto z-50">
+            <div className="btn-shadow-dark fixed inset-x-[21px] bottom-[227px] top-[21px] bg-white rounded-lg shadow-lg overflow-auto z-50">
               <h5 className="py-1 px-2">Schedule</h5>
             </div>
         )}
@@ -155,7 +155,7 @@ const IconsDisplay = () => {
     const text = isLoaded ? (isSignedIn ? `Signed in as ${user.firstName} ${user.lastName}` : "Not signed in") : "Loading user...";
 
     if (!isLoaded || !isSignedIn) return (
-      <div className="fixed inset-x-[21px] bottom-[227px] bg-white border border-gray-200 rounded-lg shadow-lg px-4 pt-4 pb-1 font-sans z-50">
+      <div className="btn-shadow-dark fixed inset-x-[21px] bottom-[227px] bg-white border border-gray-200 rounded-lg shadow-lg px-4 pt-4 pb-1 font-sans z-50">
         <div className="flex items-center gap-3 mb-4">
           <div>
             <div className="text-center text-sm font-semibold text-gray-800">
@@ -187,7 +187,7 @@ const IconsDisplay = () => {
     const email = user.primaryEmailAddress?.emailAddress;
 
     return (
-      <div className="fixed inset-x-[21px] bottom-[227px] bg-white border border-gray-200 rounded-lg shadow-lg px-4 pt-4 pb-1 font-sans z-50">
+      <div className="btn-shadow-dark fixed inset-x-[21px] bottom-[227px] bg-white border border-gray-200 rounded-lg shadow-lg px-4 pt-4 pb-1 font-sans z-50">
         <div className="flex items-center gap-3 mb-4">
           <img
             src={avatarUrl}
@@ -243,7 +243,7 @@ const IconsDisplay = () => {
       <>
       <motion.div 
         animate={userButtonControls} 
-        className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow ") + "fixed flex right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
+        className={(plusButtonMenuState == PlusButtonMenuState.CLOSED ? "" : "btn-shadow-dark ") + "fixed flex right-3 bottom-3 sm:right-3.5 sm:bottom-3.5 rounded-full z-50"}
         >
 
       <div ref={userButtonRef} className="absolute right-[4px] -z-10 opacity-0 pointer-events-none z-50">
@@ -287,7 +287,7 @@ const IconsDisplay = () => {
 
   const renderQuestionMarkIcon = () => {
     return (
-      <div className="btn-shadow fixed right-3 bottom-[4.5rem] rounded-full sm:right-3.5 sm:bottom-16">
+      <div className="btn-shadow-dark fixed right-3 bottom-[4.5rem] rounded-full sm:right-3.5 sm:bottom-16">
         <a
           target="_blank"
           rel="noreferrer"
