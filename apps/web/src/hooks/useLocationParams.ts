@@ -5,8 +5,6 @@ import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { useQuery } from "@tanstack/react-query";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 
-import { toast } from "react-toastify";
-
 import { useNavigate } from "react-router";
 
 interface Params {
@@ -55,11 +53,11 @@ const useLocationParams = (): Params => {
     };
   }
 
-  if (path.split("/")?.[1] && path.split("/")?.[1] != "" && !building) {
-    // toast.error("Invalid building code");
-    navigate("/");
-    buildingCode = undefined;
-  }
+  // if (path.split("/")?.[1] && path.split("/")?.[1] != "" && !building) {
+  //   // toast.error("Invalid building code");
+  //   navigate("/");
+  //   buildingCode = undefined;
+  // }
 
   return {
     buildingCode,
