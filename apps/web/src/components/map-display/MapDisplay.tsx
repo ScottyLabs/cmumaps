@@ -6,7 +6,7 @@ import {
   MapInteractionEvent,
 } from "mapkit-react";
 
-import { use, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { getBuildingsQueryOptions } from "@/api/apiClient";
@@ -20,7 +20,6 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
-import useVerifyUrlParam from "@/hooks/useVerifyUrlParam";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -29,8 +28,6 @@ interface Props {
 const MapDisplay = ({ mapRef }: Props) => {
   // Library hooks
   const navigate = useNavigate();
-
-  useVerifyUrlParam();
 
   // Query data
   const { data: buildings } = useQuery(getBuildingsQueryOptions());

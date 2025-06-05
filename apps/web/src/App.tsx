@@ -1,8 +1,8 @@
 import { useUser } from "@clerk/clerk-react";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePostHog } from "posthog-js/react";
 
-import { use, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
 import LoginModal from "@/components/login/LoginModal";
@@ -10,6 +10,7 @@ import MapDisplay from "@/components/map-display/MapDisplay";
 import Toolbar from "@/components/toolbar/Toolbar";
 import IconsDisplay from "@/components/ui-layout/IconsDisplay";
 import MyToastContainer from "@/components/ui-layout/MyToastContainer";
+import URLVerifier from "./URLVerifier";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => {
         <FloorSwitcher />
         <MyToastContainer />
       </main>
+      <URLVerifier />
     </QueryClientProvider>
   );
 };
