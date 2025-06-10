@@ -40,12 +40,14 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
           ),
         ),
       );
-      // console.log("dragging: " + (e.touches[0]?.clientY - startingTouchY));
     }
   };
 
   const onTouchEnd = () => {
     const targetFloorIndex = Math.round(progressValue.get());
+
+    console.log("Release: " + progressValue.getVelocity());
+
     const controls = animate(progressValue, targetFloorIndex, {
       duration: Math.abs(progressValue.get() - targetFloorIndex) * 0.5,
       ease: "easeInOut",
