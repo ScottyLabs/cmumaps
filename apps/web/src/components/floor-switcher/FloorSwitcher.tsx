@@ -54,8 +54,11 @@ const FloorSwitcher = () => {
 
   if (isMobile) {
     return (
-      <FloorSwitcherDisplayMobile building={building} floor={floor} />
-    )
+      <FloorSwitcherDisplayMobile
+        building={building}
+        initialFloorLevel={floor.level}
+      />
+    );
   }
 
   return (
