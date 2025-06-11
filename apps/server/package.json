@@ -8,9 +8,10 @@
     "dev": "dotenv -e .env -- tsx watch index.ts",
     "dev:host": "dotenv -e .env -- tsx watch index.ts",
     "db-generate": "prisma generate",
-    "lint": "eslint .",
+    "format": "biome format",
+    "lint": "biome lint",
     "tsc": "tsc -b",
-    "check": "pnpm run lint && pnpm run tsc"
+    "check": "tsc -b && biome check"
   },
   "keywords": [],
   "author": "",
