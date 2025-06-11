@@ -20,10 +20,11 @@
     "db-generate": "turbo run db-generate --filter=@cmumaps/server"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "latest",
     "eslint": "^9.21.0",
     "prettier": "^3.5.3",
     "turbo": "^2.4.4",
-    "typescript": "^5.8.2",
-    "@types/bun": "latest"
+    "typescript": "^5.8.2"
   }
 }
