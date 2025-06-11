@@ -65,7 +65,7 @@ const useVerifyUrlParam = () => {
     return;
   }
 
-  toast.info("Rooms data loaded successfully");
+  // toast.info("Rooms data loaded successfully");
 
   if (!rooms[roomName]) {
     toast.error("Invalid room name");
