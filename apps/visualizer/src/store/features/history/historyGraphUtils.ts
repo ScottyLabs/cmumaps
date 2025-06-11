@@ -20,10 +20,9 @@ const getGraph = async (
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<Graph> => {
-  let nodes =
-    floorDataApiSlice.endpoints.getFloorGraph.select(floorCode)(
-      getStore(),
-    ).data;
+  let nodes = floorDataApiSlice.endpoints.getFloorGraph.select(floorCode)(
+    getStore(),
+  ).data;
 
   if (!nodes) {
     nodes = await dispatch(

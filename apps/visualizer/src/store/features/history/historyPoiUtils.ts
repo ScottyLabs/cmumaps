@@ -14,8 +14,9 @@ const getPois = async (
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<Pois> => {
-  let pois =
-    floorDataApiSlice.endpoints.getFloorPois.select(floorCode)(getStore()).data;
+  let pois = floorDataApiSlice.endpoints.getFloorPois.select(floorCode)(
+    getStore(),
+  ).data;
 
   if (!pois) {
     pois = await dispatch(

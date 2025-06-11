@@ -7,10 +7,10 @@
     "dev": "vite",
     "dev:host": "vite --host",
     "build": "tsc -b && vite build",
-    "lint": "biome lint",
     "preview": "vite preview",
     "tsc": "tsc -b",
-    "check": "tsc -b && eslint ."
+    "lint": "biome lint",
+    "check": "tsc -b && biome check"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.24.1",

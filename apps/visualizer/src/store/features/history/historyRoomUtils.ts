@@ -14,10 +14,9 @@ const getRooms = async (
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<Rooms> => {
-  let rooms =
-    floorDataApiSlice.endpoints.getFloorRooms.select(floorCode)(
-      getStore(),
-    ).data;
+  let rooms = floorDataApiSlice.endpoints.getFloorRooms.select(floorCode)(
+    getStore(),
+  ).data;
 
   if (!rooms) {
     rooms = await dispatch(

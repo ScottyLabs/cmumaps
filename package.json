@@ -3,10 +3,7 @@
   "private": true,
   "packageManager": "bun@1.2.10",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "start": "turbo run start",
     "build": "turbo build --parallel",
@@ -14,10 +11,10 @@
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
-    "format": "turbo format --parallel",
-    "lint": "turbo lint --parallel",
+    "db-generate": "turbo run db-generate --filter=@cmumaps/server",
     "tsc": "turbo tsc --parallel",
-    "db-generate": "turbo run db-generate --filter=@cmumaps/server"
+    "lint": "turbo lint --parallel",
+    "check": "turbo check --parallel"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
