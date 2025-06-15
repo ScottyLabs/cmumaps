@@ -44,7 +44,7 @@ export const webSocketService = new WebSocketService(io);
 app.use(clerkMiddleware());
 
 // Routes
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
