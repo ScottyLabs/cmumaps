@@ -1,7 +1,7 @@
+import http from "node:http";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import express from "express";
-import http from "http";
 import { Server } from "socket.io";
 
 import { checkAuth, socketAuth } from "./middleware/authMiddleware";

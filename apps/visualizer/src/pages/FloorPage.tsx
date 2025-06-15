@@ -1,6 +1,6 @@
 import { ErrorCode } from "@cmumaps/common";
 
-import { useParams, Navigate } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
