@@ -1,4 +1,4 @@
-import { Graph } from "@cmumaps/common";
+import type { Graph } from "@cmumaps/common";
 
 import { useMemo } from "react";
 import { Line } from "react-konva";
@@ -46,16 +46,13 @@ const EdgesDisplay = ({ floorCode, graph }: Props) => {
 
     const getStrokeColor = (curId: string, neighborId: string) => {
       // orange if selected
-      if (curId == nodeId || neighborId == nodeId) {
+      if (curId === nodeId || neighborId === nodeId) {
         return "orange";
       }
 
       // blue if in the mst
       if (mst) {
-        if (
-          (mst && mst[curId] && mst[curId][neighborId]) ||
-          (mst[neighborId] && mst[neighborId][curId])
-        ) {
+        if (mst[curId]?.[neighborId] || mst[neighborId]?.[curId]) {
           return "blue";
         }
       }

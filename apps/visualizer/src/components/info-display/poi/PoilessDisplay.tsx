@@ -1,4 +1,4 @@
-import { PoiInfo } from "@cmumaps/common";
+import type { PoiInfo } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useCreatePoiMutation } from "../../../store/api/poiApiSlice";

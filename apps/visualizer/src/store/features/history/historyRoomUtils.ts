@@ -1,13 +1,13 @@
-import { Rooms } from "@cmumaps/common";
+import type { Rooms } from "@cmumaps/common";
 
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
-import {
+import type {
   CreateRoomArg,
   DeleteRoomArg,
   UpdateRoomArg,
 } from "../../api/roomApiSlice";
-import { AppDispatch, RootState } from "../../store";
-import { Edit, EditPair } from "./historyTypes";
+import type { AppDispatch, RootState } from "../../store";
+import type { Edit, EditPair } from "./historyTypes";
 
 const getRooms = async (
   floorCode: string,

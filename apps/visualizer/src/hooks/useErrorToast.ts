@@ -1,4 +1,4 @@
-import { ErrorCode, getErrorMessage } from "@cmumaps/common";
+import { type ErrorCode, getErrorMessage } from "@cmumaps/common";
 
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";

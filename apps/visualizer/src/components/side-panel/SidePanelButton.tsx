@@ -9,8 +9,9 @@ interface Props {
 const SidePanelButton = ({ text, handleClick, style }: Props) => {
   return (
     <button
+      type="button"
       className={twMerge(
-        "block rounded bg-blue-500 px-4 py-2 text-sm font-bold text-nowrap text-emerald-200 hover:bg-blue-700",
+        "block text-nowrap rounded bg-blue-500 px-4 py-2 font-bold text-emerald-200 text-sm hover:bg-blue-700",
         style,
       )}
       onClick={handleClick}

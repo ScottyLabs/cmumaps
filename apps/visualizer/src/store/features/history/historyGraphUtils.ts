@@ -1,19 +1,19 @@
-import { Graph } from "@cmumaps/common";
+import type { Graph } from "@cmumaps/common";
 
-import {
+import type {
   CreateEdgeAcrossFloorsArg,
   CreateEdgeArg,
   DeleteEdgeAcrossFloorsArg,
   DeleteEdgeArg,
 } from "../../api/edgeApiSlice";
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
-import {
+import type {
   CreateNodeArg,
   DeleteNodeArg,
   UpdateNodeArg,
 } from "../../api/nodeApiSlice";
-import { AppDispatch, RootState } from "../../store";
-import { Edit, EditPair } from "./historyTypes";
+import type { AppDispatch, RootState } from "../../store";
+import type { Edit, EditPair } from "./historyTypes";
 
 const getGraph = async (
   floorCode: string,

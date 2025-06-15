@@ -1,4 +1,4 @@
-import { Pois } from "@cmumaps/common";
+import type { Pois } from "@cmumaps/common";
 
 import CopyIdRow from "../shared/CopyIdRow";
 import TableLayout from "../shared/TableLayout";
