@@ -1,97 +1,17 @@
-# Logs
-logs
-*.log
-yarn-debug.log*
-yarn-error.log*
-
 # Dependency directories
 node_modules/
 venv/
 .venv/
 
-# Optional eslint cache
-.eslintcache
-
-# Yarn Integrity file
-.yarn-integrity
-
-# secrets
-.env
-.env.local
-.env.test.local
-.env.production
-.env.production.local
-.env.local
-.secrets
-
-# yarn v2
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# local configurations
-.git
-.turbo
-token.json
-
-# built project
-dist
-.next
-out
-
-# dependencies
-node_modules
-venv
-.pnp
-.pnp.js
-
-# testing
-coverage
-test-results
-
-# next.js
-.next/
-out/
-
-# production
-build
-
-# misc
-.DS_Store
-*.pem
-texput.log
-texput.aux
-.turbo
-**/*/sitemap*.xml
-bin
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# vercel
-.vercel
-
-# Google Sheets sync tokens
-sheetEmailKey.json
-googleSheetsToken.json
-
-# typescript
-*.tsbuildinfo
-
-*.swp
-
-# python
+# Python
 __pycache__/
 *.py[cod]
+
+# Build
+dist/
+
+# Misc
+.env
+.git
+.turbo
+.DS_Store
