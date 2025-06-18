@@ -1,7 +1,7 @@
 # python3 scripts/json-to-database-carnival/format_carnival_coord.py
 
 import json
-from prisma import Prisma  # type: ignore
+from prisma import Prisma
 import asyncio
 
 prisma = Prisma()
@@ -11,10 +11,10 @@ async def roomname_abomination(events_dict: dict):
     await prisma.connect()
 
     for event_occ in events_dict.values():
-        if "roomName" in event_occ and type(event_occ["roomName"]) == list:
+        if "roomName" in event_occ and isinstance(event_occ["roomName"], list):
             event_occ["latitude"] = event_occ["roomName"][0]
             event_occ["longitude"] = event_occ["roomName"][1]
-        elif "roomName" in event_occ and type(event_occ["roomName"]) == str:
+        elif "roomName" in event_occ and isinstance(event_occ["roomName"], str):
             roomName = event_occ["roomName"]
             if roomName == "":
                 continue
