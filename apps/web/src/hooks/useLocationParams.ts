@@ -4,7 +4,6 @@ import {
 } from "@/api/apiClient";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { useQuery } from "@tanstack/react-query";
-import { floor } from "lodash";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
@@ -84,14 +83,16 @@ const useLocationParams = (): Params => {
   const location = useLocation();
   const path = location.pathname;
 
-  const suffix = path.split("/")?.[1] || "";
-
-  const [buildingCode, roomName] = suffix.split("-") || [];
-  const floor = getFloorLevelFromRoomName(roomName) || "";
-
   const error = verifyURLParams();
   if (error) {
     toast.error(error);
+  }
+
+  if (path.split("/")?.[1] === "events") {
+    return {
+      eventId: path.split("/")?.[2],
+      isCardOpen: true,
+    };
   }
 
   if (path.split("/")?.[1] === "carnival") {
@@ -103,6 +104,8 @@ const useLocationParams = (): Params => {
       isCardOpen: true,
     };
   }
+  const [buildingCode, roomName] = path.split("/")?.[1]?.split("-") || [];
+  const floor = getFloorLevelFromRoomName(roomName);
 
   return {
     buildingCode,
