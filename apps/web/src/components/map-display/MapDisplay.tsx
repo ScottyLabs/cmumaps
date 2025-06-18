@@ -13,8 +13,8 @@ import { useQuery } from "@tanstack/react-query";
 import {
   FeatureVisibility,
   type MapInteractionEvent,
-  Map as MapKitMap,
   MapType,
+  Map as MapkitMap,
 } from "mapkit-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -92,7 +92,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   };
 
   return (
-    <MapKitMap
+    <MapkitMap
       ref={mapRef}
       token={import.meta.env.VITE_MAPKIT_TOKEN || ""}
       initialRegion={INITIAL_REGION}
@@ -121,7 +121,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
-    </MapKitMap>
+    </MapkitMap>
   );
 };
 

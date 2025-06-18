@@ -77,8 +77,7 @@ const RoomCard = () => {
         {renderTitle()}
         {renderSchedule()}
       </div>
-      {/* biome-ignore lint/complexity/noUselessFragments: passing empty element to middleButton prop */}
-      <ButtonsRow middleButton={<></>} />
+      <ButtonsRow />
     </>
   );
 };

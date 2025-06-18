@@ -36,8 +36,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
       <h2 className="ml-3 pt-2">
         {building.name} ({building.code})
       </h2>
-      {/* biome-ignore lint/complexity/noUselessFragments: passing empty element to middleButton prop */}
-      <ButtonsRow middleButton={<></>} />
+      <ButtonsRow />
     </>
   );
 };

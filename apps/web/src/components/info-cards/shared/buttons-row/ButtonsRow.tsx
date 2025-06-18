@@ -4,7 +4,7 @@ import { TbXboxX } from "react-icons/tb";
 import { toast } from "react-toastify";
 
 interface Props {
-  middleButton: React.JSX.Element;
+  middleButton?: React.JSX.Element;
 }
 
 const ButtonsRow = ({ middleButton }: Props) => {

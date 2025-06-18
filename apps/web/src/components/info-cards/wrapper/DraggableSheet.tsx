@@ -58,15 +58,15 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
       const newPosAdj =
         newPos - Math.min(300, Math.max(-300, 400 * info.velocity.y));
       const closestSnap = snapPoints.reduce((prev, curr) =>
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        Math.abs(curr! - newPosAdj) < Math.abs(prev! - newPosAdj) ? curr : prev,
+        Math.abs(curr - newPosAdj) < Math.abs(prev - newPosAdj) ? curr : prev,
       );
 
       const index = snapPoints.indexOf(closestSnap);
       if (CardStatesList[index]) {
         setCardStatus(CardStatesList[index]);
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        controls.start({ y: -snapPoints[index]! });
+        if (snapPoints[index]) {
+          controls.start({ y: -snapPoints[index] });
+        }
       }
     }
 
