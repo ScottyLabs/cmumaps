@@ -5,6 +5,7 @@ import useBoundStore from "@/store";
 import { useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
+import FloorSwitcherDisplayMobile from "./FloorSwitcherDisplayMobile";
 
 /**
  * This component determines if the floor switcher should be shown.
@@ -49,6 +50,15 @@ const FloorSwitcher = () => {
   const building = buildings[floor.buildingCode];
   if (!building) {
     return <></>;
+  }
+
+  if (isMobile) {
+    return (
+      <FloorSwitcherDisplayMobile
+        building={building}
+        initialFloorLevel={floor.level}
+      />
+    );
   }
 
   return (
