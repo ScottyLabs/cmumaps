@@ -1,5 +1,5 @@
-import { Floor, RoomType } from "@cmumaps/common";
-import { Coordinate } from "mapkit-react";
+import type { Floor, RoomType } from "@cmumaps/common";
+import type { Coordinate } from "mapkit-react";
 
 export interface Document {
   /**

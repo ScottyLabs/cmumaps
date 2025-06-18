@@ -24,10 +24,9 @@ const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
         return;
       }
       // otherwise it is the room floor name + the room name
-      else {
-        setSearchQuery(`${buildingCode} ${roomName}`);
-        return;
-      }
+
+      setSearchQuery(`${buildingCode} ${roomName}`);
+      return;
     }
 
     // return the building name if a building is selected

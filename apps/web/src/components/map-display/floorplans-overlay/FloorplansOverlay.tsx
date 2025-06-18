@@ -1,7 +1,6 @@
-import { useUser } from "@clerk/clerk-react";
-
 import FloorplanOverlay from "@/components/map-display/floorplans-overlay/FloorplanOverlay";
 import useBoundStore from "@/store";
+import { useUser } from "@clerk/clerk-react";
 
 const FloorPlansOverlay = () => {
   const { isSignedIn } = useUser();

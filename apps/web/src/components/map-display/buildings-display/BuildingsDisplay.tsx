@@ -1,7 +1,6 @@
-import { Buildings } from "@cmumaps/common";
-
 import BuildingRoundel from "@/components/map-display/buildings-display/BuildingRoundel";
 import BuildingShape from "@/components/map-display/buildings-display/BuildingShape";
+import type { Buildings } from "@cmumaps/common";
 
 interface Props {
   map: mapkit.Map | null;

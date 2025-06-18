@@ -1,4 +1,4 @@
-import { Building } from "@cmumaps/common";
+import type { Building } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
 import useBoundStore from "@/store";
@@ -10,7 +10,7 @@ interface Props {
 
 const BuildingShape = ({ building }: Props) => {
   const selectedBuilding = useBoundStore((state) => state.selectedBuilding);
-  const isSelected = selectedBuilding?.code == building.code;
+  const isSelected = selectedBuilding?.code === building.code;
 
   const getStrokeColor = () => {
     const selectedStrokeColor = "#FFBD59";
@@ -18,22 +18,21 @@ const BuildingShape = ({ building }: Props) => {
 
     if (isSelected) {
       return selectedStrokeColor;
-    } else {
-      return notSelectedColor;
     }
+    return notSelectedColor;
   };
 
   const getFillColor = () => {
     const fillColor = getBuildingShapeFillColor(building.code);
     if (fillColor) {
       return fillColor;
-    } else if (!building.isMapped) {
+    }
+    if (!building.isMapped) {
       // fill color for unmapped buildings
       return "#6b7280";
-    } else {
-      // default fill color
-      return "#9ca3af";
     }
+    // default fill color
+    return "#9ca3af";
   };
 
   const getFillOpacity = () => {
@@ -42,16 +41,13 @@ const BuildingShape = ({ building }: Props) => {
     if (fillColor) {
       if (isSelected) {
         return 1;
-      } else {
-        return 0.8;
       }
-    } else {
-      if (isSelected) {
-        return 1;
-      } else {
-        return 0.6;
-      }
+      return 0.8;
     }
+    if (isSelected) {
+      return 1;
+    }
+    return 0.6;
   };
 
   return (

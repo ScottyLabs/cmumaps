@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-
 import {
   getBuildingsQueryOptions,
   getRoomsQueryOptions,
@@ -9,6 +7,7 @@ import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
+import { useQuery } from "@tanstack/react-query";
 
 const RoomCard = () => {
   const isMobile = useIsMobile();
@@ -50,9 +49,9 @@ const RoomCard = () => {
     }
 
     if (
-      room.type == "Restroom" ||
-      room.type == "Stairs" ||
-      room.type == "Elevator"
+      room.type === "Restroom" ||
+      room.type === "Stairs" ||
+      room.type === "Elevator"
     ) {
       return <h2>{room.type}</h2>;
     }
@@ -78,7 +77,7 @@ const RoomCard = () => {
         {renderTitle()}
         {renderSchedule()}
       </div>
-      <ButtonsRow middleButton={<></>} />
+      <ButtonsRow />
     </>
   );
 };

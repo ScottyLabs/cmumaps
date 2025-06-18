@@ -1,4 +1,4 @@
-import { Buildings, GeoRooms } from "@cmumaps/common";
+import type { Buildings, GeoRooms } from "@cmumaps/common";
 import { queryOptions, skipToken } from "@tanstack/react-query";
 
 type QueryKey = ["buildings"] | ["rooms", string | null] | [];
@@ -10,7 +10,7 @@ declare module "@tanstack/react-query" {
 }
 
 const getClerkToken = async () => {
-  if (window.Clerk && window.Clerk.session) {
+  if (window.Clerk?.session) {
     return await window.Clerk.session.getToken();
   }
   return null;

@@ -1,5 +1,5 @@
-import { Building } from "@cmumaps/common";
-import { Floor } from "@cmumaps/common";
+import type { Building } from "@cmumaps/common";
+import type { Floor } from "@cmumaps/common";
 
 import useBoundStore from "@/store";
 
@@ -23,8 +23,9 @@ const FloorPicker = ({ building, floor, setShowFloorPicker }: Props) => {
 
     return (
       <button
+        type="button"
         key={floorLevel}
-        className={`cursor-pointer border-l border-gray-300 px-4 ${
+        className={`cursor-pointer border-gray-300 border-l px-4 ${
           floorLevel === floor.level ? "font-bold" : ""
         }`}
         onClick={handleClick}
