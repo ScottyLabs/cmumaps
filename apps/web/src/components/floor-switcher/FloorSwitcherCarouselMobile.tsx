@@ -48,7 +48,7 @@ const FloorSwitcherButton = ({
 
   return (
     <motion.div
-      className="fixed top-1/2 flex h-[46px] w-[46px] translate-x-[89px] items-center justify-center rounded-full text-white"
+      className="fixed top-1/2 flex h-11 w-11 translate-x-22 items-center justify-center rounded-full text-white"
       style={{
         borderRadius: "50% / 50%",
         backgroundColor: "#6F8FE3",
@@ -80,12 +80,14 @@ const DummyButton = ({ index, progressValue }: DummyButtonProps) => {
 
   return (
     <motion.div
-      className="fixed top-1/2 flex h-[38px] w-[38px] translate-x-[89px] items-center justify-center rounded-full text-white"
+      className="fixed top-1/2 flex translate-x-22 items-center justify-center rounded-full text-white"
       style={{
         backgroundColor: "B3C1E8",
         offsetPath: 'path("M -30,70 L 0,70 A 56,70 0 1,0 0,-70 L -30, -70")',
         offsetDistance,
         opacity: 0.5,
+        width: 38,
+        height: 38,
         offsetRotate: "0deg",
       }}
       key={index}
