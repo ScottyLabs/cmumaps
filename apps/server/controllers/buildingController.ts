@@ -14,7 +14,7 @@ export const buildingController = {
     }
   },
 
-  async getBuildingCodesAndNames(res: Response) {
+  async getBuildingCodesAndNames(_req: Request, res: Response) {
     try {
       const buildingCodesAndNames =
         await buildingService.getAllBuildingCodesAndNames();
