@@ -1,6 +1,6 @@
 // The number of meters in a degree.
-import { GeoCoordinate } from "@cmumaps/common";
-import { Coordinate } from "mapkit-react";
+import type { GeoCoordinate } from "@cmumaps/common";
+import type { Coordinate } from "mapkit-react";
 
 // Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
 export const latitudeRatio = 111318.8450631976;
@@ -20,9 +20,13 @@ export function isInPolygon(point: Coordinate, vertices: GeoCoordinate[]) {
 
   let inside = false;
   for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const xi = vertices[i]!.longitude;
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const yi = vertices[i]!.latitude;
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const xj = vertices[j]!.longitude;
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const yj = vertices[j]!.latitude;
 
     const intersect =

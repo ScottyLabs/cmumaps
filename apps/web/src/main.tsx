@@ -1,11 +1,9 @@
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-react";
-import { Clerk } from "@clerk/types";
+import type { Clerk } from "@clerk/types";
 import { PostHogProvider } from "posthog-js/react";
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
-
 import App from "./App.tsx";
 import "./index.css";
 
@@ -27,6 +25,7 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");
 }
 
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
 createRoot(document.getElementById("root")!).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <ClerkLoaded>

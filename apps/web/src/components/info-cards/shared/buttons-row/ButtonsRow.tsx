@@ -1,8 +1,7 @@
+import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
 import { FaArrowRight } from "react-icons/fa";
 import { TbXboxX } from "react-icons/tb";
 import { toast } from "react-toastify";
-
-import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
 
 interface Props {
   middleButton: React.JSX.Element;

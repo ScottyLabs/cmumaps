@@ -1,12 +1,10 @@
-import { motion, PanInfo, useAnimation } from "motion/react";
-
-import { useEffect, useMemo } from "react";
-import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
-
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
+import { type PanInfo, motion, useAnimation } from "motion/react";
+import { useEffect, useMemo } from "react";
+import { IoIosClose } from "react-icons/io";
+import { useNavigate } from "react-router";
 
 interface Props {
   snapPoints: number[];
@@ -37,7 +35,7 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     } else {
       setCardStatus(CardStates.COLLAPSED);
     }
-  }, [controls, isCardOpen, setCardStatus]);
+  }, [isCardOpen, setCardStatus]);
 
   // updates the snapping when isCardOpen or snapIndex changes
   useEffect(() => {
@@ -60,12 +58,14 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
       const newPosAdj =
         newPos - Math.min(300, Math.max(-300, 400 * info.velocity.y));
       const closestSnap = snapPoints.reduce((prev, curr) =>
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         Math.abs(curr! - newPosAdj) < Math.abs(prev! - newPosAdj) ? curr : prev,
       );
 
       const index = snapPoints.indexOf(closestSnap);
       if (CardStatesList[index]) {
         setCardStatus(CardStatesList[index]);
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         controls.start({ y: -snapPoints[index]! });
       }
     }

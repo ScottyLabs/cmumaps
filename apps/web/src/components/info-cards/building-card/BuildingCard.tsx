@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
+import { useQuery } from "@tanstack/react-query";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -37,6 +36,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
       <h2 className="ml-3 pt-2">
         {building.name} ({building.code})
       </h2>
+      {/* biome-ignore lint/complexity/noUselessFragments: passing empty element to middleButton prop */}
       <ButtonsRow middleButton={<></>} />
     </>
   );

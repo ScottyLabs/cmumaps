@@ -11,5 +11,6 @@ export function encodeCoord(coord: Coordinate): string {
 export function decodeCoord(s: string): Coordinate {
   const decoded = Buffer.from(s, "base64").toString();
   const [latitude, longitude] = decoded.split(",").map(Number);
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
   return { latitude: latitude!, longitude: longitude! };
 }

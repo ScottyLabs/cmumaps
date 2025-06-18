@@ -1,14 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  Map,
-  MapType,
-  FeatureVisibility,
-  MapInteractionEvent,
-} from "mapkit-react";
-
-import { useState } from "react";
-import { useNavigate } from "react-router";
-
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import {
   CAMERA_BOUNDARY,
@@ -20,6 +9,15 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
+import { useQuery } from "@tanstack/react-query";
+import {
+  FeatureVisibility,
+  type MapInteractionEvent,
+  Map as MapKitMap,
+  MapType,
+} from "mapkit-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -94,7 +92,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   };
 
   return (
-    <Map
+    <MapKitMap
       ref={mapRef}
       token={import.meta.env.VITE_MAPKIT_TOKEN || ""}
       initialRegion={INITIAL_REGION}
@@ -123,7 +121,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
-    </Map>
+    </MapKitMap>
   );
 };
 
