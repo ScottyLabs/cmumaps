@@ -1,10 +1,11 @@
 import {
-  Placement,
-  RoomInfo,
+  type Placement,
+  type RoomInfo,
   extractBuildingCode,
   extractFloorLevel,
 } from "@cmumaps/common";
 
+import type { InputJsonValue } from "@prisma/client/runtime/library";
 import { prisma } from "../prisma";
 import {
   pdfCoordsToGeoCoords,
@@ -37,8 +38,7 @@ export const roomService = {
           name: roomInfo.name,
           labelLatitude: geoCoords.latitude,
           labelLongitude: geoCoords.longitude,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          polygon: geoPolygon as any,
+          polygon: geoPolygon as unknown as InputJsonValue,
         },
       });
 
@@ -77,8 +77,7 @@ export const roomService = {
       name: roomInfo.name,
       labelLatitude: geoCoords?.latitude,
       labelLongitude: geoCoords?.longitude,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      polygon: geoPolygon as any,
+      polygon: geoPolygon as InputJsonValue | undefined,
     };
 
     await prisma.room.update({

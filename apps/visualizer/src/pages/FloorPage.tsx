@@ -1,6 +1,6 @@
-import { ErrorCode } from "@cmumaps/common";
+import type { ErrorCode } from "@cmumaps/common";
 
-import { useParams, Navigate } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 import Loader from "../components/shared/Loader";
 import MyToastContainer from "../components/shared/MyToastContainer";
@@ -33,9 +33,9 @@ const FloorPage = () => {
 
     if (defaultFloor) {
       return <Navigate to={`/${floorCode}-${defaultFloor}`} replace />;
-    } else {
-      return <Loader loadingText="Fetching default floor" />;
     }
+
+    return <Loader loadingText="Fetching default floor" />;
   }
 
   return (

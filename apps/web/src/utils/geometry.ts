@@ -1,6 +1,6 @@
 // The number of meters in a degree.
-import { GeoCoordinate } from "@cmumaps/common";
-import { Coordinate } from "mapkit-react";
+import type { GeoCoordinate } from "@cmumaps/common";
+import type { Coordinate } from "mapkit-react";
 
 // Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
 export const latitudeRatio = 111318.8450631976;
@@ -20,10 +20,18 @@ export function isInPolygon(point: Coordinate, vertices: GeoCoordinate[]) {
 
   let inside = false;
   for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-    const xi = vertices[i]!.longitude;
-    const yi = vertices[i]!.latitude;
-    const xj = vertices[j]!.longitude;
-    const yj = vertices[j]!.latitude;
+    const vi = vertices[i];
+    const vj = vertices[j];
+
+    // Flex your 15-122 knowledge and prove this never happens!
+    if (vi === undefined || vj === undefined) {
+      continue;
+    }
+
+    const xi = vi.longitude;
+    const yi = vi.latitude;
+    const xj = vj.longitude;
+    const yj = vj.latitude;
 
     const intersect =
       yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;

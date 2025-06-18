@@ -5,7 +5,7 @@ import { handleControllerError } from "../errors/errorHandler";
 import { buildingService } from "../services/buildingService";
 
 export const buildingController = {
-  async getBuildings(req: Request, res: Response) {
+  async getBuildings(_req: Request, res: Response) {
     try {
       const buildings = await buildingService.getBuildings();
       res.json(buildings);
@@ -14,7 +14,7 @@ export const buildingController = {
     }
   },
 
-  async getBuildingCodesAndNames(req: Request, res: Response) {
+  async getBuildingCodesAndNames(_req: Request, res: Response) {
     try {
       const buildingCodesAndNames =
         await buildingService.getAllBuildingCodesAndNames();

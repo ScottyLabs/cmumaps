@@ -1,12 +1,12 @@
 import {
-  NodeInfo,
-  Graph,
-  PdfCoordinate,
-  Rooms,
-  Pois,
+  type Graph,
+  type NodeInfo,
+  type PdfCoordinate,
+  type Pois,
+  type Rooms,
   ValidCrossFloorEdgeTypes,
 } from "@cmumaps/common";
-import Konva from "konva";
+import type Konva from "konva";
 import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,7 +23,7 @@ import {
 } from "../../store/api/edgeApiSlice";
 import { useUpdateNodeMutation } from "../../store/api/nodeApiSlice";
 import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
-import { CursorInfoOnDragNode } from "../../store/features/liveCursor/liveCursorTypes";
+import type { CursorInfoOnDragNode } from "../../store/features/liveCursor/liveCursorTypes";
 import {
   ADD_DOOR_NODE,
   ADD_EDGE,
@@ -84,7 +84,7 @@ const NodesDisplay = ({
       Object.keys(graph).filter((nodeId) => {
         return (
           Object.values(pois).filter((poiInfo) => poiInfo.nodeId === nodeId)
-            .length != 0
+            .length !== 0
         );
       }),
     [graph, pois],
@@ -95,7 +95,7 @@ const NodesDisplay = ({
   }
 
   const getFillColor = (nodeId: string) => {
-    if (nodeId == selectedNodeId) {
+    if (nodeId === selectedNodeId) {
       return "yellow";
     }
 
@@ -111,31 +111,30 @@ const NodesDisplay = ({
 
     // colors for cross floor edges
     const isValidCrossFloorEdgeType =
-      room && room.type && ValidCrossFloorEdgeTypes.includes(room.type);
+      room?.type && ValidCrossFloorEdgeTypes.includes(room.type);
 
     const hasAcrossFloorEdge =
       Object.values(graph[nodeId].neighbors).filter(
         (neighbor) => neighbor.outFloorCode,
-      ).length != 0;
+      ).length !== 0;
 
     if (isValidCrossFloorEdgeType) {
       if (hasAcrossFloorEdge) {
         return "lime";
-      } else {
-        return "pink";
       }
-    } else {
-      if (hasAcrossFloorEdge) {
-        return "pink";
-      }
+      return "pink";
+    }
+
+    if (hasAcrossFloorEdge) {
+      return "pink";
     }
 
     // warning, error, and default colors
-    if (room && room.type == "Inaccessible") {
+    if (room && room.type === "Inaccessible") {
       return "gray";
     }
 
-    if (room && room.polygon.coordinates[0].length == 0) {
+    if (room && room.polygon.coordinates[0].length === 0) {
       return "red";
     }
 
@@ -151,7 +150,7 @@ const NodesDisplay = ({
       }
 
       // Check for self-loop
-      if (selectedNodeId == nodeId) {
+      if (selectedNodeId === nodeId) {
         return { error: "No self-loop allowed!" };
       }
 
@@ -197,13 +196,13 @@ const NodesDisplay = ({
   };
 
   const handleNodeClick = (nodeId: string) => {
-    if (mode == GRAPH_SELECT) {
+    if (mode === GRAPH_SELECT) {
       navigate(`?nodeId=${nodeId}`);
-    } else if (mode == ADD_EDGE) {
+    } else if (mode === ADD_EDGE) {
       handleAddEdge(nodeId);
-    } else if (mode == DELETE_EDGE) {
+    } else if (mode === DELETE_EDGE) {
       handleDeleteEdge(nodeId);
-    } else if (mode == ADD_DOOR_NODE) {
+    } else if (mode === ADD_DOOR_NODE) {
       // addDoorNodeErrToast();
     }
   };

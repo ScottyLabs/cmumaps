@@ -1,4 +1,4 @@
-import { Graph, Rooms } from "@cmumaps/common";
+import type { Graph, Rooms } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useEffect } from "react";
@@ -21,10 +21,10 @@ import {
 } from "../store/features/modeSlice";
 import {
   toggleShowEdges,
-  toggleShowPdf,
   toggleShowLabels,
   toggleShowNodes,
   toggleShowOutline,
+  toggleShowPdf,
   toggleShowPolygons,
 } from "../store/features/visibilitySlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";

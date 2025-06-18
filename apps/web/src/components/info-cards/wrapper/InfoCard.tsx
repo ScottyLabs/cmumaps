@@ -1,11 +1,9 @@
-import React from "react";
-
 import RoomCard from "@/components/info-cards/room-card/RoomCard";
 import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-
+import React from "react";
 import BuildingCard from "../building-card/BuildingCard";
 
 interface Props {
@@ -28,19 +26,19 @@ const InfoCard = ({ mapRef }: Props) => {
         snapPoints: [166, 310, window.innerHeight],
         element: () => <RoomCard />,
       };
-    } else if (buildingCode) {
+    }
+    if (buildingCode) {
       // TODO: should change based on if has food eateries
       // eateries.length > 0 ? 460 : 288));
       return {
         snapPoints: [142, 288, window.innerHeight],
         element: () => <BuildingCard mapRef={mapRef} />,
       };
-    } else {
-      return {
-        snapPoints: [],
-        element: () => <></>,
-      };
     }
+    return {
+      snapPoints: [],
+      element: () => <></>,
+    };
   };
 
   const { snapPoints, element } = renderCard();
@@ -51,13 +49,12 @@ const InfoCard = ({ mapRef }: Props) => {
         {React.createElement(element)}
       </DraggableSheet>
     );
-  } else {
-    return (
-      <div className="flex w-96 flex-col overflow-hidden rounded-lg bg-white shadow-lg shadow-gray-400">
-        {React.createElement(element)}
-      </div>
-    );
   }
+  return (
+    <div className="flex w-96 flex-col overflow-hidden rounded-lg bg-white shadow-gray-400 shadow-lg">
+      {React.createElement(element)}
+    </div>
+  );
 };
 
 export default InfoCard;

@@ -1,7 +1,7 @@
+import http from "node:http";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import express from "express";
-import http from "http";
 import { Server } from "socket.io";
 
 import { checkAuth, socketAuth } from "./middleware/authMiddleware";
@@ -44,7 +44,7 @@ export const webSocketService = new WebSocketService(io);
 app.use(clerkMiddleware());
 
 // Routes
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 

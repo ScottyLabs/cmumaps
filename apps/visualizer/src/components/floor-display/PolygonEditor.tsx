@@ -1,6 +1,6 @@
-import { PdfCoordinate, Position } from "@cmumaps/common";
-import { Polygon } from "geojson";
-import Konva from "konva";
+import type { PdfCoordinate, Position } from "@cmumaps/common";
+import type { Polygon } from "geojson";
+import type Konva from "konva";
 import { throttle } from "lodash";
 
 import { useMemo } from "react";
@@ -9,11 +9,11 @@ import { Circle, Line } from "react-konva";
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import { pushCursorInfo } from "../../store/features/liveCursor/liveCursorSlice";
-import { CursorInfoOnDragVertex } from "../../store/features/liveCursor/liveCursorTypes";
+import type { CursorInfoOnDragVertex } from "../../store/features/liveCursor/liveCursorTypes";
 import {
   POLYGON_DELETE_VERTEX,
-  setMode,
   POLYGON_SELECT,
+  setMode,
 } from "../../store/features/modeSlice";
 import {
   releaseVertex,
@@ -92,7 +92,7 @@ const PolygonEditor = ({
     ];
     coords[index] = newPos;
     // first and last point need to stay the same
-    if (index == 0) {
+    if (index === 0) {
       coords[coords.length - 1] = newPos;
     }
 
@@ -101,15 +101,15 @@ const PolygonEditor = ({
   };
 
   const handleClick = (index: number) => {
-    if (mode == POLYGON_DELETE_VERTEX) {
+    if (mode === POLYGON_DELETE_VERTEX) {
       const newPolygon: Polygon = JSON.parse(JSON.stringify(polygon));
       const coords = newPolygon.coordinates[ringIndex];
       coords.splice(index, 1);
 
       // when deleting the first index
-      if (index == 0) {
+      if (index === 0) {
         // keep the start and end the same if there are more vertices
-        if (coords.length != 1) {
+        if (coords.length !== 1) {
           coords.push(coords[0]);
         }
         // delete the duplicate vertex if there is no more vertex

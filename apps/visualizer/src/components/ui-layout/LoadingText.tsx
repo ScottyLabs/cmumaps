@@ -12,8 +12,8 @@ const LoadingText = () => {
 
   if (loadingStatus === FAILED_LOAD) {
     return (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2">
-        <p className="text-3xl text-nowrap text-red-500">{loadingText}</p>
+      <div className="-translate-x-1/2 absolute top-1/2 left-1/2">
+        <p className="text-nowrap text-3xl text-red-500">{loadingText}</p>
       </div>
     );
   }

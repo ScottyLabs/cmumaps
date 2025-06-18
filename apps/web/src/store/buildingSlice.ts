@@ -1,5 +1,5 @@
-import { Building } from "@cmumaps/common";
-import { StateCreator } from "zustand";
+import type { Building } from "@cmumaps/common";
+import type { StateCreator } from "zustand";
 
 export interface BuildingSlice {
   selectedBuilding: Building | null;

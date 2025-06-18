@@ -1,9 +1,8 @@
-import { GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
-
 import pinIcon from "@/assets/icons/search_results/pin.svg";
 import useLocationParams from "@/hooks/useLocationParams";
-import { Document } from "@/types/searchTypes";
+import type { Document } from "@/types/searchTypes";
 import { getIcon } from "@/utils/iconUtils";
+import { type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
 
 interface Props {
   room: (GeoRoom & { name: string }) | Document;
@@ -15,13 +14,13 @@ interface Props {
  */
 const RoomPin = ({ room }: Props) => {
   const { roomName } = useLocationParams();
-  const isSelected = "name" in room && room.name == roomName;
+  const isSelected = "name" in room && room.name === roomName;
 
   const icon = getIcon(room);
   const hasGraphic = !!icon;
 
   const roomColors = getRoomTypeDetails(
-    room.type == "Building" ? "Default" : room.type,
+    room.type === "Building" ? "Default" : room.type,
   );
 
   return (

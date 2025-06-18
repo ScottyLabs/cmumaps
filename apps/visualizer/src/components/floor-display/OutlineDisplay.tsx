@@ -1,4 +1,4 @@
-import { DoorInfo } from "@cmumaps/common";
+import type { DoorInfo } from "@cmumaps/common";
 
 import { Line } from "react-konva";
 
@@ -32,7 +32,7 @@ const OutlineDisplay = ({ floorCode }: Props) => {
     const doors = outlineData.doors;
 
     const getStrokeColor = (doorId: string) => {
-      if (doors[doorId].roomIds.length != 2) {
+      if (doors[doorId].roomIds.length !== 2) {
         return "red";
       }
 
@@ -43,11 +43,11 @@ const OutlineDisplay = ({ floorCode }: Props) => {
       doorInfo.lineList.map((points, index: number) => (
         // identify bezier curve by number of points
         <Line
-          key={doorId + " " + index}
+          key={`${doorId} ${index}`}
           points={points}
           stroke={getStrokeColor(doorId)}
           strokeWidth={1}
-          bezier={points.length == 8}
+          bezier={points.length === 8}
           onMouseEnter={(e) => setCursor(e, "pointer")}
           onMouseLeave={(e) => setCursor(e, "default")}
         />
@@ -62,7 +62,7 @@ const OutlineDisplay = ({ floorCode }: Props) => {
         points={points}
         stroke={"black"}
         strokeWidth={1}
-        bezier={points.length == 8}
+        bezier={points.length === 8}
       />
     ));
   };

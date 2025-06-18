@@ -1,4 +1,4 @@
-import { EdgeInfo } from "@cmumaps/common";
+import type { EdgeInfo } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { NavLink } from "react-router";
@@ -49,10 +49,10 @@ const DifferentFloorNeighborTable = ({
       // all nodes in differentFloorNeighbors should have outFloorCode
       if (outFloorCode) {
         return `/${outFloorCode}?nodeId=${neighborId}`;
-      } else {
-        toast.error("This is not a different floor neighbor");
-        return `/${floorCode}?nodeId=${nodeId}`;
       }
+
+      toast.error("This is not a different floor neighbor");
+      return `/${floorCode}?nodeId=${nodeId}`;
     };
 
     return Object.entries(differentFloorNeighbors).map(
@@ -60,7 +60,7 @@ const DifferentFloorNeighborTable = ({
         <tr key={neighborId}>
           <td className="border p-2">
             <NavLink
-              className="border px-1 whitespace-nowrap hover:bg-sky-700"
+              className="whitespace-nowrap border px-1 hover:bg-sky-700"
               to={calculatePath(neighborId)}
             >
               {neighbor.outFloorCode}
@@ -68,7 +68,8 @@ const DifferentFloorNeighborTable = ({
           </td>
           <td className="border p-2">
             <button
-              className="border px-1 whitespace-nowrap hover:bg-sky-700"
+              type="button"
+              className="whitespace-nowrap border px-1 hover:bg-sky-700"
               onClick={handleDeleteAcrossFloors(neighborId)}
             >
               delete
