@@ -1,8 +1,6 @@
-import { SignInButton, useUser } from "@clerk/clerk-react";
-
-import { useEffect } from "react";
-
 import useBoundStore from "@/store";
+import { SignInButton, useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
 
 const LoginModal = () => {
   const { isSignedIn } = useUser();
@@ -24,8 +22,8 @@ const LoginModal = () => {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-white p-4">
-        <h2 className="text-2xl font-bold text-black">CMU Maps</h2>
-        <p className="text-sm text-gray-500">
+        <h2 className="font-bold text-2xl text-black">CMU Maps</h2>
+        <p className="text-gray-500 text-sm">
           CMU Maps is built with ❤️ by ScottyLabs. Find out more about us{" "}
           <a href="https://www.scottylabs.org/" className="underline">
             here
@@ -35,11 +33,12 @@ const LoginModal = () => {
         <p className="text-sm">Log in to see floor plans.</p>
 
         <div className="flex justify-between">
-          <span className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-sm text-blue-400 hover:bg-blue-200">
+          <span className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 text-sm hover:bg-blue-200">
             <SignInButton />
           </span>
           <button
-            className="cursor-pointer rounded-md bg-red-200 p-2 text-sm text-red-700 hover:bg-red-300"
+            type="button"
+            className="cursor-pointer rounded-md bg-red-200 p-2 text-red-700 text-sm hover:bg-red-300"
             onClick={() => hideLogin()}
           >
             Close

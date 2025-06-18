@@ -1,7 +1,7 @@
-import { PoiInfo, PoiType, PoiTypes } from "@cmumaps/common";
+import { type PoiInfo, type PoiType, PoiTypes } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
-import { SingleValue } from "react-select";
+import type { SingleValue } from "react-select";
 
 import { useUpdatePoiMutation } from "../../../store/api/poiApiSlice";
 import SelectTypeCell from "../shared/SelectTypeCell";

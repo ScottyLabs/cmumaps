@@ -7,11 +7,11 @@ import { poiService } from "../services/poiService";
 export const poiController = {
   createPoi: async (req: Request, res: Response) => {
     const poiId = req.params.id;
-    const { floorCode, poiInfo } = req.body;
+    const { poiInfo } = req.body;
     const socketId = req.socketId;
 
     try {
-      await poiService.createPoi(floorCode, poiId, poiInfo);
+      await poiService.createPoi(poiId, poiInfo);
       const payload = { poiId, poiInfo };
       webSocketService.broadcastToUserFloor(socketId, "create-poi", payload);
       res.json(null);

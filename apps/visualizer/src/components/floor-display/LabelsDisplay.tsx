@@ -1,5 +1,5 @@
-import { Graph, RoomInfo, Rooms } from "@cmumaps/common";
-import Konva from "konva";
+import type { Graph, RoomInfo, Rooms } from "@cmumaps/common";
+import type Konva from "konva";
 import { v4 as uuidv4 } from "uuid";
 
 import { useMemo } from "react";
@@ -45,7 +45,7 @@ const LabelsDisplay = ({ floorCode, rooms }: Props) => {
   return Object.entries(rooms).map(([roomId, room]) => {
     // selected if it is edit label mode and it is the label of the selected room
     // or the room of the label is connected by the selected door
-    const selected = editRoomLabel && selectedRoomId == roomId;
+    const selected = editRoomLabel && selectedRoomId === roomId;
     //   (idSelected.type == DOOR &&
     //     doors[idSelected.id].roomIds.includes(roomId));
 

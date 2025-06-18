@@ -1,6 +1,6 @@
 import { verifyToken } from "@clerk/express";
-import type { Request, Response, NextFunction } from "express";
-import { Socket } from "socket.io";
+import type { NextFunction, Request, Response } from "express";
+import type { Socket } from "socket.io";
 
 // for http requests
 // https://clerk.com/docs/references/express/overview#example-use-clerk-client-to-get-a-users-information

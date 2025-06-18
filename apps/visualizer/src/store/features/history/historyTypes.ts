@@ -1,20 +1,20 @@
-import {
+import type {
   CreateEdgeAcrossFloorsArg,
   CreateEdgeArg,
   DeleteEdgeAcrossFloorsArg,
   DeleteEdgeArg,
 } from "../../api/edgeApiSlice";
-import {
+import type {
   CreateNodeArg,
   DeleteNodeArg,
   UpdateNodeArg,
 } from "../../api/nodeApiSlice";
-import {
+import type {
   CreatePoiArg,
   DeletePoiArg,
   UpdatePoiArg,
 } from "../../api/poiApiSlice";
-import {
+import type {
   CreateRoomArg,
   DeleteRoomArg,
   UpdateRoomArg,

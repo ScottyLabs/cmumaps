@@ -1,5 +1,5 @@
-import { PdfCoordinate } from "@cmumaps/common";
-import Konva from "konva";
+import type { PdfCoordinate } from "@cmumaps/common";
+import type Konva from "konva";
 import { throttle } from "lodash";
 
 import { useEffect } from "react";
@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { pushCursorInfo } from "../store/features/liveCursor/liveCursorSlice";
 import { syncCursors } from "../store/features/liveCursor/liveCursorThunks";
 import { useAppDispatch } from "../store/hooks";
-import { getSocketId } from "../store/middleware/webSocketMiddleware";
 import { getCursorPos } from "../utils/canvasUtils";
 
 export const CURSOR_UPDATE_RATE = 20;
@@ -15,8 +14,6 @@ const CURSOR_SYNC_INTERVAL = 500;
 
 const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
   const dispatch = useAppDispatch();
-
-  const socketId = getSocketId();
 
   // store mouse positions
   const handleMouseMove = throttle((e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -34,7 +31,7 @@ const useCursorTracker = (offset: PdfCoordinate, scale: number) => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [dispatch, socketId]);
+  }, [dispatch]);
 
   return handleMouseMove;
 };

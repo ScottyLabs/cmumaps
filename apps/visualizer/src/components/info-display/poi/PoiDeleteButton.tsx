@@ -19,7 +19,7 @@ const PoiDeleteButton = ({ floorCode, poiId }: Props) => {
       <InfoDisplayButton
         text="Delete POI"
         handleClick={deletePoiHelper}
-        style={RED_BUTTON_STYLE + " text-base"}
+        style={`${RED_BUTTON_STYLE} text-base`}
       />
     </div>
   );

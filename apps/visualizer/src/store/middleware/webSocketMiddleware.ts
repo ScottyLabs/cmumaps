@@ -1,11 +1,11 @@
-import { LiveUser } from "@cmumaps/common";
+import type { LiveUser } from "@cmumaps/common";
 import {
+  type WebSocketEventType,
   WebSocketEvents,
-  WebSocketEventType,
-  WebSocketPayloads,
+  type WebSocketPayloads,
 } from "@cmumaps/common";
-import { Action, Middleware } from "@reduxjs/toolkit";
-import { io, Socket } from "socket.io-client";
+import type { Action, Middleware } from "@reduxjs/toolkit";
+import { type Socket, io } from "socket.io-client";
 
 import { getClerkToken } from "../api/apiSlice";
 import {
@@ -21,15 +21,15 @@ import {
   setCursorInfos,
   setLiveUsers,
 } from "../features/liveCursor/liveCursorSlice";
-import { AppDispatch } from "../store";
+import type { AppDispatch } from "../store";
 import {
+  type BroadcastMessage,
+  type BroadcastWebSocketAction,
+  type JoinWebSocketAction,
+  type LeaveWebSocketAction,
+  WEBSOCKET_BROADCAST,
   WEBSOCKET_JOIN,
   WEBSOCKET_LEAVE,
-  JoinWebSocketAction,
-  LeaveWebSocketAction,
-  WEBSOCKET_BROADCAST,
-  BroadcastWebSocketAction,
-  BroadcastMessage,
 } from "./webSocketActions";
 
 // Socket instance

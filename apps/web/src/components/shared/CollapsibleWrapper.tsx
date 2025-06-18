@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 interface Props {
   title: string | React.ReactElement;
@@ -23,6 +23,11 @@ const CollapsibleWrapper = ({ title, children }: Props) => {
       <div
         className="flex cursor-pointer flex-col bg-white"
         onClick={() => setOpen(!open)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setOpen(!open);
+          }
+        }}
       >
         {renderTrigger()}
       </div>

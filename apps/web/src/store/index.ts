@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-import { createBuildingSlice, BuildingSlice } from "./buildingSlice";
-import { createCardSlice, CardSlice } from "./cardSlice";
-import { createFloorSlice, FloorSlice } from "./floorSlice";
-import { createLoginSlice, LoginSlice } from "./loginSlice";
-import { createSearchSlice, SearchSlice } from "./searchSlice";
-import { createZoomSlice, ZoomSlice } from "./zoomSlice";
+import { type BuildingSlice, createBuildingSlice } from "./buildingSlice";
+import { type CardSlice, createCardSlice } from "./cardSlice";
+import { type FloorSlice, createFloorSlice } from "./floorSlice";
+import { type LoginSlice, createLoginSlice } from "./loginSlice";
+import { type SearchSlice, createSearchSlice } from "./searchSlice";
+import { type ZoomSlice, createZoomSlice } from "./zoomSlice";
 
 export type BoundStore = BuildingSlice &
   CardSlice &

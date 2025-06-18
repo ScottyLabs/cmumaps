@@ -1,4 +1,4 @@
-import { PdfCoordinate } from "@cmumaps/common";
+import type { PdfCoordinate } from "@cmumaps/common";
 
 export const distPointToLine = (p1: number[], p2: number[], p3: number[]) => {
   const x = p1[0];
@@ -18,11 +18,12 @@ export const distPointToLine = (p1: number[], p2: number[], p3: number[]) => {
   let param = -1;
 
   //in case of 0 length line
-  if (len_sq != 0) {
+  if (len_sq !== 0) {
     param = dot / len_sq;
   }
 
-  let xx, yy;
+  let xx: number;
+  let yy: number;
 
   if (param < 0) {
     xx = x1;

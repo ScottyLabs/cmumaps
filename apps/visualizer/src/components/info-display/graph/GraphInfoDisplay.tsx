@@ -1,4 +1,4 @@
-import { EdgeInfo, Graph } from "@cmumaps/common";
+import type { EdgeInfo, Graph } from "@cmumaps/common";
 
 import { useMemo } from "react";
 

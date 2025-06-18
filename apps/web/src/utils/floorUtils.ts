@@ -1,4 +1,4 @@
-import { Building, Floor } from "@cmumaps/common";
+import type { Building, Floor } from "@cmumaps/common";
 
 export const getFloorOrdinal = (building: Building, floor: Floor) => {
   if (!building.defaultFloor) {

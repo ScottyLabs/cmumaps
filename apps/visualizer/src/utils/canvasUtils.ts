@@ -1,6 +1,6 @@
-import { PdfCoordinate } from "@cmumaps/common";
-import Konva from "konva";
-import { KonvaEventObject } from "konva/lib/Node";
+import type { PdfCoordinate } from "@cmumaps/common";
+import type Konva from "konva";
+import type { KonvaEventObject } from "konva/lib/Node";
 
 import { toast } from "react-toastify";
 

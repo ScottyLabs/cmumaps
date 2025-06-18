@@ -1,4 +1,4 @@
-import {
+import type {
   CreatePoiPayload,
   DeletePoiPayload,
   UpdatePoiPayload,
@@ -13,8 +13,8 @@ import {
 } from "../features/history/historyPoiUtils";
 import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
-import { AppDispatch, RootState } from "../store";
-import { apiSlice, BaseMutationArg } from "./apiSlice";
+import type { AppDispatch, RootState } from "../store";
+import { type BaseMutationArg, apiSlice } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 import { floorDataApiSlice } from "./floorDataApiSlice";
 

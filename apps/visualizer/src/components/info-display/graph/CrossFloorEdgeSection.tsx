@@ -1,4 +1,4 @@
-import { Graph } from "@cmumaps/common";
+import type { Graph } from "@cmumaps/common";
 import { extractBuildingCode } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
@@ -37,11 +37,11 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
     // include floor above and below if possible
     const floorsArr = floorCode.split("-");
     const floorIndex = floorLevels.indexOf(floorsArr[floorsArr.length - 1]);
-    const prefix = buildingCode + "-";
-    if (floorIndex != floorLevels.length - 1) {
+    const prefix = `${buildingCode}-`;
+    if (floorIndex !== floorLevels.length - 1) {
       connectedFloors.push(prefix + floorLevels[floorIndex + 1]);
     }
-    if (floorIndex != 0) {
+    if (floorIndex !== 0) {
       connectedFloors.push(prefix + floorLevels[floorIndex - 1]);
     }
 

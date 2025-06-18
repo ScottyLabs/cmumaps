@@ -15,10 +15,10 @@ const NavBar = ({ floorCode }: Props) => {
   return (
     <nav className="absolute inset-0 z-50 h-min bg-gray-800 p-4">
       <div className="flex justify-between">
-        <div className="text-xl font-bold text-white">
+        <div className="font-bold text-white text-xl">
           CMU Maps Data Visualization
         </div>
-        <div className="fixed top-4 left-1/2 h-7 -translate-x-1/2 text-xl text-white">
+        <div className="-translate-x-1/2 fixed top-4 left-1/2 h-7 text-white text-xl">
           {name ? name : ""}
         </div>
         <NavLink

@@ -1,5 +1,5 @@
-import { NodeInfo, PdfCoordinate, Polygon, Rooms } from "@cmumaps/common";
-import Konva from "konva";
+import type { NodeInfo, PdfCoordinate, Polygon, Rooms } from "@cmumaps/common";
+import type Konva from "konva";
 import { v4 as uuidv4 } from "uuid";
 
 import { useNavigate } from "react-router";
@@ -17,8 +17,8 @@ import {
   setMode,
 } from "../store/features/modeSlice";
 import {
-  setShowRoomSpecific,
   setEditRoomLabel,
+  setShowRoomSpecific,
 } from "../store/features/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCursorPos } from "../utils/canvasUtils";
@@ -86,7 +86,7 @@ const useStageClickHandler = (
       const coords = polygon.coordinates[ringIndex];
       const newPolygon: Polygon = JSON.parse(JSON.stringify(polygon));
       // empty polygon case
-      if (coords.length == 0) {
+      if (coords.length === 0) {
         // first and last coordinate need to be the same
         newPolygon.coordinates[ringIndex].push(newVertex);
         newPolygon.coordinates[ringIndex].push(newVertex);
@@ -119,20 +119,20 @@ const useStageClickHandler = (
   };
 
   return (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const clickedOnStage = e.target == e.target.getStage();
+    const clickedOnStage = e.target === e.target.getStage();
 
     // create node
-    if (mode == ADD_NODE) {
+    if (mode === ADD_NODE) {
       handleCreateNode(e);
     }
 
     // add vertex to polygon
-    else if (mode == POLYGON_ADD_VERTEX) {
+    else if (mode === POLYGON_ADD_VERTEX) {
       handleAddVertex(e);
     }
 
     // error for edge edits
-    else if (mode == ADD_EDGE || mode == DELETE_EDGE) {
+    else if (mode === ADD_EDGE || mode === DELETE_EDGE) {
       if (clickedOnStage) {
         toast.error("Click on another node!");
       }

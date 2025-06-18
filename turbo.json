@@ -18,23 +18,14 @@
     },
     "@cmumaps/server#db-generate": {},
     "@cmumaps/server#build": {
-      "dependsOn": [
-        "@cmumaps/server#db-generate"
-      ]
+      "dependsOn": ["@cmumaps/server#db-generate"]
     },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     },
     "start": {
-      "dependsOn": [
-        "^start",
-        "^build"
-      ]
+      "dependsOn": ["^start", "^build"]
     },
     "format": {
       "cache": false,
@@ -45,6 +36,10 @@
       "persistent": true
     },
     "tsc": {
+      "cache": false,
+      "persistent": true
+    },
+    "check": {
       "cache": false,
       "persistent": true
     }

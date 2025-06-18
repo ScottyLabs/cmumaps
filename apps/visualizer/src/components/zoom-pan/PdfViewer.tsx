@@ -1,4 +1,4 @@
-import { PdfCoordinate } from "@cmumaps/common";
+import type { PdfCoordinate } from "@cmumaps/common";
 
 import { useState } from "react";
 import { FiZoomIn } from "react-icons/fi";
@@ -33,14 +33,14 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
   const { data: pdfData } = useGetFloorPdfQuery(filePath);
 
   const renderZoomInButton = () => {
-    const disabled = pdfScaleIndex == PDF_SCALES.length - 1;
+    const disabled = pdfScaleIndex === PDF_SCALES.length - 1;
 
     const zoomIn = () => {
       setPdfScaleIndex(pdfScaleIndex + 1);
     };
 
     return (
-      <button onClick={zoomIn} disabled={disabled}>
+      <button type="button" onClick={zoomIn} disabled={disabled}>
         <FiZoomIn
           className={`size-7 ${disabled ? "text-gray-400" : "cursor-pointer"}`}
         />
@@ -49,14 +49,14 @@ const PDFViewer = ({ floorCode, scale, offset }: Props) => {
   };
 
   const renderZoomOutButton = () => {
-    const disabled = pdfScaleIndex == 0;
+    const disabled = pdfScaleIndex === 0;
 
     const zoomOut = () => {
       setPdfScaleIndex(pdfScaleIndex - 1);
     };
 
     return (
-      <button onClick={zoomOut} disabled={disabled}>
+      <button type="button" onClick={zoomOut} disabled={disabled}>
         <FiZoomOut
           className={`size-7 ${disabled ? "text-gray-400" : "cursor-pointer"}`}
         />

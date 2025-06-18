@@ -1,10 +1,8 @@
-import { Building, Floor } from "@cmumaps/common";
-
-import { useState } from "react";
-
 import DefaultView from "@/components/floor-switcher/DefaultView";
 import FloorPicker from "@/components/floor-switcher/FloorPicker";
 import RoundelButton from "@/components/floor-switcher/RoundelButton";
+import type { Building, Floor } from "@cmumaps/common";
+import { useState } from "react";
 
 interface Props {
   building: Building;

@@ -1,4 +1,4 @@
-import { Graph, Pois, Rooms } from "@cmumaps/common";
+import type { Graph, Pois, Rooms } from "@cmumaps/common";
 
 import React from "react";
 
@@ -44,7 +44,9 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
       return (
         <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
       );
-    } else if (nodeId) {
+    }
+
+    if (nodeId) {
       return (
         <RoomlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
       );
@@ -58,7 +60,9 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
   const renderPoiInfoDisplay = () => {
     if (poiId) {
       return <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />;
-    } else if (nodeId) {
+    }
+
+    if (nodeId) {
       return <PoilessDisplay floorCode={floorCode} nodeId={nodeId} />;
     }
 
@@ -99,6 +103,7 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
 
     return (
       <button
+        type="button"
         key={index}
         className={`mb-3 cursor-pointer border-b-2 px-3 pt-4 pb-2 text-center font-medium ${
           index === activeTabIndex

@@ -45,7 +45,6 @@ const EditCell = ({ property, value, handleSave }: Props) => {
               dispatch(setShortcutsDisabled(false));
               setIsEditing(false);
             }}
-            autoFocus
           />
           <FaCheck
             className="ml-2 flex cursor-pointer text-2xl text-white hover:text-gray-400"
@@ -57,20 +56,20 @@ const EditCell = ({ property, value, handleSave }: Props) => {
           />
         </div>
       );
-    } else {
-      return (
-        <div className="flex justify-between">
-          <div className="h-7 truncate text-lg text-white">{value}</div>
-          <FaPencilAlt
-            className="mt-1 ml-2 flex-none cursor-pointer text-right text-white hover:text-gray-400"
-            onClick={() => {
-              setIsEditing(true);
-              dispatch(setShortcutsDisabled(true));
-            }}
-          />
-        </div>
-      );
     }
+
+    return (
+      <div className="flex justify-between">
+        <div className="h-7 truncate text-lg text-white">{value}</div>
+        <FaPencilAlt
+          className="mt-1 ml-2 flex-none cursor-pointer text-right text-white hover:text-gray-400"
+          onClick={() => {
+            setIsEditing(true);
+            dispatch(setShortcutsDisabled(true));
+          }}
+        />
+      </div>
+    );
   };
 
   return (

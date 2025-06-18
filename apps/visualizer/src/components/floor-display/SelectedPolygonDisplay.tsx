@@ -1,5 +1,5 @@
-import { PdfCoordinate } from "@cmumaps/common";
-import { Polygon } from "geojson";
+import type { PdfCoordinate } from "@cmumaps/common";
+import type { Polygon } from "geojson";
 
 import { Line } from "react-konva";
 

@@ -1,11 +1,9 @@
-import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-
+import { useUser } from "@clerk/clerk-react";
+import { useQuery } from "@tanstack/react-query";
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 
 /**
@@ -54,7 +52,7 @@ const FloorSwitcher = () => {
   }
 
   return (
-    <div className="fixed bottom-2 left-1/2 w-fit -translate-x-1/2 px-2">
+    <div className="-translate-x-1/2 fixed bottom-2 left-1/2 w-fit px-2">
       <FloorSwitcherDisplay building={building} floor={floor} />
     </div>
   );
