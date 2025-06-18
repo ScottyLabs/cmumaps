@@ -5,7 +5,7 @@
  * @returns The building code associated with the floor code (e.g: GHC)
  */
 export const extractBuildingCode = (floorCode: string) => {
-  return floorCode.split('-')[0];
+  return floorCode.split("-")[0];
 };
 
 /**
@@ -15,5 +15,5 @@ export const extractBuildingCode = (floorCode: string) => {
  * @returns The floor level associated with the floor code (e.g: 4)
  */
 export const extractFloorLevel = (floorCode: string) => {
-  return floorCode.split('-')[1];
+  return floorCode.split("-")[1];
 };

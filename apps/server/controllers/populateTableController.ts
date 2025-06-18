@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 import { handleControllerError } from "../errors/errorHandler";
 import { populateTableService } from "../services/populateTableService";

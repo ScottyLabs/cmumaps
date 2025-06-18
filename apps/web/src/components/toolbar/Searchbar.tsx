@@ -1,11 +1,10 @@
-import { useRef, useState, useEffect } from "react";
-import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
-
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
 import useBoundStore from "@/store";
+import { useEffect, useRef, useState } from "react";
+import { IoIosClose } from "react-icons/io";
+import { useNavigate } from "react-router";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;

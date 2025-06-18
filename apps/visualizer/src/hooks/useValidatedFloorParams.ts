@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 import {
   useGetFloorGraphQuery,
@@ -21,7 +21,6 @@ type FloorParamsResult =
     };
 
 const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { data: graph } = useGetFloorGraphQuery(floorCode);
@@ -43,8 +42,9 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     if (poiId) {
       dispatch(setInfoDisplayActiveTabIndex(InfoDisplayTabIndex.POI));
     }
-  }, [dispatch, navigate, nodeId, poiId, pois, roomId]);
+  }, [dispatch, poiId, roomId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see below
   const result = useMemo(() => {
     if (!graph || !pois || !rooms) {
       return {};
@@ -93,7 +93,6 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     // pois should trigger param update to update if the node is a poi
     // rooms should trigger param update to update if the node belongs to a room
     // graph shouldn't trigger param update because of delete node
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, poiId, nodeId, pois, rooms]);
 
   return result;

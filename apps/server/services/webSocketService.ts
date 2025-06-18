@@ -1,5 +1,9 @@
-import { WebSocketEvents, WebSocketPayloads, LiveUser } from "@cmumaps/common";
-import { Server } from "socket.io";
+import {
+  type LiveUser,
+  WebSocketEvents,
+  type WebSocketPayloads,
+} from "@cmumaps/common";
+import type { Server } from "socket.io";
 
 export class WebSocketService {
   private io: Server;
@@ -69,11 +73,11 @@ export class WebSocketService {
     // fetch all users in the room except the sender
     const users = await this.io.in(room).fetchSockets();
     const userMap: Record<string, LiveUser> = {};
-    users.forEach((user) => {
+    for (const user of users) {
       if (includeSender || user.id !== senderId) {
         userMap[user.id] = this.socketToUser.get(user.id) as LiveUser;
       }
-    });
+    }
 
     // broadcast the updated user list
     const payload = { users: userMap };

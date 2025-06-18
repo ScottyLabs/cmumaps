@@ -34,7 +34,6 @@ venv/
 !.yarn/versions
 
 # local configurations
-.vscode
 .git
 .turbo
 token.json
@@ -92,9 +91,6 @@ googleSheetsToken.json
 *.tsbuildinfo
 
 *.swp
-
-# ide
-.vscode
 
 # python
 __pycache__/

@@ -1,5 +1,5 @@
-import { ReactNode, useState } from "react";
-import { IconType } from "react-icons";
+import { type ReactNode, useState } from "react";
+import type { IconType } from "react-icons";
 import { AiOutlineMacCommand } from "react-icons/ai";
 import { MdOutlinePalette } from "react-icons/md";
 

@@ -1,6 +1,6 @@
-import { LiveUser } from "@cmumaps/common";
+import type { LiveUser } from "@cmumaps/common";
 
-import { CursorInfo } from "../features/liveCursor/liveCursorTypes";
+import type { CursorInfo } from "../features/liveCursor/liveCursorTypes";
 
 // Action types
 export const WEBSOCKET_JOIN = "WEBSOCKET_JOIN";

@@ -26,10 +26,7 @@ const FloorSwitcher = ({ floorCode }: Props) => {
       <td key={floorLevel} className="border border-black">
         <NavLink
           to={`/${buildingCode}-${floorLevel}`}
-          className={
-            "cursor-pointer px-4 " +
-            (floorLevel == floorLevelSelected ? "font-bold" : "")
-          }
+          className={`cursor-pointer px-4 ${floorLevel === floorLevelSelected ? "font-bold" : ""}`}
           onClick={() => {
             // exit full display mode in case clicking on the same floor level
             setFullDisplayMode(false);
@@ -45,7 +42,7 @@ const FloorSwitcher = ({ floorCode }: Props) => {
     const index = floorLevels.indexOf(floorLevelSelected);
 
     const renderDownArrow = () => (
-      <td className="border-x border-black">
+      <td className="border-black border-x">
         {index !== 0 ? (
           <NavLink
             to={`/${buildingCode}-${floorLevels[index - 1]}`}
@@ -62,28 +59,28 @@ const FloorSwitcher = ({ floorCode }: Props) => {
     );
 
     const renderFloorLevelCell = () => (
-      <td
-        className="cursor-pointer text-lg"
-        onClick={() => setFullDisplayMode(true)}
-      >
-        <div className="px-2 text-center">{floorLevelSelected}</div>
-        <div className="flex justify-center">
-          {floorLevels.map((floorLevel) => (
-            <div
-              key={floorLevel}
-              className={
-                "m-[1px] h-1 w-1 rounded-full " +
-                (floorLevel == floorLevelSelected ? "bg-black" : "bg-gray-400")
-              }
-            ></div>
-          ))}
-        </div>
+      <td>
+        <button
+          type="button"
+          className="cursor-pointer text-lg"
+          onClick={() => setFullDisplayMode(true)}
+        >
+          <div className="px-2 text-center">{floorLevelSelected}</div>
+          <div className="flex justify-center">
+            {floorLevels.map((floorLevel) => (
+              <div
+                key={floorLevel}
+                className={`m-[1px] h-1 w-1 rounded-full ${floorLevel === floorLevelSelected ? "bg-black" : "bg-gray-400"}`}
+              />
+            ))}
+          </div>
+        </button>
       </td>
     );
 
     const renderUpArrow = () => (
-      <td className="border-l border-black">
-        {index != floorLevels.length - 1 ? (
+      <td className="border-black border-l">
+        {index !== floorLevels.length - 1 ? (
           <NavLink
             to={`/${buildingCode}-${floorLevels[index + 1]}`}
             className="flex h-full w-full cursor-pointer items-center p-1"
@@ -100,8 +97,8 @@ const FloorSwitcher = ({ floorCode }: Props) => {
 
     return (
       <>
-        <td className="border-black p-1">
-          <p className="m-0 px-1">Floor Switcher:</p>
+        <td className="flex border-black p-1">
+          <p className="m-0 flex items-center px-1">Floor Switcher:</p>
         </td>
         {renderDownArrow()}
         {renderFloorLevelCell()}
@@ -111,7 +108,7 @@ const FloorSwitcher = ({ floorCode }: Props) => {
   };
 
   return (
-    <div className="fixed bottom-2 left-1/2 z-50 -translate-x-1/2">
+    <div className="-translate-x-1/2 fixed bottom-2 left-1/2 z-50">
       <div className="rounded border border-black bg-gray-50">
         <table>
           <tbody>

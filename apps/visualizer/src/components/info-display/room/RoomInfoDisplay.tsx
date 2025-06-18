@@ -1,8 +1,13 @@
-import { Rooms, RoomInfo, RoomType, RoomTypes } from "@cmumaps/common";
+import {
+  type RoomInfo,
+  type RoomType,
+  RoomTypes,
+  type Rooms,
+} from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useDispatch } from "react-redux";
-import { SingleValue } from "react-select";
+import type { SingleValue } from "react-select";
 
 import {
   useDeleteRoomMutation,
@@ -13,8 +18,8 @@ import {
   toggleEditPolygon,
 } from "../../../store/features/modeSlice";
 import {
-  setSidePanelActiveTabIndex,
   SidePanelTabIndex,
+  setSidePanelActiveTabIndex,
   toggleEditRoomLabel,
 } from "../../../store/features/uiSlice";
 import { useAppSelector } from "../../../store/hooks";
@@ -95,6 +100,7 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
     return (
       <td className="text-center">
         <button
+          type="button"
           className="my-2 w-28 rounded bg-slate-500 px-4 py-1 text-sm text-white hover:bg-slate-700"
           onClick={() => {
             dispatch(setSidePanelActiveTabIndex(SidePanelTabIndex.POLYGON));
@@ -111,6 +117,7 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
     return (
       <td className="text-center">
         <button
+          type="button"
           className="my-2 w-28 rounded bg-slate-500 px-4 py-1 text-sm text-white hover:bg-slate-700"
           onClick={() => dispatch(toggleEditRoomLabel())}
         >
@@ -138,7 +145,7 @@ const RoomInfoDisplay = ({ floorCode, roomId, rooms }: Props) => {
         <InfoDisplayButton
           text="Delete Room"
           handleClick={deleteRoomHelper}
-          style={RED_BUTTON_STYLE + " text-base"}
+          style={`${RED_BUTTON_STYLE} text-base`}
         />
       </div>
     </>

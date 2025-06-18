@@ -5,7 +5,7 @@ interface Props {
 const Loader = ({ loadingText }: Props) => {
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="h-12 w-12 animate-spin rounded-full border-4 border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
       <div className="m-6 text-3xl">
         {loadingText}
         <span

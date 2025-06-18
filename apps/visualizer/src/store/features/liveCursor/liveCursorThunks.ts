@@ -3,7 +3,7 @@ import { broadcastWebSocket } from "../../middleware/webSocketActions";
 import { getSocketId } from "../../middleware/webSocketMiddleware";
 import { createAppAsyncThunk } from "../../withTypes";
 import { setCursorInfos } from "./liveCursorSlice";
-import {
+import type {
   CursorInfoOnDragNode,
   CursorInfoOnDragVertex,
 } from "./liveCursorTypes";

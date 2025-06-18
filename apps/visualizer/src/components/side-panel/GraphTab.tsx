@@ -1,4 +1,4 @@
-import { Graph, Rooms } from "@cmumaps/common";
+import type { Graph, Rooms } from "@cmumaps/common";
 
 import { BiHide } from "react-icons/bi";
 import { useNavigate } from "react-router";
@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 
 import { setMst } from "../../store/features/dataSlice";
 import {
-  setMode,
-  ADD_NODE,
   ADD_DOOR_NODE,
+  ADD_NODE,
+  setMode,
 } from "../../store/features/modeSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { calcMst } from "../../utils/graphUtils";

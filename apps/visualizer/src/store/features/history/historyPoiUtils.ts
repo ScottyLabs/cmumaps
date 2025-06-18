@@ -1,21 +1,22 @@
-import { Pois } from "@cmumaps/common";
+import type { Pois } from "@cmumaps/common";
 
 import { floorDataApiSlice } from "../../api/floorDataApiSlice";
-import {
+import type {
   CreatePoiArg,
   DeletePoiArg,
   UpdatePoiArg,
 } from "../../api/poiApiSlice";
-import { AppDispatch, RootState } from "../../store";
-import { Edit, EditPair } from "./historyTypes";
+import type { AppDispatch, RootState } from "../../store";
+import type { Edit, EditPair } from "./historyTypes";
 
 const getPois = async (
   floorCode: string,
   getStore: () => RootState,
   dispatch: AppDispatch,
 ): Promise<Pois> => {
-  let pois =
-    floorDataApiSlice.endpoints.getFloorPois.select(floorCode)(getStore()).data;
+  let pois = floorDataApiSlice.endpoints.getFloorPois.select(floorCode)(
+    getStore(),
+  ).data;
 
   if (!pois) {
     pois = await dispatch(

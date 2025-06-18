@@ -1,7 +1,7 @@
-import { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/common";
-import Konva from "konva";
+import type { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/common";
+import type Konva from "konva";
 
-import { Stage, Layer } from "react-konva";
+import { Layer, Stage } from "react-konva";
 
 import useCursorTracker from "../../hooks/useCursorTracker";
 import useKeyboardShortcuts from "../../hooks/useKeyboardShortcuts";

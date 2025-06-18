@@ -6,8 +6,9 @@ interface Props {
 
 const DefaultViewButton = ({ disabled, handleClick, children }: Props) => {
   return (
-    <div className="border-l border-gray-300">
+    <div className="border-gray-300 border-l">
       <button
+        type="button"
         className={`flex h-full w-full items-center px-2 ${
           disabled ? "text-gray-300" : "cursor-pointer"
         }`}

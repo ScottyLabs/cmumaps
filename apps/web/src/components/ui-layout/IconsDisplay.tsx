@@ -1,4 +1,4 @@
-import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { UserButton, useClerk, useUser } from "@clerk/clerk-react";
 import { motion, useAnimation } from "motion/react";
 
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
 import userButtonDeselected from "@/assets/icons/plus_button_menu/user-button-deselected.svg";
 import userButtonSelected from "@/assets/icons/plus_button_menu/user-button-selected.svg";
+
 import questionMarkIcon from "@/assets/icons/question-mark.png";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
@@ -318,13 +319,12 @@ const IconsDisplay = () => {
           <UserButton />
         </div>
       );
-    } else {
-      return (
-        <div className="fixed top-14 right-6">
-          <UserButton />
-        </div>
-      );
     }
+    return (
+      <div className="fixed top-14 right-6">
+        <UserButton />
+      </div>
+    );
   };
 
   const renderQuestionMarkIcon = () => {

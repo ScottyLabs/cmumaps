@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ItemInterface, ReactSortable } from "react-sortablejs";
+import { type ItemInterface, ReactSortable } from "react-sortablejs";
 
 interface Props {
   aliases: string[];

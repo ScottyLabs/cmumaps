@@ -1,4 +1,4 @@
-import { Rooms, Polygon, getRoomTypeDetails } from "@cmumaps/common";
+import { type Polygon, type Rooms, getRoomTypeDetails } from "@cmumaps/common";
 
 import { Path } from "react-konva";
 import { useNavigate } from "react-router";
@@ -22,29 +22,29 @@ const PolygonsDisplay = ({ rooms }: Props) => {
   const geojsonToPath = (polygon: Polygon): string => {
     const [outerRing, ...holes] = polygon.coordinates;
 
-    if (outerRing.length == 0) {
+    if (outerRing.length === 0) {
       return "";
     }
 
     // Convert outer ring to SVG path
     let pathString = `M ${outerRing[0][0]},${outerRing[0][1]}`;
-    outerRing.slice(1).forEach(([x, y]) => {
+    for (const [x, y] of outerRing.slice(1)) {
       pathString += ` L ${x},${y}`;
-    });
+    }
     pathString += " Z"; // Close the outer path
 
     // Convert each hole (inner rings) to SVG path
-    holes.forEach((hole) => {
-      if (hole.length == 0) {
-        return;
+    for (const hole of holes) {
+      if (hole.length === 0) {
+        continue;
       }
 
       pathString += ` M ${hole[0][0]},${hole[0][1]}`;
-      hole.slice(1).forEach(([x, y]) => {
+      for (const [x, y] of hole.slice(1)) {
         pathString += ` L ${x},${y}`;
-      });
+      }
       pathString += " Z"; // Close the hole path
-    });
+    }
 
     return pathString;
   };
