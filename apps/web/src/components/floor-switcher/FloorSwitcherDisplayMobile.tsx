@@ -1,10 +1,7 @@
-import { Building } from "@cmumaps/common";
-import { motion, useMotionValue, animate } from "framer-motion";
-
-import { useState } from "react";
-
 import useBoundStore from "@/store";
-
+import type { Building } from "@cmumaps/common";
+import { animate, motion, useMotionValue } from "framer-motion";
+import { useState } from "react";
 import FloorSwitcherCarouselMobile from "./FloorSwitcherCarouselMobile";
 
 interface Props {
@@ -46,8 +43,6 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   const onTouchEnd = () => {
     const targetFloorIndex = Math.round(progressValue.get());
 
-    console.log("Release: " + progressValue.getVelocity());
-
     const controls = animate(progressValue, targetFloorIndex, {
       duration: Math.abs(progressValue.get() - targetFloorIndex) * 0.5,
       ease: "easeInOut",
@@ -69,7 +64,7 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   return (
     <>
       <motion.div
-        className="btn-shadow fixed top-1/2 h-[208px] w-[178px] -translate-x-1/2 -translate-y-1/2 bg-white/10 shadow-lg shadow-black/20 backdrop-blur-md"
+        className="btn-shadow -translate-x-1/2 -translate-y-1/2 fixed top-1/2 h-52 w-45 bg-white/10 shadow-black/20 shadow-lg backdrop-blur-md"
         style={{ borderRadius: "50% / 50%" }}
         onTouchStart={(e) => {
           onTouchStart(e);
