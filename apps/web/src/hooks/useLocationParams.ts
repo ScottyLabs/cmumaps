@@ -14,6 +14,7 @@ interface Params {
   eventId?: string;
   carnivalEvent?: "booth" | "buggy" | "mobot";
   isCardOpen: boolean;
+  error?: string;
 }
 
 const verifyURLParams = (): string | undefined => {
@@ -86,6 +87,10 @@ const useLocationParams = (): Params => {
   const error = verifyURLParams();
   if (error) {
     toast.error(error);
+    return {
+      error,
+      isCardOpen: false,
+    };
   }
 
   if (path.split("/")?.[1] === "events") {
