@@ -4,10 +4,10 @@ import { edgeApiSlice } from "../../api/edgeApiSlice";
 import { nodeApiSlice } from "../../api/nodeApiSlice";
 import { poiApiSlice } from "../../api/poiApiSlice";
 import { roomApiSlice } from "../../api/roomApiSlice";
-import { AppDispatch } from "../../store";
+import type { AppDispatch } from "../../store";
 import { createAppAsyncThunk } from "../../withTypes";
 import { setEditIndex } from "./historySlice";
-import { Edit } from "./historyTypes";
+import type { Edit } from "./historyTypes";
 
 const applyEdit = async (
   edit: Edit,
@@ -91,7 +91,7 @@ export const undo = createAppAsyncThunk(
     try {
       const historyState = getState().history;
       let editIndex = historyState.editIndex;
-      if (editIndex == -1) {
+      if (editIndex === -1) {
         toast.warn("Can't undo anymore!");
         return Promise.reject();
       }

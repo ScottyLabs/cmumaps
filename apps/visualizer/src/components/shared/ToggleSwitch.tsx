@@ -5,7 +5,8 @@ interface Props {
 
 const ToggleSwitch = ({ isOn, handleToggle }: Props) => {
   return (
-    <div
+    <button
+      type="button"
       className={`h-8 w-14 cursor-pointer rounded-full ${
         isOn ? "bg-blue-500" : "bg-gray-300"
       }`}
@@ -15,8 +16,8 @@ const ToggleSwitch = ({ isOn, handleToggle }: Props) => {
         className={`m-1 h-6 w-6 rounded-full bg-white shadow duration-200 ease-in ${
           isOn ? "translate-x-6" : "translate-x-0"
         }`}
-      ></div>
-    </div>
+      />
+    </button>
   );
 };
 

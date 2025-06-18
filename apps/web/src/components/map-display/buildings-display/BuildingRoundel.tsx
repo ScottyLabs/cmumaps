@@ -1,12 +1,10 @@
-import { Building, extractBuildingCode } from "@cmumaps/common";
-import { Annotation } from "mapkit-react";
-
-import { useLocation, useNavigate } from "react-router";
-
 import Roundel from "@/components/shared/Roundel";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { zoomOnObject } from "@/utils/zoomUtils";
+import { type Building, extractBuildingCode } from "@cmumaps/common";
+import { Annotation } from "mapkit-react";
+import { useLocation, useNavigate } from "react-router";
 
 interface Props {
   map: mapkit.Map | null;
@@ -30,7 +28,7 @@ const BuildingRoundel = ({ map, building }: Props) => {
     // zoom on building if it's already selected
     if (floorCode) {
       const buildingCode = extractBuildingCode(floorCode);
-      if (buildingCode == building.code) {
+      if (buildingCode === building.code) {
         zoomOnObject(map, building.shape.flat());
       }
     }
@@ -52,6 +50,12 @@ const BuildingRoundel = ({ map, building }: Props) => {
           onClick={(e) => {
             handleClick();
             e.stopPropagation();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleClick();
+              e.stopPropagation();
+            }
           }}
         >
           <Roundel code={building.code} />

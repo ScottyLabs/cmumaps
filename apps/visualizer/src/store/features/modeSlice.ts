@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { toast } from "react-toastify";
 
-import { AppStartListening } from "../middleware/listenerMiddleware";
+import type { AppStartListening } from "../middleware/listenerMiddleware";
 
 export type Mode =
   | "Graph Select"

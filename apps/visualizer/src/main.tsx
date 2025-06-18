@@ -4,7 +4,7 @@ import {
   RedirectToSignIn,
   useUser,
 } from "@clerk/clerk-react";
-import { Clerk } from "@clerk/types";
+import type { Clerk } from "@clerk/types";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -57,7 +57,7 @@ const AppContent = () => (
   </ClerkProvider>
 );
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root") as HTMLElement).render(
   USE_STRICT_MODE ? (
     <StrictMode>
       <AppContent />

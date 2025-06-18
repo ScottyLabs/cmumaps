@@ -1,5 +1,5 @@
-import { Floor } from "@cmumaps/common";
-import { StateCreator } from "zustand";
+import type { Floor } from "@cmumaps/common";
+import type { StateCreator } from "zustand";
 
 export interface FloorSlice {
   focusedFloor: Floor | null;

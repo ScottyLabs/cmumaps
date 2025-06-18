@@ -6,6 +6,14 @@
     "strict": true,
     "lib": ["esnext"],
     "esModuleInterop": true,
+
+    /* Stricter Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* Others */
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "Node",

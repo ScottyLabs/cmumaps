@@ -1,4 +1,4 @@
-import { Graph, Rooms } from "@cmumaps/common";
+import type { Graph, Rooms } from "@cmumaps/common";
 
 import { selectEditPolygon } from "../../store/features/modeSlice";
 import { setSidePanelActiveTabIndex } from "../../store/features/uiSlice";
@@ -45,6 +45,7 @@ const SidePanel = ({ floorCode, graph, rooms }: Props) => {
       <ul className="flex text-sm">
         {tabNames.map((tabName, index) => (
           <button
+            type="button"
             key={index}
             className={`mb-3 cursor-pointer border-b-2 px-3 pt-4 pb-2 text-center font-medium ${
               activeTabIndex === index

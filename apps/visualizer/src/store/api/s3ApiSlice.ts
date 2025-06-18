@@ -1,4 +1,4 @@
-import { DoorInfo } from "@cmumaps/common";
+import type { DoorInfo } from "@cmumaps/common";
 
 import { apiSlice } from "./apiSlice";
 

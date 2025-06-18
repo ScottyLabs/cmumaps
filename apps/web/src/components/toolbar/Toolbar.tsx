@@ -11,9 +11,8 @@ const Toolbar = ({ mapRef }: Props) => {
 
   if (isMobile) {
     return <MobileToolbar mapRef={mapRef} />;
-  } else {
-    return <DesktopToolbar mapRef={mapRef} />;
   }
+  return <DesktopToolbar mapRef={mapRef} />;
 };
 
 export default Toolbar;

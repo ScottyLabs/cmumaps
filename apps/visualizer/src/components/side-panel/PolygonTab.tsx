@@ -1,4 +1,4 @@
-import { Rooms, Polygon } from "@cmumaps/common";
+import type { Polygon, Rooms } from "@cmumaps/common";
 import { simplify } from "@turf/simplify";
 
 import { toast } from "react-toastify";
@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import useSavePolygonEdit from "../../hooks/useSavePolygonEdit";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";
 import {
-  setMode,
   POLYGON_ADD_VERTEX,
   POLYGON_DELETE_VERTEX,
+  setMode,
 } from "../../store/features/modeSlice";
 import { setRingIndex } from "../../store/features/polygonSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -50,7 +50,7 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
       savePolygonEdit(newPolygon);
     };
 
-    if (ringIndex == 0) {
+    if (ringIndex === 0) {
       return (
         <SidePanelButton
           text="Add Hole"
@@ -58,15 +58,15 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
           style="px-2 py-1"
         />
       );
-    } else {
-      return (
-        <SidePanelButton
-          text="Delete Hole"
-          handleClick={() => deleteHole()}
-          style="px-2 py-1"
-        />
-      );
     }
+
+    return (
+      <SidePanelButton
+        text="Delete Hole"
+        handleClick={() => deleteHole()}
+        style="px-2 py-1"
+      />
+    );
   };
 
   const simplifyPolygon = async () => {
@@ -96,7 +96,7 @@ const PolygonTab = ({ floorCode, rooms }: Props) => {
         >
           {polygon.coordinates.map((_, index) => (
             <option value={index} key={index}>
-              {index == 0 ? "Exterior" : "Hole " + index}
+              {index === 0 ? "Exterior" : `Hole ${index}`}
             </option>
           ))}
         </select>

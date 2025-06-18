@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { Edit, EditPair } from "./historyTypes";
+import type { Edit, EditPair } from "./historyTypes";
 
 const MAX_UNDO_LIMIT = 50;
 

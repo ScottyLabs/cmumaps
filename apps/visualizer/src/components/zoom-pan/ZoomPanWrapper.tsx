@@ -1,5 +1,5 @@
-import { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/common";
-import Konva from "konva";
+import type { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/common";
+import type Konva from "konva";
 
 import { useRef, useState } from "react";
 

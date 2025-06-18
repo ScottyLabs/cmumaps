@@ -1,4 +1,8 @@
-import { Buildings, ERROR_CODES, GeoCoordinate } from "@cmumaps/common";
+import {
+  type Buildings,
+  ERROR_CODES,
+  type GeoCoordinate,
+} from "@cmumaps/common";
 
 import { BuildingError } from "../errors/error";
 import { prisma } from "../prisma";

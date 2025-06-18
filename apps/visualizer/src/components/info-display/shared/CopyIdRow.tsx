@@ -18,6 +18,7 @@ const CopyIdRow = ({ text, id }: Props) => {
       <TableCell text={text} />
       <td className="border px-4 py-2 text-sm">
         <button
+          type="button"
           className="cursor-pointer border p-1 hover:bg-slate-700"
           onClick={copyId}
         >

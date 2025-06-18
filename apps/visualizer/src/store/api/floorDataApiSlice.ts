@@ -1,4 +1,4 @@
-import { Graph, Pois, Rooms } from "@cmumaps/common";
+import type { Graph, Pois, Rooms } from "@cmumaps/common";
 
 import { apiSlice } from "./apiSlice";
 

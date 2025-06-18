@@ -1,11 +1,11 @@
-import { Graph, Mst, Rooms } from "@cmumaps/common";
+import type { Graph, Mst, Rooms } from "@cmumaps/common";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
 
-import { NavigateFunction } from "react-router";
+import type { NavigateFunction } from "react-router";
 import { toast } from "react-toastify";
 
 import { setMst } from "../store/features/dataSlice";
-import { AppDispatch } from "../store/store";
+import type { AppDispatch } from "../store/store";
 import { dist } from "./geometryUtils";
 
 // calculate mst for each connected components of the graph
@@ -80,11 +80,11 @@ export const calcMst = (
       }
 
       const room = rooms[graph[nodeId].roomId];
-      if (room.type != "Inaccessible") {
+      if (room.type !== "Inaccessible") {
         const curDist = Array.from(visited).reduce(
           (min, visitedNodeId) =>
             Math.min(min, dist(graph[nodeId].pos, graph[visitedNodeId].pos)),
-          Infinity,
+          Number.POSITIVE_INFINITY,
         );
         if (!nodeNotInMst || curDist < minDist) {
           nodeNotInMst = nodeId;

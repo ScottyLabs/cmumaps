@@ -1,6 +1,5 @@
-import { CoordinateRegion } from "mapkit-react";
-
-import { RefObject, useEffect, useRef } from "react";
+import type { CoordinateRegion } from "mapkit-react";
+import { type RefObject, useEffect, useRef } from "react";
 
 export interface UseMapPositionHandlers {
   onRegionChangeStart: () => void;

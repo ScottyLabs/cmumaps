@@ -1,4 +1,4 @@
-import {
+import type {
   CreateEdgeAcrossFloorsPayload,
   CreateEdgePayload,
   DeleteEdgeAcrossFloorsPayload,
@@ -15,8 +15,8 @@ import {
 } from "../features/history/historyGraphUtils";
 import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
-import { AppDispatch } from "../store";
-import { apiSlice, BaseMutationArg } from "./apiSlice";
+import type { AppDispatch } from "../store";
+import { type BaseMutationArg, apiSlice } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 import { floorDataApiSlice } from "./floorDataApiSlice";
 

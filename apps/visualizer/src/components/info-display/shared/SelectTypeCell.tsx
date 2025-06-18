@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Select, { SingleValue } from "react-select";
+import Select, { type SingleValue } from "react-select";
 
 import { setShortcutsDisabled } from "../../../store/features/statusSlice";
 import { useAppDispatch } from "../../../store/hooks";

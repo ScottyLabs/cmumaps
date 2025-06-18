@@ -1,6 +1,5 @@
-import { useLocation } from "react-router";
-
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
+import { useLocation } from "react-router";
 
 interface Params {
   buildingCode?: string;

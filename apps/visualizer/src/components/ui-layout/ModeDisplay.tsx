@@ -9,6 +9,7 @@ const ModeDisplay = () => {
   const renderResetModeButtton = () => {
     return (
       <button
+        type="button"
         className="fixed bottom-10 m-1 rounded border border-black p-1 hover:bg-gray-200"
         onClick={() => dispatch(setMode(GRAPH_SELECT))}
       >

@@ -8,7 +8,7 @@ export interface BaseMutationArg {
 }
 
 export const getClerkToken = async () => {
-  if (window.Clerk && window.Clerk.session) {
+  if (window.Clerk?.session) {
     const token = await window.Clerk.session.getToken();
     return token;
   }
@@ -20,7 +20,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER_URL}/api/`,
     prepareHeaders: async (headers) => {
-      if (window.Clerk && window.Clerk.session) {
+      if (window.Clerk?.session) {
         const token = await getClerkToken();
         if (token) {
           headers.set("authorization", `Bearer ${token}`);
