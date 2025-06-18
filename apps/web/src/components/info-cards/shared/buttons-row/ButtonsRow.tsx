@@ -1,4 +1,7 @@
 import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
+import useBoundStore from "@/store";
+import { CardStates } from "@/store/cardSlice";
+import { set } from "lodash";
 import { FaArrowRight } from "react-icons/fa";
 import { TbXboxX } from "react-icons/tb";
 import { toast } from "react-toastify";
@@ -8,6 +11,9 @@ interface Props {
 }
 
 const ButtonsRow = ({ middleButton }: Props) => {
+  const openNav = useBoundStore((state) => state.openNav);
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
+
   const renderDirectionButton = () => {
     const isRoomAcc = false;
 
@@ -18,7 +24,8 @@ const ButtonsRow = ({ middleButton }: Props) => {
         className="flex items-center gap-2 rounded-lg bg-[#56b57b] px-3 py-1 text-white disabled:bg-red-600"
         disabled={isRoomAcc}
         onClick={() => {
-          toast.warn("Will be implemented!");
+          openNav();
+          setCardStatus(CardStates.COLLAPSED);
         }}
       >
         {isRoomAcc ? <TbXboxX size={20} /> : <FaArrowRight size={12} />}

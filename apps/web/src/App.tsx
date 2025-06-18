@@ -8,6 +8,7 @@ import { useUser } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
+import NavOverlay from "./components/nav/NavOverlay";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => {
         <IconsDisplay />
         <Toolbar mapRef={mapRef} />
         <FloorSwitcher />
+        <NavOverlay />
         <MyToastContainer />
       </main>
     </QueryClientProvider>
