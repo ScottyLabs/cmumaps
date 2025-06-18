@@ -50,7 +50,7 @@ const PlusButton = ({
     <div
       className={`${
         isMenuOpen ? "btn-shadow-dark " : "btn-shadow "
-      }fixed right-3 bottom-3 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
+      }fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
       onClick={onClick}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
@@ -68,9 +68,8 @@ const PlusButton = ({
       >
         <img
           alt="Plus Button"
+          className="h-14 w-14"
           src={isPlusButtonSelected ? plusButtonSelected : plusButtonDeselected}
-          height={43}
-          width={43}
         />
       </motion.div>
     </div>
@@ -103,7 +102,7 @@ const IconsDisplay = () => {
 
     if (!isLoaded || !isSignedIn)
       return (
-        <div className="btn-shadow-dark fixed inset-x-5 bottom-57 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
+        <div className="btn-shadow-dark fixed inset-x-5 bottom-71 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
           <div className="mb-4 flex items-center gap-3">
             <div>
               <div className="text-center font-semibold text-gray-800 text-sm">
@@ -138,7 +137,7 @@ const IconsDisplay = () => {
     const email = user.primaryEmailAddress?.emailAddress;
 
     return (
-      <div className="btn-shadow-dark fixed inset-x-5 bottom-57 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
+      <div className="btn-shadow-dark fixed inset-x-5 bottom-71 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
         <div className="mb-4 flex items-center gap-3">
           <img
             src={avatarUrl}
@@ -232,7 +231,7 @@ const IconsDisplay = () => {
             y:
               plusButtonMenuState === PlusButtonMenuState.CLOSED
                 ? 0
-                : -54 * (menuButtons.length - index),
+                : -68 * (menuButtons.length - index),
             transition: {
               bounce: 0,
             },
@@ -241,18 +240,17 @@ const IconsDisplay = () => {
             plusButtonMenuState === PlusButtonMenuState.CLOSED
               ? ""
               : "btn-shadow-dark "
-          }fixed right-3 bottom-3 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
+          }fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
           onClick={onClick}
         >
           <img
+            className="h-14 w-14"
             alt={altText}
             src={
               plusButtonMenuState === selectedMenuState
                 ? selectedIcon
                 : deselectedIcon
             }
-            height={43}
-            width={43}
           />
         </motion.div>
         {plusButtonMenuState === selectedMenuState && menu()}
