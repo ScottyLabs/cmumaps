@@ -261,15 +261,8 @@ const IconsDisplay = () => {
   };
 
   const renderClerkIcon = () => {
-    if (isMobile) {
-      return (
-        <div className="fixed right-3 bottom-[7.5rem] flex items-center justify-center rounded-full bg-[#4b5563] p-2">
-          <UserButton />
-        </div>
-      );
-    }
     return (
-      <div className="fixed top-14 right-6">
+      <div className="fixed right-3 bottom-[7.5rem] flex items-center justify-center rounded-full bg-[#4b5563] p-2">
         <UserButton />
       </div>
     );
@@ -286,8 +279,8 @@ const IconsDisplay = () => {
           <img
             alt="Question Mark"
             src={questionMarkIcon}
-            height={isMobile ? 43 : 50}
-            width={isMobile ? 43 : 50}
+            height={50}
+            width={50}
           />
         </a>
       </div>
