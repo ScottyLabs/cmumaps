@@ -1,8 +1,7 @@
-import { Building } from "@cmumaps/common";
-import { motion, useTransform, animate } from "framer-motion";
-import { MotionValue } from "motion/react";
-
 import useBoundStore from "@/store";
+import type { Building } from "@cmumaps/common";
+import { animate, motion, useTransform } from "framer-motion";
+import type { MotionValue } from "motion/react";
 
 interface FloorSwitcherButtonProps {
   building: Building;
@@ -21,11 +20,11 @@ const FloorSwitcherButton = ({
 
   const offsetDistance = useTransform(
     () =>
-      Math.max(0, Math.min(100, (progressValue.get() - index) * 25 + 50)) + "%",
+      `${Math.max(0, Math.min(100, (progressValue.get() - index) * 25 + 50))}%`,
   );
 
   const distCurveValue = () => {
-    const dist = parseFloat(offsetDistance.get().replace("%", "")) / 100;
+    const dist = Number.parseFloat(offsetDistance.get().replace("%", "")) / 100;
     return Math.max(0, Math.min(1, 2 - 20 * Math.abs(dist - 0.5)));
   };
 
@@ -49,7 +48,7 @@ const FloorSwitcherButton = ({
 
   return (
     <motion.div
-      className="fixed top-1/2 flex h-[46px] w-[46px] translate-x-[89px] items-center justify-center text-white rounded-full"
+      className="fixed top-1/2 flex h-[46px] w-[46px] translate-x-[89px] items-center justify-center rounded-full text-white"
       style={{
         borderRadius: "50% / 50%",
         backgroundColor: "#6F8FE3",
@@ -76,21 +75,21 @@ interface DummyButtonProps {
 const DummyButton = ({ index, progressValue }: DummyButtonProps) => {
   const offsetDistance = useTransform(
     () =>
-      Math.max(0, Math.min(100, (progressValue.get() - index) * 25 + 50)) + "%",
+      `${Math.max(0, Math.min(100, (progressValue.get() - index) * 25 + 50))}%`,
   );
 
   return (
     <motion.div
-      className="fixed top-1/2 flex h-[38px] w-[38px] translate-x-[89px] items-center justify-center text-white rounded-full"
+      className="fixed top-1/2 flex h-[38px] w-[38px] translate-x-[89px] items-center justify-center rounded-full text-white"
       style={{
-        backgroundColor: "rgb(179, 193, 232)",
+        backgroundColor: "B3C1E8",
         offsetPath: 'path("M -30,70 L 0,70 A 56,70 0 1,0 0,-70 L -30, -70")',
         offsetDistance,
         opacity: 0.5,
         offsetRotate: "0deg",
       }}
       key={index}
-    ></motion.div>
+    />
   );
 };
 
