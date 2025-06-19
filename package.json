@@ -11,6 +11,7 @@
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
+    "dev:server": "turbo dev --filter=@cmumaps/server --parallel",
     "db-generate": "turbo run db-generate --filter=@cmumaps/server",
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",
