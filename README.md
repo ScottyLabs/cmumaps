@@ -16,18 +16,14 @@ For comprehensive usage instructions and features, refer to our [documentation](
 ### Installation
 
 1. Clone the repository
-
-   Using GitHub Desktop: clone `cmumaps` from the GitHub by authenticating with your account.
-   
-   Using CLI:
-    1. In the folder on your computer that you want the cmumaps folder to be in, type:
-       ```zsh
-       git clone git@github.com:ScottyLabs/cmumaps.git
-       ```
-    3. To clone the `cmumaps-data` submodule: `cd` into the folder that the submodule is in (`cmumaps/apps/data`)
-        1. `git submodule update --init`
-        2. If it asks for authentication, instead of using your GitHub password, when prompted for the password, input your PAT (personal access token). 
-            1. Account Settings → Developer Settings → Generate a new Personal Access Token (with repo permissions)
+   1. Using GitHub Desktop: clone `cmumaps` from the GitHub by authenticating using your username. 
+   2. Using CLI:
+       1. In the folder on your computer that you want the cmumaps folder to be in, `git clone [git@github.com](mailto:git@github.com):ScottyLabs/cmumaps.git`
+       2. To clone the `cmumaps-data` submodule: `cd` into the folder that the submodule is in (`cmumaps/apps/data`) 
+       `git submodule update --init`
+           1. Case 1: not logged into GitHub. If it asks for authentication, instead of using your GitHub password, when prompted for the password, input your PAT (personal access token). 
+               1. Account Settings → Developer Settings → Generate a new Personal Access Token (with repo permissions)
+           2. Case 2: logged into GitHub and still error. If there’s a “Failed to clone” error with “repository not found”, make sure you have access to the submodule. If you don’t, ask someone to give your account access to the submodule.
 
 3. Set up environment variables
 
