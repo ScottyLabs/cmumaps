@@ -44,6 +44,8 @@ const MapDisplay = ({ mapRef }: Props) => {
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
 
+  const closeNav = useBoundStore((state) => state.closeNav);
+
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
   const handleLoad = () => {
@@ -88,6 +90,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     if (!clickedBuilding) {
       deselectBuilding();
       navigate("/");
+      closeNav();
     }
   };
 

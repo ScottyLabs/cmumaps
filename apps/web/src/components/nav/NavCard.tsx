@@ -156,7 +156,7 @@ const NavCard = () => {
                     {tripInfo.distance}
                   </div>
                 </div>
-                <div className="flex">
+                <div className="flex -translate-y-2">
                   <div className="w-full text-center">arrival</div>
                   <div className="w-full text-center">min</div>
                   <div className="w-full text-center">mi</div>
