@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { Buildings, GeoRooms } from "@cmumaps/common";
 import { queryOptions, skipToken } from "@tanstack/react-query";
 
@@ -19,7 +20,11 @@ const getClerkToken = async () => {
 const apiClient = async (endpoint: string) => {
   const token = await getClerkToken();
   const headers = { Authorization: `Bearer ${token}` };
-  const endpointUrl = `${import.meta.env.VITE_SERVER_URL}/api/${endpoint}`;
+  const endpointUrl = path.join(
+    import.meta.env.VITE_SERVER_URL,
+    "api",
+    endpoint,
+  );
   const response = await fetch(endpointUrl, { headers });
   if (!response.ok) throw new Error(`API error: ${response.status}`);
   return response.json();
