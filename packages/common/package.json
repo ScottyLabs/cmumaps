@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "main": "src/index.ts",
+  "scripts": {
+    "format": "biome format",
+    "lint": "biome lint",
+    "tsc": "tsc -b",
+    "check": "tsc -b && biome check"
+  },
   "devDependencies": {
     "@types/geojson": "^7946.0.16",
     "@types/node": "^20.11.24",
