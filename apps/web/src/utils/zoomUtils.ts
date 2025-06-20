@@ -1,6 +1,6 @@
-import prefersReducedMotion from "@/utils/prefersReducedMotion";
 import type { Buildings, Floor } from "@cmumaps/common";
 import type { Coordinate } from "mapkit-react";
+import prefersReducedMotion from "@/utils/prefersReducedMotion";
 
 const setIsZoomingAsync =
   (setIsZooming: (isZooming: boolean) => void) => (isZooming: boolean) =>
