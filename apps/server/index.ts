@@ -19,12 +19,13 @@ import roomRoutes from "./routes/roomRoutes";
 import { WebSocketService } from "./services/webSocketService";
 
 const app = express();
-app.use(
-  cors({
-    origin: process.env.ALLOWED_ORIGINS?.split(","),
-    credentials: true,
-  }),
-);
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS_REGEX?.split(",").map(
+    (origin) => new RegExp(origin),
+  ),
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "8mb" }));
 
 // Create HTTP server with Express app attached
@@ -33,7 +34,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO with CORS and authentication middleware
 // https://socket.io/docs/v4/handling-cors/
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: corsOptions,
 });
 io.use(socketAuth);
 
