@@ -1,5 +1,5 @@
-import lockIcon from "@/assets/icons/half-lock.svg";
 import type { Building } from "@cmumaps/common";
+import lockIcon from "@/assets/icons/half-lock.svg";
 
 interface Props {
   building: Building;

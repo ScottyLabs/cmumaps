@@ -1,11 +1,11 @@
 import type { LiveUser } from "@cmumaps/common";
 import {
-  type WebSocketEventType,
   WebSocketEvents,
+  type WebSocketEventType,
   type WebSocketPayloads,
 } from "@cmumaps/common";
 import type { Action, Middleware } from "@reduxjs/toolkit";
-import { type Socket, io } from "socket.io-client";
+import { io, type Socket } from "socket.io-client";
 
 import { getClerkToken } from "../api/apiSlice";
 import {

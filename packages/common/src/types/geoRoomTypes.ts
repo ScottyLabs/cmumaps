@@ -1,6 +1,6 @@
-import { GeoCoordinate } from "./coordTypes";
-import { Floor } from "./floorTypes";
-import { RoomType } from "./roomTypes";
+import type { GeoCoordinate } from "./coordTypes";
+import type { Floor } from "./floorTypes";
+import type { RoomType } from "./roomTypes";
 
 export interface GeoRoom {
   /**

@@ -1,3 +1,4 @@
+import type { GeoRoom, RoomType } from "@cmumaps/common";
 import restroomIcon from "@/assets/icons/quick_search/restroom.svg";
 import corridorIcon from "@/assets/icons/search_results/corridor.svg";
 import diningIcon from "@/assets/icons/search_results/dining.svg";
@@ -7,7 +8,6 @@ import pinIcon from "@/assets/icons/search_results/pin.svg";
 import stairsIcon from "@/assets/icons/search_results/stairs.svg";
 import studyIcon from "@/assets/icons/search_results/study.svg";
 import type { Document } from "@/types/searchTypes";
-import type { GeoRoom, RoomType } from "@cmumaps/common";
 
 const icons: Partial<Record<RoomType, string>> = {
   Elevator: elevatorIcon,
