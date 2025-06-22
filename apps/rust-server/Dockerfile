@@ -2,12 +2,8 @@
 FROM rust:latest
 WORKDIR /app
 
-# Copy only the necessary files for the build
-COPY apps/rust-server apps/rust-server
-
-# Set the working directory to rust server application
-WORKDIR /app/apps/rust-server
-
+# Copy the source code
+COPY . .
 # Install dependencies
 RUN cargo build --release
 
