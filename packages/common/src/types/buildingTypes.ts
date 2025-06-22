@@ -9,7 +9,7 @@ export type BuildingMetadata = {
 export interface Building {
   code: string;
   name: string;
-  osmId: string;
+  osmId: string | null;
   isMapped: boolean;
   defaultOrdinal: number | null;
   defaultFloor: string | null;
