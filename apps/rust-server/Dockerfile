@@ -1,17 +1,36 @@
-# build stage
-FROM rust:latest
+# Build stage
+FROM rust:bullseye as builder
 WORKDIR /app
+
 # Copy the source code
 COPY . .
 
-# configure cmumaps-data + tell rust where to find it
-ENV DATA_PATH=./cmumaps-data
-COPY ../data/cmumaps-data ./cmumaps-data
+# set PAT from host env to container env
+ARG GITHUB_ACCESS_TOKEN
+ENV GITHUB_ACCESS_TOKEN=${GITHUB_ACCESS_TOKEN}
+RUN ./init_submodule.sh
 
-# Install dependencies
-RUN cargo build --release
+WORKDIR /app/apps/rust-server
 
+# build rust app and put it into /usr/local/.cargo/bin
+RUN cargo install --path server
+
+# builder image
+FROM debian:bullseye-slim
+
+# Copy the data directory
+ENV DATA_PATH=/cmumaps-data
+COPY --from=builder /app/cmumaps-data /cmumaps-data
+
+# install runtime deps
+RUN rm -rf /var/lib/apt/lists/*
+
+
+COPY --from=builder /usr/local/cargo/bin/server /usr/local/bin/server
+
+# Expose the port
 EXPOSE 3278
 
 # set the start command to run the server
-CMD ["cargo", "run", "--release", "--bin", "server"]
+CMD ["server"]
+
