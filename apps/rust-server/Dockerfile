@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy the source code
 COPY . .
 # Install dependencies
-RUN cargo build --release
+RUN bunx turbo run build --filter=@cmumaps/rust-server...
 
 EXPOSE 3278
 

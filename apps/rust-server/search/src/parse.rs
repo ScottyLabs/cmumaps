@@ -1,6 +1,5 @@
 use regex::Regex;
 use serde::de::DeserializeOwned;
-use std::error::Error;
 use std::io::BufReader;
 use std::{path::Path};
 use std::fs::File;
@@ -37,6 +36,7 @@ fn trigrams(s: &str) -> Vec<String> {
 }
 
 pub fn parse_query(query: &String) -> Vec<String> {
+    let query = query.trim().to_lowercase();
     let nonalphanumre = Regex::new(r"[^a-zA-Z0-9 ]").unwrap();
     let split_query = nonalphanumre.split(&query);
     let trigrams = split_query.flat_map(|x| trigrams(x)).collect::<Vec<String>>();
