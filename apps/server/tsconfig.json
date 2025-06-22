@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
 
-    // Disable this for now
-    "noUncheckedIndexedAccess": false
+    // Disable these rules for now but should be enabled in the future
+    "noUncheckedIndexedAccess": false,
+    "noPropertyAccessFromIndexSignature": false
   }
 }

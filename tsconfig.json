@@ -29,7 +29,7 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": false,
+    "noPropertyAccessFromIndexSignature": true,
 
     /* https://github.com/tsconfig/bases/blob/main/bases/strictest.json */
     "allowUnusedLabels": false,

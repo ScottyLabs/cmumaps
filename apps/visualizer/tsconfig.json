@@ -4,7 +4,7 @@
     // https://github.com/tsconfig/bases/blob/main/bases/vite-react.json
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
-    // Disable this for now
+    // Disable these rules for now but should be enabled in the future
     "noUncheckedIndexedAccess": false
   },
   "include": ["src"]

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import env from "../../env";
 
 export interface BaseMutationArg {
   floorCode: string;
@@ -18,7 +19,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   tagTypes: ["Graph", "Rooms", "Pois"],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_SERVER_URL}/api/`,
+    baseUrl: `${env.VITE_SERVER_URL}/api/`,
     prepareHeaders: async (headers) => {
       if (window.Clerk?.session) {
         const token = await getClerkToken();
