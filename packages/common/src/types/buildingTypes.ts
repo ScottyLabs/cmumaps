@@ -1,4 +1,4 @@
-import { GeoCoordinate, PdfCoordinate } from "./coordTypes";
+import type { GeoCoordinate, PdfCoordinate } from "./coordTypes";
 
 export interface Building {
   code: string;

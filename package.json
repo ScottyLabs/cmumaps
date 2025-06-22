@@ -11,6 +11,7 @@
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
+    "dev:server": "turbo dev --filter=@cmumaps/server --parallel",
     "db-generate": "turbo run db-generate --filter=@cmumaps/server",
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",
@@ -18,7 +19,7 @@
     "check": "turbo check --parallel"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "2.0.0",
     "@types/bun": "latest",
     "eslint": "^9.21.0",
     "prettier": "^3.5.3",

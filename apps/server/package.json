@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/index.cjs",
-    "build": "bun build index.ts --outdir=dist --target=bun --format=cjs --sourcemap --out-extension:.js=.cjs",
+    "build": "bun build index.ts --outdir=dist --target=bun",
     "dev": "dotenv -e .env -- tsx watch index.ts",
     "dev:host": "dotenv -e .env -- tsx watch index.ts",
     "db-generate": "prisma generate",

@@ -1,8 +1,7 @@
+import type { Building, Floor } from "@cmumaps/common";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import DefaultViewButton from "@/components/floor-switcher/DefaultViewButton";
 import useBoundStore from "@/store";
-import type { Building, Floor } from "@cmumaps/common";
-import { IoIosArrowUp } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
 
 interface Props {
   building: Building;

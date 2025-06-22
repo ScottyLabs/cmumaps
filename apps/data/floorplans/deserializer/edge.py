@@ -5,11 +5,12 @@
 import sys
 import os
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
+
 
 # Drop and populate Edge table
 def drop_edge_table():
