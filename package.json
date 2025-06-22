@@ -25,6 +25,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
     "@types/bun": "latest",
+    "@types/web": "^0.0.243",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"
   }

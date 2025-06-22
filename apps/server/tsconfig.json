@@ -1,22 +1,9 @@
-// https://github.com/prisma/prisma-examples/blob/latest/orm/express/tsconfig.json
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
     "outDir": "dist",
-    "strict": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true,
 
-    /* Stricter Linting */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-
-    /* Others */
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ESNext"
+    // Disable this for now
+    "noUncheckedIndexedAccess": false
   }
 }
