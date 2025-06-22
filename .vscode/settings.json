@@ -1,5 +1,4 @@
 {
-  "python.analysis.extraPaths": ["./apps/data/auth_utils"],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
