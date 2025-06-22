@@ -1,11 +1,15 @@
 # build stage
 FROM rust:latest
 WORKDIR /app
-
 # Copy the source code
-COPY . .
+COPY apps/rust-server/ .
+
+# configure cmumaps-data + tell rust where to find it
+ENV DATA_PATH=./cmumaps-data
+COPY apps/data/cmumaps-data ./cmumaps-data
+
 # Install dependencies
-RUN bunx turbo run build --filter=@cmumaps/rust-server...
+RUN cargo build --release
 
 EXPOSE 3278
 
