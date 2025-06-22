@@ -1,0 +1,10 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.4"
+path = { version = "0.1.0", path = "../path" }
+search = { version = "0.1.0", path = "../search" }
+tokio = { version = "1.45.1", features = ["macros", "rt-multi-thread"] }
