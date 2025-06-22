@@ -69,9 +69,12 @@ const UserMenu = ({ userProps, clerkFunctions }: UserMenuProps) => {
         },
       ];
 
-  const renderMenuButton = ({ icon, label, onClick }: MenuButtonProps) => {
+  const renderMenuButton = (
+    { icon, label, onClick }: MenuButtonProps,
+    index: number,
+  ) => {
     return (
-      <>
+      <div key={index}>
         <hr className="-mx-4 my-1 border-gray-200" />
         <button
           type="button"
@@ -81,7 +84,7 @@ const UserMenu = ({ userProps, clerkFunctions }: UserMenuProps) => {
           <img src={icon} alt="User Settings Button" width={24} height={24} />
           <span>{label}</span>
         </button>
-      </>
+      </div>
     );
   };
 

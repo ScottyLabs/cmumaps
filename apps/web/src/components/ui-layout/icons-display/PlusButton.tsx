@@ -1,6 +1,5 @@
 import plusButtonDeselected from "@/assets/icons/plus_button_menu/plus-button-deselected.svg";
 import plusButtonSelected from "@/assets/icons/plus_button_menu/plus-button-selected.svg";
-import { motion } from "motion/react";
 
 interface PlusButtonProps {
   isMenuOpen: boolean;
@@ -13,28 +12,21 @@ const PlusButton = ({
   isPlusButtonSelected,
   onClick,
 }: PlusButtonProps) => {
-  const animationControls = {
-    rotate: isMenuOpen ? 0 : 45,
-    transition: {
-      bounce: 0,
-    },
-  };
-
   const icon = isPlusButtonSelected ? plusButtonSelected : plusButtonDeselected;
 
   return (
     <div
       className={`${
-        isMenuOpen ? "btn-shadow-dark " : "btn-shadow "
-      }fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
+        isMenuOpen ? "btn-shadow-dark" : "btn-shadow"
+      } fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
     >
-      <motion.div
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: Only used in mobile */}
+      <div
         onClick={onClick}
-        animate={animationControls}
-        initial={{ rotate: 45 }}
+        className={`${isMenuOpen ? "" : "rotate-45"} transition-transform duration-500 ease-in-out`}
       >
         <img alt="Plus Button" className="h-14 w-14" src={icon} />
-      </motion.div>
+      </div>
     </div>
   );
 };

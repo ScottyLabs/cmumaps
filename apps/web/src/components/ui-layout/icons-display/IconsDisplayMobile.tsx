@@ -7,7 +7,6 @@ import userButtonSelected from "@/assets/icons/plus_button_menu/user-button-sele
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
 import { useClerk, useUser } from "@clerk/clerk-react";
-import { motion } from "motion/react";
 import { useState } from "react";
 import AboutMenu from "./AboutMenu";
 import CoursesMenu from "./CoursesMenu";
@@ -89,34 +88,32 @@ const IconsDisplayMobile = () => {
       }
     };
 
-    const animationControls = {
-      y:
+    const style = {
+      transform:
         plusButtonMenuState === PlusButtonMenuState.CLOSED
-          ? 0
-          : -68 * (menuButtons.length - index),
-      transition: {
-        bounce: 0,
-      },
+          ? ""
+          : `translateY(${-68 * (menuButtons.length - index)}px)`,
     };
 
     const icon =
       plusButtonMenuState === selectedMenuState ? selectedIcon : deselectedIcon;
 
     return (
-      <>
-        <motion.div
-          animate={animationControls}
+      <div key={index}>
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: Only used in mobile */}
+        <div
+          onClick={onClick}
           className={`${
             plusButtonMenuState === PlusButtonMenuState.CLOSED
               ? ""
-              : "btn-shadow-dark "
-          }fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
-          onClick={onClick}
+              : "btn-shadow-dark"
+          } fixed right-5 bottom-6 z-50 rounded-full transition-transform duration-500 ease-in-out sm:right-3.5 sm:bottom-3.5`}
+          style={style}
         >
           <img className="h-14 w-14" alt={altText} src={icon} />
-        </motion.div>
+        </div>
         {plusButtonMenuState === selectedMenuState && menu()}
-      </>
+      </div>
     );
   };
 
