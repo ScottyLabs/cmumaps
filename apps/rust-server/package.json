@@ -1,5 +1,5 @@
 {
-  "name": "@repo/rust-server",
+  "name": "@cmumaps/rust-server",
   "scripts": {
     "build": "cargo build --release",
     "start": "cargo run --release",
