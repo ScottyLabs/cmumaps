@@ -20,12 +20,22 @@
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",
     "tsc": "turbo tsc --parallel",
-    "check": "turbo check --parallel"
+    "check": "biome check && turbo check --parallel",
+    "prepare": "husky",
+    "preinstall": "npx only-allow bun"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "latest",
     "@types/web": "^0.0.243",
+    "husky": "^9.1.7",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"
   }
