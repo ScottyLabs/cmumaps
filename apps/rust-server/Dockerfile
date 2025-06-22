@@ -1,16 +1,21 @@
-# build stage
+# Build stage
 FROM rust:latest
 WORKDIR /app
+
 # Copy the source code
 COPY . .
 
-# configure cmumaps-data + tell rust where to find it
+# Copy the data directory
 ENV DATA_PATH=./cmumaps-data
-COPY ../data/cmumaps-data ./cmumaps-data
+RUN mv /app/apps/data/cmumaps-data /app/apps/rust-server/server/cmumaps-data
+
+# Set the working directory to rust server application
+WORKDIR /app/apps/rust-server/server
 
 # Install dependencies
 RUN cargo build --release
 
+# Expose the port
 EXPOSE 3278
 
 # set the start command to run the server
