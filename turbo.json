@@ -1,12 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": [
-    "VITE_CLERK_PUBLISHABLE_KEY",
-    "VITE_AWS_API_INVOKE_URL",
-    "VITE_SERVER_URL",
-    "ALLOWED_ORIGINS"
-  ],
   "tasks": {
     "dev": {
       "cache": false,
@@ -22,7 +16,16 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": [
+        "CLERK_PUBLISHABLE_KEY",
+        "CLERK_SECRET_KEY",
+        "ALLOWED_ORIGINS_REGEX",
+        "DATABASE_URL",
+        "VITE_MAPKIT_TOKEN",
+        "VITE_SERVER_URL",
+        "VITE_CLERK_PUBLISHABLE_KEY"
+      ]
     },
     "start": {
       "dependsOn": ["^start", "^build"]
