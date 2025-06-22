@@ -1,8 +1,8 @@
 {
-    "name": "@repo/rust-server",
-    "scripts": {
-        "build": "cargo build --release",
-        "start": "cargo run --release",
-        "dev": "cargo-watch -x run"
-    }
+  "name": "@repo/rust-server",
+  "scripts": {
+    "build": "cargo build --release",
+    "start": "cargo run --release",
+    "dev": "cargo-watch -x run"
+  }
 }
