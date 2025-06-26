@@ -6,7 +6,7 @@ import {
 } from "@cmumaps/common";
 import type { Action, Middleware } from "@reduxjs/toolkit";
 import { io, type Socket } from "socket.io-client";
-
+import env from "../../env";
 import { getClerkToken } from "../api/apiSlice";
 import {
   createEdge,
@@ -50,7 +50,7 @@ const getFloorCode = () => {
 // Create socket connection
 const createSocket = async (user: LiveUser, dispatch: AppDispatch) => {
   const token = await getClerkToken();
-  const socket = io(import.meta.env.VITE_SERVER_URL, {
+  const socket = io(env.VITE_SERVER_URL, {
     query: {
       userName: user.userName,
       userColor: user.color,

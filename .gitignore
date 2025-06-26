@@ -12,6 +12,8 @@ dist/
 
 # Misc
 .env
+.env.*
 .git
 .turbo
 .DS_Store
+Cargo.lock
