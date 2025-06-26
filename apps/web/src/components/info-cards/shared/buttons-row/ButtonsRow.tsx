@@ -1,7 +1,7 @@
-import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
 import { FaArrowRight } from "react-icons/fa";
 import { TbXboxX } from "react-icons/tb";
 import { toast } from "react-toastify";
+import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
 
 interface Props {
   middleButton?: React.JSX.Element;
@@ -13,7 +13,7 @@ const ButtonsRow = ({ middleButton }: Props) => {
 
     return (
       <button
-        id="DirectionButton"
+        name="DirectionButton"
         type="button"
         className="flex items-center gap-2 rounded-lg bg-[#56b57b] px-3 py-1 text-white disabled:bg-red-600"
         disabled={isRoomAcc}

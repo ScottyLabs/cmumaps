@@ -1,5 +1,5 @@
 import type { Mst } from "@cmumaps/common";
-import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface DataState {
   mst: Mst | null;

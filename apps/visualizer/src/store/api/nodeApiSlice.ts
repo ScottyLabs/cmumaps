@@ -14,7 +14,7 @@ import {
 import { addEditToHistory } from "../features/history/historySlice";
 import { getSocketId } from "../middleware/webSocketMiddleware";
 import type { AppDispatch, RootState } from "../store";
-import { type BaseMutationArg, apiSlice } from "./apiSlice";
+import { apiSlice, type BaseMutationArg } from "./apiSlice";
 import { handleQueryError } from "./errorHandler";
 import { floorDataApiSlice } from "./floorDataApiSlice";
 

@@ -1,8 +1,8 @@
+import { UserButton } from "@clerk/clerk-react";
 import questionMarkIcon from "@/assets/icons/question-mark.png";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import { UserButton } from "@clerk/clerk-react";
 
 const IconsDisplay = () => {
   const isMobile = useIsMobile();

@@ -1,0 +1,18 @@
+# Dependencies
+**/node_modules
+**/npm-debug.log
+
+# Build outputs
+**/dist
+**/build
+
+# Environment and system files
+**/.env
+**/.DS_Store
+
+# Git
+.git
+**/.gitignore
+
+# Documentation
+**/README.md

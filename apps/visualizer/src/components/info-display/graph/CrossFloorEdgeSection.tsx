@@ -1,9 +1,8 @@
 import type { Graph } from "@cmumaps/common";
 import { extractBuildingCode } from "@cmumaps/common";
-import { v4 as uuidv4 } from "uuid";
-
 import { useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 import { useGetBuildingFloorsQuery } from "../../../store/api/buildingApiSlice";
 import { useCreateEdgeAcrossFloorsMutation } from "../../../store/api/edgeApiSlice";
@@ -114,7 +113,6 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
       <div>
         <select
           name="floor"
-          id="floor"
           className="rounded bg-white text-black"
           value={toFloorCode}
           onChange={handleChange}

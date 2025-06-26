@@ -1,5 +1,4 @@
-import type { PdfCoordinate } from "@cmumaps/common";
-import type { LiveUser } from "@cmumaps/common";
+import type { LiveUser, PdfCoordinate } from "@cmumaps/common";
 
 import { useState } from "react";
 import { Group, Rect, Text } from "react-konva";

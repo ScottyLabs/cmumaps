@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
 import "./index.css";
+import env from "./env";
 import FloorPage from "./pages/FloorPage";
 import Home from "./pages/Home";
 import { USE_STRICT_MODE } from "./settings";
@@ -24,8 +25,7 @@ declare global {
   }
 }
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
+const PUBLISHABLE_KEY = env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");
 }

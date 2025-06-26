@@ -1,4 +1,4 @@
-import { RoomType } from "../types";
+import type { RoomType } from "../types";
 
 /**
  * The attributes of a room type.

@@ -1,4 +1,4 @@
-import { type Polygon, type Rooms, getRoomTypeDetails } from "@cmumaps/common";
+import { getRoomTypeDetails, type Polygon, type Rooms } from "@cmumaps/common";
 
 import { Path } from "react-konva";
 import { useNavigate } from "react-router";

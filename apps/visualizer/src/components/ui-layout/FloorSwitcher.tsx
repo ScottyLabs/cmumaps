@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { FaArrowUp } from "react-icons/fa";
-import { FaArrowDown } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { NavLink } from "react-router";
 
 import useFloorInfo from "../../hooks/useFloorInfo";

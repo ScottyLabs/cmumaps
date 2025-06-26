@@ -1,23 +1,24 @@
-import { getBuildingsQueryOptions } from "@/api/apiClient";
-import {
-  CAMERA_BOUNDARY,
-  INITIAL_REGION,
-} from "@/components/map-display/MapConstants";
-import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
-import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
-import useIsMobile from "@/hooks/useIsMobile";
-import useMapRegionChange from "@/hooks/useMapRegionChange";
-import useBoundStore from "@/store";
-import { isInPolygon } from "@/utils/geometry";
 import { useQuery } from "@tanstack/react-query";
 import {
   FeatureVisibility,
   type MapInteractionEvent,
-  MapType,
   Map as MapkitMap,
+  MapType,
 } from "mapkit-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { getBuildingsQueryOptions } from "@/api/apiClient";
+import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
+import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
+import {
+  CAMERA_BOUNDARY,
+  INITIAL_REGION,
+} from "@/components/map-display/MapConstants";
+import env from "@/env";
+import useIsMobile from "@/hooks/useIsMobile";
+import useMapRegionChange from "@/hooks/useMapRegionChange";
+import useBoundStore from "@/store";
+import { isInPolygon } from "@/utils/geometry";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -94,7 +95,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   return (
     <MapkitMap
       ref={mapRef}
-      token={import.meta.env.VITE_MAPKIT_TOKEN || ""}
+      token={env.VITE_MAPKIT_TOKEN || ""}
       initialRegion={INITIAL_REGION}
       includedPOICategories={[]}
       cameraBoundary={CAMERA_BOUNDARY}

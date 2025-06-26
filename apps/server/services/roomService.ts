@@ -1,8 +1,8 @@
 import {
-  type Placement,
-  type RoomInfo,
   extractBuildingCode,
   extractFloorLevel,
+  type Placement,
+  type RoomInfo,
 } from "@cmumaps/common";
 
 import type { InputJsonValue } from "@prisma/client/runtime/library";

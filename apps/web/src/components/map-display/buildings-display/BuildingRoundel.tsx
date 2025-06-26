@@ -1,10 +1,10 @@
+import { type Building, extractBuildingCode } from "@cmumaps/common";
+import { Annotation } from "mapkit-react";
+import { useLocation, useNavigate } from "react-router";
 import Roundel from "@/components/shared/Roundel";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { zoomOnObject } from "@/utils/zoomUtils";
-import { type Building, extractBuildingCode } from "@cmumaps/common";
-import { Annotation } from "mapkit-react";
-import { useLocation, useNavigate } from "react-router";
 
 interface Props {
   map: mapkit.Map | null;
@@ -45,7 +45,8 @@ const BuildingRoundel = ({ map, building }: Props) => {
         longitude={building.labelLongitude}
         displayPriority="required"
       >
-        <div
+        <button
+          type="button"
           className="translate-y-1/2 cursor-pointer"
           onClick={(e) => {
             handleClick();
@@ -59,7 +60,7 @@ const BuildingRoundel = ({ map, building }: Props) => {
           }}
         >
           <Roundel code={building.code} />
-        </div>
+        </button>
       </Annotation>
     </div>
   );

@@ -1,8 +1,9 @@
 import type { DoorInfo } from "@cmumaps/common";
 
+import env from "../../env";
 import { apiSlice } from "./apiSlice";
 
-export const AWS_API_INVOKE_URL = `${import.meta.env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;
+export const AWS_API_INVOKE_URL = `${env.VITE_AWS_API_INVOKE_URL}/${import.meta.env.MODE}`;
 
 interface OutlineData {
   walls: number[][];

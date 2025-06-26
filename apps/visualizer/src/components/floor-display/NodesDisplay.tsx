@@ -8,12 +8,11 @@ import {
 } from "@cmumaps/common";
 import type Konva from "konva";
 import { throttle } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-
 import { useMemo } from "react";
 import { Circle } from "react-konva";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 import { CURSOR_UPDATE_RATE } from "../../hooks/useCursorTracker";
 import useValidatedFloorParams from "../../hooks/useValidatedFloorParams";

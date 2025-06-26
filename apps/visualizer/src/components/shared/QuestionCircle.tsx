@@ -1,6 +1,5 @@
-import { twMerge } from "tailwind-merge";
-
 import { FaRegQuestionCircle } from "react-icons/fa";
+import { twMerge } from "tailwind-merge";
 
 interface Props {
   url: string;

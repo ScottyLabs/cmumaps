@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   getBuildingsQueryOptions,
   getRoomsQueryOptions,
@@ -7,7 +8,6 @@ import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import { useQuery } from "@tanstack/react-query";
 
 const RoomCard = () => {
   const isMobile = useIsMobile();

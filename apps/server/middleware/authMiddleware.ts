@@ -1,11 +1,12 @@
-import { verifyToken } from "@clerk/express";
+import { getAuth, verifyToken } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
 import type { Socket } from "socket.io";
 
 // for http requests
-// https://clerk.com/docs/references/express/overview#example-use-clerk-client-to-get-a-users-information
+// https://clerk.com/docs/references/express/overview#get-auth
 const checkAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.auth.userId) {
+  const auth = getAuth(req);
+  if (!auth.userId) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }

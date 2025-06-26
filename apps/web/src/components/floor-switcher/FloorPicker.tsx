@@ -1,5 +1,4 @@
-import type { Building } from "@cmumaps/common";
-import type { Floor } from "@cmumaps/common";
+import type { Building, Floor } from "@cmumaps/common";
 
 import useBoundStore from "@/store";
 

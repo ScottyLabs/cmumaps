@@ -1,4 +1,4 @@
-import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export type LoadingStatus = "Loaded" | "Loading" | "Failed";
 export const LOADED: LoadingStatus = "Loaded";

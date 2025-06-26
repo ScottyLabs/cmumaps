@@ -1,7 +1,7 @@
-import Roundel from "@/components/shared/Roundel";
-import useBoundStore from "@/store";
 import type { Building } from "@cmumaps/common";
 import { useNavigate } from "react-router";
+import Roundel from "@/components/shared/Roundel";
+import useBoundStore from "@/store";
 
 interface Props {
   building: Building;

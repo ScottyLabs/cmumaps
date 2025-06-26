@@ -1,6 +1,6 @@
-import useBoundStore from "@/store";
 import { SignInButton, useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
+import useBoundStore from "@/store";
 
 const LoginModal = () => {
   const { isSignedIn } = useUser();

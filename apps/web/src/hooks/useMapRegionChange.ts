@@ -1,3 +1,7 @@
+import type { Building } from "@cmumaps/common";
+import { useQuery } from "@tanstack/react-query";
+import type { CoordinateRegion } from "mapkit-react";
+import { type RefObject, useState } from "react";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import {
   INITIAL_REGION,
@@ -8,10 +12,6 @@ import useMapPosition from "@/hooks/useMapPosition";
 import useBoundStore from "@/store";
 import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
-import type { Building } from "@cmumaps/common";
-import { useQuery } from "@tanstack/react-query";
-import type { CoordinateRegion } from "mapkit-react";
-import { type RefObject, useState } from "react";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Query data

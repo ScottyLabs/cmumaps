@@ -6,10 +6,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import App from "./App.tsx";
 import "./index.css";
-
-const options = {
-  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-};
+import env from "@/env.ts";
 
 // https://clerk.com/docs/components/control/clerk-loaded
 declare global {
@@ -18,21 +15,26 @@ declare global {
   }
 }
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+// Posthog settings
+const posthog_options = {
+  api_host: env.VITE_PUBLIC_POSTHOG_HOST,
+};
 
+// Clerk settings
+const PUBLISHABLE_KEY = env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");
 }
 
+// Render the App
 createRoot(document.getElementById("root") as HTMLElement).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <ClerkLoaded>
       <BrowserRouter>
         <StrictMode>
           <PostHogProvider
-            apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
-            options={options}
+            apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
+            options={posthog_options}
           >
             <App />
           </PostHogProvider>

@@ -1,9 +1,9 @@
+import React from "react";
 import RoomCard from "@/components/info-cards/room-card/RoomCard";
 import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import React from "react";
 import BuildingCard from "../building-card/BuildingCard";
 
 interface Props {

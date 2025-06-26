@@ -4,10 +4,10 @@ import type {
   GeoRooms,
   Graph,
   Placement,
-  PoiType,
   Pois,
-  RoomType,
+  PoiType,
   Rooms,
+  RoomType,
 } from "@cmumaps/common";
 import { extractBuildingCode, extractFloorLevel } from "@cmumaps/common";
 

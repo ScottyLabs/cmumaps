@@ -1,10 +1,10 @@
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
-import { CardStates, CardStatesList } from "@/store/cardSlice";
-import { type PanInfo, motion, useAnimation } from "motion/react";
+import { motion, type PanInfo, useAnimation } from "motion/react";
 import { useEffect, useMemo } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
+import useLocationParams from "@/hooks/useLocationParams";
+import useBoundStore from "@/store";
+import { CardStates, CardStatesList } from "@/store/cardSlice";
 
 interface Props {
   snapPoints: number[];
