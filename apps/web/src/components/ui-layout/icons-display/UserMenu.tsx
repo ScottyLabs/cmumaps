@@ -1,7 +1,7 @@
+import type { LoadedClerk, UseUserReturn } from "@clerk/types";
 import settingsIcon from "@/assets/icons/plus_button_menu/settings.svg";
 import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
-import type { LoadedClerk, UseUserReturn } from "@clerk/types";
 
 interface UserMenuProps {
   userProps: UseUserReturn;
@@ -18,7 +18,7 @@ const UserMenu = ({ userProps, clerkFunctions }: UserMenuProps) => {
   const { isLoaded, isSignedIn, user } = userProps;
   const { signOut, openUserProfile, openSignIn } = clerkFunctions;
 
-  const UserProfile = () => {
+  const renderUserProfile = () => {
     if (!isLoaded || !isSignedIn) {
       return (
         <div className="text-center font-semibold text-gray-800 text-sm">
@@ -90,9 +90,7 @@ const UserMenu = ({ userProps, clerkFunctions }: UserMenuProps) => {
 
   return (
     <div className="btn-shadow-dark fixed inset-x-5 bottom-74 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
-      <div className="mb-4 flex items-center gap-3">
-        <UserProfile />
-      </div>
+      <div className="mb-4 flex items-center gap-3">{renderUserProfile()}</div>
       {menuButtons.map(renderMenuButton)}
     </div>
   );

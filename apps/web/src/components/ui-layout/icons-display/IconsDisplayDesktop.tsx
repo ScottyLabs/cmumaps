@@ -1,5 +1,5 @@
-import questionMarkIcon from "@/assets/icons/question-mark.png";
 import { UserButton } from "@clerk/clerk-react";
+import questionMarkIcon from "@/assets/icons/question-mark.png";
 
 const IconsDisplay = () => {
   const renderClerkIcon = () => {

@@ -1,3 +1,5 @@
+import { useClerk, useUser } from "@clerk/clerk-react";
+import { useState } from "react";
 import coursesButtonDeselected from "@/assets/icons/plus_button_menu/courses-button-deselected.svg";
 import coursesButtonSelected from "@/assets/icons/plus_button_menu/courses-button-selected.svg";
 import questionMarkButtonDeselected from "@/assets/icons/plus_button_menu/question-mark-button-deselected.svg";
@@ -6,8 +8,6 @@ import userButtonDeselected from "@/assets/icons/plus_button_menu/user-button-de
 import userButtonSelected from "@/assets/icons/plus_button_menu/user-button-selected.svg";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import { useClerk, useUser } from "@clerk/clerk-react";
-import { useState } from "react";
 import AboutMenu from "./AboutMenu";
 import CoursesMenu from "./CoursesMenu";
 import PlusButton from "./PlusButton";
@@ -100,8 +100,8 @@ const IconsDisplayMobile = () => {
 
     return (
       <div key={index}>
-        {/* biome-ignore lint/a11y/useKeyWithClickEvents: Only used in mobile */}
-        <div
+        <button
+          type="button"
           onClick={onClick}
           className={`${
             plusButtonMenuState === PlusButtonMenuState.CLOSED
@@ -111,7 +111,7 @@ const IconsDisplayMobile = () => {
           style={style}
         >
           <img className="h-14 w-14" alt={altText} src={icon} />
-        </div>
+        </button>
         {plusButtonMenuState === selectedMenuState && menu()}
       </div>
     );
@@ -134,8 +134,8 @@ const IconsDisplayMobile = () => {
   return (
     <>
       {plusButtonMenuState !== PlusButtonMenuState.CLOSED && (
-        // biome-ignore lint/a11y/useKeyWithClickEvents: Only used for mobile
-        <div
+        <button
+          type="button"
           className="fixed inset-0 z-50 bg-black/30 backdrop-blur-md"
           onClick={onClickBackground}
         />

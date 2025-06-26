@@ -20,13 +20,13 @@ const PlusButton = ({
         isMenuOpen ? "btn-shadow-dark" : "btn-shadow"
       } fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
     >
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: Only used in mobile */}
-      <div
+      <button
+        type="button"
         onClick={onClick}
         className={`${isMenuOpen ? "" : "rotate-45"} transition-transform duration-500 ease-in-out`}
       >
         <img alt="Plus Button" className="h-14 w-14" src={icon} />
-      </div>
+      </button>
     </div>
   );
 };
