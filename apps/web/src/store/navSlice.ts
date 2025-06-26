@@ -1,13 +1,13 @@
 import type { StateCreator } from "zustand";
 
 export interface NavSlice {
-  isNavOpen: boolean;
-  openNav: () => void;
-  closeNav: () => void;
+  isNavigating: boolean;
+  startNav: () => void;
+  endNav: () => void;
 }
 
 export const createNavSlice: StateCreator<NavSlice> = (set) => ({
-  isNavOpen: false,
-  openNav: () => set({ isNavOpen: true }),
-  closeNav: () => set({ isNavOpen: false }),
+  isNavigating: false,
+  startNav: () => set({ isNavigating: true }),
+  endNav: () => set({ isNavigating: false }),
 });

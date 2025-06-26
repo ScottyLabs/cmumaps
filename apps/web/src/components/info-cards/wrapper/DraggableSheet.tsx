@@ -1,10 +1,11 @@
 import useLocationParams from "@/hooks/useLocationParams";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
 import { type PanInfo, motion, useAnimation } from "motion/react";
+import { useQueryState } from "nuqs";
 import { useEffect, useMemo } from "react";
 import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
 
 interface Props {
   snapPoints: number[];
@@ -13,7 +14,7 @@ interface Props {
 
 const DraggableSheet = ({ snapPoints, children }: Props) => {
   // Library hooks
-  const navigate = useNavigate();
+  const navigate = useNavigateLocationParams();
   const controls = useAnimation();
 
   // Global state
@@ -47,6 +48,12 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
       controls.start({ y: 0 });
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
+
+  const [dst] = useQueryState("dst");
+
+  if (dst) {
+    return;
+  }
 
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,

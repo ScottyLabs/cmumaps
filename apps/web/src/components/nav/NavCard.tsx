@@ -59,11 +59,27 @@
 
 import useBoundStore from "@/store";
 import { type ClassValue, clsx } from "clsx";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+interface NavHeaderProps {
+  src: string;
+  dst: string;
+  isNavigating: boolean;
+  setSrc: (_: string | null) => void;
+  setDst: (_: string | null) => void;
+  startNav: () => void;
+}
+
 // Frame component
-const NavCard = () => {
+const NavCard = ({
+  src,
+  dst,
+  setSrc,
+  setDst,
+  isNavigating,
+  startNav,
+}: NavHeaderProps) => {
   // Navigation options data
   const navigationOptions = [
     {
@@ -98,8 +114,14 @@ const NavCard = () => {
     distance: "3.7",
   };
 
-  return (
-    <div className="btn-shadow-dark fixed inset-x-0 bottom-0 z-50 overflow-auto rounded-t-3xl bg-white shadow-lg">
+  const [yControl, setYControl] = useState(300);
+
+  useEffect(() => {
+    setYControl(isNavigating ? 63 : 0);
+  }, [isNavigating]);
+
+  const ChooseCard = () => {
+    return (
       <div
         className="relative flex flex-col items-center bg-white px-0 pt-4 pb-0"
         data-model-id="47:143"
@@ -142,9 +164,9 @@ const NavCard = () => {
           </div>
 
           {/* Trip information panel */}
-          <div className="rounded-xl border bg-card text-card-foreground shadow border-none rounded-none w-full">
-            <div className="flex items-center justify-between pt-[19px] pb-[11px] px-[21px] relative self-stretch w-full flex-[0_0_auto] bg-[#f1f4fd] p-0">
-              <div className="w-36 h-9">
+          <div className="w-full border border-none bg-card text-card-foreground shadow">
+            <div className="relative flex w-full flex-[0_0_auto] items-center justify-between self-stretch bg-[#f1f4fd] p-0 px-[21px] pt-[19px] pb-[11px]">
+              <div className="h-9 w-36">
                 <div className="flex">
                   <div className="w-full text-center font-bold text-[19px] text-black">
                     {tripInfo.arrivalTime}
@@ -156,18 +178,24 @@ const NavCard = () => {
                     {tripInfo.distance}
                   </div>
                 </div>
-                <div className="flex -translate-y-2">
+                <div className="-translate-y-2 flex">
                   <div className="w-full text-center">arrival</div>
                   <div className="w-full text-center">min</div>
                   <div className="w-full text-center">mi</div>
                 </div>
               </div>
 
-              <div className="inline-flex h-[39px] w-[104px] items-center justify-center rounded-full bg-[#31b777] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+              <button
+                type="button"
+                className="inline-flex h-[39px] w-[104px] items-center justify-center rounded-full bg-[#31b777] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                onClick={() => {
+                  startNav();
+                }}
+              >
                 <span className="text-center font-[number:var(--body-2-font-weight)] font-body-2 text-[length:var(--body-2-font-size)] text-white leading-[var(--body-2-line-height)] tracking-[var(--body-2-letter-spacing)] [font-style:var(--body-2-font-style)]">
                   GO
                 </span>
-              </div>
+              </button>
             </div>
           </div>
 
@@ -177,6 +205,52 @@ const NavCard = () => {
           </div>
         </div>
       </div>
+    );
+  };
+
+  const NavCard = () => {
+    return (
+      <div className="h-9 mt-[31px] ml-[35.74px] flex">
+        <div className="w-39">
+          <div className="flex">
+            <div className="w-full text-center font-bold text-[19px] text-black">
+              {tripInfo.arrivalTime}
+            </div>
+            <div className="w-full text-center font-bold text-[19px] text-black">
+              {tripInfo.duration}
+            </div>
+            <div className="w-full text-center font-bold text-[19px] text-black">
+              {tripInfo.distance}
+            </div>
+          </div>
+          <div className="-translate-y-2 flex">
+            <div className="w-full text-center">arrival</div>
+            <div className="w-full text-center">min</div>
+            <div className="w-full text-center">mi</div>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="inline-flex absolute right-5 h-[39px] w-[104px] items-center justify-center rounded-full bg-[#C41230] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          onClick={() => {
+            setDst(null);
+            setSrc(null);
+          }}
+        >
+          <span className="text-center font-[number:var(--body-2-font-weight)] font-body-2 text-[length:var(--body-2-font-size)] text-white leading-[var(--body-2-line-height)] tracking-[var(--body-2-letter-spacing)] [font-style:var(--body-2-font-style)]">
+            End
+          </span>
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className="btn-shadow-dark h-46 fixed inset-x-0 bottom-0 z-50 overflow-auto rounded-t-3xl bg-white shadow-lg transition duration-300 ease-in-out"
+      style={{ transform: `translateY(${yControl}px)` }}
+    >
+      {isNavigating ? <NavCard /> : <ChooseCard />}
     </div>
   );
 };
