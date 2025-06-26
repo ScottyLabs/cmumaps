@@ -30,12 +30,11 @@ interface MenuButtonProps {
 }
 
 const IconsDisplayMobile = () => {
-  const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
-  const { isCardOpen } = useLocationParams();
-
-  const userProps = useUser();
   const clerkFunctions = useClerk();
+  const { isCardOpen } = useLocationParams();
+  const userProps = useUser();
 
+  const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
   const [plusButtonMenuState, setPlusButtonMenuState] = useState(
     PlusButtonMenuState.CLOSED,
   );
@@ -50,9 +49,7 @@ const IconsDisplayMobile = () => {
       selectedIcon: userButtonSelected,
       altText: "User Menu",
       selectedMenuState: PlusButtonMenuState.USER_SELECTED,
-      menu: () => {
-        return UserMenu({ userProps, clerkFunctions });
-      },
+      menu: () => UserMenu({ userProps, clerkFunctions }),
     },
     {
       deselectedIcon: questionMarkButtonDeselected,
@@ -88,6 +85,7 @@ const IconsDisplayMobile = () => {
       }
     };
 
+    // Can't use Tailwind here because of the dynamic translation
     const style = {
       transform:
         plusButtonMenuState === PlusButtonMenuState.CLOSED
@@ -117,40 +115,50 @@ const IconsDisplayMobile = () => {
     );
   };
 
-  const onClickBackground = () => {
-    if (plusButtonMenuState === PlusButtonMenuState.OPEN)
-      setPlusButtonMenuState(PlusButtonMenuState.CLOSED);
-    else setPlusButtonMenuState(PlusButtonMenuState.OPEN);
-  };
+  const renderBackground = () => {
+    const handleClick = () => {
+      if (plusButtonMenuState === PlusButtonMenuState.OPEN)
+        setPlusButtonMenuState(PlusButtonMenuState.CLOSED);
+      else setPlusButtonMenuState(PlusButtonMenuState.OPEN);
+    };
 
-  const plusButtonOnClick = () => {
-    setPlusButtonMenuState(
-      plusButtonMenuState === PlusButtonMenuState.CLOSED
-        ? PlusButtonMenuState.OPEN
-        : PlusButtonMenuState.CLOSED,
-    );
-  };
-
-  return (
-    <>
-      {plusButtonMenuState !== PlusButtonMenuState.CLOSED && (
+    return (
+      plusButtonMenuState !== PlusButtonMenuState.CLOSED && (
         <button
           type="button"
           className="fixed inset-0 z-50 bg-black/30 backdrop-blur-md"
-          onClick={onClickBackground}
+          onClick={handleClick}
         />
-      )}
+      )
+    );
+  };
 
-      {menuButtons.map(renderMenuButton)}
+  const renderPlusButton = () => {
+    const handleClick = () => {
+      setPlusButtonMenuState(
+        plusButtonMenuState === PlusButtonMenuState.CLOSED
+          ? PlusButtonMenuState.OPEN
+          : PlusButtonMenuState.CLOSED,
+      );
+    };
 
+    return (
       <PlusButton
         isMenuOpen={plusButtonMenuState !== PlusButtonMenuState.CLOSED}
         isPlusButtonSelected={
           plusButtonMenuState === PlusButtonMenuState.CLOSED ||
           plusButtonMenuState === PlusButtonMenuState.OPEN
         }
-        onClick={plusButtonOnClick}
+        onClick={handleClick}
       />
+    );
+  };
+
+  return (
+    <>
+      {renderBackground()}
+      {menuButtons.map(renderMenuButton)}
+      {renderPlusButton()}
     </>
   );
 };
