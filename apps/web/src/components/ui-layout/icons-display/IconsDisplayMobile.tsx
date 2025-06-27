@@ -30,11 +30,12 @@ interface MenuButtonProps {
 }
 
 const IconsDisplayMobile = () => {
-  const clerkFunctions = useClerk();
-  const { isCardOpen } = useLocationParams();
-  const userProps = useUser();
-
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const { isCardOpen } = useLocationParams();
+
+  const userProps = useUser();
+  const clerkFunctions = useClerk();
+
   const [plusButtonMenuState, setPlusButtonMenuState] = useState(
     PlusButtonMenuState.CLOSED,
   );
@@ -49,7 +50,9 @@ const IconsDisplayMobile = () => {
       selectedIcon: userButtonSelected,
       altText: "User Menu",
       selectedMenuState: PlusButtonMenuState.USER_SELECTED,
-      menu: () => UserMenu({ userProps, clerkFunctions }),
+      menu: () => {
+        return UserMenu({ userProps, clerkFunctions });
+      },
     },
     {
       deselectedIcon: questionMarkButtonDeselected,
@@ -77,7 +80,7 @@ const IconsDisplayMobile = () => {
     }: MenuButtonProps,
     index: number,
   ) => {
-    const onClick = () => {
+    const handleClick = () => {
       if (plusButtonMenuState === selectedMenuState) {
         setPlusButtonMenuState(PlusButtonMenuState.OPEN);
       } else if (plusButtonMenuState !== PlusButtonMenuState.CLOSED) {
@@ -85,7 +88,6 @@ const IconsDisplayMobile = () => {
       }
     };
 
-    // Can't use Tailwind here because of the dynamic translation
     const style = {
       transform:
         plusButtonMenuState === PlusButtonMenuState.CLOSED
@@ -100,12 +102,12 @@ const IconsDisplayMobile = () => {
       <div key={index}>
         <button
           type="button"
-          onClick={onClick}
+          onClick={handleClick}
           className={`${
             plusButtonMenuState === PlusButtonMenuState.CLOSED
               ? ""
               : "btn-shadow-dark"
-          } fixed right-5 bottom-6 z-50 rounded-full transition-transform duration-500 ease-in-out sm:right-3.5 sm:bottom-3.5`}
+          } fixed right-5 bottom-6 z-50 rounded-full transition-transform duration-500 ease-in-out`}
           style={style}
         >
           <img className="h-14 w-14" alt={altText} src={icon} />
@@ -157,7 +159,9 @@ const IconsDisplayMobile = () => {
   return (
     <>
       {renderBackground()}
+
       {menuButtons.map(renderMenuButton)}
+
       {renderPlusButton()}
     </>
   );

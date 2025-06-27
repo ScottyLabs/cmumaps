@@ -15,19 +15,19 @@ const PlusButton = ({
   const icon = isPlusButtonSelected ? plusButtonSelected : plusButtonDeselected;
 
   return (
-    <div
+    <button
+      type="button"
       className={`${
         isMenuOpen ? "btn-shadow-dark" : "btn-shadow"
-      } fixed right-5 bottom-6 z-50 rounded-full sm:right-3.5 sm:bottom-3.5`}
+      } fixed right-5 bottom-6 z-50 rounded-full`}
+      onClick={onClick}
     >
-      <button
-        type="button"
-        onClick={onClick}
+      <div
         className={`${isMenuOpen ? "" : "rotate-45"} transition-transform duration-500 ease-in-out`}
       >
         <img alt="Plus Button" className="h-14 w-14" src={icon} />
-      </button>
-    </div>
+      </div>
+    </button>
   );
 };
 
