@@ -107,7 +107,7 @@ const IconsDisplayMobile = () => {
             plusButtonMenuState === PlusButtonMenuState.CLOSED
               ? ""
               : "btn-shadow-dark"
-          } fixed right-5 bottom-6 z-50 rounded-full transition-transform duration-500 ease-in-out`}
+          } fixed right-5 bottom-16 z-50 rounded-full transition-transform duration-500 ease-in-out`}
           style={style}
         >
           <img className="h-14 w-14" alt={altText} src={icon} />
