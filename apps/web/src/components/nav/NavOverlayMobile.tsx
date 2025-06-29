@@ -1,9 +1,3 @@
-import { getBuildingsQueryOptions } from "@/api/apiClient";
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
-import { useQuery } from "@tanstack/react-query";
-import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
 import NavCard from "./NavCard";
 import NavHeader from "./NavHeader";
 

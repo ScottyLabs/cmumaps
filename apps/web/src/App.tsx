@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
 import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
@@ -8,11 +9,6 @@ import MapDisplay from "@/components/map-display/MapDisplay";
 import Toolbar from "@/components/toolbar/Toolbar";
 import IconsDisplay from "@/components/ui-layout/IconsDisplay";
 import MyToastContainer from "@/components/ui-layout/MyToastContainer";
-import { useUser } from "@clerk/clerk-react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { NuqsAdapter } from "nuqs/adapters/react";
-import { usePostHog } from "posthog-js/react";
-import { useEffect, useRef } from "react";
 import NavOverlay from "./components/nav/NavOverlay.tsx";
 
 const queryClient = new QueryClient();

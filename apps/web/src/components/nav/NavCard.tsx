@@ -1,66 +1,4 @@
-// const NavOverlay = () => {
-//   const navigationOptions = [
-//     {
-//       id: "fastest",
-//       icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/fastest.svg",
-//       label: "Fastest",
-//       isSelected: false,
-//     },
-//     {
-//       id: "accessible",
-//       icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/outside.svg",
-//       label: "Accessible",
-//       isSelected: true,
-//     },
-//     {
-//       id: "inside",
-//       icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/indoor.svg",
-//       label: "Inside",
-//       isSelected: false,
-//     },
-//     {
-//       id: "outside",
-//       icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/outside.svg",
-//       label: "Outside",
-//       isSelected: false,
-//     },
-//   ];
-
-//   return (
-//     <div className="btn-shadow-dark fixed inset-x-0 bottom-0 z-50 overflow-auto rounded-t-3xl bg-white shadow-lg">
-//       <div className="relative flex w-full items-center justify-center self-stretch px-0 pt-6 pb-[5px]">
-//         {navigationOptions.map((option) => (
-//           <div
-//             key={option.id}
-//             className={`relative flex flex-1 grow flex-col items-center gap-0.5 ${option.isSelected ? "bg-white" : ""}`}
-//           >
-//             <img
-//               className="relative h-6 w-6"
-//               alt={option.label}
-//               src={option.icon}
-//             />
-//             <div
-//               className={`relative self-stretch text-center text-xs ${
-//                 option.id === "accessible"
-//                   ? "text-[#1e86ff] underline"
-//                   : option.id === "fastest"
-//                     ? "text-[#bec1c6]"
-//                     : "text-lightcolorbaseprimarydark"
-//               }`}
-//             >
-//               {option.label}
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-import useBoundStore from "@/store";
-import { type ClassValue, clsx } from "clsx";
-import React, { forwardRef, useEffect, useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { useEffect, useState } from "react";
 
 interface NavHeaderProps {
   src: string;
@@ -73,8 +11,6 @@ interface NavHeaderProps {
 
 // Frame component
 const NavCard = ({
-  src,
-  dst,
   setSrc,
   setDst,
   isNavigating,
@@ -120,7 +56,7 @@ const NavCard = ({
     setYControl(isNavigating ? 63 : 0);
   }, [isNavigating]);
 
-  const ChooseCard = () => {
+  const renderChooseCard = () => {
     return (
       <div
         className="relative flex flex-col items-center bg-white px-0 pt-4 pb-0"
@@ -142,14 +78,14 @@ const NavCard = ({
                   </div>
                 ) : (
                   <img
-                    className="relative w-6 h-6"
+                    className="relative h-6 w-6"
                     alt={option.label}
                     src={option.icon}
                   />
                 )}
 
                 <div
-                  className={`relative self-stretch font-body-2 font-[number:var(--body-2-font-weight)] text-center tracking-[var(--body-2-letter-spacing)] leading-[var(--body-2-line-height)] [font-style:var(--body-2-font-style)] text-[length:var(--body-2-font-size)] ${
+                  className={`relative self-stretch text-center font-[number:var(--body-2-font-weight)] font-body-2 text-[length:var(--body-2-font-size)] leading-[var(--body-2-line-height)] tracking-[var(--body-2-letter-spacing)] [font-style:var(--body-2-font-style)] ${
                     option.id === "accessible"
                       ? "text-[#1e86ff] underline"
                       : option.id === "fastest"
@@ -208,9 +144,9 @@ const NavCard = ({
     );
   };
 
-  const NavCard = () => {
+  const renderNavCard = () => {
     return (
-      <div className="h-9 mt-[31px] ml-[35.74px] flex">
+      <div className="mt-[31px] ml-[35.74px] flex h-9">
         <div className="w-39">
           <div className="flex">
             <div className="w-full text-center font-bold text-[19px] text-black">
@@ -231,7 +167,7 @@ const NavCard = ({
         </div>
         <button
           type="button"
-          className="inline-flex absolute right-5 h-[39px] w-[104px] items-center justify-center rounded-full bg-[#C41230] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          className="absolute right-5 inline-flex h-[39px] w-[104px] items-center justify-center rounded-full bg-[#C41230] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
           onClick={() => {
             setDst(null);
             setSrc(null);
@@ -247,10 +183,10 @@ const NavCard = ({
 
   return (
     <div
-      className="btn-shadow-dark h-46 fixed inset-x-0 bottom-0 z-50 overflow-auto rounded-t-3xl bg-white shadow-lg transition duration-300 ease-in-out"
+      className="btn-shadow-dark fixed inset-x-0 bottom-0 z-50 h-46 overflow-auto rounded-t-3xl bg-white shadow-lg transition duration-300 ease-in-out"
       style={{ transform: `translateY(${yControl}px)` }}
     >
-      {isNavigating ? <NavCard /> : <ChooseCard />}
+      {isNavigating ? renderNavCard() : renderChooseCard()}
     </div>
   );
 };

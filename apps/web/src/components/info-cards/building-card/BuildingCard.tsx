@@ -5,15 +5,12 @@ import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import { useQuery } from "@tanstack/react-query";
-import { useQueryState } from "nuqs";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
 }
 
 const BuildingCard = ({ mapRef: _mapRef }: Props) => {
-  const [dst] = useQueryState("dst");
   const isMobile = useIsMobile();
   const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed);
   const { buildingCode } = useLocationParams();

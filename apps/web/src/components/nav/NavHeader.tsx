@@ -1,10 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import cancelIcon from "@/assets/icons/nav/nav-overlay/cancel.svg";
 import forwardArrowIcon from "@/assets/icons/nav/nav-overlay/forward-arrow.svg";
 import headerIcon from "@/assets/icons/nav/nav-overlay/header.svg";
 import swapIcon from "@/assets/icons/nav/nav-overlay/swap.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import { useQuery } from "@tanstack/react-query";
 
 interface NavHeaderProps {
   src: string;
@@ -21,7 +21,6 @@ const NavHeader = ({
   setSrc,
   setDst,
   isNavigating,
-  startNav,
 }: NavHeaderProps) => {
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
@@ -40,17 +39,18 @@ const NavHeader = ({
         ? buildings[dst]?.name || "Invalid Building"
         : "Loading...";
 
-  const ChooseHeader = () => {
+  const renderChooseHeader = () => {
     return (
       <div className="btn-shadow fixed inset-x-[19px] top-10 z-50 overflow-auto rounded-lg bg-white">
         <div className="flex">
           <img
+            alt="navigation header"
             src={headerIcon}
-            className="mt-[14px] mr-[10px] mb-[9px] ml-[13px] w-[33px] h-[84px]"
+            className="mt-[14px] mr-[10px] mb-[9px] ml-[13px] h-[84px] w-[33px]"
             width={33}
             height={84}
           />
-          <div className="btn-shadow absolute left-[18.22px] top-[70.22px] w-[22.56px] h-[22.56px] rounded-full" />
+          <div className="btn-shadow absolute top-[70.22px] left-[18.22px] h-[22.56px] w-[22.56px] rounded-full" />
 
           {/* <div className="w-full">
 					<div className="relative pb-[11.5px] pt-[23.5px] w-fit font-body-1 font-[number:var(--body-1-font-weight)] text-[#1e86ff] text-[length:var(--body-1-font-size)] tracking-[var(--body-1-letter-spacing)] leading-[var(--body-1-line-height)] whitespace-nowrap [font-style:var(--body-1-font-style)]">
@@ -63,15 +63,15 @@ const NavHeader = ({
 				</div> */}
           <div className="w-full">
             <div className="flex flex-col items-start gap-3 pt-[23.5px]">
-              <div className="flex h-[19px] items-center gap-2.5 relative self-stretch w-full">
-                <div className="relative w-fit mt-[-1.50px] font-body-1 font-[number:var(--body-1-font-weight)] text-[#1e86ff] text-[length:var(--body-1-font-size)] tracking-[var(--body-1-letter-spacing)] leading-[var(--body-1-line-height)] whitespace-nowrap [font-style:var(--body-1-font-style)]">
+              <div className="relative flex h-[19px] w-full items-center gap-2.5 self-stretch">
+                <div className="relative mt-[-1.50px] w-fit whitespace-nowrap font-[number:var(--body-1-font-weight)] font-body-1 text-[#1e86ff] text-[length:var(--body-1-font-size)] leading-[var(--body-1-line-height)] tracking-[var(--body-1-letter-spacing)] [font-style:var(--body-1-font-style)]">
                   {srcName}
                 </div>
               </div>
 
               <hr className="w-full border-gray-300" />
 
-              <div className="relative self-stretch font-body-1 font-[number:var(--body-1-font-weight)] text-black text-[length:var(--body-1-font-size)] tracking-[var(--body-1-letter-spacing)] leading-[var(--body-1-line-height)] [font-style:var(--body-1-font-style)]">
+              <div className="relative self-stretch font-[number:var(--body-1-font-weight)] font-body-1 text-[length:var(--body-1-font-size)] text-black leading-[var(--body-1-line-height)] tracking-[var(--body-1-letter-spacing)] [font-style:var(--body-1-font-style)]">
                 {dstName}
               </div>
             </div>
@@ -102,7 +102,7 @@ const NavHeader = ({
     );
   };
 
-  const NavigateHeader = () => {
+  const renderNavigateHeader = () => {
     return (
       <div className="btn-shadow fixed inset-x-[19px] top-10 z-50 overflow-auto rounded-lg bg-[#31b777]">
         <div className="flex">
@@ -111,15 +111,15 @@ const NavHeader = ({
             alt="forward"
             className="my-[22px] mr-[19px] ml-[30px]"
           />
-          <div className="flex-col mt-[16px]">
-            <div className="font-semibold font-lato text-[2rem] text-white">
+          <div className="mt-[16px] flex-col">
+            <div className="font-lato font-semibold text-[2rem] text-white">
               Stay Straight
             </div>
-            <div className="pl-[2px] font-semibold font-lato text-[15px] text-white -translate-y-2">
+            <div className="-translate-y-2 pl-[2px] font-lato font-semibold text-[15px] text-white">
               for 100 ft
             </div>
           </div>
-          <div className="absolute top-[40px] right-[20px] font-semibold font-lato text-[17px] text-white -translate-y-2">
+          <div className="-translate-y-2 absolute top-[40px] right-[20px] font-lato font-semibold text-[17px] text-white">
             {dst}
           </div>
         </div>
@@ -127,7 +127,7 @@ const NavHeader = ({
     );
   };
 
-  return isNavigating ? <NavigateHeader /> : <ChooseHeader />;
+  return isNavigating ? renderNavigateHeader() : renderChooseHeader();
 };
 
 export default NavHeader;

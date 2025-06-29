@@ -1,15 +1,11 @@
 import { motion, type PanInfo, useAnimation } from "motion/react";
+import { useQueryState } from "nuqs";
 import { useEffect, useMemo } from "react";
 import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
 import useLocationParams from "@/hooks/useLocationParams";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
-import { type PanInfo, motion, useAnimation } from "motion/react";
-import { useQueryState } from "nuqs";
-import { useEffect, useMemo } from "react";
-import { IoIosClose } from "react-icons/io";
 
 interface Props {
   snapPoints: number[];

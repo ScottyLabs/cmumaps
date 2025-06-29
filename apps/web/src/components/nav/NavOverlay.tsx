@@ -1,12 +1,7 @@
-import { getBuildingsQueryOptions } from "@/api/apiClient";
-import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
-import { useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
-import NavCard from "./NavCard";
-import NavHeader from "./NavHeader";
+import { useEffect } from "react";
+import useIsMobile from "@/hooks/useIsMobile";
+import useBoundStore from "@/store";
 import NavOverlayMobile from "./NavOverlayMobile";
 
 const NavOverlay = () => {

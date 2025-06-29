@@ -1,8 +1,8 @@
+import type { Building } from "@cmumaps/common";
+import { useQueryState } from "nuqs";
 import Roundel from "@/components/shared/Roundel";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
-import type { Building } from "@cmumaps/common";
-import { useQueryState } from "nuqs";
 
 interface Props {
   building: Building;

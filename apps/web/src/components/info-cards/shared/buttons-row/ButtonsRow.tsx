@@ -1,19 +1,18 @@
+import { useQueryState } from "nuqs";
+import { FaArrowRight } from "react-icons/fa";
+import { TbXboxX } from "react-icons/tb";
 import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
-import { set } from "lodash";
-import { useQueryState } from "nuqs";
-import { FaArrowRight } from "react-icons/fa";
-import { TbXboxX } from "react-icons/tb";
 
 interface Props {
   middleButton?: React.JSX.Element;
 }
 
 const ButtonsRow = ({ middleButton }: Props) => {
-  const [dst, setDst] = useQueryState("dst");
-  const [src, setSrc] = useQueryState("src");
+  const [_src, setDst] = useQueryState("dst");
+  const [_dst, setSrc] = useQueryState("src");
   const { buildingCode } = useLocationParams();
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
