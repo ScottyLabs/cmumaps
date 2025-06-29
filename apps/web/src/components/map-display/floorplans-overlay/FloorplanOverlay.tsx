@@ -1,7 +1,6 @@
 import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
 import { useQuery } from "@tanstack/react-query";
 import { Annotation, Polygon } from "mapkit-react";
-import { useNavigate } from "react-router";
 import { getRoomsQueryOptions } from "@/api/apiClient";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";

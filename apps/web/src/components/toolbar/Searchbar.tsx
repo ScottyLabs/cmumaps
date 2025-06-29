@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";

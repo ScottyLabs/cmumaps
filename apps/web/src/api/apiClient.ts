@@ -2,7 +2,11 @@ import type { Buildings, GeoRooms } from "@cmumaps/common";
 import { queryOptions, skipToken } from "@tanstack/react-query";
 import env from "@/env";
 
-type QueryKey = ["buildings"] | ["rooms", string | null] | [];
+type QueryKey =
+  | ["buildings"]
+  | ["rooms", string | null]
+  | ["path", string | null, string | null]
+  | [];
 
 declare module "@tanstack/react-query" {
   interface Register {
@@ -38,4 +42,10 @@ export const getRoomsQueryOptions = (floorCode: string | null) =>
     queryFn: floorCode
       ? () => apiClient(`floors/${floorCode}/floorplan`)
       : skipToken,
+  });
+
+export const getPathQueryOptions = (src: string | null, dst: string | null) =>
+  queryOptions<GeoRooms>({
+    queryKey: ["path", src, dst],
+    queryFn: () => apiClient(`floors/path?start=${src}&end=${dst}`),
   });
