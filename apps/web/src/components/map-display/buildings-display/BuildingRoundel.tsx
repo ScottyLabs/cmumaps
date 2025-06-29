@@ -55,7 +55,8 @@ const BuildingRoundel = ({ map, building }: Props) => {
         longitude={building.labelLongitude}
         displayPriority="required"
       >
-        <div
+        <button
+          type="button"
           className="translate-y-1/2 cursor-pointer"
           onClick={(e) => {
             handleClick();
@@ -69,7 +70,7 @@ const BuildingRoundel = ({ map, building }: Props) => {
           }}
         >
           <Roundel code={building.code} />
-        </div>
+        </button>
       </Annotation>
     </div>
   );

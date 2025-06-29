@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import { type BuildingSlice, createBuildingSlice } from "./buildingSlice";
 import { type CardSlice, createCardSlice } from "./cardSlice";
 import { type FloorSlice, createFloorSlice } from "./floorSlice";

@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";

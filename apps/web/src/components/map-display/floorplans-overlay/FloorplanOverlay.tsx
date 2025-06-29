@@ -1,3 +1,7 @@
+import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
+import { useQuery } from "@tanstack/react-query";
+import { Annotation, Polygon } from "mapkit-react";
+import { useNavigate } from "react-router";
 import { getRoomsQueryOptions } from "@/api/apiClient";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
@@ -5,9 +9,6 @@ import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { getFloorCode } from "@/utils/floorUtils";
-import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
-import { useQuery } from "@tanstack/react-query";
-import { Annotation, Polygon } from "mapkit-react";
 
 interface Props {
   floor: Floor;
@@ -76,7 +77,9 @@ const FloorplanOverlay = ({ floor }: Props) => {
           longitude={room.labelPosition.longitude}
           displayPriority={"low"}
         >
-          <div
+          <button
+            type="button"
+            tabIndex={0}
             className="flex flex-col items-center"
             onClick={(e) => {
               handleSelectRoom(roomName, room);
@@ -91,7 +94,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
           >
             {showPin && <RoomPin room={{ ...room, name: roomName }} />}
             {renderRoomName()}
-          </div>
+          </button>
         </Annotation>
       </div>
     );

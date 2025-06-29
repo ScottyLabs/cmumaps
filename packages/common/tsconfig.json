@@ -1,15 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-    "outDir": "dist",
-    "declaration": true,
-    "sourceMap": true,
-    "strict": true,
-    "skipLibCheck": true
+    "outDir": "dist"
   },
-  "include": ["./**/*.ts", "src/types/geoRoomTypes.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"]
 }

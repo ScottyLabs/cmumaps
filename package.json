@@ -3,25 +3,39 @@
   "private": true,
   "packageManager": "bun@1.2.10",
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "start": "turbo run start",
     "build": "turbo build --parallel",
     "dev": "turbo dev --parallel",
-    "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
-    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
+    "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --filter=@cmumaps/rust-server --parallel",
+    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --filter=@cmumaps/rust-server --parallel",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
+    "dev:server": "turbo dev --filter=@cmumaps/server --parallel",
+    "dev:rust-server": "turbo dev --filter=@cmumaps/rust-server --parallel",
     "db-generate": "turbo run db-generate --filter=@cmumaps/server",
     "format": "turbo format --parallel",
     "lint": "turbo lint --parallel",
     "tsc": "turbo tsc --parallel",
-    "check": "turbo check --parallel"
+    "check": "biome check && turbo check --parallel",
+    "prepare": "husky",
+    "preinstall": "npx only-allow bun"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "2.0.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "latest",
-    "eslint": "^9.21.0",
-    "prettier": "^3.5.3",
+    "@types/web": "^0.0.243",
+    "husky": "^9.1.7",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"
   },
