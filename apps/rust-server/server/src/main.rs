@@ -1,5 +1,8 @@
 use std::sync::Arc;
 
+use axum::http::Method;
+use tower_http::cors::{Any, CorsLayer};
+
 use axum::{
     routing::get,
     Router,
@@ -30,6 +33,11 @@ async fn main() {
         index: Arc::new(index)
     };
 
+    // init cors middleware
+    let cors = CorsLayer::new()
+        .allow_methods([Method::GET, Method::POST])
+        .allow_origin(Any);
+
     println!("Loaded {} documents", app_state.docs.len());
 
     // build our application with a single route
@@ -37,6 +45,7 @@ async fn main() {
         .route("/", get(|| async { "Hello, World!" }))
         .route("/search", get(search::search))
         .route("/path", get(path::path))
+        .layer(cors)
         .with_state(app_state);
 
     // run our app with hyper, listening globally on port FAST = 3278
