@@ -1,4 +1,4 @@
-import type { LiveUser } from "@cmumaps/common";
+import type { LiveUser } from "@cmumaps/websocket";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import { getSocketId } from "../../middleware/webSocketMiddleware";

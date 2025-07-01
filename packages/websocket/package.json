@@ -1,0 +1,16 @@
+{
+  "name": "@cmumaps/websocket",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "format": "biome format",
+    "lint": "biome lint",
+    "tsc": "tsc -b",
+    "check": "tsc -b && biome check"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "^5.8.2"
+  }
+}
