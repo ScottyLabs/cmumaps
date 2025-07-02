@@ -3,6 +3,10 @@ import forwardArrowIconGrey from "@/assets/icons/nav/forward-arrow-grey.svg";
 import forwardArrowIconWhite from "@/assets/icons/nav/forward-arrow-white.svg";
 
 const NavDirectionsList = () => {
+  interface DirectionProps {
+    time: number;
+  }
+
   const pastDirections = [
     { time: 30 },
     { time: 25 },
@@ -19,7 +23,7 @@ const NavDirectionsList = () => {
     { time: 25 },
     { time: 30 },
   ];
-  const renderPastDirection = ({ time }, i) => {
+  const renderPastDirection = ({ time }: DirectionProps, i: number) => {
     return (
       <div className="px-12 py-6" key={i}>
         <div className="pb-3 text-light-grey">{time} MIN AGO</div>
@@ -42,7 +46,7 @@ const NavDirectionsList = () => {
     );
   };
 
-  const renderFutureDirection = ({ time }, i) => {
+  const renderFutureDirection = ({ time }: DirectionProps, i: number) => {
     return (
       <div className="px-12 py-6" key={i}>
         <div className="pb-3 text-nav-blue">IN {time} MIN</div>

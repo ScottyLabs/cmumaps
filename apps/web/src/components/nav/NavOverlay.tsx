@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import useClerkToken from "@/hooks/useClerkToken";
 import useIsMobile from "@/hooks/useIsMobile";
 import useBoundStore from "@/store";
 import NavOverlayMobile from "./NavOverlayMobile";
@@ -16,9 +14,7 @@ const NavOverlay = () => {
   const startNav = useBoundStore((state) => state.startNav);
   const endNav = useBoundStore((state) => state.endNav);
 
-  const token = useClerkToken();
-
-  const [path, setPath] = useState({
+  const [_path, setPath] = useState({
     fastest: null,
     indoor: null,
     outdoor: null,
@@ -87,7 +83,7 @@ const NavOverlay = () => {
           ]}`,
         );
       });
-  }, [src, dst]);
+  }, [src, dst, pathDist]);
 
   if (!dst || !src) {
     return;
