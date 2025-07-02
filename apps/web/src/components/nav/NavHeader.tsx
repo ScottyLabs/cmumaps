@@ -13,6 +13,7 @@ interface NavHeaderProps {
   setSrc: (_: string | null) => void;
   setDst: (_: string | null) => void;
   startNav: () => void;
+  listShown: boolean;
 }
 
 const NavHeader = ({
@@ -21,10 +22,15 @@ const NavHeader = ({
   setSrc,
   setDst,
   isNavigating,
+  listShown,
 }: NavHeaderProps) => {
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   const navigate = useNavigateLocationParams();
+
+  if (listShown) {
+    return;
+  }
 
   const srcName =
     src === "user"
@@ -77,7 +83,7 @@ const NavHeader = ({
             </div>
             <button
               type="button"
-              className="absolute top-[19.33px] right-[13.63px]"
+              className="absolute top-[0px] right-[13.63px]"
               onClick={() => {
                 setSrc("user");
               }}
@@ -94,7 +100,7 @@ const NavHeader = ({
                 setDst(temp);
               }}
             >
-              <img src={swapIcon} alt="cancel" />
+              <img src={swapIcon} alt="swap" />
             </button>
           </div>
         </div>

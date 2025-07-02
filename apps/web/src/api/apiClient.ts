@@ -43,9 +43,3 @@ export const getRoomsQueryOptions = (floorCode: string | null) =>
       ? () => apiClient(`floors/${floorCode}/floorplan`)
       : skipToken,
   });
-
-export const getPathQueryOptions = (src: string | null, dst: string | null) =>
-  queryOptions<GeoRooms>({
-    queryKey: ["path", src, dst],
-    queryFn: () => apiClient(`floors/path?start=${src}&end=${dst}`),
-  });

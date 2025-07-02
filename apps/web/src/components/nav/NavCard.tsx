@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
 
 interface NavHeaderProps {
   src: string;
@@ -7,6 +8,9 @@ interface NavHeaderProps {
   setSrc: (_: string | null) => void;
   setDst: (_: string | null) => void;
   startNav: () => void;
+  pathDist: number;
+  toggleListShown: () => void;
+  listShown: boolean;
 }
 
 // Frame component
@@ -15,6 +19,8 @@ const NavCard = ({
   setDst,
   isNavigating,
   startNav,
+  toggleListShown,
+  listShown,
 }: NavHeaderProps) => {
   // Navigation options data
   const navigationOptions = [
@@ -53,7 +59,7 @@ const NavCard = ({
   const [yControl, setYControl] = useState(300);
 
   useEffect(() => {
-    setYControl(isNavigating ? 63 : 0);
+    setYControl(isNavigating ? 64 : 0);
   }, [isNavigating]);
 
   const renderChooseCard = () => {
@@ -183,10 +189,25 @@ const NavCard = ({
 
   return (
     <div
-      className="btn-shadow-dark fixed inset-x-0 bottom-0 z-50 h-46 overflow-auto rounded-t-3xl bg-white shadow-lg transition duration-300 ease-in-out"
+      className="fixed inset-x-0 bottom-0 z-50 transition duration-300 ease-in-out"
       style={{ transform: `translateY(${yControl}px)` }}
     >
-      {isNavigating ? renderNavCard() : renderChooseCard()}
+      {isNavigating && (
+        <div className="flex justify-end p-4">
+          <button
+            type="button"
+            className="btn-shadow rounded-full"
+            onClick={toggleListShown}
+          >
+            <img src={navStackIcon} alt="directions list" />
+          </button>
+        </div>
+      )}
+      <div
+        className={`${listShown ? "shadow-2xl shadow-black" : "btn-shadow rounded-t-3xl"} z-50 h-46 overflow-auto bg-white shadow-lg`}
+      >
+        {isNavigating ? renderNavCard() : renderChooseCard()}
+      </div>
     </div>
   );
 };
