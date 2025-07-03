@@ -89,7 +89,7 @@ const UserMenu = ({ userProps, clerkFunctions }: UserMenuProps) => {
   };
 
   return (
-    <div className="btn-shadow-dark fixed inset-x-5 bottom-85 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
+    <div className="btn-shadow-dark fixed inset-x-5 bottom-77 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
       <div className="mb-4 flex items-center gap-3">{renderUserProfile()}</div>
       {menuButtons.map(renderMenuButton)}
     </div>
