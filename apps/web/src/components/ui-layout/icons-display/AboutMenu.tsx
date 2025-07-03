@@ -1,6 +1,6 @@
 const AboutMenu = () => {
   return (
-    <div className="btn-shadow-dark fixed inset-x-5 top-5 bottom-85 z-50 overflow-auto rounded-lg bg-white shadow-lg">
+    <div className="btn-shadow-dark fixed inset-x-5 top-5 bottom-77 z-50 overflow-auto rounded-lg bg-white shadow-lg">
       <h5 className="px-2 py-1">About CMU Maps</h5>
     </div>
   );

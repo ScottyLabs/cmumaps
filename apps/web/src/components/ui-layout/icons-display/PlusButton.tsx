@@ -19,7 +19,7 @@ const PlusButton = ({
       type="button"
       className={`${
         isMenuOpen ? "btn-shadow-dark" : "btn-shadow"
-      } fixed right-5 bottom-16 z-50 rounded-full`}
+      } fixed left-5 bottom-8 z-50 rounded-full`}
       onClick={onClick}
     >
       <div
