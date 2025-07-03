@@ -34,10 +34,10 @@
     /* https://github.com/tsconfig/bases/blob/main/bases/strictest.json */
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
-    "exactOptionalPropertyTypes": false,
-    "noImplicitReturns": false,
     "isolatedModules": true,
     "checkJs": true,
     "esModuleInterop": true
+    // "exactOptionalPropertyTypes": true,
+    // "noImplicitReturns": true,
   }
 }

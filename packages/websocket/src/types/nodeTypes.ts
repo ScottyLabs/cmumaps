@@ -1,4 +1,4 @@
-import type { NodeInfo } from "../types";
+import type { NodeInfo } from "@cmumaps/common/src/types";
 
 export interface CreateNodePayload {
   nodeId: string;

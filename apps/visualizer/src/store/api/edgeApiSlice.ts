@@ -3,7 +3,7 @@ import type {
   CreateEdgePayload,
   DeleteEdgeAcrossFloorsPayload,
   DeleteEdgePayload,
-} from "@cmumaps/common";
+} from "@cmumaps/websocket";
 
 import { toast } from "react-toastify";
 

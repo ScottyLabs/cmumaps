@@ -2,7 +2,7 @@ import {
   type LiveUser,
   WebSocketEvents,
   type WebSocketPayloads,
-} from "@cmumaps/common";
+} from "@cmumaps/websocket";
 import type { Server } from "socket.io";
 
 export class WebSocketService {

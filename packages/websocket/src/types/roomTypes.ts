@@ -1,4 +1,4 @@
-import type { RoomInfo } from "../types";
+import type { RoomInfo } from "@cmumaps/common/src/types";
 
 export interface CreateRoomPayload {
   roomId: string;
