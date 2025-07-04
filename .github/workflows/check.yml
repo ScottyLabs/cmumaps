@@ -12,5 +12,6 @@ jobs:
         with:
             bun-version: latest 
       - run: bun install
+      - run: bun run db-generate
       - name: Check
         run: bun run check
