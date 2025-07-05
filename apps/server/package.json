@@ -7,7 +7,8 @@
     "build": "bun build index.ts --outdir=dist --target=bun",
     "server": "dotenv -e .env -- tsx watch index.ts",
     "tsoa": "onchange '**/*.ts' '!build/**' -- tsoa spec-and-routes",
-    "dev": "concurrently \"bun run server\" \"bun run tsoa\"",
+    "openapi": "openapi-typescript ./build/swagger.yaml -o ./build/swagger.d.ts",
+    "dev": "concurrently \"bun run server\" \"bun run tsoa & bun run openapi\"",
     "dev:host": "bun run dev",
     "db-generate": "prisma generate",
     "format": "biome format",
@@ -38,9 +39,9 @@
     "esbuild": "^0.23.0",
     "globals": "^16.0.0",
     "onchange": "^7.1.0",
+    "openapi-typescript": "^7.8.0",
     "prisma": "^6.8.2",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2",
-    "typescript-eslint": "^8.28.0"
+    "typescript": "^5.8.2"
   }
 }
