@@ -17,7 +17,7 @@
     "@clerk/clerk-react": "^5.24.1",
     "@cmumaps/common": "workspace:*",
     "@tailwindcss/vite": "^4.0.9",
-    "@tanstack/react-query": "^5.76.1",
+    "@tanstack/react-query": "^5.81.5",
     "lodash": "^4.17.21",
     "mapkit-react": "^1.16.1",
     "motion": "^12.6.2",
