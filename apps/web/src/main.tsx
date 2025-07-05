@@ -1,12 +1,13 @@
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-react";
 import type { Clerk } from "@clerk/types";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
+import env from "@/env.ts";
 import App from "./App.tsx";
 import "./index.css";
-import env from "@/env.ts";
 
 // https://clerk.com/docs/components/control/clerk-loaded
 declare global {
@@ -22,23 +23,25 @@ const posthog_options = {
 
 // Clerk settings
 const PUBLISHABLE_KEY = env.VITE_CLERK_PUBLISHABLE_KEY;
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Add your Clerk Publishable Key to the .env file");
-}
+
+// Create a query client
+const queryClient = new QueryClient();
 
 // Render the App
 createRoot(document.getElementById("root") as HTMLElement).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <ClerkLoaded>
       <BrowserRouter>
-        <StrictMode>
+        <QueryClientProvider client={queryClient}>
           <PostHogProvider
             apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
             options={posthog_options}
           >
-            <App />
+            <StrictMode>
+              <App />
+            </StrictMode>
           </PostHogProvider>
-        </StrictMode>
+        </QueryClientProvider>
       </BrowserRouter>
     </ClerkLoaded>
   </ClerkProvider>,

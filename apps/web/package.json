@@ -21,6 +21,8 @@
     "lodash": "^4.17.21",
     "mapkit-react": "^1.16.1",
     "motion": "^12.6.2",
+    "openapi-fetch": "^0.14.0",
+    "openapi-react-query": "^0.5.0",
     "posthog-js": "^1.234.6",
     "react": "^19.0.0",
     "react-device-detect": "^2.2.3",
@@ -44,7 +46,7 @@
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "globals": "^15.15.0",
-    "typescript": "~5.7.2",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.26.0",
     "vite": "^6.2.0"
   }
