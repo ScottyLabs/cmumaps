@@ -1,8 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  getBuildingsQueryOptions,
-  getRoomsQueryOptions,
-} from "@/api/apiClient";
+import $api from "@/api/client";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
 import useIsMobile from "@/hooks/useIsMobile";
@@ -16,8 +12,13 @@ const RoomCard = () => {
 
   // Query data
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
-  const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
+  const { data: buildings } = $api.useQuery("get", "/buildings");
+  const { data: rooms } = $api.useQuery(
+    "get",
+    "/floors/{floorCode}/floorplan",
+    { params: { path: { floorCode: floorCode ?? "" } } },
+    { enabled: !!floorCode },
+  );
 
   if (!roomName || !rooms || !buildings) {
     return;

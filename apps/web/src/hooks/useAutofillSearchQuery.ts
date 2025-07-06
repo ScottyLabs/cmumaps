@@ -1,19 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-
 import { useCallback, useEffect } from "react";
 
-import {
-  getBuildingsQueryOptions,
-  getRoomsQueryOptions,
-} from "@/api/apiClient";
+import $api from "@/api/client";
 import useLocationParams from "@/hooks/useLocationParams";
 import { buildFloorCode } from "@/utils/floorUtils";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
   const { buildingCode, roomName, floor } = useLocationParams();
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: buildings } = $api.useQuery("get", "/buildings");
   const floorCode = buildFloorCode(buildingCode, floor);
-  const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
+  const { data: rooms } = $api.useQuery(
+    "get",
+    "/floors/{floorCode}/floorplan",
+    { params: { path: { floorCode: floorCode ?? "" } } },
+    { enabled: !!floorCode },
+  );
 
   const autoFillSearchQuery = useCallback(() => {
     // return the room name if a room is selected
