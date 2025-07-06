@@ -1,6 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-import { getBuildingsQueryOptions } from "@/api/apiClient";
+import $api from "@/api/client";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
@@ -19,7 +18,7 @@ const FloorSwitcher = () => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
 
   // Query data
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: buildings } = $api.useQuery("get", "/buildings");
 
   // Custom hooks
   const { isCardOpen } = useLocationParams();

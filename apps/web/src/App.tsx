@@ -1,7 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
-import $api from "@/api/client";
 import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
 import LoginModal from "@/components/login/LoginModal";
 import MapDisplay from "@/components/map-display/MapDisplay";
@@ -11,14 +10,6 @@ import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
-
-  const { data: defaultFloor, error: defaultFloorError } = $api.useQuery(
-    "get",
-    "/floors/{floorCode}/floorplan",
-    { params: { path: { floorCode: "GHC-1" } } },
-  );
-  console.log(defaultFloor);
-  console.log(defaultFloorError);
 
   // Identify PostHog user with Clerk ID
   const { user } = useUser();
