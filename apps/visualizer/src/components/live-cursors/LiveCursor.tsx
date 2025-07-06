@@ -1,4 +1,4 @@
-import type { LiveUser } from "@cmumaps/common";
+import type { LiveUser } from "@cmumaps/websocket";
 
 import { useEffect } from "react";
 import { GiArrowCursor } from "react-icons/gi";

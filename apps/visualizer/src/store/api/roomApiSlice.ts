@@ -2,7 +2,7 @@ import type {
   CreateRoomPayload,
   DeleteRoomPayload,
   UpdateRoomPayload,
-} from "@cmumaps/common";
+} from "@cmumaps/websocket";
 
 import { toast } from "react-toastify";
 

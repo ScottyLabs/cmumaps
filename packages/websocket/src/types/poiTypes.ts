@@ -1,4 +1,4 @@
-import type { PoiInfo, PoiType } from "../types";
+import type { PoiInfo, PoiType } from "@cmumaps/common/src/types";
 
 export interface CreatePoiPayload {
   poiId: string;
