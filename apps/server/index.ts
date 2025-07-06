@@ -1,8 +1,10 @@
 import http from "node:http";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
-import express from "express";
+import type { ErrorRequestHandler, Request, Response } from "express";
+import express, { type NextFunction } from "express";
 import { Server } from "socket.io";
+import { ValidateError } from "tsoa";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
 import { socketAuth } from "./src/middleware/authMiddleware";
@@ -52,6 +54,31 @@ app.use("/api", apiRouter);
 // app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
 // app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
 // app.use(notFoundHandler);
+
+// Error Handling and Not Found Handlers from https://tsoa-community.github.io/docs/error-handling.html
+app.use(function errorHandler(
+  err: unknown,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  if (err instanceof ValidateError) {
+    console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
+    return res.status(422).json({
+      message: "Validation Failed",
+      details: err?.fields,
+    });
+  }
+  if (err instanceof Error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+
+  next();
+} as ErrorRequestHandler);
+
+app.use(function notFoundHandler(_req, res: Response) {
+  res.status(404).send({ message: "Not Found" });
+});
 
 const port = process.env.PORT || 80;
 server.listen(port, () => {
