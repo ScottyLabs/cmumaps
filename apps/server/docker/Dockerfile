@@ -16,7 +16,7 @@ COPY . .
 RUN bun install --frozen-lockfile
 
 # Build the project
-RUN bunx turbo run build --filter=@cmumaps/server...
+RUN bun run build --filter=@cmumaps/server...
 
 # Final runtime image
 FROM base AS runner
@@ -32,4 +32,4 @@ COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/di
 COPY --from=builder --chown=server:nodejs /app/node_modules/.prisma /app/node_modules/.prisma
 
 EXPOSE 3000
-CMD ["bun", "run", "start", "--filter=@cmumaps/server..."]
+CMD ["bun", "apps/server/dist/server.js"]
