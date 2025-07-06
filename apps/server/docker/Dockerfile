@@ -32,4 +32,4 @@ COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/di
 COPY --from=builder --chown=server:nodejs /app/node_modules/.prisma /app/node_modules/.prisma
 
 EXPOSE 3000
-CMD ["bun", "apps/server/dist/index.js"]
+CMD ["bun", "run", "start", "--filter=@cmumaps/server..."]
