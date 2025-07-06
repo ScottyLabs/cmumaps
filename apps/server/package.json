@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node dist/index.cjs",
-    "build": "bun build index.ts --outdir=dist --target=bun",
-    "server": "dotenv -e .env -- tsx watch index.ts",
+    "start": "bun dist/server.js",
+    "build": "bun build server.ts --outdir=dist --target=bun",
+    "server": "dotenv -e .env -- tsx watch server.ts",
     "tsoa": "onchange '**/*.ts' '!build/**' -- tsoa spec-and-routes",
     "openapi": "onchange './build/swagger.yaml' -- openapi-typescript ./build/swagger.yaml -o ./build/swagger.d.ts",
     "dev": "concurrently 'bun run server' 'bun run tsoa' 'bun run openapi'",

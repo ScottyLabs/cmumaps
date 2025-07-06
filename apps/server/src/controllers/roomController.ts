@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { webSocketService } from "../../index";
+import { webSocketService } from "../../server";
 import { handleControllerError } from "../errors/errorHandler";
 import { floorService } from "../services/floorService";
 import { roomService } from "../services/roomService";
