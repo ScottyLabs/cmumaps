@@ -5,7 +5,7 @@ use std::collections::{HashMap, HashSet};
 use std::str::FromStr;
 
 use crate::turns::get_precise_route;
-use crate::types;
+use crate::types::{self, Coordinate};
 
 /// Converts a waypoint (Room, Building, or Coordinate as PlaceOnMap or UserPosition)
 pub fn waypoint_to_nodes(waypoint: types::Waypoint, graph: &types::Graph, buildings: &HashMap<String, types::Building>) -> Vec<String> {
@@ -48,6 +48,28 @@ pub fn waypoint_to_nodes(waypoint: types::Waypoint, graph: &types::Graph, buildi
     
 }
 
+pub fn l2_norm(a: &types::Coordinate, b: &types::Coordinate) -> CmpF32 {
+    // Convert coordinates to flat using Mercator projection
+    let lat_diff = (b.latitude - a.latitude) * 111318.8450631976; // Convert latitude difference to meters
+    let lon_diff = (b.longitude - a.longitude) * 84719.3945182816; // Convert longitude difference to meters
+    CmpF32((lat_diff * lat_diff + lon_diff * lon_diff).sqrt())
+}
+
+pub fn heuristic(a: &types::Coordinate, end_nodes: &Vec<Coordinate>) -> CmpF32 {
+    // Use the closest end node as the heuristic
+    let mut best_dist = None;
+    for end_node in end_nodes {
+        let dist = l2_norm(a, end_node);
+        match best_dist {
+            None => best_dist = Some(dist),
+            Some(cmp_dist) => if dist < cmp_dist {
+                best_dist = Some(dist);
+            }
+        }
+    }
+    best_dist.unwrap_or(CmpF32(0.0))
+}
+
 /// Finds best (shortest iff outside_cost_mul == 1) path between two sets of nodes
 /// in the graph, picking  penalizing distance outside by a multiplier (outside_cost_mul)
 /// Returns the penalized cost and, inside the GraphPath, the penalty amount
@@ -56,6 +78,10 @@ pub fn find_path(start_nodes: &Vec<String>, end_nodes: &Vec<String>, graph: &typ
     /// Init work list and empty explored set
     let mut pq = PriorityQueue::new();
     let mut explored_set = HashSet::new();
+
+    let end_coords = end_nodes.iter()
+        .map(|node_id| graph.get(node_id).unwrap().coordinate.clone())
+        .collect::<Vec<types::Coordinate>>();
 
     // Iter over start nodes, returning on first (not least) path found
     for node_id in start_nodes {
@@ -94,8 +120,9 @@ pub fn find_path(start_nodes: &Vec<String>, end_nodes: &Vec<String>, graph: &typ
             for node in end_nodes.clone() {
                 let last_node_id = cur_path[path_len-1].clone();
                 if node == last_node_id {
+                    println!("{}, {}", cur_path.len(), explored_set.len());
                     return Some(types::Route {
-                        distance: length,
+                        distance: length - heuristic(&last_node.coordinate, &end_coords),
                         path: types::GraphPath{
                             path: cur_path,
                             add_cost: cur_add_cost
@@ -125,12 +152,13 @@ pub fn find_path(start_nodes: &Vec<String>, end_nodes: &Vec<String>, graph: &typ
                         edge.dist
                     }
                 };
-                let new_length = -float_len + step_dist; 
+                let new_length = CmpF32(float_len - step_dist) - 
+                    heuristic(&last_node.coordinate, &end_coords);
                 let cur_add_f32 = cur_add_cost.parse::<f32>().unwrap();
                 pq.push(types::GraphPath{
                     path: path_copy,
                     add_cost: (cur_add_f32 + outside_add).to_string()
-                }, types::CmpF32(-new_length));
+                }, new_length);
             }
         }
     }

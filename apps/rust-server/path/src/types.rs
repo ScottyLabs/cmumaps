@@ -5,12 +5,13 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
+use std::ops::Sub;
 use std::path::Path;
 use std::sync::Arc;
 
 
 
-#[derive(Debug, PartialOrd, PartialEq, Serialize)]
+#[derive(Debug, PartialOrd, PartialEq, Serialize, Clone, Copy)]
 pub struct CmpF32(pub f32);
 
 impl Eq for CmpF32 {}
@@ -23,6 +24,14 @@ impl Ord for CmpF32 {
 	    // Choose what to do with NaNs, for example:
 	    Ordering::Less
 	}
+    }
+}
+
+impl Sub for CmpF32 {
+    type Output = CmpF32;
+
+    fn sub(self, other: CmpF32) -> CmpF32 {
+        CmpF32(self.0 - other.0)
     }
 }
 
