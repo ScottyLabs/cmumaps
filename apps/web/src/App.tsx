@@ -12,9 +12,17 @@ import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
-  const { data: buildings, error } = $api.useQuery("get", "/buildings");
-  console.log(buildings);
-  console.log(error);
+  // const { data: buildings, error } = $api.useQuery("get", "/buildings");
+  // console.log(buildings);
+  // console.log(error);
+
+  const { data: defaultFloor, error: defaultFloorError } = $api.useQuery(
+    "get",
+    "/buildings/{buildingCode}/default-floor",
+    { params: { path: { buildingCode: "a" } } },
+  );
+  console.log(defaultFloor);
+  console.log(defaultFloorError);
 
   // Identify PostHog user with Clerk ID
   const { user } = useUser();

@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import { ValidateError } from "tsoa";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
+import { BuildingError } from "./src/errors/error";
 import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./src/services/webSocketService";
 
@@ -69,7 +70,14 @@ app.use(function errorHandler(
       details: err?.fields,
     });
   }
+
+  if (err instanceof BuildingError) {
+    res.status(404).json({ code: err.code });
+    return;
+  }
+
   if (err instanceof Error) {
+    console.error(`Error ${req.path}`, err);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 

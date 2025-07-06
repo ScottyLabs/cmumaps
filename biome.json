@@ -50,5 +50,10 @@
         "noUselessElse": "error"
       }
     }
+  },
+  "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    }
   }
 }
