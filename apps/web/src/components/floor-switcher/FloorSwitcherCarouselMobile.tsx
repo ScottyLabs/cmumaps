@@ -1,7 +1,7 @@
-import useBoundStore from "@/store";
 import type { Building } from "@cmumaps/common";
 import { animate, motion, useTransform } from "framer-motion";
 import type { MotionValue } from "motion/react";
+import useBoundStore from "@/store";
 
 interface FloorSwitcherButtonProps {
   building: Building;
