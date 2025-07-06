@@ -12,14 +12,10 @@ import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
-  // const { data: buildings, error } = $api.useQuery("get", "/buildings");
-  // console.log(buildings);
-  // console.log(error);
-
   const { data: defaultFloor, error: defaultFloorError } = $api.useQuery(
     "get",
-    "/buildings/{buildingCode}/default-floor",
-    { params: { path: { buildingCode: "a" } } },
+    "/floors/{floorCode}/floorplan",
+    { params: { path: { floorCode: "GHC-1" } } },
   );
   console.log(defaultFloor);
   console.log(defaultFloorError);
