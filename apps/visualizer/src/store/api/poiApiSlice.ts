@@ -2,7 +2,7 @@ import type {
   CreatePoiPayload,
   DeletePoiPayload,
   UpdatePoiPayload,
-} from "@cmumaps/common";
+} from "@cmumaps/websocket";
 
 import { toast } from "react-toastify";
 

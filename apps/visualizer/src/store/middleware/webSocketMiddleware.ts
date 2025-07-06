@@ -1,9 +1,9 @@
-import type { LiveUser } from "@cmumaps/common";
 import {
+  type LiveUser,
   WebSocketEvents,
   type WebSocketEventType,
   type WebSocketPayloads,
-} from "@cmumaps/common";
+} from "@cmumaps/websocket";
 import type { Action, Middleware } from "@reduxjs/toolkit";
 import { io, type Socket } from "socket.io-client";
 import env from "../../env";

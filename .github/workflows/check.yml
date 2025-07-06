@@ -1,0 +1,17 @@
+name: Check
+on:   
+  pull_request:
+    branches:
+      - main
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest 
+      - run: bun install
+      - run: bun run db-generate
+      - name: Check
+        run: bun run check

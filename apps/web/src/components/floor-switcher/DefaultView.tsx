@@ -35,7 +35,7 @@ const DefaultView = ({ building, floor, setShowFloorPicker }: Props) => {
         {building.floors.map((floorLevel) => (
           <div
             key={floorLevel}
-            className={`m-[1px] h-1 w-1 rounded-full ${floorLevel === floor.level ? "bg-black" : "bg-gray-400"}`}
+            className={`m-0.25 h-1 w-1 rounded-full ${floorLevel === floor.level ? "bg-black" : "bg-gray-400"}`}
           />
         ))}
       </div>
