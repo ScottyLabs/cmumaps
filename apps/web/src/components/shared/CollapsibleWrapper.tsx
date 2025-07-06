@@ -20,7 +20,8 @@ const CollapsibleWrapper = ({ title, children }: Props) => {
 
   return (
     <div className="flex flex-col overflow-hidden rounded">
-      <div
+      <button
+        type="button"
         className="flex cursor-pointer flex-col bg-white"
         onClick={() => setOpen(!open)}
         onKeyDown={(e) => {
@@ -30,7 +31,7 @@ const CollapsibleWrapper = ({ title, children }: Props) => {
         }}
       >
         {renderTrigger()}
-      </div>
+      </button>
       <div
         className={`overflow-hidden bg-white duration-500 ease-in-out ${
           open ? "flex h-full flex-col" : "h-0"

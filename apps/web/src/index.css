@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary-blue: #1e86ff;
+  --color-primary-red: #c41230;
+  --color-primary-green: #31b777;
+  --color-primary-grey: #bec1c6;
+
+  --color-nav-blue: #3d83d3;
+  --color-nav-grey: #828282;
+
+  --color-pale-blue: #e6f0ff;
+  --color-button-grey: #979797;
+
+  --color-light-blue: #f1f4fd;
+  --color-light-grey: #b0b0b0;
+  --color-blue-grey: #e6e6e6;
+  --color-dark-grey: #4c5564;
+}
+
 @layer base {
   html,
   body,
@@ -21,5 +39,8 @@
 @layer components {
   .btn-shadow {
     @apply shadow-md shadow-gray-400;
+  }
+  .btn-shadow-dark {
+    @apply shadow-md shadow-gray-500;
   }
 }

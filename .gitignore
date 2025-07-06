@@ -10,8 +10,14 @@ __pycache__/
 # Build
 dist/
 
+# Rust
+target/
+Cargo.lock
+
 # Misc
 .env
+.env.*
 .git
 .turbo
 .DS_Store
+Cargo.lock

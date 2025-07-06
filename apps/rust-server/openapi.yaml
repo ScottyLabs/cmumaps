@@ -1,0 +1,149 @@
+openapi: 3.0.4
+
+security:
+  - clerkAuth: [] # security scopes required for API calls
+
+info:
+  version: 1.0.0
+  title: CMUMaps pathfinding and search apis
+  description: CMUMaps pathfinding from Waypoint to Waypoint (where a waypoint is a Coordinate, roomId, or buildingCode) and CMUMaps search engine for rooms, courses, and events
+
+servers: 
+ - url: localhost:9000
+                
+components:
+  securitySchemes:
+    clerkAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    BadParam:
+      description: Missing or invalid required parameter
+  schemas:
+    path:
+      type: array
+      items: 
+        $ref: "#/components/schemas/navnode"
+    navnode: 
+      type: object
+      properties:
+        floor: 
+          type: object 
+        coordinate: 
+          type: object 
+        id: 
+          type: string 
+        instruction: 
+          type: string
+          nullable: true
+          description: This is not null if it marks a turn or event otherwise deemed notable by the instruction algorithm.  The most recent instructions should always be displayed
+
+
+
+paths:
+  /search:
+    get:
+      description: Returns top n (default 100) results by relevance to query
+      parameters:
+        - in: query
+          name: query
+          schema: 
+            type: string
+          required: true
+          description: the user's query
+      responses:
+        '200':
+          description: Successfully returned top n results 
+          content: 
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  type: object
+                  required:
+                    - id
+                  properties:
+                    id:
+                      type: string
+                      example: "d65471a3-1f77-4412-9acd-6079bed4fa84"
+                    nameWithSpace:
+                      type: string
+                      example: "CUC 220"
+                    fullNameWithSpace:
+                      type: string
+                      example: "Cohon University Center 220"
+                    labelPosition:
+                      type: object
+                      properties:
+                        latitude:
+                          type: number
+                          example: 40.44392022644891
+                        longitude:
+                          type: number
+                          example: -79.94220130436851
+                    type:
+                      type: string
+                      example: "Food"
+                    alias:
+                      type: string
+                      example: "Au Bon Pain at Skibo Café   ABP"
+                    numTerms:
+                      type: integer
+                      example: 6
+                    floor:
+                      type: object
+                      properties:
+                        buildingCode:
+                          type: string
+                          example: "CUC"
+                        level:
+                          type: string
+                          example: "2"
+        '400':
+          $ref: '#/components/responses/BadParam'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500': 
+          description: internal server error
+  /path:
+    get:
+      description: Returns multiple options for paths from the start to end, with "precise" directions
+      parameters:
+        - in: query
+          name: start
+          schema: 
+            type: string
+          required: true
+          description: a Waypoint (Coordinate, roomId, or buildingCode)
+        - in: query 
+          name: end
+          schema: 
+            type: string 
+          required: true
+      responses:
+        '200':
+          description: Successfully returned path + directions
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  fastest: 
+                    $ref: "#/components/schemas/path"
+                  outdoor: 
+                    $ref: "#/components/schemas/path"
+                  indoor: 
+                    $ref: "#/components/schemas/path"
+                required:
+                  - fastest
+
+                    
+        '400':
+          $ref: '#/components/responses/BadParam'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500': 
+          description: internal server error

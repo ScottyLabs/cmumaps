@@ -1,9 +1,9 @@
+import { useUser } from "@clerk/clerk-react";
+import { useQuery } from "@tanstack/react-query";
 import { getBuildingsQueryOptions } from "@/api/apiClient";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
-import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 import FloorSwitcherDisplayMobile from "./FloorSwitcherDisplayMobile";
 

@@ -1,4 +1,4 @@
-import { PdfCoordinate } from "./coordTypes";
+import type { PdfCoordinate } from "./coordTypes";
 
 export const ValidCrossFloorEdgeTypes = [
   "Ramp",

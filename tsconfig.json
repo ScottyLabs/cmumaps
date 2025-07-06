@@ -1,4 +1,9 @@
 {
+  // This is based on https://bun.sh/docs/typescript#suggested-compileroptions
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Bun",
+  "docs": "https://bun.sh/docs/typescript",
+
   "compilerOptions": {
     // Environment setup & latest features
     "lib": ["ESNext"],
@@ -22,8 +27,17 @@
     "noImplicitOverride": true,
 
     // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    /* https://github.com/tsconfig/bases/blob/main/bases/strictest.json */
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "isolatedModules": true,
+    "checkJs": true,
+    "esModuleInterop": true
+    // "exactOptionalPropertyTypes": true,
+    // "noImplicitReturns": true,
   }
 }

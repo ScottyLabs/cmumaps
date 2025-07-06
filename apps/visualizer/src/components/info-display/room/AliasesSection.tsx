@@ -20,7 +20,7 @@ const AliasesSection = ({ aliases }: Props) => {
   return (
     <ReactSortable list={list} setList={setList}>
       {list.map((item) => (
-        <div key={item.id}>{item.name}</div>
+        <div key={item.id}>{item["name"]}</div>
       ))}
     </ReactSortable>
   );
