@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
-import { Get, Path, Route } from "tsoa";
+import { Get, Middlewares, Path, Route } from "tsoa";
 import { handleControllerError } from "../errors/errorHandler";
+import { checkAuth } from "../middleware/authMiddleware";
 import { floorService } from "../services/floorService";
 
 @Route("/floors")
@@ -40,6 +41,7 @@ export class FloorController {
   }
 
   @Get("/:floorCode/floorplan")
+  @Middlewares(checkAuth)
   async getFloorplan(@Path() floorCode: string) {
     return await floorService.getFloorplan(floorCode);
   }
