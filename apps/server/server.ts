@@ -13,10 +13,7 @@ import { WebSocketService } from "./src/services/webSocketService";
 
 const app = express();
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS_REGEX?.split(",").map(
-    (origin) => new RegExp(origin),
-  ),
-  credentials: true,
+  origin: "*",
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "8mb" }));
