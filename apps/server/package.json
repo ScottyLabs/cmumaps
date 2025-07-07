@@ -29,12 +29,15 @@
     "@prisma/client": "^6.8.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
     "socket.io": "^4.8.1",
     "tsoa": "^6.6.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.11.24",
     "concurrently": "^9.2.0",
     "dotenv-cli": "^8.0.0",
