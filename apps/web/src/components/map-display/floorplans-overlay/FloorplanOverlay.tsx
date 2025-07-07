@@ -22,14 +22,14 @@ const FloorplanOverlay = ({ floor }: Props) => {
   const showRoomNames = useBoundStore((state) => state.showRoomNames);
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
-  // Query data
+  // Get auth token
   const [token, setToken] = useState<string | null>(null);
   const { getToken } = useAuth();
-
   useEffect(() => {
     getToken().then((token) => setToken(token));
   }, [getToken]);
 
+  // Query data
   const floorCode = getFloorCode(floor);
   const { data: rooms } = $api.useQuery(
     "get",
