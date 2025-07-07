@@ -1,5 +1,7 @@
+import { useAuth } from "@clerk/clerk-react";
 import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
 import { Annotation, Polygon } from "mapkit-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import $api from "@/api/client";
 import RoomPin from "@/components/shared/RoomPin";
@@ -21,12 +23,22 @@ const FloorplanOverlay = ({ floor }: Props) => {
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
   // Query data
+  const [token, setToken] = useState<string | null>(null);
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    getToken().then((token) => setToken(token));
+  }, [getToken]);
+
   const floorCode = getFloorCode(floor);
   const { data: rooms } = $api.useQuery(
     "get",
     "/floors/{floorCode}/floorplan",
-    { params: { path: { floorCode: floorCode ?? "" } } },
-    { enabled: !!floorCode },
+    {
+      params: { path: { floorCode: floorCode ?? "" } },
+      headers: { Authorization: `Bearer ${token}` },
+    },
+    { enabled: !!floorCode && !!token },
   );
 
   // Custom hooks
