@@ -1,12 +1,11 @@
-import type { Request, Response } from "express";
-import { Get, Middlewares, Path, Route } from "tsoa";
+import type * as express from "express";
+import { Get, Path, Route, Security } from "tsoa";
 import { handleControllerError } from "../errors/errorHandler";
-import { checkAuth } from "../middleware/authMiddleware";
 import { floorService } from "../services/floorService";
 
 @Route("/floors")
 export class FloorController {
-  async getFloorGraph(req: Request, res: Response) {
+  async getFloorGraph(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
     try {
@@ -18,7 +17,7 @@ export class FloorController {
     }
   }
 
-  async getFloorRooms(req: Request, res: Response) {
+  async getFloorRooms(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
     try {
@@ -29,7 +28,7 @@ export class FloorController {
     }
   }
 
-  async getFloorPois(req: Request, res: Response) {
+  async getFloorPois(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
     try {
@@ -40,9 +39,9 @@ export class FloorController {
     }
   }
 
+  @Security("bearerAuth", [])
   @Get("/:floorCode/floorplan")
-  @Middlewares(checkAuth)
-  async getFloorplan(@Path() floorCode: string) {
+  public async getFloorplan(@Path() floorCode: string) {
     return await floorService.getFloorplan(floorCode);
   }
 }
