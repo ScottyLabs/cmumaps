@@ -1,22 +1,51 @@
 // https://tsoa-community.github.io/docs/authentication.html#authentication
 // https://medium.com/@alexandre.penombre/tsoa-the-library-that-will-supercharge-your-apis-c551c8989081
-import { getAuth } from "@clerk/express";
 import type * as express from "express";
+import jwt from "jsonwebtoken";
+import jwksClient from "jwks-rsa";
+
+const client = jwksClient({
+  jwksUri: process.env.AUTH_JWKS_URI || "",
+});
 
 export function expressAuthentication(
   request: express.Request,
   securityName: string,
   _scopes?: string[],
 ) {
-  const response = request.res;
-  if (securityName !== "bearerAuth") {
-    response?.status(401).json({ message: "No token provided" });
-  }
+  return new Promise((resolve, reject) => {
+    const response = request.res;
+    if (securityName !== "oauth2") {
+      response?.status(401).json({ message: "Invalid security name" });
+      return reject({});
+    }
 
-  const auth = getAuth(request);
-  if (!auth.userId) {
-    response?.status(401).json({ message: "Invalid token" });
-  }
+    const token = request.headers.authorization?.split(" ")[1];
+    if (!token) {
+      response?.status(401).json({ message: "No token provided" });
+      return reject({});
+    }
 
-  return Promise.resolve({ id: auth.userId });
+    jwt.verify(
+      token,
+      (header, callback) => {
+        client.getSigningKey(header.kid, (_error, key) => {
+          const signingKey = key?.getPublicKey();
+          callback(null, signingKey);
+        });
+      },
+      { issuer: process.env.AUTH_ISSUER },
+      (error, decoded) => {
+        if (error) {
+          console.error("Authentication error:", error.message);
+          response?.status(401).json({ message: "Invalid token" });
+          return reject({});
+        }
+        if (decoded && typeof decoded === "object") {
+          console.log(decoded);
+          return resolve({});
+        }
+      },
+    );
+  });
 }

@@ -39,7 +39,7 @@ export class FloorController {
     }
   }
 
-  @Security("bearerAuth", [])
+  @Security("oauth2", [])
   @Get("/:floorCode/floorplan")
   public async getFloorplan(@Path() floorCode: string) {
     return await floorService.getFloorplan(floorCode);

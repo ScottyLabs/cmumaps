@@ -4,10 +4,11 @@
   "controllerPathGlobs": ["src/controllers/*.ts"],
   "spec": {
     "securityDefinitions": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      "oauth2": {
+        "type": "oauth2",
+        "flow": "implicit",
+        "authorizationUrl": "https://auth.slabs-dev.org/application/o/authorize/",
+        "scopes": {}
       }
     },
     "basePath": "/api",
