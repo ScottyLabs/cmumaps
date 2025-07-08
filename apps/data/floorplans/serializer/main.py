@@ -1,5 +1,6 @@
 # python floorplans/serializer/main.py <Optional file_to_serialize> <Optional floor_code>
 import sys
+import argparse
 from placements import placements_serializer
 from buildings import buildings_serializer
 from floorplans import floorplans_serializer
@@ -10,38 +11,79 @@ from all_graph import all_graph_serializer
 # Create floorplans.json using Alias and Room table
 # Create placements.json using Floor table
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:  # serialize all
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="A script to serialize different parts of floorplan data.",
+        formatter_class=argparse.RawTextHelpFormatter,  # For better help text formatting
+    )
+
+    parser.add_argument(
+        "serializer",
+        nargs="?",  # The argument is optional
+        choices=["placements", "buildings", "floorplans", "all-graph", "all"],
+        default="all",
+        help=(
+            "The name of the serializer to run.\n"
+            "  - placements: Serializes placement data.\n"
+            "  - buildings:  Serializes building data.\n"
+            "  - floorplans: Serializes all floorplans OR a specific one if floor_code is provided.\n"
+            "  - all-graph:  Serializes the graph data.\n"
+            "  - all:        (Default) Runs all serializers."
+        ),
+    )
+    parser.add_argument(
+        "floor_code",
+        nargs="?",  # The argument is optional
+        default=None,
+        help="Optional: The specific floor code (e.g., 'GH-1') to serialize. Only valid with the 'floorplans' serializer.",
+    )
+
+    args = parser.parse_args()
+
+    if args.floor_code and args.serializer != "floorplans":
+        parser.error(
+            "The 'floor_code' argument can only be used with the 'floorplans' serializer."
+        )
+        sys.exit(1)
+
+    if args.serializer == "floorplans":
+        if args.floor_code:
+            print(f"Serializing ONLY floor '{args.floor_code}'...")
+            floorplans_serializer(args.floor_code)
+            print("Serialized specific floorplan data into floorplans-serialized.json!")
+        else:
+            print("Serializing all floorplan data...")
+            floorplans_serializer()
+            print("Serialized all floorplans.json into floorplans-serialized.json!")
+
+    elif args.serializer == "placements":
+        print("Serializing placements data...")
         placements_serializer()
-        print("serialized placements.json into placements-serialized.json!")
+        print("Serialized placements.json into placements-serialized.json!")
+
+    elif args.serializer == "buildings":
+        print("Serializing buildings data...")
         buildings_serializer()
-        print("serialized buildings.json into buildings-serialized.json!")
-        floorplans_serializer()
-        print("serialized floorplans.json into floorplans-serialized.json!")
+        print("Serialized buildings.json into buildings-serialized.json!")
+
+    elif args.serializer == "all-graph":
+        print("Serializing all-graph data...")
         all_graph_serializer()
-        print("serialized all-graph.json into all-graph-serialized.json!")
+        print("Serialized all-graph.json into all-graph-serialized.json!")
 
-    file_to_serialize = str(sys.argv[1])
-
-    if len(sys.argv) > 2:
-        if file_to_serialize != "floorplans":
-            print("Usage: python floorplans/serializer/main.py floorplans GH-1")
-            sys.exit(1)
-        # python floorplans/serializer/main.py <floorplans> <GH-1>
-        floor_code = str(sys.argv[2])
-        print(f"Serializing ONLY floor {floor_code}")
-        floorplans_serializer(floor_code)
-
-    elif file_to_serialize == "placements":
-        print("serialized placements.json into placements-serialized.json!")
-
-    elif file_to_serialize == "buildings":
-        print("serialized buildings.json into buildings-serialized.json!")
-
-    elif file_to_serialize == "floorplans":
+    elif args.serializer == "all":
+        print("Running all serializers...")
+        placements_serializer()
+        print("Serialized placements.json into placements-serialized.json!")
+        buildings_serializer()
+        print("Serialized buildings.json into buildings-serialized.json!")
         floorplans_serializer()
-        print("serialized floorplans.json into floorplans-serialized.json!")
-
-    elif file_to_serialize == "all-graph":
+        print("Serialized floorplans.json into floorplans-serialized.json!")
         all_graph_serializer()
-        print("serialized all-graph.json into all-graph-serialized.json!")
+        print("Serialized all-graph.json into all-graph-serialized.json!")
+        print("\nAll serialization tasks are complete!")
+
+
+if __name__ == "__main__":
+    main()
