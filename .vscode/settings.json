@@ -18,5 +18,8 @@
   },
   "files.associations": {
     ".env.*": "properties"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
   }
 }
