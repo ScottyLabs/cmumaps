@@ -1,0 +1,9 @@
+bun
+docker
+prisma
+ruff
+turbo
+
+requests
+pyjwt
+python-dotenv
