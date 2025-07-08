@@ -13,6 +13,7 @@ export function expressAuthentication(
   securityName: string,
   _scopes?: string[],
 ) {
+  console.log("expressAuthentication", request.headers);
   return new Promise((resolve, reject) => {
     const response = request.res;
     if (securityName !== "oauth2") {
