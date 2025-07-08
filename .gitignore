@@ -17,3 +17,4 @@ dist/
 .turbo
 .DS_Store
 Cargo.lock
+/.vscode
