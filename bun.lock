@@ -101,7 +101,6 @@
       "name": "@cmumaps/web",
       "version": "0.0.0",
       "dependencies": {
-        "@clerk/clerk-react": "^5.24.1",
         "@cmumaps/common": "workspace:*",
         "@tailwindcss/vite": "^4.0.9",
         "@tanstack/react-query": "^5.81.5",
@@ -123,7 +122,6 @@
         "zustand": "^5.0.5",
       },
       "devDependencies": {
-        "@clerk/types": "^4.47.0",
         "@tanstack/eslint-plugin-query": "^5.74.7",
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/apple-mapkit-js-browser": "^5.78.1",

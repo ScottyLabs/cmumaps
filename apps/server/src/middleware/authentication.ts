@@ -4,6 +4,14 @@ import type * as express from "express";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { id?: string };
+    }
+  }
+}
+
 const client = jwksClient({
   jwksUri: process.env.AUTH_JWKS_URI || "",
 });
@@ -43,8 +51,7 @@ export function expressAuthentication(
           return reject({});
         }
         if (decoded && typeof decoded === "object") {
-          console.log(decoded);
-          return resolve({});
+          return resolve({ id: decoded.sub });
         }
       },
     );
