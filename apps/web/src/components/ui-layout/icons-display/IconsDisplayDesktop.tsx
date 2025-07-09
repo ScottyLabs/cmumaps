@@ -1,14 +1,13 @@
-import { UserButton } from "@clerk/clerk-react";
 import questionMarkIcon from "@/assets/icons/question-mark.png";
 
 const IconsDisplay = () => {
-  const renderClerkIcon = () => {
-    return (
-      <div className="fixed top-14 right-6">
-        <UserButton />
-      </div>
-    );
-  };
+  // const renderClerkIcon = () => {
+  //   return (
+  //     <div className="fixed top-14 right-6">
+  //       <UserButton />
+  //     </div>
+  //   );
+  // };
 
   const renderQuestionMarkIcon = () => {
     return (
@@ -31,7 +30,7 @@ const IconsDisplay = () => {
 
   return (
     <>
-      {renderClerkIcon()}
+      {/* {renderClerkIcon()} */}
       {renderQuestionMarkIcon()}
     </>
   );

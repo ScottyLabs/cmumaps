@@ -6,6 +6,6 @@ export class AuthController {
   @Security("oauth2")
   @Get("/userInfo")
   public async userInfo(@Request() request: express.Request) {
-    return { id: request.user?.id };
+    return request.user;
   }
 }

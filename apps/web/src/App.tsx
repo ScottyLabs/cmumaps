@@ -11,10 +11,8 @@ import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
-  // Identify PostHog user with Clerk ID
+  // Identify PostHog user with user ID
   const { data: user } = $api.useQuery("get", "/auth/userInfo");
-  console.log(user);
-
   const posthog = usePostHog();
   useEffect(() => {
     if (user) {

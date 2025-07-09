@@ -1,21 +1,22 @@
-import { SignInButton, useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
+import $api from "@/api/client";
+import env from "@/env";
 import useBoundStore from "@/store";
 
 const LoginModal = () => {
-  const { isSignedIn } = useUser();
+  const { data: user } = $api.useQuery("get", "/auth/userInfo");
   const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
   const hideLogin = useBoundStore((state) => state.hideLogin);
 
   // Should try to show the login modal again if the user signed out
   useEffect(() => {
-    if (!isSignedIn) {
+    if (!user) {
       sessionStorage.removeItem("showedLogin");
     }
-  }, [isSignedIn]);
+  }, [user]);
 
   // Don't show the login modal if the user is signed in
-  if (!isLoginOpen || isSignedIn) {
+  if (!isLoginOpen || user) {
     return null;
   }
 
@@ -33,9 +34,15 @@ const LoginModal = () => {
         <p className="text-sm">Log in to see floor plans.</p>
 
         <div className="flex justify-between">
-          <span className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 text-sm hover:bg-blue-200">
-            <SignInButton />
-          </span>
+          <button
+            type="button"
+            className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 text-sm hover:bg-blue-200"
+            onClick={() => {
+              window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
+            }}
+          >
+            Sign in
+          </button>
           <button
             type="button"
             className="cursor-pointer rounded-md bg-red-200 p-2 text-red-700 text-sm hover:bg-red-300"
