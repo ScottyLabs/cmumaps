@@ -2,19 +2,18 @@ import {
   ClerkLoaded,
   ClerkProvider,
   RedirectToSignIn,
-  useUser,
+  SignedIn,
+  SignedOut,
 } from "@clerk/clerk-react";
 import type { Clerk } from "@clerk/types";
-
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router";
-
 import "./index.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import ReactDOM from "react-dom/client";
 import env from "./env";
-import FloorPage from "./pages/FloorPage";
-import Home from "./pages/Home";
+import { routeTree } from "./routeTree.gen";
 import { USE_STRICT_MODE } from "./settings";
 import { store } from "./store/store";
 
@@ -25,44 +24,50 @@ declare global {
   }
 }
 
-const PUBLISHABLE_KEY = env.VITE_CLERK_PUBLISHABLE_KEY;
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Add your Clerk Publishable Key to the .env file");
+// Create a query client
+const queryClient = new QueryClient();
+
+// Create a new router instance
+const router = createRouter({ routeTree });
+
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-const ProtectedRoute = () => {
-  const { isSignedIn } = useUser();
-
-  if (!isSignedIn) {
-    return <RedirectToSignIn />;
-  }
-
-  return <Outlet />;
-};
-
 const AppContent = () => (
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+  <ClerkProvider
+    publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}
+    afterSignOutUrl="/"
+  >
     <ClerkLoaded>
-      <BrowserRouter>
-        <Provider store={store}>
-          <Routes>
-            <Route element={<ProtectedRoute />}>
-              <Route index element={<Home />} />
-              <Route path=":floorCode" element={<FloorPage />} />
-            </Route>
-          </Routes>
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <SignedIn>
+            <RouterProvider router={router} />
+          </SignedIn>
+        </QueryClientProvider>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
+      </Provider>
     </ClerkLoaded>
   </ClerkProvider>
 );
 
-createRoot(document.getElementById("root") as HTMLElement).render(
-  USE_STRICT_MODE ? (
-    <StrictMode>
+// Render the app
+const rootElement = document.getElementById("root") as HTMLElement;
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    USE_STRICT_MODE ? (
+      <StrictMode>
+        <AppContent />
+      </StrictMode>
+    ) : (
       <AppContent />
-    </StrictMode>
-  ) : (
-    <AppContent />
-  ),
-);
+    ),
+  );
+}
