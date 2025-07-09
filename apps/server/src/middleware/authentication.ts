@@ -7,7 +7,7 @@ import jwksClient from "jwks-rsa";
 declare global {
   namespace Express {
     interface Request {
-      user?: { id?: string };
+      user?: { id: string | null };
     }
   }
 }
@@ -21,7 +21,6 @@ export function expressAuthentication(
   securityName: string,
   _scopes?: string[],
 ) {
-  console.log("expressAuthentication", request.headers);
   return new Promise((resolve, reject) => {
     const response = request.res;
     if (securityName !== "oauth2") {
@@ -31,6 +30,9 @@ export function expressAuthentication(
 
     const token = request.headers.authorization?.split(" ")[1];
     if (!token) {
+      if (request.path === "/auth/userInfo") {
+        return resolve({ id: null });
+      }
       response?.status(401).json({ message: "No token provided" });
       return reject({});
     }
