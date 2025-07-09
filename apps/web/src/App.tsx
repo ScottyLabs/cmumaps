@@ -1,6 +1,6 @@
-import { useUser } from "@clerk/clerk-react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
+import $api from "@/api/client";
 import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
 import LoginModal from "@/components/login/LoginModal";
 import MapDisplay from "@/components/map-display/MapDisplay";
@@ -12,7 +12,9 @@ const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
   // Identify PostHog user with Clerk ID
-  const { user } = useUser();
+  const { data: user } = $api.useQuery("get", "/auth/userInfo");
+  console.log(user);
+
   const posthog = usePostHog();
   useEffect(() => {
     if (user) {
