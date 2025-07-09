@@ -36,12 +36,10 @@ export const webSocketService = new WebSocketService(io);
 app.use(clerkMiddleware());
 
 // Routes
+RegisterRoutes(app);
 app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
-
-const apiRouter = express.Router();
-RegisterRoutes(apiRouter);
 
 // Routes for database population
 // app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
