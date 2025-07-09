@@ -11,7 +11,7 @@
         "scopes": {}
       }
     },
-    "basePath": "/api",
+    "basePath": "/",
     "outputDirectory": "build",
     "specVersion": 3,
     "yaml": true

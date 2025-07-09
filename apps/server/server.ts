@@ -39,7 +39,6 @@ app.get("/", (_req, res) => {
 
 const apiRouter = express.Router();
 RegisterRoutes(apiRouter);
-app.use("/api", apiRouter);
 
 // Routes for database population
 // app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
