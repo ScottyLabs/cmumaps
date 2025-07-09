@@ -1,5 +1,4 @@
 import http from "node:http";
-import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import type { ErrorRequestHandler, Request, Response } from "express";
 import express, { type NextFunction } from "express";
@@ -8,7 +7,7 @@ import { ValidateError } from "tsoa";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
 import { BuildingError } from "./src/errors/error";
-import { socketAuth } from "./src/middleware/authMiddleware";
+// import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./src/services/webSocketService";
 
 const app = express();
@@ -27,13 +26,10 @@ const server = http.createServer(app);
 // Initialize Socket.IO with CORS and authentication middleware
 // https://socket.io/docs/v4/handling-cors/
 const io = new Server(server, { cors: corsOptions });
-io.use(socketAuth);
+// io.use(socketAuth);
 
 // Initialize WebSocket service
 export const webSocketService = new WebSocketService(io);
-
-// Clerk middleware to authenticate requests
-app.use(clerkMiddleware());
 
 // Routes
 RegisterRoutes(app);
