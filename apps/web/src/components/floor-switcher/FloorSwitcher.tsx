@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/clerk-react";
 import $api from "@/api/client";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
@@ -11,7 +10,7 @@ import FloorSwitcherDisplayMobile from "./FloorSwitcherDisplayMobile";
  */
 const FloorSwitcher = () => {
   // Library hooks
-  const { isSignedIn } = useUser();
+  const { data: user } = $api.useQuery("get", "/auth/userInfo");
   const isMobile = useIsMobile();
 
   // Global states
@@ -31,7 +30,7 @@ const FloorSwitcher = () => {
   }
 
   // Don't show the floor switcher if the user is not signed in
-  if (!isSignedIn) {
+  if (!user) {
     return <></>;
   }
 

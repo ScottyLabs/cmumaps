@@ -1,17 +1,13 @@
-import { useClerk, useUser } from "@clerk/clerk-react";
 import { useState } from "react";
 import coursesButtonDeselected from "@/assets/icons/plus_button_menu/courses-button-deselected.svg";
 import coursesButtonSelected from "@/assets/icons/plus_button_menu/courses-button-selected.svg";
 import questionMarkButtonDeselected from "@/assets/icons/plus_button_menu/question-mark-button-deselected.svg";
 import questionMarkButtonSelected from "@/assets/icons/plus_button_menu/question-mark-button-selected.svg";
-import userButtonDeselected from "@/assets/icons/plus_button_menu/user-button-deselected.svg";
-import userButtonSelected from "@/assets/icons/plus_button_menu/user-button-selected.svg";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
 import AboutMenu from "./AboutMenu";
 import CoursesMenu from "./CoursesMenu";
 import PlusButton from "./PlusButton";
-import UserMenu from "./UserMenu";
 
 enum PlusButtonMenuState {
   CLOSED = 0,
@@ -33,9 +29,6 @@ const IconsDisplayMobile = () => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
   const { isCardOpen } = useLocationParams();
 
-  const userProps = useUser();
-  const clerkFunctions = useClerk();
-
   const [plusButtonMenuState, setPlusButtonMenuState] = useState(
     PlusButtonMenuState.CLOSED,
   );
@@ -45,15 +38,15 @@ const IconsDisplayMobile = () => {
   }
 
   const menuButtons: MenuButtonProps[] = [
-    {
-      deselectedIcon: userButtonDeselected,
-      selectedIcon: userButtonSelected,
-      altText: "User Menu",
-      selectedMenuState: PlusButtonMenuState.USER_SELECTED,
-      menu: () => {
-        return UserMenu({ userProps, clerkFunctions });
-      },
-    },
+    // {
+    //   deselectedIcon: userButtonDeselected,
+    //   selectedIcon: userButtonSelected,
+    //   altText: "User Menu",
+    //   selectedMenuState: PlusButtonMenuState.USER_SELECTED,
+    //   menu: () => {
+    //     return UserMenu({ userProps, clerkFunctions });
+    //   },
+    // },
     {
       deselectedIcon: questionMarkButtonDeselected,
       selectedIcon: questionMarkButtonSelected,

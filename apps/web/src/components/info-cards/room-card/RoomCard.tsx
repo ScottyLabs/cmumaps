@@ -1,5 +1,3 @@
-import { useAuth } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
 import $api from "@/api/client";
 import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
@@ -12,24 +10,14 @@ const RoomCard = () => {
   const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed);
   const { buildingCode, roomName, floor } = useLocationParams();
 
-  // Get auth token
-  const [token, setToken] = useState<string | null>(null);
-  const { getToken } = useAuth();
-  useEffect(() => {
-    getToken().then((token) => setToken(token));
-  }, [getToken]);
-
   // Query data
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
   const { data: buildings } = $api.useQuery("get", "/buildings");
   const { data: rooms } = $api.useQuery(
     "get",
     "/floors/{floorCode}/floorplan",
-    {
-      params: { path: { floorCode: floorCode ?? "" } },
-      headers: { Authorization: `Bearer ${token}` },
-    },
-    { enabled: !!floorCode && !!token },
+    { params: { path: { floorCode: floorCode ?? "" } } },
+    { enabled: !!floorCode },
   );
 
   if (!roomName || !rooms || !buildings) {
