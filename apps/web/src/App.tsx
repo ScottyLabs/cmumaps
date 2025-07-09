@@ -13,6 +13,8 @@ const App = () => {
 
   // Identify PostHog user with user ID
   const { data: user } = $api.useQuery("get", "/auth/userInfo");
+  console.log(user);
+
   const posthog = usePostHog();
   useEffect(() => {
     if (user) {

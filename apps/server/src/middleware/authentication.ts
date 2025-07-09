@@ -7,7 +7,7 @@ import jwksClient from "jwks-rsa";
 declare global {
   namespace Express {
     interface Request {
-      user: { id: string } | null;
+      user: { token: string } | null;
     }
   }
 }
@@ -47,15 +47,13 @@ export function expressAuthentication(
         });
       },
       { issuer: process.env.AUTH_ISSUER },
-      (error, decoded) => {
+      (error, _decoded) => {
         if (error) {
           console.error("Authentication error:", error.message);
           response?.status(401).json({ message: "Invalid token" });
           return reject({});
         }
-        if (decoded && typeof decoded === "object") {
-          return resolve({ id: decoded.sub });
-        }
+        return resolve({ token });
       },
     );
   });
