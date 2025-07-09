@@ -22,6 +22,7 @@ export function expressAuthentication(
   _scopes?: string[],
 ) {
   return new Promise((resolve, reject) => {
+    console.log("expressAuthentication", request.headers);
     const response = request.res;
     if (securityName !== "oauth2") {
       response?.status(401).json({ message: "Invalid security name" });
