@@ -6,6 +6,18 @@ export class AuthController {
   @Security("oauth2")
   @Get("/userInfo")
   public async userInfo(@Request() request: express.Request) {
-    return request.user;
+    return fetch("https://auth.slabs-dev.org/application/o/userinfo/", {
+      headers: {
+        Authorization: `Bearer ${request.user?.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return {
+          id: data.sub as string,
+          email: data.email as string,
+          name: data.name as string,
+        };
+      });
   }
 }
