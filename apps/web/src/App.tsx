@@ -1,20 +1,18 @@
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
-import $api from "@/api/client";
 import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
 import LoginModal from "@/components/login/LoginModal";
 import MapDisplay from "@/components/map-display/MapDisplay";
 import Toolbar from "@/components/toolbar/Toolbar";
 import IconsDisplay from "@/components/ui-layout/icons-display/IconsDisplay";
 import MyToastContainer from "@/components/ui-layout/MyToastContainer";
+import useUser from "@/hooks/useUser";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
   // Identify PostHog user with user ID
-  const { data: user } = $api.useQuery("get", "/auth/userInfo");
-  console.log(user);
-
+  const { user } = useUser();
   const posthog = usePostHog();
   useEffect(() => {
     if (user) {

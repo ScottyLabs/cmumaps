@@ -1,6 +1,7 @@
 import $api from "@/api/client";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
+import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 import FloorSwitcherDisplayMobile from "./FloorSwitcherDisplayMobile";
@@ -10,7 +11,7 @@ import FloorSwitcherDisplayMobile from "./FloorSwitcherDisplayMobile";
  */
 const FloorSwitcher = () => {
   // Library hooks
-  const { data: user } = $api.useQuery("get", "/auth/userInfo");
+  const { isCMU } = useUser();
   const isMobile = useIsMobile();
 
   // Global states
@@ -30,7 +31,7 @@ const FloorSwitcher = () => {
   }
 
   // Don't show the floor switcher if the user is not signed in
-  if (!user) {
+  if (!isCMU) {
     return <></>;
   }
 

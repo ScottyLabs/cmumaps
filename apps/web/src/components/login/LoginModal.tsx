@@ -1,25 +1,26 @@
 import { useEffect } from "react";
-import $api from "@/api/client";
 import env from "@/env";
+import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 
 const LoginModal = () => {
-  const { data: user } = $api.useQuery("get", "/auth/userInfo");
+  const { isSignedIn, isCMU } = useUser();
   const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
   const hideLogin = useBoundStore((state) => state.hideLogin);
 
   // Should try to show the login modal again if the user signed out
   useEffect(() => {
-    if (!user) {
+    if (!isSignedIn) {
       sessionStorage.removeItem("showedLogin");
     }
-  }, [user]);
+  }, [isSignedIn]);
 
-  // Don't show the login modal if the user is signed in
-  if (!isLoginOpen || user) {
+  // Don't show the login modal if the user is signed in with CMU email
+  if (!isLoginOpen || isCMU) {
     return null;
   }
 
+  // TODO: display message differently if the user is signed in but not with CMU email
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-white p-4">
