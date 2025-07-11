@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import forwardArrowIconBlack from "@/assets/icons/nav/forward-arrow-black.svg";
 import forwardArrowIconGrey from "@/assets/icons/nav/forward-arrow-grey.svg";
 import forwardArrowIconWhite from "@/assets/icons/nav/forward-arrow-white.svg";
 
-const NavDirectionsList = () => {
+const NavDirectionsList = ({ show }: { show: boolean }) => {
   interface DirectionProps {
     time: number;
   }
@@ -79,10 +80,16 @@ const NavDirectionsList = () => {
     );
   };
 
+  const [yControl, setYControl] = useState(-100);
+
+  useEffect(() => {
+    setYControl(show ? 0 : -100);
+  }, [show]);
+
   return (
     <div
-      className="btn-shadow fixed inset-x-0 top-0 bottom-30 flex-col overflow-y-scroll bg-white transition duration-300 ease-in-out"
-      //   style={{ transform: `translateY(${yControl}px)` }}
+      className="btn-shadow fixed inset-x-0 top-0 bottom-30 z-40 flex-col overflow-y-scroll bg-white transition duration-300 ease-in-out"
+      style={{ transform: `translateY(${yControl}%)` }}
     >
       {pastDirections.map(renderPastDirection)}
       <div className="btn-shadow sticky top-0 bottom-0 z-10 mt-6 mb-3 bg-primary-green px-12 pb-3">

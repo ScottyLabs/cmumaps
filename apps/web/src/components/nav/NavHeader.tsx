@@ -22,15 +22,15 @@ const NavHeader = ({
   setSrc,
   setDst,
   isNavigating,
-  listShown,
+  // listShown,
 }: NavHeaderProps) => {
   const { data: buildings } = useQuery(getBuildingsQueryOptions());
 
   const navigate = useNavigateLocationParams();
 
-  if (listShown) {
-    return;
-  }
+  // if (listShown) {
+  //   return;
+  // }
 
   const srcName =
     src === "user"
@@ -110,7 +110,7 @@ const NavHeader = ({
 
   const renderNavigateHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-[19px] top-10 z-50 overflow-auto rounded-lg bg-[#31b777]">
+      <div className="btn-shadow fixed inset-x-[19px] top-10 overflow-auto rounded-lg bg-[#31b777]">
         <div className="flex">
           <img
             src={forwardArrowIcon}

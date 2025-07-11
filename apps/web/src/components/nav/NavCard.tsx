@@ -64,17 +64,13 @@ const NavCard = ({
 
   const renderChooseCard = () => {
     return (
-      <div
-        className="relative flex flex-col items-center bg-white px-0 pt-4 pb-0"
-        data-model-id="47:143"
-      >
-        <div className="relative flex w-full flex-[0_0_auto] flex-col items-start self-stretch">
-          {/* Navigation options */}
-          <div className="relative flex w-full flex-[0_0_auto] items-center justify-center self-stretch px-0 pt-2 pb-[5px]">
+      <div className="relative flex flex-col items-center bg-white">
+        <div className="relative flex w-full flex-col items-start self-stretch">
+          <div className="flex w-full items-center justify-center self-stretch pt-4">
             {navigationOptions.map((option) => (
               <div
                 key={option.id}
-                className={`relative flex flex-1 grow flex-col items-center gap-0.5 ${option.isSelected ? "bg-white" : ""}`}
+                className={`relative flex flex-1 grow flex-col items-center gap-0.5 pt-2 pb-1 ${option.isSelected ? "bg-white" : ""}`}
               >
                 {option.id === "accessible" ? (
                   <div className="relative h-6 w-6 rounded bg-[#1e86ff]">
@@ -204,7 +200,7 @@ const NavCard = ({
         </div>
       )}
       <div
-        className={`${listShown ? "shadow-2xl shadow-black" : "btn-shadow rounded-t-3xl"} z-50 h-46 overflow-auto bg-white shadow-lg`}
+        className={`${listShown ? "shadow-2xl shadow-black" : "btn-shadow rounded-t-3xl"} h-46 overflow-auto bg-white shadow-lg`}
       >
         {isNavigating ? renderNavCard() : renderChooseCard()}
       </div>

@@ -48,7 +48,7 @@ const NavOverlayMobile = ({
         startNav={startNav}
         listShown={listShown}
       />
-      {listShown && <NavDirectionsList />}
+      <NavDirectionsList show={listShown} />
     </>
   );
 };

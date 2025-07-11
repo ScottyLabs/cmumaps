@@ -20,6 +20,7 @@ import useMapRegionChange from "@/hooks/useMapRegionChange";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
+import NavLine from "../nav/NavLine";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -128,6 +129,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
+      {mapRef.current && <NavLine map={mapRef.current} />}
     </MapkitMap>
   );
 };
