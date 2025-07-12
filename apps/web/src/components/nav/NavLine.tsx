@@ -1,4 +1,5 @@
 import { Annotation, type Coordinate } from "mapkit-react";
+import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import endIcon from "@/assets/icons/nav/path/pathEnd.svg";
 import startIcon from "@/assets/icons/nav/path/pathStart.svg";
@@ -23,6 +24,9 @@ const NavLine = ({ map }: Props) => {
 
   const [pathOverlay, setPathOverlay] = useState<mapkit.PolylineOverlay[]>([]);
   const [iconInfos, setIconInfos] = useState<IconInfo[]>([]);
+
+  const [src, _setSrc] = useQueryState("src");
+  const [dst, _setDst] = useQueryState("dst");
 
   const recommendedPath = [
     {
@@ -144,7 +148,11 @@ const NavLine = ({ map }: Props) => {
   // render the polylines so they stay on top
   useEffect(() => {
     if (pathOverlay) {
-      map.addOverlays(pathOverlay);
+      if (dst && src && dst !== "" && src !== "") {
+        map.addOverlays(pathOverlay);
+      } else {
+        map.removeOverlays(pathOverlay);
+      }
     }
 
     return () => {
@@ -152,7 +160,7 @@ const NavLine = ({ map }: Props) => {
         map.removeOverlays(pathOverlay);
       }
     };
-  }, [map, pathOverlay]);
+  }, [map, pathOverlay, src, dst]);
 
   // calculate the icons (annotations)
   useEffect(() => {
@@ -185,6 +193,10 @@ const NavLine = ({ map }: Props) => {
     setIconInfos(newIconInfos);
     console.log("Icon Infos:", newIconInfos);
   }, []);
+
+  if (!dst || dst === "") {
+    return;
+  }
 
   return iconInfos.map((iconInfo, index) => (
     <Annotation
