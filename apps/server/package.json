@@ -7,7 +7,7 @@
     "build": "bun run tsoa:build && bun run openapi:build && bun build server.ts --outdir=dist --target=bun",
     "server": "dotenv -e .env -- tsx watch server.ts",
     "tsoa:build": "tsoa spec-and-routes",
-    "tsoa": "onchange '**/*.ts' '!build/**' -- bun run tsoa:build",
+    "tsoa": "onchange 'src/controllers/*.ts' -- bun run tsoa:build",
     "openapi:build": "openapi-typescript ./build/swagger.yaml -o ./build/swagger.d.ts",
     "openapi": "onchange './build/swagger.yaml' -- bun run openapi:build",
     "dev": "concurrently 'bun run server' 'bun run tsoa' 'bun run openapi'",
