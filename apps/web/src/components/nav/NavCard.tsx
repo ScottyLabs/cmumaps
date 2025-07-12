@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
+import accessibleUnavailableIcon from "@/assets/icons/nav/route-selection/accessibleUnavailable.svg";
+import fastestSelectedIcon from "@/assets/icons/nav/route-selection/fastestSelected.svg";
+import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnavailable.svg";
+import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
 
 interface NavHeaderProps {
   src: string;
@@ -26,26 +30,32 @@ const NavCard = ({
   const navigationOptions = [
     {
       id: "fastest",
-      icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/fastest.svg",
+      icon: fastestSelectedIcon,
       label: "Fastest",
-      isSelected: false,
+      isSelected: true,
+      //Change to enum
+      isAvailable: true,
     },
     {
       id: "accessible",
       label: "Accessible",
-      isSelected: true,
+      icon: accessibleUnavailableIcon,
+      isSelected: false,
+      isAvailable: false,
     },
     {
       id: "inside",
-      icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/indoor.svg",
+      icon: indoorUnavailableIcon,
       label: "Inside",
       isSelected: false,
+      isAvailable: false,
     },
     {
       id: "outside",
-      icon: "https://c.animaapp.com/mc2d479d5LjgzY/img/outside.svg",
+      icon: outdoorUnavailableIcon,
       label: "Outside",
       isSelected: false,
+      isAvailable: false,
     },
   ];
 
@@ -64,100 +74,84 @@ const NavCard = ({
 
   const renderChooseCard = () => {
     return (
-      <div className="relative flex flex-col items-center bg-white">
-        <div className="relative flex w-full flex-col items-start self-stretch">
-          <div className="flex w-full items-center justify-center self-stretch pt-4">
-            {navigationOptions.map((option) => (
+      // <div className="relative flex flex-col items-center bg-white">
+      <div className="relative flex w-full flex-col items-start self-stretch bg-white">
+        <div className="flex w-full items-center justify-center self-stretch pt-4">
+          {navigationOptions.map((option) => (
+            <div
+              key={option.id}
+              className={`relative flex flex-1 grow flex-col items-center gap-0.5 pt-2 pb-1 ${option.isSelected ? "bg-white" : ""}`}
+            >
+              <img
+                className="relative h-6 w-6"
+                alt={option.label}
+                src={option.icon}
+              />
+
               <div
-                key={option.id}
-                className={`relative flex flex-1 grow flex-col items-center gap-0.5 pt-2 pb-1 ${option.isSelected ? "bg-white" : ""}`}
+                className={`relative self-stretch pb-px text-center ${
+                  option.isSelected
+                    ? "text-primary-blue underline"
+                    : option.isAvailable
+                      ? "text-black"
+                      : "text-primary-grey"
+                }`}
               >
-                {option.id === "accessible" ? (
-                  <div className="relative h-6 w-6 rounded bg-[#1e86ff]">
-                    <div className="relative top-0.5 left-0.5 h-5 w-5">
-                      <div className="relative top-1 left-1 h-[13px] w-[13px] bg-[100%_100%] bg-[url(https://c.animaapp.com/mc2d479d5LjgzY/img/union.svg)]" />
-                    </div>
-                  </div>
-                ) : (
-                  <img
-                    className="relative h-6 w-6"
-                    alt={option.label}
-                    src={option.icon}
-                  />
-                )}
-
-                <div
-                  className={`relative self-stretch text-center font-[number:var(--body-2-font-weight)] font-body-2 text-[length:var(--body-2-font-size)] leading-[var(--body-2-line-height)] tracking-[var(--body-2-letter-spacing)] [font-style:var(--body-2-font-style)] ${
-                    option.id === "accessible"
-                      ? "text-[#1e86ff] underline"
-                      : option.id === "fastest"
-                        ? "text-[#bec1c6]"
-                        : "text-lightcolorbaseprimarydark"
-                  }`}
-                >
-                  {option.label}
-                </div>
+                {option.label}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Trip information panel */}
-          <div className="w-full border border-none bg-card text-card-foreground shadow">
-            <div className="relative flex w-full flex-[0_0_auto] items-center justify-between self-stretch bg-[#f1f4fd] p-0 px-[21px] pt-[19px] pb-[11px]">
-              <div className="h-9 w-36">
-                <div className="flex">
-                  <div className="w-full text-center font-bold text-[19px] text-black">
-                    {tripInfo.arrivalTime}
-                  </div>
-                  <div className="w-full text-center font-bold text-[19px] text-black">
-                    {tripInfo.duration}
-                  </div>
-                  <div className="w-full text-center font-bold text-[19px] text-black">
-                    {tripInfo.distance}
-                  </div>
-                </div>
-                <div className="-translate-y-2 flex">
-                  <div className="w-full text-center">arrival</div>
-                  <div className="w-full text-center">min</div>
-                  <div className="w-full text-center">mi</div>
-                </div>
+        {/* Trip information panel */}
+        {/* <div className="w-full text-card-foreground shadow"> */}
+        <div className="relative flex h-26 w-full justify-between self-stretch bg-light-blue pt-5 pr-5 pb-11 pl-5">
+          <div className="h-9 w-36">
+            <div className="flex">
+              <div className="w-full text-center font-bold text-black text-xl">
+                {tripInfo.arrivalTime}
               </div>
-
-              <button
-                type="button"
-                className="inline-flex h-[39px] w-[104px] items-center justify-center rounded-full bg-[#31b777] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                onClick={() => {
-                  startNav();
-                }}
-              >
-                <span className="text-center font-[number:var(--body-2-font-weight)] font-body-2 text-[length:var(--body-2-font-size)] text-white leading-[var(--body-2-line-height)] tracking-[var(--body-2-letter-spacing)] [font-style:var(--body-2-font-style)]">
-                  GO
-                </span>
-              </button>
+              <div className="w-full text-center font-bold text-black text-xl">
+                {tripInfo.duration}
+              </div>
+              <div className="w-full text-center font-bold text-black text-xl">
+                {tripInfo.distance}
+              </div>
+            </div>
+            <div className="-translate-y-2 flex">
+              <div className="w-full text-center">arrival</div>
+              <div className="w-full text-center">min</div>
+              <div className="w-full text-center">mi</div>
             </div>
           </div>
 
-          {/* Bottom indicator */}
-          <div className="relative flex h-[34px] w-full items-end justify-center self-stretch bg-[#f1f4fd] pb-2">
-            <div className="relative h-[5px] w-[134px] rounded-[100px] bg-transparent" />
-          </div>
+          <button
+            type="button"
+            className="btn-shadow inline-flex h-10 w-26 items-center justify-center rounded-full bg-[#31b777] font-medium text-sm"
+            onClick={() => {
+              startNav();
+            }}
+          >
+            <span className="text-center text-white">GO</span>
+          </button>
         </div>
       </div>
+      // </div>
     );
   };
 
   const renderNavCard = () => {
     return (
-      <div className="mt-[31px] ml-[35.74px] flex h-9">
+      <div className="mt-8 ml-9 flex h-9">
         <div className="w-39">
           <div className="flex">
-            <div className="w-full text-center font-bold text-[19px] text-black">
+            <div className="w-full text-center font-bold text-black text-xl">
               {tripInfo.arrivalTime}
             </div>
-            <div className="w-full text-center font-bold text-[19px] text-black">
+            <div className="w-full text-center font-bold text-black text-xl">
               {tripInfo.duration}
             </div>
-            <div className="w-full text-center font-bold text-[19px] text-black">
+            <div className="w-full text-center font-bold text-black text-xl">
               {tripInfo.distance}
             </div>
           </div>
@@ -169,15 +163,13 @@ const NavCard = ({
         </div>
         <button
           type="button"
-          className="absolute right-5 inline-flex h-[39px] w-[104px] items-center justify-center rounded-full bg-[#C41230] font-medium text-sm shadow-[0px_4px_4px_#00000040] transition-colors hover:bg-[#2aa56a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          className="btn-shadow absolute right-5 inline-flex h-10 w-26 items-center justify-center rounded-full bg-primary-red font-medium"
           onClick={() => {
             setDst(null);
             setSrc(null);
           }}
         >
-          <span className="text-center font-[number:var(--body-2-font-weight)] font-body-2 text-[length:var(--body-2-font-size)] text-white leading-[var(--body-2-line-height)] tracking-[var(--body-2-letter-spacing)] [font-style:var(--body-2-font-style)]">
-            End
-          </span>
+          <span className="text-center text-white">End</span>
         </button>
       </div>
     );
