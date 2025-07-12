@@ -6,13 +6,14 @@ import { Server } from "socket.io";
 import { ValidateError } from "tsoa";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
+import env from "./src/env";
 import { BuildingError } from "./src/errors/error";
 // import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./src/services/webSocketService";
 
 const app = express();
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS_REGEX?.split(",").map(
+  origin: env.ALLOWED_ORIGINS_REGEX?.split(",").map(
     (origin) => new RegExp(origin),
   ),
   credentials: true,
@@ -81,7 +82,7 @@ app.use(function notFoundHandler(_req, res: Response) {
   res.status(404).send({ message: "Not Found" });
 });
 
-const port = process.env.PORT || 80;
+const port = env.PORT;
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

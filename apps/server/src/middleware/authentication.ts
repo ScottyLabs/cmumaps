@@ -3,6 +3,7 @@
 import type * as express from "express";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
+import env from "../env";
 
 declare global {
   namespace Express {
@@ -13,7 +14,7 @@ declare global {
 }
 
 const client = jwksClient({
-  jwksUri: process.env.AUTH_JWKS_URI || "",
+  jwksUri: env.AUTH_JWKS_URI,
 });
 
 export function expressAuthentication(
@@ -45,7 +46,7 @@ export function expressAuthentication(
           callback(null, signingKey);
         });
       },
-      { issuer: process.env.AUTH_ISSUER },
+      { issuer: env.AUTH_ISSUER },
       (error, _decoded) => {
         if (error) {
           console.error("Authentication error:", error.message);
