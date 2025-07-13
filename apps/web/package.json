@@ -1,18 +1,6 @@
 {
   "name": "@cmumaps/web",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "dev:host": "vite --host",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "biome format",
-    "lint": "biome lint",
-    "tsc": "tsc -b",
-    "check": "tsc -b && biome check"
-  },
   "dependencies": {
     "@cmumaps/common": "workspace:*",
     "@tailwindcss/vite": "^4.0.9",
@@ -47,5 +35,17 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.26.0",
     "vite": "^6.2.0"
-  }
+  },
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "check": "tsc -b && biome check",
+    "dev": "vite",
+    "dev:host": "vite --host",
+    "format": "biome format",
+    "lint": "biome lint",
+    "preview": "vite preview",
+    "tsc": "tsc -b"
+  },
+  "type": "module"
 }

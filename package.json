@@ -1,29 +1,5 @@
 {
   "name": "cmumaps",
-  "private": true,
-  "packageManager": "bun@1.2.10",
-  "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "start": "turbo run start",
-    "build": "turbo build --parallel",
-    "dev": "turbo dev --parallel",
-    "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
-    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
-    "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
-    "dev:visualizer:full": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --filter=@cmumaps/rust-server --parallel",
-    "dev:server": "turbo dev --filter=@cmumaps/server --parallel",
-    "db-generate": "turbo run db-generate --filter=@cmumaps/server",
-    "format": "turbo format --parallel",
-    "lint": "turbo lint --parallel",
-    "tsc": "turbo tsc --parallel",
-    "check": "biome check && turbo check --parallel",
-    "prepare": "husky",
-    "preinstall": "npx only-allow bun"
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -36,7 +12,35 @@
     "@types/bun": "latest",
     "@types/web": "^0.0.243",
     "husky": "^9.1.7",
+    "syncpack": "^13.0.4",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"
-  }
+  },
+  "packageManager": "bun@1.2.10",
+  "private": true,
+  "scripts": {
+    "build": "turbo build --parallel",
+    "check": "biome check && turbo check --parallel",
+    "db-generate": "turbo run db-generate --filter=@cmumaps/server",
+    "dev": "turbo dev --parallel",
+    "dev:server": "turbo dev --filter=@cmumaps/server --parallel",
+    "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
+    "dev:visualizer:full": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --filter=@cmumaps/rust-server --parallel",
+    "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
+    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
+    "format": "turbo format --parallel",
+    "lint": "turbo lint --parallel",
+    "preinstall": "npx only-allow bun",
+    "prepare": "husky",
+    "start": "turbo run start",
+    "syncpack": "syncpack format && syncpack lint",
+    "syncpack:fix": "syncpack fix-mismatches",
+    "syncpack:update": "syncpack update",
+    "tsc": "turbo tsc --parallel"
+  },
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
