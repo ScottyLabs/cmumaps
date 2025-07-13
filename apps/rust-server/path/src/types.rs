@@ -111,6 +111,11 @@ pub struct NodesRoute {
 }
 
 pub type Graph = HashMap<String, Node>;
+pub struct CGraph {
+    pub cgraph: Graph,
+    pub node_to_cluster: HashMap<String, String>,
+    pub cluster_to_nodes: HashMap<String, Vec<String>>
+}
 
 #[derive(Deserialize, Clone)]
 pub struct UserPosition { pub userPosition: Coordinate }
