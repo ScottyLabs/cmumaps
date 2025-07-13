@@ -7,7 +7,7 @@
   "devDependencies": {
     "@types/geojson": "^7946.0.16",
     "@types/node": "^20.11.24",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "main": "src/index.ts",
   "scripts": {
