@@ -28,7 +28,7 @@
     "openapi-typescript": "^7.8.0",
     "prisma": "^6.8.2",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "keywords": [],
   "license": "ISC",
