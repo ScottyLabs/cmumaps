@@ -6,7 +6,7 @@
   },
   "devDependencies": {
     "@types/geojson": "~7946.0.16",
-    "@types/node": "~20.11.24",
+    "@types/node": "~24.0.13",
     "typescript": "~5.8.3"
   },
   "main": "src/index.ts",
