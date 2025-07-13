@@ -82,7 +82,7 @@ app.use(function notFoundHandler(_req, res: Response) {
   res.status(404).send({ message: "Not Found" });
 });
 
-const port = env.PORT;
+const port = env.SERVER_PORT;
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

@@ -6,7 +6,7 @@ const envSchema = z.object({
   ALLOWED_ORIGINS_REGEX: z.string(),
   AUTH_ISSUER: z.url(),
   AUTH_JWKS_URI: z.url(),
-  PORT: z.number().default(80),
+  SERVER_PORT: z.number().default(80),
 });
 
 // Validate `process.env` against our schema and return the result
