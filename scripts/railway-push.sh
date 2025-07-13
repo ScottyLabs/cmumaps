@@ -32,18 +32,39 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+# Sanitizing the Service argument
 if [ "$SERVICE" == "all" ]; then
   SERVICES=("server" "rust-server")
 else
-  SERVICES=("$SERVICE")
+  case "$SERVICE" in
+  "server" | "rust-server")
+    SERVICES=("$SERVICE")
+    ;;
+  *)
+    echo "Error: Invalid service: '$SERVICE'" >&2
+    usage
+    exit 1
+    ;;
+  esac
 fi
 
+# Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
   ENVIRONMENTS=("dev" "prod")
 else
-  ENVIRONMENTS=("$ENVIRONMENT")
+  case "$ENVIRONMENT" in
+  "dev" | "prod")
+    ENVIRONMENTS=("$ENVIRONMENT")
+    ;;
+  *)
+    echo "Error: Invalid environment: '$ENVIRONMENT'" >&2
+    usage
+    exit 1
+    ;;
+  esac
 fi
 
+# Pushing to railway
 for SERVICE in "${SERVICES[@]}"; do
   for ENVIRONMENT in "${ENVIRONMENTS[@]}"; do
     railway link -p $RAILWAY_PROJECT_ID -s $SERVICE -e $ENVIRONMENT

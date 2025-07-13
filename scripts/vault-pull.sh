@@ -18,7 +18,7 @@ while [[ "$#" -gt 0 ]]; do
     exit 0
     ;;
   *)
-    if [[ -z "$SERVICE" ]]; then
+    if [[ -z "$APPLICATION" ]]; then
       APPLICATION="$1"
     elif [[ -z "$ENVIRONMENT" ]]; then
       ENVIRONMENT="$1"
@@ -32,28 +32,41 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+# Special case for scripts
 if [ "$APPLICATION" == "scripts" ]; then
   vault kv get -format=json ScottyLabs/cmumaps/scripts |
     jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >scripts/.env
   exit 0
 fi
 
+# Sanitizing the Application argument
 if [ "$APPLICATION" == "all" ]; then
   APPLICATIONS=("web" "visualizer" "server" "rust-server" "data")
 else
-  APPLICATIONS=("$APPLICATION")
+  case "$APPLICATION" in
+  "web" | "visualizer" | "server" | "rust-server" | "data")
+    APPLICATIONS=("$APPLICATION")
+    ;;
+  *)
+    echo "Error: Invalid application: '$APPLICATION'" >&2
+    usage
+    exit 1
+    ;;
+  esac
 fi
 
+# Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
   ENVIRONMENT=("local" "dev" "staging" "prod")
 else
   ENVIRONMENT=("$ENVIRONMENT")
 fi
 
+# Pulling from vault
 for ENV in "${ENVIRONMENT[@]}"; do
-  ENV_FILE_SUFFIX=".$ENV"
-  if [ "$ENV" == "local" ]; then
-    ENV_FILE_SUFFIX=""
+  ENV_FILE_SUFFIX=""
+  if [ "$ENV" != "local" ]; then
+    ENV_FILE_SUFFIX=".$ENV"
   fi
 
   for APP in "${APPLICATIONS[@]}"; do
