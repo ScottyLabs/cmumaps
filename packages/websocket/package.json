@@ -1,6 +1,6 @@
 {
   "name": "@cmumaps/websocket",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "devDependencies": {
     "@types/node": "~20.11.24",
     "typescript": "~5.8.3"

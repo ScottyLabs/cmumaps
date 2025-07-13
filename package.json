@@ -1,5 +1,6 @@
 {
   "name": "cmumaps",
+  "version": "0.0.0",
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
