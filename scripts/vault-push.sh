@@ -32,23 +32,45 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+# Special case for scripts
 if [ "$APPLICATION" == "scripts" ]; then
   cat scripts/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/scripts"
   exit 0
 fi
 
+# Sanitizing the Application argument
 if [ "$APPLICATION" == "all" ]; then
   APPLICATIONS=("web" "visualizer" "server" "rust-server" "data")
 else
-  APPLICATIONS=("$APPLICATION")
+  case "$APPLICATION" in
+  "web" | "visualizer" | "server" | "rust-server" | "data")
+    APPLICATIONS=($APPLICATION)
+    ;;
+  *)
+    echo "Error: Invalid application: '$APPLICATION'" >&2
+    usage
+    exit 1
+    ;;
+  esac
 fi
 
+# Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
   ENVIRONMENT=("local" "dev" "staging" "prod")
 else
-  ENVIRONMENT=("$ENVIRONMENT")
+  case "$ENVIRONMENT" in
+  "local" | "dev" | "staging" | "prod")
+    ENVIRONMENT=("$ENVIRONMENT")
+    ;;
+  *)
+    echo "Error: Invalid environment: '$ENVIRONMENT'" >&2
+    usage
+    exit 1
+    ;;
+  esac
 fi
 
+# Pushing to vault
 for ENV in "${ENVIRONMENT[@]}"; do
   ENV_FILE_SUFFIX=""
   if [ "$ENV" != "local" ]; then
