@@ -1,27 +1,8 @@
 {
   "name": "@cmumaps/server",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "bun dist/server.js",
-    "build": "bun run tsoa:build && bun run openapi:build && bun build server.ts --outdir=dist --target=bun",
-    "server": "dotenv -e .env -- tsx watch server.ts",
-    "tsoa:build": "tsoa spec-and-routes",
-    "tsoa": "onchange 'src/controllers/*.ts' -- bun run tsoa:build",
-    "openapi:build": "openapi-typescript ./build/swagger.yaml -o ./build/swagger.d.ts",
-    "openapi": "onchange './build/swagger.yaml' -- bun run openapi:build",
-    "dev": "concurrently 'bun run server' 'bun run tsoa' 'bun run openapi'",
-    "dev:host": "bun run dev",
-    "db-generate": "prisma generate",
-    "format": "biome format",
-    "lint": "biome lint",
-    "tsc": "tsc -b",
-    "check": "tsc -b && biome check"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "description": "",
+  "version": "1.0.0",
+  "author": "",
   "dependencies": {
     "@cmumaps/common": "workspace:*",
     "@cmumaps/websocket": "workspace:*",
@@ -48,5 +29,24 @@
     "prisma": "^6.8.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
-  }
+  },
+  "keywords": [],
+  "license": "ISC",
+  "scripts": {
+    "build": "bun run tsoa:build && bun run openapi:build && bun build server.ts --outdir=dist --target=bun",
+    "check": "tsc -b && biome check",
+    "db-generate": "prisma generate",
+    "dev": "concurrently 'bun run server' 'bun run tsoa' 'bun run openapi'",
+    "dev:host": "bun run dev",
+    "format": "biome format",
+    "lint": "biome lint",
+    "openapi": "onchange './build/swagger.yaml' -- bun run openapi:build",
+    "openapi:build": "openapi-typescript ./build/swagger.yaml -o ./build/swagger.d.ts",
+    "server": "dotenv -e .env -- tsx watch server.ts",
+    "start": "bun dist/server.js",
+    "tsc": "tsc -b",
+    "tsoa": "onchange 'src/controllers/*.ts' -- bun run tsoa:build",
+    "tsoa:build": "tsoa spec-and-routes"
+  },
+  "type": "module"
 }

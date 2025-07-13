@@ -1,17 +1,6 @@
 {
   "name": "@cmumaps/visualizer",
-  "private": true,
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "biome format",
-    "lint": "biome lint",
-    "tsc": "tsc -b",
-    "check": "tsc -b && biome check"
-  },
   "dependencies": {
     "@clerk/clerk-react": "^5.24.1",
     "@cmumaps/common": "workspace:*",
@@ -57,5 +46,16 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.25.0",
     "vite": "^6.2.0"
-  }
+  },
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "check": "tsc -b && biome check",
+    "dev": "vite",
+    "format": "biome format",
+    "lint": "biome lint",
+    "preview": "vite preview",
+    "tsc": "tsc -b"
+  },
+  "type": "module"
 }
