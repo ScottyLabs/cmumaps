@@ -7,5 +7,25 @@
       "dependencyTypes": ["!local"],
       "pinVersion": "workspace:*"
     }
+  ],
+  "semverGroups": [
+    {
+      "dependencyTypes": [
+        "prod",
+        "resolutions",
+        "overrides",
+        "pnpmOverrides",
+        "local"
+      ],
+      "range": ""
+    },
+    {
+      "dependencyTypes": ["dev"],
+      "range": "~"
+    },
+    {
+      "dependencyTypes": ["peer"],
+      "range": "^"
+    }
   ]
 }

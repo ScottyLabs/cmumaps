@@ -2,8 +2,8 @@
   "name": "@cmumaps/websocket",
   "version": "1.0.0",
   "devDependencies": {
-    "@types/node": "^20.11.24",
-    "typescript": "^5.8.3"
+    "@types/node": "~20.11.24",
+    "typescript": "~5.8.3"
   },
   "main": "src/index.ts",
   "scripts": {

@@ -6,15 +6,15 @@
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@biomejs/biome": "~2.0.0",
+    "@commitlint/cli": "~19.8.1",
+    "@commitlint/config-conventional": "~19.8.1",
     "@types/bun": "latest",
-    "@types/web": "^0.0.243",
-    "husky": "^9.1.7",
-    "syncpack": "^13.0.4",
-    "turbo": "^2.4.4",
-    "typescript": "^5.8.3"
+    "@types/web": "~0.0.243",
+    "husky": "~9.1.7",
+    "syncpack": "~13.0.4",
+    "turbo": "~2.4.4",
+    "typescript": "~5.8.3"
   },
   "packageManager": "bun@1.2.10",
   "private": true,
