@@ -37,7 +37,10 @@
     "syncpack": "syncpack format && syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
-    "tsc": "turbo tsc --parallel"
+    "tsc": "turbo tsc --parallel",
+    "vault:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc",
+    "vault:push:dev": "./vault-push-dev.sh",
+    "vault:pull:dev": "./vault-pull-dev.sh"
   },
   "type": "module",
   "workspaces": [
