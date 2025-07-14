@@ -29,7 +29,7 @@ USER server
 
 # Copy only what's needed to run the server
 COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./build/swagger.yaml
-COPY --from=builder --chown=server:nodejs /app/node_modules/swagger-ui-dist ./public
+COPY --from=builder --chown=server:nodejs /app/node_modules/swagger-ui-dist ./node_modules/swagger-ui-dist
 COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
 COPY --from=builder --chown=server:nodejs /app/node_modules/.prisma /app/node_modules/.prisma
 
