@@ -39,6 +39,7 @@ export const webSocketService = new WebSocketService(io);
 const file = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(file);
 
+app.use(express.static("./public"));
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
