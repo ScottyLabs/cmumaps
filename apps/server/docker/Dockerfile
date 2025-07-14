@@ -27,9 +27,12 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 --gid 1001 server
 USER server
 
-# Copy only what's needed to run the server
+# Copy swagger UI
 COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./build/swagger.yaml
-COPY --from=builder --chown=server:nodejs /app/node_modules/swagger-ui-dist ./node_modules/swagger-ui-dist
+COPY --from=builder --chown=server:nodejs /app/node_modules/swagger-ui-dist /app/node_modules/swagger-ui-dist
+RUN rm /app/node_modules/swagger-ui-dist/index.html
+
+# Copy only what's needed to run the server
 COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
 COPY --from=builder --chown=server:nodejs /app/node_modules/.prisma /app/node_modules/.prisma
 
