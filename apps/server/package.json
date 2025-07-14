@@ -45,7 +45,7 @@
     "server": "dotenv -e .env -- tsx watch server.ts",
     "start": "bun dist/server.js",
     "tsc": "tsc -b",
-    "tsoa": "onchange 'src/controllers/*.ts' -- bun run tsoa:build",
+    "tsoa": "onchange 'src/controllers/*.ts' 'tsoa.json' -- bun run tsoa:build",
     "tsoa:build": "tsoa spec-and-routes"
   },
   "type": "module"
