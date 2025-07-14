@@ -6,7 +6,8 @@
     "securityDefinitions": {
       "oauth2": {
         "type": "oauth2",
-        "flow": "implicit",
+        "flow": "accessCode",
+        "tokenUrl": "${TOKEN_URL}",
         "authorizationUrl": "${AUTHORIZATION_URL}",
         "scopes": {}
       }
