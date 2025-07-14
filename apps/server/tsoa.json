@@ -7,7 +7,7 @@
       "oauth2": {
         "type": "oauth2",
         "flow": "implicit",
-        "authorizationUrl": "https://auth.slabs-dev.org/application/o/authorize/",
+        "authorizationUrl": "${AUTHORIZATION_URL}",
         "scopes": {}
       }
     },
