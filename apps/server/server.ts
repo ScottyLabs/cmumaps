@@ -1,9 +1,12 @@
+import fs from "node:fs";
 import http from "node:http";
 import cors from "cors";
 import type { ErrorRequestHandler, Request, Response } from "express";
 import express, { type NextFunction } from "express";
 import { Server } from "socket.io";
+import swaggerUi from "swagger-ui-express";
 import { ValidateError } from "tsoa";
+import YAML from "yaml";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
 import env from "./src/env";
@@ -31,6 +34,12 @@ const io = new Server(server, { cors: corsOptions });
 
 // Initialize WebSocket service
 export const webSocketService = new WebSocketService(io);
+
+// Swagger
+const file = fs.readFileSync("./build/swagger.yaml", "utf8");
+const swaggerDocument = YAML.parse(file);
+
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 RegisterRoutes(app);
