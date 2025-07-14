@@ -4,7 +4,7 @@ usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
   echo -e "\t\tAPPLICATION: The application to push to, one of web | visualizer | all\n"
-  echo -e "\t\tENVIRONMENT: The environment to push to, one of dev | staging | prod | all\n"
+  echo -e "\t\tENVIRONMENT: The environment to push to, one of dev | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
 }
@@ -49,10 +49,10 @@ fi
 
 # Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
-  ENVIRONMENTS=("dev" "staging" "prod")
+  ENVIRONMENTS=("dev" "prod")
 else
   case "$ENVIRONMENT" in
-  "dev" | "staging" | "prod")
+  "dev" | "prod")
     ENVIRONMENTS=("$ENVIRONMENT")
     ;;
   *)
@@ -70,8 +70,6 @@ for APPLICATION in "${APPLICATIONS[@]}"; do
       VERCEL_ENVIRONMENT=""
       if [ "$ENVIRONMENT" == "dev" ]; then
         VERCEL_ENVIRONMENT="preview"
-      elif [ "$ENVIRONMENT" == "staging" ]; then
-        VERCEL_ENVIRONMENT="staging"
       elif [ "$ENVIRONMENT" == "prod" ]; then
         VERCEL_ENVIRONMENT="production"
       fi
