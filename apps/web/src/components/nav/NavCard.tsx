@@ -12,7 +12,6 @@ interface NavHeaderProps {
   setSrc: (_: string | null) => void;
   setDst: (_: string | null) => void;
   startNav: () => void;
-  pathDist: number;
   toggleListShown: () => void;
   listShown: boolean;
 }

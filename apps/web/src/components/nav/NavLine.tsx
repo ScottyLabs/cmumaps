@@ -1,23 +1,30 @@
 import { Annotation, type Coordinate } from "mapkit-react";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
+import enterIcon from "@/assets/icons/nav/path/enter.svg";
 import endIcon from "@/assets/icons/nav/path/pathEnd.svg";
 import startIcon from "@/assets/icons/nav/path/pathStart.svg";
+import useBoundStore from "@/store";
+import type { Node } from "@/types/graphTypes";
 
 interface IconInfo {
   coordinate: Coordinate;
-  icon: string;
-  offset?: { x: number; y: number };
+  icon: { icon: string; offset?: { x: number; y: number } };
 }
-interface Node {
-  coordinate: { latitude: number; longitude: number };
-}
+
 interface Props {
   map: mapkit.Map;
 }
 
+const Icons = {
+  start: { icon: startIcon, offset: { x: 1, y: 2 } },
+  end: { icon: endIcon, offset: { x: 12, y: 4 } },
+  enter: { icon: enterIcon, offset: { x: 15, y: 5 } },
+};
+
 const NavLine = ({ map }: Props) => {
   //   const dispatch = useAppDispatch();
+  const navPath = useBoundStore((state) => state.navPaths);
 
   const [curFloorPath, _setCurFloorPath] = useState<Node[] | null>(null);
   const [restPath, _setRestPath] = useState<Node[] | null>(null);
@@ -28,39 +35,12 @@ const NavLine = ({ map }: Props) => {
   const [src, _setSrc] = useQueryState("src");
   const [dst, _setDst] = useQueryState("dst");
 
-  const recommendedPath = [
-    {
-      path: [
-        {
-          coordinate: {
-            latitude: 40.441598163584466,
-            longitude: -79.94164604686353,
-          },
-        },
-        {
-          coordinate: {
-            latitude: 40.44053789673255,
-            longitude: -79.94242929024519,
-          },
-        },
-      ],
-    },
-  ];
+  const fastestPath = navPath?.Fastest?.path.path;
 
-  const path: Node[] = [
-    {
-      coordinate: {
-        latitude: 40.441598163584466,
-        longitude: -79.94164604686353,
-      },
-    },
-    {
-      coordinate: {
-        latitude: 40.44053789673255,
-        longitude: -79.94242929024519,
-      },
-    },
-  ];
+  const recommendedPath = navPath;
+
+  const path = fastestPath || [];
+  const instructions = navPath?.Fastest?.instructions || [];
 
   const startedNavigation = false;
 
@@ -116,7 +96,7 @@ const NavLine = ({ map }: Props) => {
         setPathOverlay([]);
       } else {
         setPathOverlay(
-          recommendedPath.map((p, _) => {
+          Object.values(recommendedPath).map((p, _) => {
             const style = {
               strokeColor: "blue",
               strokeOpacity: 0.9,
@@ -124,7 +104,7 @@ const NavLine = ({ map }: Props) => {
             };
 
             return new mapkit.PolylineOverlay(
-              p.path.map(
+              p.path.path.map(
                 (n) =>
                   new mapkit.Coordinate(
                     n.coordinate.latitude,
@@ -137,13 +117,7 @@ const NavLine = ({ map }: Props) => {
         );
       }
     }
-  }, [
-    // recommendedPath,
-    restPath,
-    curFloorPath,
-    // selectedPathNum,
-    // startedNavigation,
-  ]);
+  }, [restPath, curFloorPath, recommendedPath]);
 
   // render the polylines so they stay on top
   useEffect(() => {
@@ -170,29 +144,41 @@ const NavLine = ({ map }: Props) => {
     }
 
     const addStartEndIcons = () => {
+      console.log(path);
       if (path.length === 0) return;
 
       newIconInfos.push({
         // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
         coordinate: path[0]!.coordinate,
-        icon: startIcon,
-        offset: { x: 1, y: 2 },
+        icon: Icons.start,
       });
       newIconInfos.push({
         // biome-ignore lint/style/noNonNullAssertion: path[path.length - 1] is guaranteed to exist
         coordinate: path[path.length - 1]!.coordinate,
-        icon: endIcon,
-        offset: { x: 12, y: 4 },
+        icon: Icons.end,
+      });
+    };
+
+    const addInstructionIcons = () => {
+      instructions.forEach((instruction) => {
+        const coord = path.find(
+          (n) => n.id === instruction.node_id,
+        )?.coordinate;
+        newIconInfos.push({
+          coordinate: coord || { latitude: 0, longitude: 0 },
+          icon: Icons.enter,
+        });
       });
     };
 
     const newIconInfos: IconInfo[] = [];
 
+    addInstructionIcons();
     addStartEndIcons();
 
     setIconInfos(newIconInfos);
     console.log("Icon Infos:", newIconInfos);
-  }, []);
+  }, [path.length, path[0], recommendedPath, instructions.forEach]);
 
   if (!dst || dst === "") {
     return;
@@ -206,12 +192,12 @@ const NavLine = ({ map }: Props) => {
       displayPriority={"required"}
     >
       <img
-        src={iconInfo.icon}
+        src={iconInfo.icon.icon}
         alt="Icon"
         height={40}
         style={{
           height: "40px",
-          transform: `translate(${iconInfo.offset?.x ?? 0}px, ${iconInfo.offset?.y ?? 0}px)`,
+          transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
         }}
       />
     </Annotation>

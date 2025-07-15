@@ -10,7 +10,6 @@ interface NavOverlayMobileProps {
   setSrc: (_: string | null) => void;
   setDst: (_: string | null) => void;
   startNav: () => void;
-  pathDist: number;
 }
 
 const NavOverlayMobile = ({
@@ -20,7 +19,6 @@ const NavOverlayMobile = ({
   setDst,
   isNavigating,
   startNav,
-  pathDist,
 }: NavOverlayMobileProps) => {
   const [listShown, setListShown] = useState(false);
 
@@ -33,7 +31,6 @@ const NavOverlayMobile = ({
         setDst={setDst}
         isNavigating={isNavigating}
         startNav={startNav}
-        pathDist={pathDist}
         toggleListShown={() => {
           setListShown(!listShown);
         }}
