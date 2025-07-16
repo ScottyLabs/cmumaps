@@ -1,4 +1,4 @@
-// biome-ignore-all lint/suspicious/noExplicitAny: <Necessary>
+// biome-ignore-all lint/suspicious/noExplicitAny: <Just for populating table>
 import { prisma } from "../../prisma";
 
 export const populateTableService = {
