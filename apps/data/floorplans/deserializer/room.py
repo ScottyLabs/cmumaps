@@ -14,7 +14,7 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 def drop_room_table():
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
-        f"{server_url}/api/drop-tables",
+        f"{server_url}/drop-tables",
         json={"tableNames": ["Room"]},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
@@ -65,7 +65,7 @@ def create_rooms():
         # Send request to server to populate Room table
         server_url = os.getenv("SERVER_URL")
         response = requests.post(
-            f"{server_url}/api/populate-table/rooms",
+            f"{server_url}/populate-table/rooms",
             json=rooms_data,
             headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
         )
