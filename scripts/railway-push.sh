@@ -5,7 +5,7 @@ usage() {
   echo
   echo -e "\tUsage: $0 SERVICE ENVIRONMENT\n"
   echo -e "\t\tSERVICE: The service to push to, one of server | rust-server | all\n"
-  echo -e "\t\tENVIRONMENT: The environment to push to, one of dev | prod | all\n"
+  echo -e "\t\tENVIRONMENT: The environment to push to, one of dev | staging | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
 }
@@ -50,10 +50,10 @@ fi
 
 # Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
-  ENVIRONMENTS=("dev" "prod")
+  ENVIRONMENTS=("dev" "staging" "prod")
 else
   case "$ENVIRONMENT" in
-  "dev" | "prod")
+  "dev" | "staging" | "prod")
     ENVIRONMENTS=("$ENVIRONMENT")
     ;;
   *)
