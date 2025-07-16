@@ -5,7 +5,7 @@ usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
   echo -e "\t\tAPPLICATION: The application to pull from, one of web | visualizer | server | rust-server | data | scripts | all\n"
-  echo -e "\t\tENVIRONMENT: The environment to pull from, one of local | dev | prod | all\n"
+  echo -e "\t\tENVIRONMENT: The environment to pull from, one of local | dev | staging | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
 }
@@ -57,10 +57,10 @@ fi
 
 # Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
-  ENVIRONMENT=("local" "dev" "prod")
+  ENVIRONMENT=("local" "dev" "staging" "prod")
 else
   case "$ENVIRONMENT" in
-  "local" | "dev" | "prod")
+  "local" | "dev" | "staging" | "prod")
     ENVIRONMENT=("$ENVIRONMENT")
     ;;
   *)
