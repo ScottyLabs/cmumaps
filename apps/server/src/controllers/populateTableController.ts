@@ -1,66 +1,42 @@
-import type { Request, Response } from "express";
-
-import { handleControllerError } from "../errors/errorHandler";
+/** biome-ignore-all lint/suspicious/noExplicitAny: <Just for populating table> */
+import { Body, Post, Route } from "tsoa";
 import { populateTableService } from "../services/populateTableService";
 
-export const populateTableController = {
-  populateBuildings: async (req: Request, res: Response) => {
-    try {
-      const data = req.body;
-      await populateTableService.populateBuildings(data);
-      res.status(200).json({ message: "Buildings populated" });
-    } catch (error) {
-      handleControllerError(res, error, "populating buildings");
-    }
-  },
+@Route("populate-table")
+export class PopulateTableController {
+  @Post("/buildings")
+  async populateBuildings(@Body() data: any) {
+    await populateTableService.populateBuildings(data);
+    return { message: "Buildings populated" };
+  }
 
-  populateFloors: async (req: Request, res: Response) => {
-    try {
-      const data = req.body;
-      await populateTableService.populateFloors(data);
-      res.status(200).json({ message: "Floors populated" });
-    } catch (error) {
-      handleControllerError(res, error, "populating floors");
-    }
-  },
+  @Post("/floors")
+  async populateFloors(@Body() data: any) {
+    await populateTableService.populateFloors(data);
+    return { message: "Floors populated" };
+  }
 
-  populateRooms: async (req: Request, res: Response) => {
-    try {
-      const data = req.body;
-      await populateTableService.populateRooms(data);
-      res.status(200).json({ message: "Rooms populated" });
-    } catch (error) {
-      handleControllerError(res, error, "populating rooms");
-    }
-  },
+  @Post("/rooms")
+  async populateRooms(@Body() data: any) {
+    await populateTableService.populateRooms(data);
+    return { message: "Rooms populated" };
+  }
 
-  populateAlias: async (req: Request, res: Response) => {
-    try {
-      const data = req.body;
-      await populateTableService.populateAlias(data);
-      res.status(200).json({ message: "Alias populated" });
-    } catch (error) {
-      handleControllerError(res, error, "populating alias");
-    }
-  },
+  @Post("/alias")
+  async populateAlias(@Body() data: any) {
+    await populateTableService.populateAlias(data);
+    return { message: "Alias populated" };
+  }
 
-  populateNodes: async (req: Request, res: Response) => {
-    try {
-      const data = req.body;
-      await populateTableService.populateNodes(data);
-      res.status(200).json({ message: "Nodes populated" });
-    } catch (error) {
-      handleControllerError(res, error, "populating nodes");
-    }
-  },
+  @Post("/nodes")
+  async populateNodes(@Body() data: any) {
+    await populateTableService.populateNodes(data);
+    return { message: "Nodes populated" };
+  }
 
-  populateEdges: async (req: Request, res: Response) => {
-    try {
-      const data = req.body;
-      await populateTableService.populateEdges(data);
-      res.status(200).json({ message: "Edges populated" });
-    } catch (error) {
-      handleControllerError(res, error, "populating edges");
-    }
-  },
-};
+  @Post("/edges")
+  async populateEdges(@Body() data: any) {
+    await populateTableService.populateEdges(data);
+    return { message: "Edges populated" };
+  }
+}
