@@ -68,9 +68,10 @@ fi
 for SERVICE in "${SERVICES[@]}"; do
   for ENVIRONMENT in "${ENVIRONMENTS[@]}"; do
     railway link -p $RAILWAY_PROJECT_ID -s $SERVICE -e $ENVIRONMENT
-    while IFS='=' read -r key value; do
+    FILENAME="apps/$SERVICE/.env.$ENVIRONMENT"
+    while IFS='=' read -r key value || [ -n "$key" ]; do
       RAILWAY_SET_ARGS+=" --set $key=${value//\"/}"
-    done <"apps/$SERVICE/.env.$ENVIRONMENT"
+    done <"$FILENAME"
     railway variables$RAILWAY_SET_ARGS
   done
 done
