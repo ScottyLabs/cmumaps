@@ -13,7 +13,7 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 def drop_alias_table():
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
-        f"{server_url}/api/drop-tables",
+        f"{server_url}/drop-tables",
         json={"tableNames": ["Alias"]},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
@@ -53,7 +53,7 @@ def create_aliases():
     # Send request to server to populate Alias table
     server_url = os.getenv("SERVER_URL")
     response = requests.post(
-        f"{server_url}/api/populate-table/alias",
+        f"{server_url}/populate-table/alias",
         json=alias_data,
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )

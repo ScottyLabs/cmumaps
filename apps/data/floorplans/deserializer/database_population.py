@@ -20,7 +20,7 @@ def drop_all_tables():
     table_names = ["Building", "Floor", "Room", "Alias", "Node", "Edge", "Poi"]
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
-        f"{server_url}/api/drop-tables",
+        f"{server_url}/drop-tables",
         json={"tableNames": table_names},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )

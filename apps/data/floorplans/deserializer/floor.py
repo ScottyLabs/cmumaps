@@ -15,7 +15,7 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 def drop_floor_table():
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
-        f"{server_url}/api/drop-tables",
+        f"{server_url}/drop-tables",
         json={"tableNames": ["Floor"]},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
@@ -62,7 +62,7 @@ def create_floors():
     # Send request to server to populate Floor table
     server_url = os.getenv("SERVER_URL")
     response = requests.post(
-        f"{server_url}/api/populate-table/floors",
+        f"{server_url}/populate-table/floors",
         json=floors_data,
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
