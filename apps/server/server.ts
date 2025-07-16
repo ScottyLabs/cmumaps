@@ -49,7 +49,6 @@ app.get("/", (_req, res) => {
 
 // Routes for database population
 // app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
-// app.use("/api/populate-table", checkAuth, populateTableRoutes);
 
 // app.use("/api/floors", checkAuth, floorRoutes);
 // // app.use("/api/buildings", buildingRoutes);
