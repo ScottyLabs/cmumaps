@@ -15,7 +15,7 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 def drop_node_table():
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
-        f"{server_url}/api/drop-tables",
+        f"{server_url}/drop-tables",
         json={"tableNames": ["Node"]},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
@@ -49,7 +49,7 @@ def create_nodes():
     # Send request to server to populate Node table
     server_url = os.getenv("SERVER_URL")
     response = requests.post(
-        f"{server_url}/api/populate-table/nodes",
+        f"{server_url}/populate-table/nodes",
         json=node_data,
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )

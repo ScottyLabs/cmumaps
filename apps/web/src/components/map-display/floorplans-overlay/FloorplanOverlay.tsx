@@ -1,7 +1,6 @@
 import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
-import { useQuery } from "@tanstack/react-query";
 import { Annotation, Polygon } from "mapkit-react";
-import { getRoomsQueryOptions } from "@/api/apiClient";
+import $api from "@/api/client";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
@@ -23,7 +22,12 @@ const FloorplanOverlay = ({ floor }: Props) => {
 
   // Query data
   const floorCode = getFloorCode(floor);
-  const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
+  const { data: rooms } = $api.useQuery(
+    "get",
+    "/floors/{floorCode}/floorplan",
+    { params: { path: { floorCode: floorCode ?? "" } } },
+    { enabled: !!floorCode },
+  );
 
   // Custom hooks
   const { roomName: selectedRoomName } = useLocationParams();

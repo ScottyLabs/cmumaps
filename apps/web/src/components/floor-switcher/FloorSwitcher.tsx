@@ -1,8 +1,7 @@
-import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-import { getBuildingsQueryOptions } from "@/api/apiClient";
+import $api from "@/api/client";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
+import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
 
@@ -11,7 +10,7 @@ import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
  */
 const FloorSwitcher = () => {
   // Library hooks
-  const { isSignedIn } = useUser();
+  const { isCMU } = useUser();
   const isMobile = useIsMobile();
 
   // Global states
@@ -19,7 +18,7 @@ const FloorSwitcher = () => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
 
   // Query data
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: buildings } = $api.useQuery("get", "/buildings");
 
   // Custom hooks
   const { isCardOpen } = useLocationParams();
@@ -31,7 +30,7 @@ const FloorSwitcher = () => {
   }
 
   // Don't show the floor switcher if the user is not signed in
-  if (!isSignedIn) {
+  if (!isCMU) {
     return <></>;
   }
 

@@ -1,8 +1,9 @@
 {
   "name": "@cmumaps/rust-server",
+  "version": "0.0.0",
   "scripts": {
     "build": "cargo build --release",
-    "start": "cargo run --release",
-    "dev": "cargo-watch -x run"
+    "dev": "cargo-watch -x run",
+    "start": "cargo run --release"
   }
 }

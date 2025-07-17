@@ -9,6 +9,7 @@ __pycache__/
 
 # Build
 dist/
+build/
 
 # Rust
 target/
@@ -21,3 +22,4 @@ Cargo.lock
 .turbo
 .DS_Store
 Cargo.lock
+.vercel

@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import {
   FeatureVisibility,
   type MapInteractionEvent,
@@ -7,7 +6,7 @@ import {
 } from "mapkit-react";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
-import { getBuildingsQueryOptions } from "@/api/apiClient";
+import $api from "@/api/client";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
 import {
@@ -31,7 +30,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const navigate = useNavigateLocationParams();
 
   // Query data
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: buildings } = $api.useQuery("get", "/buildings");
 
   // Global state
   const hideSearch = useBoundStore((state) => state.hideSearch);

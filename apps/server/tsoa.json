@@ -1,12 +1,24 @@
 {
-  "entryFile": "index.ts",
+  "entryFile": "server.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "controllerPathGlobs": ["src/controllers/*.ts"],
   "spec": {
+    "securityDefinitions": {
+      "oauth2": {
+        "type": "oauth2",
+        "flow": "accessCode",
+        "tokenUrl": "${TOKEN_URL}",
+        "authorizationUrl": "${AUTHORIZATION_URL}",
+        "scopes": {}
+      }
+    },
+    "basePath": "/",
     "outputDirectory": "build",
-    "specVersion": 3
+    "specVersion": 3,
+    "yaml": true
   },
   "routes": {
-    "routesDir": "build"
+    "routesDir": "build",
+    "authenticationModule": "./src/middleware/authentication.ts"
   }
 }

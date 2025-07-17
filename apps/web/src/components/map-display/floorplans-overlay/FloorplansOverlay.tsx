@@ -1,5 +1,5 @@
-import { useUser } from "@clerk/clerk-react";
 import FloorplanOverlay from "@/components/map-display/floorplans-overlay/FloorplanOverlay";
+import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 
 const FloorPlansOverlay = () => {

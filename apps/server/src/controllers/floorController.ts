@@ -1,10 +1,11 @@
-import type { Request, Response } from "express";
-
+import type * as express from "express";
+import { Get, Path, Route, Security } from "tsoa";
 import { handleControllerError } from "../errors/errorHandler";
 import { floorService } from "../services/floorService";
 
-export const floorController = {
-  getFloorGraph: async (req: Request, res: Response) => {
+@Route("/floors")
+export class FloorController {
+  async getFloorGraph(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
     try {
@@ -14,9 +15,9 @@ export const floorController = {
     } catch (error) {
       handleControllerError(res, error, "getting floor nodes");
     }
-  },
+  }
 
-  getFloorRooms: async (req: Request, res: Response) => {
+  async getFloorRooms(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
     try {
@@ -25,9 +26,9 @@ export const floorController = {
     } catch (error) {
       handleControllerError(res, error, "getting floor rooms");
     }
-  },
+  }
 
-  getFloorPois: async (req: Request, res: Response) => {
+  async getFloorPois(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
     try {
@@ -36,16 +37,11 @@ export const floorController = {
     } catch (error) {
       handleControllerError(res, error, "getting floor pois");
     }
-  },
+  }
 
-  getFloorplan: async (req: Request, res: Response) => {
-    const floorCode = req.params.id;
-
-    try {
-      const floorPlan = await floorService.getFloorplan(floorCode);
-      res.json(floorPlan);
-    } catch (error) {
-      handleControllerError(res, error, "getting floor plan");
-    }
-  },
-};
+  @Security("oauth2", [])
+  @Get("/:floorCode/floorplan")
+  public async getFloorplan(@Path() floorCode: string) {
+    return await floorService.getFloorplan(floorCode);
+  }
+}

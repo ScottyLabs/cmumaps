@@ -12,6 +12,7 @@
       "!**/src/assets/**",
       "!**/cmumaps-data/**",
       "!**/dist/**",
+      "!**/build/**",
       "!**/routeTree.gen.ts",
       "!**/openapi.d.ts"
     ]
@@ -48,6 +49,11 @@
         "noInferrableTypes": "error",
         "noUselessElse": "error"
       }
+    }
+  },
+  "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
     }
   }
 }

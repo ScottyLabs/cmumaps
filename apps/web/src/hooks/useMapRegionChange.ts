@@ -1,8 +1,7 @@
 import type { Building } from "@cmumaps/common";
-import { useQuery } from "@tanstack/react-query";
 import type { CoordinateRegion } from "mapkit-react";
 import { type RefObject, useState } from "react";
-import { getBuildingsQueryOptions } from "@/api/apiClient";
+import $api from "@/api/client";
 import {
   INITIAL_REGION,
   THRESHOLD_DENSITY_TO_SHOW_FLOORS,
@@ -15,7 +14,7 @@ import { isInPolygon } from "@/utils/geometry";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Query data
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: buildings } = $api.useQuery("get", "/buildings");
 
   // Global state
   const focusedFloor = useBoundStore((state) => state.focusedFloor);

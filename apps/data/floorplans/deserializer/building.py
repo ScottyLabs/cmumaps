@@ -13,7 +13,7 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 def drop_building_table():
     server_url = os.getenv("SERVER_URL")
     response = requests.delete(
-        f"{server_url}/api/drop-tables",
+        f"{server_url}/drop-tables",
         json={"tableNames": ["Building"]},
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
@@ -54,7 +54,7 @@ def create_buildings():
     # Send request to server to populate Building table
     server_url = os.getenv("SERVER_URL")
     response = requests.post(
-        f"{server_url}/api/populate-table/buildings",
+        f"{server_url}/populate-table/buildings",
         json=buildings_data,
         headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
     )
