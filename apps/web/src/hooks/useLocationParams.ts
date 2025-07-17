@@ -1,10 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import {
-  getBuildingsQueryOptions,
-  getRoomsQueryOptions,
-} from "@/api/apiClient";
+import $api from "@/api/client";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Params {
@@ -23,7 +19,7 @@ const verifyURLParams = (): string | undefined => {
 
   const navigate = useNavigate();
 
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
+  const { data: buildings } = $api.useQuery("get", "/buildings");
 
   const suffix = path.split("/")?.[1] || "";
 
@@ -31,7 +27,12 @@ const verifyURLParams = (): string | undefined => {
   const floor = getFloorLevelFromRoomName(roomName) || "";
 
   const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
-  const { data: rooms } = useQuery(getRoomsQueryOptions(floorCode));
+  const { data: rooms } = $api.useQuery(
+    "get",
+    "/floors/{floorCode}/floorplan",
+    { params: { path: { floorCode: floorCode ?? "" } } },
+    { enabled: !!floorCode },
+  );
 
   const building = buildings && buildingCode && buildings[buildingCode];
 

@@ -1,5 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { getBuildingsQueryOptions } from "@/api/apiClient";
+import $api from "@/api/client";
 import cancelIcon from "@/assets/icons/nav/nav-overlay/cancel.svg";
 import forwardArrowIcon from "@/assets/icons/nav/nav-overlay/forward-arrow.svg";
 import headerIcon from "@/assets/icons/nav/nav-overlay/header.svg";
@@ -24,8 +23,7 @@ const NavHeader = ({
   isNavigating,
   // listShown,
 }: NavHeaderProps) => {
-  const { data: buildings } = useQuery(getBuildingsQueryOptions());
-
+  const { data: buildings } = $api.useQuery("get", "/buildings");
   const navigate = useNavigateLocationParams();
 
   // if (listShown) {
