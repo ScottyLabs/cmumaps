@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router";
 import env from "@/env.ts";
 import App from "./App.tsx";
 import "./index.css";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 // Posthog settings
 const posthog_options = {
@@ -19,14 +20,16 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
-      <PostHogProvider
-        apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
-        options={posthog_options}
-      >
-        <StrictMode>
-          <App />
-        </StrictMode>
-      </PostHogProvider>
+      <NuqsAdapter>
+        <PostHogProvider
+          apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
+          options={posthog_options}
+        >
+          <StrictMode>
+            <App />
+          </StrictMode>
+        </PostHogProvider>
+      </NuqsAdapter>
     </QueryClientProvider>
   </BrowserRouter>,
 );

@@ -14,18 +14,18 @@ declare module "@tanstack/react-query" {
   }
 }
 
-const getClerkToken = async () => {
-  if (window.Clerk?.session) {
-    return await window.Clerk.session.getToken();
-  }
-  return null;
-};
+// const getClerkToken = async () => {
+//   if (window.Clerk?.session) {
+//     return await window.Clerk.session.getToken();
+//   }
+//   return null;
+// };
 
 const apiClient = async (endpoint: string) => {
-  const token = await getClerkToken();
-  const headers = { Authorization: `Bearer ${token}` };
+  // const token = await getClerkToken();
+  // const headers = { Authorization: `Bearer ${token}` };
   const endpointUrl = `${env.VITE_SERVER_URL}/api/${endpoint}`;
-  const response = await fetch(endpointUrl, { headers });
+  const response = await fetch(endpointUrl);
   if (!response.ok) throw new Error(`API error: ${response.status}`);
   return response.json();
 };
