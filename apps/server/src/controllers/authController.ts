@@ -1,6 +1,6 @@
 import type * as express from "express";
 import { Get, Request, Route, Security } from "tsoa";
-import env from "../env";
+import env from "@/env";
 
 export interface UserInfoResponse {
   user: {
