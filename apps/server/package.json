@@ -33,7 +33,7 @@
   "keywords": [],
   "license": "ISC",
   "scripts": {
-    "build": "bun run tsoa:build && bun run openapi:build && bun build server.ts --outdir=dist --target=bun --sourcemap",
+    "build": "bun build server.ts --outdir=dist --target=bun --sourcemap",
     "check": "tsc -b && biome check",
     "db-generate": "prisma generate",
     "dev": "concurrently 'bun run server' 'bun run tsoa' 'bun run openapi'",

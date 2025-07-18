@@ -11,8 +11,15 @@
       "persistent": true
     },
     "@cmumaps/server#db-generate": {},
+    "@cmumaps/server#tsoa:build": {},
+    "@cmumaps/server#openapi:build": {
+      "dependsOn": ["@cmumaps/server#tsoa:build"]
+    },
     "@cmumaps/server#build": {
-      "dependsOn": ["@cmumaps/server#db-generate"]
+      "dependsOn": [
+        "@cmumaps/server#db-generate",
+        "@cmumaps/server#openapi:build"
+      ]
     },
     "build": {
       "dependsOn": ["^build"],
