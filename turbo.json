@@ -10,7 +10,9 @@
       "cache": false,
       "persistent": true
     },
-    "@cmumaps/server#db-generate": {},
+    "@cmumaps/server#db-generate": {
+      "cache": false
+    },
     "@cmumaps/server#tsoa": {},
     "@cmumaps/server#openapi": {
       "dependsOn": ["@cmumaps/server#tsoa"]
@@ -32,23 +34,20 @@
       ]
     },
     "start": {
-      "dependsOn": ["^start", "^build"]
+      "dependsOn": ["^start", "^build"],
+      "persistent": true
     },
     "format": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "lint": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "tsc": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "check": {
       "cache": false,
-      "persistent": true,
       "dependsOn": ["@cmumaps/server#db-generate", "@cmumaps/server#openapi"]
     }
   }
