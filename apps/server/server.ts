@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import http from "node:http";
+import cors from "cors";
 import type { ErrorRequestHandler, Request, Response } from "express";
 import express, { type NextFunction } from "express";
 import { Server } from "socket.io";
@@ -15,6 +16,10 @@ import { WebSocketService } from "./src/services/webSocketService";
 
 const app = express();
 app.use(express.json({ limit: "8mb" }));
+
+if (process.env.NODE_ENV === "development") {
+  app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+}
 
 // Create HTTP server with Express app attached
 const server = http.createServer(app);
