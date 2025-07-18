@@ -74,51 +74,49 @@ const FloorDisplay = ({
   };
 
   return (
-    <>
-      <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
-        onMouseMove={handleMouseMove}
-        onMouseDown={handleOnMouseDown}
-        onMouseUp={() => setCanPan(true)}
-        onClick={handleStageClick}
-        onWheel={handleWheel}
-        onDragMove={handleDragMove}
-        draggable
-        scaleX={scale}
-        scaleY={scale}
-        x={offset.x}
-        y={offset.y}
-        ref={stageRef}
-      >
-        <Layer>
-          <OutlineDisplay floorCode={floorCode} />
-          <PolygonsDisplay rooms={rooms} />
-          <EdgesDisplay floorCode={floorCode} graph={graph} />
-          <NodesDisplay
+    <Stage
+      width={window.innerWidth}
+      height={window.innerHeight}
+      onMouseMove={handleMouseMove}
+      onMouseDown={handleOnMouseDown}
+      onMouseUp={() => setCanPan(true)}
+      onClick={handleStageClick}
+      onWheel={handleWheel}
+      onDragMove={handleDragMove}
+      draggable
+      scaleX={scale}
+      scaleY={scale}
+      x={offset.x}
+      y={offset.y}
+      ref={stageRef}
+    >
+      <Layer>
+        <OutlineDisplay floorCode={floorCode} />
+        <PolygonsDisplay rooms={rooms} />
+        <EdgesDisplay floorCode={floorCode} graph={graph} />
+        <NodesDisplay
+          floorCode={floorCode}
+          graph={graph}
+          rooms={rooms}
+          pois={pois}
+          offset={offset}
+          scale={scale}
+        />
+        {roomId && (
+          <SelectedPolygonDisplay
             floorCode={floorCode}
-            graph={graph}
-            rooms={rooms}
-            pois={pois}
+            roomId={roomId}
+            polygon={rooms[roomId].polygon}
             offset={offset}
             scale={scale}
           />
-          {roomId && (
-            <SelectedPolygonDisplay
-              floorCode={floorCode}
-              roomId={roomId}
-              polygon={rooms[roomId].polygon}
-              offset={offset}
-              scale={scale}
-            />
-          )}
-          <LabelsDisplay floorCode={floorCode} graph={graph} rooms={rooms} />
-          {LIVE_CURSORS_ENABLED && (
-            <LiveCursors floorCode={floorCode} scale={scale} />
-          )}
-        </Layer>
-      </Stage>
-    </>
+        )}
+        <LabelsDisplay floorCode={floorCode} graph={graph} rooms={rooms} />
+        {LIVE_CURSORS_ENABLED && (
+          <LiveCursors floorCode={floorCode} scale={scale} />
+        )}
+      </Layer>
+    </Stage>
   );
 };
 

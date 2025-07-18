@@ -11,7 +11,7 @@ const SearchResults = ({ searchQuery }: Props) => {
 
   // Don't render if the search is not open or the search query is empty
   if (searchQuery.length === 0 || !isSearchOpen) {
-    return <></>;
+    return;
   }
 
   // No results found
