@@ -27,6 +27,7 @@
         "@cmumaps/websocket": "workspace:*",
         "@prisma/client": "6.12.0",
         "@types/swagger-ui-express": "4.1.8",
+        "cors": "2.8.5",
         "express": "5.1.0",
         "jsonwebtoken": "9.0.2",
         "jwks-rsa": "3.2.0",
