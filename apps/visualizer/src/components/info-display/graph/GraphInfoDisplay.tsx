@@ -28,22 +28,20 @@ const GraphInfoDisplay = ({ nodeId, floorCode, graph }: Props) => {
   }, [neighbors]);
 
   return (
-    <>
-      <div className="mb-2 space-y-4">
-        <GraphInfoButtons floorCode={floorCode} nodeId={nodeId} />
-        <CrossFloorNeighborTable
-          floorCode={floorCode}
-          nodeId={nodeId}
-          neighbors={neighbors}
-          differentFloorNeighbors={differentFloorNeighbors}
-        />
-        <CrossFloorEdgeSection
-          floorCode={floorCode}
-          nodeId={nodeId}
-          graph={graph}
-        />
-      </div>
-    </>
+    <div className="mb-2 space-y-4">
+      <GraphInfoButtons floorCode={floorCode} nodeId={nodeId} />
+      <CrossFloorNeighborTable
+        floorCode={floorCode}
+        nodeId={nodeId}
+        neighbors={neighbors}
+        differentFloorNeighbors={differentFloorNeighbors}
+      />
+      <CrossFloorEdgeSection
+        floorCode={floorCode}
+        nodeId={nodeId}
+        graph={graph}
+      />
+    </div>
   );
 };
 

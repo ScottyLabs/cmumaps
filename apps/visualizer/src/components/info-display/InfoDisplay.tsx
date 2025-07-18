@@ -40,6 +40,8 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
   }
 
   const renderRoomInfoDisplay = () => {
+    // One of these conditions should always occur since we checked that one of the ids is available
+    // and we can retrieve nodeId from poiId
     if (roomId) {
       return (
         <RoomInfoDisplay floorCode={floorCode} roomId={roomId} rooms={rooms} />
@@ -51,13 +53,10 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
         <RoomlessDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
       );
     }
-
-    // this condition should never occur since we checked that one of the ids is available
-    // and we can retrieve nodeId from poiId
-    return <></>;
   };
 
   const renderPoiInfoDisplay = () => {
+    // One of these conditions should always occur since we check either poiId or nodeId is available
     if (poiId) {
       return <PoiInfoDisplay floorCode={floorCode} poiId={poiId} pois={pois} />;
     }
@@ -65,20 +64,15 @@ const InfoDisplay = ({ floorCode, graph, rooms, pois }: Props) => {
     if (nodeId) {
       return <PoilessDisplay floorCode={floorCode} nodeId={nodeId} />;
     }
-
-    // this condition should never occur since we check either poiId or nodeId is available
-    return <></>;
   };
 
   const renderGraphInfoDisplay = () => {
+    // This condition should always occur since we check nodeId is available
     if (nodeId) {
       return (
         <GraphInfoDisplay floorCode={floorCode} nodeId={nodeId} graph={graph} />
       );
     }
-
-    // this condition should never occur since we check nodeId is available
-    return <></>;
   };
 
   const tabNames = ["Room Info"];

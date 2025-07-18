@@ -8,7 +8,7 @@ const FloorPlansOverlay = () => {
 
   // Only show floorplans if user is signed in and a floor is focused
   if (!focusedFloor || !isSignedIn) {
-    return <></>;
+    return;
   }
 
   return <FloorplanOverlay floor={focusedFloor} />;
