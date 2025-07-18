@@ -4,14 +4,14 @@
   "dependencies": {
     "@cmumaps/common": "workspace:*",
     "@cmumaps/websocket": "workspace:*",
-    "@prisma/client": "6.11.1",
-    "@types/swagger-ui-express": "^4.1.8",
+    "@prisma/client": "6.12.0",
+    "@types/swagger-ui-express": "4.1.8",
     "cors": "2.8.5",
     "express": "5.1.0",
     "jsonwebtoken": "9.0.2",
     "jwks-rsa": "3.2.0",
     "socket.io": "4.8.1",
-    "swagger-ui-express": "^5.0.1",
+    "swagger-ui-express": "5.0.1",
     "tsoa": "6.6.0",
     "zod": "4.0.5"
   },
@@ -26,7 +26,7 @@
     "globals": "~16.3.0",
     "onchange": "~7.1.0",
     "openapi-typescript": "~7.8.0",
-    "prisma": "~6.11.1",
+    "prisma": "~6.12.0",
     "tsx": "~4.20.3",
     "typescript": "~5.8.3"
   },
