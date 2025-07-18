@@ -13,7 +13,5 @@ jobs:
         with:
             bun-version: latest 
       - run: bun install
-      - run: bun run tsoa:build && bun run openapi:build
-      - run: bun run db-generate
       - name: Check
         run: bun run syncpack && bun run check

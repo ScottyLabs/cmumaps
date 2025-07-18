@@ -49,7 +49,7 @@
     "check": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["@cmumaps/server#openapi"]
+      "dependsOn": ["@cmumaps/server#db-generate", "@cmumaps/server#openapi"]
     }
   }
 }
