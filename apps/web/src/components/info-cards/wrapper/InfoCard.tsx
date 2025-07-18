@@ -16,7 +16,7 @@ const InfoCard = ({ mapRef }: Props) => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
 
   if (isSearchOpen) {
-    return <></>;
+    return;
   }
 
   const renderCard = () => {

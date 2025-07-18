@@ -29,7 +29,8 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "useLiteralKeys": "off"
+        "useLiteralKeys": "off",
+        "noUselessFragments": "error"
       },
       "suspicious": {
         "noArrayIndexKey": "off"

@@ -26,28 +26,28 @@ const FloorSwitcher = () => {
   // Don't show the floor switcher in mobile
   // if either the card is open or the search is open
   if (isMobile && (isCardOpen || isSearchOpen)) {
-    return <></>;
+    return;
   }
 
   // Don't show the floor switcher if the user is not signed in
   if (!isCMU) {
-    return <></>;
+    return;
   }
 
   // Don't show the floor switcher if there is no focused floor
   if (!floor) {
-    return <></>;
+    return;
   }
 
   // Don't show the floor switcher if building data is not loaded
   if (!buildings) {
-    return <></>;
+    return;
   }
 
   // Don't show the floor switcher if invalid building code
   const building = buildings[floor.buildingCode];
   if (!building) {
-    return <></>;
+    return;
   }
 
   return (
