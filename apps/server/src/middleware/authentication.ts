@@ -23,6 +23,10 @@ export function expressAuthentication(
   _scopes?: string[],
 ) {
   return new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV === "development") {
+      return resolve({});
+    }
+
     const response = request.res;
     if (securityName !== "oauth2") {
       response?.status(401).json({ message: "Invalid security name" });
