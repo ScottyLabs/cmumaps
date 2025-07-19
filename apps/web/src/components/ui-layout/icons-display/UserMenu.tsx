@@ -35,7 +35,11 @@ const UserMenu = () => {
           icon: signOutIcon,
           label: "Sign Out",
           onClick: () => {
-            window.location.href = `${env.VITE_LOGOUT_URL}`;
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = env.VITE_LOGOUT_URL;
+            document.body.appendChild(form);
+            form.submit();
           },
         },
       ]
@@ -44,7 +48,7 @@ const UserMenu = () => {
           icon: signInIcon,
           label: "Sign In",
           onClick: () => {
-            window.location.href = `${env.VITE_LOGIN_URL}/?redirect_uri=${window.location.href}`;
+            window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
           },
         },
       ];
