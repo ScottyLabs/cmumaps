@@ -5,6 +5,7 @@ import { z } from "zod";
 const envSchema = z.object({
   AUTH_ISSUER: z.url(),
   AUTH_JWKS_URI: z.url(),
+  AUTH_USER_INFO_URL: z.url(),
   SERVER_PORT: z.number().default(80),
 });
 

@@ -1,5 +1,6 @@
 import type * as express from "express";
 import { Get, Request, Route, Security } from "tsoa";
+import env from "../env";
 
 export interface UserInfoResponse {
   user: {
@@ -16,11 +17,14 @@ export class AuthController {
   public async userInfo(
     @Request() request: express.Request,
   ): Promise<UserInfoResponse> {
+    if (process.env.NODE_ENV === "development") {
+      return { user: { id: "dev", email: "dev@andrew.cmu.edu", name: "Dev" } };
+    }
+
     if (!request.user) return { user: null };
 
-    const url = "https://auth.slabs-dev.org/application/o/userinfo/";
-    const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${request.user?.token}` },
+    const res = await fetch(env.AUTH_USER_INFO_URL, {
+      headers: { Authorization: `Bearer ${request.user.token}` },
     });
     const data = await res.json();
     return {
