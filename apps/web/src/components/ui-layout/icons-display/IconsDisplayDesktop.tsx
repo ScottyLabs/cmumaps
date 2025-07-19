@@ -1,13 +1,22 @@
+import { useState } from "react";
+import { IoPersonCircleSharp } from "react-icons/io5";
 import questionMarkIcon from "@/assets/icons/question-mark.png";
+import UserMenu from "@/components/ui-layout/icons-display/UserMenu";
 
 const IconsDisplay = () => {
-  // const renderClerkIcon = () => {
-  //   return (
-  //     <div className="fixed top-14 right-6">
-  //       <UserButton />
-  //     </div>
-  //   );
-  // };
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  const renderUserIcon = () => {
+    return (
+      <div className="fixed top-12 right-4 cursor-pointer">
+        <IoPersonCircleSharp
+          size={30}
+          onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+        />
+        {isUserMenuOpen && <UserMenu />}
+      </div>
+    );
+  };
 
   const renderQuestionMarkIcon = () => {
     return (
@@ -30,7 +39,7 @@ const IconsDisplay = () => {
 
   return (
     <>
-      {/* {renderClerkIcon()} */}
+      {renderUserIcon()}
       {renderQuestionMarkIcon()}
     </>
   );
