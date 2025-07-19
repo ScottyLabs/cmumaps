@@ -31,6 +31,9 @@ COPY --from=builder /usr/local/cargo/bin/server /usr/local/bin/server
 # Expose the port
 EXPOSE 3278
 
+# set the node environment to production
+ENV NODE_ENV production
+
 # set the start command to run the server
 CMD ["server"]
 
