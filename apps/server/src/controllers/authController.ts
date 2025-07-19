@@ -27,6 +27,7 @@ export class AuthController {
       headers: { Authorization: `Bearer ${request.user.token}` },
     });
     const data = await res.json();
+    console.log(data);
     return {
       user: {
         id: data.sub as string,
