@@ -20,43 +20,52 @@ def all_graph_serializer():
 
     headers = {
         "Authorization": f"Bearer {get_clerk_jwt()}",
-        "X-Socket-Id": "my-serializer-script",
     }
 
-    nodes_response = requests.get(f"{server_url}/api/nodes", headers=headers)
-
-    nodes_response.raise_for_status()  # debugging
-    nodes = nodes_response.json()
+    all_buildings = requests.get(f"{server_url}/api/buildings", headers=headers)
+    all_buildings.raise_for_status()  # debugging
+    buildings = all_buildings.json()
+    all_floor_codes = []
+    for building in buildings:
+        floors = buildings[building]["floors"]
+        for floor in floors:
+            floor_code = f"{building}-{floor}"
+            all_floor_codes.append(floor_code)
 
     all_nodes_data = {}
+    for floor_code in all_floor_codes:
+        building_code = floor_code.split("-")[0]
+        floor_level = floor_code.split("-")[1]
+        nodes_response = requests.get(
+            f"{server_url}/api/floors/{floor_code}/graph", headers=headers
+        )
+        nodes_response.raise_for_status()  # debugging
+        nodes = nodes_response.json()
 
-    for node in nodes:
-        node_info = nodes[node]
+        for node in nodes:
+            node_info = nodes[node]
+            node_id = node
+            node_dict = {}
 
-        node_dict = {}
-        node_dict["id"] = node_info["id"]
-        node_dict["pos"] = {"x": 0, "y": 0}
-        node_dict["coordinate"] = {
-            "latitude": node_info["latitude"],
-            "longitude": node_info["longitude"],
-        }
-        if node_info["roomId"]:
+            node_dict["id"] = node_id
+            node_dict["pos"] = node_info["pos"]
             node_dict["roomId"] = node_info["roomId"]
-        else:
-            node_dict["roomId"] = ""
-        if node_info["buildingCode"]:
-            node_dict["floor"] = {
-                "buildingCode": node_info["buildingCode"],
-                "level": node_info["floorLevel"],
+
+            node_dict["coordinate"] = {
+                "latitude": node_info["position"]["latitude"],
+                "longitude": node_info["position"]["longitude"],
             }
-        if node_info["neighbors"]:
+            node_dict["floor"] = {
+                "buildingCode": building_code,
+                "level": floor_level,
+            }
             neighbors = node_info["neighbors"]
             neighbors_dict = {}
             for neighbor in neighbors:
                 neighbors_dict[neighbor] = {"dist": 0}
             node_dict["neighbors"] = neighbors_dict
 
-        all_nodes_data[node] = node_dict
+            all_nodes_data[node] = node_dict
 
     # Save file
     with open("cmumaps-data/floorplans/all-graph-serialized.json", "w") as f:
