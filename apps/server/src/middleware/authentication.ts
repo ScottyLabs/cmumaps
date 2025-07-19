@@ -23,7 +23,7 @@ export function expressAuthentication(
   _scopes?: string[],
 ) {
   return new Promise((resolve, reject) => {
-    if (process.env.NODE_ENV === "development") {
+    if (env.NODE_ENV === "development") {
       return resolve({});
     }
 

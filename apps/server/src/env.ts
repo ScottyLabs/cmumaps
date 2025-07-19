@@ -3,6 +3,7 @@ import { z } from "zod";
 // Define the schema as an object with all of the env
 // variables and their types
 const envSchema = z.object({
+  NODE_ENV: z.enum(["development", "production"]),
   AUTH_ISSUER: z.url(),
   AUTH_JWKS_URI: z.url(),
   AUTH_USER_INFO_URL: z.url(),

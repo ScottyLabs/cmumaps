@@ -17,7 +17,7 @@ export class AuthController {
   public async userInfo(
     @Request() request: express.Request,
   ): Promise<UserInfoResponse> {
-    if (process.env.NODE_ENV === "development") {
+    if (env.NODE_ENV === "development") {
       return { user: { id: "dev", email: "dev@andrew.cmu.edu", name: "Dev" } };
     }
 
