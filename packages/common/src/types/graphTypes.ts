@@ -1,4 +1,4 @@
-import type { PdfCoordinate } from "./coordTypes";
+import type { GeoCoordinate, PdfCoordinate } from "./coordTypes";
 
 export const ValidCrossFloorEdgeTypes = [
   "Ramp",
@@ -29,6 +29,7 @@ export interface NodeInfo {
    * If null, the node is not associated with any room
    */
   roomId: string | null;
+  position?: GeoCoordinate;
 }
 
 export type Graph = Record<string, NodeInfo>;

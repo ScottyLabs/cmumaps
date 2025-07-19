@@ -22,37 +22,34 @@ def floorplans_serializer(floor_code: str = None):
 
     headers = {
         "Authorization": f"Bearer {get_clerk_jwt()}",
-        "X-Socket-Id": "my-serializer-script",
     }
 
     # Update specific floor in floorplans_serializer.json
     if floor_code:
+        building_code = floor_code.split("-")[0]
+        floor_level = floor_code.split("-")[1]
         file_to_update = "cmumaps-data/floorplans/floorplans-serialized.json"
-        roomIds_response = requests.get(
-            f"{server_url}/api/rooms/by-floor/{floor_code}", headers=headers
+        rooms_response = requests.get(
+            f"{server_url}/api/floors/{floor_code}/rooms", headers=headers
         )
-        roomIds_response.raise_for_status()
-        roomIds = roomIds_response.json()
+        rooms_response.raise_for_status()
+        rooms = rooms_response.json()
 
         with open(file_to_update, "r") as f:
             floorplans_data = json.load(f)
-        for roomId in roomIds:
-            room_to_update = requests.get(
-                f"{server_url}/api/rooms/{roomId}", headers=headers
-            )
-            room_to_update.raise_for_status()  # debug
+        for room in rooms:
+            room_info = rooms[room]
+            room_name = room_info["name"]
+            roomId = room
 
-            room_info = room_to_update.json()[roomId]
-            building_code = room_info["buildingCode"]
-            floor_level = room_info["floorLevel"]
             new_room_dict = {
-                "name": room_info["name"],
+                "name": room_name,
                 "labelPosition": {
-                    "latitude": room_info["labelLatitude"],
-                    "longitude": room_info["labelLongitude"],
+                    "latitude": room_info["labelPosition"]["latitude"],
+                    "longitude": room_info["labelPosition"]["longitude"],
                 },
                 "type": room_info["type"],
-                "id": room_info["id"],
+                "id": roomId,
                 "floor": {"buildingCode": building_code, "level": floor_level},
                 "coordinates": room_info["polygon"],
                 "aliases": room_info["aliases"],
@@ -66,30 +63,46 @@ def floorplans_serializer(floor_code: str = None):
 
     else:  # Update all
         floorplans_dict = {}
-        rooms_response = requests.get(f"{server_url}/api/rooms", headers=headers)
-        rooms_response.raise_for_status()  # debugging
-        rooms = rooms_response.json()
-        for room in rooms:
-            room_info = rooms[room]
-            building_code = room_info["buildingCode"]
-            floor_level = room_info["floorLevel"]
-            room_dict = {
-                "name": room_info["name"],
-                "labelPosition": {
-                    "latitude": room_info["labelLatitude"],
-                    "longitude": room_info["labelLongitude"],
-                },
-                "type": room_info["type"],
-                "id": room_info["id"],
-                "floor": {"buildingCode": building_code, "level": floor_level},
-                "coordinates": room_info["polygon"],
-                "aliases": room_info["aliases"],
-            }
-            if building_code not in floorplans_dict:
-                floorplans_dict[building_code] = {}
-            if floor_level not in floorplans_dict[building_code]:
-                floorplans_dict[building_code][floor_level] = {}
-            floorplans_dict[building_code][floor_level][room] = room_dict
+        all_buildings = requests.get(f"{server_url}/api/buildings", headers=headers)
+        all_buildings.raise_for_status()  # debugging
+        buildings = all_buildings.json()
+        all_floor_codes = []
+        for building in buildings:
+            floors = buildings[building]["floors"]
+            for floor in floors:
+                floor_code = f"{building}-{floor}"
+                all_floor_codes.append(floor_code)
+
+        for floor_code in all_floor_codes:
+            building_code = floor_code.split("-")[0]
+            floor_level = floor_code.split("-")[1]
+            rooms_response = requests.get(
+                f"{server_url}/api/floors/{floor_code}/rooms", headers=headers
+            )
+            rooms_response.raise_for_status()
+            rooms = rooms_response.json()
+            for room in rooms:
+                room_info = rooms[room]
+                room_name = room_info["name"]
+                roomId = room
+
+                new_room_dict = {
+                    "name": room_name,
+                    "labelPosition": {
+                        "latitude": room_info["labelPosition"]["latitude"],
+                        "longitude": room_info["labelPosition"]["longitude"],
+                    },
+                    "type": room_info["type"],
+                    "id": roomId,
+                    "floor": {"buildingCode": building_code, "level": floor_level},
+                    "coordinates": room_info["polygon"],
+                    "aliases": room_info["aliases"],
+                }
+                if building_code not in floorplans_dict:
+                    floorplans_dict[building_code] = {}
+                if floor_level not in floorplans_dict[building_code]:
+                    floorplans_dict[building_code][floor_level] = {}
+                floorplans_dict[building_code][floor_level][room] = new_room_dict
 
         # Create serialized json file and save
         with open("cmumaps-data/floorplans/floorplans-serialized.json", "w") as f:
