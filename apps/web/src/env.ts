@@ -4,6 +4,7 @@ import { z } from "zod";
 // variables and their types
 const envSchema = z.object({
   VITE_LOGIN_URL: z.url(),
+  VITE_LOGOUT_URL: z.url(),
   VITE_MAPKIT_TOKEN: z.string().optional(),
   VITE_PUBLIC_POSTHOG_HOST: z.string().optional(),
   VITE_PUBLIC_POSTHOG_KEY: z.string().optional(),
