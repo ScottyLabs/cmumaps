@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 const Searchbar = ({ mapRef }: Props) => {
   // Hooks
-  const navigate = useNavigate();
+  const navigate = useNavigateLocationParams();
 
   // Global state
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);

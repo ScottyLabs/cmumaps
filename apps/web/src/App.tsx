@@ -7,6 +7,7 @@ import Toolbar from "@/components/toolbar/Toolbar";
 import IconsDisplay from "@/components/ui-layout/icons-display/IconsDisplay";
 import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 import useUser from "@/hooks/useUser";
+import NavOverlay from "./components/nav/NavOverlay.tsx";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
@@ -29,6 +30,7 @@ const App = () => {
       <IconsDisplay />
       <Toolbar mapRef={mapRef} />
       <FloorSwitcher />
+      <NavOverlay />
       <MyToastContainer />
     </main>
   );

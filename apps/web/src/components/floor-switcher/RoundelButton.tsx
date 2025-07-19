@@ -1,6 +1,7 @@
 import type { Building } from "@cmumaps/common";
-import { useNavigate } from "react-router";
+import { useQueryState } from "nuqs";
 import Roundel from "@/components/shared/Roundel";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 
 interface Props {
@@ -8,15 +9,22 @@ interface Props {
 }
 
 const RoundelButton = ({ building }: Props) => {
-  const navigate = useNavigate();
+  const [src, setSrc] = useQueryState("src");
+  const navigate = useNavigateLocationParams();
   const hideSearch = useBoundStore((state) => state.hideSearch);
+  const isNavigating = useBoundStore((state) => state.isNavigating);
 
   return (
     <button
       type="button"
       className="cursor-pointer p-1"
       onClick={() => {
-        navigate(`/${building.code}`);
+        if (!src || src === "") {
+          navigate(`/${building.code}`);
+        } else if (!isNavigating) {
+          setSrc(building.code);
+        }
+
         hideSearch();
       }}
     >

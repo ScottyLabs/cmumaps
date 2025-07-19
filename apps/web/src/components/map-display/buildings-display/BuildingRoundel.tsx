@@ -1,7 +1,9 @@
 import { type Building, extractBuildingCode } from "@cmumaps/common";
 import { Annotation } from "mapkit-react";
-import { useLocation, useNavigate } from "react-router";
+import { useQueryState } from "nuqs";
+import { useLocation } from "react-router";
 import Roundel from "@/components/shared/Roundel";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { zoomOnObject } from "@/utils/zoomUtils";
@@ -12,12 +14,16 @@ interface Props {
 }
 
 const BuildingRoundel = ({ map, building }: Props) => {
-  const navigate = useNavigate();
+  const navigate = useNavigateLocationParams();
 
   const location = useLocation();
   const floorCode = location.pathname.split("/")[1];
   const selectBuilding = useBoundStore((state) => state.selectBuilding);
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
+
+  const [src, setSrc] = useQueryState("src");
+
+  const isNavigating = useBoundStore((state) => state.isNavigating);
 
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
   if (focusedFloor || !map) {
@@ -33,9 +39,13 @@ const BuildingRoundel = ({ map, building }: Props) => {
       }
     }
 
-    navigate(`/${building.code}`);
-    selectBuilding(building);
-    setCardStatus(CardStates.HALF_OPEN);
+    if (!src || src === "") {
+      navigate(`/${building.code}`);
+      selectBuilding(building);
+      setCardStatus(CardStates.HALF_OPEN);
+    } else if (!isNavigating) {
+      setSrc(building.code);
+    }
   };
 
   return (

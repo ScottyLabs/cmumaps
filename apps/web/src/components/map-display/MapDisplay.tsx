@@ -4,8 +4,8 @@ import {
   Map as MapkitMap,
   MapType,
 } from "mapkit-react";
+import { useQueryState } from "nuqs";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 import $api from "@/api/client";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
@@ -16,8 +16,10 @@ import {
 import env from "@/env";
 import useIsMobile from "@/hooks/useIsMobile";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
+import NavLine from "../nav/NavLine";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -25,7 +27,7 @@ interface Props {
 
 const MapDisplay = ({ mapRef }: Props) => {
   // Library hooks
-  const navigate = useNavigate();
+  const navigate = useNavigateLocationParams();
 
   // Query data
   const { data: buildings } = $api.useQuery("get", "/buildings");
@@ -43,6 +45,9 @@ const MapDisplay = ({ mapRef }: Props) => {
   // Custom hooks
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
+
+  const [_src, setSrc] = useQueryState("src");
+  const [_dst, setDst] = useQueryState("dst");
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
@@ -88,6 +93,8 @@ const MapDisplay = ({ mapRef }: Props) => {
     if (!clickedBuilding) {
       deselectBuilding();
       navigate("/");
+      setSrc(null);
+      setDst(null);
     }
   };
 
@@ -121,6 +128,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
+      {mapRef.current && <NavLine map={mapRef.current} />}
     </MapkitMap>
   );
 };

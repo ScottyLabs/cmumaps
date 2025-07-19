@@ -8,6 +8,7 @@
     "lodash": "4.17.21",
     "mapkit-react": "1.16.1",
     "motion": "12.23.6",
+    "nuqs": "2.4.3",
     "openapi-fetch": "0.14.0",
     "openapi-react-query": "0.5.0",
     "posthog-js": "1.257.0",

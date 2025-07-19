@@ -1,9 +1,9 @@
 import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
 import { Annotation, Polygon } from "mapkit-react";
-import { useNavigate } from "react-router";
 import $api from "@/api/client";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { getFloorCode } from "@/utils/floorUtils";
@@ -14,7 +14,7 @@ interface Props {
 
 const FloorplanOverlay = ({ floor }: Props) => {
   // Library hooks
-  const navigate = useNavigate();
+  const navigate = useNavigateLocationParams();
 
   // Global state
   const showRoomNames = useBoundStore((state) => state.showRoomNames);
