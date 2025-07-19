@@ -35,11 +35,7 @@ const UserMenu = () => {
           icon: signOutIcon,
           label: "Sign Out",
           onClick: () => {
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = env.VITE_LOGOUT_URL;
-            document.body.appendChild(form);
-            form.submit();
+            window.location.href = `${env.VITE_LOGOUT_URL}`;
           },
         },
       ]
