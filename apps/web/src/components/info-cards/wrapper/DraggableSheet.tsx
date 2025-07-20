@@ -1,8 +1,9 @@
 import { motion, type PanInfo, useAnimation } from "motion/react";
-import { useEffect, useMemo } from "react";
+import { useQueryState } from "nuqs";
+import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router";
 import useLocationParams from "@/hooks/useLocationParams";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
 
@@ -13,8 +14,9 @@ interface Props {
 
 const DraggableSheet = ({ snapPoints, children }: Props) => {
   // Library hooks
-  const navigate = useNavigate();
+  const navigate = useNavigateLocationParams();
   const controls = useAnimation();
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   // Global state
   const cardStatus = useBoundStore((state) => state.cardStatus);
@@ -48,6 +50,12 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
 
+  const [dst] = useQueryState("dst");
+
+  if (dst) {
+    return;
+  }
+
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
@@ -71,7 +79,10 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     }
 
     // update the height of the card
-    controls.set({ height: window.innerHeight });
+    // controls.set({ height: window.innerHeight });
+    if (sheetRef.current) {
+      sheetRef.current.style.height = `${window.innerHeight}px`;
+    }
   };
 
   // extend the height of the card based on the drag
@@ -81,7 +92,10 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   ) => {
     if (snapPoints[snapIndex]) {
       const newPos = snapPoints[snapIndex] - info.offset.y;
-      controls.set({ height: newPos + window.innerHeight });
+      // controls.set({ height: newPos + window.innerHeight });
+      if (sheetRef.current) {
+        sheetRef.current.style.height = `${newPos + window.innerHeight}px`;
+      }
     }
   };
 
@@ -99,6 +113,7 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     <div className="absolute inset-0">
       <motion.div
         animate={controls}
+        ref={sheetRef}
         transition={{ duration: 0.5 }}
         drag="y"
         onDragEnd={handleDragEnd}

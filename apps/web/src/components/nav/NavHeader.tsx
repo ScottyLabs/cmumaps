@@ -1,34 +1,72 @@
+import { useQueryState } from "nuqs";
+import { useEffect } from "react";
 import $api from "@/api/client";
+import $rapi from "@/api/rustClient";
 import cancelIcon from "@/assets/icons/nav/nav-overlay/cancel.svg";
-import forwardArrowIcon from "@/assets/icons/nav/nav-overlay/forward-arrow.svg";
 import headerIcon from "@/assets/icons/nav/nav-overlay/header.svg";
+import enterIcon from "@/assets/icons/nav/nav-overlay/header-instructions/enter.svg";
+import exitIcon from "@/assets/icons/nav/nav-overlay/header-instructions/exit.svg";
+import forwardArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/forward-arrow.svg";
+import leftArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/left-arrow.svg";
+import rightArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/right-arrow.svg";
+import nextInstructionIcon from "@/assets/icons/nav/nav-overlay/next-instruction.svg";
 import swapIcon from "@/assets/icons/nav/nav-overlay/swap.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
+import useBoundStore from "@/store";
+import type { NavPaths } from "@/types/navTypes";
 
 interface NavHeaderProps {
-  src: string;
-  dst: string;
   isNavigating: boolean;
-  setSrc: (_: string | null) => void;
-  setDst: (_: string | null) => void;
   startNav: () => void;
   listShown: boolean;
 }
 
 const NavHeader = ({
-  src,
-  dst,
-  setSrc,
-  setDst,
   isNavigating,
   // listShown,
 }: NavHeaderProps) => {
   const { data: buildings } = $api.useQuery("get", "/buildings");
   const navigate = useNavigateLocationParams();
 
+  const instructionIcons: Record<string, string> = {
+    Left: leftArrowIcon,
+    Right: rightArrowIcon,
+    Forward: forwardArrowIcon,
+    Enter: enterIcon,
+    Exit: exitIcon,
+  };
+
+  const instructionTitles: Record<string, string> = {
+    Left: "Turn Left",
+    Right: "Turn Right",
+    Forward: "Stay Straight",
+    Arrive: "Arrived",
+    Enter: "Enter",
+    Exit: "Exit",
+  };
+
+  const [src, setSrc] = useQueryState("src");
+  const [dst, setDst] = useQueryState("dst");
+
   // if (listShown) {
   //   return;
   // }
+
+  const { data: navPaths } = $rapi.useQuery("get", "/path", {
+    params: { query: { start: src ?? "", end: dst ?? "" } },
+    enabled: !!src && !!dst,
+  }) as { data: NavPaths | undefined };
+
+  useEffect(() => {
+    console.log("Nav Paths: ", navPaths);
+  }, [navPaths]);
+
+  const instructions = useBoundStore((state) => state.navInstructions) ?? [];
+  const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
+
+  const setInstructionIndex = useBoundStore(
+    (state) => state.setNavInstructionIndex,
+  );
 
   const srcName =
     src === "user"
@@ -42,6 +80,11 @@ const NavHeader = ({
       : buildings && dst
         ? buildings[dst]?.name || "Invalid Building"
         : "Loading...";
+
+  // const distance = useMemo(() => instructions[instructionIndex]?.distance, [instructions, instructionIndex]);
+  // const action = useMemo(() => instructions[instructionIndex]?.action, [instructions, instructionIndex]);
+  const distance = instructions[instructionIndex]?.distance;
+  const action = instructions[instructionIndex]?.action;
 
   const renderChooseHeader = () => {
     return (
@@ -93,7 +136,7 @@ const NavHeader = ({
               className="absolute right-[13px] bottom-[17px]"
               onClick={() => {
                 const temp = src;
-                navigate(temp);
+                navigate(temp || "");
                 setSrc(dst);
                 setDst(temp);
               }}
@@ -107,25 +150,101 @@ const NavHeader = ({
   };
 
   const renderNavigateHeader = () => {
+    return action === "Arrive"
+      ? renderArrivedHeader()
+      : renderInstructionHeader();
+  };
+
+  const renderInstructionHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-[19px] top-10 overflow-auto rounded-lg bg-[#31b777]">
+      <div className="btn-shadow fixed inset-x-5 top-10 overflow-auto rounded-lg bg-primary-green">
         <div className="flex">
           <img
-            src={forwardArrowIcon}
+            src={instructionIcons[action || "Forward"]}
             alt="forward"
-            className="my-[22px] mr-[19px] ml-[30px]"
+            className="mt-[22px] mr-[19px] ml-[30px]"
           />
           <div className="mt-[16px] flex-col">
             <div className="font-lato font-semibold text-[2rem] text-white">
-              Stay Straight
+              {instructionTitles[action || "Forward"]}
             </div>
             <div className="-translate-y-2 pl-[2px] font-lato font-semibold text-[15px] text-white">
-              for 100 ft
+              {action === "Forward" ? "for" : "in"} {distance} ft
             </div>
           </div>
-          <div className="-translate-y-2 absolute top-[40px] right-[20px] font-lato font-semibold text-[17px] text-white">
+          <div className="-translate-y-2 absolute top-10 right-5 font-lato font-semibold text-[17px] text-white">
             {dst}
           </div>
+        </div>
+        <div className="mx-5 my-4 flex justify-between px-px pb-0.5">
+          <button
+            className={`flex ${instructionIndex > 0 ? "" : "disabled opacity-0"}`}
+            type="button"
+            onClick={() => {
+              setInstructionIndex(Math.max(0, instructionIndex - 1));
+            }}
+          >
+            <img
+              className="rotate-180"
+              src={nextInstructionIcon}
+              alt="next instruction"
+            />
+            <div className="px-2 font-bold font-lato text-[1rem] text-white">
+              Prev
+            </div>
+          </button>
+          <div className="px-2 font-bold font-lato text-[1rem] text-white">
+            {instructionIndex + 1}/{instructions.length} (Debug)
+          </div>
+          <button
+            className={`flex ${instructionIndex < instructions.length - 1 ? "" : "disabled opacity-0"}`}
+            type="button"
+            onClick={() => {
+              setInstructionIndex(
+                Math.min(instructions.length - 1, instructionIndex + 1),
+              );
+            }}
+          >
+            <div className="px-2 font-bold font-lato text-[1rem] text-white">
+              Next
+            </div>
+            <img src={nextInstructionIcon} alt="next instruction" />
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderArrivedHeader = () => {
+    return (
+      <div className="btn-shadow fixed inset-x-5 top-10 overflow-auto rounded-lg bg-primary-blue">
+        <div className="flex justify-center">
+          <div className="mt-[16px] flex-col">
+            <div className="flex justify-center font-lato font-semibold text-[2rem] text-white">
+              You Have Arrived
+            </div>
+            <div className="flex justify-center font-lato font-semibold text-[1rem] text-white">
+              Near {dstName}
+            </div>
+          </div>
+        </div>
+        <div className="mx-5 my-4 flex justify-between px-px pb-0.5">
+          <button
+            className={`flex ${instructionIndex > 0 ? "" : "disabled opacity-0"}`}
+            type="button"
+            onClick={() => {
+              setInstructionIndex(Math.max(0, instructionIndex - 1));
+            }}
+          >
+            <img
+              className="rotate-180"
+              src={nextInstructionIcon}
+              alt="next instruction"
+            />
+            <div className="px-2 font-bold font-lato text-[1rem] text-white">
+              Prev
+            </div>
+          </button>
         </div>
       </div>
     );

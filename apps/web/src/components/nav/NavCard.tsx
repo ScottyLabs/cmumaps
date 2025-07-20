@@ -1,3 +1,4 @@
+import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
 import accessibleUnavailableIcon from "@/assets/icons/nav/route-selection/accessibleUnavailable.svg";
@@ -6,11 +7,7 @@ import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnav
 import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
 
 interface NavHeaderProps {
-  src: string;
-  dst: string;
   isNavigating: boolean;
-  setSrc: (_: string | null) => void;
-  setDst: (_: string | null) => void;
   startNav: () => void;
   toggleListShown: () => void;
   listShown: boolean;
@@ -18,8 +15,6 @@ interface NavHeaderProps {
 
 // Frame component
 const NavCard = ({
-  setSrc,
-  setDst,
   isNavigating,
   startNav,
   toggleListShown,
@@ -64,6 +59,9 @@ const NavCard = ({
     duration: "10",
     distance: "3.7",
   };
+
+  const [_src, setSrc] = useQueryState("src");
+  const [_dst, setDst] = useQueryState("dst");
 
   const [yControl, setYControl] = useState(300);
 
