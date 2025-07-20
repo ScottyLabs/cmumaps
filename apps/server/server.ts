@@ -17,7 +17,7 @@ import { WebSocketService } from "./src/services/webSocketService";
 const app = express();
 app.use(express.json({ limit: "8mb" }));
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 }
 
