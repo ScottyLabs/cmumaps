@@ -26,13 +26,19 @@ export class AuthController {
     const res = await fetch(env.AUTH_USER_INFO_URL, {
       headers: { Authorization: `Bearer ${request.user.token}` },
     });
-    const data = await res.json();
-    return {
-      user: {
-        id: data.sub as string,
-        email: data.email as string,
-        name: data.name as string,
-      },
-    };
+
+    try {
+      const data = await res.json();
+      return {
+        user: {
+          id: data.sub as string,
+          email: data.email as string,
+          name: data.name as string,
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching user info", error);
+      return { user: null };
+    }
   }
 }
