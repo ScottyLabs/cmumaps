@@ -1,16 +1,12 @@
-import type { Request, Response } from "express";
-
-import { handleControllerError } from "../errors/errorHandler";
+import { Body, Delete, Route, Security } from "tsoa";
 import { dropTablesService } from "../services/dropTablesService";
 
-export const dropTablesController = {
-  async dropTables(req: Request, res: Response) {
-    try {
-      const { tableNames } = req.body;
-      await dropTablesService.dropTables(tableNames);
-      res.json({ message: `Tables dropped: ${tableNames.join(", ")}` });
-    } catch (error) {
-      handleControllerError(res, error, "dropping tables");
-    }
-  },
-};
+@Route("drop-tables")
+export class DropTablesController {
+  @Security("oauth2", ["db_admin"])
+  @Delete("/")
+  async dropTables(@Body() body: { tableNames: string[] }) {
+    const { tableNames } = body;
+    await dropTablesService.dropTables(tableNames);
+  }
+}

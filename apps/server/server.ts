@@ -44,16 +44,12 @@ app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-// Routes for database population
-// app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
-
 // app.use("/api/floors", checkAuth, floorRoutes);
 // // app.use("/api/buildings", buildingRoutes);
 // app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 // app.use("/api", checkAuth, edgeRoutes);
 // app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
 // app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
-// app.use(notFoundHandler);
 
 // Error Handling and Not Found Handlers from https://tsoa-community.github.io/docs/error-handling.html
 app.use(function errorHandler(
