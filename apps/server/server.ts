@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import http from "node:http";
 import cors from "cors";
-import type { ErrorRequestHandler, Response } from "express";
+import type { ErrorRequestHandler } from "express";
 import express from "express";
 import { Server } from "socket.io";
 import swaggerUi from "swagger-ui-express";
@@ -9,9 +9,10 @@ import YAML from "yaml";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
 import env from "./src/env";
+import { errorHandler } from "./src/middleware/errorHandler";
+import { notFoundHandler } from "./src/middleware/notFoundHandler";
 // import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./src/services/webSocketService";
-import { errorHandler } from "./src/utils/errorHandler";
 
 const app = express();
 app.use(express.json({ limit: "8mb" }));
@@ -50,12 +51,9 @@ app.get("/", (_req, res) => {
 // app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
 // app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
 
-// Error Handling and Not Found Handlers from https://tsoa-community.github.io/docs/error-handling.html
+// Error Handling and Not Found Handlers
 app.use(errorHandler as ErrorRequestHandler);
-
-app.use(function notFoundHandler(_req, res: Response) {
-  res.status(404).send({ message: "Not Found" });
-});
+app.use(notFoundHandler);
 
 const port = env.SERVER_PORT;
 server.listen(port, () => {

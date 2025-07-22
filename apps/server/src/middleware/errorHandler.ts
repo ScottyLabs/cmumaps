@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { ValidateError } from "tsoa";
 import { BuildingError } from "../errors/error";
 
-// Error Handling and Not Found Handlers from https://tsoa-community.github.io/docs/error-handling.html
+// From https://tsoa-community.github.io/docs/error-handling.html
 export const errorHandler = (
   err: unknown,
   req: Request,
