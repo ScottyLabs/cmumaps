@@ -8,5 +8,6 @@ export class DropTablesController {
   async dropTables(@Body() body: { tableNames: string[] }) {
     const { tableNames } = body;
     await dropTablesService.dropTables(tableNames);
+    return { message: `Tables dropped: ${tableNames.join(", ")}` };
   }
 }
