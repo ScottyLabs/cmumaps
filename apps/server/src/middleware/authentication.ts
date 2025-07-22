@@ -20,10 +20,10 @@ const client = jwksClient({
 export function expressAuthentication(
   request: express.Request,
   securityName: string,
-  _scopes?: string[],
+  scopes?: string[],
 ) {
   return new Promise((resolve, reject) => {
-    if (process.env.NODE_ENV === "development") {
+    if (env.NODE_ENV === "development") {
       return resolve({});
     }
 
@@ -51,12 +51,30 @@ export function expressAuthentication(
         });
       },
       { issuer: env.AUTH_ISSUER },
-      (error, _decoded) => {
+      (error, decoded) => {
+        // Check if the token is valid
         if (error) {
           console.error("Authentication error:", error.message);
           response?.status(401).json({ message: "Invalid token" });
           return reject({});
         }
+
+        // Check if the token format is valid
+        if (!decoded || typeof decoded !== "object") {
+          response?.status(401).json({ message: "Invalid token format" });
+          return reject({});
+        }
+
+        // Check if the token contains the required scopes
+        for (const scope of scopes ?? []) {
+          if (!decoded.groups?.includes(scope)) {
+            response
+              ?.status(401)
+              .json({ message: "JWT does not contain required scope." });
+            return reject({});
+          }
+        }
+
         return resolve({ token });
       },
     );

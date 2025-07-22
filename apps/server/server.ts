@@ -1,23 +1,23 @@
 import fs from "node:fs";
 import http from "node:http";
 import cors from "cors";
-import type { ErrorRequestHandler, Request, Response } from "express";
-import express, { type NextFunction } from "express";
+import type { ErrorRequestHandler } from "express";
+import express from "express";
 import { Server } from "socket.io";
 import swaggerUi from "swagger-ui-express";
-import { ValidateError } from "tsoa";
 import YAML from "yaml";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
 import env from "./src/env";
-import { BuildingError } from "./src/errors/error";
+import { errorHandler } from "./src/middleware/errorHandler";
+import { notFoundHandler } from "./src/middleware/notFoundHandler";
 // import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./src/services/webSocketService";
 
 const app = express();
 app.use(express.json({ limit: "8mb" }));
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 }
 
@@ -44,48 +44,16 @@ app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-// Routes for database population
-// app.use("/api/drop-tables", checkAuth, dropTablesRoutes);
-
 // app.use("/api/floors", checkAuth, floorRoutes);
 // // app.use("/api/buildings", buildingRoutes);
 // app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
 // app.use("/api", checkAuth, edgeRoutes);
 // app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
 // app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
-// app.use(notFoundHandler);
 
-// Error Handling and Not Found Handlers from https://tsoa-community.github.io/docs/error-handling.html
-app.use(function errorHandler(
-  err: unknown,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  if (err instanceof ValidateError) {
-    console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
-    return res.status(422).json({
-      message: "Validation Failed",
-      details: err?.fields,
-    });
-  }
-
-  if (err instanceof BuildingError) {
-    res.status(404).json({ code: err.code });
-    return;
-  }
-
-  if (err instanceof Error) {
-    console.error(`Error ${req.path}`, err);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-
-  next();
-} as ErrorRequestHandler);
-
-app.use(function notFoundHandler(_req, res: Response) {
-  res.status(404).send({ message: "Not Found" });
-});
+// Error Handling and Not Found Handlers
+app.use(errorHandler as ErrorRequestHandler);
+app.use(notFoundHandler);
 
 const port = env.SERVER_PORT;
 server.listen(port, () => {
