@@ -24,15 +24,19 @@ const NavOverlay = () => {
 
   // Process instructions
   useEffect(() => {
-    const instructions = navPaths?.Fastest?.instructions || [];
+    const instructions = navPaths?.Fastest?.instructions ?? [];
     const path: Node[] = navPaths?.Fastest?.path.path ?? [];
 
     const newInstructions = [];
 
     let oldInstructionsIndex = 0;
+    let distanceAcc = 0;
     path.forEach((node, index) => {
       if (node.id === instructions[oldInstructionsIndex]?.node_id) {
-        newInstructions.push(instructions[oldInstructionsIndex]);
+        const instruction = instructions[oldInstructionsIndex];
+        if (instruction) instruction.distance = Math.round(distanceAcc);
+        newInstructions.push(instruction);
+        distanceAcc = 0;
         oldInstructionsIndex++;
       }
 
@@ -43,9 +47,10 @@ const NavOverlay = () => {
       ) {
         newInstructions.push({
           action: "Enter",
-          distance: 0,
+          distance: Math.round(distanceAcc),
           node_id: node.id,
         });
+        distanceAcc = 0;
       }
       if (
         index > 0 &&
@@ -54,9 +59,18 @@ const NavOverlay = () => {
       ) {
         newInstructions.push({
           action: "Exit",
-          distance: 0,
+          distance: Math.round(distanceAcc),
           node_id: node.id,
         });
+        distanceAcc = 0;
+      }
+
+      if (index < path.length - 1) {
+        const nextNode = path[index + 1];
+        if (nextNode) {
+          const distance = node.neighbors[nextNode.id]?.dist ?? 0;
+          distanceAcc += distance;
+        }
       }
     });
 
