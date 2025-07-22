@@ -13,6 +13,12 @@ export interface UserInfoResponse {
 @Route("/auth")
 export class AuthController {
   @Security("oauth2")
+  @Get("/token")
+  public async token(@Request() request: express.Request) {
+    return { token: request.user?.token ?? null };
+  }
+
+  @Security("oauth2")
   @Get("/userInfo")
   public async userInfo(
     @Request() request: express.Request,
