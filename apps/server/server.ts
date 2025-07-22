@@ -1,18 +1,17 @@
 import fs from "node:fs";
 import http from "node:http";
 import cors from "cors";
-import type { ErrorRequestHandler, Request, Response } from "express";
-import express, { type NextFunction } from "express";
+import type { ErrorRequestHandler, Response } from "express";
+import express from "express";
 import { Server } from "socket.io";
 import swaggerUi from "swagger-ui-express";
-import { ValidateError } from "tsoa";
 import YAML from "yaml";
 import { RegisterRoutes } from "./build/routes";
 import { prisma } from "./prisma";
 import env from "./src/env";
-import { BuildingError } from "./src/errors/error";
 // import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./src/services/webSocketService";
+import { errorHandler } from "./src/utils/errorHandler";
 
 const app = express();
 app.use(express.json({ limit: "8mb" }));
@@ -52,32 +51,7 @@ app.get("/", (_req, res) => {
 // app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
 
 // Error Handling and Not Found Handlers from https://tsoa-community.github.io/docs/error-handling.html
-app.use(function errorHandler(
-  err: unknown,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  if (err instanceof ValidateError) {
-    console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
-    return res.status(422).json({
-      message: "Validation Failed",
-      details: err?.fields,
-    });
-  }
-
-  if (err instanceof BuildingError) {
-    res.status(404).json({ code: err.code });
-    return;
-  }
-
-  if (err instanceof Error) {
-    console.error(`Error ${req.path}`, err);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-
-  next();
-} as ErrorRequestHandler);
+app.use(errorHandler as ErrorRequestHandler);
 
 app.use(function notFoundHandler(_req, res: Response) {
   res.status(404).send({ message: "Not Found" });
