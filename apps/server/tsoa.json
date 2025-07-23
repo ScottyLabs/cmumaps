@@ -9,7 +9,7 @@
         "flow": "accessCode",
         "tokenUrl": "${TOKEN_URL}",
         "authorizationUrl": "${AUTHORIZATION_URL}",
-        "scopes": {}
+        "scopes": { "db_admin": "Database Admin" }
       }
     },
     "basePath": "/",
