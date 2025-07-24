@@ -4,7 +4,7 @@
     "": {
       "name": "cmumaps",
       "dependencies": {
-        "ruff": "1.5.4",
+        "ruff": "1.5.4"
       },
       "devDependencies": {
         "@biomejs/biome": "~2.1.1",
@@ -15,16 +15,16 @@
         "husky": "~8.0.0",
         "syncpack": "~13.0.4",
         "turbo": "~2.5.4",
-        "typescript": "~5.8.3",
-      },
+        "typescript": "~5.8.3"
+      }
     },
     "apps/data": {
       "name": "@cmumaps/data",
-      "version": "0.0.0",
+      "version": "0.0.0"
     },
     "apps/rust-server": {
       "name": "@cmumaps/rust-server",
-      "version": "0.0.0",
+      "version": "0.0.0"
     },
     "apps/server": {
       "name": "@cmumaps/server",
@@ -41,7 +41,7 @@
         "socket.io": "4.8.1",
         "swagger-ui-express": "5.0.1",
         "tsoa": "6.6.0",
-        "zod": "4.0.5",
+        "zod": "4.0.5"
       },
       "devDependencies": {
         "@types/cors": "~2.8.17",
@@ -56,8 +56,8 @@
         "openapi-typescript": "~7.8.0",
         "prisma": "~6.12.0",
         "tsx": "~4.20.3",
-        "typescript": "~5.8.3",
-      },
+        "typescript": "~5.8.3"
+      }
     },
     "apps/visualizer": {
       "name": "@cmumaps/visualizer",
@@ -76,6 +76,7 @@
         "@tanstack/zod-adapter": "1.128.3",
         "@turf/simplify": "7.2.0",
         "@turf/turf": "7.2.0",
+        "geojson": "0.5.0",
         "konva": "9.3.22",
         "lodash": "4.17.21",
         "openapi-fetch": "0.14.0",
@@ -93,7 +94,7 @@
         "tailwind-merge": "3.3.1",
         "tailwindcss": "4.1.11",
         "uuid": "11.1.0",
-        "zod": "4.0.5",
+        "zod": "4.0.5"
       },
       "devDependencies": {
         "@clerk/types": "~4.68.0",
@@ -104,8 +105,8 @@
         "globals": "~16.3.0",
         "openapi-typescript": "~7.8.0",
         "typescript": "~5.8.3",
-        "vite": "~7.0.4",
-      },
+        "vite": "~7.0.4"
+      }
     },
     "apps/web": {
       "name": "@cmumaps/web",
@@ -131,7 +132,7 @@
         "react-toastify": "11.0.5",
         "tailwindcss": "4.1.11",
         "zod": "4.0.5",
-        "zustand": "5.0.6",
+        "zustand": "5.0.6"
       },
       "devDependencies": {
         "@tanstack/eslint-plugin-query": "~5.81.2",
@@ -144,25 +145,25 @@
         "@vitejs/plugin-react-swc": "~3.10.2",
         "globals": "~16.3.0",
         "typescript": "~5.8.3",
-        "vite": "~7.0.4",
-      },
+        "vite": "~7.0.4"
+      }
     },
     "packages/common": {
       "name": "@cmumaps/common",
       "version": "1.0.0",
       "devDependencies": {
         "@types/node": "~24.0.13",
-        "typescript": "~5.8.3",
-      },
+        "typescript": "~5.8.3"
+      }
     },
     "packages/websocket": {
       "name": "@cmumaps/websocket",
       "version": "0.0.0",
       "devDependencies": {
         "@types/node": "~24.0.13",
-        "typescript": "~5.8.3",
-      },
-    },
+        "typescript": "~5.8.3"
+      }
+    }
   },
   "packages": {
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
