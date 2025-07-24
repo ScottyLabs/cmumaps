@@ -44,4 +44,10 @@ export class FloorController {
   public async getFloorplan(@Path() floorCode: string) {
     return await floorService.getFloorplan(floorCode);
   }
+
+  @Security("oauth2", [])
+  @Get("/:floorCode/nodes")
+  public async getFloorNodes(@Path() floorCode: string) {
+    return await floorService.getFloorNodes(floorCode);
+  }
 }
