@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import http from "node:http";
 import cors from "cors";
 import type { ErrorRequestHandler } from "express";
