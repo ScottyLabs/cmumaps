@@ -1,9 +1,9 @@
-export type { Polygon, Position } from "geojson";
 export * from "./buildingTypes";
 export * from "./coordTypes";
 export * from "./doorTypes";
 export * from "./eventTypes";
 export * from "./floorTypes";
+export type { Polygon, Position } from "./geojson";
 export * from "./geoRoomTypes";
 export * from "./graphTypes";
 export * from "./poiTypes";
