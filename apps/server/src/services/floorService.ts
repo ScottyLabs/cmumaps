@@ -1,6 +1,7 @@
 import type {
   EdgeInfo,
   GeoCoordinate,
+  GeoNodes,
   GeoRooms,
   Graph,
   Placement,
@@ -65,7 +66,7 @@ export const floorService = {
         }
       }
 
-      nodes[node.nodeId] = { pos, neighbors, roomId: node.roomId, position };
+      nodes[node.nodeId] = { pos, neighbors, roomId: node.roomId };
     }
 
     return nodes;
@@ -189,5 +190,56 @@ export const floorService = {
     }
 
     return rooms;
+  },
+
+  getFloorNodes: async (floorCode: string) => {
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    // Get all nodes on the floor with their neighbors
+    const dbNodes = await prisma.node.findMany({
+      where: { buildingCode, floorLevel },
+      // include the out floor code of each neighbor
+      // include the element of each node (both in and out)
+      include: {
+        outEdges: {
+          include: {
+            outNode: {
+              select: {
+                buildingCode: true,
+                floorLevel: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Convert thGeoNodeses to the format expected by the frontend
+    const nodes: GeoNodes = {};
+    for (const node of dbNodes) {
+      // Convert the node's geo position to PDF position
+      const pos = {
+        latitude: node.latitude,
+        longitude: node.longitude,
+      };
+
+      // Create a mapping of neighbor node strings to edge info
+      const neighbors: Record<string, EdgeInfo> = {};
+      for (const edge of node.outEdges) {
+        const outNode = edge.outNode;
+
+        // Determine if cross floor edge
+        const outFloorCode = `${outNode.buildingCode}-${outNode.floorLevel}`;
+        neighbors[edge.outNodeId] = {};
+        if (outFloorCode !== floorCode) {
+          neighbors[edge.outNodeId].outFloorCode = outFloorCode;
+        }
+      }
+
+      nodes[node.nodeId] = { pos, neighbors, roomId: node.roomId };
+    }
+
+    return nodes;
   },
 };
