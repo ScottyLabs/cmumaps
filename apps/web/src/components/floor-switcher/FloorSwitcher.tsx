@@ -3,8 +3,8 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
-import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
-import FloorSwitcherDisplayMobile from "./FloorSwitcherDisplayMobile";
+import FloorSwitcherDisplayDesktop from "./desktop/FloorSwitcherDisplayDesktop";
+import FloorSwitcherDisplayMobile from "./mobile/FloorSwitcherDisplayMobile";
 
 /**
  * This component determines if the floor switcher should be shown.
@@ -62,7 +62,7 @@ const FloorSwitcher = () => {
 
   return (
     <div className="-translate-x-1/2 fixed bottom-2 left-1/2 w-fit px-2">
-      <FloorSwitcherDisplay building={building} floor={floor} />
+      <FloorSwitcherDisplayDesktop building={building} floor={floor} />
     </div>
   );
 };
