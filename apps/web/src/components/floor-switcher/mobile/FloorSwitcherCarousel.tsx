@@ -24,8 +24,9 @@ const FloorSwitcherButton = ({
   );
 
   const distCurveValue = () => {
-    const dist = Number.parseFloat(offsetDistance.get().replace("%", "")) / 100;
-    return Math.max(0, Math.min(1, 2 - 20 * Math.abs(dist - 0.5)));
+    const val = Number.parseFloat(offsetDistance.get().replace("%", "")) / 100;
+    const dist = 2 - 20 * Math.abs(val - 0.5);
+    return Math.max(0, Math.min(1, dist));
   };
 
   const opacity = useTransform(() => 0.5 + 0.5 * distCurveValue());
@@ -82,7 +83,7 @@ const DummyButton = ({ index, progressValue }: DummyButtonProps) => {
     <motion.div
       className="fixed top-1/2 flex translate-x-22 items-center justify-center rounded-full text-white"
       style={{
-        backgroundColor: "B3C1E8",
+        backgroundColor: "#B3C1E8",
         offsetPath: 'path("M -30,70 L 0,70 A 56,70 0 1,0 0,-70 L -30, -70")',
         offsetDistance,
         opacity: 0.5,
