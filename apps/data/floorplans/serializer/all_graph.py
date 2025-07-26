@@ -2,6 +2,7 @@
 # python floorplans/serializer/all_graph.py
 import os
 import sys
+import math
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
@@ -9,6 +10,36 @@ from auth_utils.get_clerk_jwt import get_clerk_jwt
 
 import requests
 import json
+
+
+def pdf_coords_to_geo_coords(
+    pdf_coords,
+    geo_center,
+    pdf_center,
+    scale,
+    angle_radians,
+    longitude_ratio=84719.3945182816,
+    latitude_ratio=111318.8450631976,
+):
+    x, y = pdf_coords
+    cx, cy = pdf_center
+    lat0, lon0 = geo_center
+
+    translated_x = x - cx
+    translated_y = y - cy
+
+    sin_a = math.sin(angle_radians)
+    cos_a = math.cos(angle_radians)
+    ry = translated_x * sin_a + translated_y * cos_a
+    rx = translated_x * cos_a - translated_y * sin_a
+
+    scaled_x = rx / scale
+    scaled_y = ry / scale
+
+    longitude = scaled_x / longitude_ratio + lon0
+    latitude = scaled_y / latitude_ratio + lat0
+
+    return (latitude, longitude)
 
 
 def all_graph_serializer():
@@ -42,18 +73,32 @@ def all_graph_serializer():
         nodes_response.raise_for_status()  # debugging
         nodes = nodes_response.json()
 
+        placement_response = requests.get(
+            f"{server_url}/api/floors/{floor_code}/placement", headers=headers
+        )
+        placement_response.raise_for_status()  # debugging
+        placement = placement_response.json()
+
         for node in nodes:
             node_info = nodes[node]
             node_id = node
             node_dict = {}
 
             node_dict["id"] = node_id
-            node_dict["pos"] = node_info["pos"]
+            node_dict["pos"] = node_info["pos"]  # GeoCoordinate
             node_dict["roomId"] = node_info["roomId"]
 
+            latitude, longitude = pdf_coords_to_geo_coords(
+                pdf_coords=node_info["pos"],
+                geo_center=placement["geoCenter"],
+                pdf_center=placement["pdfCenter"],
+                scale=placement["scale"],
+                angle_radians=placement["angle"],
+            )
+
             node_dict["coordinate"] = {
-                "latitude": node_info["position"]["latitude"],
-                "longitude": node_info["position"]["longitude"],
+                "latitude": latitude,
+                "longitude": longitude,
             }
             node_dict["floor"] = {
                 "buildingCode": building_code,
