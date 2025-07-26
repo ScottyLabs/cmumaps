@@ -1,5 +1,4 @@
-import type { RoomInfo } from "@cmumaps/common";
-import type { Polygon } from "geojson";
+import type { Polygon, RoomInfo } from "@cmumaps/common";
 import { v4 as uuidv4 } from "uuid";
 
 import { useUpdateRoomMutation } from "../store/api/roomApiSlice";
