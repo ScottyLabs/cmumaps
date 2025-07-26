@@ -2,7 +2,7 @@ import type { Building } from "@cmumaps/common";
 import { animate, motion, useMotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import useBoundStore from "@/store";
-import FloorSwitcherCarouselMobile from "./FloorSwitcherCarouselMobile";
+import FloorSwitcherCarouselMobile from "./FloorSwitcherCarousel";
 
 interface Props {
   building: Building;
@@ -15,6 +15,9 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
 
   const draggableRegionRef = useRef<HTMLDivElement>(null);
 
+  /* float value ranging from 0 to building.floors.length, representing the position of the floor switcher Carousel
+   * Each whole number value corresponds to the floor with the corresponding index being selected
+   * progressValue between two whole numbers occurs when dragging/animating the floor switcher Carousel */
   const progressValue = useMotionValue(floorIndex);
 
   const [startingTouchY, setStartingTouchY] = useState(0);
@@ -29,15 +32,10 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
 
   const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     if (e.touches[0]?.clientY) {
+      const newValue =
+        startingProgressValue - (e.touches[0]?.clientY - startingTouchY) / 50;
       progressValue.set(
-        Math.max(
-          0,
-          Math.min(
-            building.floors.length - 1,
-            startingProgressValue -
-              (e.touches[0]?.clientY - startingTouchY) / 50,
-          ),
-        ),
+        Math.max(0, Math.min(building.floors.length - 1, newValue)),
       );
     }
   };
@@ -75,17 +73,16 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   }, []);
 
   return (
-    <>
-      <div
-        className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 h-104 w-90"
-        style={{ borderRadius: "50% / 50%" }}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        ref={draggableRegionRef}
-      />
+    <div
+      className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 h-104 w-90"
+      style={{ borderRadius: "50% / 50%" }}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      ref={draggableRegionRef}
+    >
       <motion.div
-        className="btn-shadow -translate-x-1/2 -translate-y-1/2 fixed top-1/2 h-52 w-45 bg-white/10 backdrop-blur-md"
+        className="btn-shadow -translate-y-1/2 fixed top-1/2 h-52 w-45 translate-x-1/2 bg-white/10 backdrop-blur-md"
         style={{ borderRadius: "50% / 50%" }}
       >
         <FloorSwitcherCarouselMobile
@@ -93,7 +90,7 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
           progressValue={progressValue}
         />
       </motion.div>
-    </>
+    </div>
   );
 };
 
