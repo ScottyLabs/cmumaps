@@ -32,6 +32,12 @@ export class FloorController {
     return await floorService.getFloorNodes(floorCode);
   }
 
+  @Security("oauth2", [])
+  @Get("/:floorCode/placement")
+  async getFloorPlacement(@Path() floorCode: string) {
+    return await floorService.getFloorPlacement(floorCode);
+  }
+
   async getFloorPois(req: express.Request, res: express.Response) {
     const floorCode = req.params.id;
 
