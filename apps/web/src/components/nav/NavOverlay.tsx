@@ -76,7 +76,7 @@ const NavOverlay = () => {
 
     newInstructions.push({
       action: "Forward",
-      distance: 0,
+      distance: Math.round(distanceAcc),
       node_id: path[path.length - 1]?.id ?? "",
     });
     newInstructions.push({

@@ -1,10 +1,12 @@
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
+import $rapi from "@/api/rustClient";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
 import accessibleUnavailableIcon from "@/assets/icons/nav/route-selection/accessibleUnavailable.svg";
 import fastestSelectedIcon from "@/assets/icons/nav/route-selection/fastestSelected.svg";
 import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnavailable.svg";
 import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
+import type { NavPaths } from "@/types/navTypes";
 
 interface NavHeaderProps {
   isNavigating: boolean;
@@ -53,15 +55,22 @@ const NavCard = ({
     },
   ];
 
-  // Trip information
-  const tripInfo = {
-    arrivalTime: "9:56",
-    duration: "10",
-    distance: "3.7",
-  };
+  const [src, setSrc] = useQueryState("src");
+  const [dst, setDst] = useQueryState("dst");
 
-  const [_src, setSrc] = useQueryState("src");
-  const [_dst, setDst] = useQueryState("dst");
+  const { data: navPaths } = $rapi.useQuery("get", "/path", {
+    params: { query: { start: src ?? "", end: dst ?? "" } },
+    enabled: !!src && !!dst,
+  }) as { data: NavPaths | undefined };
+
+  const distance = Math.round(navPaths?.Fastest?.path.distance ?? 0);
+  const time = Math.round((navPaths?.Fastest?.path.distance ?? 0) / 100);
+  // const now = new Date();
+  const endTime = new Date().toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
 
   const [yControl, setYControl] = useState(300);
 
@@ -103,22 +112,26 @@ const NavCard = ({
         {/* Trip information panel */}
         {/* <div className="w-full text-card-foreground shadow"> */}
         <div className="relative flex h-26 w-full justify-between self-stretch bg-light-blue pt-5 pr-5 pb-11 pl-5">
-          <div className="h-9 w-36">
+          <div className="h-9">
             <div className="flex">
-              <div className="w-full text-center font-bold text-black text-xl">
-                {tripInfo.arrivalTime}
+              <div className="flex-col pr-4">
+                <div className="w-full font-bold text-black text-xl">
+                  {endTime}
+                </div>
+                <div className="-translate-y-2 w-full text-center">arrival</div>
               </div>
-              <div className="w-full text-center font-bold text-black text-xl">
-                {tripInfo.duration}
+              <div className="flex-col pr-4">
+                <div className="w-full text-center font-bold text-black text-xl">
+                  {time}
+                </div>
+                <div className="-translate-y-2 w-full text-center">min</div>
               </div>
-              <div className="w-full text-center font-bold text-black text-xl">
-                {tripInfo.distance}
+              <div className="flex-col">
+                <div className="w-full text-center font-bold text-black text-xl">
+                  {distance}
+                </div>
+                <div className="-translate-y-2 w-full text-center">ft</div>
               </div>
-            </div>
-            <div className="-translate-y-2 flex">
-              <div className="w-full text-center">arrival</div>
-              <div className="w-full text-center">min</div>
-              <div className="w-full text-center">mi</div>
             </div>
           </div>
 
@@ -140,22 +153,44 @@ const NavCard = ({
   const renderNavCard = () => {
     return (
       <div className="mt-8 ml-9 flex h-9">
-        <div className="w-39">
+        {/* <div className="w-39">
           <div className="flex">
             <div className="w-full text-center font-bold text-black text-xl">
-              {tripInfo.arrivalTime}
+              {endTime}
             </div>
             <div className="w-full text-center font-bold text-black text-xl">
-              {tripInfo.duration}
+              {time}
             </div>
             <div className="w-full text-center font-bold text-black text-xl">
-              {tripInfo.distance}
+              {distance}
             </div>
           </div>
           <div className="-translate-y-2 flex">
             <div className="w-full text-center">arrival</div>
             <div className="w-full text-center">min</div>
-            <div className="w-full text-center">mi</div>
+            <div className="w-full text-center">ft</div>
+          </div>
+        </div> */}
+        <div className="h-9">
+          <div className="flex">
+            <div className="flex-col pr-4">
+              <div className="w-full font-bold text-black text-xl">
+                {endTime}
+              </div>
+              <div className="-translate-y-2 w-full text-center">arrival</div>
+            </div>
+            <div className="flex-col pr-4">
+              <div className="w-full text-center font-bold text-black text-xl">
+                {time}
+              </div>
+              <div className="-translate-y-2 w-full text-center">min</div>
+            </div>
+            <div className="flex-col">
+              <div className="w-full text-center font-bold text-black text-xl">
+                {distance}
+              </div>
+              <div className="-translate-y-2 w-full text-center">ft</div>
+            </div>
           </div>
         </div>
         <button

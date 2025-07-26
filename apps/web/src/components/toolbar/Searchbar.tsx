@@ -1,3 +1,4 @@
+import { useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
@@ -22,6 +23,8 @@ const Searchbar = ({ mapRef }: Props) => {
   // Local state
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [dst, _setDst] = useQueryState("dst");
 
   // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
@@ -57,6 +60,8 @@ const Searchbar = ({ mapRef }: Props) => {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [navigate, hideSearch, showSearch]);
+
+  if (dst && dst !== "") return;
 
   const renderSearchIcon = () => (
     <img
