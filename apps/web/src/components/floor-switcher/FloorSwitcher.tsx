@@ -1,8 +1,8 @@
 import $api from "@/api/client";
 import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
 import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
+import { CardStates } from "@/store/cardSlice";
 import FloorSwitcherDisplayDesktop from "./desktop/FloorSwitcherDisplayDesktop";
 import FloorSwitcherDisplayMobile from "./mobile/FloorSwitcherDisplayMobile";
 
@@ -17,16 +17,14 @@ const FloorSwitcher = () => {
   // Global states
   const floor = useBoundStore((state) => state.focusedFloor);
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const cardStatus = useBoundStore((state) => state.cardStatus);
 
   // Query data
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
-  // Custom hooks
-  const { isCardOpen } = useLocationParams();
-
   // Don't show the floor switcher in mobile
   // if either the card is open or the search is open
-  if (isMobile && (isCardOpen || isSearchOpen)) {
+  if (isMobile && (isSearchOpen || cardStatus !== CardStates.COLLAPSED)) {
     return;
   }
 

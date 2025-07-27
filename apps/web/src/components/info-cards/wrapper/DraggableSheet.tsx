@@ -48,6 +48,16 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
 
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
+  /* biome-ignore lint/correctness/useExhaustiveDependencies: re-rendering whenever navigate
+   * changes would lock draggableSheet in Collapsed state */
+  useEffect(() => {
+    if (focusedFloor) {
+      setCardStatus(CardStates.COLLAPSED);
+      navigate(`/${focusedFloor.buildingCode}`);
+    }
+  }, [focusedFloor, setCardStatus]);
+
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
