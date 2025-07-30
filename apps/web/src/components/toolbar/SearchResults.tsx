@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router";
 import $rapi from "@/api/rustClient";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
 import useBoundStore from "@/store";
@@ -11,6 +12,9 @@ interface Props {
 const SearchResults = ({ searchQuery }: Props) => {
   // Global state
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const hidesSearch = useBoundStore((state) => state.hideSearch);
+
+  const navigate = useNavigate();
 
   const { data: searchResults } = $rapi.useQuery("get", "/search", {
     params: { query: { query: searchQuery } },
@@ -37,7 +41,19 @@ const SearchResults = ({ searchQuery }: Props) => {
   return (
     <div className="flex-col overflow-hidden overflow-y-scroll bg-white">
       {organizedResults?.map((result, i) => (
-        <div key={i} className="flex h-19 items-center bg-white text-lg">
+        <button
+          type="button"
+          key={i}
+          className="flex h-19 w-full items-center bg-white text-lg active:bg-[#dce8f6]"
+          onClick={() => {
+            if (result.type === "room") {
+              navigate(`/${result.nameWithSpace?.split(" ").join("-")}`);
+            } else {
+              navigate(`/${result.id}`);
+            }
+            hidesSearch();
+          }}
+        >
           {result.type === "building" ? (
             <>
               <div className="mr-2 ml-5 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-full bg-[#4b5563] text-white text-xs">
@@ -64,7 +80,7 @@ const SearchResults = ({ searchQuery }: Props) => {
               </div>
             </>
           )}
-        </div>
+        </button>
       ))}
     </div>
   );
