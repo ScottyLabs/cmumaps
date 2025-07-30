@@ -21,16 +21,17 @@ interface Props {
   map: mapkit.Map;
 }
 
+const standardOffset = { x: 20, y: 8 };
 const PathInstructionIcons: Record<
   string,
   { icon: string; offset?: { x: number; y: number } }
 > = {
   Start: { icon: startIcon, offset: { x: 0, y: 0 } },
   StartCompleted: { icon: startIconCompleted, offset: { x: 0, y: 0 } },
-  Enter: { icon: enterIcon, offset: { x: 15, y: 5 } },
-  EnterCompleted: { icon: enterCompletedIcon, offset: { x: 15, y: 5 } },
-  Exit: { icon: exitIcon, offset: { x: 15, y: 5 } },
-  ExitCompleted: { icon: exitCompletedIcon, offset: { x: 15, y: 5 } },
+  Enter: { icon: enterIcon, offset: standardOffset },
+  EnterCompleted: { icon: enterCompletedIcon, offset: standardOffset },
+  Exit: { icon: exitIcon, offset: standardOffset },
+  ExitCompleted: { icon: exitCompletedIcon, offset: standardOffset },
 };
 const EndIcon = { icon: endIcon, offset: { x: 12, y: 4 } };
 
@@ -132,7 +133,7 @@ const NavLine = ({ map }: Props) => {
           ),
           {
             style: new mapkit.Style({
-              strokeColor: "blue",
+              strokeColor: "#3D83D3",
               strokeOpacity: 0.9,
               lineWidth: 5,
               //   lineDash: [10, 10],
@@ -151,7 +152,7 @@ const NavLine = ({ map }: Props) => {
         newPathOverlays.push(
           ...Object.values(recommendedPath).map((p, _) => {
             const style = {
-              strokeColor: "blue",
+              strokeColor: "#3D83D3",
               strokeOpacity: 0.9,
               lineWidth: 5,
             };
@@ -202,15 +203,14 @@ const NavLine = ({ map }: Props) => {
     const addStartEndIcons = () => {
       console.log(path);
       if (path.length === 0) return;
-      //
-      // newIconInfos.push({
-      //   // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
-      //   coordinate: path[0]!.coordinate,
-      //   // biome-ignore lint/style/noNonNullAssertion: PathInstructionIcons always contains both Start and StartCompleted
-      //   icon: PathInstructionIcons[
-      //     instructionIndex === 0 ? "Start" : "StartCompleted"
-      //   ]!,
-      // });
+      newIconInfos.push({
+        // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
+        coordinate: path[0]!.coordinate,
+        // biome-ignore lint/style/noNonNullAssertion: PathInstructionIcons always contains both Start and StartCompleted
+        icon: PathInstructionIcons[
+          instructionIndex === 0 ? "Start" : "StartCompleted"
+        ]!,
+      });
       newIconInfos.push({
         // biome-ignore lint/style/noNonNullAssertion: path[path.length - 1] is guaranteed to exist
         coordinate: path[path.length - 1]!.coordinate,
@@ -266,9 +266,9 @@ const NavLine = ({ map }: Props) => {
       <img
         src={iconInfo.icon.icon}
         alt="Icon"
-        height={40}
+        // height={40}
         style={{
-          height: "40px",
+          // height: "40px",
           transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
         }}
       />
