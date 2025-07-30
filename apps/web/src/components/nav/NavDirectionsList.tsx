@@ -1,4 +1,11 @@
+import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
+import enterIconBlack from "@/assets/icons/nav/directions-list/enter-black.svg";
+import enterIconGrey from "@/assets/icons/nav/directions-list/enter-grey.svg";
+import enterIconWhite from "@/assets/icons/nav/directions-list/enter-white.svg";
+import exitIconBlack from "@/assets/icons/nav/directions-list/exit-black.svg";
+import exitIconGrey from "@/assets/icons/nav/directions-list/exit-grey.svg";
+import exitIconWhite from "@/assets/icons/nav/directions-list/exit-white.svg";
 import forwardArrowIconBlack from "@/assets/icons/nav/directions-list/forward-arrow-black.svg";
 import forwardArrowIconGrey from "@/assets/icons/nav/directions-list/forward-arrow-grey.svg";
 import forwardArrowIconWhite from "@/assets/icons/nav/directions-list/forward-arrow-white.svg";
@@ -8,6 +15,7 @@ import leftArrowIconWhite from "@/assets/icons/nav/directions-list/left-arrow-wh
 import rightArrowIconBlack from "@/assets/icons/nav/directions-list/right-arrow-black.svg";
 import rightArrowIconGrey from "@/assets/icons/nav/directions-list/right-arrow-grey.svg";
 import rightArrowIconWhite from "@/assets/icons/nav/directions-list/right-arrow-white.svg";
+import useNavPaths from "@/hooks/useNavPaths";
 import useBoundStore from "@/store";
 
 const WALKING_SPEED = 100;
@@ -34,12 +42,23 @@ const DirectionIcons: Record<string, DirectionIconSet> = {
     White: rightArrowIconWhite,
     Grey: rightArrowIconGrey,
   },
+  Enter: {
+    Black: enterIconBlack,
+    White: enterIconWhite,
+    Grey: enterIconGrey,
+  },
+  Exit: {
+    Black: exitIconBlack,
+    White: exitIconWhite,
+    Grey: exitIconGrey,
+  },
 };
 
 const NavDirectionsList = ({ show }: { show: boolean }) => {
   interface DirectionProps {
     distance: number;
     action: string;
+    id: string;
   }
 
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
@@ -51,6 +70,12 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
   const [futureDirections, setFutureDirections] = useState<
     Record<number, DirectionProps[]>
   >([]);
+
+  const [src, _setSrc] = useQueryState("src");
+  const [dst, _setDst] = useQueryState("dst");
+  const navPaths = useNavPaths(src, dst);
+
+  // const { data: buildings } = $api.useQuery("get", "/buildings");
 
   //Compute past and future directions based on current instruction index
   useEffect(() => {
@@ -71,9 +96,9 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
         Math.abs(distanceAcc - currentDistance) / WALKING_SPEED,
       );
       const entry = {
-        time,
         distance: instruction.distance,
         action: instruction.action,
+        id: instruction.node_id,
       };
       if (index < instructionIndex) {
         past[time] = past[time] ? [...past[time], entry] : [entry];
@@ -107,7 +132,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
   };
 
   const renderDirectionEntry = (
-    { distance, action }: DirectionProps,
+    { distance, action, id }: DirectionProps,
     color: "Black" | "White" | "Grey",
     i?: number,
   ) => {
@@ -116,8 +141,21 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
       White: "text-white",
       Grey: "text-light-grey",
     };
+    const buildingCode = navPaths?.Fastest?.path.path.find((n) => n.id === id)
+      ?.floor.buildingCode;
+
+    const buildingName = buildingCode === "outside" ? "Outside" : buildingCode;
+    // : buildings && buildingCode
+    //   ? buildings[buildingCode]?.name || "Invalid Building"
+    //   : "";
     return (
       <div className="flex pt-2" key={i}>
+        <div
+          className={`mr-5 font-bold font-lato text-[2rem] ${textColors[color]}`}
+        >
+          {distance} ft
+        </div>
+
         <img
           src={DirectionIcons[action]?.[color]}
           alt="forward"
@@ -126,15 +164,9 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
           className="mr-5"
         />
         <div
-          className={`mr-5 font-bold font-lato text-[2rem] ${textColors[color]}`}
-        >
-          {distance} ft
-        </div>
-
-        <div
           className={`ml-auto pt-3 font-bold font-lato text-[1rem] ${textColors[color]}`}
         >
-          Wean Hall
+          {buildingName}
         </div>
       </div>
     );
@@ -155,14 +187,17 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
         .reverse()
         .map(([k, v], i) => renderDirection(v, Number.parseInt(k), true, i))}
       {instructionIndex < instructions.length - 1 && (
-        <div className="btn-shadow sticky top-0 bottom-0 z-10 mx-3 mt-6 mb-3 rounded-xl bg-primary-green px-9 pb-3">
-          {renderDirectionEntry(
-            {
-              distance: instructions[instructionIndex]?.distance ?? 0,
-              action: instructions[instructionIndex]?.action ?? "",
-            },
-            "White",
-          )}
+        <div className="sticky top-0 bottom-0 mx-3 mt-3 bg-white py-3">
+          <div className="btn-shadow rounded-xl bg-primary-green px-9 pb-3">
+            {renderDirectionEntry(
+              {
+                distance: instructions[instructionIndex]?.distance ?? 0,
+                action: instructions[instructionIndex]?.action ?? "",
+                id: instructions[instructionIndex]?.node_id ?? "",
+              },
+              "White",
+            )}
+          </div>
         </div>
       )}
       {Object.entries(futureDirections).map(([k, v], i) =>

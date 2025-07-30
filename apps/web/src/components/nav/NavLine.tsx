@@ -21,13 +21,13 @@ interface Props {
   map: mapkit.Map;
 }
 
-const standardOffset = { x: 20, y: 8 };
+const standardOffset = { x: 22.5, y: 8 };
 const PathInstructionIcons: Record<
   string,
   { icon: string; offset?: { x: number; y: number } }
 > = {
-  Start: { icon: startIcon, offset: { x: 0, y: 0 } },
-  StartCompleted: { icon: startIconCompleted, offset: { x: 0, y: 0 } },
+  Start: { icon: startIcon, offset: { x: 0, y: 8 } },
+  StartCompleted: { icon: startIconCompleted, offset: { x: 0, y: 8 } },
   Enter: { icon: enterIcon, offset: standardOffset },
   EnterCompleted: { icon: enterCompletedIcon, offset: standardOffset },
   Exit: { icon: exitIcon, offset: standardOffset },
