@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import questionMarkIcon from "@/assets/icons/question-mark.png";
-import UserMenu from "@/components/ui-layout/icons-display/UserMenu";
+import UserMenu from "@/components/ui-layout/icons-display/desktop/UserMenu";
 
 const IconsDisplay = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
