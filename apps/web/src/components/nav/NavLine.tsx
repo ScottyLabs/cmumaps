@@ -1,15 +1,16 @@
 import { Annotation, type Coordinate } from "mapkit-react";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import $rapi from "@/api/rustClient";
 import enterIcon from "@/assets/icons/nav/path/enter.svg";
 import enterCompletedIcon from "@/assets/icons/nav/path/enter-completed.svg";
 import exitIcon from "@/assets/icons/nav/path/exit.svg";
 import exitCompletedIcon from "@/assets/icons/nav/path/exit-completed.svg";
 import endIcon from "@/assets/icons/nav/path/pathEnd.svg";
 import startIcon from "@/assets/icons/nav/path/pathStart.svg";
+import startIconCompleted from "@/assets/icons/nav/path/pathStart-completed.svg";
+import useNavPaths from "@/hooks/useNavPaths";
 import useBoundStore from "@/store";
-import type { NavPaths, Node } from "@/types/navTypes";
+import type { Node } from "@/types/navTypes";
 
 interface IconInfo {
   coordinate: Coordinate;
@@ -24,12 +25,13 @@ const PathInstructionIcons: Record<
   string,
   { icon: string; offset?: { x: number; y: number } }
 > = {
+  Start: { icon: startIcon, offset: { x: 0, y: 0 } },
+  StartCompleted: { icon: startIconCompleted, offset: { x: 0, y: 0 } },
   Enter: { icon: enterIcon, offset: { x: 15, y: 5 } },
   EnterCompleted: { icon: enterCompletedIcon, offset: { x: 15, y: 5 } },
   Exit: { icon: exitIcon, offset: { x: 15, y: 5 } },
   ExitCompleted: { icon: exitCompletedIcon, offset: { x: 15, y: 5 } },
 };
-const StartIcon = { icon: startIcon, offset: { x: 1, y: 2 } };
 const EndIcon = { icon: endIcon, offset: { x: 12, y: 4 } };
 
 const NavLine = ({ map }: Props) => {
@@ -37,16 +39,15 @@ const NavLine = ({ map }: Props) => {
   const [completedPath, setCompletedPath] = useState<Node[] | null>(null);
   const [uncompletedPath, setUncompletedPath] = useState<Node[] | null>(null);
 
-  const [pathOverlay, setPathOverlay] = useState<mapkit.PolylineOverlay[]>([]);
+  const [pathOverlay, setPathOverlay] = useState<mapkit.Overlay[]>([]);
   const [iconInfos, setIconInfos] = useState<IconInfo[]>([]);
 
   const [src, _setSrc] = useQueryState("src");
   const [dst, _setDst] = useQueryState("dst");
 
-  const { data: navPaths } = $rapi.useQuery("get", "/path", {
-    params: { query: { start: src ?? "", end: dst ?? "" } },
-    enabled: !!src && !!dst,
-  }) as { data: NavPaths | undefined };
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
+
+  const navPaths = useNavPaths(src, dst);
 
   const fastestPath = navPaths?.Fastest?.path.path;
 
@@ -96,8 +97,9 @@ const NavLine = ({ map }: Props) => {
   ]);
 
   useEffect(() => {
+    const newPathOverlays: mapkit.Overlay[] = [];
+
     if (startedNavigation) {
-      const newPathOverlays: mapkit.PolylineOverlay[] = [];
       if (completedPath) {
         const curFloorPathOverlay = new mapkit.PolylineOverlay(
           completedPath.map(
@@ -146,8 +148,8 @@ const NavLine = ({ map }: Props) => {
       if (!recommendedPath) {
         setPathOverlay([]);
       } else {
-        setPathOverlay(
-          Object.values(recommendedPath).map((p, _) => {
+        newPathOverlays.push(
+          ...Object.values(recommendedPath).map((p, _) => {
             const style = {
               strokeColor: "blue",
               strokeOpacity: 0.9,
@@ -166,11 +168,14 @@ const NavLine = ({ map }: Props) => {
             );
           }),
         );
+
+        setPathOverlay(newPathOverlays);
       }
     }
   }, [recommendedPath, completedPath, startedNavigation, uncompletedPath]);
 
   // render the polylines so they stay on top
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render whenever new floor is focused so line is not covered
   useEffect(() => {
     if (pathOverlay) {
       if (dst && src && dst !== "" && src !== "") {
@@ -185,7 +190,7 @@ const NavLine = ({ map }: Props) => {
         map.removeOverlays(pathOverlay);
       }
     };
-  }, [map, pathOverlay, src, dst]);
+  }, [map, pathOverlay, src, dst, focusedFloor]);
 
   // calculate the icons (annotations)
   useEffect(() => {
@@ -197,12 +202,15 @@ const NavLine = ({ map }: Props) => {
     const addStartEndIcons = () => {
       console.log(path);
       if (path.length === 0) return;
-
-      newIconInfos.push({
-        // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
-        coordinate: path[0]!.coordinate,
-        icon: StartIcon,
-      });
+      //
+      // newIconInfos.push({
+      //   // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
+      //   coordinate: path[0]!.coordinate,
+      //   // biome-ignore lint/style/noNonNullAssertion: PathInstructionIcons always contains both Start and StartCompleted
+      //   icon: PathInstructionIcons[
+      //     instructionIndex === 0 ? "Start" : "StartCompleted"
+      //   ]!,
+      // });
       newIconInfos.push({
         // biome-ignore lint/style/noNonNullAssertion: path[path.length - 1] is guaranteed to exist
         coordinate: path[path.length - 1]!.coordinate,

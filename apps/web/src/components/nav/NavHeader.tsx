@@ -1,7 +1,6 @@
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
 import $api from "@/api/client";
-import $rapi from "@/api/rustClient";
 import cancelIcon from "@/assets/icons/nav/nav-overlay/cancel.svg";
 import headerIcon from "@/assets/icons/nav/nav-overlay/header.svg";
 import enterIcon from "@/assets/icons/nav/nav-overlay/header-instructions/enter.svg";
@@ -12,8 +11,8 @@ import rightArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/r
 import nextInstructionIcon from "@/assets/icons/nav/nav-overlay/next-instruction.svg";
 import swapIcon from "@/assets/icons/nav/nav-overlay/swap.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
+import useNavPaths from "@/hooks/useNavPaths";
 import useBoundStore from "@/store";
-import type { NavPaths } from "@/types/navTypes";
 
 interface NavHeaderProps {
   isNavigating: boolean;
@@ -52,10 +51,7 @@ const NavHeader = ({
   //   return;
   // }
 
-  const { data: navPaths } = $rapi.useQuery("get", "/path", {
-    params: { query: { start: src ?? "", end: dst ?? "" } },
-    enabled: !!src && !!dst,
-  }) as { data: NavPaths | undefined };
+  const navPaths = useNavPaths(src, dst);
 
   useEffect(() => {
     console.log("Nav Paths: ", navPaths);

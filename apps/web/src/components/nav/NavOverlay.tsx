@@ -1,9 +1,9 @@
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
-import $rapi from "@/api/rustClient";
 import useIsMobile from "@/hooks/useIsMobile";
+import useNavPaths from "@/hooks/useNavPaths";
 import useBoundStore from "@/store";
-import type { NavPaths, Node } from "@/types/navTypes";
+import type { Node } from "@/types/navTypes";
 import NavOverlayMobile from "./NavOverlayMobile";
 
 const NavOverlay = () => {
@@ -17,10 +17,7 @@ const NavOverlay = () => {
   const endNav = useBoundStore((state) => state.endNav);
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
 
-  const { data: navPaths } = $rapi.useQuery("get", "/path", {
-    params: { query: { start: src ?? "", end: dst ?? "" } },
-    enabled: !!src && !!dst,
-  }) as { data: NavPaths | undefined };
+  const navPaths = useNavPaths(src, dst);
 
   // Process instructions
   useEffect(() => {
@@ -100,7 +97,6 @@ const NavOverlay = () => {
   useEffect(() => {
     if (!dst || dst === "") {
       endNav();
-      console.log("endNav");
     }
   }, [dst, endNav]);
 

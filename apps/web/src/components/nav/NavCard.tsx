@@ -1,12 +1,11 @@
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import $rapi from "@/api/rustClient";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
 import accessibleUnavailableIcon from "@/assets/icons/nav/route-selection/accessibleUnavailable.svg";
 import fastestSelectedIcon from "@/assets/icons/nav/route-selection/fastestSelected.svg";
 import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnavailable.svg";
 import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
-import type { NavPaths } from "@/types/navTypes";
+import useNavPaths from "@/hooks/useNavPaths";
 
 interface NavHeaderProps {
   isNavigating: boolean;
@@ -58,10 +57,7 @@ const NavCard = ({
   const [src, setSrc] = useQueryState("src");
   const [dst, setDst] = useQueryState("dst");
 
-  const { data: navPaths } = $rapi.useQuery("get", "/path", {
-    params: { query: { start: src ?? "", end: dst ?? "" } },
-    enabled: !!src && !!dst,
-  }) as { data: NavPaths | undefined };
+  const navPaths = useNavPaths(src, dst);
 
   const distance = Math.round(navPaths?.Fastest?.path.distance ?? 0);
   const time = Math.round((navPaths?.Fastest?.path.distance ?? 0) / 100);
