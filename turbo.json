@@ -13,12 +13,12 @@
     "@cmumaps/server#db-generate": {
       "cache": false
     },
-    "@cmumaps/server#tsoa": {},
-    "@cmumaps/server#openapi": {
-      "dependsOn": ["@cmumaps/server#tsoa"]
+    "@cmumaps/server#tsoa": {
+      "cache": false
     },
-    "@cmumaps/server#build": {
-      "dependsOn": ["@cmumaps/server#db-generate", "@cmumaps/server#openapi"]
+    "@cmumaps/server#openapi": {
+      "dependsOn": ["@cmumaps/server#tsoa"],
+      "cache": false
     },
     "build": {
       "dependsOn": ["^build"],
@@ -47,8 +47,7 @@
       "cache": false
     },
     "check": {
-      "cache": false,
-      "dependsOn": ["@cmumaps/server#db-generate", "@cmumaps/server#openapi"]
+      "cache": false
     }
   }
 }
