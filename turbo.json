@@ -40,13 +40,19 @@
     "format": {
       "cache": false
     },
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
     "lint": {
+      "dependsOn": ["^transit"],
       "cache": false
     },
     "tsc": {
+      "dependsOn": ["^transit"],
       "cache": false
     },
     "check": {
+      "dependsOn": ["^transit"],
       "cache": false
     }
   }
