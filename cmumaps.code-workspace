@@ -12,9 +12,9 @@
     {
       "path": "apps/server"
     },
-    {
-      "path": "apps/visualizer"
-    },
+    // {
+    //   "path": "apps/visualizer"
+    // },
     {
       "path": "apps/web"
     }
