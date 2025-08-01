@@ -11,7 +11,7 @@ import FloorSwitcherDisplayMobile from "./mobile/FloorSwitcherDisplayMobile";
  */
 const FloorSwitcher = () => {
   // Library hooks
-  const { isCMU } = useUser();
+  const { hasAccess } = useUser();
   const isMobile = useIsMobile();
 
   // Global states
@@ -29,7 +29,7 @@ const FloorSwitcher = () => {
   }
 
   // Don't show the floor switcher if the user is not signed in
-  if (!isCMU) {
+  if (!hasAccess) {
     return;
   }
 

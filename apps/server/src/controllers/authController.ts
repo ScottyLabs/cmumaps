@@ -7,6 +7,7 @@ export interface UserInfoResponse {
     id: string;
     email: string;
     name: string;
+    groups: string[];
   } | null;
 }
 
@@ -24,7 +25,14 @@ export class AuthController {
     @Request() request: express.Request,
   ): Promise<UserInfoResponse> {
     if (env.NODE_ENV === "development") {
-      return { user: { id: "dev", email: "dev@andrew.cmu.edu", name: "Dev" } };
+      return {
+        user: {
+          id: "dev",
+          email: "dev@andrew.cmu.edu",
+          name: "Dev",
+          groups: [],
+        },
+      };
     }
 
     if (!request.user) return { user: null };
@@ -40,6 +48,7 @@ export class AuthController {
           id: data.sub as string,
           email: data.email as string,
           name: data.name as string,
+          groups: data.groups as string[],
         },
       };
     } catch (error) {
