@@ -17,6 +17,9 @@ def buildings_serializer():
 
     buildings = get_api_client(path="buildings")
 
+    with open("cmumaps-data/floorplans/buildings.json", "r") as f:
+        buildings_data = json.load(f)
+
     all_buildings_data = {}
 
     for building in buildings:
@@ -33,8 +36,8 @@ def buildings_serializer():
         building_dict["shapes"] = building_info["shape"]
         building_dict["hitbox"] = building_info["hitbox"]
         building_dict["code"] = building_info["code"]
-        # if building_info["osmId"]:
-        #     building_dict["osmId"] = building_info["osmId"]
+        if "osmId" in buildings_data:
+            building_dict["osmId"] = buildings_data["osmId"]
         if building_info["defaultFloor"]:
             building_dict["defaultFloor"] = building_info["defaultFloor"]
         if building_info["defaultOrdinal"]:
