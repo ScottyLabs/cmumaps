@@ -5,9 +5,8 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.api_client import get_api_client
 
-import requests
 import json
 
 
@@ -15,16 +14,9 @@ def placements_serializer():
     """
     Fetches floor data from the server and saves it to the placements-serialized.json
     """
-
-    server_url = os.getenv("SERVER_URL")
-
     all_floors_data = {}
-    headers = {"Authorization": f"Bearer {get_clerk_jwt()}"}
 
-    buildings_response = requests.get(f"{server_url}/api/buildings", headers=headers)
-
-    buildings_response.raise_for_status()  # debugging
-    buildings = buildings_response.json()
+    buildings = get_api_client(path="buildings")
 
     for building in buildings:
         if buildings[building]["floors"]:
@@ -34,20 +26,17 @@ def placements_serializer():
 
             for floor_level in floor_levels:
                 floor_code = f"{building_code}-{floor_level}"
-                floor_results = requests.get(
-                    f"{server_url}/api/floors/{floor_code}/floorinfo", headers=headers
-                )
-                floor_info = floor_results.json()
+                floor_info = get_api_client(path=f"floors/{floor_code}/placement")
                 floor_dict = {
                     "center": {
-                        "latitude": floor_info["centerLatitude"],
-                        "longitude": floor_info["centerLongitude"],
+                        "latitude": floor_info["geoCenter"]["latitude"],
+                        "longitude": floor_info["geoCenter"]["longitude"],
                     },
                     "scale": floor_info["scale"],
                     "angle": floor_info["angle"],
                     "pdfCenter": {
-                        "x": floor_info["centerX"],
-                        "y": floor_info["centerY"],
+                        "x": floor_info["pdfCenter"]["x"],
+                        "y": floor_info["pdfCenter"]["y"],
                     },
                 }
 
