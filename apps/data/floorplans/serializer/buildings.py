@@ -17,9 +17,6 @@ def buildings_serializer():
 
     buildings = get_api_client(path="buildings")
 
-    with open("cmumaps-data/floorplans/buildings.json", "r") as f:
-        buildings_data = json.load(f)
-
     all_buildings_data = {}
 
     for building in buildings:
@@ -36,8 +33,8 @@ def buildings_serializer():
         building_dict["shapes"] = building_info["shape"]
         building_dict["hitbox"] = building_info["hitbox"]
         building_dict["code"] = building_info["code"]
-        if "osmId" in buildings_data:
-            building_dict["osmId"] = buildings_data["osmId"]
+        # if "osmId" in buildings_data:
+        #     building_dict["osmId"] = buildings_data["osmId"]
         if building_info["defaultFloor"]:
             building_dict["defaultFloor"] = building_info["defaultFloor"]
         if building_info["defaultOrdinal"]:
@@ -48,6 +45,15 @@ def buildings_serializer():
     # Save file
     with open("cmumaps-data/floorplans/buildings-serialized.json", "w") as f:
         json.dump(all_buildings_data, f, indent=4)
+    # Merge files
+    with open("cmumaps-data/floorplans/buildings.json", "r") as f:
+        original_buildings_data = json.load(f)
+    with open("cmumaps-data/floorplans/buildings-serialized.json", "r") as f:
+        new_buildings_data = json.load(f)
+    new_buildings_data.update(original_buildings_data)
+    # Save file
+    with open("cmumaps-data/floorplans/buildings-serialized.json", "w") as f:
+        json.dump(new_buildings_data, f, indent=4)
 
     return
 
