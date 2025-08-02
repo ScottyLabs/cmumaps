@@ -5,9 +5,8 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.api_client import get_api_client
 
-import requests
 import json
 
 
@@ -16,14 +15,7 @@ def buildings_serializer():
     Fetches floor data from the server and saves it to the buildings-serialized.json
     """
 
-    server_url = os.getenv("SERVER_URL")
-
-    headers = {"Authorization": f"Bearer {get_clerk_jwt()}"}
-
-    buildings_response = requests.get(f"{server_url}/api/buildings", headers=headers)
-
-    buildings_response.raise_for_status()  # debugging
-    buildings = buildings_response.json()
+    buildings = get_api_client(path="buildings")
 
     all_buildings_data = {}
 
@@ -41,8 +33,8 @@ def buildings_serializer():
         building_dict["shapes"] = building_info["shape"]
         building_dict["hitbox"] = building_info["hitbox"]
         building_dict["code"] = building_info["code"]
-        if building_info["osmId"]:
-            building_dict["osmId"] = building_info["osmId"]
+        # if building_info["osmId"]:
+        #     building_dict["osmId"] = building_info["osmId"]
         if building_info["defaultFloor"]:
             building_dict["defaultFloor"] = building_info["defaultFloor"]
         if building_info["defaultOrdinal"]:
