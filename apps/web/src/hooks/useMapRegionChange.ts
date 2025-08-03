@@ -9,7 +9,11 @@ import {
 } from "@/components/map-display/MapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
 import useBoundStore from "@/store";
-import { getFloorByOrdinal, getFloorOrdinal } from "@/utils/floorUtils";
+import {
+  getFloorByOrdinal,
+  getFloorLevelFromRoomName,
+  getFloorOrdinal,
+} from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
@@ -26,8 +30,19 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Local state
   const [showFloor, setShowFloor] = useState<boolean>(false);
 
+  // const { buildingCode: selectedBuildingCode, floor: selectedFloor } =
+  //   useLocationParams();
+  //
+  // useEffect(() => {
+  //   console.log("selected floor", selectedFloor);
+  //   if (selectedFloor && selectedBuildingCode) {
+  //     focusFloor({ buildingCode: selectedBuildingCode, level: selectedFloor });
+  //   }
+  // }, [selectedFloor, focusFloor, selectedBuildingCode]);
+
   // Calculates the focused floor based on the region
   const calcFocusedFloor = (region: CoordinateRegion) => {
+    console.log("calc focused floor");
     if (!buildings) {
       return;
     }
@@ -47,19 +62,35 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       return;
     }
 
+    // If the focused floor is in the same building as the selected floor (given by the URL params),
+    // then focus the selected floor
+    // HACK: use window to get current pathname value (values from hooks are stale)
+    const path = window.location.pathname;
+    // TODO: replace logic with a util function once urlparam branch is merged in
+    const [selectedBuildingCode, roomName] =
+      path.split("/")?.[1]?.split("-") || [];
+    const selectedFloor = getFloorLevelFromRoomName(roomName);
+
+    if (selectedFloor) {
+      if (
+        selectedBuildingCode === centerBuilding.code &&
+        selectedFloor !== focusedFloor?.level
+      ) {
+        console.log("using selection");
+        focusFloor({
+          buildingCode: centerBuilding.code,
+          level: selectedFloor,
+        });
+        return;
+      }
+    }
+
     // if no floor is focused
     //   - we focus on the floor of the selected room if there is one
     //     and it is in the center building
     //   - otherwise we focus on the default floor of the center building
+    console.log("selected floor", selectedFloor);
     if (!focusedFloor) {
-      // TODO: complete when there is a selected room
-      //   if (selectedRoom) {
-      //     if (selectedRoom.floor.buildingCode == centerBuilding.code) {
-      //       dispatch(setFocusedFloor(selectedRoom.floor));
-      //       return;
-      //     }
-      //   }
-
       if (!centerBuilding.defaultFloor) {
         return;
       }
