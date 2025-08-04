@@ -4,6 +4,7 @@ import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
 import useBoundStore from "@/store";
+import { CardStates } from "@/store/cardSlice";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { zoomOnObject, zoomOnPoint } from "@/utils/zoomUtils";
 
@@ -26,6 +27,8 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   // Global state
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
   const hidesSearch = useBoundStore((state) => state.hideSearch);
+  const setIsZooming = useBoundStore((state) => state.setIsZooming);
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
   const navigate = useNavigate();
 
@@ -92,25 +95,32 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
       const roomName = result.nameWithSpace?.split(" ")[1];
       const buildingName = result.nameWithSpace?.split(" ")[0];
       const floor = getFloorLevelFromRoomName(roomName);
-      if (buildingName && floor) {
+      if (
+        buildingName &&
+        floor &&
+        buildings?.[buildingName]?.floors.includes(floor)
+      ) {
         navigate(`/${buildingName}-${roomName}`);
+        setCardStatus(CardStates.COLLAPSED);
+      } else {
+        navigate("/");
       }
       const latitude = result.labelPosition?.latitude;
       const longitude = result.labelPosition?.longitude;
       if (latitude && longitude && mapRef.current) {
-        const offset = 0.0005;
+        const newRegionSize = 0.0005;
         zoomOnPoint(
           mapRef.current,
           new mapkit.Coordinate(latitude, longitude),
-          offset,
+          newRegionSize,
+          setIsZooming,
         );
-        // }
       }
     } else {
       navigate(`/ ${result.id} `);
       const building = buildings?.[result.id];
       if (building && mapRef.current) {
-        zoomOnObject(mapRef.current, building.shape.flat());
+        zoomOnObject(mapRef.current, building.shape.flat(), setIsZooming);
       }
     }
     hidesSearch();

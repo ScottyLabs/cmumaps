@@ -1,36 +1,35 @@
 import $api from "@/api/client";
 import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
 import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
-import FloorSwitcherDisplay from "./FloorSwitcherDisplay";
+import { CardStates } from "@/store/cardSlice";
+import FloorSwitcherDisplayDesktop from "./desktop/FloorSwitcherDisplayDesktop";
+import FloorSwitcherDisplayMobile from "./mobile/FloorSwitcherDisplayMobile";
 
 /**
  * This component determines if the floor switcher should be shown.
  */
 const FloorSwitcher = () => {
   // Library hooks
-  const { isCMU } = useUser();
+  const { hasAccess } = useUser();
   const isMobile = useIsMobile();
 
   // Global states
   const floor = useBoundStore((state) => state.focusedFloor);
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const cardStatus = useBoundStore((state) => state.cardStatus);
 
   // Query data
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
-  // Custom hooks
-  const { isCardOpen } = useLocationParams();
-
   // Don't show the floor switcher in mobile
   // if either the card is open or the search is open
-  if (isMobile && (isCardOpen || isSearchOpen)) {
+  if (isMobile && (isSearchOpen || cardStatus !== CardStates.COLLAPSED)) {
     return;
   }
 
   // Don't show the floor switcher if the user is not signed in
-  if (!isCMU) {
+  if (!hasAccess) {
     return;
   }
 
@@ -50,9 +49,18 @@ const FloorSwitcher = () => {
     return;
   }
 
+  if (isMobile) {
+    return (
+      <FloorSwitcherDisplayMobile
+        building={building}
+        initialFloorLevel={floor.level}
+      />
+    );
+  }
+
   return (
     <div className="-translate-x-1/2 fixed bottom-2 left-1/2 w-fit px-2">
-      <FloorSwitcherDisplay building={building} floor={floor} />
+      <FloorSwitcherDisplayDesktop building={building} floor={floor} />
     </div>
   );
 };

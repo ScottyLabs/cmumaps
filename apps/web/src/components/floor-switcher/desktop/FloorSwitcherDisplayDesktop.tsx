@@ -1,15 +1,15 @@
 import type { Building, Floor } from "@cmumaps/common";
 import { useState } from "react";
-import DefaultView from "@/components/floor-switcher/DefaultView";
-import FloorPicker from "@/components/floor-switcher/FloorPicker";
-import RoundelButton from "@/components/floor-switcher/RoundelButton";
+import DefaultView from "@/components/floor-switcher/desktop/DefaultView";
+import FloorPicker from "@/components/floor-switcher/desktop/FloorPicker";
+import RoundelButton from "@/components/floor-switcher/desktop/RoundelButton";
 
 interface Props {
   building: Building;
   floor: Floor;
 }
 
-const FloorSwitcherDisplay = ({ building, floor }: Props) => {
+const FloorSwitcherDisplayDesktop = ({ building, floor }: Props) => {
   const [showFloorPicker, setShowFloorPicker] = useState<boolean>(false);
 
   return (
@@ -32,4 +32,4 @@ const FloorSwitcherDisplay = ({ building, floor }: Props) => {
   );
 };
 
-export default FloorSwitcherDisplay;
+export default FloorSwitcherDisplayDesktop;

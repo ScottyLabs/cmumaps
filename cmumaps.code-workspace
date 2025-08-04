@@ -3,18 +3,18 @@
     // {
     //   "path": "."
     // },
-    {
-      "path": "apps/data"
-    },
-    {
-      "path": "apps/rust-server"
-    },
-    {
-      "path": "apps/server"
-    },
-    {
-      "path": "apps/visualizer"
-    },
+    // {
+    //   "path": "apps/data"
+    // },
+    // {
+    //   "path": "apps/rust-server"
+    // },
+    // {
+    //   "path": "apps/server"
+    // },
+    // {
+    //   "path": "apps/visualizer"
+    // },
     {
       "path": "apps/web"
     }

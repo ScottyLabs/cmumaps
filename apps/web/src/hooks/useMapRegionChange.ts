@@ -30,19 +30,8 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Local state
   const [showFloor, setShowFloor] = useState<boolean>(false);
 
-  // const { buildingCode: selectedBuildingCode, floor: selectedFloor } =
-  //   useLocationParams();
-  //
-  // useEffect(() => {
-  //   console.log("selected floor", selectedFloor);
-  //   if (selectedFloor && selectedBuildingCode) {
-  //     focusFloor({ buildingCode: selectedBuildingCode, level: selectedFloor });
-  //   }
-  // }, [selectedFloor, focusFloor, selectedBuildingCode]);
-
   // Calculates the focused floor based on the region
   const calcFocusedFloor = (region: CoordinateRegion) => {
-    console.log("calc focused floor");
     if (!buildings) {
       return;
     }
@@ -76,7 +65,6 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
         selectedBuildingCode === centerBuilding.code &&
         selectedFloor !== focusedFloor?.level
       ) {
-        console.log("using selection");
         focusFloor({
           buildingCode: centerBuilding.code,
           level: selectedFloor,
@@ -89,7 +77,6 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
     //   - we focus on the floor of the selected room if there is one
     //     and it is in the center building
     //   - otherwise we focus on the default floor of the center building
-    console.log("selected floor", selectedFloor);
     if (!focusedFloor) {
       if (!centerBuilding.defaultFloor) {
         return;
