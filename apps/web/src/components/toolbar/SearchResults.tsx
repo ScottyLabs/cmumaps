@@ -61,10 +61,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         <div className="mr-2 ml-5 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-full bg-[#4b5563] text-white text-xs">
           {result.id}
         </div>
-        <div className="flex flex-col">
-          {/* {result.alias && result.type === "room" && `${ result.alias } - `} */}
-          {result.fullNameWithSpace}
-        </div>
+        <div className="flex flex-col">{result.fullNameWithSpace}</div>
       </>
     );
   };
@@ -75,16 +72,13 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         <div className="mr-2 ml-5 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md bg-[#4b5563] text-white">
           <img width={18} src={classroomIcon} alt="classroom" />
         </div>
-        <div className="flex w-[100%] justify-between">
-          <div className="flex flex-col">
-            {/* {result.alias && result.type === "room" && `${ result.alias } - `} */}
+        <div className="flex w-[100%] items-center justify-between">
+          <div className="flex flex-col text-left">
             {result.alias && result.alias !== ""
               ? result.alias
               : result.fullNameWithSpace}
           </div>
-          <div className="flex flex-col self-end pr-5 text-[#9ca3af]">
-            Rooms
-          </div>
+          <div className="self-center pr-5 text-[#9ca3af]">Rooms</div>
         </div>
       </>
     );
@@ -117,7 +111,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         );
       }
     } else {
-      navigate(`/ ${result.id} `);
+      navigate(`/${result.id} `);
       const building = buildings?.[result.id];
       if (building && mapRef.current) {
         zoomOnObject(mapRef.current, building.shape.flat(), setIsZooming);
