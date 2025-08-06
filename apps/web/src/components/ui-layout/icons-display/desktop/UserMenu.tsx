@@ -14,7 +14,7 @@ const UserMenu = () => {
         width={300}
       />
       <div className="px-5 pt-3">ScottyLabs Sign In</div>
-      <div className="px-5 text-[0.75rem]">
+      <div className="px-5 text-[0.75rem] text-dark-grey">
         {isSignedIn
           ? `Signed in as ${user?.email}`
           : "Sign in with your @andrew.cmu.edu email"}
