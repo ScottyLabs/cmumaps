@@ -19,6 +19,12 @@
       "path": "apps/web"
     }
     // {
+    //   "path": "apps/visualizer"
+    // },
+    // {
+    //   "path": "apps/web"
+    // }
+    // {
     //   "path": "packages/common"
     // },
     // {
@@ -39,6 +45,9 @@
     },
     "[json]": {
       "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[python]": {
+      "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "[shellscript]": {
       "editor.defaultFormatter": "mkhl.shfmt"
