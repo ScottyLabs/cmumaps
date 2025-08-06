@@ -62,7 +62,6 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     ) {
       navigate(`/${focusedFloor.buildingCode}`);
       setCardStatus(CardStates.COLLAPSED);
-
     }
   }, [focusedFloor, setCardStatus]);
 
