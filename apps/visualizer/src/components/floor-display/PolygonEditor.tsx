@@ -1,5 +1,4 @@
-import type { PdfCoordinate, Position } from "@cmumaps/common";
-import type { Polygon } from "geojson";
+import type { PdfCoordinate, Polygon, Position } from "@cmumaps/common";
 import type Konva from "konva";
 import { throttle } from "lodash";
 

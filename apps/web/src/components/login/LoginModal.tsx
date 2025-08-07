@@ -4,7 +4,7 @@ import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 
 const LoginModal = () => {
-  const { isSignedIn, isCMU } = useUser();
+  const { isSignedIn, hasAccess } = useUser();
   const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
   const hideLogin = useBoundStore((state) => state.hideLogin);
 
@@ -16,7 +16,7 @@ const LoginModal = () => {
   }, [isSignedIn]);
 
   // Don't show the login modal if the user is signed in with CMU email
-  if (!isLoginOpen || isCMU) {
+  if (!isLoginOpen || hasAccess) {
     return null;
   }
 

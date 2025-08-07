@@ -21,6 +21,10 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   // Global state
   const cardStatus = useBoundStore((state) => state.cardStatus);
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
+  const isZooming = useBoundStore((state) => state.isZooming);
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
+
+  const { buildingCode } = useLocationParams();
 
   // Local state
   const snapIndex = useMemo(() => {
@@ -28,16 +32,16 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   }, [cardStatus]);
 
   // Custom hooks
-  const { isCardOpen } = useLocationParams();
+  const { isCardOpen, floor } = useLocationParams();
 
   // updates the card status when the isCardOpen changes
   useEffect(() => {
-    if (isCardOpen) {
+    if (isCardOpen && !floor && !focusedFloor) {
       setCardStatus(CardStates.HALF_OPEN);
     } else {
       setCardStatus(CardStates.COLLAPSED);
     }
-  }, [isCardOpen, setCardStatus]);
+  }, [isCardOpen, setCardStatus, floor, focusedFloor]);
 
   // updates the snapping when isCardOpen or snapIndex changes
   useEffect(() => {
@@ -49,6 +53,19 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
       controls.start({ y: 0 });
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
+
+  /* biome-ignore lint/correctness/useExhaustiveDependencies: re-rendering whenever navigate
+   * changes would lock draggableSheet in Collapsed state */
+  useEffect(() => {
+    if (
+      focusedFloor &&
+      focusedFloor.buildingCode !== buildingCode &&
+      !isZooming
+    ) {
+      navigate(`/${focusedFloor.buildingCode}`);
+      setCardStatus(CardStates.COLLAPSED);
+    }
+  }, [focusedFloor, setCardStatus]);
 
   const [dst] = useQueryState("dst");
 

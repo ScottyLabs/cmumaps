@@ -24,9 +24,16 @@ export const zoomOnFloor = (
   });
 };
 
-export const zoomOnObject = (map: mapkit.Map, points: Coordinate[]) => {
+export const zoomOnObject = (
+  map: mapkit.Map,
+  points: Coordinate[],
+  setIsZooming?: (_: boolean) => void,
+) => {
   const allLat = points.map((p) => p.latitude);
   const allLon = points.map((p) => p.longitude);
+
+  setIsZooming?.(true);
+
   map.setRegionAnimated(
     new mapkit.BoundingRegion(
       Math.max(...allLat),
@@ -38,13 +45,20 @@ export const zoomOnObject = (map: mapkit.Map, points: Coordinate[]) => {
   );
 };
 
-export const zoomOnPoint = (map: mapkit.Map, point: Coordinate) => {
+export const zoomOnPoint = (
+  map: mapkit.Map,
+  point: Coordinate,
+  offset = 0.001,
+  setIsZooming?: (_: boolean) => void,
+) => {
+  setIsZooming?.(true);
+
   map.setRegionAnimated(
     new mapkit.BoundingRegion(
-      point.latitude + 0.001,
-      point.longitude + 0.001,
-      point.latitude - 0.001,
-      point.longitude - 0.001,
+      point.latitude + offset,
+      point.longitude + offset,
+      point.latitude - offset,
+      point.longitude - offset,
     ).toCoordinateRegion(),
     !prefersReducedMotion(),
   );

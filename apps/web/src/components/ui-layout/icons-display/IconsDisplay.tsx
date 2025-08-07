@@ -1,6 +1,6 @@
 import useIsMobile from "@/hooks/useIsMobile";
-import IconsDisplayDesktop from "./IconsDisplayDesktop";
-import IconsDisplayMobile from "./IconsDisplayMobile";
+import IconsDisplayDesktop from "./desktop/IconsDisplayDesktop";
+import IconsDisplayMobile from "./mobile/IconsDisplayMobile";
 
 const IconsDisplay = () => {
   const isMobile = useIsMobile();

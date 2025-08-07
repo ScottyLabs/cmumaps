@@ -6,6 +6,11 @@
       "@commitlint/config-conventional"
     ],
     "rules": {
+      "body-max-line-length": [
+        2,
+        "always",
+        120
+      ],
       "type-enum": [
         2,
         "always",
@@ -32,7 +37,7 @@
     "@commitlint/config-conventional": "~19.8.1",
     "@types/bun": "latest",
     "@types/web": "~0.0.243",
-    "husky": "~9.1.7",
+    "husky": "^8.0.0",
     "syncpack": "~13.0.4",
     "turbo": "~2.5.4",
     "typescript": "~5.8.3"
@@ -40,23 +45,23 @@
   "packageManager": "bun@1.2.10",
   "private": true,
   "scripts": {
-    "build": "turbo build --parallel",
-    "check": "biome check && turbo check --parallel",
-    "db-generate": "turbo run db-generate --filter=@cmumaps/server",
-    "dev": "turbo dev --filter=@cmumaps/server --filter=@cmumaps/web --filter=@cmumaps/visualizer --parallel",
-    "dev:server": "turbo dev --filter=@cmumaps/server --parallel",
-    "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server --parallel",
-    "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
-    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server --parallel",
-    "format": "turbo format --parallel",
-    "lint": "turbo lint --parallel",
+    "build": "turbo build",
+    "check": "biome check && turbo check",
+    "dev": "turbo dev --filter=@cmumaps/server --filter=@cmumaps/web --filter=@cmumaps/visualizer",
+    "dev:server": "turbo dev --filter=@cmumaps/server",
+    "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
+    "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",
+    "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server",
+    "format": "turbo format",
+    "lint": "turbo lint",
+    "postinstall": "turbo db-generate openapi --filter=@cmumaps/server",
     "preinstall": "npx only-allow bun",
-    "prepare": "husky",
-    "start": "turbo run start",
+    "prepare": "husky && husky install",
+    "start": "turbo start",
     "syncpack": "syncpack format && syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
-    "tsc": "turbo tsc --parallel",
+    "tsc": "turbo tsc",
     "vault:pull": "./scripts/vault-pull.sh all local",
     "vault:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc"
   },
