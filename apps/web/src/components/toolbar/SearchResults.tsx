@@ -1,8 +1,9 @@
+import { useQueryState } from "nuqs";
 import { useMemo } from "react";
-import { useNavigate } from "react-router";
 import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
+import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -29,8 +30,13 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const hidesSearch = useBoundStore((state) => state.hideSearch);
   const setIsZooming = useBoundStore((state) => state.setIsZooming);
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
+  const searchTarget = useBoundStore((state) => state.searchTarget);
+  const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
 
-  const navigate = useNavigate();
+  const [_src, setSrc] = useQueryState("src");
+  const [_dst, setDst] = useQueryState("dst");
+
+  const navigate = useNavigateLocationParams();
 
   const { data: searchResults } = $rapi.useQuery("get", "/search", {
     params: { query: { query: searchQuery } },
@@ -84,40 +90,71 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     );
   };
 
-  const handleClick = (result: SearchResultProps) => {
-    if (result.type === "room") {
-      const roomName = result.nameWithSpace?.split(" ")[1];
-      const buildingName = result.nameWithSpace?.split(" ")[0];
-      const floor = getFloorLevelFromRoomName(roomName);
-      if (
-        buildingName &&
-        floor &&
-        buildings?.[buildingName]?.floors.includes(floor)
-      ) {
-        navigate(`/${buildingName}-${roomName}`);
-        setCardStatus(CardStates.COLLAPSED);
-      } else {
-        navigate("/");
-      }
-      const latitude = result.labelPosition?.latitude;
-      const longitude = result.labelPosition?.longitude;
-      if (latitude && longitude && mapRef.current) {
-        const newRegionSize = 0.0005;
-        zoomOnPoint(
-          mapRef.current,
-          new mapkit.Coordinate(latitude, longitude),
-          newRegionSize,
-          setIsZooming,
-        );
+  const handleSelectRoom = (result: SearchResultProps) => {
+    const roomName = result.nameWithSpace?.split(" ")[1];
+    const buildingName = result.nameWithSpace?.split(" ")[0];
+    const floor = getFloorLevelFromRoomName(roomName);
+    if (
+      buildingName &&
+      floor &&
+      buildings?.[buildingName]?.floors.includes(floor)
+    ) {
+      switch (searchTarget) {
+        case "nav-src":
+          setSrc(result.id);
+          break;
+        case "nav-dst":
+          navigate(`/${buildingName}-${roomName}`);
+          setDst(result.id);
+          break;
+        default:
+          navigate(`/${buildingName}-${roomName}`);
+          setCardStatus(CardStates.COLLAPSED);
+          break;
       }
     } else {
-      navigate(`/${result.id} `);
-      const building = buildings?.[result.id];
-      if (building && mapRef.current) {
-        zoomOnObject(mapRef.current, building.shape.flat(), setIsZooming);
-      }
+      navigate("/");
+    }
+    const latitude = result.labelPosition?.latitude;
+    const longitude = result.labelPosition?.longitude;
+    if (latitude && longitude && mapRef.current) {
+      const newRegionSize = 0.0005;
+      zoomOnPoint(
+        mapRef.current,
+        new mapkit.Coordinate(latitude, longitude),
+        newRegionSize,
+        setIsZooming,
+      );
+    }
+  };
+
+  const handleSelectBuilding = (result: SearchResultProps) => {
+    switch (searchTarget) {
+      case "nav-src":
+        setSrc(result.id);
+        break;
+      case "nav-dst":
+        navigate(`/${result.id}`);
+        setDst(result.id);
+        break;
+      default:
+        navigate(`/${result.id}`);
+        break;
+    }
+    const building = buildings?.[result.id];
+    if (building && mapRef.current) {
+      zoomOnObject(mapRef.current, building.shape.flat(), setIsZooming);
+    }
+  };
+
+  const handleClick = (result: SearchResultProps) => {
+    if (result.type === "room") {
+      handleSelectRoom(result);
+    } else {
+      handleSelectBuilding(result);
     }
     hidesSearch();
+    setSearchTarget(undefined);
   };
 
   // No results found

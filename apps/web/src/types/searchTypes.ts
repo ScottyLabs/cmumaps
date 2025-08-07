@@ -22,3 +22,5 @@ export interface Document {
 
   floor: Floor;
 }
+
+export type SearchTarget = "nav-src" | "nav-dst";

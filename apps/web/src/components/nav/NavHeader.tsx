@@ -27,6 +27,9 @@ const NavHeader = ({
   const { data: buildings } = $api.useQuery("get", "/buildings");
   const navigate = useNavigateLocationParams();
 
+  const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
+  const searchTarget = useBoundStore((state) => state.searchTarget);
+
   const instructionIcons: Record<string, string> = {
     Left: leftArrowIcon,
     Right: rightArrowIcon,
@@ -84,7 +87,7 @@ const NavHeader = ({
 
   const renderChooseHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-[19px] top-10 z-50 overflow-auto rounded-lg bg-white">
+      <div className="btn-shadow fixed inset-x-[19px] top-10 overflow-auto rounded-lg bg-white">
         <div className="flex">
           <img
             alt="navigation header"
@@ -107,16 +110,36 @@ const NavHeader = ({
           <div className="w-full">
             <div className="flex flex-col items-start gap-3 pt-[23.5px]">
               <div className="relative flex h-[19px] w-full items-center gap-2.5 self-stretch">
-                <div className="relative mt-[-1.50px] w-fit whitespace-nowrap font-[number:var(--body-1-font-weight)] font-body-1 text-[#1e86ff] text-[length:var(--body-1-font-size)] leading-[var(--body-1-line-height)] tracking-[var(--body-1-letter-spacing)] [font-style:var(--body-1-font-style)]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (searchTarget !== "nav-src") {
+                      setSearchTarget("nav-src");
+                    } else {
+                      setSearchTarget(undefined);
+                    }
+                  }}
+                  className="relative mt-[-1.50px] w-fit whitespace-nowrap font-[number:var(--body-1-font-weight)] font-body-1 text-[#1e86ff] text-[length:var(--body-1-font-size)] leading-[var(--body-1-line-height)] tracking-[var(--body-1-letter-spacing)] [font-style:var(--body-1-font-style)]"
+                >
                   {srcName}
-                </div>
+                </button>
               </div>
 
               <hr className="w-full border-gray-300" />
 
-              <div className="relative self-stretch font-[number:var(--body-1-font-weight)] font-body-1 text-[length:var(--body-1-font-size)] text-black leading-[var(--body-1-line-height)] tracking-[var(--body-1-letter-spacing)] [font-style:var(--body-1-font-style)]">
+              <button
+                onClick={() => {
+                  if (searchTarget !== "nav-dst") {
+                    setSearchTarget("nav-dst");
+                  } else {
+                    setSearchTarget(undefined);
+                  }
+                }}
+                type="button"
+                className="relative font-body-1 text-black"
+              >
                 {dstName}
-              </div>
+              </button>
             </div>
             <button
               type="button"

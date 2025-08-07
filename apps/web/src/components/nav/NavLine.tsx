@@ -14,24 +14,32 @@ import type { Node } from "@/types/navTypes";
 
 interface IconInfo {
   coordinate: Coordinate;
-  icon: { icon: string; offset?: { x: number; y: number } };
+  icon: { icon: string; offset?: { x: number; y: number }; height?: number };
 }
 
 interface Props {
   map: mapkit.Map;
 }
 
-const standardOffset = { x: 22.5, y: 8 };
+const standardOffset = { x: 16, y: 8 };
 const PathInstructionIcons: Record<
   string,
-  { icon: string; offset?: { x: number; y: number } }
+  { icon: string; offset?: { x: number; y: number }; height?: number }
 > = {
   Start: { icon: startIcon, offset: { x: 0, y: 8 } },
   StartCompleted: { icon: startIconCompleted, offset: { x: 0, y: 8 } },
-  Enter: { icon: enterIcon, offset: standardOffset },
-  EnterCompleted: { icon: enterCompletedIcon, offset: standardOffset },
-  Exit: { icon: exitIcon, offset: standardOffset },
-  ExitCompleted: { icon: exitCompletedIcon, offset: standardOffset },
+  Enter: { icon: enterIcon, offset: standardOffset, height: 40 },
+  EnterCompleted: {
+    icon: enterCompletedIcon,
+    offset: standardOffset,
+    height: 40,
+  },
+  Exit: { icon: exitIcon, offset: standardOffset, height: 40 },
+  ExitCompleted: {
+    icon: exitCompletedIcon,
+    offset: standardOffset,
+    height: 40,
+  },
 };
 const EndIcon = { icon: endIcon, offset: { x: 12, y: 4 } };
 
@@ -268,7 +276,7 @@ const NavLine = ({ map }: Props) => {
         alt="Icon"
         // height={40}
         style={{
-          // height: "40px",
+          height: iconInfo.icon.height,
           transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
         }}
       />

@@ -28,9 +28,9 @@ const App = () => {
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
+      <NavOverlay />
       <Toolbar mapRef={mapRef} />
       <FloorSwitcher />
-      <NavOverlay />
       <MyToastContainer />
     </main>
   );

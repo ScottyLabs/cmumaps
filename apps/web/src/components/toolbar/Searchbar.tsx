@@ -6,6 +6,7 @@ import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
+import type { SearchTarget } from "@/types/searchTypes";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -15,10 +16,16 @@ const Searchbar = ({ mapRef }: Props) => {
   // Hooks
   const navigate = useNavigateLocationParams();
 
+  const searchTargetText: Record<SearchTarget, string> = {
+    "nav-src": "Search for Starting Location",
+    "nav-dst": "Search for Destination",
+  };
+
   // Global state
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
   const showSearch = useBoundStore((state) => state.showSearch);
   const hideSearch = useBoundStore((state) => state.hideSearch);
+  const searchTarget = useBoundStore((state) => state.searchTarget);
 
   // Local state
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +68,15 @@ const Searchbar = ({ mapRef }: Props) => {
     return () => window.removeEventListener("keydown", handler);
   }, [navigate, hideSearch, showSearch]);
 
-  if (dst && dst !== "") return;
+  useEffect(() => {
+    if (searchTarget) {
+      inputRef.current?.focus();
+      setSearchQuery("");
+    }
+  }, [searchTarget]);
+
+  // Hide searchbar if navigating, unless selecting a destination or source
+  if (dst && searchTarget !== "nav-dst" && searchTarget !== "nav-src") return;
 
   const renderSearchIcon = () => (
     <img
@@ -76,7 +91,7 @@ const Searchbar = ({ mapRef }: Props) => {
     <input
       type="text"
       className="w-full rounded p-2 pr-6 outline-none"
-      placeholder={"Search..."}
+      placeholder={searchTarget ? searchTargetText[searchTarget] : "Search..."}
       ref={inputRef}
       value={searchQuery}
       onChange={(event) => {
@@ -104,7 +119,7 @@ const Searchbar = ({ mapRef }: Props) => {
 
   return (
     <>
-      <div className="mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white">
+      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white">
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
