@@ -101,11 +101,11 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     ) {
       switch (searchTarget) {
         case "nav-src":
-          setSrc(result.id);
+          setSrc(`${buildingName}-${roomName}`);
           break;
         case "nav-dst":
           navigate(`/${buildingName}-${roomName}`);
-          setDst(result.id);
+          setDst(`${buildingName}-${roomName}`);
           break;
         default:
           navigate(`/${buildingName}-${roomName}`);

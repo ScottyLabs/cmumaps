@@ -1,3 +1,4 @@
+import { useQueryState } from "nuqs";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import $api from "@/api/client";
@@ -84,6 +85,9 @@ const verifyURLParams = (): string | undefined => {
 const useLocationParams = (): Params => {
   const location = useLocation();
   const path = location.pathname;
+
+  const [_src] = useQueryState("src");
+  const [_dst] = useQueryState("dst");
 
   const error = verifyURLParams();
   if (error) {

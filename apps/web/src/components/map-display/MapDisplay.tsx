@@ -128,7 +128,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
-      {mapRef.current && <NavLine map={mapRef.current} />}
+      <NavLine map={mapRef.current} />
     </MapkitMap>
   );
 };

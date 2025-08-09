@@ -1,15 +1,11 @@
-import { useQueryState } from "nuqs";
 import { useEffect } from "react";
 import useIsMobile from "@/hooks/useIsMobile";
-import useNavPaths from "@/hooks/useNavPaths";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import type { Node } from "@/types/navTypes";
 import NavOverlayMobile from "./NavOverlayMobile";
 
 const NavOverlay = () => {
-  const [src, _setSrc] = useQueryState("src");
-  const [dst, _setDst] = useQueryState("dst");
-
   const isMobile = useIsMobile();
 
   const isNavigating = useBoundStore((state) => state.isNavigating);
@@ -17,8 +13,7 @@ const NavOverlay = () => {
   const endNav = useBoundStore((state) => state.endNav);
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
 
-  const navPaths = useNavPaths(src, dst);
-
+  const { navPaths, isNavOpen } = useNavigationParams();
   // Process instructions
   useEffect(() => {
     const instructions = navPaths?.Fastest?.instructions ?? [];
@@ -95,10 +90,10 @@ const NavOverlay = () => {
   // const processPathInstructions = (path: NavPath) => {};
 
   useEffect(() => {
-    if (!dst || dst === "") {
+    if (!isNavOpen) {
       endNav();
     }
-  }, [dst, endNav]);
+  }, [isNavOpen, endNav]);
 
   // useEffect(() => {
   //   if (!src || !dst || src === "" || dst === "") {
@@ -115,7 +110,7 @@ const NavOverlay = () => {
   //     });
   // }, [src, dst, setNavPaths]);
 
-  if (!dst || !src) {
+  if (!isNavOpen) {
     return;
   }
 

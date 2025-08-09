@@ -1,4 +1,3 @@
-import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import enterIconBlack from "@/assets/icons/nav/directions-list/enter-black.svg";
 import enterIconGrey from "@/assets/icons/nav/directions-list/enter-grey.svg";
@@ -15,7 +14,7 @@ import leftArrowIconWhite from "@/assets/icons/nav/directions-list/left-arrow-wh
 import rightArrowIconBlack from "@/assets/icons/nav/directions-list/right-arrow-black.svg";
 import rightArrowIconGrey from "@/assets/icons/nav/directions-list/right-arrow-grey.svg";
 import rightArrowIconWhite from "@/assets/icons/nav/directions-list/right-arrow-white.svg";
-import useNavPaths from "@/hooks/useNavPaths";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 
 const WALKING_SPEED = 100;
@@ -71,9 +70,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
     Record<number, DirectionProps[]>
   >([]);
 
-  const [src, _setSrc] = useQueryState("src");
-  const [dst, _setDst] = useQueryState("dst");
-  const navPaths = useNavPaths(src, dst);
+  const { navPaths } = useNavigationParams();
 
   // const { data: buildings } = $api.useQuery("get", "/buildings");
 
@@ -180,7 +177,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
 
   return (
     <div
-      className="btn-shadow fixed inset-x-0 top-0 bottom-30 z-40 flex-col overflow-y-scroll bg-white transition duration-300 ease-in-out"
+      className={`${show && "btn-shadow"} fixed inset-x-0 top-0 bottom-30 z-40 flex-col overflow-y-scroll bg-white transition duration-300 ease-in-out`}
       style={{ transform: `translateY(${yControl}%)` }}
     >
       {Object.entries(pastDirections)

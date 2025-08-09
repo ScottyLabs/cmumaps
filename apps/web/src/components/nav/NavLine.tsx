@@ -1,5 +1,4 @@
 import { Annotation, type Coordinate } from "mapkit-react";
-import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import enterIcon from "@/assets/icons/nav/path/enter.svg";
 import enterCompletedIcon from "@/assets/icons/nav/path/enter-completed.svg";
@@ -8,7 +7,7 @@ import exitCompletedIcon from "@/assets/icons/nav/path/exit-completed.svg";
 import endIcon from "@/assets/icons/nav/path/pathEnd.svg";
 import startIcon from "@/assets/icons/nav/path/pathStart.svg";
 import startIconCompleted from "@/assets/icons/nav/path/pathStart-completed.svg";
-import useNavPaths from "@/hooks/useNavPaths";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import type { Node } from "@/types/navTypes";
 
@@ -18,7 +17,7 @@ interface IconInfo {
 }
 
 interface Props {
-  map: mapkit.Map;
+  map: mapkit.Map | null;
 }
 
 const standardOffset = { x: 16, y: 8 };
@@ -48,15 +47,10 @@ const NavLine = ({ map }: Props) => {
   const [completedPath, setCompletedPath] = useState<Node[] | null>(null);
   const [uncompletedPath, setUncompletedPath] = useState<Node[] | null>(null);
 
-  const [pathOverlay, setPathOverlay] = useState<mapkit.Overlay[]>([]);
+  const [pathOverlay, setPathOverlay] = useState<mapkit.PolylineOverlay[]>([]);
   const [iconInfos, setIconInfos] = useState<IconInfo[]>([]);
 
-  const [src, _setSrc] = useQueryState("src");
-  const [dst, _setDst] = useQueryState("dst");
-
-  const focusedFloor = useBoundStore((state) => state.focusedFloor);
-
-  const navPaths = useNavPaths(src, dst);
+  const { navPaths, isNavOpen } = useNavigationParams();
 
   const fastestPath = navPaths?.Fastest?.path.path;
 
@@ -106,7 +100,7 @@ const NavLine = ({ map }: Props) => {
   ]);
 
   useEffect(() => {
-    const newPathOverlays: mapkit.Overlay[] = [];
+    const newPathOverlays: mapkit.PolylineOverlay[] = [];
 
     if (startedNavigation) {
       if (completedPath) {
@@ -187,19 +181,19 @@ const NavLine = ({ map }: Props) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render whenever new floor is focused so line is not covered
   useEffect(() => {
     if (pathOverlay) {
-      if (dst && src && dst !== "" && src !== "") {
-        map.addOverlays(pathOverlay);
+      if (isNavOpen) {
+        map?.addOverlays(pathOverlay);
       } else {
-        map.removeOverlays(pathOverlay);
+        map?.removeOverlays(pathOverlay);
       }
     }
 
     return () => {
       if (pathOverlay) {
-        map.removeOverlays(pathOverlay);
+        map?.removeOverlays(pathOverlay);
       }
     };
-  }, [map, pathOverlay, src, dst, focusedFloor]);
+  }, [map, map?.overlays, map?.selectedAnnotation, pathOverlay, isNavOpen]);
 
   // calculate the icons (annotations)
   useEffect(() => {
@@ -260,28 +254,43 @@ const NavLine = ({ map }: Props) => {
     instructionIndex,
   ]);
 
-  if (!dst || dst === "") {
+  if (!isNavOpen || !map) {
     return;
   }
 
-  return iconInfos.map((iconInfo, index) => (
-    <Annotation
-      key={index}
-      latitude={iconInfo.coordinate.latitude}
-      longitude={iconInfo.coordinate.longitude}
-      displayPriority={"required"}
-    >
-      <img
-        src={iconInfo.icon.icon}
-        alt="Icon"
-        // height={40}
-        style={{
-          height: iconInfo.icon.height,
-          transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
-        }}
-      />
-    </Annotation>
-  ));
+  return (
+    <>
+      {iconInfos.map((iconInfo, index) => (
+        <Annotation
+          key={index}
+          latitude={iconInfo.coordinate.latitude}
+          longitude={iconInfo.coordinate.longitude}
+          displayPriority={"required"}
+        >
+          <img
+            src={iconInfo.icon.icon}
+            alt="Icon"
+            // height={40}
+            style={{
+              height: iconInfo.icon.height,
+              transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
+            }}
+          />
+        </Annotation>
+      ))}
+
+      {/* {pathOverlay.map((path, index) => ( */}
+      {/*   <Polyline */}
+      {/*     key={index} */}
+      {/*     points={path.points} */}
+      {/*     strokeColor={path.style.strokeColor} */}
+      {/*     strokeOpacity={path.style.strokeOpacity} */}
+      {/*     lineWidth={path.style.lineWidth} */}
+      {/*     lineDash={path.style.lineDash} */}
+      {/*   /> */}
+      {/* ))} */}
+    </>
+  );
 };
 
 export default NavLine;

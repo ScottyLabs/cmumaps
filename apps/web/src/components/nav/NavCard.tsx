@@ -1,11 +1,10 @@
-import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
 import accessibleUnavailableIcon from "@/assets/icons/nav/route-selection/accessibleUnavailable.svg";
 import fastestSelectedIcon from "@/assets/icons/nav/route-selection/fastestSelected.svg";
 import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnavailable.svg";
 import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
-import useNavPaths from "@/hooks/useNavPaths";
+import useNavigationParams from "@/hooks/useNavigationParams";
 
 interface NavHeaderProps {
   isNavigating: boolean;
@@ -54,10 +53,7 @@ const NavCard = ({
     },
   ];
 
-  const [src, setSrc] = useQueryState("src");
-  const [dst, setDst] = useQueryState("dst");
-
-  const navPaths = useNavPaths(src, dst);
+  const { navPaths, setSrc, setDst } = useNavigationParams();
 
   const distance = Math.round(navPaths?.Fastest?.path.distance ?? 0);
   const time = Math.round((navPaths?.Fastest?.path.distance ?? 0) / 100);

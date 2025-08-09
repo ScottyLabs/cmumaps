@@ -1,6 +1,4 @@
-import { useQueryState } from "nuqs";
 import { useEffect } from "react";
-import $api from "@/api/client";
 import cancelIcon from "@/assets/icons/nav/nav-overlay/cancel.svg";
 import headerIcon from "@/assets/icons/nav/nav-overlay/header.svg";
 import enterIcon from "@/assets/icons/nav/nav-overlay/header-instructions/enter.svg";
@@ -10,8 +8,7 @@ import leftArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/le
 import rightArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/right-arrow.svg";
 import nextInstructionIcon from "@/assets/icons/nav/nav-overlay/next-instruction.svg";
 import swapIcon from "@/assets/icons/nav/nav-overlay/swap.svg";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useNavPaths from "@/hooks/useNavPaths";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 
 interface NavHeaderProps {
@@ -24,9 +21,6 @@ const NavHeader = ({
   isNavigating,
   // listShown,
 }: NavHeaderProps) => {
-  const { data: buildings } = $api.useQuery("get", "/buildings");
-  const navigate = useNavigateLocationParams();
-
   const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
   const searchTarget = useBoundStore((state) => state.searchTarget);
 
@@ -47,14 +41,12 @@ const NavHeader = ({
     Exit: "Exit",
   };
 
-  const [src, setSrc] = useQueryState("src");
-  const [dst, setDst] = useQueryState("dst");
-
   // if (listShown) {
   //   return;
   // }
 
-  const navPaths = useNavPaths(src, dst);
+  const { navPaths, srcName, dstName, dstShortName, setSrc, swap } =
+    useNavigationParams();
 
   useEffect(() => {
     console.log("Nav Paths: ", navPaths);
@@ -66,19 +58,6 @@ const NavHeader = ({
   const setInstructionIndex = useBoundStore(
     (state) => state.setNavInstructionIndex,
   );
-
-  const srcName =
-    src === "user"
-      ? "Your Location"
-      : buildings && src
-        ? buildings[src]?.name || "Invalid Building"
-        : "Loading...";
-  const dstName =
-    dst === "user"
-      ? "Your Location"
-      : buildings && dst
-        ? buildings[dst]?.name || "Invalid Building"
-        : "Loading...";
 
   // const distance = useMemo(() => instructions[instructionIndex]?.distance, [instructions, instructionIndex]);
   // const action = useMemo(() => instructions[instructionIndex]?.action, [instructions, instructionIndex]);
@@ -153,12 +132,7 @@ const NavHeader = ({
             <button
               type="button"
               className="absolute right-[13px] bottom-[17px]"
-              onClick={() => {
-                const temp = src;
-                navigate(temp || "");
-                setSrc(dst);
-                setDst(temp);
-              }}
+              onClick={swap}
             >
               <img src={swapIcon} alt="swap" />
             </button>
@@ -192,7 +166,7 @@ const NavHeader = ({
             </div>
           </div>
           <div className="-translate-y-2 absolute top-10 right-5 font-lato font-semibold text-[17px] text-white">
-            {dst}
+            {dstShortName}
           </div>
         </div>
         <div className="mx-5 my-4 flex justify-between px-px pb-0.5">
