@@ -28,6 +28,11 @@ export interface GeoRoom {
    * Points to display on map
    */
   points: GeoCoordinate[][];
+
+  /**
+   * The uuid of the room
+   */
+  id: string;
 }
 
 // maps from name to room

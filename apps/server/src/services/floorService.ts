@@ -184,6 +184,7 @@ export const floorService = {
         },
         floor: { buildingCode, level: floorLevel },
         type: room.type as RoomType,
+        id: room.roomId,
         alias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
         points: room.polygon as unknown as GeoCoordinate[][],
       };
