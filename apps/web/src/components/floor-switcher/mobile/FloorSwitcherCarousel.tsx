@@ -1,9 +1,9 @@
 import type { Building } from "@cmumaps/common";
 import { animate, motion, useTransform } from "framer-motion";
 import type { MotionValue } from "motion/react";
-import useBoundStore from "@/store";
-import $api from "@/api/client";
 import { useEffect } from "react";
+import $api from "@/api/client";
+import useBoundStore from "@/store";
 
 interface FloorSwitcherButtonProps {
   building: Building;
