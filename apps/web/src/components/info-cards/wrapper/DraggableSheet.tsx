@@ -6,6 +6,7 @@ import useLocationParams from "@/hooks/useLocationParams";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
+import useNavigationParams from "@/hooks/useNavigationParams";
 
 interface Props {
   snapPoints: number[];
@@ -67,9 +68,9 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     }
   }, [focusedFloor, setCardStatus]);
 
-  const [dst] = useQueryState("dst");
+  const { isNavOpen } = useNavigationParams();
 
-  if (dst) {
+  if (isNavOpen) {
     return;
   }
 

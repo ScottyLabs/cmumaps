@@ -83,8 +83,9 @@ const verifyURLParams = (): string | undefined => {
 };
 
 const useLocationParams = (): Params => {
-  const location = useLocation();
-  const path = location.pathname;
+  // const location = useLocation();
+  // const path = location.pathname;
+  const path = window.location.pathname;
 
   const [_src] = useQueryState("src");
   const [_dst] = useQueryState("dst");

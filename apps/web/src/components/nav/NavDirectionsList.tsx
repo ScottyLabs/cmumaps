@@ -84,8 +84,6 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
       currentDistance += instructions[i]?.distance ?? 0;
     }
 
-    console.log(`Current Distance: ${currentDistance}`);
-
     let distanceAcc = 0;
     instructions.forEach((instruction, index) => {
       if (index === instructions.length - 1) return;

@@ -62,8 +62,10 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
     if (selectedFloor) {
       if (
-        selectedBuildingCode === centerBuilding.code &&
-        selectedFloor !== focusedFloor?.level
+        !focusedFloor ||
+        (focusedFloor.buildingCode !== centerBuilding.code &&
+          selectedBuildingCode === centerBuilding.code &&
+          selectedFloor !== focusedFloor?.level)
       ) {
         focusFloor({
           buildingCode: centerBuilding.code,

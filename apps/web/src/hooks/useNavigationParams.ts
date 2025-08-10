@@ -97,7 +97,7 @@ const useNavPaths = (): Params => {
         end: dstQuery ?? "",
       },
     },
-    enabled: !!src && !!dst,
+    enabled: srcQuery && dstQuery && srcQuery !== "" && dstQuery !== "",
   }) as { data: NavPaths | undefined };
 
   const swap = () => {

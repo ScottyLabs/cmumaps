@@ -2,6 +2,8 @@ import type { Building } from "@cmumaps/common";
 import { animate, motion, useTransform } from "framer-motion";
 import type { MotionValue } from "motion/react";
 import useBoundStore from "@/store";
+import $api from "@/api/client";
+import { useEffect } from "react";
 
 interface FloorSwitcherButtonProps {
   building: Building;
@@ -22,6 +24,22 @@ const FloorSwitcherButton = ({
     () =>
       `${Math.max(0, Math.min(100, (progressValue.get() - index) * 25 + 50))}%`,
   );
+
+  useEffect(() => {
+    offsetDistance.addDependent(progressValue);
+  });
+
+  // // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // useEffect(() => {
+  //   console.log(
+  //     "index ",
+  //     index,
+  //     "  progressValue ",
+  //     progressValue.get(),
+  //     " d: ",
+  //     offsetDistance.get(),
+  //   );
+  // }, []);
 
   const distCurveValue = () => {
     const val = Number.parseFloat(offsetDistance.get().replace("%", "")) / 100;
@@ -102,12 +120,18 @@ interface Props {
 }
 
 const FloorSwitcherCarouselMobile = ({ building, progressValue }: Props) => {
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
+
+  const { data: buildings } = $api.useQuery("get", "/buildings");
+  const currentBuilding = buildings?.[focusedFloor?.buildingCode ?? ""];
+  const floors = currentBuilding?.floors ?? [];
+
   return (
     <>
       <DummyButton index={-1} progressValue={progressValue} />
-      {building.floors.map((floor, index) => (
+      {floors.map((floor, index) => (
         <FloorSwitcherButton
-          building={building}
+          building={currentBuilding ?? building}
           index={index}
           floor={floor}
           progressValue={progressValue}
