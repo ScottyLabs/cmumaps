@@ -4,6 +4,7 @@ import $api from "@/api/client";
 import RoomPin from "@/components/shared/RoomPin";
 import useLocationParams from "@/hooks/useLocationParams";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { getFloorCode } from "@/utils/floorUtils";
@@ -31,6 +32,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
 
   // Custom hooks
   const { roomName: selectedRoomName } = useLocationParams();
+  const { isNavOpen, setSrc } = useNavigationParams();
 
   if (!rooms) {
     return null;
@@ -38,8 +40,12 @@ const FloorplanOverlay = ({ floor }: Props) => {
 
   const handleSelectRoom = (roomName: string, room: GeoRoom) => {
     const floor = room.floor;
-    navigate(`/${floor.buildingCode}-${roomName}`);
-    setCardStatus(CardStates.HALF_OPEN);
+    if (isNavOpen) {
+      setSrc(`${floor.buildingCode}-${roomName}`);
+    } else {
+      navigate(`/${floor.buildingCode}-${roomName}`);
+      setCardStatus(CardStates.HALF_OPEN);
+    }
   };
 
   return Object.entries(rooms).map(([roomName, room]) => {

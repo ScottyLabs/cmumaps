@@ -1,8 +1,8 @@
-import { useQueryState } from "nuqs";
 import { FaArrowRight } from "react-icons/fa";
 import { TbXboxX } from "react-icons/tb";
 import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
 import useLocationParams from "@/hooks/useLocationParams";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 
@@ -11,9 +11,8 @@ interface Props {
 }
 
 const ButtonsRow = ({ middleButton }: Props) => {
-  const [_src, setDst] = useQueryState("dst");
-  const [_dst, setSrc] = useQueryState("src");
-  const { buildingCode } = useLocationParams();
+  const { setSrc, setDst } = useNavigationParams();
+  const { buildingCode, roomName } = useLocationParams();
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
   const renderDirectionButton = () => {
@@ -27,7 +26,11 @@ const ButtonsRow = ({ middleButton }: Props) => {
         disabled={isRoomAcc}
         onClick={() => {
           if (buildingCode) {
-            setDst(buildingCode);
+            if (roomName) {
+              setDst(`${buildingCode}-${roomName}`);
+            } else {
+              setDst(buildingCode);
+            }
             setSrc("user");
           }
           setCardStatus(CardStates.COLLAPSED);
