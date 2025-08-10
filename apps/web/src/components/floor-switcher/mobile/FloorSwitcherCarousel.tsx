@@ -53,6 +53,8 @@ const FloorSwitcherButton = ({
 
   const height = useTransform(() => 38 + distCurveValue() * 8);
 
+  const boundingBoxSize = useTransform(() => 80 - distCurveValue() * 80);
+
   const onClick = () => {
     const controls = animate(progressValue, index, {
       duration: 0.3,
@@ -67,21 +69,28 @@ const FloorSwitcherButton = ({
 
   return (
     <motion.div
-      className="fixed top-1/2 flex h-11 w-11 translate-x-22 items-center justify-center rounded-full text-white"
+      className="fixed top-1/2 flex translate-x-22 items-center justify-center rounded-full"
       style={{
-        borderRadius: "50% / 50%",
-        backgroundColor: "#6F8FE3",
         offsetPath: 'path("M -30,70 L 0,70 A 56,70 0 1,0 0,-70 L -30, -70")',
         offsetDistance,
-        opacity,
-        width,
-        height,
         offsetRotate: "0deg",
+        width: boundingBoxSize,
+        height: boundingBoxSize,
       }}
       key={index}
       onClick={onClick}
     >
-      <div className="fixed">{floor}</div>
+      <motion.div
+        className="fixed flex items-center justify-center rounded-full text-white"
+        style={{
+          backgroundColor: "#6F8FE3",
+          opacity,
+          width,
+          height,
+        }}
+      >
+        <p>{floor}</p>
+      </motion.div>
     </motion.div>
   );
 };

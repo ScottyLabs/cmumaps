@@ -86,24 +86,24 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   }, []);
 
   return (
-    <motion.div
-      className="btn-shadow -translate-x-1/2 -translate-y-1/2 fixed top-1/2 h-52 w-45 bg-white/10 shadow-black/20 shadow-lg backdrop-blur-md"
+    <div
+      className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 flex h-78 w-68 items-center align-center"
       style={{ borderRadius: "50% / 50%" }}
-      onTouchStart={(e) => {
-        onTouchStart(e);
-      }}
-      onTouchMove={(e) => {
-        onTouchMove(e);
-      }}
-      onTouchEnd={() => {
-        onTouchEnd();
-      }}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      ref={draggableRegionRef}
     >
-      <FloorSwitcherCarouselMobile
-        building={building}
-        progressValue={progressValue}
-      />
-    </motion.div>
+      <motion.div
+        className="btn-shadow m-auto h-52 w-45 self-center bg-white/10 backdrop-blur-md"
+        style={{ borderRadius: "50% / 50%" }}
+      >
+        <FloorSwitcherCarouselMobile
+          building={building}
+          progressValue={progressValue}
+        />
+      </motion.div>
+    </div>
   );
 };
 
