@@ -4,7 +4,6 @@ import {
   Map as MapkitMap,
   MapType,
 } from "mapkit-react";
-import { useQueryState } from "nuqs";
 import { useState } from "react";
 import $api from "@/api/client";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
@@ -15,8 +14,10 @@ import {
 } from "@/components/map-display/MapConstants";
 import env from "@/env";
 import useIsMobile from "@/hooks/useIsMobile";
+import useLocationParams from "@/hooks/useLocationParams";
 import useMapRegionChange from "@/hooks/useMapRegionChange";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
 import NavLine from "../nav/NavLine";
@@ -26,9 +27,6 @@ interface Props {
 }
 
 const MapDisplay = ({ mapRef }: Props) => {
-  // Library hooks
-  const navigate = useNavigateLocationParams();
-
   // Query data
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
@@ -45,9 +43,9 @@ const MapDisplay = ({ mapRef }: Props) => {
   // Custom hooks
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
-
-  const [_src, setSrc] = useQueryState("src");
-  const [_dst, setDst] = useQueryState("dst");
+  const navigate = useNavigateLocationParams();
+  const { setSrc, setDst } = useNavigationParams();
+  const { buildingCode, roomName } = useLocationParams();
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
@@ -88,11 +86,16 @@ const MapDisplay = ({ mapRef }: Props) => {
       }
     }
 
-    // If no building is clicked, deselect the building and navigate to the home page
-    // TODO: do we need to deselect the room?
+    // If no building is clicked,
+    // If there is a sleceted room: navigate to the building containing the room
+    // Otherwise: deselect the building and navigate to the home page
     if (!clickedBuilding) {
-      deselectBuilding();
-      navigate("/");
+      if (roomName) {
+        navigate(`/${buildingCode}`);
+      } else {
+        deselectBuilding();
+        navigate("/");
+      }
       setSrc(null);
       setDst(null);
     }
