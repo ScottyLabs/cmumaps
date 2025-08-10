@@ -20,7 +20,13 @@ interface Params {
 
 const getWaypointParams = (
   point: string,
-): { query?: string; label?: string; labelShort?: string; error?: string } => {
+): {
+  query?: string;
+  label?: string;
+  labelShort?: string;
+  urlParam?: string;
+  error?: string;
+} => {
   const { data: buildings } = $api.useQuery("get", "/buildings");
   const pointSplit = point.split("-");
   const buildingCode = pointSplit[0];
@@ -57,7 +63,7 @@ const getWaypointParams = (
     const label =
       room.alias || `${buildings[room.floor.buildingCode]?.name} ${roomName}`;
     const labelShort = `${buildingCode} ${roomName}`;
-    return { query: room.id, label, labelShort };
+    return { query: room.id, label, labelShort, urlParam: point };
   }
 
   if (!buildingCode || !buildings?.[buildingCode])
@@ -80,6 +86,7 @@ const useNavPaths = (): Params => {
     query: srcQuery,
     label: srcName,
     labelShort: srcShortName,
+    urlParam: srcUrlParam,
     error: srcError,
   } = getWaypointParams(src ?? "");
 
@@ -102,7 +109,9 @@ const useNavPaths = (): Params => {
 
   const swap = () => {
     const temp = src;
-    navigate(temp || "");
+    if (srcUrlParam) {
+      navigate(`/${srcUrlParam}`);
+    }
     setSrc(dst);
     setDst(temp);
   };
