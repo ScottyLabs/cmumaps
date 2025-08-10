@@ -1,9 +1,9 @@
-import { useQueryState } from "nuqs";
 import { useMemo } from "react";
 import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -32,11 +32,10 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
   const searchTarget = useBoundStore((state) => state.searchTarget);
   const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
-
-  const [_src, setSrc] = useQueryState("src");
-  const [_dst, setDst] = useQueryState("dst");
+  const focusFloor = useBoundStore((state) => state.focusFloor);
 
   const navigate = useNavigateLocationParams();
+  const { setSrc, setDst } = useNavigationParams();
 
   const { data: searchResults } = $rapi.useQuery("get", "/search", {
     params: { query: { query: searchQuery } },
@@ -112,9 +111,11 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
           setCardStatus(CardStates.COLLAPSED);
           break;
       }
+      focusFloor({ buildingCode: buildingName, level: floor });
     } else {
       navigate("/");
     }
+
     const latitude = result.labelPosition?.latitude;
     const longitude = result.labelPosition?.longitude;
     if (latitude && longitude && mapRef.current) {

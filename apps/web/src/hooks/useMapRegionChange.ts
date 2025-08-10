@@ -51,21 +51,24 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       return;
     }
 
-    // If the focused floor is in the same building as the selected floor (given by the URL params),
-    // then focus the selected floor
-    // HACK: use window to get current pathname value (values from hooks are stale)
-    const path = window.location.pathname;
-    // TODO: replace logic with a util function once urlparam branch is merged in
-    const [selectedBuildingCode, roomName] =
-      path.split("/")?.[1]?.split("-") || [];
-    const selectedFloor = getFloorLevelFromRoomName(roomName);
+    // if no floor is focused or the focused floor is not in the center building
+    //   - we focus on the floor of the selected room if there is one
+    //     and it is in the center building
+    //   - otherwise we focus on the default floor of the center building
+    if (!focusedFloor || focusedFloor.buildingCode !== centerBuilding.code) {
+      // If the focused floor is in the same building as the selected floor (given by the URL params),
+      // then focus the selected floor
+      // HACK: use window to get current pathname value (values from hooks are stale)
+      const path = window.location.pathname;
+      // TODO: replace logic with a util function once urlparam branch is merged in
+      const [selectedBuildingCode, roomName] =
+        path.split("/")?.[1]?.split("-") || [];
+      const selectedFloor = getFloorLevelFromRoomName(roomName);
 
-    if (selectedFloor) {
       if (
-        !focusedFloor ||
-        (focusedFloor.buildingCode !== centerBuilding.code &&
-          selectedBuildingCode === centerBuilding.code &&
-          selectedFloor !== focusedFloor?.level)
+        selectedFloor &&
+        selectedBuildingCode === centerBuilding.code &&
+        selectedFloor !== focusedFloor?.level
       ) {
         focusFloor({
           buildingCode: centerBuilding.code,
@@ -73,23 +76,17 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
         });
         return;
       }
-    }
 
-    // if no floor is focused
-    //   - we focus on the floor of the selected room if there is one
-    //     and it is in the center building
-    //   - otherwise we focus on the default floor of the center building
-    if (!focusedFloor) {
       if (!centerBuilding.defaultFloor) {
         return;
       }
 
-      const focusedFloor = {
+      const newFocusedFloor = {
         buildingCode: centerBuilding.code,
         level: centerBuilding.defaultFloor,
       };
 
-      focusFloor(focusedFloor);
+      focusFloor(newFocusedFloor);
       return;
     }
 
