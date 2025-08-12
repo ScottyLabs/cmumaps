@@ -157,7 +157,9 @@ const NavHeader = ({
               {instructionTitles[action || "Forward"]}
             </div>
             <div className="-translate-y-2 pl-[2px] font-lato font-semibold text-[15px] text-white">
-              {action === "Forward" ? "for" : "in"} {distance} ft
+              {distance === 0
+                ? "Directly ahead"
+                : `${action === "Forward" ? "for" : "in"} ${distance} ft`}
             </div>
           </div>
           <div className="-translate-y-2 absolute top-10 right-5 font-lato font-semibold text-[17px] text-white">
@@ -207,7 +209,7 @@ const NavHeader = ({
     return (
       <div className="btn-shadow fixed inset-x-5 top-10 overflow-auto rounded-lg bg-primary-blue">
         <div className="flex justify-center">
-          <div className="mt-[16px] flex-col">
+          <div className="mt-4 flex-col">
             <div className="flex justify-center font-lato font-semibold text-[2rem] text-white">
               You Have Arrived
             </div>
