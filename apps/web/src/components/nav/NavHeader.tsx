@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import cancelIcon from "@/assets/icons/nav/nav-overlay/cancel.svg";
 import headerIcon from "@/assets/icons/nav/nav-overlay/header.svg";
 import enterIcon from "@/assets/icons/nav/nav-overlay/header-instructions/enter.svg";
@@ -45,12 +44,8 @@ const NavHeader = ({
   //   return;
   // }
 
-  const { navPaths, srcName, dstName, dstShortName, setSrc, swap } =
+  const { srcName, dstName, dstShortName, setSrc, swap } =
     useNavigationParams();
-
-  useEffect(() => {
-    console.log("Nav Paths: ", navPaths);
-  }, [navPaths]);
 
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);

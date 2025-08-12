@@ -20,6 +20,7 @@ import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
+import prefersReducedMotion from "@/utils/prefersReducedMotion";
 import NavLine from "../nav/NavLine";
 
 interface Props {
@@ -35,6 +36,10 @@ const MapDisplay = ({ mapRef }: Props) => {
   const selectBuilding = useBoundStore((state) => state.selectBuilding);
   const deselectBuilding = useBoundStore((state) => state.deselectBuilding);
   const setIsZooming = useBoundStore((state) => state.setIsZooming);
+  const queuedZoomRegion = useBoundStore((state) => state.queuedZoomRegion);
+  const setQueuedZoomRegion = useBoundStore(
+    (state) => state.setQueuedZoomRegion,
+  );
 
   // Local state
   const isMobile = useIsMobile();
@@ -125,7 +130,16 @@ const MapDisplay = ({ mapRef }: Props) => {
       onClick={handleClick}
       onRegionChangeStart={onRegionChangeStart}
       onRegionChangeEnd={() => {
-        setIsZooming(false);
+        if (queuedZoomRegion) {
+          mapRef.current?.setRegionAnimated(
+            queuedZoomRegion,
+            !prefersReducedMotion(),
+          );
+          setQueuedZoomRegion(null);
+          setIsZooming(true);
+        } else {
+          setIsZooming(false);
+        }
         onRegionChangeEnd();
       }}
     >

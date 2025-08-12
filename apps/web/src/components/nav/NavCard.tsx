@@ -145,24 +145,6 @@ const NavCard = ({
   const renderNavCard = () => {
     return (
       <div className="mt-8 ml-9 flex h-9">
-        {/* <div className="w-39">
-          <div className="flex">
-            <div className="w-full text-center font-bold text-black text-xl">
-              {endTime}
-            </div>
-            <div className="w-full text-center font-bold text-black text-xl">
-              {time}
-            </div>
-            <div className="w-full text-center font-bold text-black text-xl">
-              {distance}
-            </div>
-          </div>
-          <div className="-translate-y-2 flex">
-            <div className="w-full text-center">arrival</div>
-            <div className="w-full text-center">min</div>
-            <div className="w-full text-center">ft</div>
-          </div>
-        </div> */}
         <div className="h-9">
           <div className="flex">
             <div className="flex-col pr-4">

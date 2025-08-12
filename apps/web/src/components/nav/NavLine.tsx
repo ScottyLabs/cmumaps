@@ -10,6 +10,7 @@ import startIconCompleted from "@/assets/icons/nav/path/pathStart-completed.svg"
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import type { Node } from "@/types/navTypes";
+import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface IconInfo {
   coordinate: Coordinate;
@@ -55,17 +56,55 @@ const NavLine = ({ map }: Props) => {
   const fastestPath = navPaths?.Fastest?.path.path;
 
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
+  const isNavigating = useBoundStore((state) => state.isNavigating);
+  const setIsZooming = useBoundStore((state) => state.setIsZooming);
+  const setQueuedZoomRegion = useBoundStore(
+    (state) => state.setQueuedZoomRegion,
+  );
+  const focusFloor = useBoundStore((state) => state.focusFloor);
 
   const recommendedPath = navPaths;
 
   const path = fastestPath || [];
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
 
-  const startedNavigation = useBoundStore((state) => state.isNavigating);
+  // zoom on current instruction and focus the corresponding floor
+  useEffect(() => {
+    if (isNavigating && map) {
+      const node =
+        instructionIndex === 0
+          ? navPaths?.Fastest?.path.path[0]
+          : navPaths?.Fastest?.path.path.find(
+              (n) => n.id === instructions[instructionIndex - 1]?.node_id,
+            );
+      if (node) {
+        focusFloor(node.floor);
+      }
+      if (node?.coordinate) {
+        zoomOnPoint(
+          map,
+          node.coordinate,
+          0.0004,
+          setIsZooming,
+          setQueuedZoomRegion,
+        );
+      }
+    }
+  }, [
+    isNavigating,
+    instructionIndex,
+    focusFloor,
+    instructions[instructionIndex - 1]?.node_id,
+    map,
+    navPaths?.Fastest?.path.path.find,
+    setIsZooming,
+    navPaths?.Fastest?.path.path[0],
+    setQueuedZoomRegion,
+  ]);
 
   // calculate curFloorPath and restPath
   useEffect(() => {
-    if (startedNavigation) {
+    if (isNavigating) {
       const path: Node[] = fastestPath || [];
       const newFinishedPath: Node[] = [];
       const newUnfinishedPath: Node[] = [];
@@ -96,13 +135,13 @@ const NavLine = ({ map }: Props) => {
     instructionIndex,
     fastestPath,
     instructions[instructionIndex]?.node_id,
-    startedNavigation,
+    isNavigating,
   ]);
 
   useEffect(() => {
     const newPathOverlays: mapkit.PolylineOverlay[] = [];
 
-    if (startedNavigation) {
+    if (isNavigating) {
       if (completedPath) {
         const curFloorPathOverlay = new mapkit.PolylineOverlay(
           completedPath.map(
@@ -175,7 +214,7 @@ const NavLine = ({ map }: Props) => {
         setPathOverlay(newPathOverlays);
       }
     }
-  }, [recommendedPath, completedPath, startedNavigation, uncompletedPath]);
+  }, [recommendedPath, completedPath, isNavigating, uncompletedPath]);
 
   // render the polylines so they stay on top
   // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render whenever new floor is focused so line is not covered
@@ -278,17 +317,6 @@ const NavLine = ({ map }: Props) => {
           />
         </Annotation>
       ))}
-
-      {/* {pathOverlay.map((path, index) => ( */}
-      {/*   <Polyline */}
-      {/*     key={index} */}
-      {/*     points={path.points} */}
-      {/*     strokeColor={path.style.strokeColor} */}
-      {/*     strokeOpacity={path.style.strokeOpacity} */}
-      {/*     lineWidth={path.style.lineWidth} */}
-      {/*     lineDash={path.style.lineDash} */}
-      {/*   /> */}
-      {/* ))} */}
     </>
   );
 };

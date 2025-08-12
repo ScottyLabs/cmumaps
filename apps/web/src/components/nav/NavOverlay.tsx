@@ -79,36 +79,11 @@ const NavOverlay = () => {
     setNavInstructions?.(newInstructions);
   }, [navPaths, setNavInstructions]);
 
-  // const setNavPaths = useBoundStore((state) => state.setNavPaths);
-
-  // const processPathsData = (data: NavPaths) => {
-  //   const processedPaths: NavPaths = {};
-  //   for (const key in data) {
-  //   }
-  // };
-
-  // const processPathInstructions = (path: NavPath) => {};
-
   useEffect(() => {
     if (!isNavOpen) {
       endNav();
     }
   }, [isNavOpen, endNav]);
-
-  // useEffect(() => {
-  //   if (!src || !dst || src === "" || dst === "") {
-  //     return;
-  //   }
-  //   console.log("REQUESTING:");
-  //   fetch(`http://localhost:3278/path?start=${src}&end=${dst}`, {
-  //     method: "GET",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setNavPaths(data);
-  //       console.log("Nav Paths: ", data);
-  //     });
-  // }, [src, dst, setNavPaths]);
 
   if (!isNavOpen) {
     return;

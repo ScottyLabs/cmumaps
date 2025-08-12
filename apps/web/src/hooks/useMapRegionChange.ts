@@ -15,6 +15,7 @@ import {
   getFloorOrdinal,
 } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
+import useNavigationParams from "./useNavigationParams";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Query data
@@ -26,9 +27,14 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   const unfocusFloor = useBoundStore((state) => state.unfocusFloor);
   const showLogin = useBoundStore((state) => state.showLogin);
   const setShowRoomNames = useBoundStore((state) => state.setShowRoomNames);
+  const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
+  const isNavigating = useBoundStore((state) => state.isNavigating);
 
   // Local state
   const [showFloor, setShowFloor] = useState<boolean>(false);
+
+  const { navPaths } = useNavigationParams();
+  const instructions = useBoundStore((state) => state.navInstructions) ?? [];
 
   // Calculates the focused floor based on the region
   const calcFocusedFloor = (region: CoordinateRegion) => {
@@ -56,9 +62,23 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
     //     and it is in the center building
     //   - otherwise we focus on the default floor of the center building
     if (!focusedFloor || focusedFloor.buildingCode !== centerBuilding.code) {
+      // If actively navigating, focus on the floor corresponding to the current instruction
+      // if it is in the focused building
+      if (isNavigating) {
+        const node =
+          instructionIndex === 0
+            ? navPaths?.Fastest?.path.path[0]
+            : navPaths?.Fastest?.path.path.find(
+                (n) => n.id === instructions[instructionIndex - 1]?.node_id,
+              );
+        if (node?.floor && node.floor.buildingCode === centerBuilding.code) {
+          focusFloor(node.floor);
+          return;
+        }
+      }
+
       // If the focused floor is in the same building as the selected floor (given by the URL params),
       // then focus the selected floor
-      // HACK: use window to get current pathname value (values from hooks are stale)
       const path = window.location.pathname;
       // TODO: replace logic with a util function once urlparam branch is merged in
       const [selectedBuildingCode, roomName] =

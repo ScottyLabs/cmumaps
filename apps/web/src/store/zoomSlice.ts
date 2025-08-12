@@ -6,6 +6,9 @@ export interface ZoomSlice {
 
   showRoomNames: boolean;
   setShowRoomNames: (showRoomNames: boolean) => void;
+
+  queuedZoomRegion: mapkit.CoordinateRegion | null;
+  setQueuedZoomRegion: (region: mapkit.CoordinateRegion | null) => void;
 }
 
 export const createZoomSlice: StateCreator<ZoomSlice> = (set) => ({
@@ -14,4 +17,8 @@ export const createZoomSlice: StateCreator<ZoomSlice> = (set) => ({
 
   showRoomNames: false,
   setShowRoomNames: (showRoomNames: boolean) => set({ showRoomNames }),
+
+  queuedZoomRegion: null,
+  setQueuedZoomRegion: (region: mapkit.CoordinateRegion | null) =>
+    set({ queuedZoomRegion: region }),
 });

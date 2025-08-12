@@ -50,16 +50,17 @@ export const zoomOnPoint = (
   point: Coordinate,
   offset = 0.001,
   setIsZooming?: (_: boolean) => void,
+  setQueuedZoomRegion?: (region: mapkit.CoordinateRegion | null) => void,
 ) => {
-  setIsZooming?.(true);
+  const region = new mapkit.BoundingRegion(
+    point.latitude + offset,
+    point.longitude + offset,
+    point.latitude - offset,
+    point.longitude - offset,
+  ).toCoordinateRegion();
 
-  map.setRegionAnimated(
-    new mapkit.BoundingRegion(
-      point.latitude + offset,
-      point.longitude + offset,
-      point.latitude - offset,
-      point.longitude - offset,
-    ).toCoordinateRegion(),
-    !prefersReducedMotion(),
-  );
+  setIsZooming?.(true);
+  setQueuedZoomRegion?.(region);
+
+  map.setRegionAnimated(region, !prefersReducedMotion());
 };
