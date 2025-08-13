@@ -113,10 +113,12 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
     isPast: boolean,
     i: number,
   ) => {
+    const timeLabel = time > 0 ? time : "<1";
+
     return (
       <div className="px-12 py-6" key={i}>
         <div className={`pb-3 ${isPast ? "text-light-grey" : "text-black"}`}>
-          {isPast ? `${time} MIN AGO` : `IN ${time} MIN`}
+          {isPast ? `${timeLabel} MIN AGO` : `IN ${timeLabel} MIN`}
         </div>
         <hr className={isPast ? "border-light-grey" : "border-black"} />
         {directions.map((dir, j) =>
