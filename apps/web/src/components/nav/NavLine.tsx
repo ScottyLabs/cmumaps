@@ -41,7 +41,7 @@ const PathInstructionIcons: Record<
     height: 40,
   },
 };
-const EndIcon = { icon: endIcon, offset: { x: 12, y: 4 } };
+const EndIcon = { icon: endIcon, offset: { x: 15, y: 4 } };
 
 const NavLine = ({ map }: Props) => {
   //   const dispatch = useAppDispatch();
@@ -242,7 +242,6 @@ const NavLine = ({ map }: Props) => {
     }
 
     const addStartEndIcons = () => {
-      console.log(path);
       if (path.length === 0) return;
       newIconInfos.push({
         // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
@@ -284,7 +283,6 @@ const NavLine = ({ map }: Props) => {
     addStartEndIcons();
 
     setIconInfos(newIconInfos);
-    console.log("Icon Infos:", newIconInfos);
   }, [
     path.length,
     path[0],

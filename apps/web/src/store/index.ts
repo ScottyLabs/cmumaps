@@ -5,6 +5,10 @@ import { createFloorSlice, type FloorSlice } from "./floorSlice";
 import { createLoginSlice, type LoginSlice } from "./loginSlice";
 import { createNavSlice, type NavSlice } from "./navSlice";
 import { createSearchSlice, type SearchSlice } from "./searchSlice";
+import {
+  createUserPositionSlice,
+  type UserPositionSlice,
+} from "./userPositionSlice";
 import { createZoomSlice, type ZoomSlice } from "./zoomSlice";
 
 export type BoundStore = BuildingSlice &
@@ -13,7 +17,8 @@ export type BoundStore = BuildingSlice &
   LoginSlice &
   SearchSlice &
   ZoomSlice &
-  NavSlice;
+  NavSlice &
+  UserPositionSlice;
 
 const useBoundStore = create<BoundStore>()((...args) => ({
   ...createFloorSlice(...args),
@@ -23,6 +28,7 @@ const useBoundStore = create<BoundStore>()((...args) => ({
   ...createSearchSlice(...args),
   ...createZoomSlice(...args),
   ...createNavSlice(...args),
+  ...createUserPositionSlice(...args),
 }));
 
 export default useBoundStore;

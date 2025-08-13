@@ -7,6 +7,7 @@ import Toolbar from "@/components/toolbar/Toolbar";
 import IconsDisplay from "@/components/ui-layout/icons-display/IconsDisplay";
 import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 import useUser from "@/hooks/useUser";
+import useBoundStore from "@/store";
 import NavOverlay from "./components/nav/NavOverlay.tsx";
 
 const App = () => {
@@ -22,6 +23,14 @@ const App = () => {
       posthog?.reset();
     }
   }, [posthog, user]);
+
+  // Set up user position tracking
+  const setUserPosition = useBoundStore((state) => state.setUserPosition);
+  useEffect(() => {
+    navigator.geolocation.watchPosition((position) => {
+      setUserPosition(position);
+    });
+  }, [setUserPosition]);
 
   return (
     <main className="relative h-dvh">

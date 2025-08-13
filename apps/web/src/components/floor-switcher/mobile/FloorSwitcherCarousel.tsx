@@ -29,18 +29,6 @@ const FloorSwitcherButton = ({
     offsetDistance.addDependent(progressValue);
   });
 
-  // // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  // useEffect(() => {
-  //   console.log(
-  //     "index ",
-  //     index,
-  //     "  progressValue ",
-  //     progressValue.get(),
-  //     " d: ",
-  //     offsetDistance.get(),
-  //   );
-  // }, []);
-
   const distCurveValue = () => {
     const val = Number.parseFloat(offsetDistance.get().replace("%", "")) / 100;
     const dist = 2 - 20 * Math.abs(val - 0.5);

@@ -57,12 +57,14 @@ const NavCard = ({
 
   const distance = Math.round(navPaths?.Fastest?.path.distance ?? 0);
   const time = Math.round((navPaths?.Fastest?.path.distance ?? 0) / 100);
-  // const now = new Date();
-  const endTime = new Date().toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const endTime = new Date(Date.now() + time * 60 * 1000).toLocaleTimeString(
+    "en-US",
+    {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    },
+  );
 
   const [yControl, setYControl] = useState(300);
 

@@ -2,6 +2,7 @@ import { useQueryState } from "nuqs";
 import { toast } from "react-toastify";
 import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
+import useBoundStore from "@/store";
 import type { NavPaths } from "@/types/navTypes";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import useNavigateLocationParams from "./useNavigateLocationParams";
@@ -32,6 +33,7 @@ const getWaypointParams = (
   const buildingCode = pointSplit[0];
   const roomName = pointSplit.slice(1).join("-");
   const floorName = getFloorLevelFromRoomName(roomName);
+  const userPosition = useBoundStore((state) => state.userPosition);
 
   const floorCode =
     buildingCode && floorName ? `${buildingCode}-${floorName}` : null;
@@ -43,11 +45,18 @@ const getWaypointParams = (
   );
 
   if (point.includes("user")) {
+    if (!userPosition) {
+      return { label: "Your Location (unavailable)" };
+    }
     return {
-      query: "40.444035,-79.94463",
+      query: `${userPosition.coords.latitude},${userPosition.coords.longitude}`,
       label: "Your Location",
       labelShort: "You",
     };
+  }
+
+  if (point === "") {
+    return {};
   }
 
   if (point.includes(",")) {
@@ -66,13 +75,19 @@ const getWaypointParams = (
     return { query: room.id, label, labelShort, urlParam: point };
   }
 
-  if (!buildingCode || !buildings?.[buildingCode])
-    return { error: "Invalid Building" };
+  // If point is not a coordinate, user position, or room name, we treat it as a building code
+  if (!buildings) {
+    return {};
+  }
+
+  if (!point || !buildings?.[point]) {
+    return { error: `Invalid Building ${point}` };
+  }
 
   return {
-    query: buildingCode,
-    label: buildings[buildingCode]?.name,
-    labelShort: buildingCode,
+    query: point,
+    label: buildings[point]?.name,
+    labelShort: point,
   };
 };
 
