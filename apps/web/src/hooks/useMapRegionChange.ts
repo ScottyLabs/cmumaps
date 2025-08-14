@@ -29,6 +29,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   const setShowRoomNames = useBoundStore((state) => state.setShowRoomNames);
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
   const isNavigating = useBoundStore((state) => state.isNavigating);
+  const selectedPath = useBoundStore((state) => state.selectedPath);
 
   // Local state
   const [showFloor, setShowFloor] = useState<boolean>(false);
@@ -67,8 +68,8 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       if (isNavigating) {
         const node =
           instructionIndex === 0
-            ? navPaths?.Fastest?.path.path[0]
-            : navPaths?.Fastest?.path.path.find(
+            ? navPaths?.[selectedPath]?.path.path[0]
+            : navPaths?.[selectedPath]?.path.path.find(
                 (n) => n.id === instructions[instructionIndex - 1]?.node_id,
               );
         if (node?.floor && node.floor.buildingCode === centerBuilding.code) {
@@ -80,7 +81,6 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       // If the focused floor is in the same building as the selected floor (given by the URL params),
       // then focus the selected floor
       const path = window.location.pathname;
-      // TODO: replace logic with a util function once urlparam branch is merged in
       const [selectedBuildingCode, roomName] =
         path.split("/")?.[1]?.split("-") || [];
       const selectedFloor = getFloorLevelFromRoomName(roomName);

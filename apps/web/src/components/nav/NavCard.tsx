@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
+import accessibleAvailableIcon from "@/assets/icons/nav/route-selection/accessibleAvailable.svg";
+import accessibleSelectedIcon from "@/assets/icons/nav/route-selection/accessibleSelected.svg";
 import accessibleUnavailableIcon from "@/assets/icons/nav/route-selection/accessibleUnavailable.svg";
+import fastestAvailableIcon from "@/assets/icons/nav/route-selection/fastestAvailable.svg";
 import fastestSelectedIcon from "@/assets/icons/nav/route-selection/fastestSelected.svg";
+import fastestUnavailableIcon from "@/assets/icons/nav/route-selection/fastestUnavailable.svg";
+import indoorAvailableIcon from "@/assets/icons/nav/route-selection/indoorAvailable.svg";
+import indoorSelectedIcon from "@/assets/icons/nav/route-selection/indoorSelected.svg";
 import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnavailable.svg";
+import outdoorAvailableIcon from "@/assets/icons/nav/route-selection/outdoorAvailable.svg";
+import outdoorSelectedIcon from "@/assets/icons/nav/route-selection/outdoorSelected.svg";
 import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
 import useNavigationParams from "@/hooks/useNavigationParams";
+import useBoundStore from "@/store";
 
 interface NavHeaderProps {
   isNavigating: boolean;
@@ -21,42 +30,45 @@ const NavCard = ({
   listShown,
 }: NavHeaderProps) => {
   // Navigation options data
-  const navigationOptions = [
+  const navigationOptions: {
+    id: "Fastest" | "Accessible" | "Inside" | "Outside";
+    selectedIcon: string;
+    availableIcon: string;
+    unavailableIcon: string;
+  }[] = [
     {
-      id: "fastest",
-      icon: fastestSelectedIcon,
-      label: "Fastest",
-      isSelected: true,
-      //Change to enum
-      isAvailable: true,
+      id: "Fastest",
+      selectedIcon: fastestSelectedIcon,
+      availableIcon: fastestAvailableIcon,
+      unavailableIcon: fastestUnavailableIcon,
     },
     {
-      id: "accessible",
-      label: "Accessible",
-      icon: accessibleUnavailableIcon,
-      isSelected: false,
-      isAvailable: false,
+      id: "Accessible",
+      selectedIcon: accessibleSelectedIcon,
+      availableIcon: accessibleAvailableIcon,
+      unavailableIcon: accessibleUnavailableIcon,
     },
     {
-      id: "inside",
-      icon: indoorUnavailableIcon,
-      label: "Inside",
-      isSelected: false,
-      isAvailable: false,
+      id: "Inside",
+      selectedIcon: indoorSelectedIcon,
+      availableIcon: indoorAvailableIcon,
+      unavailableIcon: indoorUnavailableIcon,
     },
     {
-      id: "outside",
-      icon: outdoorUnavailableIcon,
-      label: "Outside",
-      isSelected: false,
-      isAvailable: false,
+      id: "Outside",
+      selectedIcon: outdoorSelectedIcon,
+      availableIcon: outdoorAvailableIcon,
+      unavailableIcon: outdoorUnavailableIcon,
     },
   ];
 
+  const selectedPath = useBoundStore((state) => state.selectedPath);
+  const setSelectedPath = useBoundStore((state) => state.setSelectedPath);
+
   const { navPaths, setSrc, setDst } = useNavigationParams();
 
-  const distance = Math.round(navPaths?.Fastest?.path.distance ?? 0);
-  const time = Math.round((navPaths?.Fastest?.path.distance ?? 0) / 100);
+  const distance = Math.round(navPaths?.[selectedPath]?.path.distance ?? 0);
+  const time = Math.round((navPaths?.[selectedPath]?.path.distance ?? 0) / 100);
   const endTime = new Date(Date.now() + time * 60 * 1000).toLocaleTimeString(
     "en-US",
     {
@@ -74,33 +86,48 @@ const NavCard = ({
 
   const renderChooseCard = () => {
     return (
-      // <div className="relative flex flex-col items-center bg-white">
       <div className="relative flex w-full flex-col items-start self-stretch bg-white">
         <div className="flex w-full items-center justify-center self-stretch pt-4">
-          {navigationOptions.map((option) => (
-            <div
-              key={option.id}
-              className={`relative flex flex-1 grow flex-col items-center gap-0.5 pt-2 pb-1 ${option.isSelected ? "bg-white" : ""}`}
-            >
-              <img
-                className="relative h-6 w-6"
-                alt={option.label}
-                src={option.icon}
-              />
-
-              <div
-                className={`relative self-stretch pb-px text-center ${
-                  option.isSelected
-                    ? "text-primary-blue underline"
-                    : option.isAvailable
-                      ? "text-black"
-                      : "text-primary-grey"
-                }`}
+          {navigationOptions.map((option) => {
+            const isAvailable = !!navPaths?.[option.id];
+            const isSelected = option.id === selectedPath;
+            return (
+              <button
+                type="button"
+                onClick={
+                  isAvailable && !isSelected
+                    ? () => setSelectedPath(option.id)
+                    : () => {}
+                }
+                key={option.id}
+                className={`relative flex flex-1 grow flex-col items-center gap-0.5 pt-2 pb-1 ${isSelected ? "bg-white" : ""}`}
               >
-                {option.label}
-              </div>
-            </div>
-          ))}
+                <img
+                  className="relative h-6 w-6"
+                  alt={option.id}
+                  src={
+                    isSelected
+                      ? option.selectedIcon
+                      : isAvailable
+                        ? option.availableIcon
+                        : option.unavailableIcon
+                  }
+                />
+
+                <div
+                  className={`relative self-stretch pb-px text-center ${
+                    isSelected
+                      ? "text-primary-blue underline"
+                      : isAvailable
+                        ? "text-black"
+                        : "text-primary-grey"
+                  }`}
+                >
+                  {option.id}
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Trip information panel */}

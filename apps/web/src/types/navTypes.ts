@@ -24,6 +24,8 @@ export type NavPath = {
   path: { path: Node[]; distance: number };
 };
 
+export type NavPathType = "Fastest" | "Accessible" | "Inside" | "Outside";
+
 export type NavPaths = {
   Fastest?: NavPath;
   Accessible?: NavPath;

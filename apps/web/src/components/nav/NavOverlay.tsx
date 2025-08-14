@@ -12,12 +12,13 @@ const NavOverlay = () => {
   const startNav = useBoundStore((state) => state.startNav);
   const endNav = useBoundStore((state) => state.endNav);
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
+  const selectedPath = useBoundStore((state) => state.selectedPath);
 
   const { navPaths, isNavOpen } = useNavigationParams();
   // Process instructions
   useEffect(() => {
-    const instructions = navPaths?.Fastest?.instructions ?? [];
-    const path: Node[] = navPaths?.Fastest?.path.path ?? [];
+    const instructions = navPaths?.[selectedPath]?.instructions ?? [];
+    const path: Node[] = navPaths?.[selectedPath]?.path.path ?? [];
 
     const newInstructions = [];
 
@@ -77,7 +78,7 @@ const NavOverlay = () => {
       node_id: path[path.length - 1]?.id ?? "",
     });
     setNavInstructions?.(newInstructions);
-  }, [navPaths, setNavInstructions]);
+  }, [navPaths, setNavInstructions, selectedPath]);
 
   useEffect(() => {
     if (!isNavOpen) {

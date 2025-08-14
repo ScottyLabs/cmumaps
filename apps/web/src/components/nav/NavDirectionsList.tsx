@@ -62,6 +62,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
 
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
+  const selectedPath = useBoundStore((state) => state.selectedPath);
 
   const [pastDirections, setPastDirections] = useState<
     Record<number, DirectionProps[]>
@@ -138,8 +139,9 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
       White: "text-white",
       Grey: "text-light-grey",
     };
-    const buildingCode = navPaths?.Fastest?.path.path.find((n) => n.id === id)
-      ?.floor.buildingCode;
+    const buildingCode = navPaths?.[selectedPath]?.path.path.find(
+      (n) => n.id === id,
+    )?.floor.buildingCode;
 
     const buildingName = buildingCode === "outside" ? "Outside" : buildingCode;
     // : buildings && buildingCode

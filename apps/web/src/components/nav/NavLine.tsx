@@ -53,19 +53,19 @@ const NavLine = ({ map }: Props) => {
 
   const { navPaths, isNavOpen } = useNavigationParams();
 
-  const fastestPath = navPaths?.Fastest?.path.path;
-
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
   const isNavigating = useBoundStore((state) => state.isNavigating);
+  const selectedPath = useBoundStore((state) => state.selectedPath);
   const setIsZooming = useBoundStore((state) => state.setIsZooming);
   const setQueuedZoomRegion = useBoundStore(
     (state) => state.setQueuedZoomRegion,
   );
   const focusFloor = useBoundStore((state) => state.focusFloor);
 
+  const path = navPaths?.[selectedPath]?.path.path ?? [];
+
   const recommendedPath = navPaths;
 
-  const path = fastestPath || [];
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
 
   // zoom on current instruction and focus the corresponding floor
@@ -73,8 +73,8 @@ const NavLine = ({ map }: Props) => {
     if (isNavigating && map) {
       const node =
         instructionIndex === 0
-          ? navPaths?.Fastest?.path.path[0]
-          : navPaths?.Fastest?.path.path.find(
+          ? navPaths?.[selectedPath]?.path.path[0]
+          : navPaths?.[selectedPath]?.path.path.find(
               (n) => n.id === instructions[instructionIndex - 1]?.node_id,
             );
       if (node) {
@@ -96,16 +96,16 @@ const NavLine = ({ map }: Props) => {
     focusFloor,
     instructions[instructionIndex - 1]?.node_id,
     map,
-    navPaths?.Fastest?.path.path.find,
+    navPaths?.[selectedPath]?.path.path.find,
     setIsZooming,
-    navPaths?.Fastest?.path.path[0],
+    navPaths?.[selectedPath]?.path.path[0],
     setQueuedZoomRegion,
+    selectedPath,
   ]);
 
   // calculate curFloorPath and restPath
   useEffect(() => {
     if (isNavigating) {
-      const path: Node[] = fastestPath || [];
       const newFinishedPath: Node[] = [];
       const newUnfinishedPath: Node[] = [];
 
@@ -133,9 +133,9 @@ const NavLine = ({ map }: Props) => {
     }
   }, [
     instructionIndex,
-    fastestPath,
     instructions[instructionIndex]?.node_id,
     isNavigating,
+    path,
   ]);
 
   useEffect(() => {
@@ -307,7 +307,6 @@ const NavLine = ({ map }: Props) => {
           <img
             src={iconInfo.icon.icon}
             alt="Icon"
-            // height={40}
             style={{
               height: iconInfo.icon.height,
               transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
