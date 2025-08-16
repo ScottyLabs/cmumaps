@@ -24,7 +24,7 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   const isZooming = useBoundStore((state) => state.isZooming);
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
-  const { buildingCode } = useLocationParams();
+  const { buildingCode, coordinate } = useLocationParams();
 
   // Local state
   const snapIndex = useMemo(() => {
@@ -36,12 +36,12 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
 
   // updates the card status when the isCardOpen changes
   useEffect(() => {
-    if (isCardOpen && !floor && !focusedFloor) {
+    if (isCardOpen && !floor && !focusedFloor && !coordinate) {
       setCardStatus(CardStates.HALF_OPEN);
     } else {
       setCardStatus(CardStates.COLLAPSED);
     }
-  }, [isCardOpen, setCardStatus, floor, focusedFloor]);
+  }, [isCardOpen, setCardStatus, floor, focusedFloor, coordinate]);
 
   // updates the snapping when isCardOpen or snapIndex changes
   useEffect(() => {

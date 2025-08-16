@@ -40,11 +40,7 @@ const NavHeader = ({
     Exit: "Exit",
   };
 
-  // if (listShown) {
-  //   return;
-  // }
-
-  const { srcName, dstName, dstShortName, setSrc, swap } =
+  const { srcName, dstName, dstShortName, srcType, setSrc, swap } =
     useNavigationParams();
 
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
@@ -54,8 +50,6 @@ const NavHeader = ({
     (state) => state.setNavInstructionIndex,
   );
 
-  // const distance = useMemo(() => instructions[instructionIndex]?.distance, [instructions, instructionIndex]);
-  // const action = useMemo(() => instructions[instructionIndex]?.action, [instructions, instructionIndex]);
   const distance = instructions[instructionIndex]?.distance;
   const action = instructions[instructionIndex]?.action;
 
@@ -72,18 +66,9 @@ const NavHeader = ({
           />
           <div className="btn-shadow absolute top-[70.22px] left-[18.22px] h-[22.56px] w-[22.56px] rounded-full" />
 
-          {/* <div className="w-full">
-					<div className="relative pb-[11.5px] pt-[23.5px] w-fit font-body-1 font-[number:var(--body-1-font-weight)] text-[#1e86ff] text-[length:var(--body-1-font-size)] tracking-[var(--body-1-letter-spacing)] leading-[var(--body-1-line-height)] whitespace-nowrap [font-style:var(--body-1-font-style)]">
-						Your Location
-					</div>
-					<hr className="border-gray-200" />
-					<div className="relative pt-[11.5px] pb-[20px] w-fit font-body-1 font-[number:var(--body-1-font-weight)] text-black text-[length:var(--body-1-font-size)] tracking-[var(--body-1-letter-spacing)] leading-[var(--body-1-line-height)] whitespace-nowrap [font-style:var(--body-1-font-style)]">
-						Gates & Hillman Centers
-					</div>
-				</div> */}
           <div className="w-full">
             <div className="flex flex-col items-start gap-3 pt-[23.5px]">
-              <div className="relative flex h-[19px] w-full items-center gap-2.5 self-stretch">
+              <div className="relative flex h-[19px] w-full self-stretch">
                 <button
                   type="button"
                   onClick={() => {
@@ -93,7 +78,7 @@ const NavHeader = ({
                       setSearchTarget(undefined);
                     }
                   }}
-                  className="relative mt-[-1.50px] w-fit whitespace-nowrap font-[number:var(--body-1-font-weight)] font-body-1 text-[#1e86ff] text-[length:var(--body-1-font-size)] leading-[var(--body-1-line-height)] tracking-[var(--body-1-letter-spacing)] [font-style:var(--body-1-font-style)]"
+                  className="relative my-[-8px] mr-12 w-full text-start text-[#1e86ff]"
                 >
                   {srcName}
                 </button>
@@ -101,25 +86,31 @@ const NavHeader = ({
 
               <hr className="w-full border-gray-300" />
 
-              <button
-                onClick={() => {
-                  if (searchTarget !== "nav-dst") {
-                    setSearchTarget("nav-dst");
-                  } else {
-                    setSearchTarget(undefined);
-                  }
-                }}
-                type="button"
-                className="relative font-body-1 text-black"
-              >
-                {dstName}
-              </button>
+              <div className="relative flex h-[19px] w-full self-stretch">
+                <button
+                  onClick={() => {
+                    if (searchTarget !== "nav-dst") {
+                      setSearchTarget("nav-dst");
+                    } else {
+                      setSearchTarget(undefined);
+                    }
+                  }}
+                  type="button"
+                  className="relative my-[-8px] mr-12 w-full text-start font-body-1 text-black"
+                >
+                  {dstName}
+                </button>
+              </div>
             </div>
             <button
               type="button"
-              className="absolute top-[0px] right-[13.63px]"
+              className="absolute top-0 right-[13px]"
               onClick={() => {
-                setSrc("user");
+                if (srcType === "User") {
+                  setSrc(null);
+                } else {
+                  setSrc("user");
+                }
               }}
             >
               <img src={cancelIcon} alt="cancel" />

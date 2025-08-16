@@ -1,10 +1,10 @@
-import { useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import type { SearchTarget } from "@/types/searchTypes";
 
@@ -26,15 +26,15 @@ const Searchbar = ({ mapRef }: Props) => {
   const showSearch = useBoundStore((state) => state.showSearch);
   const hideSearch = useBoundStore((state) => state.hideSearch);
   const searchTarget = useBoundStore((state) => state.searchTarget);
+  const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
 
   // Local state
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [dst, _setDst] = useQueryState("dst");
-
   // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
+  const { isNavOpen } = useNavigationParams();
 
   // Blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
@@ -76,7 +76,8 @@ const Searchbar = ({ mapRef }: Props) => {
   }, [searchTarget]);
 
   // Hide searchbar if navigating, unless selecting a destination or source
-  if (dst && searchTarget !== "nav-dst" && searchTarget !== "nav-src") return;
+  if (isNavOpen && searchTarget !== "nav-dst" && searchTarget !== "nav-src")
+    return;
 
   const renderSearchIcon = () => (
     <img
@@ -110,6 +111,9 @@ const Searchbar = ({ mapRef }: Props) => {
       size={25}
       className="absolute right-3"
       onClick={() => {
+        if (searchQuery === "") {
+          setSearchTarget(undefined);
+        }
         setSearchQuery("");
         hideSearch();
         navigate("/");

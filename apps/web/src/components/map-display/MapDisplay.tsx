@@ -4,7 +4,8 @@ import {
   Map as MapkitMap,
   MapType,
 } from "mapkit-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import $api from "@/api/client";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
@@ -22,6 +23,7 @@ import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
 import prefersReducedMotion from "@/utils/prefersReducedMotion";
 import NavLine from "../nav/NavLine";
+import CoordinatePin from "./coordinate-pin/CoordinatePin";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -40,6 +42,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const setQueuedZoomRegion = useBoundStore(
     (state) => state.setQueuedZoomRegion,
   );
+  const isNavigating = useBoundStore((state) => state.isNavigating);
 
   // Local state
   const isMobile = useIsMobile();
@@ -49,8 +52,15 @@ const MapDisplay = ({ mapRef }: Props) => {
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
   const navigate = useNavigateLocationParams();
-  const { setSrc, setDst } = useNavigationParams();
-  const { buildingCode, roomName } = useLocationParams();
+  const { setSrc, setDst, isNavOpen } = useNavigationParams();
+  const { buildingCode, roomName, error } = useLocationParams();
+
+  // Toast initial error when location params are invalid
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
@@ -95,15 +105,24 @@ const MapDisplay = ({ mapRef }: Props) => {
     // If there is a sleceted room: navigate to the building containing the room
     // Otherwise: deselect the building and navigate to the home page
     if (!clickedBuilding) {
-      if (roomName) {
+      if (isNavOpen && !isNavigating) {
+        setSrc(null);
+        setDst(null);
+      } else if (roomName) {
         navigate(`/${buildingCode}`);
       } else {
         deselectBuilding();
         navigate("/");
       }
-      setSrc(null);
-      setDst(null);
     }
+  };
+
+  const handleLongPress = (e: MapInteractionEvent) => {
+    const coord = e.toCoordinates();
+    if (isNavOpen) {
+      setDst(`${coord.latitude},${coord.longitude}`);
+    }
+    navigate(`/${coord.latitude},${coord.longitude}`);
   };
 
   return (
@@ -128,6 +147,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       allowWheelToZoom
       onLoad={handleLoad}
       onClick={handleClick}
+      onLongPress={handleLongPress}
       onRegionChangeStart={onRegionChangeStart}
       onRegionChangeEnd={() => {
         if (queuedZoomRegion) {
@@ -146,6 +166,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorPlansOverlay />
       <NavLine map={mapRef.current} />
+      <CoordinatePin map={mapRef.current} />
     </MapkitMap>
   );
 };

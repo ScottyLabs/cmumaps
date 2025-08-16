@@ -1,16 +1,15 @@
-import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
+import useNavigationParams from "./useNavigationParams";
 
 const useNavigateLocationParams = () => {
   const navigate = useNavigate();
 
-  const [src, setSrc] = useQueryState("src");
-  const [dst, setDst] = useQueryState("dst");
+  const { isNavOpen } = useNavigationParams();
 
   return (newParams: string) => {
-    navigate(newParams);
-    setSrc(src);
-    setDst(dst);
+    if (!isNavOpen) {
+      navigate(newParams);
+    }
   };
 };
 

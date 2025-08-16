@@ -1,5 +1,5 @@
 import { useQueryState } from "nuqs";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import $api from "@/api/client";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -10,19 +10,22 @@ interface Params {
   roomName?: string;
   eventId?: string;
   carnivalEvent?: "booth" | "buggy" | "mobot";
-  isCardOpen: boolean;
+  coordinate?: { latitude: number; longitude: number };
+  isCardOpen?: boolean;
   error?: string;
 }
 
-const verifyURLParams = (): string | undefined => {
-  const location = useLocation();
-  const path = location.pathname;
+const useLocationParams = (): Params => {
+  const [dst, setDst] = useQueryState("dst");
+  const [src, setSrc] = useQueryState("src");
+
+  const path = window.location.pathname;
+  const pathSuffix = path.split("/")?.slice(1).join("/") || "";
+  const suffix: string = dst && dst !== pathSuffix ? dst : pathSuffix;
 
   const navigate = useNavigate();
 
   const { data: buildings } = $api.useQuery("get", "/buildings");
-
-  const suffix = path.split("/")?.[1] || "";
 
   const [buildingCode, roomName] = suffix.split("-") || [];
   const floor = getFloorLevelFromRoomName(roomName) || "";
@@ -37,66 +40,35 @@ const verifyURLParams = (): string | undefined => {
 
   const building = buildings && buildingCode && buildings[buildingCode];
 
+  if (suffix !== pathSuffix) {
+    navigate(`/${dst}`);
+    setSrc(src);
+    setDst(dst);
+  }
+
   if (suffix === "") {
-    return;
+    return {};
   }
 
-  if (suffix === "events") {
-    return;
+  if (suffix === "user") {
+    if (!dst) {
+      navigate("");
+    }
+    return {};
   }
 
-  if (suffix === "carnival") {
-    return;
-  }
-
-  if (!buildings) {
-    // toast.error("Buildings data not available");
-    return;
-  }
-
-  if (!building) {
-    toast.error("Invalid building code");
-    navigate("/");
-  }
-
-  if (!roomName || roomName === "") {
-    return;
-  }
-
-  if (!floor || (building && !building.floors.includes(floor))) {
-    toast.error("Invalid floor level");
-    navigate(`/${buildingCode}`);
-  }
-
-  if (roomName === floor) {
-    return;
-  }
-
-  if (!rooms) {
-    return;
-  }
-
-  if (!rooms[roomName]) {
-    toast.error("Invalid room name");
-    navigate(`/${buildingCode}-${floor}`);
-  }
-};
-
-const useLocationParams = (): Params => {
-  // const location = useLocation();
-  // const path = location.pathname;
-  const path = window.location.pathname;
-
-  const [_src] = useQueryState("src");
-  const [_dst] = useQueryState("dst");
-
-  const error = verifyURLParams();
-  if (error) {
-    toast.error(error);
-    return {
-      error,
-      isCardOpen: false,
-    };
+  if (suffix.includes(",")) {
+    const [latitude, longitude] = suffix.split(",").map(Number.parseFloat);
+    if (
+      !latitude ||
+      !longitude ||
+      Number.isNaN(latitude) ||
+      Number.isNaN(longitude)
+    ) {
+      navigate("/");
+      return { error: "Invalid coordinate" };
+    }
+    return { coordinate: { latitude, longitude }, isCardOpen: true };
   }
 
   if (path.split("/")?.[1] === "events") {
@@ -115,8 +87,40 @@ const useLocationParams = (): Params => {
       isCardOpen: true,
     };
   }
-  const [buildingCode, roomName] = path.split("/")?.[1]?.split("-") || [];
-  const floor = getFloorLevelFromRoomName(roomName);
+
+  if (!buildings) {
+    return {};
+  }
+
+  if (!building) {
+    navigate("/");
+    toast.error("Invalid building code");
+    return { error: "Invalid building code" };
+  }
+
+  if (!roomName || roomName === "") {
+    return { buildingCode, isCardOpen: !!buildingCode };
+  }
+
+  if (!floor || (building && !building.floors.includes(floor))) {
+    navigate(`/${buildingCode}`);
+    toast.error("Invalid floor code");
+    return { error: "Invalid floor level" };
+  }
+
+  if (roomName === floor) {
+    return { buildingCode, floor, isCardOpen: !!buildingCode };
+  }
+
+  if (!rooms) {
+    return { buildingCode, floor, isCardOpen: !!buildingCode };
+  }
+
+  if (!rooms[roomName]) {
+    navigate(`/${buildingCode}-${floor}`);
+    toast.error("Invalid room code");
+    return { error: "Invalid room name" };
+  }
 
   return {
     buildingCode,

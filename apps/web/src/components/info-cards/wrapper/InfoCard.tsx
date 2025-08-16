@@ -5,6 +5,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";
 import useBoundStore from "@/store";
 import BuildingCard from "../building-card/BuildingCard";
+import CoordinateCard from "../coordinate-card/CoordinateCard";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -12,7 +13,7 @@ interface Props {
 
 const InfoCard = ({ mapRef }: Props) => {
   const isMobile = useIsMobile();
-  const { buildingCode, roomName } = useLocationParams();
+  const { buildingCode, roomName, coordinate } = useLocationParams();
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
 
   if (isSearchOpen) {
@@ -20,6 +21,12 @@ const InfoCard = ({ mapRef }: Props) => {
   }
 
   const renderCard = () => {
+    if (coordinate) {
+      return {
+        snapPoints: [142],
+        element: () => <CoordinateCard mapRef={mapRef} />,
+      };
+    }
     if (roomName) {
       // TODO: should change based on if has schedule
       return {

@@ -130,31 +130,35 @@ const NavCard = ({
           })}
         </div>
 
-        {/* Trip information panel */}
-        {/* <div className="w-full text-card-foreground shadow"> */}
         <div className="relative flex h-26 w-full justify-between self-stretch bg-light-blue pt-5 pr-5 pb-11 pl-5">
-          <div className="h-9">
-            <div className="flex">
-              <div className="flex-col pr-4">
-                <div className="w-full font-bold text-black text-xl">
-                  {endTime}
+          {navPaths?.[selectedPath] ? (
+            <div className="h-9">
+              <div className="flex">
+                <div className="flex-col pr-4">
+                  <div className="w-full font-bold text-black text-xl">
+                    {endTime}
+                  </div>
+                  <div className="-translate-y-2 w-full text-center">
+                    arrival
+                  </div>
                 </div>
-                <div className="-translate-y-2 w-full text-center">arrival</div>
-              </div>
-              <div className="flex-col pr-4">
-                <div className="w-full text-center font-bold text-black text-xl">
-                  {time}
+                <div className="flex-col pr-4">
+                  <div className="w-full text-center font-bold text-black text-xl">
+                    {time}
+                  </div>
+                  <div className="-translate-y-2 w-full text-center">min</div>
                 </div>
-                <div className="-translate-y-2 w-full text-center">min</div>
-              </div>
-              <div className="flex-col">
-                <div className="w-full text-center font-bold text-black text-xl">
-                  {distance}
+                <div className="flex-col">
+                  <div className="w-full text-center font-bold text-black text-xl">
+                    {distance}
+                  </div>
+                  <div className="-translate-y-2 w-full text-center">ft</div>
                 </div>
-                <div className="-translate-y-2 w-full text-center">ft</div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="h-9 text-black text-xl">Path unavailable...</div>
+          )}
 
           <button
             type="button"
@@ -167,7 +171,6 @@ const NavCard = ({
           </button>
         </div>
       </div>
-      // </div>
     );
   };
 

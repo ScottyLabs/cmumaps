@@ -1,11 +1,11 @@
 import { useQueryState } from "nuqs";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
 import useBoundStore from "@/store";
-import type { NavPaths } from "@/types/navTypes";
+import type { NavPaths, NavWaypointType } from "@/types/navTypes";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
-import useNavigateLocationParams from "./useNavigateLocationParams";
 
 interface Params {
   navPaths?: NavPaths;
@@ -14,6 +14,8 @@ interface Params {
   dstName?: string;
   srcShortName?: string;
   dstShortName?: string;
+  srcType?: NavWaypointType;
+  dstType?: NavWaypointType;
   setSrc: (src: string | null) => void;
   setDst: (dst: string | null) => void;
   swap: () => void;
@@ -26,6 +28,7 @@ const getWaypointParams = (
   label?: string;
   labelShort?: string;
   urlParam?: string;
+  type?: NavWaypointType;
   error?: string;
 } => {
   const { data: buildings } = $api.useQuery("get", "/buildings");
@@ -52,6 +55,7 @@ const getWaypointParams = (
       query: `${userPosition.coords.latitude},${userPosition.coords.longitude}`,
       label: "Your Location",
       labelShort: "You",
+      type: "User",
     };
   }
 
@@ -60,7 +64,12 @@ const getWaypointParams = (
   }
 
   if (point.includes(",")) {
-    return { query: point, label: "Coordinate", labelShort: "Coord" };
+    return {
+      query: point,
+      label: "Coordinate",
+      labelShort: "Pin",
+      type: "Coordinate",
+    };
   }
 
   if (point.includes("-")) {
@@ -72,7 +81,7 @@ const getWaypointParams = (
     const label =
       room.alias || `${buildings[room.floor.buildingCode]?.name} ${roomName}`;
     const labelShort = `${buildingCode} ${roomName}`;
-    return { query: room.id, label, labelShort, urlParam: point };
+    return { query: room.id, label, labelShort, urlParam: point, type: "Room" };
   }
 
   // If point is not a coordinate, user position, or room name, we treat it as a building code
@@ -88,20 +97,22 @@ const getWaypointParams = (
     query: point,
     label: buildings[point]?.name,
     labelShort: point,
+    type: "Building",
   };
 };
 
 const useNavPaths = (): Params => {
-  const navigate = useNavigateLocationParams();
-
   const [src, setSrc] = useQueryState("src");
   const [dst, setDst] = useQueryState("dst");
+
+  const navigate = useNavigate();
 
   const {
     query: srcQuery,
     label: srcName,
     labelShort: srcShortName,
     urlParam: srcUrlParam,
+    type: srcType,
     error: srcError,
   } = getWaypointParams(src ?? "");
 
@@ -109,6 +120,7 @@ const useNavPaths = (): Params => {
     query: dstQuery,
     label: dstName,
     labelShort: dstShortName,
+    type: dstType,
     error: dstError,
   } = getWaypointParams(dst ?? "");
 
@@ -131,6 +143,14 @@ const useNavPaths = (): Params => {
     setDst(temp);
   };
 
+  const setDstAndURLParam = (dst: string | null) => {
+    if (dst) {
+      navigate(`/${dst}`);
+    }
+    setDst(dst);
+    setSrc(src);
+  };
+
   if (!src || !dst || src === "" || dst === "") {
     if (src) setSrc(null);
     if (dst) setDst(null);
@@ -151,8 +171,10 @@ const useNavPaths = (): Params => {
     dstName,
     srcShortName,
     dstShortName,
+    srcType,
+    dstType,
     setSrc,
-    setDst,
+    setDst: setDstAndURLParam,
     swap,
   };
 };

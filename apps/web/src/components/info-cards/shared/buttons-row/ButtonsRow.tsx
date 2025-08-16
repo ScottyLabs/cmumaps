@@ -12,7 +12,7 @@ interface Props {
 
 const ButtonsRow = ({ middleButton }: Props) => {
   const { setSrc, setDst } = useNavigationParams();
-  const { buildingCode, roomName } = useLocationParams();
+  const { buildingCode, roomName, coordinate } = useLocationParams();
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
   const renderDirectionButton = () => {
@@ -31,6 +31,9 @@ const ButtonsRow = ({ middleButton }: Props) => {
             } else {
               setDst(buildingCode);
             }
+            setSrc("user");
+          } else if (coordinate) {
+            setDst(`${coordinate.latitude},${coordinate.longitude}`);
             setSrc("user");
           }
           setCardStatus(CardStates.COLLAPSED);
