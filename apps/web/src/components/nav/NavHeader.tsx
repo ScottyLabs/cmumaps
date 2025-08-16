@@ -137,14 +137,14 @@ const NavHeader = ({
   const renderInstructionHeader = () => {
     return (
       <div className="btn-shadow fixed inset-x-5 top-10 overflow-auto rounded-lg bg-primary-green">
-        <div className="flex">
+        <div className="flex justify-between">
           <img
             src={instructionIcons[action || "Forward"]}
             alt="forward"
-            className="mt-[22px] mr-[19px] ml-[30px]"
+            className="mt-[22px] ml-[30px]"
           />
-          <div className="mt-[16px] flex-col">
-            <div className="font-lato font-semibold text-[2rem] text-white">
+          <div className="mt-4 flex-col">
+            <div className="font-lato font-semibold text-[min(2rem,7.5vw)] text-white">
               {instructionTitles[action || "Forward"]}
             </div>
             <div className="-translate-y-2 pl-[2px] font-lato font-semibold text-[15px] text-white">
@@ -153,7 +153,7 @@ const NavHeader = ({
                 : `${action === "Forward" ? "for" : "in"} ${distance} ft`}
             </div>
           </div>
-          <div className="-translate-y-2 absolute top-10 right-5 font-lato font-semibold text-[17px] text-white">
+          <div className="mx-4 self-center font-lato font-semibold text-[17px] text-white">
             {dstShortName}
           </div>
         </div>
@@ -166,7 +166,7 @@ const NavHeader = ({
             }}
           >
             <img
-              className="rotate-180"
+              className="w-6 rotate-180"
               src={nextInstructionIcon}
               alt="next instruction"
             />
@@ -175,7 +175,7 @@ const NavHeader = ({
             </div>
           </button>
           <div className="px-2 font-bold font-lato text-[1rem] text-white">
-            {instructionIndex + 1}/{instructions.length} (Debug)
+            {instructionIndex + 1}/{instructions.length}
           </div>
           <button
             className={`flex ${instructionIndex < instructions.length - 1 ? "" : "disabled opacity-0"}`}
@@ -189,7 +189,11 @@ const NavHeader = ({
             <div className="px-2 font-bold font-lato text-[1rem] text-white">
               Next
             </div>
-            <img src={nextInstructionIcon} alt="next instruction" />
+            <img
+              src={nextInstructionIcon}
+              className="w-6"
+              alt="next instruction"
+            />
           </button>
         </div>
       </div>
