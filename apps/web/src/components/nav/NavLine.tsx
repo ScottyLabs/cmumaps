@@ -14,7 +14,11 @@ import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface IconInfo {
   coordinate: Coordinate;
-  icon: { icon: string; offset?: { x: number; y: number }; height?: number };
+  icon: {
+    icon: string;
+    offset?: { x: number; y: number };
+    size?: { width: number; height: number };
+  };
 }
 
 interface Props {
@@ -22,23 +26,32 @@ interface Props {
 }
 
 const standardOffset = { x: 16, y: 8 };
+const standardSize = { width: 40, height: 40 };
 const PathInstructionIcons: Record<
   string,
-  { icon: string; offset?: { x: number; y: number }; height?: number }
+  {
+    icon: string;
+    offset?: { x: number; y: number };
+    size?: { width: number; height: number };
+  }
 > = {
-  Start: { icon: startIcon, offset: { x: 0, y: 8 } },
+  Start: {
+    icon: startIcon,
+    offset: { x: 0, y: 8 },
+    size: { width: 16, height: 16 },
+  },
   StartCompleted: { icon: startIconCompleted, offset: { x: 0, y: 8 } },
-  Enter: { icon: enterIcon, offset: standardOffset, height: 40 },
+  Enter: { icon: enterIcon, offset: standardOffset, size: standardSize },
   EnterCompleted: {
     icon: enterCompletedIcon,
     offset: standardOffset,
-    height: 40,
+    size: standardSize,
   },
-  Exit: { icon: exitIcon, offset: standardOffset, height: 40 },
+  Exit: { icon: exitIcon, offset: standardOffset, size: standardSize },
   ExitCompleted: {
     icon: exitCompletedIcon,
     offset: standardOffset,
-    height: 40,
+    size: standardSize,
   },
 };
 const EndIcon = { icon: endIcon, offset: { x: 15, y: 4 } };
@@ -242,18 +255,19 @@ const NavLine = ({ map }: Props) => {
     }
 
     const addStartEndIcons = () => {
-      if (path.length === 0) return;
+      if (!path[0]) return;
       newIconInfos.push({
-        // biome-ignore lint/style/noNonNullAssertion: path[0] is guaranteed to exist
-        coordinate: path[0]!.coordinate,
-        // biome-ignore lint/style/noNonNullAssertion: PathInstructionIcons always contains both Start and StartCompleted
+        coordinate: path[0].coordinate,
         icon: PathInstructionIcons[
           instructionIndex === 0 ? "Start" : "StartCompleted"
-        ]!,
+        ] ?? { icon: "" },
       });
+
+      const lastIndex = path.length - 1;
+      if (!path[lastIndex]) return;
+      const coordinate = path[lastIndex].coordinate;
       newIconInfos.push({
-        // biome-ignore lint/style/noNonNullAssertion: path[path.length - 1] is guaranteed to exist
-        coordinate: path[path.length - 1]!.coordinate,
+        coordinate,
         icon: EndIcon,
       });
     };
@@ -264,9 +278,15 @@ const NavLine = ({ map }: Props) => {
           (n) => n.id === instruction.node_id,
         )?.coordinate;
         const isCompleted = instructionIndex > i;
+
+        if (!coord) return;
+
         if (PathInstructionIcons[instruction.action]) {
           newIconInfos.push({
-            coordinate: coord || { latitude: 0, longitude: 0 },
+            coordinate: {
+              latitude: coord.latitude + 0.000000001,
+              longitude: coord.longitude,
+            },
             icon: PathInstructionIcons[
               isCompleted
                 ? `${instruction.action}Completed`
@@ -308,8 +328,11 @@ const NavLine = ({ map }: Props) => {
             src={iconInfo.icon.icon}
             alt="Icon"
             className="pointer-events-none"
+            height={iconInfo.icon.size?.height}
+            width={iconInfo.icon.size?.width}
             style={{
-              height: iconInfo.icon.height,
+              height: iconInfo.icon.size?.height,
+              width: iconInfo.icon.size?.width,
               transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,
             }}
           />
