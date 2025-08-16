@@ -41,7 +41,6 @@ const CoordinatePin = ({ map }: Props) => {
   }
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log("clicked");
     if (isNavOpen) {
       setSrc(`${prevCoordinate.latitude},${prevCoordinate.longitude}`);
     } else if (
