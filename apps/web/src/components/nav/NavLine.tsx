@@ -307,6 +307,7 @@ const NavLine = ({ map }: Props) => {
           <img
             src={iconInfo.icon.icon}
             alt="Icon"
+            className="pointer-events-none"
             style={{
               height: iconInfo.icon.height,
               transform: `translate(${iconInfo.icon.offset?.x ?? 0}px, ${iconInfo.icon.offset?.y ?? 0}px)`,

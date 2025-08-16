@@ -31,7 +31,7 @@ const RoomPin = ({ room }: Props) => {
       <img
         alt={"Room Pin"}
         src={hasGraphic ? icon : pinIcon}
-        className={`${isSelected ? "size-6" : "size-3"}`}
+        className={`${isSelected ? "size-6" : "size-3"} pointer-events-none`}
       />
     </div>
   );

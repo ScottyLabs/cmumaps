@@ -41,10 +41,16 @@ const CoordinatePin = ({ map }: Props) => {
   }
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    navigate(`/${prevCoordinate.latitude},${prevCoordinate.longitude}`);
+    console.log("clicked");
     if (isNavOpen) {
       setSrc(`${prevCoordinate.latitude},${prevCoordinate.longitude}`);
+    } else if (
+      coordinate?.latitude === prevCoordinate.latitude ||
+      coordinate?.longitude === prevCoordinate.longitude
+    ) {
+      zoomOnPoint(map, coordinate, 0.001, setIsZooming);
     }
+    navigate(`/${prevCoordinate.latitude},${prevCoordinate.longitude}`);
     e.stopPropagation();
   };
 
@@ -58,7 +64,7 @@ const CoordinatePin = ({ map }: Props) => {
         <img
           src={coordinateMarkerIcon}
           alt="Coordinate Pin"
-          className="h-10 w-10"
+          className="pointer-events-none h-10 w-10"
         />
       </button>
     </Annotation>
