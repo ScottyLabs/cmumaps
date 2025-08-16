@@ -22,7 +22,7 @@ interface MenuButtonProps {
   selectedIcon: string;
   altText: string;
   selectedMenuState: PlusButtonMenuState;
-  menu: () => React.ReactElement;
+  menu: (props: { lowerHeight: number }) => React.ReactElement;
 }
 
 const IconsDisplayMobile = () => {
@@ -105,7 +105,8 @@ const IconsDisplayMobile = () => {
         >
           <img className="h-14 w-14" alt={altText} src={icon} />
         </button>
-        {plusButtonMenuState === selectedMenuState && menu()}
+        {plusButtonMenuState === selectedMenuState &&
+          menu({ lowerHeight: 104 + 68 * menuButtons.length })}
       </div>
     );
   };
