@@ -16,7 +16,7 @@ const NavOverlay = () => {
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
   const selectedPath = useBoundStore((state) => state.selectedPath);
 
-  const { navPaths, isNavOpen, dstType } = useNavigationParams();
+  const { navPaths, isNavOpen, dstType, srcType } = useNavigationParams();
   const { hasAccess } = useUser();
 
   // Process instructions
@@ -95,10 +95,10 @@ const NavOverlay = () => {
   useEffect(() => {
     console.log("dstType", dstType);
     console.log("hasAccess", hasAccess);
-    if (dstType === "Room" && !hasAccess) {
+    if ((dstType === "Room" || srcType === "Room") && !hasAccess) {
       window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
     }
-  }, [dstType]);
+  }, [dstType, srcType]);
 
   if (!isNavOpen) {
     return;
