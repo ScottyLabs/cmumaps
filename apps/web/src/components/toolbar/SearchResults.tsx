@@ -116,7 +116,26 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
       }
       focusFloor({ buildingCode: buildingName, level: floor });
     } else {
-      navigate("/");
+      switch (searchTarget) {
+        case "nav-src":
+          if (!result.labelPosition) break;
+          setSrc(
+            `${result.labelPosition?.latitude},${result.labelPosition?.longitude}`,
+          );
+          break;
+        case "nav-dst":
+          if (!result.labelPosition) break;
+          navigate(
+            `/${result.labelPosition?.latitude},${result.labelPosition?.longitude}`,
+          );
+          setDst(
+            `${result.labelPosition?.latitude},${result.labelPosition?.longitude}`,
+          );
+          break;
+        default:
+          navigate("/");
+          break;
+      }
     }
 
     const latitude = result.labelPosition?.latitude;
