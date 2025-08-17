@@ -84,6 +84,33 @@ const NavCard = ({
     setYControl(isNavigating ? 64 : 0);
   }, [isNavigating]);
 
+  const renderPathInfo = () => {
+    return (
+      <div className="h-9">
+        <div className="flex">
+          <div className="flex-col pr-4">
+            <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
+              {endTime}
+            </div>
+            <div className="-translate-y-2 w-full text-center">arrival</div>
+          </div>
+          <div className="flex-col pr-4">
+            <div className="w-full text-center font-bold text-[min(1.25rem,5vw)] text-black">
+              {time}
+            </div>
+            <div className="-translate-y-2 w-full text-center">min</div>
+          </div>
+          <div className="flex-col">
+            <div className="w-full text-center font-bold text-[min(1.25rem,5vw)] text-black">
+              {distance}
+            </div>
+            <div className="-translate-y-2 w-full text-center">ft</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderChooseCard = () => {
     return (
       <div className="relative flex w-full flex-col items-start self-stretch bg-white">
@@ -132,37 +159,14 @@ const NavCard = ({
 
         <div className="relative flex h-26 w-full justify-between self-stretch bg-light-blue pt-5 pr-5 pb-11 pl-5">
           {navPaths?.[selectedPath] ? (
-            <div className="h-9">
-              <div className="flex">
-                <div className="flex-col pr-4">
-                  <div className="w-full font-bold text-black text-xl">
-                    {endTime}
-                  </div>
-                  <div className="-translate-y-2 w-full text-center">
-                    arrival
-                  </div>
-                </div>
-                <div className="flex-col pr-4">
-                  <div className="w-full text-center font-bold text-black text-xl">
-                    {time}
-                  </div>
-                  <div className="-translate-y-2 w-full text-center">min</div>
-                </div>
-                <div className="flex-col">
-                  <div className="w-full text-center font-bold text-black text-xl">
-                    {distance}
-                  </div>
-                  <div className="-translate-y-2 w-full text-center">ft</div>
-                </div>
-              </div>
-            </div>
+            renderPathInfo()
           ) : (
             <div className="h-9 text-black text-xl">Path unavailable...</div>
           )}
 
           <button
             type="button"
-            className="btn-shadow inline-flex h-10 w-26 items-center justify-center rounded-full bg-[#31b777] font-medium text-sm"
+            className="btn-shadow inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full bg-[#31b777] font-medium text-sm"
             onClick={() => {
               startNav();
             }}
@@ -176,32 +180,11 @@ const NavCard = ({
 
   const renderNavCard = () => {
     return (
-      <div className="mt-8 ml-9 flex h-9">
-        <div className="h-9">
-          <div className="flex">
-            <div className="flex-col pr-4">
-              <div className="w-full font-bold text-black text-xl">
-                {endTime}
-              </div>
-              <div className="-translate-y-2 w-full text-center">arrival</div>
-            </div>
-            <div className="flex-col pr-4">
-              <div className="w-full text-center font-bold text-black text-xl">
-                {time}
-              </div>
-              <div className="-translate-y-2 w-full text-center">min</div>
-            </div>
-            <div className="flex-col">
-              <div className="w-full text-center font-bold text-black text-xl">
-                {distance}
-              </div>
-              <div className="-translate-y-2 w-full text-center">ft</div>
-            </div>
-          </div>
-        </div>
+      <div className="mt-8 ml-9 flex h-9 justify-between">
+        {renderPathInfo()}
         <button
           type="button"
-          className="btn-shadow absolute right-5 inline-flex h-10 w-26 items-center justify-center rounded-full bg-primary-red font-medium"
+          className="btn-shadow mr-5 inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full bg-primary-red font-medium"
           onClick={() => {
             setDst(null);
             setSrc(null);
