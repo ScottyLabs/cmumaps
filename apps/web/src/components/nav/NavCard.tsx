@@ -166,7 +166,8 @@ const NavCard = ({
 
           <button
             type="button"
-            className="btn-shadow inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full bg-[#31b777] font-medium text-sm"
+            className={`${!navPaths ? "bg-primary-grey" : "bg-[#31b777]"} btn-shadow inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full font-medium text-sm`}
+            disabled={!navPaths?.[selectedPath]}
             onClick={() => {
               startNav();
             }}

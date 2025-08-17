@@ -78,7 +78,7 @@ const NavHeader = ({
                       setSearchTarget(undefined);
                     }
                   }}
-                  className="relative my-[-8px] mr-12 w-full text-start text-[#1e86ff]"
+                  className="relative my-[-8px] w-full whitespace-nowrap text-start text-[#1e86ff] text-[min(1rem,4vw)]"
                 >
                   {srcName}
                 </button>
@@ -96,7 +96,7 @@ const NavHeader = ({
                     }
                   }}
                   type="button"
-                  className="relative my-[-8px] mr-12 w-full text-start font-body-1 text-black"
+                  className="relative my-[-8px] w-full whitespace-nowrap text-start text-[min(1rem,4vw)] text-black"
                 >
                   {dstName}
                 </button>
