@@ -1,8 +1,8 @@
 import { motion, type PanInfo, useAnimation } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
+import { useNavigate } from "react-router";
 import useLocationParams from "@/hooks/useLocationParams";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
@@ -14,7 +14,7 @@ interface Props {
 
 const DraggableSheet = ({ snapPoints, children }: Props) => {
   // Library hooks
-  const navigate = useNavigateLocationParams();
+  const navigate = useNavigate();
   const controls = useAnimation();
   const sheetRef = useRef<HTMLDivElement>(null);
 
@@ -24,23 +24,25 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   const isZooming = useBoundStore((state) => state.isZooming);
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
-  const { buildingCode, coordinate } = useLocationParams();
-
   // Local state
   const snapIndex = useMemo(() => {
     return CardStatesList.indexOf(cardStatus);
   }, [cardStatus]);
 
   // Custom hooks
-  const { isCardOpen, floor } = useLocationParams();
+  const { isCardOpen, floor, coordinate, buildingCode } = useLocationParams();
+  const { setSrc, setDst } = useNavigationParams();
 
   // updates the card status when the isCardOpen changes
+  // TODO: uncomment once eateries are listed
+  // biome-ignore lint/correctness/useExhaustiveDependencies: will change once eateries are listed
   useEffect(() => {
-    if (isCardOpen && !floor && !focusedFloor && !coordinate) {
-      setCardStatus(CardStates.HALF_OPEN);
-    } else {
-      setCardStatus(CardStates.COLLAPSED);
-    }
+    // if (isCardOpen && !floor && !focusedFloor && !coordinate) {
+    //   setCardStatus(CardStates.HALF_OPEN);
+    // } else {
+    //   setCardStatus(CardStates.COLLAPSED);
+    // }
+    setCardStatus(CardStates.COLLAPSED);
   }, [isCardOpen, setCardStatus, floor, focusedFloor, coordinate]);
 
   // updates the snapping when isCardOpen or snapIndex changes
@@ -121,7 +123,15 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
       <div className="flex h-12 shrink-0 items-center justify-between px-2">
         <div className="w-8" />
         <div className="h-1 w-12 rounded-full rounded-t-xl bg-black" />
-        <IoIosClose title="Close" size={32} onClick={() => navigate("/")} />
+        <IoIosClose
+          title="Close"
+          size={32}
+          onClick={() => {
+            navigate("/");
+            setSrc(null);
+            setDst(null);
+          }}
+        />
       </div>
     );
   };

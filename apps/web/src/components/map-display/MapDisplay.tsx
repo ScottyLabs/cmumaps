@@ -43,6 +43,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     (state) => state.setQueuedZoomRegion,
   );
   const isNavigating = useBoundStore((state) => state.isNavigating);
+  const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
   // Local state
   const isMobile = useIsMobile();
@@ -106,9 +107,10 @@ const MapDisplay = ({ mapRef }: Props) => {
     // Otherwise: deselect the building and navigate to the home page
     if (!clickedBuilding) {
       if (isNavOpen && !isNavigating) {
+        navigate(`/${buildingCode}`);
         setSrc(null);
         setDst(null);
-      } else if (roomName) {
+      } else if (roomName && focusedFloor) {
         navigate(`/${buildingCode}`);
       } else {
         deselectBuilding();
