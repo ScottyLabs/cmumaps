@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import env from "@/env";
 import useIsMobile from "@/hooks/useIsMobile";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useUser from "@/hooks/useUser";
@@ -15,6 +14,7 @@ const NavOverlay = () => {
   const endNav = useBoundStore((state) => state.endNav);
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
   const selectedPath = useBoundStore((state) => state.selectedPath);
+  const showLogin = useBoundStore((state) => state.showLogin);
 
   const { navPaths, isNavOpen, dstType, srcType } = useNavigationParams();
   const { hasAccess } = useUser();
@@ -94,7 +94,7 @@ const NavOverlay = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load/dstType change
   useEffect(() => {
     if ((dstType === "Room" || srcType === "Room") && !hasAccess) {
-      window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
+      showLogin();
     }
   }, [dstType, srcType]);
 
