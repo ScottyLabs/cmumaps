@@ -186,7 +186,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
         .reverse()
         .map(([k, v], i) => renderDirection(v, Number.parseInt(k), true, i))}
       {instructionIndex < instructions.length - 1 && (
-        <div className="sticky top-0 bottom-0 mx-3 mt-3 bg-white py-3">
+        <div className="pointer-events-none sticky top-0 bottom-0 mx-3 mt-3 bg-white py-3">
           <div className="btn-shadow rounded-xl bg-primary-green px-9 pb-3">
             {renderDirectionEntry(
               {

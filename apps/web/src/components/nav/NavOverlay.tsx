@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useIsMobile from "@/hooks/useIsMobile";
 import useNavigationParams from "@/hooks/useNavigationParams";
+import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 import type { Node } from "@/types/navTypes";
 import NavOverlayMobile from "./NavOverlayMobile";
@@ -13,8 +14,11 @@ const NavOverlay = () => {
   const endNav = useBoundStore((state) => state.endNav);
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
   const selectedPath = useBoundStore((state) => state.selectedPath);
+  const showLogin = useBoundStore((state) => state.showLogin);
 
-  const { navPaths, isNavOpen } = useNavigationParams();
+  const { navPaths, isNavOpen, dstType } = useNavigationParams();
+  const { hasAccess } = useUser();
+
   // Process instructions
   useEffect(() => {
     const instructions = navPaths?.[selectedPath]?.instructions ?? [];
@@ -85,6 +89,12 @@ const NavOverlay = () => {
       endNav();
     }
   }, [isNavOpen, endNav]);
+
+  useEffect(() => {
+    if (dstType === "Room" && !hasAccess) {
+      showLogin();
+    }
+  }, [hasAccess, dstType, showLogin]);
 
   if (!isNavOpen) {
     return;

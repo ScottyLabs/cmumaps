@@ -4,6 +4,7 @@ import $rapi from "@/api/rustClient";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
+import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -27,15 +28,17 @@ interface Props {
 const SearchResults = ({ searchQuery, mapRef }: Props) => {
   // Global state
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
-  const hidesSearch = useBoundStore((state) => state.hideSearch);
+  const hideSearch = useBoundStore((state) => state.hideSearch);
   const setIsZooming = useBoundStore((state) => state.setIsZooming);
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
   const searchTarget = useBoundStore((state) => state.searchTarget);
   const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
   const focusFloor = useBoundStore((state) => state.focusFloor);
+  const showLogin = useBoundStore((state) => state.showLogin);
 
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst } = useNavigationParams();
+  const { hasAccess } = useUser();
 
   const { data: searchResults } = $rapi.useQuery("get", "/search", {
     params: { query: { query: searchQuery } },
@@ -150,11 +153,15 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   const handleClick = (result: SearchResultProps) => {
     if (result.type === "room") {
+      if (!hasAccess) {
+        showLogin();
+        return;
+      }
       handleSelectRoom(result);
     } else {
       handleSelectBuilding(result);
     }
-    hidesSearch();
+    hideSearch();
     setSearchTarget(undefined);
   };
 
