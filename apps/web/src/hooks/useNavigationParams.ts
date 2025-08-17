@@ -73,7 +73,7 @@ const getWaypointParams = (
   }
 
   if (point.includes("-")) {
-    if (!rooms || !buildings) return {};
+    if (!rooms || !buildings) return { type: "Room" };
 
     const room = rooms[roomName];
     if (!room) return { error: `Invalid Room Waypoint ${roomName}` };
@@ -86,7 +86,7 @@ const getWaypointParams = (
 
   // If point is not a coordinate, user position, or room name, we treat it as a building code
   if (!buildings) {
-    return {};
+    return { type: "Building" };
   }
 
   if (!point || !buildings?.[point]) {

@@ -93,8 +93,6 @@ const NavOverlay = () => {
   // On page load, if the destination is a room and the user is not signed in, redirect to the login page
   // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load/dstType change
   useEffect(() => {
-    console.log("dstType", dstType);
-    console.log("hasAccess", hasAccess);
     if ((dstType === "Room" || srcType === "Room") && !hasAccess) {
       window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
     }
