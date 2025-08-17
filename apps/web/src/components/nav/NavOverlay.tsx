@@ -16,6 +16,10 @@ const NavOverlay = () => {
   const endNav = useBoundStore((state) => state.endNav);
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
   const selectedPath = useBoundStore((state) => state.selectedPath);
+  const showLogin = useBoundStore((state) => state.showLogin);
+
+  const { navPaths, isNavOpen, dstType } = useNavigationParams();
+  const { hasAccess } = useUser();
 
   const [dst] = useQueryState("dst");
 
