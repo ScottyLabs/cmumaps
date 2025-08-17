@@ -68,7 +68,7 @@ const useLocationParams = (): Params => {
       navigate("/");
       return { error: "Invalid coordinate" };
     }
-    return { coordinate: { latitude, longitude }, isCardOpen: true };
+    return { coordinate: { latitude, longitude }, isCardOpen: !dst };
   }
 
   if (path.split("/")?.[1] === "events") {
@@ -99,7 +99,7 @@ const useLocationParams = (): Params => {
   }
 
   if (!roomName || roomName === "") {
-    return { buildingCode, isCardOpen: !!buildingCode };
+    return { buildingCode, isCardOpen: !!buildingCode && !dst };
   }
 
   if (!floor || (building && !building.floors.includes(floor))) {
@@ -109,11 +109,11 @@ const useLocationParams = (): Params => {
   }
 
   if (roomName === floor) {
-    return { buildingCode, floor, isCardOpen: !!buildingCode };
+    return { buildingCode, floor, isCardOpen: !!buildingCode && !dst };
   }
 
   if (!rooms) {
-    return { buildingCode, floor, isCardOpen: !!buildingCode };
+    return { buildingCode, floor, isCardOpen: !!buildingCode && !dst };
   }
 
   if (!rooms[roomName]) {
@@ -126,7 +126,7 @@ const useLocationParams = (): Params => {
     buildingCode,
     floor,
     roomName,
-    isCardOpen: !!buildingCode,
+    isCardOpen: !!buildingCode && !dst,
   };
 };
 

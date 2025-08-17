@@ -27,6 +27,7 @@ const Searchbar = ({ mapRef }: Props) => {
   const hideSearch = useBoundStore((state) => state.hideSearch);
   const searchTarget = useBoundStore((state) => state.searchTarget);
   const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
+  const isNavigating = useBoundStore((state) => state.isNavigating);
 
   // Local state
   const inputRef = useRef<HTMLInputElement>(null);
@@ -75,9 +76,19 @@ const Searchbar = ({ mapRef }: Props) => {
     }
   }, [searchTarget]);
 
+  useEffect(() => {
+    if (!isNavOpen) {
+      setSearchTarget(undefined);
+    }
+  }, [isNavOpen, setSearchTarget]);
+
   // Hide searchbar if navigating, unless selecting a destination or source
-  if (isNavOpen && searchTarget !== "nav-dst" && searchTarget !== "nav-src")
+  if (
+    (isNavOpen && searchTarget !== "nav-dst" && searchTarget !== "nav-src") ||
+    isNavigating
+  ) {
     return;
+  }
 
   const renderSearchIcon = () => (
     <img
