@@ -1,4 +1,3 @@
-import { useQueryState } from "nuqs";
 import { useEffect } from "react";
 import env from "@/env";
 import useIsMobile from "@/hooks/useIsMobile";
@@ -17,9 +16,7 @@ const NavOverlay = () => {
   const setNavInstructions = useBoundStore((state) => state.setNavInstructions);
   const selectedPath = useBoundStore((state) => state.selectedPath);
 
-  const [dst] = useQueryState("dst");
-
-  const { navPaths, isNavOpen } = useNavigationParams();
+  const { navPaths, isNavOpen, dstType } = useNavigationParams();
   const { hasAccess } = useUser();
 
   // Process instructions
@@ -94,12 +91,14 @@ const NavOverlay = () => {
   }, [isNavOpen, endNav]);
 
   // On page load, if the destination is a room and the user is not signed in, redirect to the login page
-  // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load
+  // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load/dstType change
   useEffect(() => {
-    if (dst?.includes("-") && !hasAccess) {
+    console.log("dstType", dstType);
+    console.log("hasAccess", hasAccess);
+    if (dstType === "Room" && !hasAccess) {
       window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
     }
-  }, []);
+  }, [dstType]);
 
   if (!isNavOpen) {
     return;
