@@ -7,7 +7,7 @@ import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { CardStates } from "@/store/cardSlice";
-import { getFloorCode } from "@/utils/floorUtils";
+import { getFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Props {
   floor: Floor;
@@ -29,6 +29,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
     { params: { path: { floorCode: floorCode ?? "" } } },
     { enabled: !!floorCode },
   );
+  const { data: buildings } = $api.useQuery("get", "/buildings");
 
   // Custom hooks
   const { roomName: selectedRoomName } = useLocationParams();
@@ -40,6 +41,15 @@ const FloorplanOverlay = ({ floor }: Props) => {
 
   const handleSelectRoom = (roomName: string, room: GeoRoom) => {
     const floor = room.floor;
+
+    if (
+      !buildings?.[floor.buildingCode]?.floors.includes(
+        getFloorLevelFromRoomName(roomName) ?? "",
+      )
+    ) {
+      return;
+    }
+
     if (isNavOpen) {
       setSrc(`${floor.buildingCode}-${roomName}`);
     } else {
@@ -93,12 +103,6 @@ const FloorplanOverlay = ({ floor }: Props) => {
             onClick={(e) => {
               handleSelectRoom(roomName, room);
               e.stopPropagation();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSelectRoom(roomName, room);
-                e.stopPropagation();
-              }
             }}
           >
             {showPin && <RoomPin room={{ ...room, name: roomName }} />}
