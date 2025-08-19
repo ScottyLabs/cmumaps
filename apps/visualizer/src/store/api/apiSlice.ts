@@ -19,7 +19,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   tagTypes: ["Graph", "Rooms", "Pois"],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${env.VITE_SERVER_URL}/api/`,
+    baseUrl: `${env.VITE_SERVER_URL}/`,
     prepareHeaders: async (headers) => {
       if (window.Clerk?.session) {
         const token = await getClerkToken();
