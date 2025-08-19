@@ -12,13 +12,9 @@ export class BuildingController {
     return await buildingService.getBuildings();
   }
 
-  async getBuildingsMetadata(_req: Request, res: Response) {
-    try {
-      const buildingMetadata = await buildingService.getBuildingsMetadata();
-      res.json(buildingMetadata);
-    } catch (error) {
-      handleControllerError(res, error, "fetching building metadata");
-    }
+  @Get("/metadata")
+  async getBuildingsMetadata() {
+    return await buildingService.getBuildingsMetadata();
   }
 
   async getBuildingName(req: Request, res: Response) {
