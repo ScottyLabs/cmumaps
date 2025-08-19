@@ -68,7 +68,7 @@
         "@cmumaps/websocket": "workspace:*",
         "@datastructures-js/priority-queue": "6.3.3",
         "@reduxjs/toolkit": "2.8.2",
-        "@scottylabs/corgi": "^0.2.1",
+        "@scottylabs/corgi": "0.2.3",
         "@tailwindcss/vite": "4.1.11",
         "@tanstack/react-query": "5.83.0",
         "@tanstack/react-router": "1.128.3",
@@ -562,7 +562,7 @@
 
     "@scarf/scarf": ["@scarf/scarf@1.4.0", "", {}, "sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ=="],
 
-    "@scottylabs/corgi": ["@scottylabs/corgi@0.2.1", "", { "dependencies": { "@base-ui-components/react": "^1.0.0-beta.1", "@tailwindcss/vite": "^4.1.12", "cva": "^1.0.0-beta.4", "tailwind-merge": "^3.3.1", "tailwindcss": "^4.1.12" }, "peerDependencies": { "react": "^19.1.0", "react-dom": "^19.1.0" } }, "sha512-T3PpGG8mqww5iuJcP0c1xoNm0jVGjgba1D5ueSMyU2OtseBw0bAlYy1oWIFN4Iwyv+UMnOfpwOsjrosWbZy17Q=="],
+    "@scottylabs/corgi": ["@scottylabs/corgi@0.2.3", "", { "dependencies": { "@base-ui-components/react": "^1.0.0-beta.1", "@tailwindcss/vite": "^4.1.12", "cva": "^1.0.0-beta.4", "tailwind-merge": "^3.3.1", "tailwindcss": "^4.1.12" }, "peerDependencies": { "react": "^19.1.0", "react-dom": "^19.1.0" } }, "sha512-5y0VTgYJlRrnRJ/yK6hRpJr4MEme4Za9Sn07ZzTW/9j8OtUKWOJI7xgG7oI97aCkuLJLHwSludHN+16b/8Hprw=="],
 
     "@sindresorhus/merge-streams": ["@sindresorhus/merge-streams@2.3.0", "", {}, "sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg=="],
 
