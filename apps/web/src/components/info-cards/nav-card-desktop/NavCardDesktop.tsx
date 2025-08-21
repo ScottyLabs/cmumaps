@@ -121,8 +121,16 @@ const NavCardDesktop = () => {
   const selectedPath = useBoundStore((state) => state.selectedPath);
   const setSelectedPath = useBoundStore((state) => state.setSelectedPath);
 
-  const { navPaths, srcName, dstName, srcType, setSrc, swap, dstShortName } =
-    useNavigationParams();
+  const {
+    navPaths,
+    srcName,
+    dstName,
+    srcType,
+    setDst,
+    setSrc,
+    swap,
+    dstShortName,
+  } = useNavigationParams();
 
   const distance = Math.round(navPaths?.[selectedPath]?.path.distance ?? 0);
   const time = Math.round((navPaths?.[selectedPath]?.path.distance ?? 0) / 100);
@@ -561,6 +569,24 @@ const NavCardDesktop = () => {
     );
   };
 
+  const renderNavCard = () => {
+    return (
+      <div className="my-8 ml-9 flex justify-between">
+        {renderPathInfo()}
+        <button
+          type="button"
+          className="btn-shadow mr-5 inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full bg-primary-red font-medium"
+          onClick={() => {
+            setDst(null);
+            setSrc(null);
+          }}
+        >
+          <span className="text-center text-white">End</span>
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
       {!isNavigating ? (
@@ -572,6 +598,7 @@ const NavCardDesktop = () => {
       ) : (
         <>
           {renderNavigateHeader()}
+          {renderNavCard()}
           <hr />
           {renderDirectionsList()}
         </>
