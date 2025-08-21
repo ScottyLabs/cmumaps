@@ -22,6 +22,7 @@ import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { isInPolygon } from "@/utils/geometry";
 import prefersReducedMotion from "@/utils/prefersReducedMotion";
+import { zoomOnObject } from "@/utils/zoomUtils";
 import NavLine from "../nav/NavLine";
 import CoordinatePin from "./coordinate-pin/CoordinatePin";
 
@@ -62,6 +63,17 @@ const MapDisplay = ({ mapRef }: Props) => {
       toast.error(error);
     }
   }, [error]);
+
+  //Zoom on url param building/room location
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Should only fire on page load
+  useEffect(() => {
+    if (!mapRef.current) return;
+    if (buildingCode) {
+      const building = buildings?.[buildingCode];
+      if (!building?.shape) return;
+      zoomOnObject(mapRef.current, building?.shape.flat(), setIsZooming);
+    }
+  }, [!!mapRef.current]);
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
