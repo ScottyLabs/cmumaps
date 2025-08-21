@@ -3,6 +3,7 @@ import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
+import useIsMobile from "@/hooks/useIsMobile";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
@@ -36,6 +37,7 @@ const Searchbar = ({ mapRef }: Props) => {
   // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
   const { isNavOpen } = useNavigationParams();
+  const isMobile = useIsMobile();
 
   // Blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
@@ -134,7 +136,9 @@ const Searchbar = ({ mapRef }: Props) => {
 
   return (
     <>
-      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white">
+      <div
+        className={`${searchTarget && isMobile && "btn-shadow"} z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white`}
+      >
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
