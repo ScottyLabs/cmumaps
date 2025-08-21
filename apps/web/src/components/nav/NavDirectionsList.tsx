@@ -179,7 +179,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
 
   return (
     <div
-      className={`${show && "btn-shadow"} fixed inset-x-0 top-0 bottom-30 z-40 flex-col overflow-y-scroll bg-white transition duration-300 ease-in-out`}
+      className={`${show && "btn-shadow"} fixed inset-x-0 top-0 bottom-30 flex-col overflow-y-scroll bg-white transition duration-300 ease-in-out`}
       style={{ transform: `translateY(${yControl}%)` }}
     >
       {Object.entries(pastDirections)

@@ -186,7 +186,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   // No results found
   return (
-    <div className="flex-col overflow-hidden overflow-y-scroll bg-white">
+    <div className="z-50 flex-col overflow-hidden overflow-y-scroll bg-white">
       {organizedResults?.map((result, i) => (
         <button
           type="button"

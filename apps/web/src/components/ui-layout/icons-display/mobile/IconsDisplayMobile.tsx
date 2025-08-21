@@ -4,6 +4,7 @@ import coursesButtonSelected from "@/assets/icons/plus_button_menu/courses-butto
 import questionMarkButtonDeselected from "@/assets/icons/plus_button_menu/question-mark-button-deselected.svg";
 import questionMarkButtonSelected from "@/assets/icons/plus_button_menu/question-mark-button-selected.svg";
 import useLocationParams from "@/hooks/useLocationParams";
+import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import AboutMenu from "./AboutMenu";
 import CoursesMenu from "./CoursesMenu";
@@ -28,12 +29,13 @@ interface MenuButtonProps {
 const IconsDisplayMobile = () => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
   const { isCardOpen } = useLocationParams();
+  const { isNavOpen } = useNavigationParams();
 
   const [plusButtonMenuState, setPlusButtonMenuState] = useState(
     PlusButtonMenuState.CLOSED,
   );
 
-  if (isSearchOpen || isCardOpen) {
+  if (isSearchOpen || isCardOpen || isNavOpen) {
     return;
   }
 

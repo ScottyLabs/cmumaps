@@ -134,11 +134,24 @@ const Searchbar = ({ mapRef }: Props) => {
     />
   );
 
+  const renderBackground = () => {
+    return (
+      <button
+        type="button"
+        onClick={() => {
+          setSearchTarget(undefined);
+          setSearchQuery("");
+          hideSearch();
+        }}
+        className="fixed inset-0 z-50 bg-black/30 backdrop-blur-md"
+      />
+    );
+  };
+
   return (
     <>
-      <div
-        className={`${searchTarget && isMobile && "btn-shadow"} z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white`}
-      >
+      {searchTarget && isMobile && renderBackground()}
+      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded bg-white">
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
