@@ -22,14 +22,12 @@ interface NavHeaderProps {
   listShown: boolean;
 }
 
-// Frame component
 const NavCard = ({
   isNavigating,
   startNav,
   toggleListShown,
   listShown,
 }: NavHeaderProps) => {
-  // Navigation options data
   const navigationOptions: {
     id: "Fastest" | "Accessible" | "Inside" | "Outside";
     selectedIcon: string;
