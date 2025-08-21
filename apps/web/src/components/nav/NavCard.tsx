@@ -197,7 +197,7 @@ const NavCard = ({
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-50 transition duration-300 ease-in-out"
+      className="fixed inset-x-0 bottom-0 transition duration-300 ease-in-out"
       style={{ transform: `translateY(${yControl}px)` }}
     >
       {isNavigating && (

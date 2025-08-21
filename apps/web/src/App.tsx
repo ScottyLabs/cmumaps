@@ -38,8 +38,8 @@ const App = () => {
       <LoginModal />
       <IconsDisplay />
       <NavOverlay />
-      <Toolbar mapRef={mapRef} />
       <FloorSwitcher />
+      <Toolbar mapRef={mapRef} />
       <MyToastContainer />
     </main>
   );

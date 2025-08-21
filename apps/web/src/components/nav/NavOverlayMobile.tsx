@@ -16,6 +16,12 @@ const NavOverlayMobile = ({
 
   return (
     <>
+      <NavHeader
+        isNavigating={isNavigating}
+        startNav={startNav}
+        listShown={listShown}
+      />
+      <NavDirectionsList show={listShown} />
       <NavCard
         isNavigating={isNavigating}
         startNav={startNav}
@@ -24,12 +30,6 @@ const NavOverlayMobile = ({
         }}
         listShown={listShown}
       />
-      <NavHeader
-        isNavigating={isNavigating}
-        startNav={startNav}
-        listShown={listShown}
-      />
-      <NavDirectionsList show={listShown} />
     </>
   );
 };

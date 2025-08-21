@@ -12,6 +12,7 @@ interface Props {
 
 const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   const focusFloor = useBoundStore((state) => state.focusFloor);
+  const searchTarget = useBoundStore((state) => state.searchTarget);
   const floorIndex = building.floors.indexOf(initialFloorLevel);
 
   const draggableRegionRef = useRef<HTMLDivElement>(null);
@@ -84,6 +85,10 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
     el.addEventListener("touchmove", handler, { passive: false });
     return () => el.removeEventListener("touchmove", handler);
   }, []);
+
+  if (searchTarget) {
+    return;
+  }
 
   return (
     <div
