@@ -1,3 +1,4 @@
+import { Banner } from "@scottylabs/corgi";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
 import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
@@ -34,6 +35,7 @@ const App = () => {
 
   return (
     <main className="relative h-dvh">
+      <Banner projectName="CMU Maps" className="fixed z-50" />
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
