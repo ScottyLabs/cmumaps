@@ -55,7 +55,7 @@ const NavHeader = ({
 
   const renderChooseHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-[19px] top-10 overflow-auto rounded-lg bg-white">
+      <div className="btn-shadow fixed inset-x-[19px] top-12 overflow-auto rounded-lg bg-white">
         <div className="flex">
           <img
             alt="navigation header"
@@ -136,7 +136,7 @@ const NavHeader = ({
 
   const renderInstructionHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-5 top-10 overflow-auto rounded-lg bg-primary-green">
+      <div className="btn-shadow fixed inset-x-5 top-12 overflow-auto rounded-lg bg-primary-green">
         <div className="flex justify-between">
           <img
             src={instructionIcons[action || "Forward"]}
@@ -202,7 +202,7 @@ const NavHeader = ({
 
   const renderArrivedHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-5 top-10 overflow-auto rounded-lg bg-primary-blue">
+      <div className="btn-shadow fixed inset-x-5 top-12 overflow-auto rounded-lg bg-primary-blue">
         <div className="flex justify-center">
           <div className="mt-4 flex-col">
             <div className="flex justify-center font-lato font-semibold text-[2rem] text-white">
