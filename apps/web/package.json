@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "@cmumaps/common": "workspace:*",
-    "@scottylabs/corgi": "0.2.4",
+    "@scottylabs/corgi": "0.2.11",
     "@tailwindcss/vite": "4.1.11",
     "@tanstack/react-query": "5.83.0",
     "lodash": "4.17.21",
