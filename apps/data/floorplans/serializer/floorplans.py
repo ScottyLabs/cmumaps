@@ -6,6 +6,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from auth_utils.api_client import get_api_client
+from s3_utils.s3_utils import upload_json_file, get_json_from_s3
 
 import json
 
@@ -28,8 +29,10 @@ def floorplans_serializer(floor_code: str = None):
         rooms = get_api_client(path=f"floors/{floor_code}/georooms")
         placement = get_api_client(path=f"floors/{floor_code}/placement")
 
-        with open(file_to_update, "r") as f:
-            floorplans_data = json.load(f)
+        # changed
+        floorplans_data = get_json_from_s3(
+            "floorplans/floorplans.json", return_data=True
+        )
         for room in rooms:
             room_info = rooms[room]
             room_name = room_info["name"]
@@ -112,7 +115,10 @@ def floorplans_serializer(floor_code: str = None):
         # Create serialized json file and save
         with open("cmumaps-data/floorplans/floorplans-serialized.json", "w") as f:
             json.dump(floorplans_dict, f, indent=4)
-
+        upload_json_file(
+            local_file_path="cmumaps-data/floorplans/floorplans-serialized.json",
+            s3_object_name="floorplans/floorplans-serialized.json",
+        )
     return
 
 

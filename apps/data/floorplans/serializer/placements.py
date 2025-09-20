@@ -6,6 +6,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from auth_utils.api_client import get_api_client
+from s3_utils.s3_utils import upload_json_file
 
 import json
 
@@ -45,7 +46,10 @@ def placements_serializer():
     # Save file
     with open("cmumaps-data/floorplans/placements-serialized.json", "w") as f:
         json.dump(all_floors_data, f, indent=4)
-
+    upload_json_file(
+        local_file_path="cmumaps-data/floorplans/placements-serialized.json",
+        s3_object_name="floorplans/placements-serialized.json",
+    )
     return
 
 
