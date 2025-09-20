@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
+from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop Building table
@@ -22,8 +23,9 @@ def drop_building_table():
 
 # Populate Building table
 def create_buildings():
-    with open("cmumaps-data/floorplans/buildings.json", "r") as file:
-        data = json.load(file)
+    # with open("cmumaps-data/floorplans/buildings.json", "r") as file:
+    #     data = json.load(file)
+    data = get_json_from_s3("floorplans/buildings.json", return_data=True)
 
     # Iterate through all buildings
     buildings_data = []

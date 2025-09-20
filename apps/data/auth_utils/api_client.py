@@ -13,6 +13,6 @@ def get_api_client(path: str):
         f"{SERVER_URL}/{path}",
         headers={"Cookie": f"SESSION={SESSION}"},
     )
-    # print({"Cookie": f"SESSION={SESSION}"})
+    print({"Cookie": f"SESSION={SESSION}"})
     response.raise_for_status()
     return response.json()
