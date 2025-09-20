@@ -10,6 +10,7 @@ const envSchema = z.object({
   VITE_PUBLIC_POSTHOG_KEY: z.string().optional(),
   VITE_RUST_SERVER_URL: z.url(),
   VITE_SERVER_URL: z.url(),
+  VITE_CLERK_PUBLISHABLE_KEY: z.string(),
 });
 
 // Validate `process.env` against our schema
