@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
+from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Element and Room tables
@@ -22,9 +23,9 @@ def drop_room_table():
 
 
 def create_rooms():
-    file_path = "cmumaps-data/floorplans/floorplans.json"
-    with open(file_path, "r") as file:
-        data = json.load(file)
+    # with open("cmumaps-data/floorplans/floorplans.json", "r") as file:
+    #     data = json.load(file)
+    data = get_json_from_s3("floorplans/floorplans.json", return_data=True)
 
     # Populate Room data
     for building in data:

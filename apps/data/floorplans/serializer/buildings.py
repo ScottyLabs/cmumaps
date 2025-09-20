@@ -6,6 +6,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from auth_utils.api_client import get_api_client
+from s3_utils.s3_utils import upload_json_file, get_json_from_s3
 
 import json
 
@@ -46,14 +47,19 @@ def buildings_serializer():
     with open("cmumaps-data/floorplans/buildings-serialized.json", "w") as f:
         json.dump(all_buildings_data, f, indent=4)
     # Merge files
-    with open("cmumaps-data/floorplans/buildings.json", "r") as f:
-        original_buildings_data = json.load(f)
+    original_buildings_data = get_json_from_s3(
+        "floorplans/buildings.json", return_data=True
+    )
     with open("cmumaps-data/floorplans/buildings-serialized.json", "r") as f:
         new_buildings_data = json.load(f)
     new_buildings_data.update(original_buildings_data)
     # Save file
     with open("cmumaps-data/floorplans/buildings-serialized.json", "w") as f:
         json.dump(new_buildings_data, f, indent=4)
+    upload_json_file(
+        local_file_path="cmumaps-data/floorplans/buildings-serialized.json",
+        s3_object_name="floorplans/buildings-serialized.json",
+    )
 
     return
 

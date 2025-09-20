@@ -4,9 +4,9 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
+from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Alias table
@@ -21,8 +21,9 @@ def drop_alias_table():
 
 
 def create_aliases():
-    with open("cmumaps-data/floorplans/floorplans.json", "r") as file:
-        data = json.load(file)
+    # with open("cmumaps-data/floorplans/floorplans.json", "r") as file:
+    #     data = json.load(file)
+    data = get_json_from_s3("floorplans/floorplans.json", return_data=True)
 
     alias_data = []
     for building in data:
