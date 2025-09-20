@@ -1,12 +1,12 @@
+import { SignInButton, SignOutButton } from "@clerk/clerk-react";
 import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
-import env from "@/env";
 import useUser from "@/hooks/useUser";
 
 interface MenuButtonProps {
   icon: string;
   label: string;
-  onClick: () => void;
+  type: "signIn" | "signOut";
 }
 
 const UserMenu = () => {
@@ -34,36 +34,34 @@ const UserMenu = () => {
         {
           icon: signOutIcon,
           label: "Sign Out",
-          onClick: () => {
-            window.location.href = `${env.VITE_LOGOUT_URL}`;
-          },
+          type: "signOut",
         },
       ]
     : [
         {
           icon: signInIcon,
           label: "Sign In",
-          onClick: () => {
-            window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
-          },
+          type: "signIn",
         },
       ];
 
   const renderMenuButton = (
-    { icon, label, onClick }: MenuButtonProps,
+    { icon, label, type }: MenuButtonProps,
     index: number,
   ) => {
+    const Cmp = type === "signIn" ? SignInButton : SignOutButton;
     return (
       <div key={index}>
         <hr className="-mx-4 my-1 border-gray-200" />
-        <button
-          type="button"
-          className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-white px-3 py-2 text-gray-700 text-sm active:bg-gray-100"
-          onClick={onClick}
-        >
-          <img src={icon} alt="User Settings Button" width={24} height={24} />
-          <span>{label}</span>
-        </button>
+        <Cmp>
+          <button
+            type="button"
+            className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-white px-3 py-2 text-gray-700 text-sm active:bg-gray-100"
+          >
+            <img src={icon} alt="User Settings Button" width={24} height={24} />
+            <span>{label}</span>
+          </button>
+        </Cmp>
       </div>
     );
   };

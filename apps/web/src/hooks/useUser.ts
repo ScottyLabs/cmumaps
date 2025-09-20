@@ -1,16 +1,21 @@
-import $api from "@/api/client";
+import { useUser as useClerkUser } from "@clerk/clerk-react";
 
 const useUser = () => {
-  const { data } = $api.useQuery("get", "/auth/userInfo");
-  const user = data?.user;
-  const isCmuStudent = user?.email.match(/@andrew\.cmu\.edu$/);
-  const isCmuAlias = user?.email.match(/@cmu\.edu$/);
-  const isCmuAlumni = user?.email.match(/@alumni\.cmu\.edu$/);
-  const isScottyLabs = user?.email.match(/@scottylabs\.org$/);
-  const isSpecialGuest = user?.groups.includes("cmumaps-guests");
+  const { isSignedIn, user } = useClerkUser();
+  const primaryEmail = user?.primaryEmailAddress?.emailAddress;
+  const isCmuStudent = primaryEmail?.match(/@andrew\.cmu\.edu$/);
+  const isCmuAlias = primaryEmail?.match(/@cmu\.edu$/);
+  const isCmuAlumni = primaryEmail?.match(/@alumni\.cmu\.edu$/);
+  const isScottyLabs = primaryEmail?.match(/@scottylabs\.org$/);
+  const isSpecialGuest = user?.publicMetadata["isSpecialGuest"];
   return {
-    isSignedIn: !!user,
-    user,
+    isSignedIn: isSignedIn,
+    user: {
+      id: user?.id,
+      name: user?.fullName,
+      email: primaryEmail,
+    },
+    email: primaryEmail,
     hasAccess:
       isCmuStudent ||
       isCmuAlias ||
