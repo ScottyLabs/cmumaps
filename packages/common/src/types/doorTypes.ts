@@ -1,18 +1,10 @@
-import type { PdfCoordinate } from "./coordTypes";
+import { z } from "zod";
+import { pdfCoordinateSchema } from "./coordTypes";
 
-export interface DoorInfo {
-  /**
-   * list of lines that outlines the door
-   */
-  lineList: number[][];
+export const doorInfoSchema = z.object({
+  lineList: z.array(z.array(z.number())),
+  center: pdfCoordinateSchema,
+  roomIds: z.array(z.string()),
+});
 
-  /**
-   * center of the door points
-   */
-  center: PdfCoordinate;
-
-  /**
-   * the id of the rooms this door connects
-   */
-  roomIds: string[];
-}
+export type DoorInfo = z.infer<typeof doorInfoSchema>;

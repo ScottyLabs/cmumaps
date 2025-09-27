@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const PoiTypes = [
   "Vending Machine",
   "Water Fountain",
@@ -5,20 +7,14 @@ export const PoiTypes = [
   "",
 ] as const;
 
-export type PoiType = (typeof PoiTypes)[number];
+export const poiTypeSchema = z.enum(PoiTypes);
+export type PoiType = z.infer<typeof poiTypeSchema>;
 
-export interface PoiInfo {
-  /**
-   * The type of the POI
-   */
-  type: PoiType;
+export const poiInfoSchema = z.object({
+  type: poiTypeSchema,
+  nodeId: z.string(),
+});
+export type PoiInfo = z.infer<typeof poiInfoSchema>;
 
-  /**
-   * The node id that the POI is associated with
-   */
-  nodeId: string;
-}
-//#endregion
-
-// Floor data types
-export type Pois = Record<string, PoiInfo>;
+export const poisSchema = z.record(z.string(), poiInfoSchema);
+export type Pois = z.infer<typeof poisSchema>;

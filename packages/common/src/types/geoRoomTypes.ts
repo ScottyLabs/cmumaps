@@ -1,39 +1,17 @@
-import type { GeoCoordinate } from "./coordTypes";
-import type { Floor } from "./floorTypes";
-import type { RoomType } from "./roomTypes";
+import { z } from "zod";
+import { geoCoordinateSchema } from "./coordTypes";
+import { floorSchema } from "./floorTypes";
+import { roomTypeSchema } from "./roomTypes";
 
-export interface GeoRoom {
-  /**
-   * The coordinates of the label of the room
-   */
-  labelPosition: GeoCoordinate;
+export const geoRoomSchema = z.object({
+  labelPosition: geoCoordinateSchema,
+  floor: floorSchema,
+  type: roomTypeSchema,
+  alias: z.string().optional(),
+  points: z.array(z.array(geoCoordinateSchema)),
+  id: z.string(),
+});
+export type GeoRoom = z.infer<typeof geoRoomSchema>;
 
-  /**
-   * the floor that the room is on
-   */
-  floor: Floor;
-
-  /**
-   * The type of the room
-   */
-  type: RoomType;
-
-  /**
-   * The name under which the room is known (e.g. 'McConomy Auditorium')
-   * The one that will be displayed.
-   */
-  alias?: string;
-
-  /**
-   * Points to display on map
-   */
-  points: GeoCoordinate[][];
-
-  /**
-   * The uuid of the room
-   */
-  id: string;
-}
-
-// maps from name to room
-export type GeoRooms = Record<string, GeoRoom>;
+export const geoRoomsSchema = z.record(z.string(), geoRoomSchema);
+export type GeoRooms = z.infer<typeof geoRoomsSchema>;

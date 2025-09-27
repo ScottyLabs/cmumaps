@@ -1,5 +1,6 @@
-import type { PdfCoordinate } from "./coordTypes";
-import type { Polygon } from "./geojson";
+import { z } from "zod";
+import { pdfCoordinateSchema } from "./coordTypes";
+import { polygonSchema } from "./geojson";
 
 export const RoomTypes = [
   "Default",
@@ -30,43 +31,20 @@ export const RoomTypes = [
   "", // not assigned
 ] as const;
 
-export type RoomType = (typeof RoomTypes)[number];
+export const roomTypeSchema = z.enum(RoomTypes);
+export type RoomType = z.infer<typeof roomTypeSchema>;
 
 export const WalkwayTypeList = ["Corridor", "Ramp", "Library"];
 
-export interface RoomInfo {
-  /**
-   * The short name of the room, without the building name but including the
-   * floor level (e.g. '121' for CUC 121)
-   */
-  name: string;
+export const roomInfoSchema = z.object({
+  name: z.string(),
+  labelPosition: pdfCoordinateSchema,
+  type: roomTypeSchema,
+  displayAlias: z.string().optional(),
+  aliases: z.array(z.string()),
+  polygon: polygonSchema,
+});
+export type RoomInfo = z.infer<typeof roomInfoSchema>;
 
-  /**
-   * The coordinates of the label of the room
-   */
-  labelPosition: PdfCoordinate;
-
-  /**
-   * The type of the room
-   */
-  type: RoomType;
-
-  /**
-   * The name under which the room is known (e.g. 'McConomy Auditorium')
-   * The one that will be displayed.
-   */
-  displayAlias?: string;
-
-  /**
-   * List of names under which the room is known (e.g. 'McConomy Auditorium')
-   * Used for searching
-   */
-  aliases: string[];
-
-  /**
-   * Geojson polygon that outlines the room
-   */
-  polygon: Polygon;
-}
-
-export type Rooms = Record<string, RoomInfo>;
+export const roomsSchema = z.record(z.string(), roomInfoSchema);
+export type Rooms = z.infer<typeof roomsSchema>;

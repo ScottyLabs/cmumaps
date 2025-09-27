@@ -1,4 +1,5 @@
-import type { GeoCoordinate, PdfCoordinate } from "./coordTypes";
+import { z } from "zod";
+import { geoCoordinateSchema, pdfCoordinateSchema } from "./coordTypes";
 
 export const ValidCrossFloorEdgeTypes = [
   "Ramp",
@@ -7,48 +8,38 @@ export const ValidCrossFloorEdgeTypes = [
   "", // not assigned
 ];
 
-export type EdgeType = (typeof ValidCrossFloorEdgeTypes)[number];
+export const edgeTypeSchema = z.enum(
+  ValidCrossFloorEdgeTypes as ["Ramp", "Stairs", "Elevator", ""],
+);
+export type EdgeType = z.infer<typeof edgeTypeSchema>;
 
-export interface EdgeInfo {
-  outFloorCode?: string;
-}
+export const edgeInfoSchema = z.object({
+  outFloorCode: z.string().optional(),
+});
+export type EdgeInfo = z.infer<typeof edgeInfoSchema>;
 
-export interface NodeInfo {
-  /**
-   * the position (x and y coordinates) of the node
-   */
-  pos: PdfCoordinate;
+export const nodeInfoSchema = z.object({
+  pos: pdfCoordinateSchema,
+  neighbors: z.record(z.string(), edgeInfoSchema),
+  roomId: z.string().nullable(),
+});
+export type NodeInfo = z.infer<typeof nodeInfoSchema>;
 
-  /**
-   * (neighbor's id to the edge) for each neighbor of the node
-   */
-  neighbors: Record<string, EdgeInfo>;
+export const geoNodeSchema = z.object({
+  pos: geoCoordinateSchema,
+  neighbors: z.record(z.string(), edgeInfoSchema),
+  roomId: z.string().nullable(),
+});
+export type GeoNode = z.infer<typeof geoNodeSchema>;
 
-  /**
-   * A node belongs to a room if it is inside the room
-   * If null, the node is not associated with any room
-   */
-  roomId: string | null;
-}
+export const graphSchema = z.record(z.string(), nodeInfoSchema);
+export type Graph = z.infer<typeof graphSchema>;
 
-export interface GeoNode {
-  /**
-   * the position (x and y coordinates) of the node
-   */
-  pos: GeoCoordinate;
+export const geoNodesSchema = z.record(z.string(), geoNodeSchema);
+export type GeoNodes = z.infer<typeof geoNodesSchema>;
 
-  /**
-   * (neighbor's id to the edge) for each neighbor of the node
-   */
-  neighbors: Record<string, EdgeInfo>;
-
-  /**
-   * A node belongs to a room if it is inside the room
-   * If null, the node is not associated with any room
-   */
-  roomId: string | null;
-}
-
-export type Graph = Record<string, NodeInfo>;
-export type GeoNodes = Record<string, GeoNode>;
-export type Mst = Record<string, Record<string, boolean>>;
+export const mstSchema = z.record(
+  z.string(),
+  z.record(z.string(), z.boolean()),
+);
+export type Mst = z.infer<typeof mstSchema>;
