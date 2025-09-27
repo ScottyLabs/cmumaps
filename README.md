@@ -44,4 +44,18 @@ bun run dev:web
 
 #### Backend
 
-Coming soon
+- Open Docker application.
+```zsh
+cd apps/server/docker
+docker compose up -d --build
+```
+- If you see errors about 'port in use', use `lsof -i :1234`, or whatever port is in use to find the port and free it.
+```zsh
+bun run dev:web
+```
+
+### Committing Tips
+If you aren't allowed to commit, try the following:
+1. `bun run check` and fix the errors. 
+2. Make sure everything is formatted.
+3. Make sure you are using a conventional commit message.
