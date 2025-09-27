@@ -2,7 +2,7 @@ import type { Building } from "@cmumaps/common";
 import { animate, motion, useMotionValue } from "framer-motion";
 import { useState } from "react";
 import useBoundStore from "@/store";
-import FloorSwitcherCarouselMobile from "./FloorSwitcherCarouselMobile";
+import FloorSwitcherCarouselMobile from "./mobile/FloorSwitcherCarousel";
 
 interface Props {
   building: Building;
