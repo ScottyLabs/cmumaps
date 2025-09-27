@@ -44,15 +44,21 @@ bun run dev:web
 
 #### Backend
 
-- Open Docker application.
+##### Database
+- Run the following command in `apps/server/docker`:
 ```zsh
-cd apps/server/docker
 docker compose up -d --build
 ```
 - If you see errors about 'port in use', use `lsof -i :1234`, or whatever port is in use to find the port and free it.
+Run the following in `apps/server`:
 ```zsh
-bun run dev:web
+bunx prisma db push
+bun run dev
 ```
+- To verify: go to `http://localhost/buildings` and it should show `{}` (and not internal server error).
+
+##### Populating the Database
+
 
 ### Committing Tips
 If you aren't allowed to commit, try the following:
