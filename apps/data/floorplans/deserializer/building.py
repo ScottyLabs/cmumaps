@@ -23,8 +23,6 @@ def drop_building_table():
 
 # Populate Building table
 def create_buildings():
-    # with open("cmumaps-data/floorplans/buildings.json", "r") as file:
-    #     data = json.load(file)
     data = get_json_from_s3("floorplans/buildings.json", return_data=True)
 
     # Iterate through all buildings

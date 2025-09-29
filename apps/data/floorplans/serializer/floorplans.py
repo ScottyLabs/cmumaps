@@ -29,7 +29,6 @@ def floorplans_serializer(floor_code: str = None):
         rooms = get_api_client(path=f"floors/{floor_code}/georooms")
         placement = get_api_client(path=f"floors/{floor_code}/placement")
 
-        # changed
         floorplans_data = get_json_from_s3(
             "floorplans/floorplans.json", return_data=True
         )

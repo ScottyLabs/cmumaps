@@ -25,12 +25,7 @@ def drop_floor_table():
 def create_floors():
     floors_data = []
 
-    # with open("cmumaps-data/floorplans/buildings.json", "r") as file:
-    #     buildings = json.load(file)
     buildings = get_json_from_s3("floorplans/buildings.json", return_data=True)
-
-    # with open("cmumaps-data/floorplans/placements.json", "r") as file:
-    #     data = json.load(file)
     data = get_json_from_s3("floorplans/placements.json", return_data=True)
 
     for buildingCode in data:

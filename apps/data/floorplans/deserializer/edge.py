@@ -24,8 +24,6 @@ def drop_edge_table():
 
 
 def create_edges():
-    # with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
-    #     data = json.load(file)
     data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
 
     edge_data = []

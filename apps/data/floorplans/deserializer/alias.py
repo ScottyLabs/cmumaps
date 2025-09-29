@@ -21,8 +21,6 @@ def drop_alias_table():
 
 
 def create_aliases():
-    # with open("cmumaps-data/floorplans/floorplans.json", "r") as file:
-    #     data = json.load(file)
     data = get_json_from_s3("floorplans/floorplans.json", return_data=True)
 
     alias_data = []

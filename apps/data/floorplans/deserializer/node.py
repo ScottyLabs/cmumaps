@@ -23,8 +23,6 @@ def drop_node_table():
 
 
 def create_nodes():
-    # with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
-    #     data = json.load(file)
     data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
 
     node_data = []
