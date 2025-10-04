@@ -2,7 +2,6 @@ import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import $api from "@/api/client";
-import $rapi from "@/api/rustClient";
 import useBoundStore from "@/store";
 import type { NavPaths, NavWaypointType } from "@/types/navTypes";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -124,7 +123,7 @@ const useNavPaths = (): Params => {
     error: dstError,
   } = getWaypointParams(dst ?? "");
 
-  const { data: navPaths } = $rapi.useQuery("get", "/path", {
+  const { data: navPaths } = $api.useQuery("get", "/path", {
     params: {
       query: {
         start: srcQuery ?? "",
