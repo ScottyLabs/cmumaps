@@ -6,11 +6,11 @@ import useUser from "@/hooks/useUser";
 interface MenuButtonProps {
   icon: string;
   label: string;
-  type: "signIn" | "signOut";
+  type: "signIn" | "signOut" | "manageAccount";
 }
 
 const UserMenu = () => {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, imageUrl } = useUser();
 
   const renderUserProfile = () => {
     if (!isSignedIn || !user) {
@@ -22,9 +22,20 @@ const UserMenu = () => {
     }
 
     return (
-      <div>
-        <div className="font-semibold text-gray-800 text-sm">{user.name}</div>
-        <div className="text-gray-500 text-sm">{user.email}</div>
+      <div className="flex gap-5">
+        <img
+          className="rounded-full"
+          src={imageUrl}
+          alt="User Profile"
+          width={48}
+          height={48}
+        />
+        <div>
+          <div className="font-semibold text-[1.25em] text-gray-800">
+            {user.name}
+          </div>
+          <div className="text-gray-500 text-sm">{user.email}</div>
+        </div>
       </div>
     );
   };
@@ -67,7 +78,7 @@ const UserMenu = () => {
   };
 
   return (
-    <div className="btn-shadow-dark fixed inset-x-5 bottom-77 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-1 font-sans shadow-lg">
+    <div className="btn-shadow-dark fixed inset-x-5 bottom-77 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-5 pb-1 font-sans shadow-lg">
       <div className="mb-4 flex items-center gap-3">{renderUserProfile()}</div>
       {menuButtons.map(renderMenuButton)}
     </div>

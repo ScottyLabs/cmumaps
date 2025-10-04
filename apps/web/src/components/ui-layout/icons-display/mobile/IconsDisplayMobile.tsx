@@ -3,6 +3,9 @@ import coursesButtonDeselected from "@/assets/icons/plus_button_menu/courses-but
 import coursesButtonSelected from "@/assets/icons/plus_button_menu/courses-button-selected.svg";
 import questionMarkButtonDeselected from "@/assets/icons/plus_button_menu/question-mark-button-deselected.svg";
 import questionMarkButtonSelected from "@/assets/icons/plus_button_menu/question-mark-button-selected.svg";
+import userButtonDeselected from "@/assets/icons/plus_button_menu/user-button-deselected.svg";
+import userButtonSelected from "@/assets/icons/plus_button_menu/user-button-selected.svg";
+import UserMenu from "@/components/ui-layout/icons-display/mobile/UserMenu";
 import useLocationParams from "@/hooks/useLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
@@ -40,15 +43,15 @@ const IconsDisplayMobile = () => {
   }
 
   const menuButtons: MenuButtonProps[] = [
-    // {
-    //   deselectedIcon: userButtonDeselected,
-    //   selectedIcon: userButtonSelected,
-    //   altText: "User Menu",
-    //   selectedMenuState: PlusButtonMenuState.USER_SELECTED,
-    //   menu: () => {
-    //     return UserMenu({ userProps, clerkFunctions });
-    //   },
-    // },
+    {
+      deselectedIcon: userButtonDeselected,
+      selectedIcon: userButtonSelected,
+      altText: "User Menu",
+      selectedMenuState: PlusButtonMenuState.USER_SELECTED,
+      menu: () => {
+        return UserMenu();
+      },
+    },
     {
       deselectedIcon: questionMarkButtonDeselected,
       selectedIcon: questionMarkButtonSelected,
