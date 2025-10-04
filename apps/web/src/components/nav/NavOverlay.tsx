@@ -39,7 +39,8 @@ const NavOverlay = () => {
 
       if (
         index < path.length - 1 &&
-        node.floor.buildingCode === "outside" &&
+        (!node.floor || node.floor.buildingCode === "outside") &&
+        path[index + 1]?.floor &&
         path[index + 1]?.floor.buildingCode !== "outside"
       ) {
         newInstructions.push({
@@ -51,7 +52,8 @@ const NavOverlay = () => {
       }
       if (
         index > 0 &&
-        node.floor.buildingCode === "outside" &&
+        (!node.floor || node.floor.buildingCode === "outside") &&
+        path[index - 1]?.floor &&
         path[index - 1]?.floor.buildingCode !== "outside"
       ) {
         newInstructions.push({

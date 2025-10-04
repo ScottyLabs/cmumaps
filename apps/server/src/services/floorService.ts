@@ -75,7 +75,14 @@ export const floorService = {
         }
       }
 
-      nodes[node.nodeId] = { pos, neighbors, roomId: node.roomId };
+      nodes[node.nodeId] = {
+        id: node.nodeId,
+        pos,
+        neighbors,
+        roomId: node.roomId,
+        coordinate: position,
+        floor: null,
+      };
     }
 
     return nodes;
@@ -251,6 +258,20 @@ export const floorService = {
     const buildingCode = extractBuildingCode(floorCode);
     const floorLevel = extractFloorLevel(floorCode);
 
+    // Get floor data for Floor type
+    const floor = await prisma.floor.findUnique({
+      where: {
+        buildingCode_floorLevel: {
+          buildingCode,
+          floorLevel,
+        },
+      },
+    });
+
+    if (!floor) {
+      throw new Error(`Floor not found: ${floorCode}`);
+    }
+
     // Get all rooms on the floor from the database
     const dbRooms = await prisma.room.findMany({
       where: {
@@ -270,7 +291,10 @@ export const floorService = {
           latitude: room.labelLatitude,
           longitude: room.labelLongitude,
         },
-        floor: { buildingCode, level: floorLevel },
+        floor: {
+          buildingCode,
+          level: floorLevel,
+        },
         type: room.type as RoomType,
         id: room.roomId,
         alias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,

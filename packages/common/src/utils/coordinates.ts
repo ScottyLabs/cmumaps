@@ -118,3 +118,21 @@ export const geoPolygonToPdfPolygon = (
     ),
   };
 };
+
+export const calcDist = (
+  coord1: GeoCoordinate,
+  coord2: GeoCoordinate,
+): number => {
+  const lat_m_ratio = 111318.8450631976;
+  const lon_m_ratio = 84719.3945182816;
+
+  const lat1 = coord1.latitude;
+  const lon1 = coord1.longitude;
+  const lat2 = coord2.latitude;
+  const lon2 = coord2.longitude;
+
+  const dist1 = (lat1 - lat2) * lat_m_ratio;
+  const dist2 = (lon1 - lon2) * lon_m_ratio;
+
+  return Math.sqrt(dist1 ** 2 + dist2 ** 2);
+};
