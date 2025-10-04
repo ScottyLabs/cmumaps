@@ -1,6 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 @import "tailwindcss";
-@import "@scottylabs/corgi/css";
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 
 @theme {
   --color-primary-blue: #1e86ff;
