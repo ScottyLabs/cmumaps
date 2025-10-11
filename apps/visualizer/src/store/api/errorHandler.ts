@@ -10,8 +10,6 @@ export const handleQueryError = async (
   } catch (e) {
     toast.error("Failed to save! Check the Console for detailed error.");
     undo();
-    const error = e as { error: { data: { error: string; details: string } } };
-    console.error(error.error.data.error);
-    console.error("Error details:", error.error.data.details);
+    console.error(e);
   }
 };
