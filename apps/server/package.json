@@ -46,6 +46,7 @@
     "openapi:watch": "onchange './build/swagger.yaml' -- bun run openapi",
     "server": "dotenv -e .env -- tsx watch src/server.ts",
     "start": "bun dist/server.js",
+    "sync-tsoa": "bun run tsoa && bun run openapi",
     "tsc": "tsc -b",
     "tsoa": "tsoa spec-and-routes",
     "tsoa:watch": "onchange 'src/controllers/*.ts' 'tsoa.json' -- bun run tsoa"

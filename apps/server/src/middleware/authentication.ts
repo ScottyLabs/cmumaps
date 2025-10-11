@@ -4,6 +4,9 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type * as express from "express";
 
+export const MEMBER_SCOPE = "org:member";
+export const ADMIN_SCOPE = "org:admin";
+
 export function expressAuthentication(
   request: express.Request,
   securityName: string,
@@ -25,27 +28,46 @@ export function expressAuthentication(
     }
 
     // Use Clerk organization membership to check if user has required scopes
+    // Note that there are only two scopes: admin and member and an admin can access member scope
     clerkClient.users
       .getOrganizationMembershipList({
         userId: auth.userId,
       })
       .then(({ data }) => {
-        const roles = new Set<string>();
-        data.forEach((membership) => {
-          if (membership.organization.slug === "cmumaps") {
-            roles.add(membership.role);
-          }
-        });
+        if (scopes?.length === 0) {
+          return resolve({});
+        }
 
-        for (const scope of scopes ?? []) {
-          if (!roles.has(scope)) {
-            response
-              ?.status(401)
-              .json({ message: "User does not have required scope." });
-            return reject({});
+        let isAdmin = false;
+        let isMember = false;
+        for (const membership of data) {
+          if (membership.organization.slug === "cmumaps") {
+            if (membership.role === ADMIN_SCOPE) {
+              isAdmin = true;
+              isMember = true;
+            }
+
+            if (membership.role === MEMBER_SCOPE) {
+              isMember = true;
+            }
           }
         }
 
+        if (scopes?.includes(ADMIN_SCOPE) && !isAdmin) {
+          response
+            ?.status(401)
+            .json({ message: "User does not have required scope." });
+          return reject({});
+        }
+
+        if (scopes?.includes(MEMBER_SCOPE) && !isMember) {
+          response
+            ?.status(401)
+            .json({ message: "User does not have required scope." });
+          return reject({});
+        }
+
+        // should never reach here because the check on scopes should be exhaustive
         return resolve({});
       });
   });

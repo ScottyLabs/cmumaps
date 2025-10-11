@@ -1,10 +1,22 @@
 import type { Request as ExpressRequest } from "express";
-import { Body, Delete, Post, Request, Route } from "tsoa";
+import {
+  Body,
+  Delete,
+  Middlewares,
+  Post,
+  Request,
+  Route,
+  Security,
+} from "tsoa";
+import { MEMBER_SCOPE } from "../middleware/authentication";
+import { requireSocketId } from "../middleware/socketAuth";
 import { webSocketService } from "../server";
 import { edgeService } from "../services/edgeService";
 
 @Route("edge")
 export class EdgeController {
+  @Middlewares(requireSocketId)
+  @Security("oauth2", [MEMBER_SCOPE])
   @Post("/")
   async createEdge(
     @Request() req: ExpressRequest,
@@ -23,6 +35,8 @@ export class EdgeController {
     return null;
   }
 
+  @Middlewares(requireSocketId)
+  @Security("oauth2", [MEMBER_SCOPE])
   @Delete("/")
   async deleteEdge(
     @Request() req: ExpressRequest,
@@ -37,6 +51,8 @@ export class EdgeController {
     return null;
   }
 
+  @Middlewares(requireSocketId)
+  @Security("oauth2", [MEMBER_SCOPE])
   @Post("/across-floors")
   async createEdgeAcrossFloors(
     @Request() req: ExpressRequest,
@@ -71,6 +87,8 @@ export class EdgeController {
     return null;
   }
 
+  @Middlewares(requireSocketId)
+  @Security("oauth2", [MEMBER_SCOPE])
   @Delete("/across-floors")
   async deleteEdgeAcrossFloors(
     @Request() req: ExpressRequest,
