@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import http from "node:http";
+import { clerkMiddleware } from "@clerk/express";
 import cors, { type CorsOptions } from "cors";
 import type { ErrorRequestHandler } from "express";
 import express from "express";
@@ -9,9 +10,9 @@ import YAML from "yaml";
 import { RegisterRoutes } from "../build/routes";
 import { prisma } from "../prisma";
 import env from "./env";
+import { socketAuth } from "./middleware/authMiddleware";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
-// import { socketAuth } from "./src/middleware/authMiddleware";
 import { WebSocketService } from "./services/webSocketService";
 
 const app = express();
@@ -33,10 +34,13 @@ const server = http.createServer(app);
 // Initialize Socket.IO with authentication middleware
 // https://socket.io/docs/v4/handling-cors/
 const io = new Server(server, { cors: corsOptions });
-// io.use(socketAuth);
+io.use(socketAuth);
 
 // Initialize WebSocket service
 export const webSocketService = new WebSocketService(io);
+
+// Clerk middleware to authenticate requests
+app.use(clerkMiddleware());
 
 // Swagger
 const file = fs.readFileSync("./build/swagger.yaml", "utf8");

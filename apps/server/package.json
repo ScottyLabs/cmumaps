@@ -2,7 +2,7 @@
   "name": "@cmumaps/server",
   "version": "0.0.0",
   "dependencies": {
-    "@clerk/express": "1.3.52",
+    "@clerk/express": "1.7.37",
     "@cmumaps/common": "workspace:*",
     "@cmumaps/websocket": "workspace:*",
     "@prisma/client": "6.12.0",
