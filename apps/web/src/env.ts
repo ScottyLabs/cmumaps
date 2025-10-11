@@ -15,7 +15,13 @@ const envSchema = z.object({
 
 // Validate `process.env` against our schema
 // and return the result
-const env = envSchema.parse(import.meta.env);
+const parsed = envSchema.safeParse(import.meta.env);
+
+if (!parsed.success) {
+  throw new Error("Invalid environment variables");
+}
+
+const env = parsed.data;
 
 // Export the result so we can use it in the project
 export default env;
