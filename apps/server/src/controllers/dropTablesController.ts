@@ -3,7 +3,7 @@ import { dropTablesService } from "../services/dropTablesService";
 
 @Route("drop-tables")
 export class DropTablesController {
-  @Security("oauth2", ["db_admin"])
+  @Security("oauth2", ["org:admin"])
   @Delete("/")
   async dropTables(@Body() body: { tableNames: string[] }) {
     const { tableNames } = body;
