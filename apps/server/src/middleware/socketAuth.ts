@@ -1,20 +1,12 @@
-import { getAuth, verifyToken } from "@clerk/express";
+import { verifyToken } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
 import type { Socket } from "socket.io";
 
-// for http requests
-// https://clerk.com/docs/references/express/overview#get-auth
-const checkAuth = (req: Request, res: Response, next: NextFunction) => {
-  const auth = getAuth(req);
-  if (!auth.userId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  next();
-};
-
-// // for socket.io
-const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
+// auth middleware for socket.io
+export const socketAuth = async (
+  socket: Socket,
+  next: (err?: Error) => void,
+) => {
   try {
     const token = socket.handshake.auth.token;
     if (!token) {
@@ -38,4 +30,19 @@ const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
   }
 };
 
-export { checkAuth, socketAuth };
+// middleware for requiring the socket id
+export const requireSocketId = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const socketId = req.header("X-Socket-ID");
+
+  if (!socketId) {
+    res.status(400).json({ message: "X-Socket-ID header is required" });
+    return;
+  }
+
+  req.socketId = socketId;
+  return next();
+};

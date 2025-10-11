@@ -1,6 +1,6 @@
 import express from "express";
 import { edgeController } from "../controllers/edgeController";
-import { requireSocketId } from "../middleware/socketIdMiddleware";
+import { requireSocketId } from "../middleware/socketAuth";
 
 const edgeRouter = express.Router();
 

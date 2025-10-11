@@ -10,9 +10,9 @@ import YAML from "yaml";
 import { RegisterRoutes } from "../build/routes";
 import { prisma } from "../prisma";
 import env from "./env";
-import { socketAuth } from "./middleware/authMiddleware";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
+import { socketAuth } from "./middleware/socketAuth";
 import { WebSocketService } from "./services/webSocketService";
 
 const app = express();
