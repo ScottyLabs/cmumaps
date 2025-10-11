@@ -10,5 +10,6 @@
     // https://tsoa-community.github.io/docs/getting-started.html#configuring-tsoa-and-typescript
     "experimentalDecorators": true
     // "emitDecoratorMetadata": true
-  }
+  },
+  "include": ["src"]
 }
