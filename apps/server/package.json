@@ -43,7 +43,7 @@
     "lint": "biome lint",
     "openapi": "openapi-typescript ./build/swagger.yaml -o ./build/swagger.d.ts",
     "openapi:watch": "onchange './build/swagger.yaml' -- bun run openapi",
-    "server": "dotenv -e .env -- tsx watch server.ts",
+    "server": "dotenv -e .env -- tsx watch src/server.ts",
     "start": "bun dist/server.js",
     "tsc": "tsc -b",
     "tsoa": "tsoa spec-and-routes",
