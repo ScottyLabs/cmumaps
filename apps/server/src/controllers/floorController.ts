@@ -1,6 +1,4 @@
-import type * as express from "express";
 import { Get, Path, Route, Security } from "tsoa";
-import { handleControllerError } from "../errors/errorHandler";
 import { floorService } from "../services/floorService";
 
 @Route("/floors")
@@ -12,7 +10,7 @@ export class FloorController {
   }
 
   @Security("oauth2", [])
-  @Get("/:floorCode/georooms")
+  @Get("/:floorCode/rooms")
   async getFloorRooms(@Path() floorCode: string) {
     const rooms = await floorService.getFloorRooms(floorCode);
     return rooms;
@@ -38,14 +36,9 @@ export class FloorController {
     return await floorService.getFloorPlacement(floorCode);
   }
 
-  async getFloorPois(req: express.Request, res: express.Response) {
-    const floorCode = req.params.id;
-
-    try {
-      const pois = await floorService.getFloorPois(floorCode);
-      res.json(pois);
-    } catch (error) {
-      handleControllerError(res, error, "getting floor pois");
-    }
+  @Security("oauth2", [])
+  @Get("/:floorCode/pois")
+  async getFloorPois(@Path() floorCode: string) {
+    return await floorService.getFloorPois(floorCode);
   }
 }
