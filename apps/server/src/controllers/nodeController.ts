@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { webSocketService } from "../../server";
 import { handleControllerError } from "../errors/errorHandler";
+import { webSocketService } from "../server";
 import { edgeService } from "../services/edgeService";
 import { floorService } from "../services/floorService";
 import { nodeService } from "../services/nodeService";
