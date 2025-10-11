@@ -127,10 +127,10 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     createEdge: builder.mutation<Response, CreateEdgeArg>({
-      query: ({ floorCode, inNodeId, outNodeId }) => ({
+      query: ({ inNodeId, outNodeId }) => ({
         url: "edge",
         method: "POST",
-        body: { floorCode, inNodeId, outNodeId },
+        body: { inNodeId, outNodeId },
         headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
@@ -153,10 +153,10 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
       },
     }),
     deleteEdge: builder.mutation<Response, DeleteEdgeArg>({
-      query: ({ floorCode, inNodeId, outNodeId }) => ({
+      query: ({ inNodeId, outNodeId }) => ({
         url: "edge",
         method: "DELETE",
-        body: { floorCode, inNodeId, outNodeId },
+        body: { inNodeId, outNodeId },
         headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
