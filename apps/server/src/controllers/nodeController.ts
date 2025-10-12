@@ -10,7 +10,7 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { MEMBER_SCOPE } from "../middleware/authentication";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { requireSocketId } from "../middleware/socketAuth";
 import { webSocketService } from "../server";
 import { edgeService } from "../services/edgeService";
@@ -18,7 +18,7 @@ import { floorService } from "../services/floorService";
 import { nodeService } from "../services/nodeService";
 
 @Middlewares(requireSocketId)
-@Security("oauth2", [MEMBER_SCOPE])
+@Security(BEARER_AUTH, [MEMBER_SCOPE])
 @Route("nodes")
 export class NodeController {
   @Post("/:nodeId")

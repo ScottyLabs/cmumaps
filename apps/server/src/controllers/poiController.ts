@@ -10,13 +10,13 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { MEMBER_SCOPE } from "../middleware/authentication";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { requireSocketId } from "../middleware/socketAuth";
 import { webSocketService } from "../server";
 import { poiService } from "../services/poiService";
 
 @Middlewares(requireSocketId)
-@Security("oauth2", [MEMBER_SCOPE])
+@Security(BEARER_AUTH, [MEMBER_SCOPE])
 @Route("pois")
 export class PoiController {
   @Post("/:poiId")

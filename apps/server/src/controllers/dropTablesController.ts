@@ -1,8 +1,8 @@
 import { Body, Delete, Route, Security } from "tsoa";
-import { ADMIN_SCOPE } from "../middleware/authentication";
+import { ADMIN_SCOPE, BEARER_AUTH } from "../middleware/authentication";
 import { dropTablesService } from "../services/dropTablesService";
 
-@Security("oauth2", [ADMIN_SCOPE])
+@Security(BEARER_AUTH, [ADMIN_SCOPE])
 @Route("drop-tables")
 export class DropTablesController {
   @Delete("/")

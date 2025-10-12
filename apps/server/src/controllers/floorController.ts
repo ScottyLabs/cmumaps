@@ -1,7 +1,9 @@
 import { Get, Path, Route, Security } from "tsoa";
+import { BEARER_AUTH } from "../middleware/authentication";
 import { floorService } from "../services/floorService";
 
-@Security("oauth2", [])
+@Security(BEARER_AUTH, [])
+
 @Route("floors")
 export class FloorController {
   @Get("/:floorCode/floorplan")
