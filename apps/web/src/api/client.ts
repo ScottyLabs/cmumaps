@@ -5,7 +5,6 @@ import env from "@/env";
 
 const fetchClient = createFetchClient<paths>({
   baseUrl: `${env.VITE_SERVER_URL}`,
-  credentials: "include",
 });
 
 const $api = createClient(fetchClient);
