@@ -65,13 +65,11 @@ export const poiApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     createPoi: builder.mutation<Response, CreatePoiArg>({
-      query: ({ floorCode, poiId, poiInfo }) => ({
+      query: ({ poiId, poiInfo }) => ({
         url: `/pois/${poiId}`,
         method: "POST",
-        body: { floorCode, poiInfo },
-        headers: {
-          "X-Socket-ID": getSocketId(),
-        },
+        body: { poiInfo },
+        headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
@@ -92,13 +90,10 @@ export const poiApiSlice = apiSlice.injectEndpoints({
     }),
 
     deletePoi: builder.mutation<Response, DeletePoiArg>({
-      query: ({ floorCode, poiId }) => ({
+      query: ({ poiId }) => ({
         url: `/pois/${poiId}`,
         method: "DELETE",
-        body: { floorCode },
-        headers: {
-          "X-Socket-ID": getSocketId(),
-        },
+        headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
@@ -124,13 +119,11 @@ export const poiApiSlice = apiSlice.injectEndpoints({
       },
     }),
     updatePoi: builder.mutation<Response, UpdatePoiArg>({
-      query: ({ floorCode, poiId, poiType }) => ({
+      query: ({ poiId, poiType }) => ({
         url: `/pois/${poiId}/type`,
         method: "PUT",
-        body: { floorCode, poiType },
-        headers: {
-          "X-Socket-ID": getSocketId(),
-        },
+        body: { poiType },
+        headers: { "X-Socket-ID": getSocketId() },
       }),
       async onQueryStarted(arg, { getState, dispatch, queryFulfilled }) {
         try {
