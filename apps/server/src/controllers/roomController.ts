@@ -60,7 +60,7 @@ export class RoomController {
   @Patch("/:roomId")
   async updateRoom(
     @Request() req: ExpressRequest,
-    @Body() body: { floorCode: string; roomInfo: RoomInfo },
+    @Body() body: { floorCode: string; roomInfo: Partial<RoomInfo> },
   ) {
     const roomId = req.params.roomId;
     const { roomInfo, floorCode } = body;
