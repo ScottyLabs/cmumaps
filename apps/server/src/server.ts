@@ -18,17 +18,15 @@ import { WebSocketService } from "./services/webSocketService";
 const app = express();
 app.use(express.json({ limit: "8mb" }));
 
-// Define CORS options conditionally
-let corsOptions: CorsOptions = {};
-if (env.NODE_ENV === "development") {
-  corsOptions = {
-    origin: ["http://localhost:5173", "http://localhost:5174"],
-    credentials: true,
-  };
-}
+// Define CORS options
+const corsOptions: CorsOptions = {
+  origin: env.ALLOWED_ORIGINS_REGEX?.split(",").map(
+    (origin) => new RegExp(origin),
+  ),
+};
+app.use(cors(corsOptions));
 
 // Create HTTP server with Express app attached
-app.use(cors(corsOptions));
 const server = http.createServer(app);
 
 // Initialize Socket.IO with authentication middleware
