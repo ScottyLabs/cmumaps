@@ -81,5 +81,6 @@ for ENV in "${ENVIRONMENT[@]}"; do
   for APP in "${APPLICATIONS[@]}"; do
     vault kv get -format=json ScottyLabs/cmumaps/$ENV/$APP |
       jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >apps/$APP/.env$ENV_FILE_SUFFIX
+    echo "Pulled from vault: ScottyLabs/cmumaps/$ENV/$APP"
   done
 done
