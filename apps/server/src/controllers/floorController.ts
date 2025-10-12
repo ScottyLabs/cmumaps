@@ -1,7 +1,7 @@
 import { Get, Path, Route, Security } from "tsoa";
 import { floorService } from "../services/floorService";
 
-@Route("/floors")
+@Route("floors")
 export class FloorController {
   @Security("oauth2", [])
   @Get("/:floorCode/floorplan")

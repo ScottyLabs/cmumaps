@@ -15,7 +15,7 @@ const initialState: VisibilityState = {
   showNodes: true,
   showEdges: true,
   showLabels: false,
-  showPolygons: false,
+  showPolygons: true,
 };
 
 const visibilitySlice = createSlice({
