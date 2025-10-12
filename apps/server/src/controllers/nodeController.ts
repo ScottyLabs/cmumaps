@@ -17,10 +17,10 @@ import { edgeService } from "../services/edgeService";
 import { floorService } from "../services/floorService";
 import { nodeService } from "../services/nodeService";
 
+@Middlewares(requireSocketId)
+@Security("oauth2", [MEMBER_SCOPE])
 @Route("nodes")
 export class NodeController {
-  @Middlewares(requireSocketId)
-  @Security("oauth2", [MEMBER_SCOPE])
   @Post("/:nodeId")
   async createNode(
     @Request() req: ExpressRequest,
@@ -44,8 +44,6 @@ export class NodeController {
     return null;
   }
 
-  @Middlewares(requireSocketId)
-  @Security("oauth2", [MEMBER_SCOPE])
   @Delete("/:nodeId")
   async deleteNode(@Request() req: ExpressRequest) {
     const nodeId = req.params.nodeId;
@@ -56,8 +54,6 @@ export class NodeController {
     return null;
   }
 
-  @Middlewares(requireSocketId)
-  @Security("oauth2", [MEMBER_SCOPE])
   @Put("/:nodeId")
   async updateNode(
     @Request() req: ExpressRequest,
