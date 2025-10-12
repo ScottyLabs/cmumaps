@@ -54,13 +54,6 @@ app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-// app.use("/api/floors", checkAuth, floorRoutes);
-// // app.use("/api/buildings", buildingRoutes);
-// app.use("/api/nodes", checkAuth, requireSocketId, nodeRoutes);
-// app.use("/api", checkAuth, edgeRoutes);
-// app.use("/api/rooms", checkAuth, requireSocketId, roomRoutes);
-// app.use("/api/pois", checkAuth, requireSocketId, poiRoutes);
-
 // Error Handling and Not Found Handlers
 app.use(errorHandler as ErrorRequestHandler);
 app.use(notFoundHandler);
