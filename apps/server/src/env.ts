@@ -4,10 +4,10 @@ import { z } from "zod";
 // variables and their types
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]),
-  AUTH_ISSUER: z.url(),
-  AUTH_JWKS_URI: z.url(),
-  AUTH_USER_INFO_URL: z.url(),
   SERVER_PORT: z.number().default(80),
+  CLERK_PUBLISHABLE_KEY: z.string(),
+  CLERK_SECRET_KEY: z.string(),
+  DATABASE_URL: z.string(),
 });
 
 // Validate `process.env` against our schema and return the result
