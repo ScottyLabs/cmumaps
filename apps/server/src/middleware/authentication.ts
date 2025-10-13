@@ -22,54 +22,60 @@ export function expressAuthentication(
 
     // https://clerk.com/docs/references/express/overview#get-auth
     // Use Clerk user id to check if user is authenticated
-    const auth = getAuth(request);
-    if (!auth.userId) {
-      response?.status(401).json({ message: "User is not authenticated" });
-      return reject({});
-    }
+    try {
+      const auth = getAuth(request);
+      if (!auth.userId) {
+        response?.status(401).json({ message: "User is not authenticated" });
+        return reject({});
+      }
 
-    // Use Clerk organization membership to check if user has required scopes
-    // Note that there are only two scopes: admin and member and an admin can access member scope
-    clerkClient.users
-      .getOrganizationMembershipList({
-        userId: auth.userId,
-      })
-      .then(({ data }) => {
-        if (scopes?.length === 0) {
-          return resolve({});
-        }
+      // Use Clerk organization membership to check if user has required scopes
+      // Note that there are only two scopes: admin and member and an admin can access member scope
+      clerkClient.users
+        .getOrganizationMembershipList({
+          userId: auth.userId,
+        })
+        .then(({ data }) => {
+          if (scopes?.length === 0) {
+            return resolve({});
+          }
 
-        let isAdmin = false;
-        let isMember = false;
-        for (const membership of data) {
-          if (membership.organization.slug === "cmumaps") {
-            if (membership.role === ADMIN_SCOPE) {
-              isAdmin = true;
-              isMember = true;
-            }
+          let isAdmin = false;
+          let isMember = false;
+          for (const membership of data) {
+            if (membership.organization.slug === "cmumaps") {
+              if (membership.role === ADMIN_SCOPE) {
+                isAdmin = true;
+                isMember = true;
+              }
 
-            if (membership.role === MEMBER_SCOPE) {
-              isMember = true;
+              if (membership.role === MEMBER_SCOPE) {
+                isMember = true;
+              }
             }
           }
-        }
 
-        if (scopes?.includes(ADMIN_SCOPE) && !isAdmin) {
-          response
-            ?.status(401)
-            .json({ message: "User does not have required scope." });
-          return reject({});
-        }
+          if (scopes?.includes(ADMIN_SCOPE) && !isAdmin) {
+            response
+              ?.status(401)
+              .json({ message: "User does not have required scope.s" });
+            return reject({});
+          }
 
-        if (scopes?.includes(MEMBER_SCOPE) && !isMember) {
-          response
-            ?.status(401)
-            .json({ message: "User does not have required scope." });
-          return reject({});
-        }
+          if (scopes?.includes(MEMBER_SCOPE) && !isMember) {
+            response
+              ?.status(401)
+              .json({ message: "User does not have required scope." });
+            return reject({});
+          }
 
-        // should never reach here because the check on scopes should be exhaustive
-        return resolve({});
-      });
+          // should never reach here because the check on scopes should be exhaustive
+          return resolve({});
+        });
+    } catch (error) {
+      console.error(error);
+      response?.status(401).json({ message: "Error authorizing user." });
+      return reject({});
+    }
   });
 }
