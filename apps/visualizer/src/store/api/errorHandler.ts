@@ -8,7 +8,7 @@ export const handleQueryError = async (
   try {
     await queryFulfilled;
   } catch (e) {
-    if ((e as { error: { status: number } }).error.status === 404) {
+    if ((e as { error: { status: number } }).error.status === 401) {
       toast.error("You are not authorized to edit!");
     } else {
       toast.error("Failed to save! Check the Console for detailed error.");
