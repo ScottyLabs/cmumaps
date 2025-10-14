@@ -9,21 +9,15 @@
     // {
     //   "path": "apps/rust-server"
     // },
-    {
-      "path": "apps/server"
-    },
+    // {
+    //   "path": "apps/server"
+    // },
     // {
     //   "path": "apps/visualizer"
-    // },
+    // }
     {
       "path": "apps/web"
     }
-    // {
-    //   "path": "apps/visualizer"
-    // },
-    // {
-    //   "path": "apps/web"
-    // }
     // {
     //   "path": "packages/common"
     // },
