@@ -19,7 +19,7 @@ Run the following command in `apps/server/docker` to start the database:
 docker compose up -d --build
 ```
 
-Push the database schema to the database:
+Push the database schema by running the following command in `apps/server`:
 
 ```zsh
 bunx prisma db push
@@ -31,7 +31,7 @@ If you see errors about 'port in use', use `lsof -i :5432` to find the process u
 
 ### Running the Server
 
-Run the server:
+Run the server by running the following command in `apps/server`:
 
 ```zsh
 bun run dev
@@ -42,3 +42,13 @@ Navigate to <http://localhost/buildings> and make sure it shows `{}` instead of 
 ### Populating the Database
 
 Follow the instructions in [apps/data/README.md](../../apps/data/README.md) to populate the database.
+
+### Development
+
+You probably want to test your changes in the server by also running the web or the visualizer. Follow the instructions in [apps/web/README.md](../../apps/web/README.md) and [apps/visualizer/README.md](../../apps/visualizer/README.md) to run the web and the visualizer. You can also run them together with the server by running one of the following commands in the root directory:
+
+```zsh
+bun run dev:web
+bun run dev:visualizer
+bun run dev
+```
