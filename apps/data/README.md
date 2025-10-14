@@ -19,6 +19,8 @@ pip install -r requirements.txt
 - [Root README](../../README.md) setup
 - [Python 3](https://www.python.org/downloads/)
 
+### Setup
+
 ### Deserialization
 
 Populate the database by running the following command in `apps/data`:
