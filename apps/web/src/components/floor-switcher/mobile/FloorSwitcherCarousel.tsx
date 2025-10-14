@@ -1,6 +1,5 @@
 import type { Building } from "@cmumaps/common";
-import { animate, motion, useTransform } from "framer-motion";
-import type { MotionValue } from "motion/react";
+import { animate, type MotionValue, motion, useTransform } from "motion/react";
 import { useEffect } from "react";
 import $api from "@/api/client";
 import useBoundStore from "@/store";
