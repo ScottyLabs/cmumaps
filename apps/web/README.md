@@ -29,3 +29,7 @@ If you want to make both frontend and backend changes, you have to follow the st
 ```zsh
 bun run dev:web
 ```
+
+#### Developing by viewing on a Mobile Device
+
+Coming soon...
