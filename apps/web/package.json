@@ -2,7 +2,10 @@
   "name": "@cmumaps/web",
   "version": "0.0.0",
   "dependencies": {
+    "@clerk/clerk-react": "5.52.0",
     "@cmumaps/common": "workspace:*",
+    "@cmumaps/rust-server": "workspace:*",
+    "@cmumaps/server": "workspace:*",
     "@scottylabs/corgi": "0.2.11",
     "@tailwindcss/vite": "4.1.11",
     "@tanstack/react-query": "5.83.0",
@@ -25,13 +28,14 @@
     "zustand": "5.0.6"
   },
   "devDependencies": {
+    "@clerk/types": "~4.93.0",
     "@tanstack/eslint-plugin-query": "~5.81.2",
     "@trivago/prettier-plugin-sort-imports": "~5.2.2",
     "@types/apple-mapkit-js-browser": "~5.78.1",
     "@types/lodash": "~4.17.16",
     "@types/node": "~24.0.13",
     "@types/react": "~19.1.8",
-    "@types/react-dom": "~19.1.6",
+    "@types/react-dom": "~19.2.2",
     "@vitejs/plugin-react-swc": "~3.10.2",
     "globals": "~16.3.0",
     "typescript": "~5.8.3",
