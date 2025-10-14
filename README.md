@@ -7,8 +7,8 @@
 - Install vault (<https://developer.hashicorp.com/vault/install>)
 - Install jq (<https://jqlang.org/download/>)
 - Permissions
-  - Be added to the CMUMaps Github team (<https://github.com/orgs/ScottyLabs/teams/cmu-maps>)
-  - Get permission to view vault through (<https://secrets.scottylabs.org/ui/vault/auth?with=oidc>)
+  - Be added to the [CMU Maps Github team](https://github.com/orgs/ScottyLabs/teams/cmu-maps).
+  - Make sure you can view [vault](https://secrets.scottylabs.org/ui/vault/auth?with=oidc).
 
 ## Installation
 
@@ -22,23 +22,12 @@
 
 ## Running the Application
 
-### Frontend
+Follow the instructions in the respective README files:
 
-If you are only working on frontend, open cmumaps.code-workspace, open workspace, and run
-
-```zsh
-bun run dev
-```
-
-Otherwise, use
-
-```zsh
-bun run dev:web
-```
-
-#### Backend
-
-
+- Web: [apps/web/README.md](apps/web/README.md)
+- Server: [apps/server/README.md](apps/server/README.md)
+- Data: [apps/data/README.md](apps/data/README.md)
+- Visualizer: [apps/visualizer/README.md](apps/visualizer/README.md)
 
 ### Committing Tips
 
