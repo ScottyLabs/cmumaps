@@ -1,5 +1,5 @@
 # Base image with Bun
-FROM oven/bun:1.2.10 AS base
+FROM oven/bun:latest AS base
 WORKDIR /app
 
 # Install any needed system packages (e.g. OpenSSL for Prisma)
