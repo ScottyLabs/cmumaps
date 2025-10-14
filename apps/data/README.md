@@ -8,6 +8,8 @@ This directory is responsible for handling data for CMU Maps.
 
 `floorplans/` directory contains the code for deserializing and serializing data from the database to JSON files.
 
+### Setup
+
 ### Deserialization
 
 To populate the database using the data in the S3 bucket, run the following command in `apps/data`:
