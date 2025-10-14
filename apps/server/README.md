@@ -37,7 +37,7 @@ Run the server:
 bun run dev
 ```
 
-Navigate to http://localhost/buildings and make sure it shows `{}` instead of an internal server error.
+Navigate to <http://localhost/buildings> and make sure it shows `{}` instead of an internal server error.
 
 ### Populating the Database
 
