@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import http from "node:http";
 import { clerkMiddleware } from "@clerk/express";
+import { YAML } from "bun";
 import cors, { type CorsOptions } from "cors";
 import type { ErrorRequestHandler } from "express";
 import express from "express";
 import { Server } from "socket.io";
-import swaggerUi from "swagger-ui-express";
-import YAML from "yaml";
+import swaggerUi, { type JsonObject } from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes";
 import { prisma } from "../prisma";
 import env from "./env";
@@ -42,7 +42,7 @@ app.use(clerkMiddleware());
 
 // Swagger
 const file = fs.readFileSync("./build/swagger.yaml", "utf8");
-const swaggerDocument = YAML.parse(file);
+const swaggerDocument = YAML.parse(file) as JsonObject;
 app.use(express.static("./node_modules/swagger-ui-dist"));
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
