@@ -6,7 +6,7 @@ import $api from "@/api/client";
 import {
   THRESHOLD_DENSITY_TO_SHOW_FLOORS,
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
-} from "@/components/map-display/MapConstants";
+} from "@/components/map-display/mapConstants";
 import useMapPosition from "@/hooks/useMapPosition";
 import useBoundStore from "@/store";
 import {
