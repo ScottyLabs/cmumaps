@@ -81,6 +81,7 @@
         "@turf/turf": "7.2.0",
         "konva": "9.3.22",
         "lodash": "4.17.21",
+        "mapkit-react": "1.16.1",
         "openapi-fetch": "0.14.0",
         "openapi-react-query": "0.5.0",
         "react": "19.1.0",

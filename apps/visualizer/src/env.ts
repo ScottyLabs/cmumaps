@@ -5,6 +5,7 @@ import { z } from "zod";
 const envSchema = z.object({
   VITE_SERVER_URL: z.url(),
   VITE_CLERK_PUBLISHABLE_KEY: z.string(),
+  VITE_MAPKIT_TOKEN: z.string().optional(),
 });
 
 // Validate `process.env` against our schema
