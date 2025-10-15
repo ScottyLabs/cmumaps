@@ -1,5 +1,5 @@
 import type { Graph, Placement, Pois, Rooms } from "@cmumaps/common";
-import { toast } from "react-toastify";
+import { handleQueryError } from "@/store/api/errorHandler";
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
@@ -18,15 +18,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
         body: { placement },
       }),
       async onQueryStarted(_, { queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          toast.success("Placement updated successfully");
-        } catch (e) {
-          toast.error(
-            "Failed to update placement! Check the Console for detailed error.",
-          );
-          console.error(e);
-        }
+        handleQueryError(queryFulfilled, () => {});
       },
     }),
     getFloorGraph: builder.query<Graph, string>({
