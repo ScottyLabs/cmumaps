@@ -1,0 +1,37 @@
+import { getRoomTypeDetails, pdfPolygonToGeoPolygon } from "@cmumaps/common";
+import { Polygon } from "mapkit-react";
+import {
+  useGetFloorPlacementQuery,
+  useGetFloorRoomsQuery,
+} from "../../store/api/floorDataApiSlice";
+
+const FloorplanOverlay = ({ floorCode }: { floorCode: string }) => {
+  const { data: rooms } = useGetFloorRoomsQuery(floorCode);
+  const { data: placement } = useGetFloorPlacementQuery(floorCode);
+
+  if (!rooms || !placement) {
+    return null;
+  }
+
+  return Object.entries(rooms).map(([roomName, room]) => {
+    const roomColors = getRoomTypeDetails(room.type);
+    const points = pdfPolygonToGeoPolygon(room.polygon, placement);
+    return (
+      <div key={roomName}>
+        <Polygon
+          points={points}
+          selected={false}
+          enabled={true}
+          fillColor={roomColors.background}
+          fillOpacity={1}
+          strokeColor={roomColors.border}
+          strokeOpacity={1}
+          lineWidth={1}
+          fillRule="nonzero"
+        />
+      </div>
+    );
+  });
+};
+
+export default FloorplanOverlay;

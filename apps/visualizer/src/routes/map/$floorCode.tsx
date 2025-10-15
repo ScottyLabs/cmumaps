@@ -3,6 +3,7 @@ import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
 import BuildingShape from "../../components/map-view/BuildingShape";
+import FloorplanOverlay from "../../components/map-view/FloorplanOverlay";
 import env from "../../env";
 import { useGetBuildingQuery } from "../../store/api/buildingApiSlice";
 
@@ -35,6 +36,7 @@ function MapView() {
         showsCompass={FeatureVisibility.Visible}
         allowWheelToZoom
       >
+        <FloorplanOverlay floorCode={floorCode} />
         <BuildingShape building={building} />
       </MapkitMap>
     </main>

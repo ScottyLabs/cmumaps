@@ -1,10 +1,13 @@
-import type { Graph, Pois, Rooms } from "@cmumaps/common";
+import type { Graph, Placement, Pois, Rooms } from "@cmumaps/common";
 
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    getFloorPlacement: builder.query<Placement, string>({
+      query: (floorCode) => `floors/${floorCode}/placement`,
+    }),
     getFloorGraph: builder.query<Graph, string>({
       query: (floorCode) => `floors/${floorCode}/graph`,
       providesTags: ["Graph"],
@@ -28,6 +31,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetFloorPlacementQuery,
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
   useGetFloorPoisQuery,
