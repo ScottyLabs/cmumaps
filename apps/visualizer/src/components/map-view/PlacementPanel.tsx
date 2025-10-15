@@ -48,7 +48,7 @@ const PlacementPanel = ({ placement, setPlacement }: Props) => {
   };
 
   const renderAngleSlider = () => {
-    return renderSliderAndInput("Angle", 0, 360, 0.1, placement.angle, (e) =>
+    return renderSliderAndInput("Angle", 0, 360, 0.01, placement.angle, (e) =>
       setPlacement({
         ...placement,
         angle: Number.parseFloat(e.target.value),

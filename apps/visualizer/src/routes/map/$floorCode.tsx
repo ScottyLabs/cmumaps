@@ -1,7 +1,12 @@
 import { extractBuildingCode, type Placement } from "@cmumaps/common";
 import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import { createFileRoute } from "@tanstack/react-router";
-import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
+import {
+  FeatureVisibility,
+  type MapInteractionEvent,
+  Map as MapkitMap,
+  MapType,
+} from "mapkit-react";
 import { useEffect, useState } from "react";
 import NavBar from "@/components/ui-layout/NavBar";
 import BuildingShape from "../../components/map-view/BuildingShape";
@@ -24,6 +29,7 @@ function MapView() {
   const [placement, setPlacement] = useState<Placement | undefined>(
     initialPlacement,
   );
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setPlacement(initialPlacement);
@@ -55,6 +61,16 @@ function MapView() {
           showsZoomControl={true}
           showsCompass={FeatureVisibility.Visible}
           allowWheelToZoom
+          onMouseDown={() => setIsDragging(false)}
+          onMouseMove={() => setIsDragging(true)}
+          onMouseUp={(e: MapInteractionEvent) => {
+            if (!isDragging) {
+              setPlacement({
+                ...placement,
+                geoCenter: e.toCoordinates(),
+              });
+            }
+          }}
         >
           <PlacementPanel placement={placement} setPlacement={setPlacement} />
           <BuildingShape building={building} />
