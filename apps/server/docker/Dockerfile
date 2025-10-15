@@ -34,7 +34,7 @@ RUN rm /app/node_modules/swagger-ui-dist/index.html
 
 # Copy only what's needed to run the server
 COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
-COPY --from=builder --chown=server:nodejs /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=builder --chown=server:nodejs /app/server/node_modules/.prisma /app/node_modules/.prisma
 
 EXPOSE 3000
 CMD ["bun", "apps/server/dist/server.js"]
