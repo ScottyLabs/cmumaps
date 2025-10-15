@@ -1,4 +1,5 @@
 import { extractBuildingCode } from "@cmumaps/common";
+import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
 import BuildingDisplay from "../../components/map-view/BuildingDisplay";
@@ -9,26 +10,10 @@ export const Route = createFileRoute("/map/$floorCode")({
   component: MapView,
 });
 
-const INITIAL_REGION = {
-  centerLatitude: 40.444,
-  centerLongitude: -79.945,
-  latitudeDelta: 0.006337455593801167,
-  longitudeDelta: 0.011960061265583022,
-};
-
-const CAMERA_BOUNDARY = {
-  centerLatitude: 40.44533940432823,
-  centerLongitude: -79.9457060010195,
-  latitudeDelta: 0.009258427149788417,
-  longitudeDelta: 0.014410141520116326,
-};
-
 function MapView() {
   const { floorCode } = Route.useParams();
   const buildingCode = extractBuildingCode(floorCode);
-  console.log(buildingCode);
   const { data: building } = useGetBuildingQuery(buildingCode);
-  console.log(building);
 
   return (
     <main className="relative h-dvh">
