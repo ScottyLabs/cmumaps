@@ -1,5 +1,5 @@
 import type { Graph, Placement, Pois, Rooms } from "@cmumaps/common";
-
+import { toast } from "react-toastify";
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
@@ -7,6 +7,27 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getFloorPlacement: builder.query<Placement, string>({
       query: (floorCode) => `floors/${floorCode}/placement`,
+    }),
+    updateFloorPlacement: builder.mutation<
+      Placement,
+      { floorCode: string; placement: Placement }
+    >({
+      query: ({ floorCode, placement }) => ({
+        url: `floors/${floorCode}/placement`,
+        method: "PUT",
+        body: { placement },
+      }),
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          toast.success("Placement updated successfully");
+        } catch (e) {
+          toast.error(
+            "Failed to update placement! Check the Console for detailed error.",
+          );
+          console.error(e);
+        }
+      },
     }),
     getFloorGraph: builder.query<Graph, string>({
       query: (floorCode) => `floors/${floorCode}/graph`,
@@ -32,6 +53,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetFloorPlacementQuery,
+  useUpdateFloorPlacementMutation,
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
   useGetFloorPoisQuery,

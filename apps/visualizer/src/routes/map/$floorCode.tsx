@@ -8,9 +8,9 @@ import {
   MapType,
 } from "mapkit-react";
 import { useEffect, useRef, useState } from "react";
-import { ToastContainer } from "react-toastify";
 import CenterPin from "@/components/map-view/CenterPin";
 import { zoomOnBuilding } from "@/components/map-view/zoomUtils";
+import MyToastContainer from "@/components/shared/MyToastContainer";
 import NavBar from "@/components/ui-layout/NavBar";
 import BuildingShape from "../../components/map-view/BuildingShape";
 import FloorplanOverlay from "../../components/map-view/FloorplanOverlay";
@@ -89,7 +89,7 @@ function MapView() {
           <CenterPin placement={placement} />
         </MapkitMap>
       </div>
-      <ToastContainer />
+      <MyToastContainer />
     </>
   );
 }

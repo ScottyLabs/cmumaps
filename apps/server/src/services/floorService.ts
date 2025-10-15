@@ -185,7 +185,14 @@ export const floorService = {
       // update the floor placement
       await tx.floor.update({
         where: { buildingCode_floorLevel: { buildingCode, floorLevel } },
-        data: placement,
+        data: {
+          centerLatitude: placement.geoCenter.latitude,
+          centerLongitude: placement.geoCenter.longitude,
+          centerX: placement.pdfCenter.x,
+          centerY: placement.pdfCenter.y,
+          scale: placement.scale,
+          angle: placement.angle,
+        },
       });
 
       // update all the nodes on the floor
