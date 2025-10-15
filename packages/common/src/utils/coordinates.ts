@@ -74,7 +74,7 @@ export const geoCoordsToPdfCoords =
  * Rotates a point around the origin by the given angle clockwise
  * @param x - X coordinate
  * @param y - Y coordinate
- * @param angle - Angle in radians
+ * @param angle - Angle in degrees
  * @returns Tuple containing rotated x and y coordinates
  */
 function rotate(x: number, y: number, angle: number): PdfCoordinate {
