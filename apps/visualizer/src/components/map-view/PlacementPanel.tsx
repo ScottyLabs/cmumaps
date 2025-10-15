@@ -1,4 +1,5 @@
 import type { Placement } from "@cmumaps/common";
+import { toast } from "react-toastify";
 import { useUpdateFloorPlacementMutation } from "@/store/api/floorDataApiSlice";
 
 interface Props {
@@ -120,6 +121,7 @@ const PlacementPanel = ({ floorCode, placement, setPlacement }: Props) => {
         type="button"
         className="cursor-pointer rounded-lg bg-blue-500 px-4 py-2 text-base text-white"
         onClick={() => {
+          toast.info("Saving placement...");
           updateFloorPlacement({
             floorCode: floorCode,
             placement: placement,

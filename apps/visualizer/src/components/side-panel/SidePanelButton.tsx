@@ -11,7 +11,7 @@ const SidePanelButton = ({ text, handleClick, style }: Props) => {
     <button
       type="button"
       className={twMerge(
-        "block text-nowrap rounded bg-blue-500 px-4 py-2 font-bold text-emerald-200 text-sm hover:bg-blue-700",
+        "block cursor-pointer text-nowrap rounded bg-blue-500 px-4 py-2 font-bold text-emerald-200 text-sm hover:bg-blue-700",
         style,
       )}
       onClick={handleClick}

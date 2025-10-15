@@ -18,7 +18,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
         body: { placement },
       }),
       async onQueryStarted(_, { queryFulfilled }) {
-        handleQueryError(queryFulfilled, () => {});
+        handleQueryError(queryFulfilled, () => {}, "Placement saved!");
       },
     }),
     getFloorGraph: builder.query<Graph, string>({
