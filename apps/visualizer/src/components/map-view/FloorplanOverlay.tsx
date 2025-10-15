@@ -1,13 +1,18 @@
-import { getRoomTypeDetails, pdfPolygonToGeoPolygon } from "@cmumaps/common";
-import { Polygon } from "mapkit-react";
 import {
-  useGetFloorPlacementQuery,
-  useGetFloorRoomsQuery,
-} from "../../store/api/floorDataApiSlice";
+  getRoomTypeDetails,
+  type Placement,
+  pdfPolygonToGeoPolygon,
+} from "@cmumaps/common";
+import { Polygon } from "mapkit-react";
+import { useGetFloorRoomsQuery } from "../../store/api/floorDataApiSlice";
 
-const FloorplanOverlay = ({ floorCode }: { floorCode: string }) => {
+interface Props {
+  floorCode: string;
+  placement: Placement;
+}
+
+const FloorplanOverlay = ({ floorCode, placement }: Props) => {
   const { data: rooms } = useGetFloorRoomsQuery(floorCode);
-  const { data: placement } = useGetFloorPlacementQuery(floorCode);
 
   if (!rooms || !placement) {
     return null;

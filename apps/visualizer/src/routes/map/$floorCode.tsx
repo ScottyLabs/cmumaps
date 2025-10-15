@@ -1,11 +1,14 @@
-import { extractBuildingCode } from "@cmumaps/common";
+import { extractBuildingCode, type Placement } from "@cmumaps/common";
 import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
+import { useEffect, useState } from "react";
 import BuildingShape from "../../components/map-view/BuildingShape";
 import FloorplanOverlay from "../../components/map-view/FloorplanOverlay";
+import PlacementPanel from "../../components/map-view/PlacementPanel";
 import env from "../../env";
 import { useGetBuildingQuery } from "../../store/api/buildingApiSlice";
+import { useGetFloorPlacementQuery } from "../../store/api/floorDataApiSlice";
 
 export const Route = createFileRoute("/map/$floorCode")({
   component: MapView,
@@ -15,6 +18,18 @@ function MapView() {
   const { floorCode } = Route.useParams();
   const buildingCode = extractBuildingCode(floorCode);
   const { data: building } = useGetBuildingQuery(buildingCode);
+  const { data: initialPlacement } = useGetFloorPlacementQuery(floorCode);
+  const [placement, setPlacement] = useState<Placement | undefined>(
+    initialPlacement,
+  );
+
+  useEffect(() => {
+    setPlacement(initialPlacement);
+  }, [initialPlacement]);
+
+  if (!placement) {
+    return null;
+  }
 
   return (
     <main className="relative h-dvh">
@@ -36,8 +51,9 @@ function MapView() {
         showsCompass={FeatureVisibility.Visible}
         allowWheelToZoom
       >
-        <FloorplanOverlay floorCode={floorCode} />
+        <PlacementPanel placement={placement} setPlacement={setPlacement} />
         <BuildingShape building={building} />
+        <FloorplanOverlay floorCode={floorCode} placement={placement} />
       </MapkitMap>
     </main>
   );
