@@ -33,8 +33,8 @@ export const pdfCoordsToGeoCoords =
     const { x: ry, y: rx } = rotate(translatedX, translatedY, angle);
 
     // Apply scaling
-    const scaledX = rx * scale;
-    const scaledY = ry * scale;
+    const scaledX = rx / scale;
+    const scaledY = ry / scale;
 
     // Convert to geographical coordinates
     const longitude = scaledX / longitudeRatio + geoCenter.longitude;
@@ -56,8 +56,8 @@ export const geoCoordsToPdfCoords =
     const { latitude, longitude } = geoCoords;
 
     // reverse the transform and scale
-    const x = ((longitude - geoCenter.longitude) * longitudeRatio) / scale;
-    const y = ((latitude - geoCenter.latitude) * latitudeRatio) / scale;
+    const x = (longitude - geoCenter.longitude) * longitudeRatio * scale;
+    const y = (latitude - geoCenter.latitude) * latitudeRatio * scale;
 
     // reverse the rotation
     // We have to swap x and y to make this function the inverse of pdfCoordsToGeoCoords
