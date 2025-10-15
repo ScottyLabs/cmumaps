@@ -27,7 +27,7 @@ function Floor() {
     <>
       <NavBar floorCode={floorCode} />
       <LiveUserCount />
-      <ViewSwitch />
+      <ViewSwitch floorCode={floorCode} />
       <MainDisplay floorCode={floorCode} />
       <ModeDisplay />
       <FloorSwitcher floorCode={floorCode} />
