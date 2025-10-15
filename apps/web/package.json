@@ -6,6 +6,7 @@
     "@cmumaps/common": "workspace:*",
     "@cmumaps/rust-server": "workspace:*",
     "@cmumaps/server": "workspace:*",
+    "@cmumaps/ui": "workspace:*",
     "@scottylabs/corgi": "0.2.11",
     "@tailwindcss/vite": "4.1.11",
     "@tanstack/react-query": "5.83.0",

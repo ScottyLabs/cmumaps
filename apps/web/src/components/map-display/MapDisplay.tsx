@@ -1,3 +1,4 @@
+import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import {
   FeatureVisibility,
   type MapInteractionEvent,
@@ -9,10 +10,6 @@ import { toast } from "react-toastify";
 import $api from "@/api/client";
 import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
 import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
-import {
-  CAMERA_BOUNDARY,
-  INITIAL_REGION,
-} from "@/components/map-display/MapConstants";
 import env from "@/env";
 import useIsMobile from "@/hooks/useIsMobile";
 import useLocationParams from "@/hooks/useLocationParams";

@@ -68,6 +68,7 @@
       "dependencies": {
         "@clerk/clerk-react": "5.52.0",
         "@cmumaps/common": "workspace:*",
+        "@cmumaps/ui": "workspace:*",
         "@cmumaps/websocket": "workspace:*",
         "@datastructures-js/priority-queue": "6.3.3",
         "@reduxjs/toolkit": "2.8.2",
@@ -120,6 +121,7 @@
         "@cmumaps/common": "workspace:*",
         "@cmumaps/rust-server": "workspace:*",
         "@cmumaps/server": "workspace:*",
+        "@cmumaps/ui": "workspace:*",
         "@scottylabs/corgi": "0.2.11",
         "@tailwindcss/vite": "4.1.11",
         "@tanstack/react-query": "5.83.0",
@@ -163,6 +165,10 @@
         "@types/node": "~24.0.13",
         "typescript": "~5.8.3",
       },
+    },
+    "packages/ui": {
+      "name": "@cmumaps/ui",
+      "version": "1.0.0",
     },
     "packages/websocket": {
       "name": "@cmumaps/websocket",
@@ -280,6 +286,8 @@
     "@cmumaps/rust-server": ["@cmumaps/rust-server@workspace:apps/rust-server"],
 
     "@cmumaps/server": ["@cmumaps/server@workspace:apps/server"],
+
+    "@cmumaps/ui": ["@cmumaps/ui@workspace:packages/ui"],
 
     "@cmumaps/visualizer": ["@cmumaps/visualizer@workspace:apps/visualizer"],
 

@@ -1,9 +1,9 @@
 import type { Building } from "@cmumaps/common";
+import { INITIAL_REGION } from "@cmumaps/ui";
 import type { CoordinateRegion } from "mapkit-react";
 import { type RefObject, useState } from "react";
 import $api from "@/api/client";
 import {
-  INITIAL_REGION,
   THRESHOLD_DENSITY_TO_SHOW_FLOORS,
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/MapConstants";

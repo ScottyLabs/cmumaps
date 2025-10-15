@@ -1,0 +1,13 @@
+{
+  "name": "@cmumaps/ui",
+  "version": "1.0.0",
+  "devDependencies": {},
+  "main": "src/index.ts",
+  "scripts": {
+    "check": "tsc -b && biome check",
+    "format": "biome format",
+    "lint": "biome lint",
+    "tsc": "tsc -b"
+  },
+  "type": "module"
+}
