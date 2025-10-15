@@ -8,6 +8,7 @@ import {
   MapType,
 } from "mapkit-react";
 import { useEffect, useState } from "react";
+import CenterPin from "@/components/map-view/CenterPin";
 import NavBar from "@/components/ui-layout/NavBar";
 import BuildingShape from "../../components/map-view/BuildingShape";
 import FloorplanOverlay from "../../components/map-view/FloorplanOverlay";
@@ -43,6 +44,7 @@ function MapView() {
     <>
       <NavBar floorCode={floorCode} />
       <ViewSwitch floorCode={floorCode} />
+      <PlacementPanel placement={placement} setPlacement={setPlacement} />
       <div className="relative h-dvh">
         <MapkitMap
           token={env.VITE_MAPKIT_TOKEN || ""}
@@ -72,9 +74,9 @@ function MapView() {
             }
           }}
         >
-          <PlacementPanel placement={placement} setPlacement={setPlacement} />
           <BuildingShape building={building} />
           <FloorplanOverlay floorCode={floorCode} placement={placement} />
+          <CenterPin placement={placement} />
         </MapkitMap>
       </div>
     </>
