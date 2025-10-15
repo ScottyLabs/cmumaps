@@ -15,7 +15,10 @@ import {
   extractFloorLevel,
   geoCoordsToPdfCoords,
   geoPolygonToPdfPolygon,
+  pdfCoordsToGeoCoords,
+  pdfPolygonToGeoPolygon,
 } from "@cmumaps/common";
+import type { InputJsonValue } from "@prisma/client/runtime/library";
 import { prisma } from "../../prisma";
 
 export const floorService = {
@@ -157,6 +160,78 @@ export const floorService = {
       scale: floor.scale,
       angle: floor.angle,
     };
+  },
+
+  updateFloorPlacement: async (floorCode: string, placement: Placement) => {
+    const buildingCode = extractBuildingCode(floorCode);
+    const floorLevel = extractFloorLevel(floorCode);
+
+    await prisma.$transaction(async (tx) => {
+      const floor = await tx.floor.findUniqueOrThrow({
+        where: { buildingCode_floorLevel: { buildingCode, floorLevel } },
+      });
+
+      // get the old placement, which is used to update the nodes and rooms
+      const oldPlacement = {
+        scale: floor.scale,
+        angle: floor.angle,
+        geoCenter: {
+          latitude: floor.centerLatitude,
+          longitude: floor.centerLongitude,
+        },
+        pdfCenter: { x: floor.centerX, y: floor.centerY },
+      };
+
+      // update the floor placement
+      await tx.floor.update({
+        where: { buildingCode_floorLevel: { buildingCode, floorLevel } },
+        data: placement,
+      });
+
+      // update all the nodes on the floor
+      const nodes = await tx.node.findMany({
+        where: { buildingCode, floorLevel },
+      });
+
+      for (const node of nodes) {
+        const pos = { latitude: node.latitude, longitude: node.longitude };
+        const pdfCoords = geoCoordsToPdfCoords(oldPlacement)(pos);
+        const geoCoords = pdfCoordsToGeoCoords(placement)(pdfCoords);
+        await tx.node.update({
+          where: { nodeId: node.nodeId },
+          data: {
+            latitude: geoCoords.latitude,
+            longitude: geoCoords.longitude,
+          },
+        });
+      }
+
+      // update all the rooms on the floor
+      const rooms = await tx.room.findMany({
+        where: { buildingCode, floorLevel },
+      });
+
+      for (const room of rooms) {
+        const labelPos = {
+          latitude: room.labelLatitude,
+          longitude: room.labelLongitude,
+        };
+        const pdfCoords = geoCoordsToPdfCoords(oldPlacement)(labelPos);
+        const geoCoords = pdfCoordsToGeoCoords(placement)(pdfCoords);
+
+        const polygon = room.polygon as unknown as GeoCoordinate[][];
+        const pdfPolygon = geoPolygonToPdfPolygon(polygon, oldPlacement);
+        const geoPolygon = pdfPolygonToGeoPolygon(pdfPolygon, placement);
+        await tx.room.update({
+          where: { roomId: room.roomId },
+          data: {
+            labelLatitude: geoCoords.latitude,
+            labelLongitude: geoCoords.longitude,
+            polygon: geoPolygon as unknown as InputJsonValue,
+          },
+        });
+      }
+    });
   },
 
   getFloorplan: async (floorCode: string) => {

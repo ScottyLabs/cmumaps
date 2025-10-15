@@ -1,5 +1,6 @@
-import { Get, Path, Route, Security } from "tsoa";
-import { BEARER_AUTH } from "../middleware/authentication";
+import type { Placement } from "@cmumaps/common";
+import { Body, Get, Path, Put, Route, Security } from "tsoa";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { floorService } from "../services/floorService";
 
 @Security(BEARER_AUTH, [])
@@ -29,13 +30,22 @@ export class FloorController {
     return await floorService.getFloorNodes(floorCode);
   }
 
+  @Get("/:floorCode/pois")
+  async getFloorPois(@Path() floorCode: string) {
+    return await floorService.getFloorPois(floorCode);
+  }
+
   @Get("/:floorCode/placement")
   async getFloorPlacement(@Path() floorCode: string) {
     return await floorService.getFloorPlacement(floorCode);
   }
 
-  @Get("/:floorCode/pois")
-  async getFloorPois(@Path() floorCode: string) {
-    return await floorService.getFloorPois(floorCode);
+  @Security(BEARER_AUTH, [MEMBER_SCOPE])
+  @Put("/:floorCode/placement")
+  async updateFloorPlacement(
+    @Path() floorCode: string,
+    @Body() body: { placement: Placement },
+  ) {
+    return await floorService.updateFloorPlacement(floorCode, body.placement);
   }
 }
