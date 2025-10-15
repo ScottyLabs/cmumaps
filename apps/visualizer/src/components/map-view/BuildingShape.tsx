@@ -5,7 +5,7 @@ interface Props {
   building: Building | undefined;
 }
 
-const BuildingDisplay = ({ building }: Props) => {
+const BuildingShape = ({ building }: Props) => {
   if (!building) {
     return null;
   }
@@ -23,4 +23,4 @@ const BuildingDisplay = ({ building }: Props) => {
   );
 };
 
-export default BuildingDisplay;
+export default BuildingShape;

@@ -2,7 +2,7 @@ import { extractBuildingCode } from "@cmumaps/common";
 import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
-import BuildingDisplay from "../../components/map-view/BuildingDisplay";
+import BuildingShape from "../../components/map-view/BuildingShape";
 import env from "../../env";
 import { useGetBuildingQuery } from "../../store/api/buildingApiSlice";
 
@@ -35,7 +35,7 @@ function MapView() {
         showsCompass={FeatureVisibility.Visible}
         allowWheelToZoom
       >
-        <BuildingDisplay building={building} />
+        <BuildingShape building={building} />
       </MapkitMap>
     </main>
   );
