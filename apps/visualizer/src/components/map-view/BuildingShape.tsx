@@ -2,14 +2,10 @@ import type { Building } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
 interface Props {
-  building: Building | undefined;
+  building: Building;
 }
 
 const BuildingShape = ({ building }: Props) => {
-  if (!building) {
-    return null;
-  }
-
   return (
     <Polygon
       key={building.code}
