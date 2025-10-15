@@ -1,4 +1,5 @@
 import {
+  type Building,
   type BuildingMetadata,
   type Buildings,
   ERROR_CODES,
@@ -35,6 +36,31 @@ export const buildingService = {
       };
     }
     return buildings;
+  },
+
+  async getBuilding(buildingCode: string): Promise<Building> {
+    const building = await prisma.building.findUnique({
+      where: { buildingCode },
+      include: { floors: true },
+    });
+
+    if (!building) {
+      throw new BuildingError(ERROR_CODES.INVALID_BUILDING_CODE);
+    }
+
+    return {
+      code: building.buildingCode,
+      name: building.name,
+      defaultOrdinal: building.defaultOrdinal,
+      defaultFloor:
+        building.floors.find((floor) => floor.isDefault)?.floorLevel ?? null,
+      labelLatitude: building.labelLatitude,
+      labelLongitude: building.labelLongitude,
+      shape: building.shape as unknown as GeoCoordinate[][],
+      hitbox: building.hitbox as unknown as GeoCoordinate[],
+      floors: this.sortFloors(building.floors.map((floor) => floor.floorLevel)),
+      isMapped: true,
+    };
   },
 
   async getBuildingsMetadata(): Promise<BuildingMetadata[]> {
