@@ -1,11 +1,15 @@
 import type { Placement } from "@cmumaps/common";
+import { useUpdateFloorPlacementMutation } from "@/store/api/floorDataApiSlice";
 
 interface Props {
+  floorCode: string;
   placement: Placement;
   setPlacement: (placement: Placement) => void;
 }
 
-const PlacementPanel = ({ placement, setPlacement }: Props) => {
+const PlacementPanel = ({ floorCode, placement, setPlacement }: Props) => {
+  const [updateFloorPlacement] = useUpdateFloorPlacementMutation();
+
   const renderSliderAndInput = (
     label: string,
     min: number,
@@ -116,7 +120,10 @@ const PlacementPanel = ({ placement, setPlacement }: Props) => {
         type="button"
         className="cursor-pointer rounded-lg bg-blue-500 px-4 py-2 text-base text-white"
         onClick={() => {
-          console.log("Confirm Placement");
+          updateFloorPlacement({
+            floorCode: floorCode,
+            placement: placement,
+          });
         }}
       >
         Confirm Placement

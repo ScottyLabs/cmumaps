@@ -8,6 +8,7 @@ import {
   MapType,
 } from "mapkit-react";
 import { useEffect, useRef, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import CenterPin from "@/components/map-view/CenterPin";
 import { zoomOnBuilding } from "@/components/map-view/zoomUtils";
 import NavBar from "@/components/ui-layout/NavBar";
@@ -47,7 +48,11 @@ function MapView() {
     <>
       <NavBar floorCode={floorCode} />
       <ViewSwitch floorCode={floorCode} />
-      <PlacementPanel placement={placement} setPlacement={setPlacement} />
+      <PlacementPanel
+        floorCode={floorCode}
+        placement={placement}
+        setPlacement={setPlacement}
+      />
       <div className="relative h-dvh">
         <MapkitMap
           ref={map}
@@ -84,6 +89,7 @@ function MapView() {
           <CenterPin placement={placement} />
         </MapkitMap>
       </div>
+      <ToastContainer />
     </>
   );
 }
