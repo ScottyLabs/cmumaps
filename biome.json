@@ -36,7 +36,7 @@
         "noArrayIndexKey": "off"
       },
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": { "fix": "safe", "level": "error" }
       },
       "style": {
         "noParameterAssign": "error",
