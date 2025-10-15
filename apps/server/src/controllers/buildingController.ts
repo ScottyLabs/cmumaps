@@ -13,6 +13,11 @@ export class BuildingController {
     return await buildingService.getBuildingsMetadata();
   }
 
+  @Get("/:buildingCode")
+  async getBuilding(@Path() buildingCode: string) {
+    return await buildingService.getBuilding(buildingCode);
+  }
+
   @Get("/:buildingCode/name")
   async getBuildingName(@Path() buildingCode: string) {
     return await buildingService.getBuildingName(buildingCode);
