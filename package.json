@@ -35,14 +35,14 @@
     "ruff": "1.5.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "~2.1.1",
+    "@biomejs/biome": "~2.1.4",
     "@commitlint/cli": "~19.8.1",
     "@commitlint/config-conventional": "~19.8.1",
     "@types/bun": "latest",
-    "@types/web": "~0.0.243",
-    "husky": "~8.0.0",
+    "@types/web": "~0.0.279",
+    "husky": "~8.0.3",
     "syncpack": "~13.0.4",
-    "turbo": "~2.5.4",
+    "turbo": "~2.5.8",
     "typescript": "~5.8.3"
   },
   "packageManager": "bun@1.2.10",
