@@ -48,7 +48,7 @@ const DifferentFloorNeighborTable = ({
             to="/map"
             search={{ nodeId: neighborId }}
           >
-            Outside
+            outside
           </Link>
         );
       }
