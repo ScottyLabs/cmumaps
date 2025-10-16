@@ -7,6 +7,12 @@ import {
 import { prisma } from "../../prisma";
 
 export const nodeService = {
+  getNode: async (nodeId: string) => {
+    return await prisma.node.findUniqueOrThrow({
+      where: { nodeId },
+    });
+  },
+
   upsertNode: async (
     floorCode: string,
     nodeId: string,

@@ -1,3 +1,4 @@
+import { extractBuildingCode, extractFloorLevel } from "@cmumaps/common";
 import type { Request as ExpressRequest } from "express";
 import {
   Body,
@@ -12,6 +13,7 @@ import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { requireSocketId } from "../middleware/socketAuth";
 import { webSocketService } from "../server";
 import { edgeService } from "../services/edgeService";
+import { nodeService } from "../services/nodeService";
 
 @Middlewares(requireSocketId)
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
@@ -61,6 +63,17 @@ export class EdgeController {
   ) {
     const { floorCode, outFloorCode, inNodeId, outNodeId } = body;
     const socketId = req.socketId;
+
+    // validate that the out node is on the out floor
+    const outNode = await nodeService.getNode(outNodeId);
+    if (
+      outNode.buildingCode !== null &&
+      outNode.floorLevel !== null &&
+      (outNode.buildingCode !== extractBuildingCode(outFloorCode) ||
+        outNode.floorLevel !== extractFloorLevel(outFloorCode))
+    ) {
+      throw new Error("Out node is not on the out floor code");
+    }
 
     await edgeService.createEdge(inNodeId, outNodeId);
     const payload = { outFloorCode, inNodeId, outNodeId };
