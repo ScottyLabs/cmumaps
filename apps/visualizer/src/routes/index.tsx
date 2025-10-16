@@ -38,9 +38,12 @@ function Index() {
 
   const renderBuildingList = () => (
     <div className="m-5 flex flex-wrap gap-8">
-      {buildingsMetadata.map(({ buildingCode, name, defaultFloor }) => (
+      {[
+        ...buildingsMetadata,
+        { buildingCode: "outside", name: "Outside", defaultFloor: true },
+      ].map(({ buildingCode, name, defaultFloor }) => (
         <Link
-          to={"/floors/$floorCode"}
+          to={buildingCode === "outside" ? "/map" : "/floors/$floorCode"}
           params={{ floorCode: `${buildingCode}-${defaultFloor}` }}
           key={buildingCode}
           disabled={!defaultFloor}
