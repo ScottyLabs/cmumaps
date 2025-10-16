@@ -66,13 +66,20 @@ export class EdgeController {
 
     // validate that the out node is on the out floor
     const outNode = await nodeService.getNode(outNodeId);
-    if (
-      outNode.buildingCode !== null &&
-      outNode.floorLevel !== null &&
-      (outNode.buildingCode !== extractBuildingCode(outFloorCode) ||
-        outNode.floorLevel !== extractFloorLevel(outFloorCode))
-    ) {
-      throw new Error("Out node is not on the out floor code");
+
+    // outside edge cases
+    const errorMessage = "Out node is not on the out floor";
+    if (outFloorCode === "outside") {
+      if (outNode.buildingCode !== null || outNode.floorLevel !== null) {
+        throw new Error(errorMessage);
+      }
+    } else {
+      if (
+        outNode.buildingCode !== extractBuildingCode(outFloorCode) ||
+        outNode.floorLevel !== extractFloorLevel(outFloorCode)
+      ) {
+        throw new Error(errorMessage);
+      }
     }
 
     await edgeService.createEdge(inNodeId, outNodeId);
