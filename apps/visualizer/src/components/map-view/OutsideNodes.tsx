@@ -18,6 +18,7 @@ const OutsideNodes = ({
 
     // Add nodes as circle overlays to the map
     const overlays: mapkit.Overlay[] = [];
+    const visitedNodes: Set<string> = new Set();
     Object.entries(nodes).forEach(([nodeId, node]: [string, GeoNode]) => {
       const circleOverlay = new mapkit.CircleOverlay(
         new mapkit.Coordinate(node.pos.latitude, node.pos.longitude),
@@ -32,6 +33,29 @@ const OutsideNodes = ({
         toast.success("Copied nodeId!");
       });
 
+      // Draw edges as lineoverlays
+      for (const neighborId in node.neighbors) {
+        const neighbor = nodes[neighborId];
+        if (!neighbor || visitedNodes.has(neighborId)) {
+          continue;
+        }
+        const lineOverlay = new mapkit.PolylineOverlay(
+          [
+            new mapkit.Coordinate(node.pos.latitude, node.pos.longitude),
+            new mapkit.Coordinate(
+              neighbor.pos.latitude,
+              neighbor.pos.longitude,
+            ),
+          ],
+          { style: new mapkit.Style({ strokeColor: "black" }) },
+        );
+
+        visitedNodes.add(neighborId);
+        overlays.push(lineOverlay);
+        map.addOverlay(lineOverlay);
+      }
+
+      // Add circle overlay last so it is on top of the line overlays
       overlays.push(circleOverlay);
       map.addOverlay(circleOverlay);
     });
