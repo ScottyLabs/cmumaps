@@ -7,7 +7,7 @@ import {
   MapType,
 } from "mapkit-react";
 import { useRef, useState } from "react";
-import BuildingShape from "@/components/map-view/BuildingShape";
+import BuildingShape from "@/components/map-view/building-display/BuildingShape";
 import CenterPin from "@/components/map-view/CenterPin";
 import FloorplanOverlay from "@/components/map-view/FloorplanOverlay";
 import { zoomOnBuilding } from "@/components/map-view/zoomUtils";
