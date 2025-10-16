@@ -20,23 +20,15 @@ const OutsideNodes = ({
     const overlays: mapkit.Overlay[] = [];
     const visitedNodes: Set<string> = new Set();
     Object.entries(nodes).forEach(([nodeId, node]: [string, GeoNode]) => {
-      const circleOverlay = new mapkit.CircleOverlay(
-        new mapkit.Coordinate(node.pos.latitude, node.pos.longitude),
-        1,
-        { style: new mapkit.Style({ fillOpacity: 1.0 }) },
-      );
-      circleOverlay.data = { nodeId };
-
-      //Copy nodeId to clipboard when user clicks on the node
-      circleOverlay.addEventListener("select", () => {
-        navigator.clipboard.writeText(nodeId);
-        toast.success("Copied nodeId!");
-      });
-
       // Draw edges as lineoverlays
+      let hasCrossFloorEdge = false;
       for (const neighborId in node.neighbors) {
         const neighbor = nodes[neighborId];
-        if (!neighbor || visitedNodes.has(neighborId)) {
+        if (!neighbor) {
+          hasCrossFloorEdge = true;
+          continue;
+        }
+        if (visitedNodes.has(neighborId)) {
           continue;
         }
         const lineOverlay = new mapkit.PolylineOverlay(
@@ -56,6 +48,23 @@ const OutsideNodes = ({
       }
 
       // Add circle overlay last so it is on top of the line overlays
+      const circleOverlay = new mapkit.CircleOverlay(
+        new mapkit.Coordinate(node.pos.latitude, node.pos.longitude),
+        1,
+        {
+          style: new mapkit.Style({
+            fillOpacity: 1.0,
+            fillColor: hasCrossFloorEdge ? "lime" : "blue",
+          }),
+        },
+      );
+      circleOverlay.data = { nodeId };
+
+      //Copy nodeId to clipboard when user clicks on the node
+      circleOverlay.addEventListener("select", () => {
+        navigator.clipboard.writeText(nodeId);
+        toast.success("Copied nodeId!");
+      });
       overlays.push(circleOverlay);
       map.addOverlay(circleOverlay);
     });
