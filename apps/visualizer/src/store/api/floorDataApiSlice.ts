@@ -7,6 +7,7 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getFloorPlacement: builder.query<Placement, string>({
       query: (floorCode) => `floors/${floorCode}/placement`,
+      keepUnusedDataFor: 0,
     }),
     updateFloorPlacement: builder.mutation<
       Placement,
