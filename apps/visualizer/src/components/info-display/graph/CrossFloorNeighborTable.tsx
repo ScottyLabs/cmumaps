@@ -41,7 +41,7 @@ const DifferentFloorNeighborTable = ({
     differentFloorNeighbors: Record<string, EdgeInfo>,
   ) => {
     const getLink = (neighborId: string, neighbor: EdgeInfo) => {
-      if (neighbor.outFloorCode === "Outside") {
+      if (neighbor.outFloorCode === "outside") {
         return (
           <Link
             className="whitespace-nowrap border px-1 hover:bg-sky-700"
