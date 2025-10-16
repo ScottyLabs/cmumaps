@@ -1,5 +1,5 @@
 import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
 import { useEffect, useRef } from "react";
@@ -22,6 +22,7 @@ export const Route = createFileRoute("/map/")({
 });
 
 function OutsideMap() {
+  const navigate = useNavigate();
   const mapRef = useRef<mapkit.Map | null>(null);
   const { data: nodes } = useGetFloorNodesQuery("outside");
   const { nodeId } = Route.useSearch();
@@ -57,6 +58,7 @@ function OutsideMap() {
           showsZoomControl={true}
           showsCompass={FeatureVisibility.Visible}
           allowWheelToZoom
+          onClick={() => navigate({ to: ".", search: {} })}
         >
           <BuildingsDisplay />
           <OutsideNodes mapRef={mapRef} nodes={nodes} />

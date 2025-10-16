@@ -1,4 +1,5 @@
 import type { GeoNode, GeoNodes } from "@cmumaps/common";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const OutsideNodes = ({ mapRef, nodes }: Props) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !nodes) {
@@ -62,6 +65,7 @@ const OutsideNodes = ({ mapRef, nodes }: Props) => {
       circleOverlay.addEventListener("select", () => {
         navigator.clipboard.writeText(nodeId);
         toast.success("Copied nodeId!");
+        navigate({ to: ".", search: { nodeId } });
       });
       overlays.push(circleOverlay);
       map.addOverlay(circleOverlay);
@@ -70,7 +74,7 @@ const OutsideNodes = ({ mapRef, nodes }: Props) => {
     return () => {
       map.removeOverlays(overlays);
     };
-  }, [mapRef, nodes]);
+  }, [mapRef, nodes, navigate]);
 
   return null;
 };
