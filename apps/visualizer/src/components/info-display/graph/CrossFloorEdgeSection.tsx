@@ -1,6 +1,6 @@
 import type { Graph } from "@cmumaps/common";
 import { extractBuildingCode } from "@cmumaps/common";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
@@ -25,31 +25,6 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
 
   const [toFloorCode, setToFloorCode] = useState("");
   const nodeIdRef = useRef<HTMLInputElement | null>(null);
-
-  const connectedFloors = useMemo(() => {
-    if (!floorLevels) {
-      return [];
-    }
-    const buildingCode = extractBuildingCode(floorCode);
-    const connectedFloors: string[] = [];
-
-    // include floor above and below if possible
-    const floorsArr = floorCode.split("-");
-    const floorIndex = floorLevels.indexOf(floorsArr[floorsArr.length - 1]);
-    const prefix = `${buildingCode}-`;
-    if (floorIndex !== floorLevels.length - 1) {
-      connectedFloors.push(prefix + floorLevels[floorIndex + 1]);
-    }
-    if (floorIndex !== 0) {
-      connectedFloors.push(prefix + floorLevels[floorIndex - 1]);
-    }
-
-    // always include outside
-    connectedFloors.push("outside");
-
-    // TODO: add connected buildings
-    return connectedFloors;
-  }, [floorCode, floorLevels]);
 
   if (!floorLevels) {
     return;
@@ -104,39 +79,12 @@ const CrossFloorEdgeSection = ({ floorCode, nodeId, graph }: Props) => {
     }
   };
 
-  const renderFloorSelector = () => {
-    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setToFloorCode(event.target.value);
-    };
-
-    return (
-      <div>
-        <select
-          name="floor"
-          className="rounded bg-white text-black"
-          value={toFloorCode}
-          onChange={handleChange}
-        >
-          <option value="" disabled>
-            --Please choose a floor--
-          </option>
-          {connectedFloors.map((floor) => (
-            <option key={floor} value={floor}>
-              {floor}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  };
-
   return (
     <div className="space-y-1">
       <div>
         <p className="text-lg">Create Edge across Floors</p>
       </div>
       <div className="mb-3 space-y-2">
-        {renderFloorSelector()}
         <div>
           <input
             ref={nodeIdRef}
