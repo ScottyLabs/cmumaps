@@ -183,7 +183,7 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
       CreateEdgeAcrossFloorsArg
     >({
       query: ({ floorCode, outFloorCode, inNodeId, outNodeId }) => ({
-        url: "cross-floor-edge",
+        url: "edge/across-floors",
         method: "POST",
         body: { floorCode, outFloorCode, inNodeId, outNodeId },
         headers: { "X-Socket-ID": getSocketId() },
@@ -216,7 +216,7 @@ export const edgeApiSlice = apiSlice.injectEndpoints({
       DeleteEdgeAcrossFloorsArg
     >({
       query: ({ floorCode, outFloorCode, inNodeId, outNodeId }) => ({
-        url: "cross-floor-edge",
+        url: "edge/across-floors",
         method: "DELETE",
         body: { floorCode, outFloorCode, inNodeId, outNodeId },
         headers: { "X-Socket-ID": getSocketId() },
