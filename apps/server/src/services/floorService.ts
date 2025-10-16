@@ -60,8 +60,14 @@ export const floorService = {
       const neighbors: Record<string, EdgeInfo> = {};
       for (const edge of node.outEdges) {
         const outNode = edge.outNode;
+        neighbors[edge.outNodeId] = {};
 
         // Determine if cross floor edge
+        if (outNode.buildingCode === null || outNode.floorLevel === null) {
+          neighbors[edge.outNodeId].outFloorCode = "Outside";
+          continue;
+        }
+
         const outFloorCode = `${outNode.buildingCode}-${outNode.floorLevel}`;
         neighbors[edge.outNodeId] = {};
         if (outFloorCode !== floorCode) {
