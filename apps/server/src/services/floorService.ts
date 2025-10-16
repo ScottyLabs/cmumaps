@@ -276,8 +276,13 @@ export const floorService = {
   },
 
   getFloorNodes: async (floorCode: string) => {
-    const buildingCode = extractBuildingCode(floorCode);
-    const floorLevel = extractFloorLevel(floorCode);
+    let buildingCode: string | null = extractBuildingCode(floorCode);
+    let floorLevel: string | null = extractFloorLevel(floorCode);
+
+    if (floorCode === "outside") {
+      buildingCode = null;
+      floorLevel = null;
+    }
 
     // Get all nodes on the floor with their neighbors
     const dbNodes = await prisma.node.findMany({
