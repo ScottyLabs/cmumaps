@@ -26,13 +26,22 @@ const MapDisplay = ({
   placement,
   setPlacement,
 }: Props) => {
-  const map = useRef<mapkit.Map | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const mapRef = useRef<mapkit.Map | null>(null);
+  const [usedPanning, setUsedPanning] = useState(false);
+
+  // Need to keep track of usedPanning because the end of panning is a click
+  // and we don't want to trigger a click when the user is panning
+  const handleLoad = () => {
+    zoomOnBuilding(mapRef.current, building);
+    if (mapRef.current) {
+      mapRef.current.addEventListener("scroll-end", () => setUsedPanning(true));
+    }
+  };
 
   return (
     <div className="relative h-dvh">
       <MapkitMap
-        ref={map}
+        ref={mapRef}
         token={env.VITE_MAPKIT_TOKEN || ""}
         initialRegion={INITIAL_REGION}
         includedPOICategories={[]}
@@ -49,16 +58,15 @@ const MapDisplay = ({
         showsZoomControl={true}
         showsCompass={FeatureVisibility.Visible}
         allowWheelToZoom
-        onLoad={() => zoomOnBuilding(map.current, building)}
-        onMouseDown={() => setIsDragging(false)}
-        onMouseMove={() => setIsDragging(true)}
-        onMouseUp={(e: MapInteractionEvent) => {
-          if (!isDragging) {
+        onLoad={handleLoad}
+        onClick={(e: MapInteractionEvent) => {
+          if (!usedPanning) {
             setPlacement({
               ...placement,
               geoCenter: e.toCoordinates(),
             });
           }
+          setUsedPanning(false);
         }}
       >
         <BuildingShape building={building} />
