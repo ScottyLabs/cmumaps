@@ -1,19 +1,39 @@
 import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
 import { createFileRoute } from "@tanstack/react-router";
+import { zodValidator } from "@tanstack/zod-adapter";
 import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import z from "zod";
 import BuildingsDisplay from "@/components/map-view/building-display/BuildingsDisplay";
 import OutsideNodes from "@/components/map-view/OutsideNodes";
+import { zoomOnPoint } from "@/components/map-view/zoomUtils";
 import MyToastContainer from "@/components/shared/MyToastContainer";
 import NavBar from "@/components/ui-layout/NavBar";
 import env from "@/env";
+import { useGetFloorNodesQuery } from "@/store/api/floorDataApiSlice";
+
+const mapSearchSchema = z.object({
+  nodeId: z.string().optional(),
+});
 
 export const Route = createFileRoute("/map/")({
   component: OutsideMap,
+  validateSearch: zodValidator(mapSearchSchema),
 });
 
 function OutsideMap() {
   const mapRef = useRef<mapkit.Map | null>(null);
+  const { data: nodes } = useGetFloorNodesQuery("outside");
+  const { nodeId } = Route.useSearch();
+
+  useEffect(() => {
+    if (nodeId && nodes) {
+      const node = nodes[nodeId];
+      if (mapRef.current) {
+        zoomOnPoint(mapRef.current, node.pos);
+      }
+    }
+  }, [nodeId, nodes]);
 
   return (
     <>
@@ -39,7 +59,7 @@ function OutsideMap() {
           allowWheelToZoom
         >
           <BuildingsDisplay />
-          <OutsideNodes mapRef={mapRef} />
+          <OutsideNodes mapRef={mapRef} nodes={nodes} />
         </MapkitMap>
       </div>
       <MyToastContainer />

@@ -1,4 +1,5 @@
 import type { Building } from "@cmumaps/common";
+import type { Coordinate } from "mapkit-react";
 
 export const zoomOnBuilding = (map: mapkit.Map | null, building: Building) => {
   if (!map) {
@@ -17,4 +18,24 @@ export const zoomOnBuilding = (map: mapkit.Map | null, building: Building) => {
       Math.min(...allLon),
     ).toCoordinateRegion(),
   );
+};
+
+export const zoomOnPoint = (
+  map: mapkit.Map,
+  point: Coordinate,
+  offset = 0.0001,
+  setIsZooming?: (_: boolean) => void,
+  setQueuedZoomRegion?: (region: mapkit.CoordinateRegion | null) => void,
+) => {
+  const region = new mapkit.BoundingRegion(
+    point.latitude + offset,
+    point.longitude + offset,
+    point.latitude - offset,
+    point.longitude - offset,
+  ).toCoordinateRegion();
+
+  setIsZooming?.(true);
+  setQueuedZoomRegion?.(region);
+
+  map.setRegionAnimated(region);
 };

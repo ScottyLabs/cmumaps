@@ -1,15 +1,13 @@
-import type { GeoNode } from "@cmumaps/common";
+import type { GeoNode, GeoNodes } from "@cmumaps/common";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { useGetFloorNodesQuery } from "@/store/api/floorDataApiSlice";
 
-const OutsideNodes = ({
-  mapRef,
-}: {
+interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
-}) => {
-  const { data: nodes } = useGetFloorNodesQuery("outside");
+  nodes: GeoNodes | undefined;
+}
 
+const OutsideNodes = ({ mapRef, nodes }: Props) => {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !nodes) {
