@@ -30,7 +30,10 @@
         "DATABASE_URL",
         "VITE_MAPKIT_TOKEN",
         "VITE_SERVER_URL",
-        "VITE_CLERK_PUBLISHABLE_KEY"
+        "VITE_RUST_SERVER_URL",
+        "VITE_CLERK_PUBLISHABLE_KEY",
+        "VITE_PUBLIC_POSTHOG_HOST",
+        "VITE_PUBLIC_POSTHOG_KEY"
       ]
     },
     "start": {
