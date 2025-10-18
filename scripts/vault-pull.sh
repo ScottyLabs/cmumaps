@@ -4,7 +4,7 @@ export VAULT_ADDR=https://secrets.scottylabs.org
 usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
-  echo -e "\t\tAPPLICATION: The application to pull from, one of web | visualizer | server | rust-server | data | scripts | all\n"
+  echo -e "\t\tAPPLICATION: The application to pull from, one of web | visualizer | server | rust-server | data | scripts | governance | all\n"
   echo -e "\t\tENVIRONMENT: The environment to pull from, one of local | dev | staging | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
@@ -36,6 +36,13 @@ done
 if [ "$APPLICATION" == "scripts" ]; then
   vault kv get -format=json ScottyLabs/cmumaps/scripts |
     jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >scripts/.env
+  exit 0
+fi
+
+# Special case for governance
+if [ "$APPLICATION" == "governance" ]; then
+  vault kv get -format=json ScottyLabs/cmumaps/governance |
+    jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >governance/.env
   exit 0
 fi
 

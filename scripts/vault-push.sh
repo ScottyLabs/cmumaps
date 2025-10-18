@@ -4,7 +4,7 @@ export VAULT_ADDR=https://secrets.scottylabs.org
 usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
-  echo -e "\t\tAPPLICATION: The application to push to, one of web | visualizer | server | rust-server | data | scripts | all\n"
+  echo -e "\t\tAPPLICATION: The application to push to, one of web | visualizer | server | rust-server | data | scripts | governance | all\n"
   echo -e "\t\tENVIRONMENT: The environment to push to, one of local | dev | staging | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
@@ -35,6 +35,12 @@ done
 # Special case for scripts
 if [ "$APPLICATION" == "scripts" ]; then
   cat scripts/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/scripts"
+  exit 0
+fi
+
+# Special case for governance
+if [ "$APPLICATION" == "governance" ]; then
+  cat governance/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/governance"
   exit 0
 fi
 
