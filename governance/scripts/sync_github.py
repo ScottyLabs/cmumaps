@@ -12,7 +12,7 @@ class GithubManager:
         print("Initializing GithubManager")
         self.team = team
 
-        auth = Auth.Token(os.getenv("GITHUB_TOKEN"))
+        auth = Auth.Token(os.getenv("SYNC_GITHUB_TOKEN"))
         self.g = Github(auth=auth)
         self.org = self.g.get_organization("ScottyLabs")
         self.existing_members = set(member.login for member in self.org.get_members())
