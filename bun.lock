@@ -98,6 +98,7 @@
         "@clerk/types": "~4.93.0",
         "@tailwindcss/vite": "~4.1.11",
         "@tanstack/router-plugin": "~1.128.3",
+        "@types/apple-mapkit-js-browser": "~5.78.1",
         "@types/lodash": "~4.17.16",
         "@types/react": "~19.1.8",
         "@types/react-dom": "~19.2.2",
@@ -114,6 +115,8 @@
       "dependencies": {
         "@clerk/clerk-react": "5.52.0",
         "@cmumaps/common": "workspace:*",
+        "@cmumaps/rust-server": "workspace:*",
+        "@cmumaps/server": "workspace:*",
         "@cmumaps/ui": "workspace:*",
         "@scottylabs/corgi": "0.2.11",
         "@tailwindcss/vite": "4.1.11",
