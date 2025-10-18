@@ -24,7 +24,7 @@ export function expressAuthentication(
     // Use Clerk user id to check if user is authenticated
     try {
       const auth = getAuth(request);
-      if (!auth.userId) {
+      if (!("userId" in auth) || !auth.userId) {
         response?.status(401).json({ message: "User is not authenticated" });
         return reject({});
       }
