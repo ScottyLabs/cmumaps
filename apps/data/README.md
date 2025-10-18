@@ -11,13 +11,13 @@ This directory is responsible for deserializing and serializing data from the da
 - [Root README](../../README.md) setup
 - [Python 3](https://www.python.org/downloads/)
 
-### Setup
-
-Coming soon...
-
 ### Deserialization
 
-Coming soon...
+Populate the database by running the following command in `apps/data`:
+
+```zsh
+python3 floorplans/deserializer/database_population.py
+```
 
 ### Serialization
 
