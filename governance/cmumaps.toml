@@ -1,16 +1,16 @@
 name = "cmumaps"
 github-team = "cmu-maps"
 leads = [
-    "Yuxiang-Huang",
-    "luke992",
+    { "github-username" = "Yuxiang-Huang", "andrew-id"= "yh4" },
+    { "github-username" = "luke992", "andrew-id" = ""},
 ]
 members = [
-    "ellylai",
-    "Nicolapps",
-    "JettChenT",
-    "SLin24",
-    "Richard-31415",
-    "kath45823"
+    { "github-username" = "ellylai", "andrew-id" = ""},
+    { "github-username" = "Nicolapps", "andrew-id" = ""},
+    { "github-username" = "JettChenT", "andrew-id" = ""},
+    { "github-username" = "SLin24", "andrew-id" = ""},
+    { "github-username" = "Richard-31415", "andrew-id" = ""},
+    { "github-username" = "kath45823", "andrew-id" = ""}
 ]
 repos = [
     "ScottyLabs/cmumaps",

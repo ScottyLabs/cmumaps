@@ -25,7 +25,8 @@ class GithubManager:
         self.sync_team(self.team)
 
     def sync_contributors(self, contributors):
-        for github_username in contributors:
+        for contributor in contributors:
+            github_username = contributor["github-username"]
             if github_username not in self.existing_members:
                 print(f"Adding {github_username} to GitHub organization")
                 user = self.g.get_user(github_username)
@@ -42,36 +43,36 @@ class GithubManager:
             traceback.print_exc()
 
     def sync_leads(self, github_team, team):
-        leads = set(team["leads"])
+        leads = set([lead["github-username"] for lead in team["leads"]])
         github_leads = github_team.get_members(role="maintainer")
         github_leads = set([member.login for member in github_leads])
 
         for lead in leads:
             if lead not in github_leads:
-                print(f"Adding {lead} as a lead to {github_team.name}")
+                print(f"Adding {lead} as a lead to {github_team.name} Github team")
                 user = self.g.get_user(lead)
                 github_team.add_membership(user, role="maintainer")
 
         for lead in github_leads:
-            if lead not in team["leads"]:
-                print(f"Removing {lead} from {github_team.name}")
+            if lead not in leads:
+                print(f"Removing {lead} from {github_team.name} Github team")
                 user = self.g.get_user(lead)
                 github_team.remove_membership(user)
 
     def sync_members(self, github_team, team):
-        members = set(team["members"])
+        members = set([member["github-username"] for member in team["members"]])
         github_members = github_team.get_members(role="member")
         github_members = set([member.login for member in github_members])
 
         for member in members:
             if member not in github_members:
-                print(f"Adding {member} as a member to {github_team.name}")
+                print(f"Adding {member} as a member to {github_team.name} Github team")
                 user = self.g.get_user(member)
                 github_team.add_membership(user, role="member")
 
         for member in github_members:
             if member not in members:
-                print(f"Removing {member} from {github_team.name}")
+                print(f"Removing {member} from {github_team.name} Github team")
                 user = self.g.get_user(member)
                 github_team.remove_membership(user)
 
@@ -82,10 +83,10 @@ class GithubManager:
 
         for repo in repos:
             if repo not in github_repos:
-                print(f"Adding {repo} as a repo to {github_team.name}")
+                print(f"Adding {repo} as a repo to {github_team.name} Github team")
                 github_team.add_to_repos(repo)
 
         for repo in github_repos:
             if repo not in repos:
-                print(f"Removing {repo} from {github_team.name}")
+                print(f"Removing {repo} from {github_team.name} Github team")
                 github_team.remove_from_repos(repo)
