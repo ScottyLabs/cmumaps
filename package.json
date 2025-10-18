@@ -31,9 +31,6 @@
       ]
     }
   },
-  "dependencies": {
-    "ruff": "1.5.4"
-  },
   "devDependencies": {
     "@biomejs/biome": "~2.1.4",
     "@commitlint/cli": "~19.8.1",
