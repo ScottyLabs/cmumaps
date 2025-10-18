@@ -4,8 +4,6 @@
   "dependencies": {
     "@clerk/clerk-react": "5.52.0",
     "@cmumaps/common": "workspace:*",
-    "@cmumaps/rust-server": "workspace:*",
-    "@cmumaps/server": "workspace:*",
     "@cmumaps/ui": "workspace:*",
     "@scottylabs/corgi": "0.2.11",
     "@tailwindcss/vite": "4.1.11",
@@ -30,6 +28,8 @@
   },
   "devDependencies": {
     "@clerk/types": "~4.93.0",
+    "@cmumaps/rust-server": "workspace:*",
+    "@cmumaps/server": "workspace:*",
     "@tanstack/eslint-plugin-query": "~5.81.2",
     "@trivago/prettier-plugin-sort-imports": "~5.2.2",
     "@types/apple-mapkit-js-browser": "~5.78.1",
