@@ -38,9 +38,11 @@ class ClerkManager:
         print(f"Clerk {self.env} sync complete")
 
     def sync_leads(self):
-        leads_ids = self.get_users(
+        leads_emails = [
             lead["andrew-id"] + "@andrew.cmu.edu" for lead in self.team["leads"]
-        )
+        ]
+        leads_emails.append("scottylabsdeveloper@gmail.com")
+        leads_ids = self.get_users(leads_emails)
 
         # Add team leads as admins to Clerk
         for lead_id in leads_ids:
