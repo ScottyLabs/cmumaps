@@ -21,8 +21,10 @@ class GithubManager:
         )
 
     def sync(self):
+        print("Syncing Github")
         self.sync_contributors(self.team["leads"] + self.team["members"])
         self.sync_team(self.team)
+        print("Github sync complete")
 
     def sync_contributors(self, contributors):
         for contributor in contributors:
