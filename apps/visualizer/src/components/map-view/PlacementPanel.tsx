@@ -45,7 +45,7 @@ const PlacementPanel = ({ floorCode, placement, setPlacement }: Props) => {
   };
 
   const renderScaleControl = () => {
-    return renderSliderAndInput("Scale", 0.05, 5, 0.01, placement.scale, (e) =>
+    return renderSliderAndInput("Scale", 0.01, 2, 0.001, placement.scale, (e) =>
       setPlacement({ ...placement, scale: Number.parseFloat(e.target.value) }),
     );
   };
