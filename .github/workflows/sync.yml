@@ -13,6 +13,10 @@ jobs:
 
     env:
       SYNC_GITHUB_TOKEN: ${{ secrets.SYNC_GITHUB_TOKEN }}
+      CLERK_DEV_SECRET_KEY: ${{ secrets.CLERK_DEV_SECRET_KEY }}
+      CLERK_DEV_ORG_ID: ${{ secrets.CLERK_DEV_ORG_ID }}
+      CLERK_PROD_SECRET_KEY: ${{ secrets.CLERK_PROD_SECRET_KEY }}
+      CLERK_PROD_ORG_ID: ${{ secrets.CLERK_PROD_ORG_ID }}
 
     steps:
       - name: Checkout
