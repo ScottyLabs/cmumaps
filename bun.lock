@@ -28,7 +28,7 @@
       "name": "@cmumaps/server",
       "version": "0.0.0",
       "dependencies": {
-        "@clerk/express": "^1.7.41",
+        "@clerk/express": "1.7.41",
         "@cmumaps/common": "workspace:*",
         "@cmumaps/websocket": "workspace:*",
         "@prisma/client": "6.12.0",
@@ -271,7 +271,7 @@
 
     "@clerk/clerk-react": ["@clerk/clerk-react@5.53.4", "", { "dependencies": { "@clerk/shared": "^3.29.0", "@clerk/types": "^4.96.0", "tslib": "2.8.1" }, "peerDependencies": { "react": "^18.0.0 || ^19.0.0 || ^19.0.0-0", "react-dom": "^18.0.0 || ^19.0.0 || ^19.0.0-0" } }, "sha512-Ozl+5QxIGiH4dbzPpCIUmooSj+5R5hCVWwH+FLrgUrtZNV6Nu2XpjkwAL2gursfQjElWtOqBxfG5spThHiWRbg=="],
 
-    "@clerk/express": ["@clerk/express@1.7.43", "", { "dependencies": { "@clerk/backend": "^2.19.1", "@clerk/shared": "^3.29.0", "@clerk/types": "^4.96.0", "tslib": "2.8.1" }, "peerDependencies": { "express": "^4.17.0 || ^5.0.0" } }, "sha512-I24202+DirFnTaA2LNKyTRX0GbW5D9CxM5A8dk8K67iLr80a1dF703UhoNvQn7nA2It1JwOQN9NNcDGALqkEfg=="],
+    "@clerk/express": ["@clerk/express@1.7.41", "", { "dependencies": { "@clerk/backend": "^2.18.3", "@clerk/shared": "^3.28.2", "@clerk/types": "^4.95.0", "tslib": "2.8.1" }, "peerDependencies": { "express": "^4.17.0 || ^5.0.0" } }, "sha512-SYKXi/Prjkxx15QGOjHlvjfwO05vUg6fBaxVdg53/vcLJNyyfER+JM9qRxxcmEqN5vkkpdqURANF3eZ8dkf85w=="],
 
     "@clerk/shared": ["@clerk/shared@3.29.0", "", { "dependencies": { "@clerk/types": "^4.96.0", "dequal": "2.0.3", "glob-to-regexp": "0.4.1", "js-cookie": "3.0.5", "std-env": "^3.9.0", "swr": "2.3.4" }, "peerDependencies": { "react": "^18.0.0 || ^19.0.0 || ^19.0.0-0", "react-dom": "^18.0.0 || ^19.0.0 || ^19.0.0-0" }, "optionalPeers": ["react", "react-dom"] }, "sha512-gwPInODY+Gp02UQcLN5FBP8MetT3LWR7mkkOX7zNM3U34WgGbs2qkQEOrY1BuHxIo/iFvkvZiXkH0oCXqto+Kw=="],
 
