@@ -7,8 +7,8 @@
 - Install vault (<https://developer.hashicorp.com/vault/install>)
 - Install jq (<https://jqlang.org/download/>)
 - Permissions
-  - Be added to the [CMU Maps Github team](https://github.com/orgs/ScottyLabs/teams/cmu-maps).
-  - Make sure you can view [vault](https://secrets.scottylabs.org/ui/vault/auth?with=oidc).
+  - Make a PR to add yourself as a member to [cmumaps.toml](governance/cmumaps.toml).
+  - Make sure you can log into [vault](https://secrets.scottylabs.org/ui/vault/auth?with=oidc) and view the [dev secrets](https://secrets.scottylabs.org/ui/vault/secrets/ScottyLabs/kv/list/cmumaps/dev/).
 
 ## Installation
 
