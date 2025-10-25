@@ -15,4 +15,5 @@ members = [
 ]
 repos = [
     "ScottyLabs/cmumaps",
+    "ScottyLabs/cmumaps-data-acquisitor",
 ]
