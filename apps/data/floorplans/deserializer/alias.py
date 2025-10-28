@@ -38,9 +38,15 @@ def create_aliases():
         for floor in data[building]:
             for room_id in data[building][floor]:
                 room = data[building][floor][room_id]
-                displayAlias = "" if not room["aliases"] else room["aliases"][0]
+                displayAlias = (
+                    ""
+                    if "aliases" not in room or not room["aliases"]
+                    else room["aliases"][0]
+                )
 
                 roomId = room["id"]
+                if "aliases" not in room:
+                    continue
                 for alias in room["aliases"]:
                     if alias:
                         alias_data.append(
