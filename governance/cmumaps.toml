@@ -1,5 +1,6 @@
 name = "cmumaps"
 github-team = "cmu-maps"
+github-admin-team = "cmu-maps-admins"
 leads = [
     { "github-username" = "Yuxiang-Huang", "andrew-id" = "yh4" },
     { "github-username" = "luke992", "andrew-id" = "lhann" },
