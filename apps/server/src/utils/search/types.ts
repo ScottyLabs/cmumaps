@@ -4,12 +4,12 @@ import type { Floor, GeoCoordinate, RoomType } from "@cmumaps/common";
 
 export type RoomDocument = {
   id: string;
-  name_with_space: string;
-  full_name_with_space: string;
-  label_position: GeoCoordinate | null;
-  _type: "room";
+  nameWithSpace: string;
+  fullNameWithSpace: string;
+  labelPosition: GeoCoordinate | null;
+  type: "room" | "building";
   alias: string;
-  num_terms: number;
+  numTerms: number;
 };
 
 export type Document = RoomDocument;
