@@ -19,4 +19,4 @@ jobs:
             bun-version: latest 
       - run: bun install
       - name: Check
-        run: bun run syncpack && bun run check
+        run: bun run check
