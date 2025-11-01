@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "charliermarsh.ruff",
+    "mkhl.shfmt"
+  ]
+}
