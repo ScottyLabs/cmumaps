@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import $api from "@/api/client";
-import $rapi from "@/api/rustClient";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
@@ -16,7 +15,7 @@ interface SearchResultProps {
   fullNameWithSpace?: string;
   alias?: string;
   type?: string;
-  labelPosition?: { latitude?: number; longitude?: number };
+  labelPosition?: { latitude?: number; longitude?: number } | null;
   floor?: { buildingCode?: string; level?: string };
 }
 
@@ -40,7 +39,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const { setSrc, setDst } = useNavigationParams();
   const { hasAccess } = useUser();
 
-  const { data: searchResults } = $rapi.useQuery("get", "/search", {
+  const { data: searchResults } = $api.useQuery("get", "/search", {
     params: { query: { query: searchQuery } },
     enabled: isSearchOpen && searchQuery.length > 0,
   });
