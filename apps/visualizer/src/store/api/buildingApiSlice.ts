@@ -1,9 +1,15 @@
-import type { BuildingMetadata } from "@cmumaps/common";
+import type { Building, BuildingMetadata, Buildings } from "@cmumaps/common";
 import { apiSlice } from "./apiSlice";
 
 export const buildingApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    getBuildings: builder.query<Buildings, void>({
+      query: () => "buildings",
+    }),
+    getBuilding: builder.query<Building, string>({
+      query: (id) => `buildings/${id}`,
+    }),
     getBuildingsMetadata: builder.query<BuildingMetadata[], void>({
       query: () => "buildings/metadata",
     }),
@@ -20,6 +26,8 @@ export const buildingApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetBuildingsQuery,
+  useGetBuildingQuery,
   useGetBuildingsMetadataQuery,
   useGetBuildingNameQuery,
   useGetDefaultFloorQuery,

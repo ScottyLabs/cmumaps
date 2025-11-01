@@ -1,5 +1,5 @@
+import { SignInButton } from "@clerk/clerk-react";
 import { useEffect } from "react";
-import env from "@/env";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
@@ -37,15 +37,14 @@ const LoginModal = () => {
         <p className="text-sm">Log in to see floor plans.</p>
 
         <div className="flex justify-between">
-          <button
-            type="button"
-            className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 text-sm hover:bg-blue-200"
-            onClick={() => {
-              window.location.href = `${env.VITE_LOGIN_URL}?redirect_uri=${window.location.href}`;
-            }}
-          >
-            Sign in
-          </button>
+          <SignInButton mode="redirect">
+            <button
+              type="button"
+              className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 text-sm hover:bg-blue-200"
+            >
+              Sign in
+            </button>
+          </SignInButton>
           <button
             type="button"
             className="cursor-pointer rounded-md bg-red-200 p-2 text-red-700 text-sm hover:bg-red-300"

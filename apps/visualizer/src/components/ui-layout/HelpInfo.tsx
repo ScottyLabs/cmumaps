@@ -87,11 +87,11 @@ const HelpInfo = () => {
           <li>doesn't have a room type </li>
           <li>
             the room type goes across floors and it doesn't have a neighbor to
-            another floor
+            another floor (not including outside)
           </li>
           <li>
             the room type doesn't goes across floors and it does have a neighbor
-            to another floor
+            to another floor (not including outside)
           </li>
         </ul>
       </div>

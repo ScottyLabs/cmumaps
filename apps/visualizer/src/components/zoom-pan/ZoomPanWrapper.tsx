@@ -7,7 +7,6 @@ import { LOADED } from "../../store/features/statusSlice";
 import { useAppSelector } from "../../store/hooks";
 import FloorDisplay from "../floor-display/FloorDisplay";
 import LoadingText from "../ui-layout/LoadingText";
-import PDFViewer from "./PdfViewer";
 
 interface Props {
   floorCode: string;
@@ -25,8 +24,6 @@ const MAX_SCALE = 20;
  */
 const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
   const loadingStatus = useAppSelector((state) => state.status.loadingStatus);
-
-  const showPdf = useAppSelector((state) => state.visibility.showPdf);
 
   const [canPan, setCanPan] = useState<boolean>(true);
 
@@ -82,28 +79,20 @@ const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
   }
 
   return (
-    <>
-      {/* PDFViewer can't be absolute so the zoom buttons can be displayed */}
-      <div className="mt-24 ml-52 h-screen overflow-hidden">
-        {showPdf && (
-          <PDFViewer floorCode={floorCode} scale={scale} offset={offset} />
-        )}
-      </div>
-      <div className="absolute inset-0 z-10 mt-24 ml-52 overflow-hidden">
-        <FloorDisplay
-          floorCode={floorCode}
-          graph={graph}
-          rooms={rooms}
-          pois={pois}
-          setCanPan={setCanPan}
-          handleWheel={handleWheel}
-          handleDragMove={handleDragMove}
-          scale={scale}
-          offset={offset}
-          stageRef={stageRef}
-        />
-      </div>
-    </>
+    <div className="absolute inset-0 z-10 mt-24 ml-52 overflow-hidden">
+      <FloorDisplay
+        floorCode={floorCode}
+        graph={graph}
+        rooms={rooms}
+        pois={pois}
+        setCanPan={setCanPan}
+        handleWheel={handleWheel}
+        handleDragMove={handleDragMove}
+        scale={scale}
+        offset={offset}
+        stageRef={stageRef}
+      />
+    </div>
   );
 };
 

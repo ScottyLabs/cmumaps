@@ -1,5 +1,9 @@
 name: Check
 on:   
+  push:
+    branches:
+      - main
+      - staging
   pull_request:
     branches:
       - main
@@ -15,4 +19,4 @@ jobs:
             bun-version: latest 
       - run: bun install
       - name: Check
-        run: bun run syncpack && bun run check
+        run: bun run check

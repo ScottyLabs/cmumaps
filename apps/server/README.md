@@ -1,25 +1,54 @@
-deployment steps (RUN FROM REPO ROOT):
+# CMU Maps Server
 
-1.
+## Overview
 
+The CMU Maps server is a RESTful API that provides data for the CMU Maps applications.
+
+## Setup
+
+### Prequisite
+
+- [Root README](../../README.md) setup
+- [Docker](https://docs.docker.com/get-docker/)
+
+### Database
+
+Run the following command in `apps/server/docker` to start the database:
+
+```zsh
+docker compose up -d --build
 ```
-aws ecr --profile <aws-profile> get-login-password --region us-east-2 | docker login --username AWS --password-stdin 340752840444.dkr.ecr.us-east-2.amazonaws.com
+
+Push the database schema by running the following command in `apps/server`:
+
+```zsh
+bunx prisma db push
 ```
 
-2.
+#### Troubleshooting
 
-```
-docker build --platform linux/amd64 -t cmumaps-server -f ./apps/server/Dockerfile .
+If you see errors about 'port in use', use `lsof -i :5432` to find the process using the port and kill it.
+
+### Running the Server
+
+Run the server by running the following command in `apps/server`:
+
+```zsh
+bun run dev
 ```
 
-3.
+Navigate to <http://localhost/buildings> and make sure it shows `{}` instead of an internal server error.
 
-```
-docker tag cmumaps-server:latest 340752840444.dkr.ecr.us-east-2.amazonaws.com/cmumaps-server:latest
-```
+### Populating the Database
 
-4.
+Follow the instructions in [apps/data/README.md](../../apps/data/README.md) to populate the database.
 
-```
-docker push 340752840444.dkr.ecr.us-east-2.amazonaws.com/cmumaps-server:latest
+### Development
+
+You probably want to test your changes in the server by also running the web or the visualizer. Follow the instructions in [apps/web/README.md](../../apps/web/README.md) and [apps/visualizer/README.md](../../apps/visualizer/README.md) to run the web and the visualizer. You can also run them together with the server by running one of the following commands in the root directory:
+
+```zsh
+bun run dev:web
+bun run dev:visualizer
+bun run dev
 ```

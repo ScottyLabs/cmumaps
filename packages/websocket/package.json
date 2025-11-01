@@ -1,9 +1,12 @@
 {
   "name": "@cmumaps/websocket",
   "version": "0.0.0",
+  "dependencies": {
+    "@cmumaps/common": "workspace:*"
+  },
   "devDependencies": {
-    "@types/node": "~24.0.13",
-    "typescript": "~5.8.3"
+    "@types/node": "^24.0.13",
+    "typescript": "^5.8.3"
   },
   "main": "src/index.ts",
   "scripts": {

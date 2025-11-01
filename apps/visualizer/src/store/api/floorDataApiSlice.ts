@@ -1,10 +1,31 @@
-import type { Graph, Pois, Rooms } from "@cmumaps/common";
-
+import type { GeoNodes, Graph, Placement, Pois, Rooms } from "@cmumaps/common";
+import { handleQueryError } from "@/store/api/errorHandler";
 import { apiSlice } from "./apiSlice";
 
 export const floorDataApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    getFloorPlacement: builder.query<Placement, string>({
+      query: (floorCode) => `floors/${floorCode}/placement`,
+      keepUnusedDataFor: 0,
+    }),
+    updateFloorPlacement: builder.mutation<
+      Placement,
+      { floorCode: string; placement: Placement }
+    >({
+      query: ({ floorCode, placement }) => ({
+        url: `floors/${floorCode}/placement`,
+        method: "PUT",
+        body: { placement },
+      }),
+      async onQueryStarted(_, { queryFulfilled }) {
+        handleQueryError(queryFulfilled, () => {}, "Placement saved!");
+      },
+    }),
+    getFloorNodes: builder.query<GeoNodes, string>({
+      query: (floorCode) => `floors/${floorCode}/geonodes`,
+      keepUnusedDataFor: 0,
+    }),
     getFloorGraph: builder.query<Graph, string>({
       query: (floorCode) => `floors/${floorCode}/graph`,
       providesTags: ["Graph"],
@@ -28,6 +49,9 @@ export const floorDataApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetFloorPlacementQuery,
+  useUpdateFloorPlacementMutation,
+  useGetFloorNodesQuery,
   useGetFloorGraphQuery,
   useGetFloorRoomsQuery,
   useGetFloorPoisQuery,

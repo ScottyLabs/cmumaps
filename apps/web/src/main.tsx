@@ -6,7 +6,16 @@ import { BrowserRouter } from "react-router";
 import env from "@/env.ts";
 import App from "./App.tsx";
 import "./index.css";
+import { ClerkProvider } from "@clerk/clerk-react";
+import type { Clerk } from "@clerk/types";
 import { NuqsAdapter } from "nuqs/adapters/react";
+
+// https://clerk.com/docs/components/control/clerk-loaded
+declare global {
+  interface Window {
+    Clerk: Clerk;
+  }
+}
 
 // Posthog settings
 const posthog_options = {
@@ -19,17 +28,19 @@ const queryClient = new QueryClient();
 // Render the App
 createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      <NuqsAdapter>
-        <PostHogProvider
-          apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
-          options={posthog_options}
-        >
-          <StrictMode>
-            <App />
-          </StrictMode>
-        </PostHogProvider>
-      </NuqsAdapter>
-    </QueryClientProvider>
+    <ClerkProvider publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}>
+      <QueryClientProvider client={queryClient}>
+        <NuqsAdapter>
+          <PostHogProvider
+            apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
+            options={posthog_options}
+          >
+            <StrictMode>
+              <App />
+            </StrictMode>
+          </PostHogProvider>
+        </NuqsAdapter>
+      </QueryClientProvider>
+    </ClerkProvider>
   </BrowserRouter>,
 );

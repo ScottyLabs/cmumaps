@@ -1,50 +1,62 @@
-import type { Request, Response } from "express";
-import { webSocketService } from "../../server";
-import { handleControllerError } from "../errors/errorHandler";
+import type { PoiInfo, PoiType } from "@cmumaps/common";
+import type { Request as ExpressRequest } from "express";
+import {
+  Body,
+  Delete,
+  Middlewares,
+  Post,
+  Put,
+  Request,
+  Route,
+  Security,
+} from "tsoa";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
+import { requireSocketId } from "../middleware/socketAuth";
+import { webSocketService } from "../server";
 import { poiService } from "../services/poiService";
 
-export const poiController = {
-  createPoi: async (req: Request, res: Response) => {
-    const poiId = req.params.id;
-    const { poiInfo } = req.body;
+@Middlewares(requireSocketId)
+@Security(BEARER_AUTH, [MEMBER_SCOPE])
+@Route("pois")
+export class PoiController {
+  @Post("/:poiId")
+  async createPoi(
+    @Request() req: ExpressRequest,
+    @Body() body: { poiInfo: PoiInfo },
+  ) {
+    const poiId = req.params.poiId;
+    const { poiInfo } = body;
     const socketId = req.socketId;
 
-    try {
-      await poiService.createPoi(poiId, poiInfo);
-      const payload = { poiId, poiInfo };
-      webSocketService.broadcastToUserFloor(socketId, "create-poi", payload);
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "creating POI");
-    }
-  },
+    await poiService.createPoi(poiId, poiInfo);
+    const payload = { poiId, poiInfo };
+    webSocketService.broadcastToUserFloor(socketId, "create-poi", payload);
+    return null;
+  }
 
-  deletePoi: async (req: Request, res: Response) => {
-    const poiId = req.params.id;
+  @Delete("/:poiId")
+  async deletePoi(@Request() req: ExpressRequest) {
+    const poiId = req.params.poiId;
     const socketId = req.socketId;
 
-    try {
-      await poiService.deletePoi(poiId);
-      const payload = { poiId };
-      webSocketService.broadcastToUserFloor(socketId, "delete-poi", payload);
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "deleting POI");
-    }
-  },
+    await poiService.deletePoi(poiId);
+    const payload = { poiId };
+    webSocketService.broadcastToUserFloor(socketId, "delete-poi", payload);
+    return null;
+  }
 
-  updatePoiType: async (req: Request, res: Response) => {
-    const poiId = req.params.id;
-    const { poiType } = req.body;
+  @Put("/:poiId/type")
+  async updatePoiType(
+    @Request() req: ExpressRequest,
+    @Body() body: { poiType: PoiType },
+  ) {
+    const poiId = req.params.poiId;
+    const { poiType } = body;
     const socketId = req.socketId;
 
-    try {
-      await poiService.updatePoiType(poiId, poiType);
-      const payload = { poiId, poiType };
-      webSocketService.broadcastToUserFloor(socketId, "update-poi", payload);
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "updating POI");
-    }
-  },
-};
+    await poiService.updatePoiType(poiId, poiType);
+    const payload = { poiId, poiType };
+    webSocketService.broadcastToUserFloor(socketId, "update-poi", payload);
+    return null;
+  }
+}

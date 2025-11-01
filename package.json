@@ -4,52 +4,25 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "body-max-line-length": [
-        2,
-        "always",
-        120
-      ],
-      "type-enum": [
-        2,
-        "always",
-        [
-          "feat",
-          "fix",
-          "docs",
-          "style",
-          "refactor",
-          "perf",
-          "test",
-          "build",
-          "ci",
-          "chore",
-          "revert",
-          "temp"
-        ]
-      ]
-    }
-  },
-  "dependencies": {
-    "ruff": "1.5.4"
+    ]
   },
   "devDependencies": {
-    "@biomejs/biome": "~2.1.1",
-    "@commitlint/cli": "~19.8.1",
-    "@commitlint/config-conventional": "~19.8.1",
+    "@biomejs/biome": "^2.1.4",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@taplo/cli": "^0.7.0",
     "@types/bun": "latest",
-    "@types/web": "~0.0.243",
-    "husky": "~8.0.0",
-    "syncpack": "~13.0.4",
-    "turbo": "~2.5.4",
-    "typescript": "~5.8.3"
+    "@types/web": "^0.0.279",
+    "husky": "^8.0.3",
+    "syncpack": "^13.0.4",
+    "turbo": "^2.5.8",
+    "typescript": "^5.8.3"
   },
   "packageManager": "bun@1.2.10",
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "check": "biome check && turbo check",
+    "check": "bun run taplo:check && bun run syncpack && biome check && turbo check",
     "dev": "turbo dev --filter=@cmumaps/server --filter=@cmumaps/web --filter=@cmumaps/visualizer",
     "dev:server": "turbo dev --filter=@cmumaps/server",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
@@ -64,6 +37,7 @@
     "syncpack": "syncpack format && syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
+    "taplo:check": "taplo format --check",
     "tsc": "turbo tsc",
     "vault:pull": "./scripts/vault-pull.sh all local",
     "vault:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc"

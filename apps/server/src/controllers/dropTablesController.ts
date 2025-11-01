@@ -1,9 +1,10 @@
 import { Body, Delete, Route, Security } from "tsoa";
+import { ADMIN_SCOPE, BEARER_AUTH } from "../middleware/authentication";
 import { dropTablesService } from "../services/dropTablesService";
 
+@Security(BEARER_AUTH, [ADMIN_SCOPE])
 @Route("drop-tables")
 export class DropTablesController {
-  @Security("oauth2", ["db_admin"])
   @Delete("/")
   async dropTables(@Body() body: { tableNames: string[] }) {
     const { tableNames } = body;

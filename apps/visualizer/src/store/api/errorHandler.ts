@@ -4,14 +4,20 @@ import { toast } from "react-toastify";
 export const handleQueryError = async (
   queryFulfilled: unknown,
   undo: () => void,
+  successMessage?: string,
 ) => {
   try {
     await queryFulfilled;
+    if (successMessage) {
+      toast.success(successMessage);
+    }
   } catch (e) {
-    toast.error("Failed to save! Check the Console for detailed error.");
+    if ((e as { error: { status: number } }).error.status === 401) {
+      toast.error("You are not authorized to edit!");
+    } else {
+      toast.error("Failed to save! Check the Console for detailed error.");
+    }
     undo();
-    const error = e as { error: { data: { error: string; details: string } } };
-    console.error(error.error.data.error);
-    console.error("Error details:", error.error.data.details);
+    console.error(e);
   }
 };

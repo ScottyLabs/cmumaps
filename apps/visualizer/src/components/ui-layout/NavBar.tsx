@@ -16,8 +16,8 @@ const NavBar = ({ floorCode }: Props) => {
         <div className="font-bold text-white text-xl">
           CMU Maps Data Visualization
         </div>
-        <div className="-translate-x-1/2 fixed top-4 left-1/2 h-7 text-white text-xl">
-          {name ? name : ""}
+        <div className="-translate-x-1/2 absolute top-4 left-1/2 h-7 text-white text-xl">
+          {name ? name : floorCode}
         </div>
         <Link
           to="/"

@@ -6,9 +6,9 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
+from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Node table
@@ -23,8 +23,9 @@ def drop_node_table():
 
 
 def create_nodes():
-    with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
-        data = json.load(file)
+    # with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
+    #     data = json.load(file)
+    data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
 
     node_data = []
     for nodeId in data:

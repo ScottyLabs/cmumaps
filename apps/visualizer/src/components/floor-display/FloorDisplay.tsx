@@ -13,7 +13,6 @@ import LiveCursors from "../live-cursors/LiveCursors";
 import EdgesDisplay from "./EdgesDisplay";
 import LabelsDisplay from "./LabelsDisplay";
 import NodesDisplay from "./NodesDisplay";
-import OutlineDisplay from "./OutlineDisplay";
 import PolygonsDisplay from "./PolygonsDisplay";
 import SelectedPolygonDisplay from "./SelectedPolygonDisplay";
 
@@ -91,7 +90,6 @@ const FloorDisplay = ({
       ref={stageRef}
     >
       <Layer>
-        <OutlineDisplay floorCode={floorCode} />
         <PolygonsDisplay rooms={rooms} />
         <EdgesDisplay floorCode={floorCode} graph={graph} />
         <NodesDisplay

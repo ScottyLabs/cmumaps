@@ -13,13 +13,13 @@
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt"
   },
   "files.associations": {
     ".env.*": "properties"
-  },
-  "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff"
   }
 }

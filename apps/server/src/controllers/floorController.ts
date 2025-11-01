@@ -1,24 +1,23 @@
-import type * as express from "express";
-import { Get, Path, Route, Security } from "tsoa";
-import { handleControllerError } from "../errors/errorHandler";
+import type { Placement } from "@cmumaps/common";
+import { Body, Get, Path, Put, Route, Security } from "tsoa";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { floorService } from "../services/floorService";
 
-@Route("/floors")
+@Security(BEARER_AUTH, [])
+
+@Route("floors")
 export class FloorController {
-  @Security("oauth2", [])
   @Get("/:floorCode/floorplan")
   async getFloorplan(@Path() floorCode: string) {
     return await floorService.getFloorplan(floorCode);
   }
 
-  @Security("oauth2", [])
-  @Get("/:floorCode/georooms")
+  @Get("/:floorCode/rooms")
   async getFloorRooms(@Path() floorCode: string) {
     const rooms = await floorService.getFloorRooms(floorCode);
     return rooms;
   }
 
-  @Security("oauth2", [])
   @Get("/:floorCode/graph")
   async getFloorGraph(@Path() floorCode: string) {
     const placement = await floorService.getFloorPlacement(floorCode);
@@ -26,26 +25,27 @@ export class FloorController {
     return graph;
   }
 
-  @Security("oauth2", [])
   @Get("/:floorCode/geonodes")
   async getFloorNodes(@Path() floorCode: string) {
     return await floorService.getFloorNodes(floorCode);
   }
 
-  @Security("oauth2", [])
+  @Get("/:floorCode/pois")
+  async getFloorPois(@Path() floorCode: string) {
+    return await floorService.getFloorPois(floorCode);
+  }
+
   @Get("/:floorCode/placement")
   async getFloorPlacement(@Path() floorCode: string) {
     return await floorService.getFloorPlacement(floorCode);
   }
 
-  async getFloorPois(req: express.Request, res: express.Response) {
-    const floorCode = req.params.id;
-
-    try {
-      const pois = await floorService.getFloorPois(floorCode);
-      res.json(pois);
-    } catch (error) {
-      handleControllerError(res, error, "getting floor pois");
-    }
+  @Security(BEARER_AUTH, [MEMBER_SCOPE])
+  @Put("/:floorCode/placement")
+  async updateFloorPlacement(
+    @Path() floorCode: string,
+    @Body() body: { placement: Placement },
+  ) {
+    return await floorService.updateFloorPlacement(floorCode, body.placement);
   }
 }

@@ -23,4 +23,3 @@ Cargo.lock
 .DS_Store
 Cargo.lock
 .vercel
-.vscode/settings.json

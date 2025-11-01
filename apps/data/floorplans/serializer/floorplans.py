@@ -5,10 +5,12 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.api_client import get_api_client
+from s3_utils.s3_utils import upload_json_file, get_json_from_s3
 
-import requests
 import json
+
+from all_graph import pdf_coords_to_geo_coords
 
 
 def floorplans_serializer(floor_code: str = None):
@@ -18,35 +20,37 @@ def floorplans_serializer(floor_code: str = None):
     updates that floor in floorplans.json directly.
     """
 
-    server_url = os.getenv("SERVER_URL")
-
-    headers = {
-        "Authorization": f"Bearer {get_clerk_jwt()}",
-    }
-
     # Update specific floor in floorplans_serializer.json
     if floor_code:
         building_code = floor_code.split("-")[0]
         floor_level = floor_code.split("-")[1]
         file_to_update = "cmumaps-data/floorplans/floorplans-serialized.json"
-        rooms_response = requests.get(
-            f"{server_url}/api/floors/{floor_code}/rooms", headers=headers
-        )
-        rooms_response.raise_for_status()
-        rooms = rooms_response.json()
 
-        with open(file_to_update, "r") as f:
-            floorplans_data = json.load(f)
+        rooms = get_api_client(path=f"floors/{floor_code}/georooms")
+        placement = get_api_client(path=f"floors/{floor_code}/placement")
+
+        # changed
+        floorplans_data = get_json_from_s3(
+            "floorplans/floorplans.json", return_data=True
+        )
         for room in rooms:
             room_info = rooms[room]
             room_name = room_info["name"]
             roomId = room
 
+            latitude, longitude = pdf_coords_to_geo_coords(
+                pdf_coords=room_info["labelPosition"],
+                geo_center=placement["geoCenter"],
+                pdf_center=placement["pdfCenter"],
+                scale=placement["scale"],
+                angle_radians=placement["angle"],
+            )
+
             new_room_dict = {
                 "name": room_name,
                 "labelPosition": {
-                    "latitude": room_info["labelPosition"]["latitude"],
-                    "longitude": room_info["labelPosition"]["longitude"],
+                    "latitude": latitude,
+                    "longitude": longitude,
                 },
                 "type": room_info["type"],
                 "id": roomId,
@@ -63,9 +67,7 @@ def floorplans_serializer(floor_code: str = None):
 
     else:  # Update all
         floorplans_dict = {}
-        all_buildings = requests.get(f"{server_url}/api/buildings", headers=headers)
-        all_buildings.raise_for_status()  # debugging
-        buildings = all_buildings.json()
+        buildings = get_api_client(path="buildings")
         all_floor_codes = []
         for building in buildings:
             floors = buildings[building]["floors"]
@@ -76,21 +78,27 @@ def floorplans_serializer(floor_code: str = None):
         for floor_code in all_floor_codes:
             building_code = floor_code.split("-")[0]
             floor_level = floor_code.split("-")[1]
-            rooms_response = requests.get(
-                f"{server_url}/api/floors/{floor_code}/rooms", headers=headers
-            )
-            rooms_response.raise_for_status()
-            rooms = rooms_response.json()
+            rooms = get_api_client(path=f"floors/{floor_code}/georooms")
+            placement = get_api_client(path=f"floors/{floor_code}/placement")
+
             for room in rooms:
                 room_info = rooms[room]
                 room_name = room_info["name"]
                 roomId = room
 
+                latitude, longitude = pdf_coords_to_geo_coords(
+                    pdf_coords=room_info["labelPosition"],
+                    geo_center=placement["geoCenter"],
+                    pdf_center=placement["pdfCenter"],
+                    scale=placement["scale"],
+                    angle_radians=placement["angle"],
+                )
+
                 new_room_dict = {
                     "name": room_name,
                     "labelPosition": {
-                        "latitude": room_info["labelPosition"]["latitude"],
-                        "longitude": room_info["labelPosition"]["longitude"],
+                        "latitude": latitude,
+                        "longitude": longitude,
                     },
                     "type": room_info["type"],
                     "id": roomId,
@@ -107,7 +115,10 @@ def floorplans_serializer(floor_code: str = None):
         # Create serialized json file and save
         with open("cmumaps-data/floorplans/floorplans-serialized.json", "w") as f:
             json.dump(floorplans_dict, f, indent=4)
-
+        upload_json_file(
+            local_file_path="cmumaps-data/floorplans/floorplans-serialized.json",
+            s3_object_name="floorplans/floorplans-serialized.json",
+        )
     return
 
 

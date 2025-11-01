@@ -93,6 +93,7 @@ const NodesDisplay = ({
     return;
   }
 
+  // see renderColorInfoText function in @/components/ui-layout/HelpInfo.tsx for more details
   const getFillColor = (nodeId: string) => {
     if (nodeId === selectedNodeId) {
       return "yellow";
@@ -112,19 +113,24 @@ const NodesDisplay = ({
     const isValidCrossFloorEdgeType =
       room?.type && ValidCrossFloorEdgeTypes.includes(room.type);
 
-    const hasAcrossFloorEdge =
-      Object.values(graph[nodeId].neighbors).filter(
-        (neighbor) => neighbor.outFloorCode,
-      ).length !== 0;
+    const crossFloorEdges = Object.values(graph[nodeId].neighbors).filter(
+      (neighbor) => neighbor.outFloorCode,
+    );
 
     if (isValidCrossFloorEdgeType) {
-      if (hasAcrossFloorEdge) {
+      if (crossFloorEdges.length > 0) {
         return "lime";
       }
+
       return "pink";
     }
 
-    if (hasAcrossFloorEdge) {
+    if (crossFloorEdges.length > 0) {
+      if (
+        crossFloorEdges.every((neighbor) => neighbor.outFloorCode === "outside")
+      ) {
+        return "lime";
+      }
       return "pink";
     }
 

@@ -1,96 +1,139 @@
-import type { Request, Response } from "express";
-import { webSocketService } from "../../server";
-import { handleControllerError } from "../errors/errorHandler";
+import { extractBuildingCode, extractFloorLevel } from "@cmumaps/common";
+import type { Request as ExpressRequest } from "express";
+import {
+  Body,
+  Delete,
+  Middlewares,
+  Post,
+  Request,
+  Route,
+  Security,
+} from "tsoa";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
+import { requireSocketId } from "../middleware/socketAuth";
+import { webSocketService } from "../server";
 import { edgeService } from "../services/edgeService";
+import { nodeService } from "../services/nodeService";
 
-export const edgeController = {
-  createEdge: async (req: Request, res: Response) => {
-    const { inNodeId, outNodeId } = req.body;
+@Middlewares(requireSocketId)
+@Security(BEARER_AUTH, [MEMBER_SCOPE])
+@Route("edge")
+export class EdgeController {
+  @Post("/")
+  async createEdge(
+    @Request() req: ExpressRequest,
+    @Body() body: { inNodeId: string; outNodeId: string },
+  ) {
+    const { inNodeId, outNodeId } = body;
     const socketId = req.socketId;
 
-    try {
-      // create edge in database
-      await edgeService.createEdge(inNodeId, outNodeId);
+    // create edge in database
+    await edgeService.createEdge(inNodeId, outNodeId);
 
-      // broadcast to all users on the floor
-      const payload = { inNodeId, outNodeId };
-      webSocketService.broadcastToUserFloor(socketId, "create-edge", payload);
+    // broadcast to all users on the floor
+    const payload = { inNodeId, outNodeId };
+    webSocketService.broadcastToUserFloor(socketId, "create-edge", payload);
 
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "creating edge");
-    }
-  },
+    return null;
+  }
 
-  deleteEdge: async (req: Request, res: Response) => {
-    const { inNodeId, outNodeId } = req.body;
+  @Delete("/")
+  async deleteEdge(
+    @Request() req: ExpressRequest,
+    @Body() body: { inNodeId: string; outNodeId: string },
+  ) {
+    const { inNodeId, outNodeId } = body;
     const socketId = req.socketId;
 
-    try {
-      await edgeService.deleteEdge(inNodeId, outNodeId);
-      const payload = { inNodeId, outNodeId };
-      webSocketService.broadcastToUserFloor(socketId, "delete-edge", payload);
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "deleting edge");
-    }
-  },
+    await edgeService.deleteEdge(inNodeId, outNodeId);
+    const payload = { inNodeId, outNodeId };
+    webSocketService.broadcastToUserFloor(socketId, "delete-edge", payload);
+    return null;
+  }
 
-  createEdgeAcrossFloors: async (req: Request, res: Response) => {
-    const { floorCode, outFloorCode, inNodeId, outNodeId } = req.body;
+  @Post("/across-floors")
+  async createEdgeAcrossFloors(
+    @Request() req: ExpressRequest,
+    @Body() body: {
+      floorCode: string;
+      outFloorCode: string;
+      inNodeId: string;
+      outNodeId: string;
+    },
+  ) {
+    const { floorCode, outFloorCode, inNodeId, outNodeId } = body;
     const socketId = req.socketId;
 
-    try {
-      await edgeService.createEdge(inNodeId, outNodeId);
-      const payload = { outFloorCode, inNodeId, outNodeId };
-      webSocketService.broadcastToUserFloor(
-        socketId,
-        "create-edge-across-floors",
-        payload,
-      );
+    // validate that the out node is on the out floor
+    const outNode = await nodeService.getNode(outNodeId);
 
-      const inPayload = {
-        outFloorCode: floorCode,
-        inNodeId: outNodeId,
-        outNodeId: inNodeId,
-      };
-      webSocketService.broadcastToFloor(
-        outFloorCode,
-        "create-edge-across-floors",
-        inPayload,
-      );
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "creating edge across floors");
+    // outside edge cases
+    const errorMessage = "Out node is not on the out floor";
+    if (outFloorCode === "outside") {
+      if (outNode.buildingCode !== null || outNode.floorLevel !== null) {
+        throw new Error(errorMessage);
+      }
+    } else {
+      if (
+        outNode.buildingCode !== extractBuildingCode(outFloorCode) ||
+        outNode.floorLevel !== extractFloorLevel(outFloorCode)
+      ) {
+        throw new Error(errorMessage);
+      }
     }
-  },
 
-  deleteEdgeAcrossFloors: async (req: Request, res: Response) => {
-    const { floorCode, outFloorCode, inNodeId, outNodeId } = req.body;
+    await edgeService.createEdge(inNodeId, outNodeId);
+    const payload = { outFloorCode, inNodeId, outNodeId };
+    webSocketService.broadcastToUserFloor(
+      socketId,
+      "create-edge-across-floors",
+      payload,
+    );
+
+    const inPayload = {
+      outFloorCode: floorCode,
+      inNodeId: outNodeId,
+      outNodeId: inNodeId,
+    };
+    webSocketService.broadcastToFloor(
+      outFloorCode,
+      "create-edge-across-floors",
+      inPayload,
+    );
+    return null;
+  }
+
+  @Delete("/across-floors")
+  async deleteEdgeAcrossFloors(
+    @Request() req: ExpressRequest,
+    @Body() body: {
+      floorCode: string;
+      outFloorCode: string;
+      inNodeId: string;
+      outNodeId: string;
+    },
+  ) {
+    const { floorCode, outFloorCode, inNodeId, outNodeId } = body;
     const socketId = req.socketId;
 
-    try {
-      await edgeService.deleteEdge(inNodeId, outNodeId);
-      const payload = { outFloorCode, inNodeId, outNodeId };
-      webSocketService.broadcastToUserFloor(
-        socketId,
-        "delete-edge-across-floors",
-        payload,
-      );
+    await edgeService.deleteEdge(inNodeId, outNodeId);
+    const payload = { outFloorCode, inNodeId, outNodeId };
+    webSocketService.broadcastToUserFloor(
+      socketId,
+      "delete-edge-across-floors",
+      payload,
+    );
 
-      const inPayload = {
-        outFloorCode: floorCode,
-        inNodeId: outNodeId,
-        outNodeId: inNodeId,
-      };
-      webSocketService.broadcastToFloor(
-        outFloorCode,
-        "delete-edge-across-floors",
-        inPayload,
-      );
-      res.json(null);
-    } catch (error) {
-      handleControllerError(res, error, "creating edge across floors");
-    }
-  },
-};
+    const inPayload = {
+      outFloorCode: floorCode,
+      inNodeId: outNodeId,
+      outNodeId: inNodeId,
+    };
+    webSocketService.broadcastToFloor(
+      outFloorCode,
+      "delete-edge-across-floors",
+      inPayload,
+    );
+    return null;
+  }
+}

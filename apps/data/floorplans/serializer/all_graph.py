@@ -6,9 +6,9 @@ import math
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.api_client import get_api_client
+from s3_utils.s3_utils import upload_json_file
 
-import requests
 import json
 
 
@@ -21,9 +21,9 @@ def pdf_coords_to_geo_coords(
     longitude_ratio=84719.3945182816,
     latitude_ratio=111318.8450631976,
 ):
-    x, y = pdf_coords
-    cx, cy = pdf_center
-    lat0, lon0 = geo_center
+    x, y = pdf_coords["x"], pdf_coords["y"]
+    cx, cy = pdf_center["x"], pdf_center["y"]
+    lat0, lon0 = geo_center["latitude"], geo_center["longitude"]
 
     translated_x = x - cx
     translated_y = y - cy
@@ -47,15 +47,7 @@ def all_graph_serializer():
     Fetches floor data from the server and saves it to the all-graph-serialized.json
     """
 
-    server_url = os.getenv("SERVER_URL")
-
-    headers = {
-        "Authorization": f"Bearer {get_clerk_jwt()}",
-    }
-
-    all_buildings = requests.get(f"{server_url}/api/buildings", headers=headers)
-    all_buildings.raise_for_status()  # debugging
-    buildings = all_buildings.json()
+    buildings = get_api_client(path="buildings")
     all_floor_codes = []
     for building in buildings:
         floors = buildings[building]["floors"]
@@ -67,17 +59,8 @@ def all_graph_serializer():
     for floor_code in all_floor_codes:
         building_code = floor_code.split("-")[0]
         floor_level = floor_code.split("-")[1]
-        nodes_response = requests.get(
-            f"{server_url}/api/floors/{floor_code}/graph", headers=headers
-        )
-        nodes_response.raise_for_status()  # debugging
-        nodes = nodes_response.json()
-
-        placement_response = requests.get(
-            f"{server_url}/api/floors/{floor_code}/placement", headers=headers
-        )
-        placement_response.raise_for_status()  # debugging
-        placement = placement_response.json()
+        nodes = get_api_client(path=f"floors/{floor_code}/graph")
+        placement = get_api_client(path=f"floors/{floor_code}/placement")
 
         for node in nodes:
             node_info = nodes[node]
@@ -115,6 +98,10 @@ def all_graph_serializer():
     # Save file
     with open("cmumaps-data/floorplans/all-graph-serialized.json", "w") as f:
         json.dump(all_nodes_data, f, indent=4)
+    upload_json_file(
+        local_file_path="cmumaps-data/floorplans/all-graph-serialized.json",
+        s3_object_name="floorplans/all-graph-serialized.json",
+    )
 
     return
 

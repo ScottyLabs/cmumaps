@@ -7,9 +7,9 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-import json
 import requests  # type: ignore
 from auth_utils.get_clerk_jwt import get_clerk_jwt
+from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Edge table
@@ -24,8 +24,9 @@ def drop_edge_table():
 
 
 def create_edges():
-    with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
-        data = json.load(file)
+    # with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
+    #     data = json.load(file)
+    data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
 
     edge_data = []
     for nodeId in data:

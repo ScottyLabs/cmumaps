@@ -1,15 +1,14 @@
 {
-  "entryFile": "server.ts",
+  "entryFile": "src/server.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": ["src/controllers/*.ts"],
   "spec": {
     "securityDefinitions": {
-      "oauth2": {
-        "type": "oauth2",
-        "flow": "accessCode",
-        "tokenUrl": "${TOKEN_URL}",
-        "authorizationUrl": "${AUTHORIZATION_URL}",
-        "scopes": { "db_admin": "Database Admin" }
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your bearer token below"
       }
     },
     "basePath": "/",

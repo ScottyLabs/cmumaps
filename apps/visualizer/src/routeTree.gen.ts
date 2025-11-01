@@ -10,12 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MapIndexRouteImport } from './routes/map/index'
+import { Route as MapFloorCodeRouteImport } from './routes/map/$floorCode'
 import { Route as FloorsFloorCodeRouteImport } from './routes/floors/$floorCode'
 import { Route as BuildingsBuildingCodeRouteImport } from './routes/buildings/$buildingCode'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapIndexRoute = MapIndexRouteImport.update({
+  id: '/map/',
+  path: '/map/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapFloorCodeRoute = MapFloorCodeRouteImport.update({
+  id: '/map/$floorCode',
+  path: '/map/$floorCode',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FloorsFloorCodeRoute = FloorsFloorCodeRouteImport.update({
@@ -33,30 +45,54 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/buildings/$buildingCode': typeof BuildingsBuildingCodeRoute
   '/floors/$floorCode': typeof FloorsFloorCodeRoute
+  '/map/$floorCode': typeof MapFloorCodeRoute
+  '/map': typeof MapIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/buildings/$buildingCode': typeof BuildingsBuildingCodeRoute
   '/floors/$floorCode': typeof FloorsFloorCodeRoute
+  '/map/$floorCode': typeof MapFloorCodeRoute
+  '/map': typeof MapIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/buildings/$buildingCode': typeof BuildingsBuildingCodeRoute
   '/floors/$floorCode': typeof FloorsFloorCodeRoute
+  '/map/$floorCode': typeof MapFloorCodeRoute
+  '/map/': typeof MapIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/buildings/$buildingCode' | '/floors/$floorCode'
+  fullPaths:
+    | '/'
+    | '/buildings/$buildingCode'
+    | '/floors/$floorCode'
+    | '/map/$floorCode'
+    | '/map'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/buildings/$buildingCode' | '/floors/$floorCode'
-  id: '__root__' | '/' | '/buildings/$buildingCode' | '/floors/$floorCode'
+  to:
+    | '/'
+    | '/buildings/$buildingCode'
+    | '/floors/$floorCode'
+    | '/map/$floorCode'
+    | '/map'
+  id:
+    | '__root__'
+    | '/'
+    | '/buildings/$buildingCode'
+    | '/floors/$floorCode'
+    | '/map/$floorCode'
+    | '/map/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuildingsBuildingCodeRoute: typeof BuildingsBuildingCodeRoute
   FloorsFloorCodeRoute: typeof FloorsFloorCodeRoute
+  MapFloorCodeRoute: typeof MapFloorCodeRoute
+  MapIndexRoute: typeof MapIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +102,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map/': {
+      id: '/map/'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map/$floorCode': {
+      id: '/map/$floorCode'
+      path: '/map/$floorCode'
+      fullPath: '/map/$floorCode'
+      preLoaderRoute: typeof MapFloorCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/floors/$floorCode': {
@@ -89,6 +139,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuildingsBuildingCodeRoute: BuildingsBuildingCodeRoute,
   FloorsFloorCodeRoute: FloorsFloorCodeRoute,
+  MapFloorCodeRoute: MapFloorCodeRoute,
+  MapIndexRoute: MapIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

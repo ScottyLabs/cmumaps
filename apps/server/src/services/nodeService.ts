@@ -1,10 +1,18 @@
 import type { NodeInfo, Placement } from "@cmumaps/common";
-import { extractBuildingCode, extractFloorLevel } from "@cmumaps/common";
-
+import {
+  extractBuildingCode,
+  extractFloorLevel,
+  pdfCoordsToGeoCoords,
+} from "@cmumaps/common";
 import { prisma } from "../../prisma";
-import { pdfCoordsToGeoCoords } from "../utils/coordinates";
 
 export const nodeService = {
+  getNode: async (nodeId: string) => {
+    return await prisma.node.findUniqueOrThrow({
+      where: { nodeId },
+    });
+  },
+
   upsertNode: async (
     floorCode: string,
     nodeId: string,

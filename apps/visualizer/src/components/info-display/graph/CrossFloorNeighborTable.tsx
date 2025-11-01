@@ -40,22 +40,38 @@ const DifferentFloorNeighborTable = ({
   const renderDifferentFloorNeighbors = (
     differentFloorNeighbors: Record<string, EdgeInfo>,
   ) => {
+    const getLink = (neighborId: string, neighbor: EdgeInfo) => {
+      if (neighbor.outFloorCode === "outside") {
+        return (
+          <Link
+            className="whitespace-nowrap border px-1 hover:bg-sky-700"
+            to="/map"
+            search={{ nodeId: neighborId }}
+          >
+            outside
+          </Link>
+        );
+      }
+
+      return (
+        <Link
+          className="whitespace-nowrap border px-1 hover:bg-sky-700"
+          to="/floors/$floorCode"
+          params={{
+            // all nodes in differentFloorNeighbors should have outFloorCode
+            floorCode: neighbor.outFloorCode as string,
+          }}
+          search={{ nodeId: neighborId }}
+        >
+          {neighbor.outFloorCode}
+        </Link>
+      );
+    };
+
     return Object.entries(differentFloorNeighbors).map(
       ([neighborId, neighbor]) => (
         <tr key={neighborId}>
-          <td className="border p-2">
-            <Link
-              className="whitespace-nowrap border px-1 hover:bg-sky-700"
-              to="/floors/$floorCode"
-              params={{
-                // all nodes in differentFloorNeighbors should have outFloorCode
-                floorCode: neighbors[neighborId].outFloorCode as string,
-              }}
-              search={{ nodeId: neighborId }}
-            >
-              {neighbor.outFloorCode}
-            </Link>
-          </td>
+          <td className="border p-2">{getLink(neighborId, neighbor)}</td>
           <td className="border p-2">
             <button
               type="button"

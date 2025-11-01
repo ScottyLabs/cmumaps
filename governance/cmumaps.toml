@@ -1,0 +1,18 @@
+name = "cmumaps"
+github-team = "cmu-maps"
+github-admin-team = "cmu-maps-admins"
+leads = [
+  { "github-username" = "Yuxiang-Huang", "andrew-id" = "yh4" },
+  { "github-username" = "luke992", "andrew-id" = "lhann" },
+  { "github-username" = "romycyy", "andrew-id" = "yiyuc" },
+  { "github-username" = "ellylai", "andrew-id" = "ellysel" },
+]
+members = [
+  { "github-username" = "Nicolapps", "andrew-id" = "" },
+  { "github-username" = "JettChenT", "andrew-id" = "" },
+  { "github-username" = "SLin24", "andrew-id" = "" },
+  { "github-username" = "Richard-31415", "andrew-id" = "" },
+  { "github-username" = "kath45823", "andrew-id" = "" },
+  { "github-username" = "JessCai06", "andrew-id" = "zhihanc" },
+]
+repos = ["ScottyLabs/cmumaps"]

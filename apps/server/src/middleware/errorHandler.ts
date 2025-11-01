@@ -24,7 +24,9 @@ export const errorHandler = (
 
   if (err instanceof Error) {
     console.error(`Error ${req.path}`, err);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", details: err.message });
   }
 
   next();
