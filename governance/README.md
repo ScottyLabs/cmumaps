@@ -12,7 +12,7 @@ The `check` workflow will run the `sync` script on every push to the `main` bran
   
 - Add team members to the [CMU Maps](https://github.com/orgs/ScottyLabs/teams/cmu-maps) Github team as members.
 
-- Add team leads to both the [CMU Maps](https://github.com/orgs/ScottyLabs/teams/cmu-maps) and [CMU Maps Admins](https://github.com/orgs/ScottyLabs/teams/cmu-maps-admins) Github teams as members.
+- Add team leads to the [CMU Maps Admins](https://github.com/orgs/ScottyLabs/teams/cmu-maps-admins) Github team as members.
   - No one should be a maintainer of the GitHub team since membership is managed by this governance folder.
 
 - Delete any unknown member from the Github team.
