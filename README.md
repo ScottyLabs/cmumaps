@@ -6,8 +6,7 @@
 - Install bun (<https://bun.com/get>)
 - Install vault (<https://developer.hashicorp.com/vault/install>)
 - Install jq (<https://jqlang.org/download/>)
-- Permissions
-  - Make a PR to add yourself as a member to [cmumaps.toml](governance/cmumaps.toml).
+- Permissions: follow the instructions in [governance/README.md](governance/README.md) to get the necessary permissions.
 
 ## Installation
 

@@ -4,7 +4,7 @@ This directory contains scripts to handle permissions for the CMU Maps project.
 
 ## Overview
 
-The `check` workflow will run the `sync` script on every push to the `main` branch to sync the team leads and members from `cmumaps.toml` to GitHub, Clerk, and Vault.
+Make a PR to add yourself to [cmumaps.toml](cmumaps.toml). The `check` workflow will run the `sync` script on every push to the `main` branch to sync the team leads and members from `cmumaps.toml` to GitHub, Clerk, and Vault.
 
 ### Github
 
