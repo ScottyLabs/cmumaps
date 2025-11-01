@@ -15,10 +15,10 @@ class GithubManager:
         auth = Auth.Token(os.getenv("SYNC_GITHUB_TOKEN"))
         self.g = Github(auth=auth)
         self.org = self.g.get_organization("ScottyLabs")
-        # self.existing_members = set(member.login for member in self.org.get_members())
-        # print(
-        #     f"GithubManager initialized with {len(self.existing_members)} existing members"
-        # )
+        self.existing_members = set(member.login for member in self.org.get_members())
+        print(
+            f"GithubManager initialized with {len(self.existing_members)} existing members"
+        )
 
     def sync(self):
         print("Syncing Github")
@@ -50,7 +50,7 @@ class GithubManager:
             # when retrieving the members of a parent team in GitHub, the members of its child teams are also included
             self.sync_members(github_team, leads.union(members))
 
-            # self.sync_repos(github_team, github_admin_team, team)
+            self.sync_repos(github_team, github_admin_team, team)
         except Exception as e:
             print(f"Error syncing team {team['name']}: {e}")
             traceback.print_exc()
@@ -91,17 +91,21 @@ class GithubManager:
                 user = self.g.get_user(member)
                 github_team.remove_membership(user)
 
+    # Sync the repositories to the Github team
+    # Give CMU Maps team members write access and CMU Maps Admins admin access to the repository
     def sync_repos(self, github_team, github_admin_team, team):
         repos = set(team["repos"])
         github_repos = github_team.get_repos()
         github_repos = set([repo.full_name for repo in github_repos])
 
-        for repo in repos:
-            if repo not in github_repos:
-                print(f"Adding {repo} as a repo to {github_team.name} Github team")
-                github_team.add_to_repos(repo)
-
+        # Remove any repositories from the Github team that are not in the team list
         for repo in github_repos:
             if repo not in repos:
                 print(f"Removing {repo} from {github_team.name} Github team")
                 github_team.remove_from_repos(repo)
+
+        # Give CMU Maps team members write access and CMU Maps Admins admin access to the repository
+        for repo in repos:
+            github_team.add_to_repos(repo)
+            github_team.update_team_repository(repo, "push")
+            github_admin_team.update_team_repository(repo, "admin")
