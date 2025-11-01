@@ -17,11 +17,11 @@
         "pnpmOverrides",
         "local"
       ],
-      "range": ""
+      "range": "^"
     },
     {
       "dependencyTypes": ["dev"],
-      "range": "~"
+      "range": "^"
     },
     {
       "dependencyTypes": ["peer"],
