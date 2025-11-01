@@ -22,7 +22,7 @@ class GithubManager:
 
     def sync(self):
         print("Syncing Github")
-        # self.sync_contributors()
+        self.sync_contributors()
         self.sync_team()
         print("Github sync complete")
 
@@ -42,54 +42,33 @@ class GithubManager:
             team = self.team
             github_admin_team = self.org.get_team_by_slug(team["github-admin-team"])
             leads = set([lead["github-username"] for lead in team["leads"]])
-            self.sync_leads(github_admin_team, leads)
+            self.sync_github_team(github_admin_team, leads)
 
-            github_team = self.org.get_team_by_slug(team["github-team"])
-            members = set([member["github-username"] for member in team["members"]])
             # Also need to include leads so they are not removed from the parent team since
             # when retrieving the members of a parent team in GitHub, the members of its child teams are also included
-            self.sync_members(github_team, leads.union(members))
+            github_team = self.org.get_team_by_slug(team["github-team"])
+            members = set([member["github-username"] for member in team["members"]])
+            self.sync_github_team(github_team, leads.union(members))
 
             self.sync_repos(github_team, github_admin_team, team)
         except Exception as e:
             print(f"Error syncing team {team['name']}: {e}")
             traceback.print_exc()
 
-    # Sync the team leads to the admin Github team
-    def sync_leads(self, github_team, leads):
-        github_leads = github_team.get_members()
-        github_leads = set([member.login for member in github_leads])
+    def sync_github_team(self, github_team, desired_members: set[str]):
+        current_members = {member.login for member in github_team.get_members()}
 
-        # Add any new team leads to the Github team
-        for lead in leads:
-            if lead not in github_leads:
-                print(f"Adding {lead} to the {github_team.name} Github team")
-                user = self.g.get_user(lead)
-                github_team.add_membership(user, role="member")
+        # --- Add new members ---
+        for username in desired_members - current_members:
+            print(f"Adding {username} to the {github_team.name} GitHub team")
+            user = self.g.get_user(username)
+            github_team.add_membership(user, role="member")
 
-        # Remove any team leads from the Github team that are not in the team list
-        for lead in github_leads:
-            if lead not in leads:
-                print(f"Removing {lead} from {github_team.name} Github team")
-                user = self.g.get_user(lead)
-                github_team.remove_membership(user)
-
-    # Sync both team members and leads to the Github team
-    def sync_members(self, github_team, members):
-        github_members = github_team.get_members()
-        github_members = set([member.login for member in github_members])
-
-        for member in members:
-            if member not in github_members:
-                print(f"Adding {member} to the {github_team.name} Github team")
-                user = self.g.get_user(member)
-                github_team.add_membership(user, role="member")
-
-        for member in github_members:
-            if member not in members:
-                print(f"Removing {member} from {github_team.name} Github team")
-                user = self.g.get_user(member)
-                github_team.remove_membership(user)
+        # --- Remove extra members ---
+        for username in current_members - desired_members:
+            print(f"Removing {username} from {github_team.name} GitHub team")
+            user = self.g.get_user(username)
+            github_team.remove_membership(user)
 
     # Sync the repositories to the Github team
     # Give CMU Maps team members write access and CMU Maps Admins admin access to the repository

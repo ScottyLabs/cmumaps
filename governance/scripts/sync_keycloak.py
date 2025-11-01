@@ -24,6 +24,8 @@ class KeycloakManager:
         )
 
     def sync(self):
+        print("Syncing Keycloak")
+
         # Sync the team leads to the Keycloak cmumaps-admins group
         admins_emails = get_leads_emails(self.team)
         self.sync_group(self.ADMIN_GROUP, admins_emails)
@@ -31,6 +33,8 @@ class KeycloakManager:
         # Sync team members to Keycloak cmumaps-devs group
         members_emails = get_members_emails(self.team)
         self.sync_group(self.MEMBER_GROUP, members_emails)
+
+        print("Keycloak sync complete")
 
     def sync_group(self, group_path: str, target_emails: set[str]):
         group = self.keycloak_admin.get_group_by_path(group_path)
@@ -56,7 +60,7 @@ class KeycloakManager:
                 self.keycloak_admin.group_user_remove(member["id"], group_id)
 
     # Get the user ID by email
-    def get_user_id_by_email(self, email: str) -> str | False:
+    def get_user_id_by_email(self, email: str):
         users = self.keycloak_admin.get_users(query={"email": email})
         if not users:
             print(f"User {email} not found in Keycloak")
