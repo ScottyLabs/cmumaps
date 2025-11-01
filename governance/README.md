@@ -56,6 +56,8 @@ Make sure you have the right permissions by logging into the [vault](https://sec
 
 - If your user is not found in Keycloak, try logging into the [vault](https://secrets.scottylabs.org/ui/vault/auth?with=oidc) to create your account and then rerun the workflow.
 
+- Make sure your andrew id in [cmumaps.toml](cmumaps.toml) is lowercased.
+
 ## Running the script locally
 
 ```zsh
