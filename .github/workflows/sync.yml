@@ -16,6 +16,12 @@ jobs:
       CLERK_DEV_ORG_ID: ${{ secrets.CLERK_DEV_ORG_ID }}
       CLERK_PROD_SECRET_KEY: ${{ secrets.CLERK_PROD_SECRET_KEY }}
       CLERK_PROD_ORG_ID: ${{ secrets.CLERK_PROD_ORG_ID }}
+      KEYCLOAK_SERVER_URL: ${{ secrets.KEYCLOAK_SERVER_URL }}
+      KEYCLOAK_USERNAME: ${{ secrets.KEYCLOAK_USERNAME }}
+      KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+      KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+      KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+      KEYCLOAK_USER_REALM: ${{ secrets.KEYCLOAK_USER_REALM }}
 
     steps:
       - name: Checkout
