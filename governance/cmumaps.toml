@@ -1,20 +1,17 @@
 name = "cmumaps"
 github-team = "cmu-maps"
 leads = [
-    { "github-username" = "Yuxiang-Huang", "andrew-id"= "yh4" },
-    { "github-username" = "luke992", "andrew-id" = "lhann"},
-    { "github-username" = "romycyy", "andrew-id" = "yiyuc"},
+    { "github-username" = "Yuxiang-Huang", "andrew-id" = "yh4" },
+    { "github-username" = "luke992", "andrew-id" = "lhann" },
+    { "github-username" = "romycyy", "andrew-id" = "yiyuc" },
 ]
 members = [
-    { "github-username" = "ellylai", "andrew-id" = ""},
-    { "github-username" = "Nicolapps", "andrew-id" = ""},
-    { "github-username" = "JettChenT", "andrew-id" = ""},
-    { "github-username" = "SLin24", "andrew-id" = ""},
-    { "github-username" = "Richard-31415", "andrew-id" = ""},
-    { "github-username" = "kath45823", "andrew-id" = ""},
-    { "github-username" = "JessCai06", "andrew-id" = "Zhihanc"}
+    { "github-username" = "ellylai", "andrew-id" = "" },
+    { "github-username" = "Nicolapps", "andrew-id" = "" },
+    { "github-username" = "JettChenT", "andrew-id" = "" },
+    { "github-username" = "SLin24", "andrew-id" = "" },
+    { "github-username" = "Richard-31415", "andrew-id" = "" },
+    { "github-username" = "kath45823", "andrew-id" = "" },
+    { "github-username" = "JessCai06", "andrew-id" = "Zhihanc" },
 ]
-repos = [
-    "ScottyLabs/cmumaps",
-    "ScottyLabs/cmumaps-data-acquisitor",
-]
+repos = ["ScottyLabs/cmumaps"]
