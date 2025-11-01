@@ -10,7 +10,7 @@ const Banner = () => {
   (" ");
 
   return (
-    <div className="bg-primary-blue px-4 py-2 text-center text-white">
+    <div className="absolute top-0 right-0 left-0 z-50 bg-primary-blue px-4 py-2 text-center text-white">
       <h1 className="font-bold text-xl">
         <div className="hidden sm:block">
           {link} for NOVA, Scottylabs' GenAI Hackathon by Nov. 1st!
