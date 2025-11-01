@@ -2,15 +2,18 @@
 # python floorplans/serializer/floorplans.py
 import os
 import sys
+import requests
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.api_client import get_api_client
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 from s3_utils.s3_utils import upload_json_file, get_json_from_s3
 
 import json
 
 from all_graph import pdf_coords_to_geo_coords
+
+server_url = os.getenv("SERVER_URL")
 
 
 def floorplans_serializer(floor_code: str = None):
@@ -26,8 +29,17 @@ def floorplans_serializer(floor_code: str = None):
         floor_level = floor_code.split("-")[1]
         file_to_update = "cmumaps-data/floorplans/floorplans-serialized.json"
 
-        rooms = get_api_client(path=f"floors/{floor_code}/georooms")
-        placement = get_api_client(path=f"floors/{floor_code}/placement")
+        response_rooms = requests.get(
+            f"{server_url}/floors/{floor_code}/rooms",
+            headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        )
+        response_placement = requests.get(
+            f"{server_url}/floors/{floor_code}/placement",
+            headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        )
+
+        rooms = response_rooms.json()
+        placement = response_placement.json()
 
         # changed
         floorplans_data = get_json_from_s3(
@@ -45,6 +57,20 @@ def floorplans_serializer(floor_code: str = None):
                 scale=placement["scale"],
                 angle_radians=placement["angle"],
             )
+            # pdf coordinates to geo coordinates
+            coordinates = []
+            room_polygon = room_info["polygon"]
+            for pair in room_polygon["coordinates"][0]:
+                x, y = pair[0], pair[1]
+                pdf_coords = {"x": x, "y": y}
+                lat, long = pdf_coords_to_geo_coords(
+                    pdf_coords=pdf_coords,
+                    geo_center=placement["geoCenter"],
+                    pdf_center=placement["pdfCenter"],
+                    scale=placement["scale"],
+                    angle_radians=placement["angle"],
+                )
+                coordinates.append({"latitude": lat, "longitude": long})
 
             new_room_dict = {
                 "name": room_name,
@@ -55,7 +81,7 @@ def floorplans_serializer(floor_code: str = None):
                 "type": room_info["type"],
                 "id": roomId,
                 "floor": {"buildingCode": building_code, "level": floor_level},
-                "coordinates": room_info["polygon"],
+                "coordinates": [coordinates],
                 "aliases": room_info["aliases"],
             }
             # Update room
@@ -67,7 +93,11 @@ def floorplans_serializer(floor_code: str = None):
 
     else:  # Update all
         floorplans_dict = {}
-        buildings = get_api_client(path="buildings")
+        response_buildings = requests.get(
+            f"{server_url}/buildings",
+            headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        )
+        buildings = response_buildings.json()
         all_floor_codes = []
         for building in buildings:
             floors = buildings[building]["floors"]
@@ -78,9 +108,16 @@ def floorplans_serializer(floor_code: str = None):
         for floor_code in all_floor_codes:
             building_code = floor_code.split("-")[0]
             floor_level = floor_code.split("-")[1]
-            rooms = get_api_client(path=f"floors/{floor_code}/georooms")
-            placement = get_api_client(path=f"floors/{floor_code}/placement")
-
+            response_rooms = requests.get(
+                f"{server_url}/floors/{floor_code}/rooms",
+                headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+            )
+            response_placement = requests.get(
+                f"{server_url}/floors/{floor_code}/placement",
+                headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+            )
+            rooms = response_rooms.json()
+            placement = response_placement.json()
             for room in rooms:
                 room_info = rooms[room]
                 room_name = room_info["name"]
@@ -94,6 +131,20 @@ def floorplans_serializer(floor_code: str = None):
                     angle_radians=placement["angle"],
                 )
 
+                coordinates = []
+                room_polygon = room_info["polygon"]
+                for pair in room_polygon["coordinates"][0]:
+                    x, y = pair[0], pair[1]
+                    pdf_coords = {"x": x, "y": y}
+                    lat, long = pdf_coords_to_geo_coords(
+                        pdf_coords=pdf_coords,
+                        geo_center=placement["geoCenter"],
+                        pdf_center=placement["pdfCenter"],
+                        scale=placement["scale"],
+                        angle_radians=placement["angle"],
+                    )
+                    coordinates.append({"latitude": lat, "longitude": long})
+
                 new_room_dict = {
                     "name": room_name,
                     "labelPosition": {
@@ -103,7 +154,7 @@ def floorplans_serializer(floor_code: str = None):
                     "type": room_info["type"],
                     "id": roomId,
                     "floor": {"buildingCode": building_code, "level": floor_level},
-                    "coordinates": room_info["polygon"],
+                    "coordinates": [coordinates],
                     "aliases": room_info["aliases"],
                 }
                 if building_code not in floorplans_dict:

@@ -2,13 +2,16 @@
 # python floorplans/serializer/buildings.py
 import os
 import sys
+import requests
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.api_client import get_api_client
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 from s3_utils.s3_utils import upload_json_file, get_json_from_s3
 
 import json
+
+server_url = os.getenv("SERVER_URL")
 
 
 def buildings_serializer():
@@ -16,7 +19,11 @@ def buildings_serializer():
     Fetches floor data from the server and saves it to the buildings-serialized.json
     """
 
-    buildings = get_api_client(path="buildings")
+    response_buildings = requests.get(
+        f"{server_url}/buildings",
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    buildings = response_buildings.json()
 
     all_buildings_data = {}
 
