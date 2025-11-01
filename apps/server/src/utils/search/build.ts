@@ -4,6 +4,38 @@ import { buildingService } from "../../services/buildingService";
 import { parseQuery, type SearchIndex } from "./parse";
 import type { Document, FloorPlans, RoomDocument } from "./types";
 
+export function buildingToDocument({
+  id,
+  name,
+  code,
+  labelPosition,
+}: {
+  id: string;
+  name: string;
+  code: string;
+  labelPosition: GeoCoordinate;
+}): { doc: RoomDocument; terms: string[] } {
+  const doc: RoomDocument = {
+    id,
+    nameWithSpace: name,
+    fullNameWithSpace: name,
+    labelPosition: labelPosition,
+    type: "building",
+    alias: code,
+    numTerms: 0,
+  };
+  const terms = [
+    ...parseQuery(name),
+    ...parseQuery(code),
+    ...parseQuery(id),
+    ...parseQuery(doc.alias),
+    ...parseQuery(doc.nameWithSpace),
+    ...parseQuery(doc.fullNameWithSpace),
+  ];
+  doc.numTerms = terms.length;
+  return { doc, terms };
+}
+
 export function roomToDocument({
   id,
   name,
@@ -21,22 +53,22 @@ export function roomToDocument({
 }): { doc: RoomDocument; terms: string[] } {
   const doc: RoomDocument = {
     id,
-    name_with_space: `${buildingCode} ${name}`,
-    full_name_with_space: `${buildingName} ${name}`,
-    label_position: labelPosition,
-    _type: "room",
+    nameWithSpace: `${buildingCode} ${name}`,
+    fullNameWithSpace: `${buildingName} ${name}`,
+    labelPosition: labelPosition,
+    type: "room",
     alias,
-    num_terms: 0,
+    numTerms: 0,
   };
   const terms = [
     ...parseQuery(name),
     ...parseQuery(alias),
     ...parseQuery(id),
     ...parseQuery(doc.alias),
-    ...parseQuery(doc.name_with_space),
-    ...parseQuery(doc.full_name_with_space),
+    ...parseQuery(doc.nameWithSpace),
+    ...parseQuery(doc.fullNameWithSpace),
   ];
-  doc.num_terms = terms.length;
+  doc.numTerms = terms.length;
   return { doc, terms };
 }
 
@@ -108,6 +140,23 @@ export async function buildSearchIndex(
   const startTime = Date.now();
   const index: SearchIndex = {};
   const documents: Record<string, Document> = {};
+
+  // Process buildings first
+  for (const [buildingCode, building] of Object.entries(buildingMap)) {
+    const { doc, terms } = buildingToDocument({
+      id: buildingCode,
+      name: building.name,
+      code: building.code,
+      labelPosition: {
+        latitude: building.labelLatitude,
+        longitude: building.labelLongitude,
+      },
+    });
+
+    documents[buildingCode] = doc;
+    insertTerms(index, terms, buildingCode);
+  }
+  console.log(`Built ${Object.keys(documents).length} building documents`);
 
   // Iterate over buildings in floorplans
   for (const [buildingCode, buildingPlan] of Object.entries(floorplans)) {

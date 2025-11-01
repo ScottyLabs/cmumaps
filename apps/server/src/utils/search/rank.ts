@@ -5,7 +5,7 @@ import type { Document, RoomDocument } from "./types";
  * Get the number of terms in a document
  */
 export function getNumTerms(doc: Document): number {
-  return doc.num_terms;
+  return doc.numTerms;
 }
 
 /**
@@ -57,11 +57,11 @@ export function distanceWeightedScore(
   userPos: GeoCoordinate | null | undefined,
   score: number,
 ): number {
-  if (!userPos || !doc.label_position) {
+  if (!userPos || !doc.labelPosition) {
     return score;
   }
 
-  const dist = coordDist(userPos, doc.label_position);
+  const dist = coordDist(userPos, doc.labelPosition);
   return score + 1.0 / (Math.log(dist + 10.0) + 1.0);
 }
 

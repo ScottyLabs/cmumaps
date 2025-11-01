@@ -92,7 +92,7 @@ export class SearchController {
       overallScores.entries(),
     ).map(([docId, score]) => {
       const doc = documents[docId];
-      if (doc._type === "room") {
+      if (doc.type === "room") {
         return [docId, distanceWeightedScore(doc as RoomDocument, pos, score)];
       }
       return [docId, score];
