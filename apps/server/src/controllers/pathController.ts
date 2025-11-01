@@ -82,7 +82,10 @@ export class PathController {
               scale: node.floor.scale,
               angle: node.floor.angle,
             }
-          : null,
+          : {
+              buildingCode: "outside",
+              level: "1",
+            },
       } as unknown as Graph[string];
     }
 
