@@ -1,9 +1,9 @@
 from clerk_backend_api import Clerk
 
+from scripts.utils import get_members_emails, get_leads_emails
+
 
 class ClerkManager:
-    EMAIL_SUFFIX = "@andrew.cmu.edu"
-
     def __init__(self, team, secret_key, org_id, env):
         self.team = team
         self.env = env
@@ -41,9 +41,7 @@ class ClerkManager:
         print(f"Clerk {self.env} sync complete")
 
     def sync_leads(self):
-        leads_emails = [
-            lead["andrew-id"] + self.EMAIL_SUFFIX for lead in self.team["leads"]
-        ]
+        leads_emails = get_leads_emails(self.team)
         leads_emails.append("scottylabsdeveloper@gmail.com")
         leads_ids = self.get_users_by_emails(leads_emails)
 
@@ -73,11 +71,7 @@ class ClerkManager:
                 )
 
     def sync_members(self):
-        members_emails = [
-            member["andrew-id"] + self.EMAIL_SUFFIX
-            for member in self.team["members"]
-            if member["andrew-id"]
-        ]
+        members_emails = get_members_emails(self.team)
         members_ids = self.get_users_by_emails(members_emails)
 
         # Add team members as members to Clerk

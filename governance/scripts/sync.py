@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from scripts.sync_github import GithubManager
 from scripts.sync_clerk import ClerkManager
+from scripts.sync_keycloak import KeycloakManager
 
 load_dotenv()
 
@@ -24,6 +25,8 @@ class SyncManager:
         secret_key = os.getenv("CLERK_PROD_SECRET_KEY")
         org_id = os.getenv("CLERK_PROD_ORG_ID")
         ClerkManager(self.team, secret_key, org_id, "Prod").sync()
+
+        KeycloakManager(self.team).sync()
 
 
 if __name__ == "__main__":
