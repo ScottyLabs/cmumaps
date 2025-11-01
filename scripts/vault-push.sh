@@ -33,13 +33,13 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Special case for scripts
-if [ "$APPLICATION" == "scripts" ]; then
+if [ "$APPLICATION" == "scripts" || "$APPLICATION" == "all" ]; then
   cat scripts/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/scripts"
   exit 0
 fi
 
 # Special case for governance
-if [ "$APPLICATION" == "governance" ]; then
+if [ "$APPLICATION" == "governance" || "$APPLICATION" == "all" ]; then
   cat governance/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/governance"
   exit 0
 fi
