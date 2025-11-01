@@ -69,9 +69,14 @@ class ClerkManager:
                 )
             else:
                 print(f"Adding {full_name} as {role} in Clerk {self.env}")
-                self.clerk.organization_memberships.create(
-                    organization_id=self.org_id, user_id=uid, role=role
-                )
+                try:
+                    self.clerk.organization_memberships.create(
+                        organization_id=self.org_id, user_id=uid, role=role
+                    )
+                except Exception as e:
+                    print(
+                        f"Error adding {full_name} as {role} in Clerk {self.env}: {e}"
+                    )
 
         # --- Remove extra users ---
         for uid in clerk_users - desired_user_ids:
