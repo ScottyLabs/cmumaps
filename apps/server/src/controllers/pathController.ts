@@ -5,6 +5,40 @@ import { prisma } from "../../prisma";
 import { generateInstructions } from "../utils/path/instructions";
 import { getRoute, waypointToNodes } from "../utils/path/pathfinder";
 
+// Cache the dbNodes query result
+let dbNodesCache: Awaited<
+  ReturnType<
+    typeof prisma.node.findMany<{
+      include: {
+        outEdges: {
+          include: {
+            outNode: { select: { buildingCode: true; floorLevel: true } };
+          };
+        };
+        floor: true;
+      };
+    }>
+  >
+> | null = null;
+
+async function getOrBuildDbNodes() {
+  if (!dbNodesCache) {
+    console.log("Building dbNodes cache...");
+    dbNodesCache = await prisma.node.findMany({
+      include: {
+        outEdges: {
+          include: {
+            outNode: { select: { buildingCode: true, floorLevel: true } },
+          },
+        },
+        floor: true,
+      },
+    });
+    console.log(`DbNodes cache built with ${dbNodesCache.length} nodes`);
+  }
+  return dbNodesCache;
+}
+
 @Route("/path")
 export class PathController {
   @Get("/")
@@ -17,16 +51,7 @@ export class PathController {
     }
 
     // Build global graph: all nodes and their neighbors, with floor placement
-    const dbNodes = await prisma.node.findMany({
-      include: {
-        outEdges: {
-          include: {
-            outNode: { select: { buildingCode: true, floorLevel: true } },
-          },
-        },
-        floor: true,
-      },
-    });
+    const dbNodes = await getOrBuildDbNodes();
 
     const graph: Graph = {};
     for (const node of dbNodes) {
@@ -128,5 +153,27 @@ export class PathController {
     const route = getRoute(startNodes, endNodes, graph, 1);
     const instructions = generateInstructions(route);
     return { Fastest: { path: route, instructions } };
+  }
+
+  @Get("/rebuild")
+  public async rebuildCache(): Promise<{
+    message: string;
+    nodeCount: number;
+  }> {
+    console.log("Rebuilding dbNodes cache...");
+    dbNodesCache = await prisma.node.findMany({
+      include: {
+        outEdges: {
+          include: {
+            outNode: { select: { buildingCode: true, floorLevel: true } },
+          },
+        },
+        floor: true,
+      },
+    });
+    return {
+      message: "DbNodes cache rebuilt successfully",
+      nodeCount: dbNodesCache.length,
+    };
   }
 }
