@@ -8,7 +8,6 @@
 - Install jq (<https://jqlang.org/download/>)
 - Permissions
   - Make a PR to add yourself as a member to [cmumaps.toml](governance/cmumaps.toml).
-  - Make sure you can log into [vault](https://secrets.scottylabs.org/ui/vault/auth?with=oidc) and view the [dev secrets](https://secrets.scottylabs.org/ui/vault/secrets/ScottyLabs/kv/list/cmumaps/dev/).
 
 ## Installation
 
