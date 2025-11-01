@@ -33,14 +33,14 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Special case for scripts
-if [ "$APPLICATION" == "scripts" || "$APPLICATION" == "all" ]; then
+if [[ "$APPLICATION" == "scripts" ]] || [[ "$APPLICATION" == "all" ]]; then
   vault kv get -format=json ScottyLabs/cmumaps/scripts |
     jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >scripts/.env
   exit 0
 fi
 
 # Special case for governance
-if [ "$APPLICATION" == "governance" || "$APPLICATION" == "all" ]; then
+if [[ "$APPLICATION" == "governance" ]] || [[ "$APPLICATION" == "all" ]]; then
   vault kv get -format=json ScottyLabs/cmumaps/governance |
     jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >governance/.env
   exit 0
