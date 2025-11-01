@@ -1,7 +1,7 @@
 import type { Graph, PreciseRoute, WayPoint } from "@cmumaps/common";
+import { geoCoordsToPdfCoords } from "@cmumaps/common";
 import { Get, Query, Route } from "tsoa";
 import { prisma } from "../../prisma";
-import { geoCoordsToPdfCoords } from "../utils/coordinates";
 import { generateInstructions } from "../utils/path/instructions";
 import { getRoute, waypointToNodes } from "../utils/path/pathfinder";
 

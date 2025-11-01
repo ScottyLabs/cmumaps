@@ -5,8 +5,8 @@ import type {
   Route,
   WayPoint,
 } from "@cmumaps/common";
+import { calcDist, pdfCoordsToGeoCoords } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
-import { calcDist, pdfCoordsToGeoCoords } from "../coordinates";
 
 export const waypointToNodes = (waypoint: WayPoint, graph: Graph) => {
   const nodes = [];
