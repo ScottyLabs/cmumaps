@@ -2,12 +2,15 @@ from clerk_backend_api import Clerk
 
 
 class ClerkManager:
+    EMAIL_SUFFIX = "@andrew.cmu.edu"
+
     def __init__(self, team, secret_key, org_id, env):
         self.team = team
         self.env = env
         self.clerk = Clerk(bearer_auth=secret_key)
         self.org_id = org_id
 
+    # Get all admins and members in the Clerk CMU Maps organization
     def load_memberships(self):
         memberships = self.clerk.organization_memberships.list(
             organization_id=self.org_id
@@ -39,10 +42,10 @@ class ClerkManager:
 
     def sync_leads(self):
         leads_emails = [
-            lead["andrew-id"] + "@andrew.cmu.edu" for lead in self.team["leads"]
+            lead["andrew-id"] + self.EMAIL_SUFFIX for lead in self.team["leads"]
         ]
         leads_emails.append("scottylabsdeveloper@gmail.com")
-        leads_ids = self.get_users(leads_emails)
+        leads_ids = self.get_users_by_emails(leads_emails)
 
         # Add team leads as admins to Clerk
         for lead_id in leads_ids:
@@ -70,9 +73,12 @@ class ClerkManager:
                 )
 
     def sync_members(self):
-        members_ids = self.get_users(
-            member["andrew-id"] + "@andrew.cmu.edu" for member in self.team["members"]
-        )
+        members_emails = [
+            member["andrew-id"] + self.EMAIL_SUFFIX
+            for member in self.team["members"]
+            if member["andrew-id"]
+        ]
+        members_ids = self.get_users_by_emails(members_emails)
 
         # Add team members as members to Clerk
         for member_id in members_ids:
@@ -103,8 +109,13 @@ class ClerkManager:
                     organization_id=self.org_id, user_id=member_id
                 )
 
-    def get_users(self, emails):
+    def get_users_by_emails(self, emails):
         users = self.clerk.users.list(request={"email_address": emails})
+        user_emails = [user.email_addresses[0].email_address for user in users]
+        for email in emails:
+            if email not in user_emails:
+                print(f"User {email} not found in Clerk {self.env}")
+
         return [user.id for user in users]
 
     def get_user_full_name(self, user_id):
