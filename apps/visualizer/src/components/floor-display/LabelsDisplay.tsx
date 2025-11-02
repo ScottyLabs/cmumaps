@@ -28,13 +28,13 @@ const LabelsDisplay = ({ floorCode, rooms }: Props) => {
   // label icon
   const { width, height, path } = useMemo(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     const viewBox = TfiLocationPin({}).props.attr.viewBox.split(" ");
     const width = Number(viewBox[2]);
     const height = Number(viewBox[3]);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     const path = TfiLocationPin({}).props.children[1].props.d;
 
     return { width, height, path };
@@ -51,7 +51,7 @@ const LabelsDisplay = ({ floorCode, rooms }: Props) => {
 
     // don't show label when not showing all labels and not selected
     if (!showLabels && !selected) {
-      return;
+      return null;
     }
 
     const handleOnDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {

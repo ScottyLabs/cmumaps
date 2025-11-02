@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.4/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -9,10 +9,10 @@
     "ignoreUnknown": false,
     "includes": [
       "**",
-      "!**/src/assets/**",
-      "!**/cmumaps-data/**",
-      "!**/dist/**",
-      "!**/build/**",
+      "!**/src/assets",
+      "!**/cmumaps-data",
+      "!**/dist",
+      "!**/build",
       "!**/routeTree.gen.ts",
       "!**/openapi.d.ts"
     ]
@@ -55,6 +55,11 @@
   "javascript": {
     "parser": {
       "unsafeParameterDecoratorsEnabled": true
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }
