@@ -9,7 +9,6 @@ import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
 import NavOverlay from "./components/nav/NavOverlay.tsx";
-import Banner from "./components/ui-layout/Banner.tsx";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
@@ -35,7 +34,6 @@ const App = () => {
 
   return (
     <main className="relative h-dvh">
-      <Banner />
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
