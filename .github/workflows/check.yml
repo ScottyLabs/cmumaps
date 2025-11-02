@@ -8,6 +8,8 @@ on:
     branches:
       - main
       - staging
+  workflow_dispatch:
+  
 jobs:
   check:
     runs-on: ubuntu-latest
