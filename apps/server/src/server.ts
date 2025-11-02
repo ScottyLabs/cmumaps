@@ -43,7 +43,7 @@ app.use(clerkMiddleware());
 // Swagger
 const file = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(file) as JsonObject;
-app.use(express.static("./node_modules/swagger-ui-dist"));
+app.use("/swagger", express.static("./node_modules/swagger-ui-dist"));
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
