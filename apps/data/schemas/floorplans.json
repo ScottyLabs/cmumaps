@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CMU Maps Floorplans Schema",
+  "description": "Schema for floorplans.json",
+  "type": "object",
+  "additionalProperties": {
+    "description": "Building code",
+    "type": "object",
+    "additionalProperties": {
+      "description": "Floor level",
+      "type": "object",
+      "additionalProperties": {
+        "description": "Room (UUID)",
+        "type": "object",
+        "required": [
+          "name",
+          "labelPosition",
+          "type",
+          "id",
+          "floor",
+          "coordinates"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "labelPosition": {
+            "type": "object",
+            "required": [
+              "latitude",
+              "longitude"
+            ],
+            "properties": {
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false
+          },
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "floor": {
+            "type": "object",
+            "required": [
+              "buildingCode",
+              "level"
+            ],
+            "properties": {
+              "buildingCode": {
+                "type": "string"
+              },
+              "level": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "latitude",
+                  "longitude"
+                ],
+                "properties": {
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "$comment": "Geographical coordinates of the room"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "$comment": "Aliases for the room (Optional)"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
