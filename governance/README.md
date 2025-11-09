@@ -2,9 +2,13 @@
 
 This directory contains scripts to handle permissions for the CMU Maps project.
 
+## Join the CMU Maps team! 🎉
+
+Make a PR to add yourself to [cmumaps.toml](cmumaps.toml). It will be manually accepted once it passes the [check workflow](https://github.com/ScottyLabs/cmumaps/actions/workflows/check.yml).
+
 ## Overview
 
-Make a PR to add yourself to [cmumaps.toml](cmumaps.toml). The `check` workflow will run the `sync` script on every push to the `main` branch to sync the team leads and members from `cmumaps.toml` to GitHub, Clerk, and Vault.
+The [sync workflow](../.github/workflows/sync.yml) will run the [sync script](scripts/sync.py) on every push to the `main` branch to sync the team leads and members from `cmumaps.toml` to GitHub, Clerk, and Vault.
 
 ### Github
 

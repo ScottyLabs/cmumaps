@@ -3,13 +3,16 @@
 import os
 import sys
 import math
+import requests
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.api_client import get_api_client
+from auth_utils.get_clerk_jwt import get_clerk_jwt
 from s3_utils.s3_utils import upload_json_file
 
 import json
+
+server_url = os.getenv("SERVER_URL")
 
 
 def pdf_coords_to_geo_coords(
@@ -46,8 +49,12 @@ def all_graph_serializer():
     """
     Fetches floor data from the server and saves it to the all-graph-serialized.json
     """
+    response_buildings = requests.get(
+        f"{server_url}/buildings",
+        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+    )
+    buildings = response_buildings.json()
 
-    buildings = get_api_client(path="buildings")
     all_floor_codes = []
     for building in buildings:
         floors = buildings[building]["floors"]
@@ -59,8 +66,16 @@ def all_graph_serializer():
     for floor_code in all_floor_codes:
         building_code = floor_code.split("-")[0]
         floor_level = floor_code.split("-")[1]
-        nodes = get_api_client(path=f"floors/{floor_code}/graph")
-        placement = get_api_client(path=f"floors/{floor_code}/placement")
+        response_nodes = requests.get(
+            f"{server_url}/floors/{floor_code}/graph",
+            headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        )
+        nodes = response_nodes.json()
+        response_placement = requests.get(
+            f"{server_url}/floors/{floor_code}/placement",
+            headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        )
+        placement = response_placement.json()
 
         for node in nodes:
             node_info = nodes[node]

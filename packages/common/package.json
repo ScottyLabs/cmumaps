@@ -2,8 +2,8 @@
   "name": "@cmumaps/common",
   "version": "1.0.0",
   "devDependencies": {
-    "@types/node": "^24.0.13",
-    "typescript": "^5.8.3"
+    "@types/node": "^24.9.2",
+    "typescript": "^5.9.3"
   },
   "main": "src/index.ts",
   "scripts": {

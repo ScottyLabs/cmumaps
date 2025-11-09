@@ -245,28 +245,25 @@ const NodesDisplay = ({
     };
 
   return Object.entries(graph).map(
-    ([nodeId, node]: [string, NodeInfo], index: number) => {
-      if (!showRoomSpecific || node.roomId === roomId) {
-        return (
-          <Circle
-            key={index}
-            x={node.pos.x}
-            y={node.pos.y}
-            radius={nodeSize}
-            fill={getFillColor(nodeId)}
-            stroke="black"
-            strokeWidth={nodeSize / 4}
-            onMouseEnter={(e) => setCursor(e, "pointer")}
-            onMouseLeave={(e) => setCursor(e, "default")}
-            onClick={() => handleNodeClick(nodeId)}
-            draggable
-            onDragStart={() => dispatch(dragNode(nodeId))}
-            onDragMove={handleDragMove(nodeId)}
-            onDragEnd={handleOnDragEnd(nodeId)}
-          />
-        );
-      }
-    },
+    ([nodeId, node]: [string, NodeInfo], index: number) =>
+      (!showRoomSpecific || node.roomId === roomId) && (
+        <Circle
+          key={index}
+          x={node.pos.x}
+          y={node.pos.y}
+          radius={nodeSize}
+          fill={getFillColor(nodeId)}
+          stroke="black"
+          strokeWidth={nodeSize / 4}
+          onMouseEnter={(e) => setCursor(e, "pointer")}
+          onMouseLeave={(e) => setCursor(e, "default")}
+          onClick={() => handleNodeClick(nodeId)}
+          draggable
+          onDragStart={() => dispatch(dragNode(nodeId))}
+          onDragMove={handleDragMove(nodeId)}
+          onDragEnd={handleOnDragEnd(nodeId)}
+        />
+      ),
   );
 };
 

@@ -55,7 +55,7 @@ const NavHeader = ({
 
   const renderChooseHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-[19px] top-15 overflow-auto rounded-lg bg-white">
+      <div className="btn-shadow fixed inset-x-[19px] top-10 overflow-auto rounded-lg bg-white">
         <div className="flex">
           <img
             alt="navigation header"

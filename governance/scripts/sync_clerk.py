@@ -97,4 +97,6 @@ class ClerkManager:
 
     def get_user_full_name(self, user_id):
         user = self.clerk.users.get(user_id=user_id)
+        if not user.first_name or not user.last_name:
+            return user.email_addresses[0].email_address
         return user.first_name + " " + user.last_name
