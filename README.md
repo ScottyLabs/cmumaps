@@ -27,6 +27,8 @@ Follow the instructions in the respective README files:
 - Data: [apps/data/README.md](apps/data/README.md)
 - Visualizer: [apps/visualizer/README.md](apps/visualizer/README.md)
 
+## Troubleshooting
+
 ### Committing Tips
 
 If you aren't allowed to commit, try the following:
