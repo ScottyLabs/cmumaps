@@ -23,6 +23,9 @@
       "osmId": {
         "type": "string"
       },
+      "fmsId": {
+        "type": "number"
+      },
       "floors": {
         "type": "array",
         "items": {
