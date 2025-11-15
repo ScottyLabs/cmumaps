@@ -1,3 +1,4 @@
 requests
 pyjwt
 minio
+clerk-backend-api

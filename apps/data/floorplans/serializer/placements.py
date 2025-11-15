@@ -6,7 +6,7 @@ import requests
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.get_clerk_token import get_clerk_token
 from s3_utils.s3_utils import upload_json_file
 
 import json
@@ -22,7 +22,7 @@ def placements_serializer():
 
     response_buildings = requests.get(
         f"{server_url}/buildings",
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {get_clerk_token()}"},
     )
     buildings = response_buildings.json()
 
@@ -36,7 +36,7 @@ def placements_serializer():
                 floor_code = f"{building_code}-{floor_level}"
                 response_floor_info = requests.get(
                     f"{server_url}/floors/{floor_code}/placement",
-                    headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+                    headers={"Authorization": f"Bearer {get_clerk_token()}"},
                 )
                 floor_info = response_floor_info.json()
                 floor_dict = {

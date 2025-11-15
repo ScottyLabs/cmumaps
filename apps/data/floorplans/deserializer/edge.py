@@ -8,7 +8,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import requests  # type: ignore
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.get_clerk_token import get_clerk_token
 from s3_utils.s3_utils import get_json_from_s3
 
 
@@ -18,7 +18,7 @@ def drop_edge_table():
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": ["Edge"]},
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {get_clerk_token()}"},
     )
     print(response.json())
 
@@ -50,7 +50,7 @@ def create_edges():
     response = requests.post(
         f"{server_url}/populate-table/edges",
         json=edge_data,
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {get_clerk_token()}"},
     )
     print(response)
     print(response.json())

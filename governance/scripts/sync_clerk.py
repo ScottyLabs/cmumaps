@@ -5,7 +5,6 @@ from scripts.utils import get_members_emails, get_leads_emails
 
 
 class ClerkManager:
-    SCOTTYLABS_DEVELOPER_EMAIL = "scottylabsdeveloper@gmail.com"
     ADMIN_ROLE = "org:admin"
     MEMBER_ROLE = "org:member"
 
@@ -38,7 +37,6 @@ class ClerkManager:
 
         self.load_memberships()
         leads_emails = get_leads_emails(self.team)
-        leads_emails.add(self.SCOTTYLABS_DEVELOPER_EMAIL)
         self.sync_clerk_role(
             leads_emails,
             self.clerk_admins,

@@ -39,7 +39,6 @@
     "syncpack:update": "syncpack update",
     "taplo:check": "taplo format --check",
     "tsc": "turbo tsc",
-    "vault:pull": "./scripts/vault-pull.sh all local",
     "vault:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc"
   },
   "type": "module",

@@ -35,13 +35,17 @@ done
 # Special case for scripts
 if [[ "$APPLICATION" == "scripts" || "$APPLICATION" == "all" ]]; then
   cat scripts/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/scripts"
-  exit 0
+  if [[ "$APPLICATION" == "scripts" ]]; then
+    exit 0
+  fi
 fi
 
 # Special case for governance
 if [[ "$APPLICATION" == "governance" || "$APPLICATION" == "all" ]]; then
   cat governance/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/governance"
-  exit 0
+  if [[ "$APPLICATION" == "governance" ]]; then
+    exit 0
+  fi
 fi
 
 # Sanitizing the Application argument

@@ -5,7 +5,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.get_clerk_token import get_clerk_token
 
 import requests  # type: ignore
 from building import create_buildings
@@ -22,7 +22,7 @@ def drop_all_tables():
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": table_names},
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {get_clerk_token()}"},
     )
     print(response.json())
 
