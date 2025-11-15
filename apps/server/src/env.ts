@@ -8,6 +8,7 @@ const envSchema = z.object({
   CLERK_SECRET_KEY: z.string(),
   DATABASE_URL: z.string(),
   ALLOWED_ORIGINS_REGEX: z.string(),
+  CLERK_MACHINE_SECRET: z.string(),
 });
 
 // Validate `process.env` against our schema and return the result
