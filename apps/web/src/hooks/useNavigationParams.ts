@@ -124,15 +124,21 @@ const useNavPaths = (): Params => {
     error: dstError,
   } = getWaypointParams(dst ?? "");
 
-  const { data: navPaths } = $rapi.useQuery("get", "/path", {
-    params: {
-      query: {
-        start: srcQuery ?? "",
-        end: dstQuery ?? "",
+  const { data: navPaths } = $rapi.useQuery(
+    "get",
+    "/path",
+    {
+      params: {
+        query: {
+          start: srcQuery ?? "",
+          end: dstQuery ?? "",
+        },
       },
     },
-    enabled: srcQuery && dstQuery && srcQuery !== "" && dstQuery !== "",
-  }) as { data: NavPaths | undefined };
+    {
+      enabled: !!srcQuery && !!dstQuery && srcQuery !== "" && dstQuery !== "",
+    },
+  ) as { data: NavPaths | undefined };
 
   const swap = () => {
     const temp = src;

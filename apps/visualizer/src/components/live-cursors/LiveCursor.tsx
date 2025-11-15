@@ -64,7 +64,7 @@ const LiveCursor = ({
   const cursorPos = cursorInfos[0].cursorPos;
   const renderCursor = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     const path = GiArrowCursor({}).props.children[0].props.d;
 
     // scale the svg to the size of an actual cursor
