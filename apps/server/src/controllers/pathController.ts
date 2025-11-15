@@ -2,7 +2,6 @@ import type { Graph, PreciseRoute, WayPoint } from "@cmumaps/common";
 import { geoCoordsToPdfCoords } from "@cmumaps/common";
 import { Get, Query, Route } from "tsoa";
 import { prisma } from "../../prisma";
-import { generateInstructions } from "../utils/path/instructions";
 import { getRoute, waypointToNodes } from "../utils/path/pathfinder";
 
 // Cache the dbNodes query result
@@ -21,6 +20,10 @@ let dbNodesCache: Awaited<
   >
 > | null = null;
 
+export type Buildings = Awaited<ReturnType<typeof prisma.building.findMany>>;
+// Cache the buildings query result
+let buildingsCache: Buildings | null = null;
+
 async function getOrBuildDbNodes() {
   if (!dbNodesCache) {
     console.log("Building dbNodes cache...");
@@ -37,6 +40,17 @@ async function getOrBuildDbNodes() {
     console.log(`DbNodes cache built with ${dbNodesCache.length} nodes`);
   }
   return dbNodesCache;
+}
+
+async function getOrBuildBuildings() {
+  if (!buildingsCache) {
+    console.log("Building buildings cache...");
+    buildingsCache = await prisma.building.findMany();
+    console.log(
+      `Buildings cache built with ${buildingsCache.length} buildings`,
+    );
+  }
+  return buildingsCache;
 }
 
 @Route("/path")
@@ -137,8 +151,9 @@ export class PathController {
     const startWaypoint = parseWaypoint(start);
     const endWaypoint = parseWaypoint(end);
 
-    const startNodes = waypointToNodes(startWaypoint, graph);
-    const endNodes = waypointToNodes(endWaypoint, graph);
+    const buildings = await getOrBuildBuildings();
+    const startNodes = waypointToNodes(startWaypoint, graph, buildings);
+    const endNodes = waypointToNodes(endWaypoint, graph, buildings);
 
     if (startNodes.length === 0 || endNodes.length === 0) {
       const msg =
@@ -151,8 +166,7 @@ export class PathController {
     }
 
     const route = getRoute(startNodes, endNodes, graph, 1);
-    const instructions = generateInstructions(route);
-    return { Fastest: { path: route, instructions } };
+    return { Fastest: route };
   }
 
   @Get("/rebuild")
