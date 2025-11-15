@@ -43,10 +43,16 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const { setSrc, setDst } = useNavigationParams();
   const { hasAccess } = useUser();
 
-  const { data: searchResults } = $rapi.useQuery("get", "/search", {
-    params: { query: { query: searchQuery } },
-    enabled: isSearchOpen && searchQuery.length > 0,
-  });
+  const { data: searchResults } = $rapi.useQuery(
+    "get",
+    "/search",
+    {
+      params: { query: { query: searchQuery } },
+    },
+    {
+      enabled: isSearchOpen && searchQuery.length > 0,
+    },
+  );
 
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
