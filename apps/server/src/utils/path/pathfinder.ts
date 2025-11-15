@@ -118,7 +118,6 @@ export const waypointToNodes = (
             roomId: null,
             floor: null,
           };
-          console.log("dummy node", dummyNode);
           graph[dummyNode.id] = dummyNode;
 
           // Add the dummy node as a neighbor to each of the found neighbors (bidirectional)
