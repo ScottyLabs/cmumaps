@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CMU Maps Graph Schema",
+  "description": "Schema for all-graph.json",
+  "type": "object",
+  "additionalProperties": {
+    "description": "Node (UUID)",
+    "type": "object",
+    "required": [
+      "neighbors",
+      "coordinate",
+      "floor",
+      "id"
+    ],
+    "properties": {
+      "pos": {
+        "description": "Position coordinates (Optional for outdoor nodes)",
+        "type": "object",
+        "required": [
+          "x",
+          "y"
+        ],
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "neighbors": {
+        "type": "object",
+        "additionalProperties": {
+          "description": "Neighbor connection",
+          "type": "object",
+          "required": [
+            "dist"
+          ],
+          "properties": {
+            "dist": {
+              "type": "number"
+            },
+            "toFloorInfo": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "roomId": {
+        "type": "string"
+      },
+      "coordinate": {
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "floor": {
+        "type": "object",
+        "required": [
+          "buildingCode",
+          "level"
+        ],
+        "properties": {
+          "buildingCode": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "id": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  }
+}

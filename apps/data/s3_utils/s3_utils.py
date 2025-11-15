@@ -2,6 +2,8 @@ from minio import Minio
 from dotenv import load_dotenv
 import os
 import json
+import jsonschema
+from pathlib import Path
 
 load_dotenv()
 
@@ -20,9 +22,42 @@ bucket_name = "cmumaps"
 
 
 def upload_json_file(local_file_path, s3_object_name):
-    """Upload a JSON file to S3 bucket"""
+    """Upload a JSON file to S3 bucket with json validation"""
+
     try:
-        # Upload the file
+        schema_filename = os.path.basename(s3_object_name)
+
+        script_dir = Path(__file__).resolve().parent #Get the absolute path of the current script's directory, .../s3_utils
+        data_dir = script_dir.parent #.../apps/data
+        schema_path = data_dir / "schemas" / schema_filename
+
+
+        if not schema_path.exists():
+            raise FileNotFoundError(
+                f"Schema not found: {schema_path}. "
+                f"Cannot upload {s3_object_name} without a corresponding schema under /schemas"
+            )
+
+        with open(schema_path, 'r') as schema_file:
+            schema = json.load(schema_file)
+
+        with open(local_file_path, 'r') as json_file:
+            data = json.load(json_file)
+
+        try:
+            jsonschema.validate(instance=data, schema=schema)
+            print(f"Validation passed for {local_file_path}")
+        except jsonschema.exceptions.ValidationError as ve:
+            raise ValueError(
+                f"JSON validation failed for {local_file_path}:\n"
+                f"  Error: {ve.message}\n"
+                f"  Path: {'.'.join(str(p) for p in ve.path)}\n"
+                f"  Schema path: {'.'.join(str(p) for p in ve.schema_path)}"
+            )
+        except jsonschema.exceptions.SchemaError as se:
+            raise ValueError(f"Invalid schema {schema_filename}: {se.message}")
+
+        # Upload the file if validation passes
         client.fput_object(
             bucket_name,
             s3_object_name,
