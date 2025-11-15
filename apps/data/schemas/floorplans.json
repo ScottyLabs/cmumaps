@@ -26,10 +26,7 @@
           },
           "labelPosition": {
             "type": "object",
-            "required": [
-              "latitude",
-              "longitude"
-            ],
+            "required": ["latitude", "longitude"],
             "properties": {
               "latitude": {
                 "type": "number"
@@ -48,10 +45,7 @@
           },
           "floor": {
             "type": "object",
-            "required": [
-              "buildingCode",
-              "level"
-            ],
+            "required": ["buildingCode", "level"],
             "properties": {
               "buildingCode": {
                 "type": "string"
@@ -68,10 +62,7 @@
               "type": "array",
               "items": {
                 "type": "object",
-                "required": [
-                  "latitude",
-                  "longitude"
-                ],
+                "required": ["latitude", "longitude"],
                 "properties": {
                   "latitude": {
                     "type": "number"

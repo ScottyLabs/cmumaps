@@ -6,20 +6,12 @@
   "additionalProperties": {
     "description": "Node (UUID)",
     "type": "object",
-    "required": [
-      "neighbors",
-      "coordinate",
-      "floor",
-      "id"
-    ],
+    "required": ["neighbors", "coordinate", "floor", "id"],
     "properties": {
       "pos": {
         "description": "Position coordinates (Optional for outdoor nodes)",
         "type": "object",
-        "required": [
-          "x",
-          "y"
-        ],
+        "required": ["x", "y"],
         "properties": {
           "x": {
             "type": "number"
@@ -35,9 +27,7 @@
         "additionalProperties": {
           "description": "Neighbor connection",
           "type": "object",
-          "required": [
-            "dist"
-          ],
+          "required": ["dist"],
           "properties": {
             "dist": {
               "type": "number"
@@ -54,10 +44,7 @@
       },
       "coordinate": {
         "type": "object",
-        "required": [
-          "latitude",
-          "longitude"
-        ],
+        "required": ["latitude", "longitude"],
         "properties": {
           "latitude": {
             "type": "number"
@@ -70,10 +57,7 @@
       },
       "floor": {
         "type": "object",
-        "required": [
-          "buildingCode",
-          "level"
-        ],
+        "required": ["buildingCode", "level"],
         "properties": {
           "buildingCode": {
             "type": "string"

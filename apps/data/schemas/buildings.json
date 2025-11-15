@@ -34,10 +34,7 @@
       },
       "labelPosition": {
         "type": "object",
-        "required": [
-          "latitude",
-          "longitude"
-        ],
+        "required": ["latitude", "longitude"],
         "properties": {
           "latitude": {
             "type": "number"
@@ -54,10 +51,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "latitude",
-              "longitude"
-            ],
+            "required": ["latitude", "longitude"],
             "properties": {
               "latitude": {
                 "type": "number"
@@ -77,10 +71,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "latitude",
-                "longitude"
-              ],
+              "required": ["latitude", "longitude"],
               "properties": {
                 "latitude": {
                   "type": "number"

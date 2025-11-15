@@ -27,10 +27,11 @@ def upload_json_file(local_file_path, s3_object_name):
     try:
         schema_filename = os.path.basename(s3_object_name)
 
-        script_dir = Path(__file__).resolve().parent #Get the absolute path of the current script's directory, .../s3_utils
-        data_dir = script_dir.parent #.../apps/data
+        script_dir = (
+            Path(__file__).resolve().parent
+        )  # Get the absolute path of the current script's directory, .../s3_utils
+        data_dir = script_dir.parent  # .../apps/data
         schema_path = data_dir / "schemas" / schema_filename
-
 
         if not schema_path.exists():
             raise FileNotFoundError(
@@ -38,10 +39,10 @@ def upload_json_file(local_file_path, s3_object_name):
                 f"Cannot upload {s3_object_name} without a corresponding schema under /schemas"
             )
 
-        with open(schema_path, 'r') as schema_file:
+        with open(schema_path, "r") as schema_file:
             schema = json.load(schema_file)
 
-        with open(local_file_path, 'r') as json_file:
+        with open(local_file_path, "r") as json_file:
             data = json.load(json_file)
 
         try:

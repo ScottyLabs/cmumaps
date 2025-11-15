@@ -9,19 +9,11 @@
     "additionalProperties": {
       "description": "Floor level",
       "type": "object",
-      "required": [
-        "center",
-        "scale",
-        "angle",
-        "pdfCenter"
-      ],
+      "required": ["center", "scale", "angle", "pdfCenter"],
       "properties": {
         "center": {
           "type": "object",
-          "required": [
-            "latitude",
-            "longitude"
-          ],
+          "required": ["latitude", "longitude"],
           "properties": {
             "latitude": {
               "type": "number"
@@ -43,10 +35,7 @@
         },
         "pdfCenter": {
           "type": "object",
-          "required": [
-            "x",
-            "y"
-          ],
+          "required": ["x", "y"],
           "properties": {
             "x": {
               "type": "number"
