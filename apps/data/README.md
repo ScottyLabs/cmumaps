@@ -4,6 +4,14 @@
 
 This directory is responsible for deserializing and serializing data from the database to JSON files.
 
+## Setup
+
+Run the following command in `apps/data` to install the requirements:
+
+```zsh
+pip install -r requirements.txt
+```
+
 ## Usage
 
 ### Prequisites
