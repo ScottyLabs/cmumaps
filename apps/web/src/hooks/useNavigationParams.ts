@@ -123,11 +123,15 @@ const useNavPaths = (): Params => {
     error: dstError,
   } = getWaypointParams(dst ?? "");
 
-  const { data: navPaths } = $api.useQuery("get", "/path", {
-    params: {
-      query: {
-        start: srcQuery ?? "",
-        end: dstQuery ?? "",
+  const { data: navPaths } = $api.useQuery(
+    "get",
+    "/path",
+    {
+      params: {
+        query: {
+          start: srcQuery ?? "",
+          end: dstQuery ?? "",
+        },
       },
     },
     {
