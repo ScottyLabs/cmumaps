@@ -115,3 +115,7 @@ def list_json_files():
     except Exception as e:
         print(f"Error listing JSON files: {e}")
         return []
+
+
+if __name__ == "__main__":
+    print(client.bucket_exists("cmumaps"))
