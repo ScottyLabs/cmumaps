@@ -6,6 +6,7 @@
 - Install bun (<https://bun.com/get>)
 - Install vault (<https://developer.hashicorp.com/vault/install>)
 - Install jq (<https://jqlang.org/download/>)
+- Install ruff (<https://docs.astral.sh/ruff/installation/>)
 - Permissions: follow the instructions in [governance/README.md](governance/README.md) to get the necessary permissions.
 
 ## Installation
