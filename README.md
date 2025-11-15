@@ -16,7 +16,7 @@
 
 3. Set up environment variables
    1. Run `bun run vault:setup`
-   2. Run `bun run vault:pull`
+   2. Run `./scripts/vault-pull.sh all local`
 
 ## Running the Application
 
