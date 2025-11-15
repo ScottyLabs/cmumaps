@@ -184,7 +184,9 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
     >
       {Object.entries(pastDirections)
         .reverse()
-        .map(([k, v], i) => renderDirection(v, Number.parseInt(k), true, i))}
+        .map(([k, v], i) =>
+          renderDirection(v, Number.parseInt(k, 10), true, i),
+        )}
       {instructionIndex < instructions.length - 1 && (
         <div className="pointer-events-none sticky top-0 bottom-0 mx-3 mt-3 bg-white py-3">
           <div className="btn-shadow rounded-xl bg-primary-green px-9 pb-3">
@@ -200,7 +202,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
         </div>
       )}
       {Object.entries(futureDirections).map(([k, v], i) =>
-        renderDirection(v, Number.parseInt(k), false, i),
+        renderDirection(v, Number.parseInt(k, 10), false, i),
       )}
     </div>
   );
