@@ -36,14 +36,20 @@ done
 if [[ "$APPLICATION" == "scripts" ]] || [[ "$APPLICATION" == "all" ]]; then
   vault kv get -format=json ScottyLabs/cmumaps/scripts |
     jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >scripts/.env
-  exit 0
+  echo "Pulled from vault: ScottyLabs/cmumaps/scripts"
+  if [[ "$APPLICATION" == "scripts" ]]; then
+    exit 0
+  fi
 fi
 
 # Special case for governance
 if [[ "$APPLICATION" == "governance" ]] || [[ "$APPLICATION" == "all" ]]; then
   vault kv get -format=json ScottyLabs/cmumaps/governance |
     jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >governance/.env
-  exit 0
+  echo "Pulled from vault: ScottyLabs/cmumaps/governance"
+  if [[ "$APPLICATION" == "governance" ]]; then
+    exit 0
+  fi
 fi
 
 # Sanitizing the Application argument
