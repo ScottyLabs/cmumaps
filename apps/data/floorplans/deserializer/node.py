@@ -7,24 +7,21 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import requests  # type: ignore
-from auth_utils.get_clerk_token import get_clerk_token
 from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Node table
-def drop_node_table():
-    server_url = os.getenv("SERVER_URL")
+def drop_node_table(clerk_manager):
+    server_url = clerk_manager.server_url
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": ["Node"]},
-        headers={"Authorization": f"Bearer {get_clerk_token()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response.json())
 
 
-def create_nodes():
-    # with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
-    #     data = json.load(file)
+def create_nodes(clerk_manager):
     data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
 
     node_data = []
@@ -48,16 +45,11 @@ def create_nodes():
         node_data.append(node)
 
     # Send request to server to populate Node table
-    server_url = os.getenv("SERVER_URL")
+    server_url = clerk_manager.server_url
     response = requests.post(
         f"{server_url}/populate-table/nodes",
         json=node_data,
-        headers={"Authorization": f"Bearer {get_clerk_token()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response)
     print(response.json())
-
-
-if __name__ == "__main__":
-    drop_node_table()
-    create_nodes()

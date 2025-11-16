@@ -8,24 +8,21 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import requests  # type: ignore
-from auth_utils.get_clerk_token import get_clerk_token
 from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Edge table
-def drop_edge_table():
-    server_url = os.getenv("SERVER_URL")
+def drop_edge_table(clerk_manager):
+    server_url = clerk_manager.server_url
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": ["Edge"]},
-        headers={"Authorization": f"Bearer {get_clerk_token()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response.json())
 
 
-def create_edges():
-    # with open("cmumaps-data/floorplans/all-graph.json", "r") as file:
-    #     data = json.load(file)
+def create_edges(clerk_manager):
     data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
 
     edge_data = []
@@ -46,16 +43,11 @@ def create_edges():
             edge_data.append(edge_node)
 
     # Send request to server to populate Edge table
-    server_url = os.getenv("SERVER_URL")
+    server_url = clerk_manager.server_url
     response = requests.post(
         f"{server_url}/populate-table/edges",
         json=edge_data,
-        headers={"Authorization": f"Bearer {get_clerk_token()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response)
     print(response.json())
-
-
-if __name__ == "__main__":
-    drop_edge_table()
-    create_edges()
