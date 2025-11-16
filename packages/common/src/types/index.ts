@@ -8,3 +8,4 @@ export * from "./geoRoomTypes";
 export * from "./graphTypes";
 export * from "./poiTypes";
 export * from "./roomTypes";
+export * from "./waypoint";
