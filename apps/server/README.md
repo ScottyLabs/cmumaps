@@ -27,7 +27,7 @@ bunx prisma db push
 
 #### Troubleshooting
 
-If you see errors about 'port in use', use `lsof -i :5432` to find the process using the port and kill it.
+If you see errors about 'port in use', use `lsof -i :5432` to find the process using that port and kill it with `kill -9 <PID>`.
 
 ### Running the Server
 
