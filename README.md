@@ -3,11 +3,23 @@
 ## Prerequisites
 
 - Git
+- Permissions: follow the instructions in [governance/README.md](governance/README.md)
+to get the necessary permissions.
+
+### macOS
+
+Run the following command to install the prerequisites:
+
+```zsh
+./scripts/setup.sh
+```
+
+### Other
+
 - Install bun (<https://bun.com/get>)
 - Install vault (<https://developer.hashicorp.com/vault/install>)
 - Install jq (<https://jqlang.org/download/>)
 - Install ruff (<https://docs.astral.sh/ruff/installation/>)
-- Permissions: follow the instructions in [governance/README.md](governance/README.md) to get the necessary permissions.
 
 ## Installation
 
@@ -23,9 +35,9 @@
 
 Follow the instructions in the respective README files:
 
-- Web: [apps/web/README.md](apps/web/README.md)
-- Server: [apps/server/README.md](apps/server/README.md)
 - Data: [apps/data/README.md](apps/data/README.md)
+- Server: [apps/server/README.md](apps/server/README.md)
+- Web: [apps/web/README.md](apps/web/README.md)
 - Visualizer: [apps/visualizer/README.md](apps/visualizer/README.md)
 
 ## Troubleshooting
@@ -34,5 +46,6 @@ Follow the instructions in the respective README files:
 
 If you aren't allowed to commit, try the following:
 
-1. `bun run check` and fix the errors.
-2. Make sure you are using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/).
+1. Make sure you are using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/).
+2. Run `bun run check` and try to fix the errors.
+3. Try running `bun install` and `bun run check` again.
