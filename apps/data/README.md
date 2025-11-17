@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 #### Deserialization
 
-Populate the database by running the following command in `apps/data`:
+Make sure the server is running by following the instructions in [apps/server/README.md](../server/README.md) up until "Populating the Database". Then, populate the database by running the following command in `apps/data`:
 
 ```zsh
 python3 floorplans/deserializer/database_population.py
