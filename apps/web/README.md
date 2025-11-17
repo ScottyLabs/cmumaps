@@ -4,32 +4,27 @@
 
 The [CMU Maps web](https://cmumaps.com) is a web application that provides a map of the CMU campus.
 
-## Setup
+## Development
 
 ### Prequisite
 
 - [Root README](../../README.md) setup
+- [Server](../server/README.md) setup
 
 ### Running the Web
 
-#### Using the Staging Server
-
-If you only wish to make frontend changes, change the `VITE_SERVER_URL` in [.env](.env) to <http://api.maps.slabs-staging.org> to use the staging server.
-
-Then open cmumaps.code-workspace, open workspace, and run
-
-```zsh
-bun run dev
-```
-
-#### Using the Local Server
-
-If you want to make both frontend and backend changes, you have to follow the steps in [server/README.md](../server/README.md) to run the server. You can also run both the server and the web by running
+Run the web with the server by running the following command in the root directory:
 
 ```zsh
 bun run dev:web
 ```
 
-#### Developing by viewing on a Mobile Device
+### Developing by viewing on a Mobile Device
 
-Coming soon...
+To develop by viewing on a mobile device, run the following command in the root directory:
+
+```zsh
+bun run dev:web:host
+```
+
+Then, open the web application on your mobile device by navigating to the Network URL listed in the terminal.
