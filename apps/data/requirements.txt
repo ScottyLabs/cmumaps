@@ -2,3 +2,6 @@ requests
 pyjwt
 minio
 clerk-backend-api
+schedule
+selenium
+python-dotenv
