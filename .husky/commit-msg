@@ -1,1 +1,1 @@
-bun ./node_modules/@commitlint/cli --edit "$i"
+bunx commitlint --verbose <.git/COMMIT_EDITMSG
