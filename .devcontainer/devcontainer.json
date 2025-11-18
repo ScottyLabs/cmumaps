@@ -14,7 +14,8 @@
       "configureZshAsDefaultShell": true
     },
     "ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {},
-    "ghcr.io/devcontainers-extra/features/shfmt:1": {}
+    "ghcr.io/devcontainers-extra/features/shfmt:1": {},
+    "ghcr.io/roul/devcontainer-features/vault:1": {}
   },
   "customizations": {
     "vscode": {
