@@ -25,6 +25,7 @@
         "mkhl.shfmt"
       ],
       "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.organizeImports.biome": "explicit"

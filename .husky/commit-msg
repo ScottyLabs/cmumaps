@@ -1,1 +1,1 @@
-bunx commitlint --verbose <.git/COMMIT_EDITMSG
+cat .git/COMMIT_EDITMSG | bunx commitlint --verbose
