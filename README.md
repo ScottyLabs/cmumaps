@@ -23,6 +23,10 @@ Prerequisite: [Docker](https://docs.docker.com/get-docker/)
 3. Open the repository in VS Code.
 4. Click on the `Reopen in Container` button in the bottom left corner of the VS Code window. Or run the command `Dev Containers: Reopen in Container` in the command palette (Command+Shift+P).
 5. Wait for the container to start. This may take a few minutes to install the dependencies. Continue with the installation instructions below.
+6. (Optional) Run the following command and restart your terminal to add Bun autocompletion to Oh My Zsh:
+```zsh
+echo "source <(SHELL=zsh bun completions)" >> ~/.zshrc
+```
 
 ### Manual Setup (Optional)
 
