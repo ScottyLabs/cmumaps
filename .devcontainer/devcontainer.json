@@ -24,7 +24,8 @@
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "charliermarsh.ruff",
-        "mkhl.shfmt"
+        "mkhl.shfmt",
+        "davidanson.vscode-markdownlint"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",

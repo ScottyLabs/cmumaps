@@ -3,6 +3,7 @@
 ## Overview
 
 [CMU Maps](https://cmumaps.com) is a web application that provides a map of the CMU campus, allowing users to easily access information about campus locations. Key features include:
+
 - View floorplans
 - Room level navigation
 - Search for buildings and rooms
@@ -11,6 +12,7 @@
 ## Getting Started
 
 ### Permission Prerequisite
+
 - Follow the instructions in [governance/README.md](governance/README.md)
 to obtain the necessary permissions.
 
@@ -24,6 +26,7 @@ Prerequisite: [Docker](https://docs.docker.com/get-docker/)
 4. Click on the `Reopen in Container` button in the bottom left corner of the VS Code window. Or run the command `Dev Containers: Reopen in Container` in the command palette (Command+Shift+P).
 5. Wait for the container to start. This may take a few minutes to install the dependencies. Continue with the installation instructions below.
 6. (Optional) Run the following command and restart your terminal to add Bun autocompletion to Oh My Zsh:
+
 ```zsh
 echo "source <(SHELL=zsh bun completions)" >> ~/.zshrc
 ```
@@ -38,7 +41,7 @@ The dev container setup is preferred, but if you prefer to set up the environmen
 - Install ruff (<https://docs.astral.sh/ruff/installation/>)
 - Install Python 3 (<https://www.python.org/downloads/>)
 
-### Installation 
+### Installation
 
 1. Run `bun install`
 
@@ -50,13 +53,13 @@ The dev container setup is preferred, but if you prefer to set up the environmen
 
 1. Follow the instructions in the [server README](apps/server/README.md) to start the server.
 
-2. Keeps the server running and open another terminal. Follow the Getting Started instructions in [apps/data/README.md](apps/data/README.md) to populate the database. 
+2. Keeps the server running and open another terminal. Follow the Getting Started instructions in [apps/data/README.md](apps/data/README.md) to populate the database.
 
 3. To populate the database, run the following command in `apps/data`:
 
-```zsh
-python3 floorplans/deserializer/database_population.py
-```
+   ```zsh
+   python3 floorplans/deserializer/database_population.py
+   ```
 
 4. You can kill the server after the database is populated, so the port is available in the next step.
 
