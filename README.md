@@ -1,44 +1,62 @@
-# Getting Started
+# CMU Maps
 
-## Prerequisites
+## Overview
 
-- Git
-- Permissions: follow the instructions in [governance/README.md](governance/README.md)
-to get the necessary permissions.
+[CMU Maps](https://cmumaps.com) is a web application that provides a map of the CMU campus, allowing users to easily access information about campus locations. Key features include:
+- View floorplans
+- Room level navigation
+- Search for buildings and rooms
+- View building and room details
 
-### macOS
+## Getting Started
 
-Run the following command to install the prerequisites:
+### Permission Prerequisite
+- Follow the instructions in [governance/README.md](governance/README.md)
+to obtain the necessary permissions.
 
-```zsh
-./scripts/setup.sh
-```
+### Dev Container Setup
 
-### Other
+Prerequisite: [Docker](https://docs.docker.com/get-docker/)
+
+1. Clone and open the repository locally in VS Code (or any other IDE that supports Dev Containers).
+2. Install the Dev Container (`anysphere.remote-containers`) extension in VS Code
+3. Open the repository in VS Code.
+4. Click on the `Reopen in Container` button in the bottom left corner of the VS Code window. Or run the command `Dev Containers: Reopen in Container` in the command palette (Command+Shift+P).
+5. Wait for the container to start. This may take a few minutes to install the dependencies. Continue with the installation instructions below.
+
+### Manual Setup (Optional)
+
+The dev container setup is preferred, but if you prefer to set up the environment manually or the dev container didn't work, follow the instructions below to manually install the dependencies and then continue with the installation instructions below.
 
 - Install bun (<https://bun.com/get>)
 - Install vault (<https://developer.hashicorp.com/vault/install>)
 - Install jq (<https://jqlang.org/download/>)
 - Install ruff (<https://docs.astral.sh/ruff/installation/>)
+- Install Python 3 (<https://www.python.org/downloads/>)
 
-## Installation
+### Installation 
 
-1. Clone the repository
+1. Run `bun install`
 
-2. Run `bun install`
+2. Set up environment variables by running the following commands in the root directory:
+   1. `bun run vault:setup`
+   2. `bun run vault:pull all local`
 
-3. Set up environment variables
-   1. Run `bun run vault:setup`
-   2. Run `./scripts/vault-pull.sh all local`
+### Running the Applications
 
-## Running the Application
+1. Follow the instructions in the [server README](apps/server/README.md) to start the server.
 
-Follow the instructions in the respective README files:
+2. Keeps the server running and open another terminal. Follow the Getting Started instructions in [apps/data/README.md](apps/data/README.md) to populate the database. 
 
-- Data: [apps/data/README.md](apps/data/README.md)
-- Server: [apps/server/README.md](apps/server/README.md)
-- Web: [apps/web/README.md](apps/web/README.md)
-- Visualizer: [apps/visualizer/README.md](apps/visualizer/README.md)
+3. To populate the database, run the following command in `apps/data`:
+
+```zsh
+python3 floorplans/deserializer/database_population.py
+```
+
+4. You can kill the server after the database is populated, so the port is available in the next step.
+
+5. Follow the instructions in [apps/web/README.md](apps/web/README.md) or [apps/visualizer/README.md](apps/visualizer/README.md) to start developing on the web or visualizer!
 
 ## Troubleshooting
 

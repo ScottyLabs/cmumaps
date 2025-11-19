@@ -8,8 +8,7 @@ The [CMU Maps visualizer](https://floorplans.scottylabs.org) is a tool to help v
 
 ### Prequisite
 
-- [Root README](../../README.md) setup
-- [Server](../server/README.md) setup
+- [Root README](../../README.md) Getting Started
 
 ### Running the Visualizer
 

@@ -8,8 +8,7 @@ The [CMU Maps web](https://cmumaps.com) is a web application that provides a map
 
 ### Prequisite
 
-- [Root README](../../README.md) setup
-- [Server](../server/README.md) setup
+- [Root README](../../README.md) Getting Started
 
 ### Running the Web
 
