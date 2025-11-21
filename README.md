@@ -9,6 +9,10 @@
 - Search for buildings and rooms
 - View building and room details
 
+## Wiki
+
+Visit the [wiki](https://github.com/ScottyLabs/cmumaps/wiki) for more information about the project.
+
 ## Getting Started
 
 ### Permission Prerequisite
@@ -42,4 +46,4 @@ If the post create command in dev container fails, you can manually run the post
 
 #### Manual Setup
 
-If the dev container setup fails, try the manual setup instructions in the [wiki](https://github.com/ScottyLabs/cmumaps/wiki/Manual-Setup).
+If the dev container setup fails, try the [manual setup instructions](https://github.com/ScottyLabs/cmumaps/wiki/Manual-Setup).
