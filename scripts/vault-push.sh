@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 export VAULT_ADDR=https://secrets.scottylabs.org
 
 usage() {
