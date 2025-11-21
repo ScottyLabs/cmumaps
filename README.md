@@ -18,14 +18,13 @@ to obtain the necessary permissions.
 
 ### Dev Container Setup
 
-Prerequisite: [Docker](https://docs.docker.com/get-docker/)
+Prerequisites: [Docker](https://docs.docker.com/get-docker/) and [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
 1. Clone and open the repository locally in VS Code (or any other IDE that supports Dev Containers).
-2. Install the Dev Container extension in VS Code.
-3. Open the repository in VS Code.
-4. Click on the `Reopen in Container` button in the bottom left corner of the VS Code window. Or run the command `Dev Containers: Reopen in Container` in the command palette (Command+Shift+P).
-5. Wait for the container to start. This may take a few minutes to install the dependencies.
-6. Follow the instructions in [apps/web/README.md](apps/web/README.md) or [apps/visualizer/README.md](apps/visualizer/README.md) to start developing on the web or visualizer!
+2. Click on the `Reopen in Container` button that pops up in the bottom left corner of the VS Code window.
+   - Or open the command palette (`Command+Shift+P`) and run the command `Dev Containers: Reopen in Container`.
+3. Wait for the container to start. It may take a few minutes to install the dependencies and run the post create script.
+4. Follow the instructions in [apps/web/README.md](apps/web/README.md) or [apps/visualizer/README.md](apps/visualizer/README.md) to start developing on the web or visualizer!
 
 ### Manual Setup (Not Recommended)
 
