@@ -23,7 +23,12 @@ Prerequisites: [Docker](https://docs.docker.com/get-docker/) and [Dev Containers
 2. Click on the `Reopen in Container` button that pops up in the bottom left corner of the VS Code window.
    - Or open the command palette and run the command `Dev Containers: Reopen in Container`.
 3. Wait for the container to start. It may take a few minutes to install dependencies and run post create script.
-4. Follow the instructions in [apps/web/README.md](apps/web/README.md) or [apps/visualizer/README.md](apps/visualizer/README.md) to start developing on the web or visualizer!
+4. Visit the respective README files to start developing!
+   - Web: [apps/web/README.md](apps/web/README.md)
+   - Visualizer: [apps/visualizer/README.md](apps/visualizer/README.md)
+   - Server: [apps/server/README.md](apps/server/README.md)
+   - Data: [apps/data/README.md](apps/data/README.md)
+   - Scripts: [scripts/README.md](scripts/README.md)
 
 ### Troubleshooting
 
