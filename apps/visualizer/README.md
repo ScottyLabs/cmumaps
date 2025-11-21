@@ -6,10 +6,6 @@ The [CMU Maps visualizer](https://floorplans.scottylabs.org) is a tool to help v
 
 ## Development
 
-### Prequisite
-
-- [Root README](../../README.md) Getting Started
-
 ### Running the Visualizer
 
 Run the visualizer with the server by running the following command in the root directory:

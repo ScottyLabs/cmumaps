@@ -4,7 +4,9 @@
 
 The CMU Maps server is a RESTful API that provides data for the CMU Maps applications.
 
-## Getting Started
+## Manual Setup (Not Recommended)
+
+This is not recommended, but if the dev container setup doesn't work, you can manually set up the environment by following the instructions below.
 
 ### Prequisite
 

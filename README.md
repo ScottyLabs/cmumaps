@@ -24,16 +24,14 @@ Prerequisite: [Docker](https://docs.docker.com/get-docker/)
 2. Install the Dev Container extension in VS Code.
 3. Open the repository in VS Code.
 4. Click on the `Reopen in Container` button in the bottom left corner of the VS Code window. Or run the command `Dev Containers: Reopen in Container` in the command palette (Command+Shift+P).
-5. Wait for the container to start. This may take a few minutes to install the dependencies. Continue with the installation instructions below.
-6. (Optional) Run the following command and restart your terminal to add Bun autocompletion to Oh My Zsh:
+5. Wait for the container to start. This may take a few minutes to install the dependencies.
+6. Follow the instructions in [apps/web/README.md](apps/web/README.md) or [apps/visualizer/README.md](apps/visualizer/README.md) to start developing on the web or visualizer!
 
-   ```zsh
-   echo "source <(SHELL=zsh bun completions)" >> ~/.zshrc
-   ```
+### Manual Setup (Not Recommended)
 
-### Manual Setup (Optional)
+The dev container setup is recommended and automated, but if you prefer to set up the environment manually or the dev container didn't work, follow the instructions below to manually set up the environment.
 
-The dev container setup is preferred, but if you prefer to set up the environment manually or the dev container didn't work, follow the instructions below to manually install the dependencies and then continue with the installation instructions below.
+#### Install System-Level Dependencies
 
 - Install bun (<https://bun.com/get>)
 - Install vault (<https://developer.hashicorp.com/vault/install>)
@@ -41,7 +39,7 @@ The dev container setup is preferred, but if you prefer to set up the environmen
 - Install ruff (<https://docs.astral.sh/ruff/installation/>)
 - Install Python 3 (<https://www.python.org/downloads/>)
 
-### Installation
+#### Install Bun Dependencies
 
 1. Run `bun install`
 
@@ -49,11 +47,11 @@ The dev container setup is preferred, but if you prefer to set up the environmen
    1. `bun run vault:setup`
    2. `bun run vault:pull all local`
 
-### Running the Applications
+#### Run the Applications
 
 1. Follow the instructions in the [server README](apps/server/README.md) to start the server.
 
-2. Keeps the server running and open another terminal. Follow the Getting Started instructions in [apps/data/README.md](apps/data/README.md) to populate the database.
+2. Keeps the server running and open another terminal. Follow the instructions in [apps/data/README.md](apps/data/README.md) to populate the database.
 
 3. To populate the database, run the following command in `apps/data`:
 
@@ -74,3 +72,11 @@ If you aren't allowed to commit, try the following:
 1. Make sure you are using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/).
 2. Run `bun run check` and try to fix the errors.
 3. Try running `bun install` and `bun run check` again.
+
+### Post Create Script
+
+If the post create command in dev container fails, you can manually run the post create script in the container by running the following command in the root directory:
+
+```zsh
+./scripts/post-create.sh
+```

@@ -4,7 +4,9 @@
 
 This directory is responsible for handling data for CMU Maps.
 
-## Getting Started
+## Manual Setup (Not Recommended)
+
+This is not recommended, but if the dev container setup doesn't work, you can manually set up the environment by following the instructions below.
 
 ### Prequisite
 
@@ -14,10 +16,10 @@ This directory is responsible for handling data for CMU Maps.
 
 1. Create and activate a virtual environment by running the following commands in the root directory:
 
-```zsh
-python3 -m venv venv
-source venv/bin/activate
-```
+   ```zsh
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 
 2. Run the following command in `apps/data` to install the requirements:
 

@@ -6,10 +6,6 @@ The [CMU Maps web](https://cmumaps.com) is a web application that provides a map
 
 ## Development
 
-### Prequisite
-
-- [Root README](../../README.md) Getting Started
-
 ### Running the Web
 
 Run the web with the server by running the following command in the root directory:
