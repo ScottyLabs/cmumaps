@@ -4,30 +4,17 @@ import { Get, Query, Route } from "tsoa";
 import { prisma } from "../../prisma";
 import { getRoute, waypointToNodes } from "../utils/path/pathfinder";
 
-// Cache the dbNodes query result
-let dbNodesCache: Awaited<
-  ReturnType<
-    typeof prisma.node.findMany<{
-      include: {
-        outEdges: {
-          include: {
-            outNode: { select: { buildingCode: true; floorLevel: true } };
-          };
-        };
-        floor: true;
-      };
-    }>
-  >
-> | null = null;
+// Cache the graph
+let graphCache: Graph | null = null;
 
 export type Buildings = Awaited<ReturnType<typeof prisma.building.findMany>>;
 // Cache the buildings query result
 let buildingsCache: Buildings | null = null;
 
-async function getOrBuildDbNodes() {
-  if (!dbNodesCache) {
-    console.log("Building dbNodes cache...");
-    dbNodesCache = await prisma.node.findMany({
+async function getOrBuildGraph(): Promise<Graph> {
+  if (!graphCache) {
+    console.log("Building graph cache...");
+    const dbNodes = await prisma.node.findMany({
       include: {
         outEdges: {
           include: {
@@ -37,35 +24,6 @@ async function getOrBuildDbNodes() {
         floor: true,
       },
     });
-    console.log(`DbNodes cache built with ${dbNodesCache.length} nodes`);
-  }
-  return dbNodesCache;
-}
-
-async function getOrBuildBuildings() {
-  if (!buildingsCache) {
-    console.log("Building buildings cache...");
-    buildingsCache = await prisma.building.findMany();
-    console.log(
-      `Buildings cache built with ${buildingsCache.length} buildings`,
-    );
-  }
-  return buildingsCache;
-}
-
-@Route("/path")
-export class PathController {
-  @Get("/")
-  public async path(
-    @Query() start: string,
-    @Query() end: string,
-  ): Promise<Record<string, PreciseRoute>> {
-    if (!start || !end) {
-      throw new Error("Invalid start or end waypoint format");
-    }
-
-    // Build global graph: all nodes and their neighbors, with floor placement
-    const dbNodes = await getOrBuildDbNodes();
 
     const graph: Graph = {};
     for (const node of dbNodes) {
@@ -128,6 +86,37 @@ export class PathController {
       } as unknown as Graph[string];
     }
 
+    graphCache = graph;
+    console.log(`Graph cache built with ${Object.keys(graph).length} nodes`);
+  }
+  return graphCache;
+}
+
+async function getOrBuildBuildings() {
+  if (!buildingsCache) {
+    console.log("Building buildings cache...");
+    buildingsCache = await prisma.building.findMany();
+    console.log(
+      `Buildings cache built with ${buildingsCache.length} buildings`,
+    );
+  }
+  return buildingsCache;
+}
+
+@Route("/path")
+export class PathController {
+  @Get("/")
+  public async path(
+    @Query() start: string,
+    @Query() end: string,
+  ): Promise<Record<string, PreciseRoute>> {
+    if (!start || !end) {
+      throw new Error("Invalid start or end waypoint format");
+    }
+
+    // Get cached graph
+    const graph = await getOrBuildGraph();
+
     // Parse waypoints
     const parseWaypoint = (s: string): WayPoint => {
       if (s.includes(",")) {
@@ -174,20 +163,12 @@ export class PathController {
     message: string;
     nodeCount: number;
   }> {
-    console.log("Rebuilding dbNodes cache...");
-    dbNodesCache = await prisma.node.findMany({
-      include: {
-        outEdges: {
-          include: {
-            outNode: { select: { buildingCode: true, floorLevel: true } },
-          },
-        },
-        floor: true,
-      },
-    });
+    console.log("Rebuilding graph cache...");
+    graphCache = null;
+    const graph = await getOrBuildGraph();
     return {
-      message: "DbNodes cache rebuilt successfully",
-      nodeCount: dbNodesCache.length,
+      message: "Graph cache rebuilt successfully",
+      nodeCount: Object.keys(graph).length,
     };
   }
 }
