@@ -7,7 +7,7 @@ import type {
   Route,
   WayPoint,
 } from "@cmumaps/common";
-import { calcDist, geoNodeToNavPathNode } from "@cmumaps/common";
+import { dist, geoNodeToNavPathNode } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
 import type { Buildings } from "../../services/pathService";
 
@@ -19,8 +19,8 @@ const findClosestNeighbors = (
   const distances: Array<{ nodeId: string; distance: number }> = [];
 
   for (const node of Object.values(graph)) {
-    const dist = calcDist(targetCoord, node.pos);
-    distances.push({ nodeId: node.id, distance: dist });
+    const d = dist(targetCoord, node.pos);
+    distances.push({ nodeId: node.id, distance: d });
   }
 
   // Sort by distance and take the closest 'count' nodes
@@ -75,9 +75,9 @@ export const waypointToNodes = (
       let best_dist = null;
       let best_node = null;
       for (const node of Object.values(graph)) {
-        const dist = calcDist(node.pos, coord);
-        if (best_dist === null || dist < best_dist) {
-          best_dist = dist;
+        const d = dist(node.pos, coord);
+        if (best_dist === null || d < best_dist) {
+          best_dist = d;
           best_node = node.id;
         }
       }
@@ -232,7 +232,7 @@ export const findPath = (
           // Traveling between floors
           return 25;
         }
-        const rawDist = calcDist(lastGeo, nextGeo);
+        const rawDist = dist(lastGeo, nextGeo);
         const lastIsOutside = lastNode.floor?.buildingCode === "outside";
         const nextIsOutside = nextNode.floor?.buildingCode === "outside";
         if (lastIsOutside && nextIsOutside) {
