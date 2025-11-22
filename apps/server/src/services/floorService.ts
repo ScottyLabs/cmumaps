@@ -81,7 +81,6 @@ export const floorService = {
         neighbors,
         roomId: node.roomId,
         coordinate: position,
-        floor: null,
       };
     }
 
@@ -355,7 +354,12 @@ export const floorService = {
         }
       }
 
-      nodes[node.nodeId] = { pos, neighbors, roomId: node.roomId };
+      nodes[node.nodeId] = {
+        pos,
+        neighbors,
+        roomId: node.roomId,
+        id: node.nodeId,
+      };
     }
 
     return nodes;

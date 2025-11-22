@@ -32,7 +32,7 @@ export interface NodeInfo {
   roomId: string | null;
 
   id: string;
-  floor: FloorInfo | null;
+  floor?: FloorInfo;
   coordinate: GeoCoordinate;
 }
 
@@ -52,6 +52,8 @@ export interface GeoNode {
    * If null, the node is not associated with any room
    */
   roomId: string | null;
+  floor?: FloorInfo;
+  id: string;
 }
 
 export interface GraphPath {
