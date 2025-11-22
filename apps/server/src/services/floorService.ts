@@ -76,11 +76,9 @@ export const floorService = {
       }
 
       nodes[node.nodeId] = {
-        id: node.nodeId,
         pos,
         neighbors,
         roomId: node.roomId,
-        coordinate: position,
       };
     }
 

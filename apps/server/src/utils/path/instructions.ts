@@ -1,18 +1,14 @@
-import type { Instruction, NodeInfo, NodesRoute } from "@cmumaps/common";
+import type { GeoCoordinate, GeoNode, Instruction } from "@cmumaps/common";
 
 function calculateAngle(
-  first: NodeInfo,
-  second: NodeInfo,
-  third: NodeInfo,
+  first: GeoCoordinate,
+  second: GeoCoordinate,
+  third: GeoCoordinate,
 ): number {
-  const latDiff1 =
-    (second.coordinate.latitude - first.coordinate.latitude) * 111318.845;
-  const lonDiff1 =
-    (second.coordinate.longitude - first.coordinate.longitude) * 84719.395;
-  const latDiff2 =
-    (third.coordinate.latitude - second.coordinate.latitude) * 111318.845;
-  const lonDiff2 =
-    (third.coordinate.longitude - second.coordinate.longitude) * 84719.395;
+  const latDiff1 = (second.latitude - first.latitude) * 111318.845;
+  const lonDiff1 = (second.longitude - first.longitude) * 84719.395;
+  const latDiff2 = (third.latitude - second.latitude) * 111318.845;
+  const lonDiff2 = (third.longitude - second.longitude) * 84719.395;
 
   const angle =
     (Math.atan2(
@@ -24,8 +20,7 @@ function calculateAngle(
   return angle;
 }
 
-export function generateInstructions(route: NodesRoute): Instruction[] {
-  const path = route.path;
+export function generateInstructions(path: GeoNode[]): Instruction[] {
   const instructions: Instruction[] = [];
 
   for (let i = 0; i < path.length - 2; i++) {
@@ -33,7 +28,7 @@ export function generateInstructions(route: NodesRoute): Instruction[] {
     const second = path[i + 1];
     const third = path[i + 2];
 
-    const angle = calculateAngle(first, second, third);
+    const angle = calculateAngle(first.pos, second.pos, third.pos);
 
     if (Math.abs(angle) >= 30 && Math.abs(angle) <= 150) {
       const action = angle < 0 ? "Left" : "Right";
