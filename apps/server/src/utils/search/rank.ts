@@ -1,12 +1,6 @@
 import type { GeoCoordinate } from "@cmumaps/common";
-import type { Document, RoomDocument } from "./types";
-
-/**
- * Get the number of terms in a document
- */
-export function getNumTerms(doc: Document): number {
-  return doc.numTerms;
-}
+import { dist } from "@cmumaps/common";
+import type { RoomDocument } from "./types";
 
 /**
  * Calculate BM25 score for a single term
@@ -36,19 +30,6 @@ export function BM25Term(
 }
 
 /**
- * Calculate distance between two coordinates in meters
- */
-export function coordDist(a: GeoCoordinate, b: GeoCoordinate): number {
-  const latitudeRatio = 111318.8450631976;
-  const longitudeRatio = 84719.3945182816;
-
-  const xDiff = (a.latitude - b.latitude) * latitudeRatio;
-  const yDiff = (a.longitude - b.longitude) * longitudeRatio;
-
-  return Math.sqrt(xDiff ** 2 + yDiff ** 2);
-}
-
-/**
  * Apply distance-based weighting to a score
  * Closer results get a higher boost
  */
@@ -61,34 +42,29 @@ export function distanceWeightedScore(
     return score;
   }
 
-  const dist = coordDist(userPos, doc.labelPosition);
-  return score + 1.0 / (Math.log(dist + 10.0) + 1.0);
+  const d = dist(userPos, doc.labelPosition);
+  return score + 1.0 / (Math.log(d + 10.0) + 1.0);
 }
 
 /**
  * Get top N items from a ranked list
- * Uses a heap-like approach for efficiency
+ * @param rankList - Array of [id, score] tuples
+ * @param n - Number of top items to return
+ * @param sort - Whether to sort results by score descending (default: false)
  */
 export function topN(
   rankList: Array<[string, number]>,
   n: number,
+  sort = false,
 ): Array<[string, number]> {
+  let result: Array<[string, number]>;
+
   if (rankList.length <= n) {
-    return rankList;
+    result = rankList;
+    if (sort) result.sort((a, b) => b[1] - a[1]);
+  } else {
+    result = rankList.sort((a, b) => b[1] - a[1]).slice(0, n);
   }
 
-  const heap: Array<[string, number]> = [];
-
-  for (const item of rankList) {
-    heap.push(item);
-
-    if (heap.length > n) {
-      // Sort by score descending
-      heap.sort((a, b) => b[1] - a[1]);
-      // Remove the lowest score
-      heap.pop();
-    }
-  }
-
-  return heap;
+  return result;
 }
