@@ -121,10 +121,7 @@ export const geoPolygonToPdfPolygon = (
   };
 };
 
-export const calcDist = (
-  coord1: GeoCoordinate,
-  coord2: GeoCoordinate,
-): number => {
+export const dist = (coord1: GeoCoordinate, coord2: GeoCoordinate): number => {
   const lat_m_ratio = 111318.8450631976;
   const lon_m_ratio = 84719.3945182816;
 
