@@ -1,5 +1,7 @@
 import type {
   GeoCoordinate,
+  GeoNode,
+  NodeInfo,
   PdfCoordinate,
   Placement,
   Polygon,
@@ -135,4 +137,29 @@ export const calcDist = (
   const dist2 = (lon1 - lon2) * lon_m_ratio;
 
   return Math.sqrt(dist1 ** 2 + dist2 ** 2);
+};
+
+export const geoNodeToNodeInfo = (geoNode: GeoNode): NodeInfo => {
+  const pos = geoNode.floor
+    ? geoCoordsToPdfCoords({
+        geoCenter: {
+          latitude: geoNode.floor.centerLatitude,
+          longitude: geoNode.floor.centerLongitude,
+        },
+        pdfCenter: {
+          x: geoNode.floor.centerX,
+          y: geoNode.floor.centerY,
+        },
+        scale: geoNode.floor.scale,
+        angle: geoNode.floor.angle,
+      })(geoNode.pos)
+    : { x: 0, y: 0 };
+  return {
+    pos,
+    neighbors: geoNode.neighbors,
+    roomId: geoNode.roomId,
+    id: geoNode.id,
+    floor: geoNode.floor,
+    coordinate: geoNode.pos,
+  };
 };

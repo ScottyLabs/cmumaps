@@ -1,25 +1,26 @@
 import type {
-  Graph,
+  GeoCoordinate,
+  GeoNode,
+  GeoNodes,
   GraphPath,
-  NodeInfo,
   NodesRoute,
   PreciseRoute,
   Route,
   WayPoint,
 } from "@cmumaps/common";
-import { calcDist, pdfCoordsToGeoCoords } from "@cmumaps/common";
+import { calcDist, geoNodeToNodeInfo } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
-import type { Buildings } from "../../controllers/pathController";
+import type { Buildings } from "../../services/pathService";
 
 const findClosestNeighbors = (
   targetCoord: { latitude: number; longitude: number },
-  graph: Graph,
+  graph: GeoNodes,
   count: number,
 ): Record<string, { outFloorCode?: string }> => {
   const distances: Array<{ nodeId: string; distance: number }> = [];
 
   for (const node of Object.values(graph)) {
-    const dist = calcDist(targetCoord, node.coordinate);
+    const dist = calcDist(targetCoord, node.pos);
     distances.push({ nodeId: node.id, distance: dist });
   }
 
@@ -36,9 +37,28 @@ const findClosestNeighbors = (
   return neighbors;
 };
 
+export const parseWaypoint = (s: string): WayPoint => {
+  if (s.includes(",")) {
+    const [latStr, lonStr] = s.split(",");
+    const latitude = Number(latStr);
+    const longitude = Number(lonStr);
+    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+      return { type: "Coordinate", coordinate: { latitude, longitude } };
+    }
+  }
+  if (s.length < 5) {
+    return { type: "Building", buildingCode: s };
+  }
+  if (s.length === 36 && !s.includes(",")) {
+    return { type: "Room", roomId: s };
+  }
+  // For now, treat unknown as room
+  return { type: "Room", roomId: s };
+};
+
 export const waypointToNodes = (
   waypoint: WayPoint,
-  graph: Graph,
+  graph: GeoNodes,
   buildings: Buildings,
 ) => {
   const nodes = [];
@@ -56,23 +76,7 @@ export const waypointToNodes = (
       let best_dist = null;
       let best_node = null;
       for (const node of Object.values(graph)) {
-        const floor = node.floor;
-        if (!floor) {
-          continue;
-        }
-        const nodeGeoCoord = pdfCoordsToGeoCoords({
-          geoCenter: {
-            latitude: floor.centerLatitude,
-            longitude: floor.centerLongitude,
-          },
-          pdfCenter: {
-            x: floor.centerX,
-            y: floor.centerY,
-          },
-          scale: floor.scale,
-          angle: floor.angle,
-        })(node.pos);
-        const dist = calcDist(nodeGeoCoord, coord);
+        const dist = calcDist(node.pos, coord);
         if (best_dist === null || dist < best_dist) {
           best_dist = dist;
           best_node = node.id;
@@ -107,16 +111,14 @@ export const waypointToNodes = (
           // Find 3 closest neighbors before creating the dummy node
           const neighbors = findClosestNeighbors(dummyCoord, graph, 3);
 
-          const dummyNode: NodeInfo = {
+          const dummyNode: GeoNode = {
             id: building.buildingCode,
-            coordinate: dummyCoord,
             pos: {
-              x: 0,
-              y: 0,
+              latitude: dummyCoord.latitude,
+              longitude: dummyCoord.longitude,
             },
             neighbors,
             roomId: null,
-            floor: null,
           };
           graph[dummyNode.id] = dummyNode;
 
@@ -143,7 +145,7 @@ export const waypointToNodes = (
 export const findPath = (
   startNodes: string[],
   endNodes: string[],
-  graph: Graph,
+  graph: GeoNodes,
   outsideCostMul = 1,
 ): Route | null => {
   type QueueItem = { path: string[]; distance: number; addCost: number };
@@ -156,15 +158,7 @@ export const findPath = (
 
   const getGeoCoordForNode = (nodeId: string) => {
     const node = graph[nodeId];
-    return pdfCoordsToGeoCoords({
-      geoCenter: {
-        latitude: node.coordinate.latitude,
-        longitude: node.coordinate.longitude,
-      },
-      pdfCenter: { x: node.pos.x, y: node.pos.y },
-      scale: node.floor?.scale ?? 1,
-      angle: node.floor?.angle ?? 0,
-    })(node.pos);
+    return node.pos;
   };
 
   // Push all start nodes into the priority queue
@@ -257,23 +251,15 @@ export const findPath = (
 };
 
 const calculateAngle = (
-  first: NodeInfo,
-  second: NodeInfo,
-  third: NodeInfo,
+  first: GeoCoordinate,
+  second: GeoCoordinate,
+  third: GeoCoordinate,
 ): number => {
   // Convert latitude difference to meters
-  const latDiff1 =
-    (second.coordinate.latitude - first.coordinate.latitude) *
-    111318.8450631976;
-  const lonDiff1 =
-    (second.coordinate.longitude - first.coordinate.longitude) *
-    84719.3945182816;
-  const latDiff2 =
-    (third.coordinate.latitude - second.coordinate.latitude) *
-    111318.8450631976;
-  const lonDiff2 =
-    (third.coordinate.longitude - second.coordinate.longitude) *
-    84719.3945182816;
+  const latDiff1 = (second.latitude - first.latitude) * 111318.8450631976;
+  const lonDiff1 = (second.longitude - first.longitude) * 84719.3945182816;
+  const latDiff2 = (third.latitude - second.latitude) * 111318.8450631976;
+  const lonDiff2 = (third.longitude - second.longitude) * 84719.3945182816;
 
   const angle =
     Math.atan2(
@@ -299,7 +285,11 @@ export const getPreciseRoute = (route: NodesRoute): PreciseRoute => {
     }
 
     // Calculate the angle between the three nodes
-    const angle = calculateAngle(first, second, third);
+    const angle = calculateAngle(
+      first.coordinate,
+      second.coordinate,
+      third.coordinate,
+    );
 
     // Filter out straight lines (angles between 30 and 150 degrees)
     if (Math.abs(angle) >= 30.0 && Math.abs(angle) <= 150.0) {
@@ -321,7 +311,7 @@ export const getPreciseRoute = (route: NodesRoute): PreciseRoute => {
 export const getRoute = (
   startNodes: string[],
   endNodes: string[],
-  graph: Graph,
+  graph: GeoNodes,
   outsideCostMul = 1,
 ): PreciseRoute => {
   const found = findPath(startNodes, endNodes, graph, outsideCostMul);
@@ -335,7 +325,7 @@ export const getRoute = (
   const trueDistance = found.distance - Number(found.path.addCost);
 
   const nodesRoute: NodesRoute = {
-    path: nodePath,
+    path: nodePath.map(geoNodeToNodeInfo),
     distance: trueDistance,
   };
 

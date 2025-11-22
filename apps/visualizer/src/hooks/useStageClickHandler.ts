@@ -51,7 +51,6 @@ const useStageClickHandler = (
         neighbors: {},
         roomId: posToRoomId(pos, rooms),
         id: nodeId,
-        floor: null,
         // We don't care about the coordinate here
         coordinate: {
           latitude: 0,
