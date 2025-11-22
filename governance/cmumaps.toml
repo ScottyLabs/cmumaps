@@ -6,6 +6,7 @@ leads = [
   { "github-username" = "luke992", "andrew-id" = "lhann" },
   { "github-username" = "romycyy", "andrew-id" = "yiyuc" },
   { "github-username" = "ellylai", "andrew-id" = "ellysel" },
+  { "github-username" = "tsurbs", "andrew-id" = "tsurban" },
 ]
 members = [
   { "github-username" = "Nicolapps", "andrew-id" = "" },
