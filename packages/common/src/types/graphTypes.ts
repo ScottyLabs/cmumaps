@@ -1,5 +1,5 @@
 import type { GeoCoordinate, PdfCoordinate } from "./coordTypes";
-import type { FloorInfo } from "./floorTypes";
+import type { Floor, FloorInfo } from "./floorTypes";
 
 export const ValidCrossFloorEdgeTypes = [
   "Ramp",
@@ -58,7 +58,7 @@ export interface NavPathNode {
     [neighborId: string]: EdgeInfo;
   };
   roomId: string;
-  floor?: FloorInfo;
+  floor?: Floor;
   coordinate: GeoCoordinate;
   id: string;
 }

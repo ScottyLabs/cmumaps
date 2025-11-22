@@ -157,6 +157,11 @@ export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => {
     coordinate: geoNode.pos,
     roomId: geoNode.roomId || "outside",
     id: geoNode.id,
-    floor: geoNode.floor,
+    floor: geoNode.floor
+      ? {
+          buildingCode: geoNode.floor.buildingCode,
+          level: geoNode.floor.level,
+        }
+      : undefined,
   };
 };
