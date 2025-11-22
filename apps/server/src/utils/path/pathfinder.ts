@@ -3,12 +3,11 @@ import type {
   GeoNode,
   GeoNodes,
   GraphPath,
-  NodesRoute,
   PreciseRoute,
   Route,
   WayPoint,
 } from "@cmumaps/common";
-import { calcDist, geoNodeToNodeInfo } from "@cmumaps/common";
+import { calcDist, geoNodeToNavPathNode } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
 import type { Buildings } from "../../services/pathService";
 
@@ -142,6 +141,11 @@ export const waypointToNodes = (
   return nodes;
 };
 
+interface GeoNodeRoute {
+  path: GeoNode[];
+  distance: number;
+}
+
 export const findPath = (
   startNodes: string[],
   endNodes: string[],
@@ -270,7 +274,7 @@ const calculateAngle = (
   return angle;
 };
 
-export const getPreciseRoute = (route: NodesRoute): PreciseRoute => {
+export const getPreciseRoute = (route: GeoNodeRoute): PreciseRoute => {
   const path = route.path;
   const instructions = [];
 
@@ -285,11 +289,7 @@ export const getPreciseRoute = (route: NodesRoute): PreciseRoute => {
     }
 
     // Calculate the angle between the three nodes
-    const angle = calculateAngle(
-      first.coordinate,
-      second.coordinate,
-      third.coordinate,
-    );
+    const angle = calculateAngle(first.pos, second.pos, third.pos);
 
     // Filter out straight lines (angles between 30 and 150 degrees)
     if (Math.abs(angle) >= 30.0 && Math.abs(angle) <= 150.0) {
@@ -303,7 +303,10 @@ export const getPreciseRoute = (route: NodesRoute): PreciseRoute => {
   }
 
   return {
-    path: route,
+    path: {
+      path: route.path.map(geoNodeToNavPathNode),
+      distance: route.distance,
+    },
     instructions,
   };
 };
@@ -324,8 +327,8 @@ export const getRoute = (
     .filter((n): n is NonNullable<typeof n> => Boolean(n));
   const trueDistance = found.distance - Number(found.path.addCost);
 
-  const nodesRoute: NodesRoute = {
-    path: nodePath.map(geoNodeToNodeInfo),
+  const nodesRoute = {
+    path: nodePath,
     distance: trueDistance,
   };
 

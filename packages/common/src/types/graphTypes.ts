@@ -30,10 +30,6 @@ export interface NodeInfo {
    * If null, the node is not associated with any room
    */
   roomId: string | null;
-
-  id: string;
-  floor?: FloorInfo;
-  coordinate: GeoCoordinate;
 }
 
 export interface GeoNode {
@@ -56,6 +52,17 @@ export interface GeoNode {
   id: string;
 }
 
+export interface NavPathNode {
+  pos: { x: number; y: number };
+  neighbors: {
+    [neighborId: string]: EdgeInfo;
+  };
+  roomId: string;
+  floor?: FloorInfo;
+  coordinate: GeoCoordinate;
+  id: string;
+}
+
 export interface GraphPath {
   path: string[];
   addCost: string;
@@ -73,7 +80,7 @@ export interface Instruction {
 }
 
 export interface NodesRoute {
-  path: NodeInfo[];
+  path: NavPathNode[];
   distance: number;
 }
 

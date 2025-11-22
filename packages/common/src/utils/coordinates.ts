@@ -1,7 +1,7 @@
 import type {
   GeoCoordinate,
   GeoNode,
-  NodeInfo,
+  NavPathNode,
   PdfCoordinate,
   Placement,
   Polygon,
@@ -139,7 +139,7 @@ export const calcDist = (
   return Math.sqrt(dist1 ** 2 + dist2 ** 2);
 };
 
-export const geoNodeToNodeInfo = (geoNode: GeoNode): NodeInfo => {
+export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => {
   const pos = geoNode.floor
     ? geoCoordsToPdfCoords({
         geoCenter: {
@@ -157,9 +157,9 @@ export const geoNodeToNodeInfo = (geoNode: GeoNode): NodeInfo => {
   return {
     pos,
     neighbors: geoNode.neighbors,
-    roomId: geoNode.roomId,
+    coordinate: geoNode.pos,
+    roomId: geoNode.roomId || "outside",
     id: geoNode.id,
     floor: geoNode.floor,
-    coordinate: geoNode.pos,
   };
 };
