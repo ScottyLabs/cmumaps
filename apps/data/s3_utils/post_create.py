@@ -6,7 +6,10 @@ Script to download all JSON files from S3 bucket while maintaining directory str
 from pathlib import Path
 from s3_utils import download_json_file, list_json_files
 
-DOWNLOAD_DIR = Path(__file__).parent.parent / "s3_downloads"
+DOWNLOAD_DIR = (
+    Path(__file__).parent.parent / "s3_downloads"
+)  # .../apps/data/s3_downloads
+
 
 def main():
     DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -23,9 +26,9 @@ def main():
     for file_info in json_files:
         s3_object_name = file_info["name"]
 
-        local_file_path = DOWNLOAD_DIR / s3_object_name #keeps s3 file structure
+        local_file_path = DOWNLOAD_DIR / s3_object_name  # keeps s3 file structure
         local_file_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         download_json_file(s3_object_name, str(local_file_path))
 
 
