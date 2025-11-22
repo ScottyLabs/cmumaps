@@ -9,8 +9,8 @@ import type {
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
-const latitudeRatio = 111318.8450631976;
-const longitudeRatio = 84719.3945182816;
+export const LATITUDE_RATIO = 111318.8450631976;
+export const LONGITUDE_RATIO = 84719.3945182816;
 
 /**
  * Converts PDF coordinates (x/y) to geographical coordinates (latitude/longitude)
@@ -39,8 +39,8 @@ export const pdfCoordsToGeoCoords =
     const scaledY = ry * scale;
 
     // Convert to geographical coordinates
-    const longitude = scaledX / longitudeRatio + geoCenter.longitude;
-    const latitude = scaledY / latitudeRatio + geoCenter.latitude;
+    const longitude = scaledX / LONGITUDE_RATIO + geoCenter.longitude;
+    const latitude = scaledY / LATITUDE_RATIO + geoCenter.latitude;
 
     return { latitude, longitude };
   };
@@ -58,8 +58,8 @@ export const geoCoordsToPdfCoords =
     const { latitude, longitude } = geoCoords;
 
     // reverse the transform and scale
-    const x = ((longitude - geoCenter.longitude) * longitudeRatio) / scale;
-    const y = ((latitude - geoCenter.latitude) * latitudeRatio) / scale;
+    const x = ((longitude - geoCenter.longitude) * LONGITUDE_RATIO) / scale;
+    const y = ((latitude - geoCenter.latitude) * LATITUDE_RATIO) / scale;
 
     // reverse the rotation
     // We have to swap x and y to make this function the inverse of pdfCoordsToGeoCoords
@@ -122,16 +122,13 @@ export const geoPolygonToPdfPolygon = (
 };
 
 export const dist = (coord1: GeoCoordinate, coord2: GeoCoordinate): number => {
-  const lat_m_ratio = 111318.8450631976;
-  const lon_m_ratio = 84719.3945182816;
-
   const lat1 = coord1.latitude;
   const lon1 = coord1.longitude;
   const lat2 = coord2.latitude;
   const lon2 = coord2.longitude;
 
-  const dist1 = (lat1 - lat2) * lat_m_ratio;
-  const dist2 = (lon1 - lon2) * lon_m_ratio;
+  const dist1 = (lat1 - lat2) * LATITUDE_RATIO;
+  const dist2 = (lon1 - lon2) * LONGITUDE_RATIO;
 
   return Math.sqrt(dist1 ** 2 + dist2 ** 2);
 };

@@ -1,5 +1,7 @@
 import type { GeoCoordinate, GeoNode, Instruction } from "@cmumaps/common";
 
+const PLACEHOLDER_INSTRUCTION_DISTANCE = 42;
+
 function calculateAngle(
   first: GeoCoordinate,
   second: GeoCoordinate,
@@ -34,7 +36,7 @@ export function generateInstructions(path: GeoNode[]): Instruction[] {
       const action = angle < 0 ? "Left" : "Right";
       instructions.push({
         action,
-        distance: 42,
+        distance: PLACEHOLDER_INSTRUCTION_DISTANCE,
         node_id: second.id,
       });
     }
