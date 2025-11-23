@@ -36,6 +36,10 @@ Prerequisites: [Docker](https://docs.docker.com/get-docker/) and [Dev Containers
 
 ### Troubleshooting
 
+#### Dev Container Installation Issues
+
+Check if the Docker Desktop version is up to date.
+
 #### Post Create Script
 
 If the post create command in dev container fails, you can manually run the post create script in the container by running the following command in the root directory:
