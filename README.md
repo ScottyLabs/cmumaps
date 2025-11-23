@@ -50,4 +50,8 @@ If the post create command in dev container fails, you can manually run the post
 
 #### Manual Setup
 
-If the dev container setup fails, try the [manual setup instructions](https://github.com/ScottyLabs/cmumaps/wiki/Manual-Setup).
+If you just can't get the dev container setup to work, try the [manual setup instructions](https://github.com/ScottyLabs/cmumaps/wiki/Manual-Setup) (not recommended).
+
+#### Biome Formatter
+
+If you are not able to use Biome as a formatter, you can try resintalling the extension.

@@ -20,6 +20,6 @@ members = [
   { "github-username" = "tu2463", "andrew-id" = "cheyut" },
   { "github-username" = "lastlegume", "andrew-id" = "krishsha" },
   { "github-username" = "SayeVikram", "andrew-id" = "sayevikk" },
-   { "github-username" = "Wunwan", "andrew-id" = "pboonsit" },
+  { "github-username" = "Wunwan", "andrew-id" = "pboonsit" },
 ]
 repos = ["ScottyLabs/cmumaps"]
