@@ -9,6 +9,7 @@ import "./index.css";
 import { ClerkProvider } from "@clerk/clerk-react";
 import type { Clerk } from "@clerk/types";
 import { NuqsAdapter } from "nuqs/adapters/react";
+import posthog from "posthog-js";
 
 // https://clerk.com/docs/components/control/clerk-loaded
 declare global {
@@ -17,10 +18,10 @@ declare global {
   }
 }
 
-// Posthog settings
-const posthog_options = {
+// Initialize Posthog https://posthog.com/docs/libraries/react
+posthog.init(env.VITE_PUBLIC_POSTHOG_KEY || "", {
   api_host: env.VITE_PUBLIC_POSTHOG_HOST,
-};
+});
 
 // Create a query client
 const queryClient = new QueryClient();
@@ -31,10 +32,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <ClerkProvider publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}>
       <QueryClientProvider client={queryClient}>
         <NuqsAdapter>
-          <PostHogProvider
-            apiKey={env.VITE_PUBLIC_POSTHOG_KEY || ""}
-            options={posthog_options}
-          >
+          <PostHogProvider client={posthog}>
             <StrictMode>
               <App />
             </StrictMode>
