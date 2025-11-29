@@ -17,7 +17,7 @@ Visit the [wiki](https://github.com/ScottyLabs/cmumaps/wiki) for more informatio
 
 ### Permission Prerequisite
 
-Follow the instructions in [governance/README.md](governance/README.md) to obtain the necessary permissions.
+Follow the instructions in [Governance](https://github.com/ScottyLabs/governance) to add yourself as a [contributor](https://github.com/ScottyLabs/governance/blob/main/docs/contributors.md) and join the [CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml) to obtain the necessary permissions.
 
 ### Dev Container Setup
 
