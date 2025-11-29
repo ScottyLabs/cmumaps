@@ -5,7 +5,7 @@ usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
   echo -e "\t\tAPPLICATION: The application to pull from, one of web | visualizer | server | rust-server | data | scripts | governance | all\n"
-  echo -e "\t\tENVIRONMENT: The environment to pull from, one of local | dev | staging | prod | all\n"
+  echo -e "\t\tENVIRONMENT: The environment to pull from, one of local | staging | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
 }
@@ -70,10 +70,10 @@ fi
 
 # Sanitizing the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
-  ENVIRONMENT=("local" "dev" "staging" "prod")
+  ENVIRONMENT=("local" "staging" "prod")
 else
   case "$ENVIRONMENT" in
-  "local" | "dev" | "staging" | "prod")
+  "local" | "staging" | "prod")
     ENVIRONMENT=("$ENVIRONMENT")
     ;;
   *)
@@ -86,14 +86,9 @@ fi
 
 # Pulling from vault
 for ENV in "${ENVIRONMENT[@]}"; do
-  ENV_FILE_SUFFIX=""
-  if [ "$ENV" != "local" ]; then
-    ENV_FILE_SUFFIX=".$ENV"
-  fi
-
   for APP in "${APPLICATIONS[@]}"; do
     vault kv get -format=json ScottyLabs/cmumaps/$ENV/$APP |
-      jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >apps/$APP/.env$ENV_FILE_SUFFIX
+      jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >apps/$APP/.env.$ENV
     echo "Pulled from vault: ScottyLabs/cmumaps/$ENV/$APP"
   done
 done
