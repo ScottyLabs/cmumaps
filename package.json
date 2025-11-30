@@ -28,7 +28,6 @@
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server",
     "format": "turbo format",
     "lint": "turbo lint",
-    "postinstall": "turbo db-generate openapi --filter=@cmumaps/server",
     "preinstall": "npx only-allow bun",
     "prepare": "husky && husky install",
     "secrets:pull": "./scripts/secrets-pull.sh",
