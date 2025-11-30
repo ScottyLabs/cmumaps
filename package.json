@@ -34,6 +34,7 @@
     "secrets:push": "./scripts/secrets-push.sh",
     "secrets:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc",
     "start": "turbo start",
+    "sync": "cd apps/server && bun run db-generate && bun run tsoa && bun run openapi",
     "syncpack": "syncpack format && syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
