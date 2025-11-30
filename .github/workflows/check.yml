@@ -18,7 +18,15 @@ jobs:
       - uses: astral-sh/ruff-action@v3
       - uses: oven-sh/setup-bun@v2
         with:
-            bun-version: latest 
-      - run: bun install
+            bun-version: latest
+ 
+      - name: Install dependencies and generate OpenAPI spec
+        run: |
+          bun install
+          cd apps/server
+          bun run tsoa
+          bun run openapi
+          cd ../../
+
       - name: Check
         run: bun run check
