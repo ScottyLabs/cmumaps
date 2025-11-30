@@ -15,6 +15,9 @@ COPY . .
 # Install deps from bun.lock
 RUN bun install --frozen-lockfile
 
+# Generate DB schema and OpenAPI spec
+RUN cd apps/server && bun run db-generate && bun run tsoa && bun run openapi
+
 # Build the project
 RUN bun run build --filter=@cmumaps/server...
 
