@@ -10,7 +10,6 @@
     "@biomejs/biome": "^2.3.2",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@taplo/cli": "^0.7.0",
     "@types/bun": "latest",
     "@types/web": "^0.0.279",
     "husky": "^8.0.3",
@@ -22,7 +21,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "check": "bun run taplo:check && bun run syncpack && turbo check",
+    "check": "bun run syncpack && turbo check",
     "dev:server": "turbo dev --filter=@cmumaps/server",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",
@@ -39,7 +38,6 @@
     "syncpack": "syncpack format && syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
-    "taplo:check": "taplo format --check",
     "tsc": "turbo tsc"
   },
   "type": "module",
