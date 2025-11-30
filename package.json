@@ -22,7 +22,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "check": "bun run taplo:check && bun run syncpack && biome check && turbo check",
+    "check": "bun run taplo:check && bun run syncpack && turbo check",
     "dev:server": "turbo dev --filter=@cmumaps/server",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",

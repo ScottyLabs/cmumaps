@@ -40,23 +40,18 @@
       "dependsOn": ["^start", "^build"],
       "persistent": true
     },
-    "format": {
-      "cache": false
-    },
+    "format": {},
     "transit": {
       "dependsOn": ["^transit"]
     },
     "lint": {
-      "dependsOn": ["^transit"],
-      "cache": false
+      "dependsOn": ["transit"]
     },
     "tsc": {
-      "dependsOn": ["^transit"],
-      "cache": false
+      "dependsOn": ["transit"]
     },
     "check": {
-      "dependsOn": ["^transit"],
-      "cache": false
+      "dependsOn": ["transit"]
     }
   }
 }
