@@ -20,10 +20,11 @@ jobs:
         with:
             bun-version: latest
  
-      - name: Install dependencies and generate OpenAPI spec
+      - name: Install dependencies, generaet DB schema and OpenAPI spec
         run: |
           bun install
           cd apps/server
+          bun run db-generate
           bun run tsoa
           bun run openapi
           cd ../../
