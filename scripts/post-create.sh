@@ -12,9 +12,11 @@ bun install
 bun run secrets:setup
 bun run secrets:pull all all
 
-# Push the database schema
+# Push the database schema and generate OpenAPI spec
 cd apps/server
 bunx prisma db push
+bun run tsoa
+bun run openapi
 
 # Start the server in the background (without console output) for data population
 bun run dev >/dev/null 2>&1 &
