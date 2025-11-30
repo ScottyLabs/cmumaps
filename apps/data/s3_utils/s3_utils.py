@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import json
 
-load_dotenv()
+load_dotenv(".env.local")
 
 access_key = os.getenv("S3_ACCESS_KEY")
 secret_key = os.getenv("S3_SECRET_KEY")

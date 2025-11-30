@@ -5,19 +5,14 @@ from pathlib import Path
 
 
 class ClerkTokenManager:
-    def __init__(self, environment: str | None):
+    def __init__(self, environment: str):
         """
-        environment: 'dev', 'staging', 'prod', or None for local.
+        environment: 'local', 'dev', 'staging', 'prod'.
         """
         root = Path(__file__).resolve().parents[1]
 
         self.environment_name = environment
-
-        if environment is None:
-            env_file = root / ".env"
-        else:
-            env_file = root / f".env.{environment}"
-
+        env_file = root / f".env.{environment}"
         load_dotenv(env_file, override=True)
 
         # Load required environment-specific variables

@@ -15,17 +15,6 @@ from alias import create_aliases
 from node import create_nodes
 from edge import create_edges
 
-if len(sys.argv) == 2:
-    env_name = sys.argv[1].strip().lower()
-    if env_name in ["dev", "prod", "staging"]:
-        print(f"Loading environment variables for .env.{env_name}")
-    else:
-        print("Usage: python auth_utils/clerk_token_manager.py <env_name>")
-else:
-    env_name = None
-
-clerk_manager = ClerkTokenManager(env_name)
-
 
 def drop_all_tables(clerk_manager):
     table_names = ["Building", "Floor", "Room", "Alias", "Node", "Edge", "Poi"]
@@ -38,7 +27,29 @@ def drop_all_tables(clerk_manager):
     print(response.json())
 
 
+def print_usage():
+    print("""\
+Usage: python floorplans/deserializer/database_population.py <env_name>
+<env_name>: dev, prod, staging, or local (default)\
+""")
+    sys.exit(1)
+
+
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        env_name = "local"
+    elif len(sys.argv) == 2:
+        env_name = sys.argv[1].strip().lower()
+    else:
+        print_usage()
+
+    if env_name in ["local", "dev", "prod", "staging"]:
+        print(f"Loading environment variables for .env.{env_name}")
+    else:
+        print_usage()
+
+    clerk_manager = ClerkTokenManager(env_name)
+
     drop_all_tables(clerk_manager)
 
     # Populate all tables
