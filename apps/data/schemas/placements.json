@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CMU Maps Placements Schema",
+  "description": "Schema for placements.json",
+  "type": "object",
+  "additionalProperties": {
+    "description": "Building code",
+    "type": "object",
+    "additionalProperties": {
+      "description": "Floor level",
+      "type": "object",
+      "required": ["center", "scale", "angle", "pdfCenter"],
+      "properties": {
+        "center": {
+          "type": "object",
+          "required": ["latitude", "longitude"],
+          "properties": {
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "$comment": "Geographical center of the floorplan"
+        },
+        "scale": {
+          "type": "number",
+          "$comment": "Scale factor from local to geographical coordinates"
+        },
+        "angle": {
+          "type": "number",
+          "$comment": "Rotation angle from local to geographical coordinates"
+        },
+        "pdfCenter": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "$comment": "Local center for the floorplan"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CMU Maps Buildings Schema",
+  "description": "Schema for buildings.json",
+  "type": "object",
+  "additionalProperties": {
+    "description": "Building code",
+    "type": "object",
+    "required": [
+      "name",
+      "osmId",
+      "floors",
+      "defaultFloor",
+      "labelPosition",
+      "shapes",
+      "hitbox"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "osmId": {
+        "type": "string"
+      },
+      "fmsId": {
+        "type": "number"
+      },
+      "floors": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "defaultFloor": {
+        "type": "string"
+      },
+      "labelPosition": {
+        "type": "object",
+        "required": ["latitude", "longitude"],
+        "properties": {
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "shapes": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["latitude", "longitude"],
+            "properties": {
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$comment": "Poloygon used to display the building in Web"
+      },
+      "hitbox": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["latitude", "longitude"],
+              "properties": {
+                "latitude": {
+                  "type": "number"
+                },
+                "longitude": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "$comment": "Hitbox used to determine to show the floorplan of a building in Web or not"
+      },
+      "code": {
+        "type": "string"
+      },
+      "entrances": {
+        "type": "array",
+        "$comment": "Outside OSM nodes linking to the inside of the building"
+      },
+      "defaultOrdinal": {
+        "type": "integer",
+        "$comment": "The number aligning differnt floor between two buildings. Floors with the same ordinal will be shown together on the map."
+      }
+    },
+    "additionalProperties": false
+  }
+}
