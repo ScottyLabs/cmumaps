@@ -5,7 +5,7 @@ import json
 import jsonschema
 from pathlib import Path
 
-load_dotenv()
+load_dotenv(".env.local")
 
 access_key = os.getenv("S3_ACCESS_KEY")
 secret_key = os.getenv("S3_SECRET_KEY")
@@ -151,3 +151,7 @@ def list_json_files():
     except Exception as e:
         print(f"Error listing JSON files: {e}")
         return []
+
+
+if __name__ == "__main__":
+    print(client.bucket_exists("cmumaps"))

@@ -1,1 +1,2 @@
-commitlint --edit "$i"
+#!/usr/bin/env bash
+cat .git/COMMIT_EDITMSG | bunx commitlint --verbose

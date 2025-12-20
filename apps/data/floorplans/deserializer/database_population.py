@@ -1,11 +1,11 @@
 # Script that combines other json-to-database scripts to populate entire database
-# python floorplans/deserializer/database_population.py
+# python floorplans/deserializer/database_population.py <env>
 import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.get_clerk_jwt import get_clerk_jwt
+from auth_utils.api_client import ClerkTokenManager
 
 import requests  # type: ignore
 from building import create_buildings
@@ -16,30 +16,52 @@ from node import create_nodes
 from edge import create_edges
 
 
-def drop_all_tables():
+def drop_all_tables(clerk_manager):
     table_names = ["Building", "Floor", "Room", "Alias", "Node", "Edge", "Poi"]
-    server_url = os.getenv("SERVER_URL")
+    server_url = clerk_manager.server_url
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": table_names},
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response.json())
 
 
+def print_usage():
+    print("""\
+Usage: python floorplans/deserializer/database_population.py <env_name>
+<env_name>: dev, prod, staging, or local (default)\
+""")
+    sys.exit(1)
+
+
 if __name__ == "__main__":
-    drop_all_tables()
+    if len(sys.argv) == 1:
+        env_name = "local"
+    elif len(sys.argv) == 2:
+        env_name = sys.argv[1].strip().lower()
+    else:
+        print_usage()
+
+    if env_name in ["local", "dev", "prod", "staging"]:
+        print(f"Loading environment variables for .env.{env_name}")
+    else:
+        print_usage()
+
+    clerk_manager = ClerkTokenManager(env_name)
+
+    drop_all_tables(clerk_manager)
 
     # Populate all tables
-    create_buildings()
+    create_buildings(clerk_manager)
     print("created buildings")
-    create_floors()
+    create_floors(clerk_manager)
     print("created floors")
-    create_rooms()
+    create_rooms(clerk_manager)
     print("created rooms")
-    create_aliases()
+    create_aliases(clerk_manager)
     print("created aliases")
-    create_nodes()
+    create_nodes(clerk_manager)
     print("created nodes")
-    create_edges()
+    create_edges(clerk_manager)
     print("created edges")

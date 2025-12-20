@@ -420,9 +420,6 @@ const NavCardDesktop = () => {
 
       const buildingName =
         buildingCode === "outside" ? "Outside" : buildingCode;
-      // : buildings && buildingCode
-      //   ? buildings[buildingCode]?.name || "Invalid Building"
-      //   : "";
       return (
         <div className="flex pt-2" key={i}>
           <div
@@ -451,12 +448,14 @@ const NavCardDesktop = () => {
       <div className="overflow-y-scroll bg-white">
         {Object.entries(pastDirections)
           .reverse()
-          .map(([k, v], i) => renderDirection(v, Number.parseInt(k), true, i))}
+          .map(([k, v], i) =>
+            renderDirection(v, Number.parseInt(k, 10), true, i),
+          )}
         {instructionIndex < instructions.length - 1 && (
           <hr className="mx-4 rounded-full border-2 border-primary-green" />
         )}
         {Object.entries(futureDirections).map(([k, v], i) =>
-          renderDirection(v, Number.parseInt(k), false, i),
+          renderDirection(v, Number.parseInt(k, 10), false, i),
         )}
       </div>
     );

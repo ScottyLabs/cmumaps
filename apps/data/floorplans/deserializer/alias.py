@@ -5,24 +5,21 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import requests  # type: ignore
-from auth_utils.get_clerk_jwt import get_clerk_jwt
 from s3_utils.s3_utils import get_json_from_s3
 
 
 # Drop and populate Alias table
-def drop_alias_table():
-    server_url = os.getenv("SERVER_URL")
+def drop_alias_table(clerk_manager):
+    server_url = clerk_manager.server_url
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": ["Alias"]},
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response.json())
 
 
-def create_aliases():
-    # with open("cmumaps-data/floorplans/floorplans.json", "r") as file:
-    #     data = json.load(file)
+def create_aliases(clerk_manager):
     data = get_json_from_s3("floorplans/floorplans.json", return_data=True)
 
     alias_data = []
@@ -58,16 +55,11 @@ def create_aliases():
                         )
 
     # Send request to server to populate Alias table
-    server_url = os.getenv("SERVER_URL")
+    server_url = clerk_manager.server_url
     response = requests.post(
         f"{server_url}/populate-table/alias",
         json=alias_data,
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response)
     print(response.json())
-
-
-if __name__ == "__main__":
-    drop_alias_table()
-    create_aliases()

@@ -4,20 +4,20 @@ This directory contains scripts that are used to manage the project.
 
 ## Usage
 
-### `vault-pull.sh`
+### `secrets-pull.sh`
 
 Pulls the secrets from the [Vault](https://secrets.scottylabs.org/ui/vault/secrets/ScottyLabs/kv/list/cmumaps/) and saves them to the corresponding `.env` file. Run the followwing command to see the usage:
 
 ```zsh
-./scripts/vault-pull.sh -h
+./scripts/secrets-pull.sh -h
 ```
 
-### `vault-push.sh`
+### `secrets-push.sh`
 
 Pushes the secrets to the [Vault](https://secrets.scottylabs.org/ui/vault/secrets/ScottyLabs/kv/list/cmumaps/) from the corresponding `.env` file. Run the followwing command to see the usage:
 
 ```zsh
-./scripts/vault-push.sh -h
+./scripts/secrets-push.sh -h
 ```
 
 ### `railway-push.sh`
@@ -27,3 +27,7 @@ Pushes the secrets to [Railway](https://railway.com/project/c90cb4e0-480e-4039-b
 ```zsh
 ./scripts/railway-push.sh -h
 ```
+
+### `post-create.sh`
+
+This script is run after the dev container is created to set up the environment.

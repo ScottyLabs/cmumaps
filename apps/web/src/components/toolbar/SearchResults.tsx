@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
+import buildingIcon from "@/assets/icons/search_results/building.svg";
+import userIcon from "@/assets/icons/search_results/mark.svg";
 import classroomIcon from "@/assets/icons/search_results/study.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
@@ -35,15 +37,22 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
   const focusFloor = useBoundStore((state) => state.focusFloor);
   const showLogin = useBoundStore((state) => state.showLogin);
+  const userPosition = useBoundStore((state) => state.userPosition);
 
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst } = useNavigationParams();
   const { hasAccess } = useUser();
 
-  const { data: searchResults } = $rapi.useQuery("get", "/search", {
-    params: { query: { query: searchQuery } },
-    enabled: isSearchOpen && searchQuery.length > 0,
-  });
+  const { data: searchResults } = $rapi.useQuery(
+    "get",
+    "/search",
+    {
+      params: { query: { query: searchQuery } },
+    },
+    {
+      enabled: isSearchOpen && searchQuery.length > 0,
+    },
+  );
 
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
@@ -55,8 +64,19 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     );
     const rooms = searchResults.filter((result) => result.type === "room");
 
+    const userLocationResult: SearchResultProps = {
+      id: "user",
+      fullNameWithSpace: "User Position",
+      type: "user",
+      nameWithSpace: "user",
+    };
+
+    if (searchTarget && userPosition) {
+      return [userLocationResult, ...buildings, ...rooms];
+    }
+
     return [...buildings, ...rooms];
-  }, [searchResults]);
+  }, [searchResults, userPosition, searchTarget]);
 
   // Don't render if the search is not open or the search query is empty
   if (searchQuery.length === 0 || !isSearchOpen) {
@@ -66,8 +86,8 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const renderBuildingResult = (result: SearchResultProps) => {
     return (
       <>
-        <div className="mr-2 ml-5 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-full bg-[#4b5563] text-white text-xs">
-          {result.id}
+        <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
+          <img width={24} src={buildingIcon} alt="classroom" />
         </div>
         <div className="flex flex-col">{result.fullNameWithSpace}</div>
       </>
@@ -77,8 +97,8 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const renderRoomResult = (result: SearchResultProps) => {
     return (
       <>
-        <div className="mr-2 ml-5 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md bg-[#4b5563] text-white">
-          <img width={18} src={classroomIcon} alt="classroom" />
+        <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
+          <img width={24} src={classroomIcon} alt="classroom" />
         </div>
         <div className="flex w-[100%] items-center justify-between">
           <div className="flex flex-col text-left">
@@ -90,6 +110,28 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         </div>
       </>
     );
+  };
+
+  const renderUserLocationResult = () => {
+    return (
+      <>
+        <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
+          <img width={24} src={userIcon} alt="classroom" />
+        </div>
+        <div className="flex flex-col">User Position</div>
+      </>
+    );
+  };
+
+  const renderResultByType = (result: SearchResultProps) => {
+    switch (result.type) {
+      case "user":
+        return renderUserLocationResult();
+      case "building":
+        return renderBuildingResult(result);
+      default:
+        return renderRoomResult(result);
+    }
   };
 
   const handleSelectRoom = (result: SearchResultProps) => {
@@ -170,6 +212,21 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     }
   };
 
+  const handleSelectUserLocation = (result: SearchResultProps) => {
+    switch (searchTarget) {
+      case "nav-src":
+        setSrc(result.id);
+        break;
+      case "nav-dst":
+        navigate(`/${result.id}`);
+        setDst(result.id);
+        break;
+      default:
+        navigate(`/${result.id}`);
+        break;
+    }
+  };
+
   const handleClick = (result: SearchResultProps) => {
     if (result.type === "room") {
       if (!hasAccess) {
@@ -177,6 +234,8 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         return;
       }
       handleSelectRoom(result);
+    } else if (result.type === "user") {
+      handleSelectUserLocation(result);
     } else {
       handleSelectBuilding(result);
     }
@@ -186,17 +245,15 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   // No results found
   return (
-    <div className="z-50 flex-col overflow-hidden overflow-y-scroll bg-white">
+    <div className="z-50 flex-col overflow-hidden overflow-y-scroll rounded-[8px] bg-white">
       {organizedResults?.map((result, i) => (
         <button
           type="button"
           key={i}
-          className="flex h-19 w-full items-center bg-white text-lg active:bg-[#dce8f6]"
+          className="flex h-19 w-full items-center bg-white text-lg hover:bg-[#F5F5F5] active:bg-[#dce8f6]"
           onClick={() => handleClick(result)}
         >
-          {result.type === "building"
-            ? renderBuildingResult(result)
-            : renderRoomResult(result)}
+          {renderResultByType(result)}
         </button>
       ))}
     </div>

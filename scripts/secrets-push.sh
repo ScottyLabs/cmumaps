@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 export VAULT_ADDR=https://secrets.scottylabs.org
 
 usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
-  echo -e "\t\tAPPLICATION: The application to pull from, one of web | visualizer | server | rust-server | data | scripts | governance | all\n"
-  echo -e "\t\tENVIRONMENT: The environment to pull from, one of local | dev | staging | prod | all\n"
+  echo -e "\t\tAPPLICATION: The application to push to, one of web | visualizer | server | rust-server | data | scripts | all\n"
+  echo -e "\t\tENVIRONMENT: The environment to push to, one of local dev | staging | prod | all\n"
   echo -e "\tOptions:"
   echo -e "\t\t-h, --help    Show this help message and exit\n"
 }
@@ -33,17 +33,11 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Special case for scripts
-if [[ "$APPLICATION" == "scripts" ]] || [[ "$APPLICATION" == "all" ]]; then
-  vault kv get -format=json ScottyLabs/cmumaps/scripts |
-    jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >scripts/.env
-  exit 0
-fi
-
-# Special case for governance
-if [[ "$APPLICATION" == "governance" ]] || [[ "$APPLICATION" == "all" ]]; then
-  vault kv get -format=json ScottyLabs/cmumaps/governance |
-    jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >governance/.env
-  exit 0
+if [[ "$APPLICATION" == "scripts" || "$APPLICATION" == "all" ]]; then
+  cat scripts/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/scripts"
+  if [[ "$APPLICATION" == "scripts" ]]; then
+    exit 0
+  fi
 fi
 
 # Sanitizing the Application argument
@@ -52,7 +46,7 @@ if [ "$APPLICATION" == "all" ]; then
 else
   case "$APPLICATION" in
   "web" | "visualizer" | "server" | "rust-server" | "data")
-    APPLICATIONS=("$APPLICATION")
+    APPLICATIONS=($APPLICATION)
     ;;
   *)
     echo "Error: Invalid application: '$APPLICATION'" >&2
@@ -78,16 +72,9 @@ else
   esac
 fi
 
-# Pulling from vault
+# Pushing to vault
 for ENV in "${ENVIRONMENT[@]}"; do
-  ENV_FILE_SUFFIX=""
-  if [ "$ENV" != "local" ]; then
-    ENV_FILE_SUFFIX=".$ENV"
-  fi
-
   for APP in "${APPLICATIONS[@]}"; do
-    vault kv get -format=json ScottyLabs/cmumaps/$ENV/$APP |
-      jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >apps/$APP/.env$ENV_FILE_SUFFIX
-    echo "Pulled from vault: ScottyLabs/cmumaps/$ENV/$APP"
+    cat apps/$APP/.env.$ENV | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/$ENV/$APP"
   done
 done

@@ -8,29 +8,23 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import requests  # type: ignore
-from auth_utils.get_clerk_jwt import get_clerk_jwt
 from s3_utils.s3_utils import get_json_from_s3
 
 
-def drop_floor_table():
-    server_url = os.getenv("SERVER_URL")
+def drop_floor_table(clerk_manager):
+    server_url = clerk_manager.server_url
     response = requests.delete(
         f"{server_url}/drop-tables",
         json={"tableNames": ["Floor"]},
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response.json())
 
 
-def create_floors():
+def create_floors(clerk_manager):
     floors_data = []
 
-    # with open("cmumaps-data/floorplans/buildings.json", "r") as file:
-    #     buildings = json.load(file)
     buildings = get_json_from_s3("floorplans/buildings.json", return_data=True)
-
-    # with open("cmumaps-data/floorplans/placements.json", "r") as file:
-    #     data = json.load(file)
     data = get_json_from_s3("floorplans/placements.json", return_data=True)
 
     for buildingCode in data:
@@ -62,16 +56,11 @@ def create_floors():
             floors_data.append(floor)
 
     # Send request to server to populate Floor table
-    server_url = os.getenv("SERVER_URL")
+    server_url = clerk_manager.server_url
     response = requests.post(
         f"{server_url}/populate-table/floors",
         json=floors_data,
-        headers={"Authorization": f"Bearer {get_clerk_jwt()}"},
+        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
     )
     print(response)
     print(response.json())
-
-
-if __name__ == "__main__":
-    drop_floor_table()
-    create_floors()

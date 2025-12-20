@@ -2,3 +2,7 @@ requests
 pyjwt
 minio
 jsonschema
+clerk-backend-api
+schedule
+selenium
+python-dotenv
