@@ -6,10 +6,10 @@ WORKDIR /app
 COPY apps/data .
 
 # Install deps
-RUN pip install -r requirements.txt
+# RUN pip install -r requirements.txt
 
 # Set environment variable to print output to console
 ENV PYTHONUNBUFFERED=1
 
 # Run the script
-CMD ["python", "webscraper/main.py"]
+CMD ["python", "25live/main.py"]
