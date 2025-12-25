@@ -26,8 +26,8 @@ FROM base AS runner
 WORKDIR /app
 
 # Create non-root user
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 --gid 1001 server
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid 1001 server
 USER server
 
 # Copy swagger UI
