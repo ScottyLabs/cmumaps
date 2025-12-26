@@ -1,0 +1,184 @@
+name: ScottyLabs Wrapped Analysis
+
+on:
+  push:
+    branches:
+      - 'wrapped-analysis-*'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Get full history for git log analysis
+
+      - name: Install cargo-binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install tokei
+        run: cargo binstall --no-confirm tokei
+
+      - name: Collect commit statistics
+        run: |
+          # Extract year from branch name (wrapped-analysis-2025 -> 2025)
+          year=$(echo "${{ github.ref_name }}" | sed 's/wrapped-analysis-//')
+
+          # Get commits for the specified year using format with separator
+          # If no commits found, create empty array
+          git log --branches --remotes --tags --since="${year}-01-01" --until="${year}-12-31" \
+            --pretty=format:'%H%x1F%an%x1F%ae%x1F%aI%x1F%s' \
+            --numstat 2>/dev/null | \
+          python3 << 'PYTHON_EOF' > commits.json
+          import sys
+          import json
+
+          commits = []
+          current_commit = None
+
+          try:
+              for line in sys.stdin:
+                  line = line.rstrip()
+                  if not line:
+                      continue
+
+                  # Check if this is a commit header (contains the separator character)
+                  if '\x1f' in line:
+                      # Save previous commit if it exists
+                      if current_commit and current_commit.get("files_changed"):
+                          commits.append(current_commit)
+
+                      # Parse new commit header
+                      parts = line.split('\x1f')
+                      if len(parts) == 5:
+                          current_commit = {
+                              "sha": parts[0],
+                              "author_name": parts[1],
+                              "author_email": parts[2],
+                              "timestamp": parts[3],
+                              "message": parts[4],
+                              "files_changed": [],
+                              "additions": 0,
+                              "deletions": 0
+                          }
+                  else:
+                      # File change stats (additions, deletions, filename)
+                      if current_commit:
+                          parts = line.split("\t")
+                          if len(parts) == 3:
+                              additions, deletions, filename = parts
+                              try:
+                                  adds = int(additions) if additions != "-" else 0
+                                  dels = int(deletions) if deletions != "-" else 0
+                              except ValueError:
+                                  adds, dels = 0, 0
+
+                              current_commit["additions"] += adds
+                              current_commit["deletions"] += dels
+                              current_commit["files_changed"].append({
+                                  "filename": filename,
+                                  "additions": adds,
+                                  "deletions": dels
+                              })
+
+              # Add last commit
+              if current_commit and current_commit.get("files_changed"):
+                  commits.append(current_commit)
+          except Exception:
+              # If there's any error, just use empty commits
+              pass
+
+          print(json.dumps(commits, indent=2))
+          PYTHON_EOF
+
+          echo "Collected $(jq length commits.json) commits"
+
+      - name: Collect language statistics
+        run: |
+          tokei --output json > languages.json
+          echo "Analyzed $(jq 'keys | length' languages.json) languages"
+
+      - name: Collect PR statistics
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Extract year from branch name
+          year=$(echo "${{ github.ref_name }}" | sed 's/wrapped-analysis-//')
+
+          # Fetch all PRs created in the specified year
+          gh pr list --state all --limit 1000 \
+            --json number,author,state,createdAt,mergedAt,additions,deletions,reviews \
+            | jq --arg year "$year" '
+              map(select(.createdAt | startswith($year)))
+            ' > prs.json
+
+          echo "Collected $(jq length prs.json) PRs"
+
+      - name: Collect issue statistics
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Extract year from branch name
+          year=$(echo "${{ github.ref_name }}" | sed 's/wrapped-analysis-//')
+
+          # Fetch all issues created in the specified year
+          # Handle repositories with disabled issues by outputting empty array if command fails
+          gh issue list --state all --limit 1000 \
+            --json number,author,state,createdAt,closedAt,comments 2>/dev/null \
+            | jq --arg year "$year" '
+              map(select(.createdAt | startswith($year)))
+            ' > issues.json || echo '[]' > issues.json
+
+          # Fetch commenters for each issue
+          jq -r '.[].number' issues.json | while read -r issue_num; do
+            gh api "/repos/${{ github.repository }}/issues/${issue_num}/comments" \
+              --jq '[.[].user.login] | unique' > "issue_${issue_num}_commenters.json" 2>/dev/null || echo '[]' > "issue_${issue_num}_commenters.json"
+          done
+
+          # Merge commenters into issues.json
+          python3 << 'PYTHON_EOF'
+          import json
+          import sys
+
+          # Read and validate issues.json
+          try:
+              with open("issues.json") as f:
+                  content = f.read().strip()
+                  if not content:
+                      # Empty file, write empty array
+                      issues = []
+                  else:
+                      issues = json.loads(content)
+          except (json.JSONDecodeError, FileNotFoundError):
+              # Invalid JSON or missing file, use empty array
+              issues = []
+
+          for issue in issues:
+              commenter_file = f"issue_{issue['number']}_commenters.json"
+              try:
+                  with open(commenter_file) as f:
+                      issue["commenters"] = json.load(f)
+              except (FileNotFoundError, json.JSONDecodeError):
+                  issue["commenters"] = []
+
+          with open("issues_with_commenters.json", "w") as f:
+              json.dump(issues, f, indent=2)
+          PYTHON_EOF
+
+          mv issues_with_commenters.json issues.json
+          rm -f issue_*_commenters.json
+
+          echo "Collected $(jq length issues.json) issues"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: stats-${{ github.event.repository.name }}
+          path: |
+            commits.json
+            languages.json
+            prs.json
+            issues.json
+          retention-days: 7
