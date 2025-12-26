@@ -92,7 +92,7 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
 
   return (
     <div
-      className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 flex h-78 w-68 items-center align-center"
+      className="fixed top-1/2 flex h-78 w-68 -translate-x-1/2 -translate-y-1/2 items-center align-center"
       style={{ borderRadius: "50% / 50%" }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
