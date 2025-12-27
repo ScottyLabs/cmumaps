@@ -2,7 +2,7 @@ import type { GeoCoordinate } from "@cmumaps/common";
 import { getSearchContext } from "../utils/search/build";
 import { parseQuery } from "../utils/search/parse";
 import { BM25Term, distanceWeightedScore, topN } from "../utils/search/rank";
-import type { Document, RoomDocument } from "../utils/search/types";
+import type { Document } from "../utils/search/types";
 
 const DEFAULT_NUM_RESULTS = 20;
 
@@ -93,7 +93,7 @@ export const searchService = {
     ).map(([docId, score]) => {
       const doc = documents[docId];
       if (doc.type === "room") {
-        return [docId, distanceWeightedScore(doc as RoomDocument, pos, score)];
+        return [docId, distanceWeightedScore(doc, pos, score)];
       }
       return [docId, score];
     });

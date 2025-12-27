@@ -1,6 +1,6 @@
 import type { GeoCoordinate } from "@cmumaps/common";
 import { dist } from "@cmumaps/common";
-import type { RoomDocument } from "./types";
+import type { Document } from "./types";
 
 /**
  * Calculate BM25 score for a single term
@@ -34,7 +34,7 @@ export function BM25Term(
  * Closer results get a higher boost
  */
 export function distanceWeightedScore(
-  doc: RoomDocument,
+  doc: Document,
   userPos: GeoCoordinate | null | undefined,
   score: number,
 ): number {

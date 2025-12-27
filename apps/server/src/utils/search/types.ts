@@ -2,7 +2,7 @@ export type SearchIndex = Record<string, [string, number][]>;
 
 import type { Floor, GeoCoordinate, RoomType } from "@cmumaps/common";
 
-export type RoomDocument = {
+export type Document = {
   id: string;
   nameWithSpace: string;
   fullNameWithSpace: string;
@@ -11,8 +11,6 @@ export type RoomDocument = {
   alias: string;
   numTerms: number;
 };
-
-export type Document = RoomDocument;
 
 export type FloorPlans = Record<string, BuildingPlan>;
 export type BuildingPlan = Record<string, RoomPlan>;

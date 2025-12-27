@@ -17,7 +17,7 @@ export type Node = {
   id: string;
 };
 
-export type Instruction = { action: string; distance: number; node_id: string };
+export type Instruction = { action: string; distance: number; nodeId: string };
 
 export type NavPath = {
   instructions: Instruction[];

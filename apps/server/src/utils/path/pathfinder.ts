@@ -10,6 +10,7 @@ import type {
 import { dist, geoNodeToNavPathNode } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
 import type { Buildings } from "../../services/pathService";
+import { PLACEHOLDER_INSTRUCTION_DISTANCE } from "./instructions";
 
 const findClosestNeighbors = (
   targetCoord: { latitude: number; longitude: number },
@@ -98,6 +99,8 @@ export const waypointToNodes = (
           (x) => x.buildingCode === waypoint.buildingCode,
         );
         if (building) {
+          // If a node with the building code as its ID already exists in the graph
+          // (e.g., from a previous dummy node creation), reuse it instead of creating a new one
           if (graph[building.buildingCode]) {
             nodes.push(building.buildingCode);
             return nodes;
@@ -296,8 +299,8 @@ export const getPreciseRoute = (route: GeoNodeRoute): PreciseRoute => {
       const action = angle < 0.0 ? "Left" : "Right";
       instructions.push({
         action,
-        distance: 42.0, // Placeholder for actual distance calculation
-        node_id: second.id,
+        distance: PLACEHOLDER_INSTRUCTION_DISTANCE,
+        nodeId: second.id,
       });
     }
   }

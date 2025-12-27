@@ -1,8 +1,8 @@
 import type { Buildings, GeoCoordinate, RoomType } from "@cmumaps/common";
 import { prisma } from "../../../prisma";
 import { buildingService } from "../../services/buildingService";
-import { parseQuery, type SearchIndex } from "./parse";
-import type { Document, FloorPlans, RoomDocument } from "./types";
+import { parseQuery } from "./parse";
+import type { Document, FloorPlans, SearchIndex } from "./types";
 
 export function buildingToDocument({
   id,
@@ -14,8 +14,8 @@ export function buildingToDocument({
   name: string;
   code: string;
   labelPosition: GeoCoordinate;
-}): { doc: RoomDocument; terms: string[] } {
-  const doc: RoomDocument = {
+}): { doc: Document; terms: string[] } {
+  const doc: Document = {
     id,
     nameWithSpace: name,
     fullNameWithSpace: name,
@@ -50,8 +50,8 @@ export function roomToDocument({
   buildingCode: string;
   alias: string;
   labelPosition: GeoCoordinate;
-}): { doc: RoomDocument; terms: string[] } {
-  const doc: RoomDocument = {
+}): { doc: Document; terms: string[] } {
+  const doc: Document = {
     id,
     nameWithSpace: `${buildingCode} ${name}`,
     fullNameWithSpace: `${buildingName} ${name}`,
@@ -117,6 +117,34 @@ export async function getFloorplans(): Promise<FloorPlans> {
   return floorplans;
 }
 
+/**
+ * Convert all buildings to documents and collect their search terms.
+ */
+export function buildingsToDocuments(buildingMap: Buildings): {
+  documents: Record<string, Document>;
+  termsByDoc: Record<string, string[]>;
+} {
+  const documents: Record<string, Document> = {};
+  const termsByDoc: Record<string, string[]> = {};
+
+  for (const [buildingCode, building] of Object.entries(buildingMap)) {
+    const { doc, terms } = buildingToDocument({
+      id: buildingCode,
+      name: building.name,
+      code: building.code,
+      labelPosition: {
+        latitude: building.labelLatitude,
+        longitude: building.labelLongitude,
+      },
+    });
+
+    documents[buildingCode] = doc;
+    termsByDoc[buildingCode] = terms;
+  }
+
+  return { documents, termsByDoc };
+}
+
 function insertTerms(index: SearchIndex, terms: string[], docId: string): void {
   // Count term frequencies
   const termFreqs = new Map<string, number>();
@@ -139,22 +167,11 @@ export async function buildSearchIndex(
 ) {
   const startTime = Date.now();
   const index: SearchIndex = {};
-  const documents: Record<string, Document> = {};
 
-  // Process buildings first
-  for (const [buildingCode, building] of Object.entries(buildingMap)) {
-    const { doc, terms } = buildingToDocument({
-      id: buildingCode,
-      name: building.name,
-      code: building.code,
-      labelPosition: {
-        latitude: building.labelLatitude,
-        longitude: building.labelLongitude,
-      },
-    });
-
-    documents[buildingCode] = doc;
-    insertTerms(index, terms, buildingCode);
+  // Process buildings first using batch function
+  const { documents, termsByDoc } = buildingsToDocuments(buildingMap);
+  for (const [docId, terms] of Object.entries(termsByDoc)) {
+    insertTerms(index, terms, docId);
   }
   console.log(`Built ${Object.keys(documents).length} building documents`);
 
