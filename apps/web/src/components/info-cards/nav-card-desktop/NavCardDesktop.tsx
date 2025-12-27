@@ -198,7 +198,7 @@ const NavCardDesktop = () => {
       const entry = {
         distance: instruction.distance,
         action: instruction.action,
-        id: instruction.node_id,
+        id: instruction.nodeId,
       };
       if (index < instructionIndex) {
         past[time] = past[time] ? [...past[time], entry] : [entry];
@@ -416,7 +416,7 @@ const NavCardDesktop = () => {
       };
       const buildingCode = navPaths?.[selectedPath]?.path.path.find(
         (n) => n.id === id,
-      )?.floor.buildingCode;
+      )?.floor?.buildingCode;
 
       const buildingName =
         buildingCode === "outside" ? "Outside" : buildingCode;
