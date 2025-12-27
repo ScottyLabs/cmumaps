@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import $api from "@/api/client";
 import useBoundStore from "@/store";
 import type { NavPaths, NavWaypointType } from "@/types/navTypes";
-import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
+import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Params {
   navPaths?: NavPaths;
@@ -37,8 +37,7 @@ const getWaypointParams = (
   const floorName = getFloorLevelFromRoomName(roomName);
   const userPosition = useBoundStore((state) => state.userPosition);
 
-  const floorCode =
-    buildingCode && floorName ? `${buildingCode}-${floorName}` : null;
+  const floorCode = buildFloorCode(buildingCode, floorName);
   const { data: rooms } = $api.useQuery(
     "get",
     "/floors/{floorCode}/floorplan",

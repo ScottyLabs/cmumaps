@@ -257,9 +257,26 @@ export const findPath = (
 };
 
 export const getPreciseRoute = (route: GeoNodeRoute): PreciseRoute => {
+  // Convert nodes and calculate distances to next node in path
+  const pathNodes = route.path.map((node, index) => {
+    const navNode = geoNodeToNavPathNode(node);
+    // Calculate distance to next node in path
+    if (index < route.path.length - 1) {
+      const nextNode = route.path[index + 1];
+      if (nextNode) {
+        const edgeDist = dist(node.pos, nextNode.pos);
+        navNode.neighbors[nextNode.id] = {
+          ...navNode.neighbors[nextNode.id],
+          dist: edgeDist,
+        };
+      }
+    }
+    return navNode;
+  });
+
   return {
     path: {
-      path: route.path.map(geoNodeToNavPathNode),
+      path: pathNodes,
       distance: route.distance,
     },
     instructions: generateInstructions(route.path),

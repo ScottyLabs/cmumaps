@@ -2,7 +2,7 @@ import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import $api from "@/api/client";
-import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
+import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Params {
   buildingCode?: string;
@@ -30,7 +30,7 @@ const useLocationParams = (): Params => {
   const [buildingCode, roomName] = suffix.split("-") || [];
   const floor = getFloorLevelFromRoomName(roomName) || "";
 
-  const floorCode = buildingCode && floor ? `${buildingCode}-${floor}` : null;
+  const floorCode = buildFloorCode(buildingCode, floor);
   const { data: rooms } = $api.useQuery(
     "get",
     "/floors/{floorCode}/floorplan",

@@ -12,6 +12,7 @@ export type EdgeType = (typeof ValidCrossFloorEdgeTypes)[number];
 
 export interface EdgeInfo {
   outFloorCode?: string;
+  dist?: number;
 }
 
 export interface NodeInfo {
