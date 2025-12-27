@@ -12,6 +12,3 @@ export const CAMERA_BOUNDARY = {
   latitudeDelta: 0.009258427149788417,
   longitudeDelta: 0.014410141520116326,
 };
-// Thresholds
-export const THRESHOLD_DENSITY_TO_SHOW_FLOORS = 350_000;
-export const THRESHOLD_DENSITY_TO_SHOW_ROOMS = 750_000;
