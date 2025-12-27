@@ -1,8 +1,5 @@
 import { Get, Query, Route, Security } from "tsoa";
-import {
-  BEARER_AUTH,
-  MEMBER_SCOPE,
-} from "../middleware/authentication";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { searchService } from "../services/searchService";
 import type { Document } from "../utils/search/types";
 
