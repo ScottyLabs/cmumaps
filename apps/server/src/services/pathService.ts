@@ -10,8 +10,6 @@ export type Buildings = Awaited<ReturnType<typeof prisma.building.findMany>>;
 
 // Cache the graph
 let graphCache: GeoNodes | null = null;
-// Cache the buildings query result
-let buildingsCache: Buildings | null = null;
 
 async function getOrBuildGraph(): Promise<GeoNodes> {
   if (!graphCache) {
@@ -74,17 +72,6 @@ async function getOrBuildGraph(): Promise<GeoNodes> {
   return graphCache;
 }
 
-async function getOrBuildBuildings(): Promise<Buildings> {
-  if (!buildingsCache) {
-    console.log("Building buildings cache...");
-    buildingsCache = await prisma.building.findMany();
-    console.log(
-      `Buildings cache built with ${buildingsCache.length} buildings`,
-    );
-  }
-  return buildingsCache;
-}
-
 export const pathService = {
   async calculatePath(
     start: string,
@@ -101,7 +88,7 @@ export const pathService = {
     const startWaypoint = parseWaypoint(start);
     const endWaypoint = parseWaypoint(end);
 
-    const buildings = await getOrBuildBuildings();
+    const buildings = await prisma.building.findMany();
     const startNodes = waypointToNodes(startWaypoint, graph, buildings);
     const endNodes = waypointToNodes(endWaypoint, graph, buildings);
 
@@ -131,3 +118,8 @@ export const pathService = {
     };
   },
 };
+
+// Build graph cache on startup for faster first request and easier debugging
+getOrBuildGraph().catch((err) => {
+  console.error("Failed to build graph cache on startup:", err);
+});

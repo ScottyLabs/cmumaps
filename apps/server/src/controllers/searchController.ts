@@ -1,6 +1,5 @@
 import { Get, Query, Route, Security } from "tsoa";
 import {
-  ADMIN_SCOPE,
   BEARER_AUTH,
   MEMBER_SCOPE,
 } from "../middleware/authentication";
@@ -10,7 +9,6 @@ import type { Document } from "../utils/search/types";
 @Route("search")
 export class SearchController {
   @Get("/")
-  @Security(BEARER_AUTH, [MEMBER_SCOPE])
   public async search(
     @Query() query: string,
     @Query() n?: number,
@@ -21,7 +19,7 @@ export class SearchController {
   }
 
   @Get("/rebuild")
-  @Security(BEARER_AUTH, [ADMIN_SCOPE])
+  @Security(BEARER_AUTH, [MEMBER_SCOPE])
   public async rebuildIndex(): Promise<{
     message: string;
     documentCount: number;

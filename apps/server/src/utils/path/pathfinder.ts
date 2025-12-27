@@ -1,5 +1,4 @@
 import type {
-  GeoCoordinate,
   GeoNode,
   GeoNodes,
   GraphPath,
@@ -10,7 +9,7 @@ import type {
 import { dist, geoNodeToNavPathNode } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
 import type { Buildings } from "../../services/pathService";
-import { PLACEHOLDER_INSTRUCTION_DISTANCE } from "./instructions";
+import { generateInstructions } from "./instructions";
 
 const findClosestNeighbors = (
   targetCoord: { latitude: number; longitude: number },
@@ -213,7 +212,7 @@ export const findPath = (
     // Add neighbors
     const neighbors = lastNode.neighbors ?? {};
     for (const [neighborId] of Object.entries(neighbors)) {
-      const lastNode = graph[lastNodeId];
+      const currentNode = graph[lastNodeId];
       const nextNode = graph[neighborId];
       if (!nextNode) continue;
 
@@ -227,16 +226,16 @@ export const findPath = (
           return 25;
         }
         if (
-          lastNode.floor &&
+          currentNode.floor &&
           nextNode.floor &&
-          lastNode.floor.buildingCode === nextNode.floor.buildingCode &&
-          lastNode.floor.level !== nextNode.floor.level
+          currentNode.floor.buildingCode === nextNode.floor.buildingCode &&
+          currentNode.floor.level !== nextNode.floor.level
         ) {
           // Traveling between floors
           return 25;
         }
         const rawDist = dist(lastGeo, nextGeo);
-        const lastIsOutside = lastNode.floor?.buildingCode === "outside";
+        const lastIsOutside = currentNode.floor?.buildingCode === "outside";
         const nextIsOutside = nextNode.floor?.buildingCode === "outside";
         if (lastIsOutside && nextIsOutside) {
           // Calculate and track penalty cost, must be mult to penalize distance not nodes.
@@ -257,60 +256,13 @@ export const findPath = (
   return null;
 };
 
-const calculateAngle = (
-  first: GeoCoordinate,
-  second: GeoCoordinate,
-  third: GeoCoordinate,
-): number => {
-  // Convert latitude difference to meters
-  const latDiff1 = (second.latitude - first.latitude) * 111318.8450631976;
-  const lonDiff1 = (second.longitude - first.longitude) * 84719.3945182816;
-  const latDiff2 = (third.latitude - second.latitude) * 111318.8450631976;
-  const lonDiff2 = (third.longitude - second.longitude) * 84719.3945182816;
-
-  const angle =
-    Math.atan2(
-      latDiff1 * lonDiff2 - lonDiff1 * latDiff2,
-      latDiff1 * latDiff2 + lonDiff1 * lonDiff2,
-    ) *
-    (180 / Math.PI);
-  return angle;
-};
-
 export const getPreciseRoute = (route: GeoNodeRoute): PreciseRoute => {
-  const path = route.path;
-  const instructions = [];
-
-  // Use a sliding window of 3 nodes
-  for (let i = 0; i < path.length - 2; i++) {
-    const first = path[i];
-    const second = path[i + 1];
-    const third = path[i + 2];
-
-    if (!first || !second || !third) {
-      continue;
-    }
-
-    // Calculate the angle between the three nodes
-    const angle = calculateAngle(first.pos, second.pos, third.pos);
-
-    // Filter out straight lines (angles between 30 and 150 degrees)
-    if (Math.abs(angle) >= 30.0 && Math.abs(angle) <= 150.0) {
-      const action = angle < 0.0 ? "Left" : "Right";
-      instructions.push({
-        action,
-        distance: PLACEHOLDER_INSTRUCTION_DISTANCE,
-        nodeId: second.id,
-      });
-    }
-  }
-
   return {
     path: {
       path: route.path.map(geoNodeToNavPathNode),
       distance: route.distance,
     },
-    instructions,
+    instructions: generateInstructions(route.path),
   };
 };
 

@@ -1,16 +1,12 @@
 import type { PreciseRoute } from "@cmumaps/common";
 import { Get, Query, Route, Security } from "tsoa";
-import {
-  ADMIN_SCOPE,
-  BEARER_AUTH,
-  MEMBER_SCOPE,
-} from "../middleware/authentication";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
 import { pathService } from "../services/pathService";
 
 @Route("/path")
 export class PathController {
   @Get("/")
-  @Security(BEARER_AUTH, [MEMBER_SCOPE])
+  @Security(BEARER_AUTH, [])
   public async path(
     @Query() start: string,
     @Query() end: string,
@@ -19,7 +15,7 @@ export class PathController {
   }
 
   @Get("/rebuild")
-  @Security(BEARER_AUTH, [ADMIN_SCOPE])
+  @Security(BEARER_AUTH, [MEMBER_SCOPE])
   public async rebuildCache(): Promise<{
     message: string;
     nodeCount: number;

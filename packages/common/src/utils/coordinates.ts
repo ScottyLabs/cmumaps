@@ -133,6 +133,36 @@ export const dist = (coord1: GeoCoordinate, coord2: GeoCoordinate): number => {
   return Math.sqrt(dist1 ** 2 + dist2 ** 2);
 };
 
+/**
+ * Calculates the angle (in degrees) between three geographic coordinates.
+ * Used for turn-by-turn navigation to determine turn directions.
+ *
+ * @param first - The starting coordinate
+ * @param second - The middle coordinate (where the turn occurs)
+ * @param third - The ending coordinate
+ * @returns The angle in degrees. Negative values indicate left turns, positive indicate right turns.
+ */
+export const calculateAngle = (
+  first: GeoCoordinate,
+  second: GeoCoordinate,
+  third: GeoCoordinate,
+): number => {
+  // Convert latitude/longitude differences to meters
+  const latDiff1 = (second.latitude - first.latitude) * LATITUDE_RATIO;
+  const lonDiff1 = (second.longitude - first.longitude) * LONGITUDE_RATIO;
+  const latDiff2 = (third.latitude - second.latitude) * LATITUDE_RATIO;
+  const lonDiff2 = (third.longitude - second.longitude) * LONGITUDE_RATIO;
+
+  const angle =
+    (Math.atan2(
+      latDiff1 * lonDiff2 - lonDiff1 * latDiff2,
+      latDiff1 * latDiff2 + lonDiff1 * lonDiff2,
+    ) *
+      180) /
+    Math.PI;
+  return angle;
+};
+
 export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => {
   const pos = geoNode.floor
     ? geoCoordsToPdfCoords({

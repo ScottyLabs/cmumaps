@@ -13,18 +13,26 @@ let searchContextCache:
     })
   | null = null;
 
+/**
+ * Calculate average document length from a collection of documents.
+ */
+function calculateAvgDl(documents: Record<string, Document>): number {
+  const numDocs = Object.keys(documents).length;
+  if (numDocs === 0) return 0;
+  let total = 0;
+  for (const doc of Object.values(documents)) {
+    total += doc.numTerms;
+  }
+  return total / numDocs;
+}
+
 async function getOrBuildSearchContext() {
   if (!searchContextCache) {
     console.log("Building search context...");
     const context = await getSearchContext();
 
-    // Calculate average document length once during build
+    const avgDl = calculateAvgDl(context.documents);
     const numDocs = Object.keys(context.documents).length;
-    let avgDl = 0;
-    for (const doc of Object.values(context.documents)) {
-      avgDl += doc.numTerms;
-    }
-    avgDl /= numDocs;
 
     searchContextCache = { ...context, avgDl };
     console.log(
@@ -113,13 +121,8 @@ export const searchService = {
     console.log("Rebuilding search index...");
     const context = await getSearchContext();
 
-    // Calculate average document length
+    const avgDl = calculateAvgDl(context.documents);
     const numDocs = Object.keys(context.documents).length;
-    let avgDl = 0;
-    for (const doc of Object.values(context.documents)) {
-      avgDl += doc.numTerms;
-    }
-    avgDl /= numDocs;
 
     searchContextCache = { ...context, avgDl };
     return {

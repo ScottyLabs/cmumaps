@@ -1,26 +1,7 @@
-import type { GeoCoordinate, GeoNode, Instruction } from "@cmumaps/common";
+import type { GeoNode, Instruction } from "@cmumaps/common";
+import { calculateAngle } from "@cmumaps/common";
 
 export const PLACEHOLDER_INSTRUCTION_DISTANCE = 42;
-
-function calculateAngle(
-  first: GeoCoordinate,
-  second: GeoCoordinate,
-  third: GeoCoordinate,
-): number {
-  const latDiff1 = (second.latitude - first.latitude) * 111318.845;
-  const lonDiff1 = (second.longitude - first.longitude) * 84719.395;
-  const latDiff2 = (third.latitude - second.latitude) * 111318.845;
-  const lonDiff2 = (third.longitude - second.longitude) * 84719.395;
-
-  const angle =
-    (Math.atan2(
-      latDiff1 * lonDiff2 - lonDiff1 * latDiff2,
-      latDiff1 * latDiff2 + lonDiff1 * lonDiff2,
-    ) *
-      180) /
-    Math.PI;
-  return angle;
-}
 
 export function generateInstructions(path: GeoNode[]): Instruction[] {
   const instructions: Instruction[] = [];
