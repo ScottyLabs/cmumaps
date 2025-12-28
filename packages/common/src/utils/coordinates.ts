@@ -164,22 +164,7 @@ export const calculateAngle = (
 };
 
 export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => {
-  const pos = geoNode.floor
-    ? geoCoordsToPdfCoords({
-        geoCenter: {
-          latitude: geoNode.floor.centerLatitude,
-          longitude: geoNode.floor.centerLongitude,
-        },
-        pdfCenter: {
-          x: geoNode.floor.centerX,
-          y: geoNode.floor.centerY,
-        },
-        scale: geoNode.floor.scale,
-        angle: geoNode.floor.angle,
-      })(geoNode.pos)
-    : { x: 0, y: 0 };
   return {
-    pos,
     neighbors: geoNode.neighbors,
     coordinate: geoNode.pos,
     roomId: geoNode.roomId || "outside",

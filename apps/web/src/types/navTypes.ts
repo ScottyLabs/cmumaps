@@ -7,7 +7,6 @@ export type Edge = {
 };
 
 export type Node = {
-  pos: { x: number; y: number };
   neighbors: {
     [neighborId: string]: Edge;
   };

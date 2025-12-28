@@ -54,7 +54,6 @@ export interface GeoNode {
 }
 
 export interface NavPathNode {
-  pos: { x: number; y: number };
   neighbors: {
     [neighborId: string]: EdgeInfo;
   };
