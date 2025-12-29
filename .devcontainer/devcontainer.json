@@ -26,7 +26,8 @@
         "bradlc.vscode-tailwindcss",
         "charliermarsh.ruff",
         "mkhl.shfmt",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "redhat.vscode-yaml"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
