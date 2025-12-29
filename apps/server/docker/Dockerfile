@@ -31,6 +31,7 @@ RUN groupadd --system --gid 1001 nodejs && \
 USER server
 
 # Copy swagger UI
+COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.json ./build/swagger.json
 COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./build/swagger.yaml
 COPY --from=builder --chown=server:nodejs /app/node_modules/swagger-ui-dist /app/node_modules/swagger-ui-dist
 
