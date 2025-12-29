@@ -43,8 +43,12 @@ app.use(clerkMiddleware());
 // Swagger
 const swaggerYaml = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(swaggerYaml) as JsonObject;
-app.use("/swagger", express.static("./node_modules/swagger-ui-dist"));
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/swagger",
+  express.static("./node_modules/swagger-ui-dist", { index: false }),
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument),
+);
 
 // OpenAPI JSON
 const swaggerJsonFile = fs.readFileSync("./build/swagger.json", "utf8");
