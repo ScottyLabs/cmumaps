@@ -59,7 +59,7 @@ const FloorSwitcher = () => {
   }
 
   return (
-    <div className="-translate-x-1/2 fixed bottom-2 left-1/2 w-fit px-2">
+    <div className="fixed bottom-2 left-1/2 w-fit -translate-x-1/2 px-2">
       <FloorSwitcherDisplayDesktop building={building} floor={floor} />
     </div>
   );

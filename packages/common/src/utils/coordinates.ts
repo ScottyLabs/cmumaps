@@ -1,5 +1,7 @@
 import type {
   GeoCoordinate,
+  GeoNode,
+  NavPathNode,
   PdfCoordinate,
   Placement,
   Polygon,
@@ -7,8 +9,8 @@ import type {
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
-const latitudeRatio = 111318.8450631976;
-const longitudeRatio = 84719.3945182816;
+export const LATITUDE_RATIO = 111318.8450631976;
+export const LONGITUDE_RATIO = 84719.3945182816;
 
 /**
  * Converts PDF coordinates (x/y) to geographical coordinates (latitude/longitude)
@@ -37,8 +39,8 @@ export const pdfCoordsToGeoCoords =
     const scaledY = ry * scale;
 
     // Convert to geographical coordinates
-    const longitude = scaledX / longitudeRatio + geoCenter.longitude;
-    const latitude = scaledY / latitudeRatio + geoCenter.latitude;
+    const longitude = scaledX / LONGITUDE_RATIO + geoCenter.longitude;
+    const latitude = scaledY / LATITUDE_RATIO + geoCenter.latitude;
 
     return { latitude, longitude };
   };
@@ -56,8 +58,8 @@ export const geoCoordsToPdfCoords =
     const { latitude, longitude } = geoCoords;
 
     // reverse the transform and scale
-    const x = ((longitude - geoCenter.longitude) * longitudeRatio) / scale;
-    const y = ((latitude - geoCenter.latitude) * latitudeRatio) / scale;
+    const x = ((longitude - geoCenter.longitude) * LONGITUDE_RATIO) / scale;
+    const y = ((latitude - geoCenter.latitude) * LATITUDE_RATIO) / scale;
 
     // reverse the rotation
     // We have to swap x and y to make this function the inverse of pdfCoordsToGeoCoords
@@ -116,5 +118,62 @@ export const geoPolygonToPdfPolygon = (
         ),
       ),
     ),
+  };
+};
+
+export const dist = (coord1: GeoCoordinate, coord2: GeoCoordinate): number => {
+  const lat1 = coord1.latitude;
+  const lon1 = coord1.longitude;
+  const lat2 = coord2.latitude;
+  const lon2 = coord2.longitude;
+
+  const dist1 = (lat1 - lat2) * LATITUDE_RATIO;
+  const dist2 = (lon1 - lon2) * LONGITUDE_RATIO;
+
+  return Math.sqrt(dist1 ** 2 + dist2 ** 2);
+};
+
+/**
+ * Calculates the angle (in degrees) between three geographic coordinates.
+ * Used for turn-by-turn navigation to determine turn directions.
+ *
+ * @param first - The starting coordinate
+ * @param second - The middle coordinate (where the turn occurs)
+ * @param third - The ending coordinate
+ * @returns The angle in degrees. Negative values indicate left turns, positive indicate right turns.
+ */
+export const calculateAngle = (
+  first: GeoCoordinate,
+  second: GeoCoordinate,
+  third: GeoCoordinate,
+): number => {
+  // Convert latitude/longitude differences to meters
+  const latDiff1 = (second.latitude - first.latitude) * LATITUDE_RATIO;
+  const lonDiff1 = (second.longitude - first.longitude) * LONGITUDE_RATIO;
+  const latDiff2 = (third.latitude - second.latitude) * LATITUDE_RATIO;
+  const lonDiff2 = (third.longitude - second.longitude) * LONGITUDE_RATIO;
+
+  const angle =
+    (Math.atan2(
+      latDiff1 * lonDiff2 - lonDiff1 * latDiff2,
+      latDiff1 * latDiff2 + lonDiff1 * lonDiff2,
+    ) *
+      180) /
+    Math.PI;
+  return angle;
+};
+
+export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => {
+  return {
+    neighbors: geoNode.neighbors,
+    coordinate: geoNode.pos,
+    roomId: geoNode.roomId || "outside",
+    id: geoNode.id,
+    floor: geoNode.floor
+      ? {
+          buildingCode: geoNode.floor.buildingCode,
+          level: geoNode.floor.level,
+        }
+      : undefined,
   };
 };

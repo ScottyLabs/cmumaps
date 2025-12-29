@@ -137,7 +137,7 @@ const PlacementPanel = ({ floorCode, placement, setPlacement }: Props) => {
   };
 
   return (
-    <div className="-translate-y-1/2 fixed top-1/2 z-50">
+    <div className="fixed top-1/2 z-50 -translate-y-1/2">
       <div className="h-66 w-fit rounded-lg border bg-slate-400 shadow-lg">
         <h1 className="pt-2 text-center text-xl underline">Placement</h1>
         <div className="mt-3 flex flex-col gap-3 px-2 text-lg">

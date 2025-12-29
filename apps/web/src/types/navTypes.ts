@@ -7,7 +7,6 @@ export type Edge = {
 };
 
 export type Node = {
-  pos: { x: number; y: number };
   neighbors: {
     [neighborId: string]: Edge;
   };
@@ -17,7 +16,7 @@ export type Node = {
   id: string;
 };
 
-export type Instruction = { action: string; distance: number; node_id: string };
+export type Instruction = { action: string; distance: number; nodeId: string };
 
 export type NavPath = {
   instructions: Instruction[];

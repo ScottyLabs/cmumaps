@@ -109,7 +109,7 @@ const FloorSwitcher = ({ floorCode }: Props) => {
   };
 
   return (
-    <div className="-translate-x-1/2 fixed bottom-2 left-1/2 z-50">
+    <div className="fixed bottom-2 left-1/2 z-50 -translate-x-1/2">
       <div className="rounded border border-black bg-gray-50">
         <table>
           <tbody>

@@ -198,7 +198,7 @@ const NavCardDesktop = () => {
       const entry = {
         distance: instruction.distance,
         action: instruction.action,
-        id: instruction.node_id,
+        id: instruction.nodeId,
       };
       if (index < instructionIndex) {
         past[time] = past[time] ? [...past[time], entry] : [entry];
@@ -295,19 +295,19 @@ const NavCardDesktop = () => {
             <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
               {endTime}
             </div>
-            <div className="-translate-y-2 w-full text-center">arrival</div>
+            <div className="w-full -translate-y-2 text-center">arrival</div>
           </div>
           <div className="flex-col pr-4">
             <div className="w-full text-center font-bold text-[min(1.25rem,5vw)] text-black">
               {time}
             </div>
-            <div className="-translate-y-2 w-full text-center">min</div>
+            <div className="w-full -translate-y-2 text-center">min</div>
           </div>
           <div className="flex-col">
             <div className="w-full text-center font-bold text-[min(1.25rem,5vw)] text-black">
               {distance}
             </div>
-            <div className="-translate-y-2 w-full text-center">ft</div>
+            <div className="w-full -translate-y-2 text-center">ft</div>
           </div>
         </div>
       </div>
@@ -416,7 +416,7 @@ const NavCardDesktop = () => {
       };
       const buildingCode = navPaths?.[selectedPath]?.path.path.find(
         (n) => n.id === id,
-      )?.floor.buildingCode;
+      )?.floor?.buildingCode;
 
       const buildingName =
         buildingCode === "outside" ? "Outside" : buildingCode;

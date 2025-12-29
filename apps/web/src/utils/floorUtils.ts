@@ -36,12 +36,13 @@ export const buildFloorCode = (
   buildingCode: string | undefined,
   floorLevel: string | undefined,
 ): string | null => {
-  if (!buildingCode || !floorLevel) return null;
+  if (!buildingCode || !floorLevel || buildingCode === "outside") return null;
   return `${buildingCode}-${floorLevel}`;
 };
 
-export const getFloorCode = (floor: Floor) => {
-  return `${floor.buildingCode}-${floor.level}`;
+export const getFloorCode = (floor: Floor | undefined): string | null => {
+  if (!floor) return null;
+  return buildFloorCode(floor.buildingCode, floor.level);
 };
 
 const FLOOR_REGEX = /^[A-F0-9]|LL|M|EV|PH/; // matches A-F, 0-9, and LL at the start of a string
