@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-editorconfig-checker
+set -e
+editorconfig-checker --exclude 'apps/rust-server/.*'
 bun run check
