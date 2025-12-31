@@ -13,6 +13,7 @@
     "@types/bun": "^1.3.5",
     "@types/web": "^0.0.279",
     "husky": "^8.0.3",
+    "markdownlint-cli": "^0.47.0",
     "syncpack": "^14.0.0-alpha.34",
     "turbo": "^2.5.8",
     "typescript": "^5.9.3"
@@ -21,13 +22,14 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "check": "bun run syncpack && turbo check",
+    "check": "bun run markdownlint && turbo check",
     "dev:server": "turbo dev --filter=@cmumaps/server",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server",
     "format": "turbo format",
     "lint": "turbo lint",
+    "markdownlint": "bunx markdownlint '**/*.md' --ignore node_modules",
     "preinstall": "npx only-allow bun",
     "prepare": "husky && husky install",
     "secrets:pull": "./scripts/secrets-pull.sh",
