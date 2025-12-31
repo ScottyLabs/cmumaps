@@ -31,10 +31,12 @@ const UserMenu = () => {
           height={48}
         />
         <div>
-          <div className="font-semibold text-[1.25em] text-gray-800">
+          <div className="font-inter font-medium text-[1.25em] text-foreground-neutral-primary">
             {user.name}
           </div>
-          <div className="text-gray-500 text-sm">{user.email}</div>
+          <div className="font-inter font-medium text-[0.75rem] text-foreground-neutral-secondary">
+            {user.email}
+          </div>
         </div>
       </div>
     );
@@ -63,14 +65,15 @@ const UserMenu = () => {
     const Cmp = type === "signIn" ? SignInButton : SignOutButton;
     return (
       <div key={index}>
-        <hr className="-mx-4 my-1 border-gray-200" />
         <Cmp>
           <button
             type="button"
             className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-white px-3 py-2 text-gray-700 text-sm active:bg-gray-100"
           >
             <img src={icon} alt="User Settings Button" width={24} height={24} />
-            <span>{label}</span>
+            <span className="font-inter font-normal text-[1rem] text-foreground-neutral-primary">
+              {label}
+            </span>
           </button>
         </Cmp>
       </div>
@@ -78,8 +81,8 @@ const UserMenu = () => {
   };
 
   return (
-    <div className="btn-shadow-dark fixed inset-x-5 bottom-77 z-50 rounded-lg border border-gray-200 bg-white px-4 pt-5 pb-1 font-sans shadow-lg">
-      <div className="mb-4 flex items-center gap-3">{renderUserProfile()}</div>
+    <div className="btn-shadow-dark fixed inset-x-10 top-[50%] z-50 -translate-y-1/2 rounded-xl border border-gray-200 bg-white px-4 pt-5 pb-2 font-sans shadow-lg">
+      <div className="mb-4 flex items-center">{renderUserProfile()}</div>
       {menuButtons.map(renderMenuButton)}
     </div>
   );

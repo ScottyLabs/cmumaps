@@ -1,5 +1,4 @@
-import plusButtonDeselected from "@/assets/icons/plus_button_menu/plus-button-deselected.svg";
-import plusButtonSelected from "@/assets/icons/plus_button_menu/plus-button-selected.svg";
+import plusIcon from "@/assets/icons/plus_button_menu/mobile/plus.svg";
 
 interface PlusButtonProps {
   isMenuOpen: boolean;
@@ -12,8 +11,6 @@ const PlusButton = ({
   isPlusButtonSelected,
   onClick,
 }: PlusButtonProps) => {
-  const icon = isPlusButtonSelected ? plusButtonSelected : plusButtonDeselected;
-
   return (
     <button
       type="button"
@@ -23,9 +20,9 @@ const PlusButton = ({
       onClick={onClick}
     >
       <div
-        className={`${isMenuOpen ? "" : "rotate-45"} transition-transform duration-500 ease-in-out`}
+        className={`${isMenuOpen ? "" : "rotate-45"} ${isPlusButtonSelected ? "bg-background-brand-primary-enabled" : "bg-blue-gray-500"} flex h-14 w-14 rounded-full transition-transform duration-500 ease-in-out`}
       >
-        <img alt="Plus Button" className="h-14 w-14" src={icon} />
+        <img alt="Plus Button" className="m-auto rotate-45" src={plusIcon} />
       </div>
     </button>
   );

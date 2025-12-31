@@ -22,7 +22,7 @@ const ButtonsRow = ({ middleButton }: Props) => {
       <button
         name="DirectionButton"
         type="button"
-        className="flex items-center gap-2 rounded-lg bg-[#56b57b] px-3 py-1 text-white disabled:bg-red-600"
+        className="flex items-center gap-2 rounded-full bg-button-green px-3 py-2 text-white disabled:bg-red-600"
         disabled={isRoomAcc}
         onClick={() => {
           if (buildingCode) {
@@ -51,7 +51,9 @@ const ButtonsRow = ({ middleButton }: Props) => {
         {renderDirectionButton()}
         {middleButton}
       </div>
-      <ShareButton />
+      <div>
+        <ShareButton />
+      </div>
     </div>
   );
 };
