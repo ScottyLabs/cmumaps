@@ -55,3 +55,8 @@ If you just can't get the dev container setup to work, try the [manual setup ins
 #### Biome Formatter
 
 If you are not able to use Biome as a formatter, you can try resintalling the extension.
+
+#### Precommit Checks
+
+If the precommit checks fail, check the [git-troubleshooting wiki page](https://github.com/ScottyLabs/cmumaps/wiki/Git-Troubleshooting)
+for troubleshooting steps.
