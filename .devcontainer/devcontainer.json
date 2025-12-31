@@ -27,13 +27,15 @@
         "charliermarsh.ruff",
         "mkhl.shfmt",
         "davidanson.vscode-markdownlint",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "vscode-icons-team.vscode-icons",
+        "tamasfe.even-better-toml"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.organizeImports.biome": "explicit"
+          "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "biomejs.biome",
         "[typescript]": {
