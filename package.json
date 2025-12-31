@@ -14,7 +14,7 @@
     "@types/web": "^0.0.279",
     "husky": "^8.0.3",
     "markdownlint-cli": "^0.47.0",
-    "syncpack": "^14.0.0-alpha.34",
+    "syncpack": "^13.0.4",
     "turbo": "^2.5.8",
     "typescript": "^5.9.3"
   },
@@ -22,7 +22,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "check": "bun run markdownlint && turbo check",
+    "check": "bun run syncpack && bun run markdownlint && turbo check",
     "dev:server": "turbo dev --filter=@cmumaps/server",
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",
@@ -37,8 +37,8 @@
     "secrets:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc",
     "start": "turbo start",
     "sync": "cd apps/server && bun run db-generate && bun run tsoa && bun run openapi",
-    "syncpack": "syncpack lint && syncpack format --check",
-    "syncpack:fix": "syncpack format && syncpack fix",
+    "syncpack": "syncpack lint",
+    "syncpack:fix": "syncpack format && syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
     "tsc": "turbo tsc"
   },
