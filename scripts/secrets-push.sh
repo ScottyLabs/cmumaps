@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-export VAULT_ADDR=https://secrets.scottylabs.org
+source scripts/config.sh
 
 usage() {
   echo
   echo -e "\tUsage: $0 APPLICATION ENVIRONMENT\n"
-  echo -e "\t\tAPPLICATION: The application to push to, one of web | visualizer | server | rust-server | data | scripts | all\n"
-  echo -e "\t\tENVIRONMENT: The environment to push to, one of local dev | staging | prod | all\n"
+  echo -e "\t\tAPPLICATION: The application to push to, one of $APPLICATIONS_OPTIONS_JOINED | all\n"
+  echo -e "\t\tENVIRONMENT: The environment to push to, one of $ENVIRONMENTS_OPTIONS_JOINED | all\n"
   echo -e "\tOptions:"
-  echo -e "\t\t-h, --help    Show this help message and exit\n"
+  echo -e "\t\t-h, --help   Show this help message and exit\n"
 }
 
 # Parse arguments
@@ -32,49 +32,55 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
-# Special case for scripts
-if [[ "$APPLICATION" == "scripts" || "$APPLICATION" == "all" ]]; then
-  cat scripts/.env | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/scripts"
-  if [[ "$APPLICATION" == "scripts" ]]; then
-    exit 0
-  fi
-fi
-
-# Sanitizing the Application argument
+# Sanitize the Application argument
 if [ "$APPLICATION" == "all" ]; then
-  APPLICATIONS=("web" "visualizer" "server" "rust-server" "data")
+  APPLICATIONS=("${APPLICATIONS_OPTIONS[@]}")
 else
-  case "$APPLICATION" in
-  "web" | "visualizer" | "server" | "rust-server" | "data")
-    APPLICATIONS=($APPLICATION)
-    ;;
-  *)
+  valid=false
+  for opt in "${APPLICATIONS_OPTIONS[@]}"; do
+    if [ "$APPLICATION" == "$opt" ]; then
+      APPLICATIONS=("$APPLICATION")
+      valid=true
+      break
+    fi
+  done
+
+  if [ "$valid" == false ]; then
     echo "Error: Invalid application: '$APPLICATION'" >&2
     usage
     exit 1
-    ;;
-  esac
+  fi
 fi
 
-# Sanitizing the Environment argument
+# Sanitize the Environment argument
 if [ "$ENVIRONMENT" == "all" ]; then
-  ENVIRONMENT=("local" "dev" "staging" "prod")
+  ENVIRONMENT=("${ENVIRONMENTS_OPTIONS[@]}")
 else
-  case "$ENVIRONMENT" in
-  "local" | "dev" | "staging" | "prod")
-    ENVIRONMENT=("$ENVIRONMENT")
-    ;;
-  *)
+  valid=false
+  for opt in "${ENVIRONMENTS_OPTIONS[@]}"; do
+    if [ "$ENVIRONMENT" == "$opt" ]; then
+      ENVIRONMENT=("$ENVIRONMENT")
+      valid=true
+      break
+    fi
+  done
+
+  if [ "$valid" == false ]; then
     echo "Error: Invalid environment: '$ENVIRONMENT'" >&2
     usage
     exit 1
-    ;;
-  esac
+  fi
 fi
 
-# Pushing to vault
-for ENV in "${ENVIRONMENT[@]}"; do
-  for APP in "${APPLICATIONS[@]}"; do
-    cat apps/$APP/.env.$ENV | xargs -r vault kv put -mount="ScottyLabs" "cmumaps/$ENV/$APP"
+# Push to vault
+for APP in "${APPLICATIONS[@]}"; do
+  echo -e "${BOLD_TEXT}==================================================${RESET_TEXT}"
+  echo -e "${BOLD_TEXT}Pushing secrets for $APP${RESET_TEXT}"
+  echo -e "${BOLD_TEXT}==================================================${RESET_TEXT}"
+  for ENV in "${ENVIRONMENT[@]}"; do
+    echo
+    echo -e "${BLUE_TEXT}Pushing to vault: ScottyLabs/$PROJECT_NAME/$ENV/$APP${RESET_TEXT}"
+    cat apps/$APP/.env.$ENV | xargs -r vault kv put -mount="ScottyLabs" "$PROJECT_NAME/$ENV/$APP"
   done
+  echo
 done

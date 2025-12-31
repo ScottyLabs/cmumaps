@@ -3,7 +3,7 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "./scripts/post-create.sh",
+  "postCreateCommand": "./.devcontainer/post-create.sh",
   "features": {
     "git": {
       "enabled": true
