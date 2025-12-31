@@ -17,7 +17,8 @@
     "ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {},
     "ghcr.io/devcontainers-extra/features/shfmt:1": {},
     "ghcr.io/roul/devcontainer-features/vault:1": {},
-    "ghcr.io/devcontainers/features/python:1": {}
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
   },
   "customizations": {
     "vscode": {
