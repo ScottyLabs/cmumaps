@@ -1,35 +1,37 @@
 name: Check
 on:
   push:
-    branches:
-      - main
-      - staging
+    branches: [main, staging]
   pull_request:
-    branches:
-      - main
-      - staging
+    branches: [main, staging]
   workflow_dispatch:
 
 jobs:
   editorconfig-check:
+    name: EditorConfig Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install EditorConfig Checker
+      - name: Install EditorConfig checker
         uses: editorconfig-checker/action-editorconfig-checker@main
 
-      - name: Check editorconfig
+      - name: Run EditorConfig checker
         run: editorconfig-checker
         with:
           args: --exclude 'apps/rust-server/.*'
 
   bun-check:
+    name: Bun Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/ruff-action@v3
-      - uses: oven-sh/setup-bun@v2
+
+      - name: Install Ruff
+        uses: astral-sh/ruff-action@v3
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
@@ -42,5 +44,5 @@ jobs:
           bun run openapi
           cd ../../
 
-      - name: Check
+      - name: Run checks
         run: bun run check
