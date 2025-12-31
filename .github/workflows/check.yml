@@ -17,9 +17,7 @@ jobs:
         uses: editorconfig-checker/action-editorconfig-checker@main
 
       - name: Run EditorConfig checker
-        run: editorconfig-checker
-        with:
-          args: --exclude 'apps/rust-server/.*'
+        run: editorconfig-checker --exclude 'apps/rust-server/.*'
 
   bun-check:
     name: Bun Checks
