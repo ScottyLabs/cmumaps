@@ -82,8 +82,19 @@ for APP in "${APPLICATIONS[@]}"; do
   for ENV in "${ENVIRONMENT[@]}"; do
     echo
     echo -e "${BLUE_TEXT}Pulling from vault: ScottyLabs/$PROJECT_NAME/$ENV/$APP${RESET_TEXT}"
+
+    # Get the environment file
+    ENV_FILE="apps/$APP/.env.$ENV"
+
+    # If the environment is applicants, populate the .env file,
+    # which will be overridden by other env files.
+    if [ "$ENV" == "applicants" ]; then
+      ENV_FILE="apps/$APP/.env"
+    fi
+
+    # Pull the secrets from vault
     vault kv get -format=json ScottyLabs/$PROJECT_NAME/$ENV/$APP |
-      jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >apps/$APP/.env.$ENV
+      jq -r '.data.data | to_entries[] | "\(.key)=\"\(.value)\""' >$ENV_FILE
   done
   echo
 done

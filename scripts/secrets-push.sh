@@ -80,7 +80,18 @@ for APP in "${APPLICATIONS[@]}"; do
   for ENV in "${ENVIRONMENT[@]}"; do
     echo
     echo -e "${BLUE_TEXT}Pushing to vault: ScottyLabs/$PROJECT_NAME/$ENV/$APP${RESET_TEXT}"
-    cat apps/$APP/.env.$ENV | xargs -r vault kv put -mount="ScottyLabs" "$PROJECT_NAME/$ENV/$APP"
+
+    # Get the environment file
+    ENV_FILE="apps/$APP/.env.$ENV"
+
+    # If the environment is applicants, populate the .env file,
+    # which will be overridden by other env files.
+    if [ "$ENV" == "applicants" ]; then
+      ENV_FILE="apps/$APP/.env"
+    fi
+
+    # Push the secrets to vault
+    cat $ENV_FILE | xargs -r vault kv put -mount="ScottyLabs" "$PROJECT_NAME/$ENV/$APP"
   done
   echo
 done

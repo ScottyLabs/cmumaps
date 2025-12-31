@@ -5,7 +5,7 @@ export APPLICATIONS_OPTIONS=("web" "server" "visualizer" "data")
 APPLICATIONS_OPTIONS_JOINED=$(printf ' | %s' "${APPLICATIONS_OPTIONS[@]}")
 export APPLICATIONS_OPTIONS_JOINED=${APPLICATIONS_OPTIONS_JOINED:3} # remove leading ' | '
 
-export ENVIRONMENTS_OPTIONS=("local" "dev" "staging" "prod")
+export ENVIRONMENTS_OPTIONS=("applicants" "local" "dev" "staging" "prod")
 ENVIRONMENTS_OPTIONS_JOINED=$(printf ' | %s' "${ENVIRONMENTS_OPTIONS[@]}")
 export ENVIRONMENTS_OPTIONS_JOINED=${ENVIRONMENTS_OPTIONS_JOINED:3} # remove leading ' | '
 
