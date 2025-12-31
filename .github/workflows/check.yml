@@ -11,7 +11,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  check:
+  editorconfig-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install EditorConfig Checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
+
+      - name: Check editorconfig
+        run: editorconfig-checker
+        with:
+          args: --exclude 'apps/rust-server/.*'
+
+  bun-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
