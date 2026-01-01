@@ -15,6 +15,12 @@
 
 - If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/ScottyLabs/cmumaps/issues/new). Be sure to include a **title and description** of the feature you want to add.
 
+## Do you want to contribute to the design?
+
+We use [Figma](https://www.figma.com/design/4hihRwPsE7JDWI21q72B03/CMU-Maps) for design.
+If you are interested in contributing to the CMU Maps design, you can direct message
+the design lead (Wunwan Boonsitanarath) on [ScottyLabs Slack](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
+
 ## Do you want to contribute to the codebase?
 
 ### Prerequisites
@@ -69,24 +75,14 @@ Key Resources:
 
 Once you are ready, follow the instructions in [PR Review Process](https://github.com/ScottyLabs/cmumaps/wiki/PR-Review-Process).
 Once your PR is merged and that you have also come to one ScottyLabs work session
-(more info in the ScottyLabs Slack), you will be included as a CMU Maps developer in the
+(more info in the [Communication wiki page](https://github.com/ScottyLabs/cmumaps/wiki/Communication)),
+you will be included as a CMU Maps developer in the
 [CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml), **forever**!
-
-## Do you want to contribute to the design?
-
-We use [Figma](https://www.figma.com/design/4hihRwPsE7JDWI21q72B03/CMU-Maps) for design.
-If you are interested in contributing to the CMU Maps design, you can direct message
-the design lead (Wunwan Boonsitanarath) on ScottyLabs Slack.
 
 ## Do you have questions?
 
 Ask any question in the [CMU Maps channel](https://scottylabs.slack.com/archives/C05T7QRN4LF)
-on [ScottyLabs Slack](https://scottylabs.slack.com).
-
-### Join ScottyLabs Slack
-
-You will receive an email including the Slack invite link by joining ScottyLabs on
-[TartanConnect](https://tartanconnect.cmu.edu/scottylabs/club_signup).
+on [ScottyLabs Slack](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
 
 ## Join Us! 🎉
 
