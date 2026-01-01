@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
-editorconfig-checker --exclude 'apps/rust-server/.*'
+editorconfig-checker --exclude '(^LICENSE|^apps/rust-server/.*)'
 bun run check
