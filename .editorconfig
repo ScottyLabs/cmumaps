@@ -4,6 +4,8 @@
 root = true
 
 [*]
+# We want to use spaces for indentation so it will still look consistent when viewing code on GitHub.
+# https://github.blog/changelog/2025-08-07-default-tab-size-changed-from-eight-to-four
 indent_style = space
 indent_size = 2
 end_of_line = lf
