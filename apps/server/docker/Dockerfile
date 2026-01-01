@@ -13,7 +13,7 @@ WORKDIR /app
 COPY . .
 
 # Install deps from bun.lock
-RUN bun install --frozen-lockfile
+RUN bun install --frozen-lockfile --production
 
 # Generate DB schema and OpenAPI spec
 RUN cd apps/server && bun run db-generate && bun run tsoa && bun run openapi
