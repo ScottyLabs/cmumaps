@@ -65,18 +65,12 @@ Key Resources:
 - [Style Guide](https://github.com/ScottyLabs/cmumaps/wiki/Style-Guide) for coding style.
 - [Troubleshooting](https://github.com/ScottyLabs/cmumaps/wiki/Troubleshooting) for troubleshooting common issues, including precommit checks.
 
-### Open a Pull Request
+### Submit a Pull Request
 
-Once you are ready and self-reviewed your changes, open a new GitHub pull request to the staging branch.
-Ensure the PR links to the corresponding issue and request the same reviewer
-as the one you requested in the Governance PR.
-
-### Review Process
-
-After our [PR review process](https://github.com/ScottyLabs/cmumaps/wiki/PR-Review-Process),
-your PR will be merged. Once you also come to one of the ScottyLabs work sessions
+Once you are ready, follow the instructions in [PR Review Process](https://github.com/ScottyLabs/cmumaps/wiki/PR-Review-Process).
+Once your PR is merged and that you have also come to one ScottyLabs work session
 (more info in the ScottyLabs Slack), you will be included as a CMU Maps developer in the
-[CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml), forever!
+[CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml), **forever**!
 
 ## Do you want to contribute to the design?
 
