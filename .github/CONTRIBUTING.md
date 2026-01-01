@@ -18,8 +18,8 @@
 ## Do you want to contribute to the design?
 
 We use [Figma](https://www.figma.com/design/4hihRwPsE7JDWI21q72B03/CMU-Maps) for design.
-If you are interested in contributing to the CMU Maps design, you can direct message
-the design lead (Wunwan Boonsitanarath) on [ScottyLabs Slack](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
+If you are interested in contributing to the CMU Maps design, you can send a message
+pining the design lead (Wunwan Boonsitanarath) in the [CMU Maps Slack channel](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
 
 ## Do you want to contribute to the codebase?
 
@@ -81,8 +81,7 @@ you will be included as a CMU Maps developer in the
 
 ## Do you have questions?
 
-Ask any question in the [CMU Maps channel](https://scottylabs.slack.com/archives/C05T7QRN4LF)
-on [ScottyLabs Slack](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
+Ask any question in the [CMU Maps Slack channel](https://github.com/ScottyLabs/cmumaps/wiki/Communication)!
 
 ## Join Us! 🎉
 
@@ -94,4 +93,4 @@ CMU Maps Team
 
 ### **Acknowledgments**
 
-Sections of this document was adapted from the [Ruby on Rails contributing guide](https://github.com/rails/rails/blob/main/CONTRIBUTING.md).
+Sections of this document were adapted from the [Ruby on Rails contributing guide](https://github.com/rails/rails/blob/main/CONTRIBUTING.md).
