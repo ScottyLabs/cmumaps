@@ -29,7 +29,7 @@
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server",
     "format": "turbo format",
     "lint": "turbo lint",
-    "markdownlint": "bunx markdownlint '**/*.md' --ignore node_modules --ignore ec",
+    "markdownlint": "bunx markdownlint '**/*.md' --ignore-path .gitignore",
     "preinstall": "npx only-allow bun",
     "prepare": "husky && husky install",
     "secrets:pull": "./scripts/secrets-pull.sh",
