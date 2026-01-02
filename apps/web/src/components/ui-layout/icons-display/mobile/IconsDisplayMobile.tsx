@@ -1,16 +1,9 @@
 import { useState } from "react";
-import coursesButtonDeselected from "@/assets/icons/plus_button_menu/courses-button-deselected.svg";
-import coursesButtonSelected from "@/assets/icons/plus_button_menu/courses-button-selected.svg";
-import questionMarkButtonDeselected from "@/assets/icons/plus_button_menu/question-mark-button-deselected.svg";
-import questionMarkButtonSelected from "@/assets/icons/plus_button_menu/question-mark-button-selected.svg";
-import userButtonDeselected from "@/assets/icons/plus_button_menu/user-button-deselected.svg";
-import userButtonSelected from "@/assets/icons/plus_button_menu/user-button-selected.svg";
+import userMenuIcon from "@/assets/icons/plus_button_menu/mobile/settings.svg";
 import UserMenu from "@/components/ui-layout/icons-display/mobile/UserMenu";
 import useLocationParams from "@/hooks/useLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
-import AboutMenu from "./AboutMenu";
-import CoursesMenu from "./CoursesMenu";
 import PlusButton from "./PlusButton";
 
 enum PlusButtonMenuState {
@@ -22,8 +15,7 @@ enum PlusButtonMenuState {
 }
 
 interface MenuButtonProps {
-  deselectedIcon: string;
-  selectedIcon: string;
+  icon: string;
   altText: string;
   selectedMenuState: PlusButtonMenuState;
   menu: (props: { lowerHeight: number }) => React.ReactElement;
@@ -44,38 +36,15 @@ const IconsDisplayMobile = () => {
 
   const menuButtons: MenuButtonProps[] = [
     {
-      deselectedIcon: userButtonDeselected,
-      selectedIcon: userButtonSelected,
+      icon: userMenuIcon,
       altText: "User Menu",
       selectedMenuState: PlusButtonMenuState.USER_SELECTED,
-      menu: () => {
-        return UserMenu();
-      },
-    },
-    {
-      deselectedIcon: questionMarkButtonDeselected,
-      selectedIcon: questionMarkButtonSelected,
-      altText: "About",
-      selectedMenuState: PlusButtonMenuState.QUESTION_MARK_SELECTED,
-      menu: AboutMenu,
-    },
-    {
-      deselectedIcon: coursesButtonDeselected,
-      selectedIcon: coursesButtonSelected,
-      altText: "Courses",
-      selectedMenuState: PlusButtonMenuState.COURSES_SELECTED,
-      menu: CoursesMenu,
+      menu: UserMenu,
     },
   ];
 
   const renderMenuButton = (
-    {
-      deselectedIcon,
-      selectedIcon,
-      altText,
-      selectedMenuState,
-      menu,
-    }: MenuButtonProps,
+    { icon, altText, selectedMenuState, menu }: MenuButtonProps,
     index: number,
   ) => {
     const handleClick = () => {
@@ -93,9 +62,6 @@ const IconsDisplayMobile = () => {
           : `translateY(${-68 * (menuButtons.length - index)}px)`,
     };
 
-    const icon =
-      plusButtonMenuState === selectedMenuState ? selectedIcon : deselectedIcon;
-
     return (
       <div key={index}>
         <button
@@ -105,10 +71,10 @@ const IconsDisplayMobile = () => {
             plusButtonMenuState === PlusButtonMenuState.CLOSED
               ? ""
               : "btn-shadow-dark"
-          } fixed bottom-8 left-5 z-50 rounded-full transition-transform duration-500 ease-in-out`}
+          } ${plusButtonMenuState === selectedMenuState ? "bg-background-brand-primary-enabled" : "bg-blue-gray-500"} fixed bottom-8 left-5 z-50 flex h-14 w-14 rounded-full rounded-full transition-transform duration-500 ease-in-out`}
           style={style}
         >
-          <img className="h-14 w-14" alt={altText} src={icon} />
+          <img className="m-auto" alt={altText} src={icon} />
         </button>
         {plusButtonMenuState === selectedMenuState &&
           menu({ lowerHeight: 104 + 68 * menuButtons.length })}

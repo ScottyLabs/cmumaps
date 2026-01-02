@@ -35,14 +35,14 @@ const InfoCard = ({ mapRef }: Props) => {
     }
     if (coordinate) {
       return {
-        snapPoints: [142],
+        snapPoints: [154],
         element: () => <CoordinateCard mapRef={mapRef} />,
       };
     }
     if (roomName) {
       // TODO: should change based on if has schedule
       return {
-        snapPoints: [166, 310, window.innerHeight],
+        snapPoints: [178, 310, window.innerHeight],
         element: () => <RoomCard />,
       };
     }
@@ -50,7 +50,7 @@ const InfoCard = ({ mapRef }: Props) => {
       // TODO: should change based on if has food eateries
       // eateries.length > 0 ? 460 : 288));
       return {
-        snapPoints: [142, 288, window.innerHeight],
+        snapPoints: [154, 288, window.innerHeight],
         element: () => <BuildingCard mapRef={mapRef} />,
       };
     }

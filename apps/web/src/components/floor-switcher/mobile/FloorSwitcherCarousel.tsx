@@ -42,6 +42,30 @@ const FloorSwitcherButton = ({
 
   const boundingBoxSize = useTransform(() => 80 - distCurveValue() * 80);
 
+  const lerpColor = (colorA: string, colorB: string, t1: number): string => {
+    // Clamp t between 0 and 1
+    const t = Math.max(0, Math.min(1, t1));
+
+    // Convert hex to RGB components
+    const hexToRgb = (hex: string) => {
+      const bigint = Number.parseInt(hex.replace("#", ""), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return { r, g, b };
+    };
+
+    const rgbA = hexToRgb(colorA);
+    const rgbB = hexToRgb(colorB);
+
+    // Apply LERP to each color channel
+    const r = Math.round(rgbA.r + (rgbB.r - rgbA.r) * t);
+    const g = Math.round(rgbA.g + (rgbB.g - rgbA.g) * t);
+    const b = Math.round(rgbA.b + (rgbB.b - rgbA.b) * t);
+
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
   const onClick = () => {
     const controls = animate(progressValue, index, {
       duration: 0.3,
@@ -53,6 +77,10 @@ const FloorSwitcherButton = ({
     });
     return controls.stop;
   };
+
+  const color = useTransform(() =>
+    lerpColor("#90CFEA", "#0E96D1", distCurveValue()),
+  );
 
   return (
     <motion.div
@@ -70,7 +98,8 @@ const FloorSwitcherButton = ({
       <motion.div
         className="fixed flex items-center justify-center rounded-full text-white"
         style={{
-          backgroundColor: "#6F8FE3",
+          color: "white",
+          backgroundColor: color,
           opacity,
           width,
           height,
@@ -97,10 +126,10 @@ const DummyButton = ({ index, progressValue }: DummyButtonProps) => {
     <motion.div
       className="fixed top-1/2 flex translate-x-22 items-center justify-center rounded-full text-white"
       style={{
-        backgroundColor: "#B3C1E8",
+        backgroundColor: "#90CFEA",
         offsetPath: 'path("M -30,70 L 0,70 A 56,70 0 1,0 0,-70 L -30, -70")',
         offsetDistance,
-        opacity: 0.5,
+        opacity: 0.25,
         width: 38,
         height: 38,
         offsetRotate: "0deg",

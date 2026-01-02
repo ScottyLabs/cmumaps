@@ -37,7 +37,7 @@ const App = () => {
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
-      <NavOverlay />
+      <NavOverlay mapRef={mapRef} />
       <FloorSwitcher />
       <Toolbar mapRef={mapRef} />
       <MyToastContainer />

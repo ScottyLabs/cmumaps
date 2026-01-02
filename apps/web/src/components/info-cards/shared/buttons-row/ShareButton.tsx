@@ -8,7 +8,7 @@ const ShareButton = () => {
   return (
     <button
       type="button"
-      className={`flex cursor-pointer items-center rounded-full p-1.5 ${clicked ? "bg-green-600" : "bg-[#b5b5b5]"}`}
+      className={`my-auto flex cursor-pointer items-center rounded-full p-1.5 ${clicked ? "bg-green-600" : "bg-background-brand-secondary-pressed"}`}
       onClick={() => {
         navigator.clipboard.writeText(window.location.href);
         setClicked(true);

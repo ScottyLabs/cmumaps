@@ -4,6 +4,7 @@ module.exports = {
     extend: {
       fontFamily: {
         lato: ["Lato", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       // You can extend other properties here as well
     },

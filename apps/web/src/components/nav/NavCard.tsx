@@ -79,30 +79,30 @@ const NavCard = ({
   const [yControl, setYControl] = useState(300);
 
   useEffect(() => {
-    setYControl(isNavigating ? 64 : 0);
+    setYControl(isNavigating ? 28 : 0);
   }, [isNavigating]);
 
   const renderPathInfo = () => {
     return (
       <div className="h-9">
-        <div className="flex">
-          <div className="flex-col pr-4">
+        <div className="flex gap-7">
+          <div className="flex-col">
             <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
               {endTime}
             </div>
-            <div className="-translate-y-2 w-full text-center">arrival</div>
-          </div>
-          <div className="flex-col pr-4">
-            <div className="w-full text-center font-bold text-[min(1.25rem,5vw)] text-black">
-              {time}
-            </div>
-            <div className="-translate-y-2 w-full text-center">min</div>
+            <div className="w-full -translate-y-2">arrival</div>
           </div>
           <div className="flex-col">
-            <div className="w-full text-center font-bold text-[min(1.25rem,5vw)] text-black">
+            <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
+              {time}
+            </div>
+            <div className="w-full -translate-y-2">min</div>
+          </div>
+          <div className="flex-col">
+            <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
               {distance}
             </div>
-            <div className="-translate-y-2 w-full text-center">ft</div>
+            <div className="w-full -translate-y-2">ft</div>
           </div>
         </div>
       </div>
@@ -111,8 +111,8 @@ const NavCard = ({
 
   const renderChooseCard = () => {
     return (
-      <div className="relative flex w-full flex-col items-start self-stretch bg-white">
-        <div className="flex w-full items-center justify-center self-stretch pt-4">
+      <div className="relative flex w-full flex-col items-start self-stretch bg-background-brand-secondary-pressed">
+        <div className="flex w-full items-center justify-center gap-8 self-stretch px-6 pt-[6px] pb-[6px]">
           {navigationOptions.map((option) => {
             const isAvailable = !!navPaths?.[option.id];
             const isSelected = option.id === selectedPath;
@@ -125,7 +125,7 @@ const NavCard = ({
                     : () => {}
                 }
                 key={option.id}
-                className={`relative flex flex-1 grow flex-col items-center gap-0.5 pt-2 pb-1 ${isSelected ? "bg-white" : ""}`}
+                className={`relative flex flex-1 flex-col items-center gap-0.5 rounded-xl pt-2 pb-1 ${isSelected ? "bg-[rgba(182,223,253,0.71)]" : ""}`}
               >
                 <img
                   className="relative h-6 w-6"
@@ -140,12 +140,12 @@ const NavCard = ({
                 />
 
                 <div
-                  className={`relative self-stretch pb-px text-center ${
+                  className={`relative self-stretch pb-px text-center font-medium text-[10px] text-inter ${
                     isSelected
-                      ? "text-primary-blue underline"
+                      ? "text-[#156588]"
                       : isAvailable
                         ? "text-black"
-                        : "text-primary-grey"
+                        : "text-foreground-neutral-tertiary"
                   }`}
                 >
                   {option.id}
@@ -155,7 +155,7 @@ const NavCard = ({
           })}
         </div>
 
-        <div className="relative flex h-26 w-full justify-between self-stretch bg-light-blue pt-5 pr-5 pb-11 pl-5">
+        <div className="relative flex w-full justify-between self-stretch bg-white pt-6 pr-5 pb-6 pl-5">
           {navPaths?.[selectedPath] ? (
             renderPathInfo()
           ) : (
@@ -164,7 +164,7 @@ const NavCard = ({
 
           <button
             type="button"
-            className={`${!navPaths ? "bg-primary-grey" : "bg-[#31b777]"} btn-shadow inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full font-medium text-sm`}
+            className={`${!navPaths ? "bg-primary-grey" : "bg-button-green"} inline-flex h-12 w-20 items-center justify-center rounded-full font-medium text-sm`}
             disabled={!navPaths?.[selectedPath]}
             onClick={() => {
               startNav();
@@ -179,11 +179,11 @@ const NavCard = ({
 
   const renderNavCard = () => {
     return (
-      <div className="mt-8 ml-9 flex h-9 justify-between">
+      <div className="ml-9 flex justify-between py-6">
         {renderPathInfo()}
         <button
           type="button"
-          className="btn-shadow mr-5 inline-flex h-10 w-[min(25vw,6.5rem)] items-center justify-center rounded-full bg-primary-red font-medium"
+          className="mr-5 inline-flex h-12 w-20 items-center justify-center rounded-full bg-primary-red font-medium text-sm"
           onClick={() => {
             setDst(null);
             setSrc(null);
@@ -197,24 +197,35 @@ const NavCard = ({
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 transition duration-300 ease-in-out"
-      style={{ transform: `translateY(${yControl}px)` }}
+      className={`${listShown ? "bg-white" : "bg-transparent"} fixed inset-x-0 bottom-0 h-30`}
     >
-      {isNavigating && (
-        <div className="flex justify-end p-4">
-          <button
-            type="button"
-            className="btn-shadow rounded-full"
-            onClick={toggleListShown}
-          >
-            <img src={navStackIcon} alt="directions list" />
-          </button>
-        </div>
+      {listShown && (
+        <div className="h-full w-full rounded-t-xl shadow-[0px_-10px_15px_-3px_rgba(0,0,0,0.1)]" />
       )}
       <div
-        className={`${listShown ? "shadow-2xl shadow-black" : "btn-shadow rounded-t-3xl"} h-46 overflow-auto bg-white shadow-lg`}
+        className={`${isNavigating ? "bottom-10" : "bottom-0"} fixed inset-x-[14px] transition duration-300 ease-in-out`}
+        style={{ transform: `translateY(${yControl}px)` }}
       >
-        {isNavigating ? renderNavCard() : renderChooseCard()}
+        {isNavigating && (
+          <div className="flex justify-end p-4">
+            <button
+              type="button"
+              className="btn-shadow flex h-12 w-12 rounded-full bg-button-green"
+              onClick={toggleListShown}
+            >
+              <img
+                src={navStackIcon}
+                alt="directions list"
+                className="m-auto"
+              />
+            </button>
+          </div>
+        )}
+        <div
+          className={`${isNavigating ? "rounded-xl" : "rounded-t-xl"} overflow-auto bg-white ${!listShown && "btn-shadow"}`}
+        >
+          {isNavigating ? renderNavCard() : renderChooseCard()}
+        </div>
       </div>
     </div>
   );
