@@ -19,7 +19,7 @@
 
 We use [Figma](https://www.figma.com/design/4hihRwPsE7JDWI21q72B03/CMU-Maps) for design.
 If you are interested in contributing to the CMU Maps design, you can send a message
-pining the design lead (Wunwan Boonsitanarath) in the [CMU Maps Slack channel](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
+pining the design lead (Wunwan Boonsitanara) in the [CMU Maps Slack channel](https://github.com/ScottyLabs/cmumaps/wiki/Communication).
 
 ## Do you want to contribute to the codebase?
 
