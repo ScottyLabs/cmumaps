@@ -15,8 +15,6 @@ import { notFoundHandler } from "./middleware/notFoundHandler";
 import { socketAuth } from "./middleware/socketAuth";
 import { WebSocketService } from "./services/webSocketService";
 
-console.log(process.env.NODE_ENV);
-
 const app = express();
 app.use(express.json({ limit: "8mb" }));
 
