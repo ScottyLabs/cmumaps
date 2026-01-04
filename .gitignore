@@ -1,11 +1,12 @@
 # Dependency directories
 node_modules/
-venv/
 .venv/
 
-# Python
+# Cache directories
 __pycache__/
-*.py[cod]
+.ruff_cache/
+.mypy_cache/
+.turbo/
 
 # Build
 dist/
@@ -16,13 +17,5 @@ target/
 Cargo.lock
 
 # Misc
-.env
-.env.*
-.git
-.turbo
+.env*
 .DS_Store
-Cargo.lock
-.vercel
-
-# Ignore the folder storing the editorconfig-checker binary we installed locally
-ec/
