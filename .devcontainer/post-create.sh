@@ -13,12 +13,9 @@ brew install editorconfig-checker
 # https://docs.astral.sh/uv/getting-started/installation/#homebrew
 brew install uv
 
-# Install Bun for JavaScript package management: https://bun.com/get
-# We have to install npm to install bun due to:
-# Download failed: https://github.com/oven-sh/bun/releases/download/bun-v1.3.5/bun-linux-aarch64.zip
-# curl: (35) LibreSSL SSL_connect: SSL_ERROR_ZERO_RETURN in connection to release-assets.githubusercontent.com:443
-brew install npm
-npm install -g bun
+# Install Bun for JavaScript package management:
+# https://bun.com/get
+curl -fsSL https://bun.sh/install | bash
 
 # Activate Bun completions in zsh on startup
 if ! grep -q 'source <(SHELL=zsh bun completions)' ~/.zshrc; then

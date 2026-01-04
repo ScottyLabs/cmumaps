@@ -1,5 +1,5 @@
 # Base image with Homebrew so we can install other dependencies in the container
-# Unable to install packages due to curl: (35) error:0A0003E8:SSL routines::reason(1000)
+# This approach gives us more visibility and control over the installation process.
 FROM homebrew/brew:master
 
 # Switch to root user to install packages
