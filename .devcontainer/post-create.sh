@@ -31,7 +31,6 @@ install_editorconfig_checker() {
 }
 
 install_editorconfig_checker
-exit 0
 
 # Activate Bun completions in zsh on startup
 if ! grep -q 'source <(SHELL=zsh bun completions)' ~/.zshrc; then
