@@ -44,20 +44,21 @@ If you don’t see something that interests you, feel free to
 [open a new issue](https://github.com/ScottyLabs/cmumaps/issues/new) with your idea.
 
 Note that a new contributor won't be assigned to the issue until their PR is merged.
-This helps keep issues open for others who might also want to work on them.
+This helps keep issues open for others who might also want to work on them, but
+we will try to not assign the same issue to multiple contributors over a short
+period of time.
 
-### Obtain Permission
+### Request Permission
 
 Follow the instructions in [Governance](https://github.com/ScottyLabs/governance)
 to add yourself as a [contributor](https://github.com/ScottyLabs/governance/blob/main/docs/contributors.md)
 and join the [CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml)
-as an applicant to obtain the necessary permissions.
+as an applicant to request the necessary permissions.
 
 When opening your Governance PR, make sure to
 [link the corresponding CMU Maps issue](<https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/>).
-Request the frontend lead (@luke992), the data lead (@ellylai), or the server lead (@JettChenT)
-as the reviewer for your PR depending on the scope of the issue.
-Request the tech director (@Yuxiang-Huang) as the reviewer if you are unsure who to request as a reviewer.
+Use the [CODEOWNERS file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) to determine the appropriate reviewers to ping
+when opening your PR.
 
 ### Setup and Develop
 
