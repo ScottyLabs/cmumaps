@@ -13,6 +13,11 @@ brew install editorconfig-checker
 # https://docs.astral.sh/uv/getting-started/installation/#homebrew
 brew install uv
 
+# Install Vault for secret management
+# https://developer.hashicorp.com/vault/install
+brew tap hashicorp/tap
+brew install hashicorp/tap/vault
+
 # Install Bun for JavaScript package management:
 # https://bun.com/get
 curl -fsSL https://bun.sh/install | bash

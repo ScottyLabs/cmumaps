@@ -1,7 +1,7 @@
 export VAULT_ADDR=https://secrets.scottylabs.org
 export PROJECT_NAME="cmumaps"
 
-export APPLICATIONS_OPTIONS=("web" "server" "visualizer" "data")
+export APPLICATIONS_OPTIONS=("web" "server" "visualizer" "dataflow")
 APPLICATIONS_OPTIONS_JOINED=$(printf ' | %s' "${APPLICATIONS_OPTIONS[@]}")
 export APPLICATIONS_OPTIONS_JOINED=${APPLICATIONS_OPTIONS_JOINED:3} # remove leading ' | '
 
