@@ -3,7 +3,7 @@ FROM python:3.12-slim AS base
 WORKDIR /app
 
 # Copy data directory
-COPY apps/data .
+COPY apps/dataflow .
 
 # Install deps
 # RUN pip install -r requirements.txt
