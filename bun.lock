@@ -17,7 +17,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "apps/data": {
+    "apps/dataflow": {
       "name": "@cmumaps/data",
       "version": "0.0.0",
     },
@@ -281,7 +281,7 @@
 
     "@cmumaps/common": ["@cmumaps/common@workspace:packages/common"],
 
-    "@cmumaps/data": ["@cmumaps/data@workspace:apps/data"],
+    "@cmumaps/data": ["@cmumaps/data@workspace:apps/dataflow"],
 
     "@cmumaps/rust-server": ["@cmumaps/rust-server@workspace:apps/rust-server"],
 
