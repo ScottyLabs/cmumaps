@@ -37,7 +37,7 @@ COPY --from=builder --chown=server:nodejs /app/node_modules/swagger-ui-dist /app
 
 # Copy only what's needed to run the server
 COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
-COPY --from=builder --chown=server:nodejs /app/node_modules/prisma /tmp/prisma-engines
+COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/prisma /tmp/prisma-engines
 
 EXPOSE 3000
 CMD ["bun", "apps/server/dist/server.js"]
