@@ -37,8 +37,7 @@ You will have read-only access to the CMU Maps S3 bucket.
 
 ### Additional Notes
 
-For CI checks, your goal is to pass both "Check / Bun Checks (pull_request)" and
-"Check / EditorConfig Check (pull_request)" with a ✅. They are also run in precommit hooks.
+For CI checks, your goal is to pass all checks starting with "Check /" with a ✅. They are also run in precommit hooks.
 
 Make sure to not include any sensitive informations in your PR. No detailed floorplan
 except CUC can be shown. Use a Google Drive link with the "Anyone in CMU with the link can view"
