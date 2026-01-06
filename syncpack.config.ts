@@ -1,3 +1,4 @@
+// biome-ignore lint/style/noDefaultExport: Required by syncpack https://jamiemason.github.io/syncpack/config/syncpackrc/
 export default {
   // https://stackoverflow.com/questions/79470698/with-syncpack-on-a-turborepo-how-to-set-app-version-dependencies-through-a-packa/79477388#79477388
   versionGroups: [
@@ -12,8 +13,7 @@ export default {
   // https://jamiemason.github.io/syncpack/semver-groups/
   semverGroups: [
     {
-      // "highly recommended to save the exact version"
-      // https://biomejs.dev/internals/versioning/
+      // "highly recommended to save the exact version" - https://biomejs.dev/internals/versioning/
       dependencies: ["@biomejs/biome"],
       dependencyTypes: ["dev"],
       range: "",

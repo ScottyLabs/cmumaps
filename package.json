@@ -14,6 +14,7 @@
     "@types/web": "^0.0.279",
     "husky": "^8.0.3",
     "markdownlint-cli2": "^0.20.0",
+    "remeda": "^2.33.1",
     "syncpack": "^13.0.4",
     "turbo": "^2.5.8",
     "typescript": "^5.9.3"
