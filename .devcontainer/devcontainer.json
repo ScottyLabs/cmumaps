@@ -56,6 +56,9 @@
         "[shellscript]": {
           "editor.defaultFormatter": "mkhl.shfmt"
         },
+        "[yaml]": {
+          "editor.defaultFormatter": "redhat.vscode-yaml"
+        },
         "files.associations": {
           ".env.*": "properties"
         },
