@@ -12,10 +12,9 @@
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.2.0",
     "socket.io": "^4.8.1",
-    "swagger-ui-dist": "^5.30.1",
+    "swagger-ui-dist": "^5.31.0",
     "swagger-ui-express": "^5.0.1",
     "tinyqueue": "^3.0.0",
-    "tsoa": "^6.6.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -31,6 +30,7 @@
     "onchange": "^7.1.0",
     "openapi-typescript": "^7.10.1",
     "prisma": "^6.18.0",
+    "tsoa": "^6.6.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
@@ -50,7 +50,7 @@
     "server": "dotenv -e .env -- bun run --watch src/server.ts",
     "start": "bun dist/server.js",
     "tsc": "tsc -b",
-    "tsoa": "tsoa spec-and-routes",
+    "tsoa": "tsoa spec-and-routes --json && tsoa spec-and-routes --yaml",
     "tsoa:watch": "onchange 'src/controllers/*.ts' 'tsoa.json' -- bun run tsoa"
   },
   "type": "module"

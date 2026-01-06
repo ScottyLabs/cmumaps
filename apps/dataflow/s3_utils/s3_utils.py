@@ -66,7 +66,7 @@ def get_json_from_s3(s3_object_name, return_data=False):
     Args:
         s3_object_name (str): The S3 object name/path
         return_data (bool): If True, return the JSON data as Python object
-                           If False, return the raw response object
+                            If False, return the raw response object
 
     Returns:
         dict/list: JSON data if return_data=True, otherwise response object

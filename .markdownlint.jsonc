@@ -1,0 +1,13 @@
+{
+  // Use dashes for lists
+  "MD004": { "style": "dash" },
+
+  // Disable line length check
+  "MD013": false,
+
+  // Use asterisk for emphasis
+  "MD049": { "style": "asterisk" },
+
+  // Disable sibling list check
+  "MD024": { "siblings_only": true }
+}

@@ -3,7 +3,7 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "./scripts/post-create.sh",
+  "postCreateCommand": "./.devcontainer/post-create.sh",
   "features": {
     "git": {
       "enabled": true
@@ -13,11 +13,7 @@
       "installOhMyZsh": true,
       "installOhMyZshConfig": true,
       "configureZshAsDefaultShell": true
-    },
-    "ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {},
-    "ghcr.io/devcontainers-extra/features/shfmt:1": {},
-    "ghcr.io/roul/devcontainer-features/vault:1": {},
-    "ghcr.io/devcontainers/features/python:1": {}
+    }
   },
   "customizations": {
     "vscode": {
@@ -27,13 +23,16 @@
         "charliermarsh.ruff",
         "mkhl.shfmt",
         "davidanson.vscode-markdownlint",
-        "prisma.prisma"
+        "prisma.prisma",
+        "redhat.vscode-yaml",
+        "vscode-icons-team.vscode-icons",
+        "tamasfe.even-better-toml"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.organizeImports.biome": "explicit"
+          "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "biomejs.biome",
         "[typescript]": {

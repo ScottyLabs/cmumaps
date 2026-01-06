@@ -1,2 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+set -e
+source ~/.zshrc
+editorconfig-checker --exclude '(^LICENSE|^apps/rust-server/.*)'
 bun run check

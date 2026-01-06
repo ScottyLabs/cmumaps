@@ -1,0 +1,13 @@
+language: "en"
+reviews:
+  auto_review:
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+    base_branches:
+      - "staging"
+      - "main"
+
+issue_enrichment:
+  planning:
+    enabled: false

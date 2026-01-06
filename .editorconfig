@@ -1,0 +1,21 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+# We want to use spaces for indentation so it will still look consistent when viewing code on GitHub.
+# https://github.blog/changelog/2025-08-07-default-tab-size-changed-from-eight-to-four
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+# Disable indentation for Markdown files, since
+# for an unordered list nested inside an ordered list,
+# the indentation is determined by the level of the list item,
+# which might not be a multiple of the indent size.
+indent_size = unset
