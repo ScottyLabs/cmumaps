@@ -113,21 +113,9 @@ export const searchService = {
     // Return the documents (without scores)
     return topResults.map(([docId, _]) => documents[docId]);
   },
-
-  async rebuildSearchContext(): Promise<{
-    message: string;
-    documentCount: number;
-  }> {
-    console.log("Rebuilding search index...");
-    const context = await getSearchContext();
-
-    const avgDl = calculateAvgDl(context.documents);
-    const numDocs = Object.keys(context.documents).length;
-
-    searchContextCache = { ...context, avgDl };
-    return {
-      message: "Search index rebuilt successfully",
-      documentCount: numDocs,
-    };
-  },
 };
+
+// Build search context on startup for faster first request and easier debugging
+getOrBuildSearchContext().catch((err) => {
+  console.error("Failed to build search context on startup:", err);
+});

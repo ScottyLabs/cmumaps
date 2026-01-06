@@ -1,5 +1,4 @@
-import { Get, Query, Route, Security } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
+import { Get, Query, Route } from "tsoa";
 import { searchService } from "../services/searchService";
 import type { Document } from "../utils/search/types";
 
@@ -13,14 +12,5 @@ export class SearchController {
     @Query() lon?: number,
   ): Promise<Document[]> {
     return searchService.search(query, n, lat, lon);
-  }
-
-  @Get("/rebuild")
-  @Security(BEARER_AUTH, [MEMBER_SCOPE])
-  public async rebuildIndex(): Promise<{
-    message: string;
-    documentCount: number;
-  }> {
-    return searchService.rebuildSearchContext();
   }
 }

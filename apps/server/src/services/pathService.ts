@@ -107,16 +107,6 @@ export const pathService = {
     const route = getRoute(startNodes, endNodes, graph, 1);
     return { Fastest: route };
   },
-
-  async rebuildGraphCache(): Promise<{ message: string; nodeCount: number }> {
-    console.log("Rebuilding graph cache...");
-    graphCache = null;
-    const graph = await getOrBuildGraph();
-    return {
-      message: "Graph cache rebuilt successfully",
-      nodeCount: Object.keys(graph).length,
-    };
-  },
 };
 
 // Build graph cache on startup for faster first request and easier debugging
