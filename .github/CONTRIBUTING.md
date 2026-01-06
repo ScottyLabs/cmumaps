@@ -1,19 +1,8 @@
 # How to Contribute to CMU Maps
 
-## Did you find a bug?
+## Did you find a bug, have an idea for a new feature, or any questions?
 
-- **Do not open up a GitHub issue if the bug is a security vulnerability
-  in CMU Maps**, and instead send an email to [ops@scottylabs.org](mailto:ops@scottylabs.org).
-
-- **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/ScottyLabs/cmumaps/issues).
-
-- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/ScottyLabs/cmumaps/issues/new). Be sure to include a **title and clear description** and as much relevant information as possible.
-
-## Do you have an idea for a new feature?
-
-- **Ensure the feature was not already proposed** by searching on GitHub under [Issues](https://github.com/ScottyLabs/cmumaps/issues).
-
-- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/ScottyLabs/cmumaps/issues/new). Be sure to include a **title and description** of the feature you want to add.
+See [ScottyLabs Base Contributing Guide](https://github.com/ScottyLabs/wiki/wiki/Base-Contributing-Guide).
 
 ## Do you want to contribute to the design?
 
@@ -28,36 +17,10 @@ pining the design lead (Wunwan Boonsitanara) in the [CMU Maps Slack channel](htt
 Because working on CMU Maps requires access to Carnegie Mellon University's campus data,
 you need to have an [Andrew ID](https://www.cmu.edu/computing/services/security/identity-access/account/userid.html).
 
-### Find an Issue
+### First Steps
 
-Start by lookging through the [open issues](https://github.com/ScottyLabs/cmumaps/issues)
-to find something you are interested in working on. Please avoid picking issues
-that are already assigned to someone.
-
-- Look for issues labeled [**good first issue**](https://github.com/ScottyLabs/cmumaps/labels/good%20first%20issue).
-  These are great entry points for new contributors.
-
-- Use labels with the `scope:` prefix to match the part of the codebase you want to work on. Or use the
-  views in the [CMU Maps project board](https://github.com/orgs/ScottyLabs/projects/11) to filter issues.
-
-If you don’t see something that interests you, feel free to
-[open a new issue](https://github.com/ScottyLabs/cmumaps/issues/new) with your idea.
-
-Note that a new contributor won't be assigned to the issue until their PR is merged.
-This helps keep issues open for others who might also want to work on them, but
-we will try to not assign the same issue to multiple contributors over a short
-period of time.
-
-### Request Permission
-
-Follow the instructions in [Governance](https://github.com/ScottyLabs/governance)
-to add yourself as a [contributor](https://github.com/ScottyLabs/governance/blob/main/docs/contributors.md)
-and join the [CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml)
-as an applicant to request the necessary permissions.
-
-When opening your Governance PR, make sure to
-[link the corresponding CMU Maps issue](<https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/>).
-Use the [CODEOWNERS file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) to determine the appropriate reviewers to ping
+Follow the instructions in [ScottyLabs Base Contributing Guide](https://github.com/ScottyLabs/wiki/wiki/Base-Contributing-Guide#do-you-want-to-contribute-to-the-codebase) to get started. When opening your Governance PR, make sure to
+use the [CODEOWNERS file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) to ping the appropriate reviewers
 when opening your PR.
 
 ### Setup and Develop
@@ -66,32 +29,16 @@ After you are added to Governance as a CMU Maps applicant, you will have access 
 Compared to a regular CMU Maps developer, you will **not** have access to an Apple MapKit token.
 You will have read-only access to the CMU Maps S3 bucket.
 
-Key Resources:
+### Key Resources
 
 - [Setup](https://github.com/ScottyLabs/cmumaps/wiki/Setup) for setup instructions.
 - [Style Guide](https://github.com/ScottyLabs/cmumaps/wiki/Style-Guide) for coding style.
 - [Troubleshooting](https://github.com/ScottyLabs/cmumaps/wiki/Troubleshooting) for troubleshooting common issues, including precommit checks.
 
-### Submit a Pull Request
-
-Once you are ready, follow the instructions in [PR Review Process](https://github.com/ScottyLabs/cmumaps/wiki/PR-Review-Process).
-Once your PR is merged and that you have also come to one ScottyLabs work session
-(more info in the [Communication wiki page](https://github.com/ScottyLabs/cmumaps/wiki/Communication)),
-you will be included as a CMU Maps developer in the
-[CMU Maps team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml), **forever**!
-
-## Do you have questions?
-
-Ask any question in the [CMU Maps Slack channel](https://github.com/ScottyLabs/cmumaps/wiki/Communication)!
-
 ## Join Us! 🎉
 
-CMU Maps is a volunteer effort. We encourage you to pitch in and join [the team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml)!
+We encourage you to get involved and join [the team](https://github.com/ScottyLabs/governance/blob/main/teams/cmumaps.toml)!
 
-Thanks! :heart: :heart: :heart:
+Thanks! ❤️
 
 CMU Maps Team
-
-### **Acknowledgments**
-
-Sections of this document were adapted from the [Ruby on Rails contributing guide](https://github.com/rails/rails/blob/main/CONTRIBUTING.md).
