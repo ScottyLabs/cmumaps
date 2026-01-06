@@ -1,35 +1,35 @@
 import { Get, Path, Route } from "tsoa";
-import { buildingService } from "../services/buildingService";
+import { buildingService } from "../services/buildingService.ts";
 
 @Route("buildings")
 export class BuildingController {
   @Get("/")
-  async getBuildings() {
+  public async getBuildings() {
     return await buildingService.getBuildings();
   }
 
   @Get("/metadata")
-  async getBuildingsMetadata() {
+  public async getBuildingsMetadata() {
     return await buildingService.getBuildingsMetadata();
   }
 
   @Get("/:buildingCode")
-  async getBuilding(@Path() buildingCode: string) {
+  public async getBuilding(@Path() buildingCode: string) {
     return await buildingService.getBuilding(buildingCode);
   }
 
   @Get("/:buildingCode/name")
-  async getBuildingName(@Path() buildingCode: string) {
+  public async getBuildingName(@Path() buildingCode: string) {
     return await buildingService.getBuildingName(buildingCode);
   }
 
   @Get("/:buildingCode/default-floor")
-  async getDefaultFloor(@Path() buildingCode: string) {
+  public async getDefaultFloor(@Path() buildingCode: string) {
     return await buildingService.getDefaultFloor(buildingCode);
   }
 
   @Get("/:buildingCode/floors")
-  async getBuildingFloors(@Path() buildingCode: string) {
+  public async getBuildingFloors(@Path() buildingCode: string) {
     return await buildingService.getBuildingFloors(buildingCode);
   }
 }

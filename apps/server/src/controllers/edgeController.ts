@@ -9,18 +9,18 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
-import { requireSocketId } from "../middleware/socketAuth";
-import { webSocketService } from "../server";
-import { edgeService } from "../services/edgeService";
-import { nodeService } from "../services/nodeService";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import { requireSocketId } from "../middleware/socketAuth.ts";
+import { webSocketService } from "../server.ts";
+import { edgeService } from "../services/edgeService.ts";
+import { nodeService } from "../services/nodeService.ts";
 
 @Middlewares(requireSocketId)
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
 @Route("edge")
 export class EdgeController {
   @Post("/")
-  async createEdge(
+  public async createEdge(
     @Request() req: ExpressRequest,
     @Body() body: { inNodeId: string; outNodeId: string },
   ) {
@@ -38,7 +38,7 @@ export class EdgeController {
   }
 
   @Delete("/")
-  async deleteEdge(
+  public async deleteEdge(
     @Request() req: ExpressRequest,
     @Body() body: { inNodeId: string; outNodeId: string },
   ) {
@@ -52,7 +52,7 @@ export class EdgeController {
   }
 
   @Post("/across-floors")
-  async createEdgeAcrossFloors(
+  public async createEdgeAcrossFloors(
     @Request() req: ExpressRequest,
     @Body() body: {
       floorCode: string;
@@ -73,13 +73,11 @@ export class EdgeController {
       if (outNode.buildingCode !== null || outNode.floorLevel !== null) {
         throw new Error(errorMessage);
       }
-    } else {
-      if (
-        outNode.buildingCode !== extractBuildingCode(outFloorCode) ||
-        outNode.floorLevel !== extractFloorLevel(outFloorCode)
-      ) {
-        throw new Error(errorMessage);
-      }
+    } else if (
+      outNode.buildingCode !== extractBuildingCode(outFloorCode) ||
+      outNode.floorLevel !== extractFloorLevel(outFloorCode)
+    ) {
+      throw new Error(errorMessage);
     }
 
     await edgeService.createEdge(inNodeId, outNodeId);
@@ -104,7 +102,7 @@ export class EdgeController {
   }
 
   @Delete("/across-floors")
-  async deleteEdgeAcrossFloors(
+  public async deleteEdgeAcrossFloors(
     @Request() req: ExpressRequest,
     @Body() body: {
       floorCode: string;
