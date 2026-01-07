@@ -5,7 +5,7 @@
   // Scan all Markdown files
   "globs": ["**/*.md"],
 
-  // Ignore gitignore file
+  // Skip gitignore file
   "gitignore": true,
 
   "config": {
@@ -18,7 +18,7 @@
     // Use asterisk for emphasis
     "MD049": { "style": "asterisk" },
 
-    // Disable sibling list check
+    // Allows duplicate headings in different sections but flags duplicates at the same level.
     "MD024": { "siblings_only": true }
   }
 }
