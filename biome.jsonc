@@ -229,7 +229,7 @@
         "noVueSetupPropsReactivityLoss": "error",
         "noVueVIfWithVFor": "off",
         "useArraySortCompare": "error",
-        "useAwaitThenable": "error",
+        "useAwaitThenable": "off",
         "useConsistentArrowReturn": "error",
         "useConsistentGraphqlDescriptions": "error",
         "useDeprecatedDate": "error",
