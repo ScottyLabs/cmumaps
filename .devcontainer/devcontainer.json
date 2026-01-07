@@ -23,6 +23,7 @@
         "charliermarsh.ruff",
         "mkhl.shfmt",
         "davidanson.vscode-markdownlint",
+        "prisma.prisma",
         "redhat.vscode-yaml",
         "vscode-icons-team.vscode-icons",
         "tamasfe.even-better-toml"
@@ -54,6 +55,9 @@
         },
         "[shellscript]": {
           "editor.defaultFormatter": "mkhl.shfmt"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "redhat.vscode-yaml"
         },
         "files.associations": {
           ".env.*": "properties"

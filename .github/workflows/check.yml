@@ -19,8 +19,30 @@ jobs:
       - name: Run EditorConfig checker
         run: editorconfig-checker --exclude '(^LICENSE|^apps/rust-server/.*)'
 
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v22
+
+  syncpack:
+    name: SyncPack Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run SyncPack
+        run: bun run syncpack
+
   bun-check:
-    name: Bun Checks
+    name: Bun Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,8 +52,6 @@ jobs:
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
 
       - name: Install dependencies, generaet DB schema and OpenAPI spec
         run: |

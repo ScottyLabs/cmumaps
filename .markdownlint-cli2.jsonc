@@ -1,0 +1,24 @@
+{
+  // Schema for the configuration file
+  "$schema": "./node_modules/markdownlint-cli2/schema/markdownlint-cli2-config-schema.json",
+
+  // Scan all Markdown files
+  "globs": ["**/*.md"],
+
+  // Ignore gitignore file
+  "gitignore": true,
+
+  "config": {
+    // Use dashes for lists
+    "MD004": { "style": "dash" },
+
+    // Disable line length check
+    "MD013": false,
+
+    // Use asterisk for emphasis
+    "MD049": { "style": "asterisk" },
+
+    // Disable sibling list check
+    "MD024": { "siblings_only": true }
+  }
+}

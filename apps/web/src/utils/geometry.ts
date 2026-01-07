@@ -2,10 +2,6 @@
 import type { GeoCoordinate } from "@cmumaps/common";
 import type { Coordinate } from "mapkit-react";
 
-// Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
-export const latitudeRatio = 111318.8450631976;
-export const longitudeRatio = 84719.3945182816;
-
 /**
  * Determines whether a point is in a polygon
  * (Assumes Euclidian geometry)

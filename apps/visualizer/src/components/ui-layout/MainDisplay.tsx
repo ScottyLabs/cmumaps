@@ -65,7 +65,7 @@ const MainDisplay = ({ floorCode }: Props) => {
 
   return (
     <>
-      <div className="-translate-y-1/2 fixed top-1/2 z-50">
+      <div className="fixed top-1/2 z-50 -translate-y-1/2">
         <SidePanel floorCode={floorCode} graph={graph} rooms={rooms} />
       </div>
       <ZoomPanWrapper

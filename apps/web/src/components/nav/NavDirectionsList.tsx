@@ -94,7 +94,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
       const entry = {
         distance: instruction.distance,
         action: instruction.action,
-        id: instruction.node_id,
+        id: instruction.nodeId,
       };
       if (index < instructionIndex) {
         past[time] = past[time] ? [...past[time], entry] : [entry];
@@ -194,7 +194,7 @@ const NavDirectionsList = ({ show }: { show: boolean }) => {
               {
                 distance: instructions[instructionIndex]?.distance ?? 0,
                 action: instructions[instructionIndex]?.action ?? "",
-                id: instructions[instructionIndex]?.node_id ?? "",
+                id: instructions[instructionIndex]?.nodeId ?? "",
               },
               "White",
             )}
