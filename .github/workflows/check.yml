@@ -41,6 +41,21 @@ jobs:
       - name: Run SyncPack
         run: bun run syncpack
 
+  biome-rules-check:
+    name: Check if Biome rules are up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check if Biome rules are up to date
+        run: bun run scripts/biome/check-biome-rules.ts
+
   bun-check:
     name: Bun Check
     runs-on: ubuntu-latest

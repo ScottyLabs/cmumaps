@@ -1,6 +1,5 @@
 // https://github.com/adamhl8/configs/blob/main/generate-biome-rules.ts
 /** biome-ignore-all lint/nursery/useAwaitThenable: external script style */
-import fs from "node:fs/promises";
 import { mergeDeep } from "remeda";
 
 /*
@@ -11,7 +10,7 @@ import { mergeDeep } from "remeda";
  * - Replaces the `linter.rules` object in the Biome config at `BIOME_CONFIG_PATH` with `mergedRules`
  */
 
-const BIOME_CONFIG_PATH = "./biome.jsonc";
+export const BIOME_CONFIG_PATH = "./biome.jsonc";
 const DEFAULT_RULE_SEVERITY = "error";
 
 const OVERRIDES = {
@@ -95,7 +94,7 @@ const OVERRIDES = {
   },
 };
 
-async function getAllRules() {
+export async function getAllRules() {
   const schema = (await (
     await fetch("https://biomejs.dev/schemas/latest/schema.json")
   ).json()) as BiomeSchema;
@@ -119,16 +118,8 @@ async function getAllRules() {
     }
   }
 
-  return allRules;
+  return mergeDeep(allRules, OVERRIDES);
 }
-
-const allRules = await getAllRules();
-const mergedRules = mergeDeep(allRules, OVERRIDES);
-const biomeConfig = JSON.parse(
-  await fs.readFile(BIOME_CONFIG_PATH, "utf-8"),
-) as BiomeConfig;
-biomeConfig.linter.rules = mergedRules;
-await fs.writeFile(BIOME_CONFIG_PATH, JSON.stringify(biomeConfig, null, 2));
 
 // ==== types ====
 
@@ -146,11 +137,5 @@ interface BiomeSchema {
 interface AllRules {
   [groupName: string]: {
     [ruleName: string]: string;
-  };
-}
-
-interface BiomeConfig {
-  linter: {
-    rules: Record<string, unknown>;
   };
 }
