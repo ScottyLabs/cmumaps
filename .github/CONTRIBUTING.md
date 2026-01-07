@@ -19,7 +19,13 @@ you need to have an [Andrew ID](https://www.cmu.edu/computing/services/security/
 
 ### First Steps
 
-Follow the instructions in [ScottyLabs Base Contributing Guide](https://github.com/ScottyLabs/wiki/wiki/Base-Contributing-Guide#do-you-want-to-contribute-to-the-codebase) to get started. When opening your Governance PR, make sure to
+Follow the instructions in [ScottyLabs Base Contributing Guide](https://github.com/ScottyLabs/wiki/wiki/Base-Contributing-Guide#do-you-want-to-contribute-to-the-codebase) to get started.
+
+The [Project Board](https://github.com/orgs/ScottyLabs/projects/11/views/1)
+is another useful resource to find a issue you might be interested in. Please
+avoid picking issues in Backlog since they need to be groomed first.
+
+When opening your Governance PR, make sure to
 use the [CODEOWNERS file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) to ping the appropriate reviewers
 when opening your PR.
 
