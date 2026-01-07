@@ -40,7 +40,9 @@ const OVERRIDES = {
     useQwikMethodUsage: "off",
     useQwikValidLexicalScope: "off",
     noTernary: "off",
+    useAwaitThenable: "off", // Too many false positives
 
+    // Vue rules
     noVueDataObjectDeclaration: "off",
     noVueDuplicateKeys: "off",
     noVueReservedKeys: "off",
