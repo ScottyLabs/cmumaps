@@ -64,3 +64,15 @@ jobs:
 
       - name: Run checks
         run: bun run check
+
+  uv-lint:
+    name: UV Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Run UV Lint
+        run: cd apps/dataflow && uv sync && uv run lint
