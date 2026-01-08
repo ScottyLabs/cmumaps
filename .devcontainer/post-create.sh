@@ -45,18 +45,11 @@ bun run dev >/dev/null 2>&1 &
 
 # Create a virtual environment for Python
 cd ../..
-python3 -m venv .venv
-source .venv/bin/activate
-cd apps/data
-pip install -r requirements.txt
-
-# Activate the virtual environment in zsh on startup
-if ! grep -q "source .venv/bin/activate" ~/.zshrc; then
-  echo "source .venv/bin/activate" >>~/.zshrc
-fi
+cd apps/dataflow
+uv sync
 
 # Populate the database
-python3 floorplans/deserializer/database_population.py
+uv run populate-database
 
 # Kill the server
 kill %1

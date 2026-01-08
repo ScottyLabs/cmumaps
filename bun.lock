@@ -17,10 +17,6 @@
         "typescript": "^5.9.3",
       },
     },
-    "apps/dataflow": {
-      "name": "@cmumaps/data",
-      "version": "0.0.0",
-    },
     "apps/rust-server": {
       "name": "@cmumaps/rust-server",
       "version": "0.0.0",
@@ -263,8 +259,6 @@
     "@clerk/types": ["@clerk/types@4.101.9", "", { "dependencies": { "@clerk/shared": "^3.41.1" } }, "sha512-RO00JqqmkIoI1o0XCtvudjaLpqEoe8PRDHlLS1r/aNZazUQCO0TT6nZOx1F3X+QJDjqYVY7YmYl3mtO2QVEk1g=="],
 
     "@cmumaps/common": ["@cmumaps/common@workspace:packages/common"],
-
-    "@cmumaps/data": ["@cmumaps/data@workspace:apps/dataflow"],
 
     "@cmumaps/rust-server": ["@cmumaps/rust-server@workspace:apps/rust-server"],
 
