@@ -27,10 +27,12 @@ packages = [
   "src/s3_utils",
   "src/serializer",
   "src/spring_carnival",
+  "src/lint",
 ]
 
 [project.scripts]
 populate-database = "deserializer:main"
+lint = "lint:main"
 
 [tool.mypy]
 check_untyped_defs = true
