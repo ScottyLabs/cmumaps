@@ -6,10 +6,10 @@ WORKDIR /app
 COPY apps/dataflow .
 
 # Install deps
-# RUN pip install -r requirements.txt
+RUN uv sync
 
 # Set environment variable to print output to console
 ENV PYTHONUNBUFFERED=1
 
 # Run the script
-CMD ["python", "25live/main.py"]
+CMD ["uv", "run", "25live/main.py"]
