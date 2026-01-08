@@ -1,5 +1,5 @@
 # Base image with Python 3.12
-FROM python:3.12-slim AS base
+FROM astral/uv:python3.12-bookworm-slim
 WORKDIR /app
 
 # Copy data directory
