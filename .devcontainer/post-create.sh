@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+# Install UV for Python package management:
+# https://docs.astral.sh/uv/getting-started/installation/
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install Bun for JavaScript package management:
+# https://bun.com/get
+curl -fsSL https://bun.sh/install | bash
+
 # Install shfmt for shell script formatting
 # https://formulae.brew.sh/formula/shfmt
 brew install shfmt
@@ -9,18 +17,10 @@ brew install shfmt
 # https://github.com/editorconfig-checker/editorconfig-checker?tab=readme-ov-file#6-using-homebrew
 brew install editorconfig-checker
 
-# Install UV for Python package management:
-# https://docs.astral.sh/uv/getting-started/installation/#homebrew
-brew install uv
-
 # Install Vault for secret management
 # https://developer.hashicorp.com/vault/install
 brew tap hashicorp/tap
 brew install hashicorp/tap/vault
-
-# Install Bun for JavaScript package management:
-# https://bun.com/get
-curl -fsSL https://bun.sh/install | bash
 
 # Activate Bun completions in zsh on startup
 if ! grep -q 'source <(SHELL=zsh bun completions)' ~/.zshrc; then
