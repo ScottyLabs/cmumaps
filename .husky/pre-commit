@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 set -e
-source ~/.zshrc
 editorconfig-checker --exclude '(^LICENSE|^apps/rust-server/.*)'
 bun run syncpack
 bunx markdownlint-cli2
 bun run check
+cd apps/dataflow && uv run lint
