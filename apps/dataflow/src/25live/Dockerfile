@@ -2,7 +2,7 @@
 FROM astral/uv:python3.12-bookworm-slim
 WORKDIR /app
 
-# Copy data directory
+# Copy the dataflow directory
 COPY apps/dataflow .
 
 # Install deps
@@ -12,4 +12,4 @@ RUN uv sync
 ENV PYTHONUNBUFFERED=1
 
 # Run the script
-CMD ["uv", "run", "25live/main.py"]
+CMD ["uv", "run", "src/25live/main.py"]

@@ -1,18 +1,24 @@
-# Dependencies
-**/node_modules
-**/npm-debug.log
+# Dependency directories
+node_modules/
+.venv/
 
-# Build outputs
-**/dist
-**/build
+# Cache directories
+__pycache__/
+.ruff_cache/
+.mypy_cache/
+.turbo/
 
-# Environment and system files
-**/.env
-**/.DS_Store
+# Build
+dist/
+build/
+
+# Python
+**/*.egg-info/
+
+# Misc
+.env*
+.DS_Store
 
 # Git
 .git
 **/.gitignore
-
-# Documentation
-**/README.md
