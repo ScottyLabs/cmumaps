@@ -1,3 +1,7 @@
 [submodule "apps/data/cmumaps-data"]
   path = apps/data/cmumaps-data
   url = https://github.com/ScottyLabs/cmumaps-data
+
+[submodule "scripts/secrets"]
+  path = scripts/secrets
+  url = git@github.com:ScottyLabs/secrets-sync-scripts.git
