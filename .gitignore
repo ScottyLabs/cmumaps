@@ -16,6 +16,9 @@ build/
 target/
 Cargo.lock
 
+# Python
+**/*.egg-info/
+
 # Misc
 .env*
 .DS_Store

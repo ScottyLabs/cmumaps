@@ -5,15 +5,15 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from auth_utils.api_client import ClerkTokenManager
-
 import requests  # type: ignore
-from building import create_buildings
-from floor import create_floors
-from room import create_rooms
 from alias import create_aliases
-from node import create_nodes
+from building import create_buildings
 from edge import create_edges
+from floor import create_floors
+from node import create_nodes
+from room import create_rooms
+
+from auth_utils.api_client import ClerkTokenManager
 
 
 def drop_all_tables(clerk_manager):
@@ -35,7 +35,7 @@ Usage: python floorplans/deserializer/database_population.py <env_name>
     sys.exit(1)
 
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) == 1:
         env_name = "local"
     elif len(sys.argv) == 2:
@@ -65,3 +65,7 @@ if __name__ == "__main__":
     print("created nodes")
     create_edges(clerk_manager)
     print("created edges")
+
+
+if __name__ == "__main__":
+    main()
