@@ -24,7 +24,6 @@ def get_logger_config() -> dict[str, Any]:
             handler_name: {
                 "class": "logging.StreamHandler",
                 "formatter": color_formatter_name,
-                "stream": "ext://sys.stdout",
             }
         },
         "formatters": {
@@ -39,8 +38,9 @@ def get_logger_config() -> dict[str, Any]:
     }
 
     # If the project is running on Railway, use the Railway log formatter instead of
-    # the color formatter
+    # the color formatter and log to stdout instead of stderr
     if os.getenv("RAILWAY_PROJECT_NAME"):
         config["handlers"][handler_name]["formatter"] = railway_formatter_name
+        config["handlers"][handler_name]["stream"] = "ext://sys.stdout"
 
     return config
