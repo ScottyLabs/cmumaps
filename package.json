@@ -12,6 +12,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.3.5",
     "@types/web": "^0.0.279",
+    "comment-json": "^4.5.1",
     "husky": "^8.0.3",
     "markdownlint-cli2": "^0.20.0",
     "remeda": "^2.33.1",
