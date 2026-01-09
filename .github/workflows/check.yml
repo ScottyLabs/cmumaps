@@ -27,7 +27,7 @@ jobs:
       - uses: DavidAnson/markdownlint-cli2-action@v22
 
   syncpack:
-    name: SyncPack Lint
+    name: Syncpack Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Run SyncPack
+      - name: Run Syncpack
         run: bun run syncpack
 
   bun-check:

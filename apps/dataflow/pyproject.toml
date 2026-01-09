@@ -41,6 +41,7 @@ packages = [
 populate-database = "deserializer:main"
 process-25live = "_25live:main"
 lint = "lint:main"
+scrape-fms = "scraper.fms:main"
 
 [tool.mypy]
 check_untyped_defs = true
