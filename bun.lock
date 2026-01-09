@@ -12,6 +12,7 @@
         "@types/web": "^0.0.279",
         "husky": "^8.0.3",
         "markdownlint-cli2": "^0.20.0",
+        "remeda": "^2.33.1",
         "syncpack": "^13.0.4",
         "turbo": "^2.5.8",
         "typescript": "^5.9.3",
@@ -1831,6 +1832,8 @@
     "redux-thunk": ["redux-thunk@3.1.0", "", { "peerDependencies": { "redux": "^5.0.0" } }, "sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw=="],
 
     "reflect-metadata": ["reflect-metadata@0.2.2", "", {}, "sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q=="],
+
+    "remeda": ["remeda@2.33.1", "", {}, "sha512-404Eba/HI/blNfbebo586OjEnAhq/x5jN1aIfK4gHnjAP7SADaRfDdIjo8Acpz7hkXgM06MPTwu4IbXamvM9Qw=="],
 
     "require-directory": ["require-directory@2.1.1", "", {}, "sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q=="],
 

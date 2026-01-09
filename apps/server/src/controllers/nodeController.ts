@@ -10,25 +10,24 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
-import { requireSocketId } from "../middleware/socketAuth";
-import { webSocketService } from "../server";
-import { edgeService } from "../services/edgeService";
-import { floorService } from "../services/floorService";
-import { nodeService } from "../services/nodeService";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import { requireSocketId } from "../middleware/socketAuth.ts";
+import { webSocketService } from "../server.ts";
+import { edgeService } from "../services/edgeService.ts";
+import { floorService } from "../services/floorService.ts";
+import { nodeService } from "../services/nodeService.ts";
 
 @Middlewares(requireSocketId)
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
 @Route("nodes")
 export class NodeController {
   @Post("/:nodeId")
-  async createNode(
+  public async createNode(
     @Request() req: ExpressRequest,
     @Body() body: { floorCode: string; nodeInfo: NodeInfo },
   ) {
     const { floorCode, nodeInfo } = body;
-    const nodeId = req.params.nodeId;
-    const socketId = req.socketId;
+    const { nodeId, socketId } = req.params;
 
     // create node in database
     const placement = await floorService.getFloorPlacement(floorCode);
@@ -45,9 +44,8 @@ export class NodeController {
   }
 
   @Delete("/:nodeId")
-  async deleteNode(@Request() req: ExpressRequest) {
-    const nodeId = req.params.nodeId;
-    const socketId = req.socketId;
+  public async deleteNode(@Request() req: ExpressRequest) {
+    const { nodeId, socketId } = req.params;
     await edgeService.deleteEdges(nodeId);
     await nodeService.deleteNode(nodeId);
     webSocketService.broadcastToUserFloor(socketId, "delete-node", { nodeId });
@@ -55,13 +53,12 @@ export class NodeController {
   }
 
   @Put("/:nodeId")
-  async updateNode(
+  public async updateNode(
     @Request() req: ExpressRequest,
     @Body() body: { nodeInfo: NodeInfo; floorCode: string },
   ) {
     const { nodeInfo, floorCode } = body;
-    const nodeId = req.params.nodeId;
-    const socketId = req.socketId;
+    const { nodeId, socketId } = req.params;
 
     const placement = await floorService.getFloorPlacement(floorCode);
     await nodeService.upsertNode(floorCode, nodeId, nodeInfo, placement);

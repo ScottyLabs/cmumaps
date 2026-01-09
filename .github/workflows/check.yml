@@ -36,10 +36,25 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install
+        run: bun install syncpack
 
       - name: Run Syncpack
         run: bun run syncpack
+
+  biome-rules-check:
+    name: Check if Biome config is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install remeda
+
+      - name: Run Biome config check
+        run: bun run scripts/biome/check-biome-config.ts
 
   bun-check:
     name: Bun Check

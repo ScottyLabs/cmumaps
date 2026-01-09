@@ -10,23 +10,22 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
-import { requireSocketId } from "../middleware/socketAuth";
-import { webSocketService } from "../server";
-import { poiService } from "../services/poiService";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import { requireSocketId } from "../middleware/socketAuth.ts";
+import { webSocketService } from "../server.ts";
+import { poiService } from "../services/poiService.ts";
 
 @Middlewares(requireSocketId)
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
 @Route("pois")
 export class PoiController {
   @Post("/:poiId")
-  async createPoi(
+  public async createPoi(
     @Request() req: ExpressRequest,
     @Body() body: { poiInfo: PoiInfo },
   ) {
-    const poiId = req.params.poiId;
+    const { poiId, socketId } = req.params;
     const { poiInfo } = body;
-    const socketId = req.socketId;
 
     await poiService.createPoi(poiId, poiInfo);
     const payload = { poiId, poiInfo };
@@ -35,10 +34,8 @@ export class PoiController {
   }
 
   @Delete("/:poiId")
-  async deletePoi(@Request() req: ExpressRequest) {
-    const poiId = req.params.poiId;
-    const socketId = req.socketId;
-
+  public async deletePoi(@Request() req: ExpressRequest) {
+    const { poiId, socketId } = req.params;
     await poiService.deletePoi(poiId);
     const payload = { poiId };
     webSocketService.broadcastToUserFloor(socketId, "delete-poi", payload);
@@ -46,13 +43,12 @@ export class PoiController {
   }
 
   @Put("/:poiId/type")
-  async updatePoiType(
+  public async updatePoiType(
     @Request() req: ExpressRequest,
     @Body() body: { poiType: PoiType },
   ) {
-    const poiId = req.params.poiId;
+    const { poiId, socketId } = req.params;
     const { poiType } = body;
-    const socketId = req.socketId;
 
     await poiService.updatePoiType(poiId, poiType);
     const payload = { poiId, poiType };
