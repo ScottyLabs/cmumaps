@@ -1,28 +1,30 @@
-from clerk_backend_api import Clerk
 import os
-from dotenv import load_dotenv
+
+from clerk_backend_api import Clerk
 
 # Environment variable name for the Clerk token
-CLERK_TOKEN = "CLERK_TOKEN"
+TOKEN_ENV_KEY = "CLERK_TOKEN"  # noqa: S105
 
 # Load environment variables from .env file
-load_dotenv()
 MACHINE_SECRET = os.getenv("CLERK_MACHINE_SECRET")
 
 
-def get_clerk_token():
+def get_token() -> str:
     # use cached token if it exists
-    if CLERK_TOKEN in os.environ:
-        return os.environ[CLERK_TOKEN]
+    if TOKEN_ENV_KEY in os.environ:
+        return os.environ[TOKEN_ENV_KEY]
 
     # create new token if it doesn't exist and cache it
     with Clerk(
         bearer_auth=MACHINE_SECRET,
     ) as clerk:
         res = clerk.m2m.create_token()
-        os.environ[CLERK_TOKEN] = res.token
+        os.environ[TOKEN_ENV_KEY] = res.token
         return res.token
 
 
 if __name__ == "__main__":
-    print(get_clerk_token())
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    print(get_token())  # noqa: T201
