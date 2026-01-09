@@ -15,10 +15,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "mypy>=1.19.1",
-    "ruff>=0.14.11",
-    "ty>=0.0.10",
-    "types-colorama>=0.4.15.20250801",
+  "mypy>=1.19.1",
+  "ruff>=0.14.11",
+  "ty>=0.0.10",
+  "types-colorama>=0.4.15.20250801",
 ]
 
 [build-system]
@@ -27,7 +27,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = [
-  "src/25live",
+  "src/_25live",
   "src/auth_utils",
   "src/deserializer",
   "src/s3_utils",
@@ -38,6 +38,7 @@ packages = [
 
 [project.scripts]
 populate-database = "deserializer:main"
+process-25live = "_25live:main"
 lint = "lint:main"
 
 [tool.mypy]
