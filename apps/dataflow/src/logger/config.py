@@ -1,7 +1,6 @@
-import os
 from typing import Any
 
-from .constants import LOGGER_NAME, PRINT_LEVEL
+from .constants import LOGGER_NAME, PRINT_LEVEL, RUNNING_ON_RAILWAY
 
 
 def get_logger_config() -> dict[str, Any]:
@@ -39,7 +38,7 @@ def get_logger_config() -> dict[str, Any]:
 
     # If the project is running on Railway, use the Railway log formatter instead of
     # the color formatter and log to stdout instead of stderr
-    if os.getenv("RAILWAY_PROJECT_NAME"):
+    if RUNNING_ON_RAILWAY:
         config["handlers"][handler_name]["formatter"] = railway_formatter_name
         config["handlers"][handler_name]["stream"] = "ext://sys.stdout"
 
