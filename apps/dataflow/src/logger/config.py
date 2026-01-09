@@ -10,7 +10,7 @@ def get_logger_config() -> dict[str, Any]:
     railway_formatter_name = "railway"
     filter_name = "status_filter"
 
-    config = {
+    config: dict[str, Any] = {
         "version": 1,
         "loggers": {
             LOGGER_NAME: {
