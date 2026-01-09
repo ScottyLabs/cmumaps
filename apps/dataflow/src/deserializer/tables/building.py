@@ -50,7 +50,7 @@ def populate_building_table() -> None:
         buildings_data.append(building)
 
     # Populate Building table
-    if not api_client.populate_table("Buildings", buildings_data):
+    if not api_client.populate_table("Building", buildings_data):
         msg = "Failed to populate Building table"
         logger.critical(msg)
         raise RuntimeError(msg)

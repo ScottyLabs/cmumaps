@@ -19,6 +19,7 @@ def main() -> None:
         logger.critical(msg)
         raise RuntimeError(msg)
 
+    print_section("Populating building table")
     try:
         with log_operation("Populating building table"):
             populate_building_table()

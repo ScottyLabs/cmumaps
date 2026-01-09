@@ -7,19 +7,19 @@ import { populateTableService } from "../services/populateTableService";
 
 @Route("populate-table")
 export class PopulateTableController {
-  @Post("/buildings")
+  @Post("/building")
   async populateBuildings(@Body() data: any) {
     await populateTableService.populateBuildings(data);
     return { message: "Buildings populated" };
   }
 
-  @Post("/floors")
+  @Post("/floor")
   async populateFloors(@Body() data: any) {
     await populateTableService.populateFloors(data);
     return { message: "Floors populated" };
   }
 
-  @Post("/rooms")
+  @Post("/room")
   async populateRooms(@Body() data: any) {
     await populateTableService.populateRooms(data);
     return { message: "Rooms populated" };
@@ -31,13 +31,13 @@ export class PopulateTableController {
     return { message: "Alias populated" };
   }
 
-  @Post("/nodes")
+  @Post("/node")
   async populateNodes(@Body() data: any) {
     await populateTableService.populateNodes(data);
     return { message: "Nodes populated" };
   }
 
-  @Post("/edges")
+  @Post("/edge")
   async populateEdges(@Body() data: any) {
     await populateTableService.populateEdges(data);
     return { message: "Edges populated" };
