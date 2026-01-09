@@ -12,19 +12,8 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": [
-        "CLERK_PUBLISHABLE_KEY",
-        "CLERK_SECRET_KEY",
-        "ALLOWED_ORIGINS_REGEX",
-        "DATABASE_URL",
-        "VITE_MAPKIT_TOKEN",
-        "VITE_SERVER_URL",
-        "VITE_RUST_SERVER_URL",
-        "VITE_CLERK_PUBLISHABLE_KEY",
-        "VITE_PUBLIC_POSTHOG_HOST",
-        "VITE_PUBLIC_POSTHOG_KEY"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**"]
     },
     "start": {
       "dependsOn": ["^start", "^build"],

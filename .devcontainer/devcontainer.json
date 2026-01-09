@@ -3,7 +3,7 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "./scripts/post-create.sh",
+  "postCreateCommand": "./.devcontainer/post-create.sh",
   "features": {
     "git": {
       "enabled": true
@@ -13,11 +13,7 @@
       "installOhMyZsh": true,
       "installOhMyZshConfig": true,
       "configureZshAsDefaultShell": true
-    },
-    "ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {},
-    "ghcr.io/devcontainers-extra/features/shfmt:1": {},
-    "ghcr.io/roul/devcontainer-features/vault:1": {},
-    "ghcr.io/devcontainers/features/python:1": {}
+    }
   },
   "customizations": {
     "vscode": {
@@ -25,16 +21,23 @@
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "charliermarsh.ruff",
+        "ms-python.mypy-type-checker",
+        "astral-sh.ty",
+        "vscode-icons-team.vscode-icons",
         "mkhl.shfmt",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "prisma.prisma"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.organizeImports.biome": "explicit"
+          "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "biomejs.biome",
+        "python.defaultInterpreterPath": "apps/dataflow/.venv/bin/python3",
         "[typescript]": {
           "editor.defaultFormatter": "biomejs.biome"
         },
@@ -55,6 +58,9 @@
         },
         "[shellscript]": {
           "editor.defaultFormatter": "mkhl.shfmt"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "redhat.vscode-yaml"
         },
         "files.associations": {
           ".env.*": "properties"

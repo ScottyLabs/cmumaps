@@ -88,7 +88,7 @@ const NavLine = ({ map }: Props) => {
         instructionIndex === 0
           ? navPaths?.[selectedPath]?.path.path[0]
           : navPaths?.[selectedPath]?.path.path.find(
-              (n) => n.id === instructions[instructionIndex - 1]?.node_id,
+              (n) => n.id === instructions[instructionIndex - 1]?.nodeId,
             );
       if (node) {
         focusFloor(node.floor);
@@ -107,7 +107,7 @@ const NavLine = ({ map }: Props) => {
     isNavigating,
     instructionIndex,
     focusFloor,
-    instructions[instructionIndex - 1]?.node_id,
+    instructions[instructionIndex - 1]?.nodeId,
     map,
     navPaths?.[selectedPath]?.path.path.find,
     setIsZooming,
@@ -124,7 +124,7 @@ const NavLine = ({ map }: Props) => {
 
       const currentNodeid =
         instructionIndex > 0
-          ? instructions[instructionIndex - 1]?.node_id
+          ? instructions[instructionIndex - 1]?.nodeId
           : path[0]?.id;
 
       let reachedCurrentNode = false;
@@ -146,7 +146,7 @@ const NavLine = ({ map }: Props) => {
     }
   }, [
     instructionIndex,
-    instructions[instructionIndex]?.node_id,
+    instructions[instructionIndex]?.nodeId,
     isNavigating,
     path,
   ]);
@@ -274,9 +274,7 @@ const NavLine = ({ map }: Props) => {
 
     const addInstructionIcons = () => {
       instructions.forEach((instruction, i) => {
-        const coord = path.find(
-          (n) => n.id === instruction.node_id,
-        )?.coordinate;
+        const coord = path.find((n) => n.id === instruction.nodeId)?.coordinate;
         const isCompleted = instructionIndex > i;
 
         if (!coord) return;

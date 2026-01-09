@@ -6,10 +6,6 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-    ports:
-      - "5173:5173"
-      - "5174:5174"
-      - "80:80"
     volumes:
       - ..:/workspace:cached
     command: sleep infinity
@@ -23,8 +19,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: donotuseinprod
       POSTGRES_DB: cmumaps
-    ports:
-      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

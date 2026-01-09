@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import $api from "@/api/client";
-import $rapi from "@/api/rustClient";
 import buildingIcon from "@/assets/icons/search_results/building.svg";
 import classroomIcon from "@/assets/icons/search_results/classroom.svg";
 import defaultIcon from "@/assets/icons/search_results/default.svg";
@@ -21,7 +20,7 @@ interface SearchResultProps {
   fullNameWithSpace?: string;
   alias?: string;
   type?: string;
-  labelPosition?: { latitude?: number; longitude?: number };
+  labelPosition?: { latitude?: number; longitude?: number } | null;
   floor?: { buildingCode?: string; level?: string };
 }
 

@@ -1,0 +1,6 @@
+import os
+
+LOGGER_NAME = "cmumaps"
+SUCCESS_LEVEL = 25
+PRINT_LEVEL = 5
+RUNNING_ON_RAILWAY = bool(os.getenv("RAILWAY_PROJECT_NAME"))

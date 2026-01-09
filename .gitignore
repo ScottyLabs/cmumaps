@@ -1,11 +1,12 @@
 # Dependency directories
 node_modules/
-venv/
 .venv/
 
-# Python
+# Cache directories
 __pycache__/
-*.py[cod]
+.ruff_cache/
+.mypy_cache/
+.turbo/
 
 # Build
 dist/
@@ -15,11 +16,9 @@ build/
 target/
 Cargo.lock
 
+# Python
+**/*.egg-info/
+
 # Misc
-.env
-.env.*
-.git
-.turbo
+.env*
 .DS_Store
-Cargo.lock
-.vercel

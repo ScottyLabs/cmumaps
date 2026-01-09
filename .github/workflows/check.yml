@@ -1,25 +1,55 @@
 name: Check
-on:   
+on:
   push:
-    branches:
-      - main
-      - staging
+    branches: [main, staging]
   pull_request:
-    branches:
-      - main
-      - staging
+    branches: [main, staging]
   workflow_dispatch:
-  
+
 jobs:
-  check:
+  editorconfig-check:
+    name: EditorConfig Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/ruff-action@v3
-      - uses: oven-sh/setup-bun@v2
-        with:
-            bun-version: latest
- 
+
+      - name: Install EditorConfig checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
+
+      - name: Run EditorConfig checker
+        run: editorconfig-checker --exclude '(^LICENSE|^apps/rust-server/.*)'
+
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v22
+
+  syncpack:
+    name: SyncPack Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run SyncPack
+        run: bun run syncpack
+
+  bun-check:
+    name: Bun Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Install dependencies, generaet DB schema and OpenAPI spec
         run: |
           bun install
@@ -29,5 +59,17 @@ jobs:
           bun run openapi
           cd ../../
 
-      - name: Check
+      - name: Run checks
         run: bun run check
+
+  uv-lint:
+    name: UV Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Run UV Lint
+        run: cd apps/dataflow && uv sync && uv run lint

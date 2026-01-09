@@ -1,9 +1,0 @@
-{
-  "name": "@cmumaps/data",
-  "version": "0.0.0",
-  "scripts": {
-    "check": "ruff check && ruff format --diff --check",
-    "format": "ruff format",
-    "lint": "ruff check"
-  }
-}

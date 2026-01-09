@@ -70,7 +70,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
           instructionIndex === 0
             ? navPaths?.[selectedPath]?.path.path[0]
             : navPaths?.[selectedPath]?.path.path.find(
-                (n) => n.id === instructions[instructionIndex - 1]?.node_id,
+                (n) => n.id === instructions[instructionIndex - 1]?.nodeId,
               );
         if (node?.floor && node.floor.buildingCode === centerBuilding.code) {
           focusFloor(node.floor);

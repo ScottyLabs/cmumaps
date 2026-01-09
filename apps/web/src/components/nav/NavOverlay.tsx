@@ -33,7 +33,7 @@ const NavOverlay = ({
     let oldInstructionsIndex = 0;
     let distanceAcc = 0;
     path.forEach((node, index) => {
-      if (node.id === instructions[oldInstructionsIndex]?.node_id) {
+      if (node.id === instructions[oldInstructionsIndex]?.nodeId) {
         const instruction = instructions[oldInstructionsIndex];
         if (instruction) instruction.distance = Math.round(distanceAcc);
         newInstructions.push(instruction);
@@ -43,25 +43,27 @@ const NavOverlay = ({
 
       if (
         index < path.length - 1 &&
-        node.floor.buildingCode === "outside" &&
+        (!node.floor || node.floor.buildingCode === "outside") &&
+        path[index + 1]?.floor &&
         path[index + 1]?.floor.buildingCode !== "outside"
       ) {
         newInstructions.push({
           action: "Enter",
           distance: Math.round(distanceAcc),
-          node_id: node.id,
+          nodeId: node.id,
         });
         distanceAcc = 0;
       }
       if (
         index > 0 &&
-        node.floor.buildingCode === "outside" &&
+        (!node.floor || node.floor.buildingCode === "outside") &&
+        path[index - 1]?.floor &&
         path[index - 1]?.floor.buildingCode !== "outside"
       ) {
         newInstructions.push({
           action: "Exit",
           distance: Math.round(distanceAcc),
-          node_id: node.id,
+          nodeId: node.id,
         });
         distanceAcc = 0;
       }
@@ -78,12 +80,12 @@ const NavOverlay = ({
     newInstructions.push({
       action: "Forward",
       distance: Math.round(distanceAcc),
-      node_id: path[path.length - 1]?.id ?? "",
+      nodeId: path[path.length - 1]?.id ?? "",
     });
     newInstructions.push({
       action: "Arrive",
       distance: 0,
-      node_id: path[path.length - 1]?.id ?? "",
+      nodeId: path[path.length - 1]?.id ?? "",
     });
     setNavInstructions?.(newInstructions);
   }, [navPaths, setNavInstructions, selectedPath]);
