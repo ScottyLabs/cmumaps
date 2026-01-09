@@ -22,12 +22,16 @@
   --color-background-brand-primary-enabled: #0e96d1;
   --color-blue-brand-700: #0a6b94;
   --color-background-brand-secondary-pressed: #f5f5f5;
+  --color-background-brand-secondary-enabled: #e7f5fa;
   --color-foreground-neutral-primary: #1e1e1e;
   --color-foreground-neutral-secondary: #666;
   --color-foreground-neutral-tertiary: #808080;
   --color-stroke-neutral-1: #d6d6d6;
   --color-blue-gray-500: #869db3;
   --color-button-green: #0ea041;
+  --color-button-green-600: #0d923b;
+
+  --color-surface-darker-background: #8e8e8e;
 }
 
 @layer base {
@@ -58,5 +62,15 @@
   }
   .btn-shadow-dark {
     @apply shadow-md shadow-gray-500;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

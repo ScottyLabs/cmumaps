@@ -34,19 +34,13 @@ const FloorSwitcherButton = ({
     return Math.max(0, Math.min(1, dist));
   };
 
-  const opacity = useTransform(() => 0.5 + 0.5 * distCurveValue());
-
   const width = useTransform(() => 38 + distCurveValue() * 8);
 
   const height = useTransform(() => 38 + distCurveValue() * 8);
 
   const boundingBoxSize = useTransform(() => 80 - distCurveValue() * 80);
 
-  const lerpColor = (colorA: string, colorB: string, t1: number): string => {
-    // Clamp t between 0 and 1
-    const t = Math.max(0, Math.min(1, t1));
-
-    // Convert hex to RGB components
+  const lerpColor = (colorA: string, colorB: string, t: number): string => {
     const hexToRgb = (hex: string) => {
       const bigint = Number.parseInt(hex.replace("#", ""), 16);
       const r = (bigint >> 16) & 255;
@@ -58,7 +52,6 @@ const FloorSwitcherButton = ({
     const rgbA = hexToRgb(colorA);
     const rgbB = hexToRgb(colorB);
 
-    // Apply LERP to each color channel
     const r = Math.round(rgbA.r + (rgbB.r - rgbA.r) * t);
     const g = Math.round(rgbA.g + (rgbB.g - rgbA.g) * t);
     const b = Math.round(rgbA.b + (rgbB.b - rgbA.b) * t);
@@ -100,7 +93,6 @@ const FloorSwitcherButton = ({
         style={{
           color: "white",
           backgroundColor: color,
-          opacity,
           width,
           height,
         }}

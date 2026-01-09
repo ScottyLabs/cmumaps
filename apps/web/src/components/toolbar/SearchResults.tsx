@@ -2,8 +2,11 @@ import { useMemo } from "react";
 import $api from "@/api/client";
 import $rapi from "@/api/rustClient";
 import buildingIcon from "@/assets/icons/search_results/building.svg";
+import classroomIcon from "@/assets/icons/search_results/classroom.svg";
+import defaultIcon from "@/assets/icons/search_results/default.svg";
+import libraryIcon from "@/assets/icons/search_results/library.svg";
 import userIcon from "@/assets/icons/search_results/mark.svg";
-import classroomIcon from "@/assets/icons/search_results/study.svg";
+import restaurantIcon from "@/assets/icons/search_results/restaurant.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useUser from "@/hooks/useUser";
@@ -100,10 +103,19 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     const roomName = result.nameWithSpace?.split(" ")[1];
     const buildingName = result.nameWithSpace?.split(" ")[0];
     const floor = getFloorLevelFromRoomName(roomName);
+
+    const icons = {
+      Food: restaurantIcon,
+      Library: libraryIcon,
+      Classroom: classroomIcon,
+    };
+
+    const icon = icons[result.type as keyof typeof icons] ?? defaultIcon;
+
     return (
       <>
         <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
-          <img width={24} src={classroomIcon} alt="classroom" />
+          <img width={24} src={icon} alt="classroom" />
         </div>
         <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
           {(result.type === "Food" ||
@@ -254,9 +266,8 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     setSearchTarget(undefined);
   };
 
-  // No results found
   return (
-    <div className="z-50 flex-col overflow-hidden overflow-y-scroll rounded-[8px] bg-white py-2">
+    <div className="z-50 flex-col overflow-hidden overflow-y-scroll rounded-lg bg-white py-2">
       {organizedResults?.map((result, i) => (
         <button
           type="button"

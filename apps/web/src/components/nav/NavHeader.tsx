@@ -18,13 +18,10 @@ interface NavHeaderProps {
   startNav: () => void;
   listShown: boolean;
   mapRef: React.RefObject<mapkit.Map | null>;
+  children?: React.ReactNode;
 }
 
-const NavHeader = ({
-  isNavigating,
-  mapRef,
-  // listShown,
-}: NavHeaderProps) => {
+const NavHeader = ({ isNavigating, mapRef, children }: NavHeaderProps) => {
   const setSearchTarget = useBoundStore((state) => state.setSearchTarget);
   const searchTarget = useBoundStore((state) => state.searchTarget);
 
@@ -78,73 +75,62 @@ const NavHeader = ({
 
   const renderChooseHeader = () => {
     return (
-      <div className="fixed inset-x-[14px] top-5 flex-col">
-        <div className="btn-shadow top-5 items-center overflow-auto rounded-xl bg-white">
-          <div className="flex gap-2 px-4 pt-5">
-            <button
-              type="button"
-              onClick={() => {
-                setSrc(null);
+      <div className="bg-white">
+        <div className="flex gap-2 px-4 pt-5">
+          <button
+            type="button"
+            onClick={() => {
+              setSrc(null);
+            }}
+          >
+            <img src={backButton} alt="back" />
+          </button>
+          <span className="flex items-center pb-0.5 font-inter font-semibold text-[0.875rem] text-foreground-neutral-tertiary">
+            Navigation
+          </span>
+        </div>
+        <div className="mt-1 flex items-center gap-2 px-4 pb-6">
+          <div className="flex flex-col items-center gap-1">
+            <img src={startIcon} alt="start" />
+            <img src={dotsIcon} alt="nav-selection" />
+            <img src={destinationIcon} alt="dest" />
+          </div>
+          <div className="flex w-full flex-col gap-[10px]">
+            <input
+              className={`${srcType === "User" ? "text-background-brand-primary-enabled" : "text-foreground-neutral-primary"} h-10 w-full rounded-[10px] border-1 border-stroke-neutral-1 px-4 font-inter font-semibold text-[0.875rem]`}
+              placeholder={"Starting Location"}
+              defaultValue={srcName}
+              onFocus={(event) => {
+                setSearchTarget("nav-src");
+                setSearchQuery(event.target.value);
               }}
-            >
-              <img src={backButton} alt="back" />
-            </button>
-            <span className="flex items-center pb-0.5 font-inter font-semibold text-[0.875rem] text-foreground-neutral-tertiary">
-              Navigation
-            </span>
+              onClick={() => {
+                srcInputRef.current?.select();
+              }}
+              onChange={(event) => {
+                setSearchQuery(event.target.value);
+              }}
+              ref={srcInputRef}
+              value={searchTarget === "nav-src" ? searchQuery : srcName}
+            />
+            <input
+              className={`${dstType === "User" ? "text-background-brand-primary-enabled" : "text-foreground-neutral-primary"} h-10 w-full rounded-[10px] border-1 border-stroke-neutral-1 px-4 font-inter font-semibold text-[0.875rem]`}
+              placeholder={"Destination"}
+              defaultValue={dstName}
+              onFocus={(event) => {
+                setSearchTarget("nav-dst");
+                setSearchQuery(event.target.value);
+              }}
+              onClick={() => {
+                dstInputRef.current?.select();
+              }}
+              onChange={(event) => {
+                setSearchQuery(event.target.value);
+              }}
+              ref={dstInputRef}
+              value={searchTarget === "nav-dst" ? searchQuery : dstName}
+            />
           </div>
-          <div className="mt-1 flex items-center gap-2 px-4 pb-6">
-            <div className="flex flex-col items-center gap-1">
-              <img src={startIcon} alt="start" />
-              <img src={dotsIcon} alt="nav-selection" />
-              <img src={destinationIcon} alt="dest" />
-            </div>
-            <div className="flex w-full flex-col gap-[10px]">
-              <input
-                className={`${srcType === "User" ? "text-background-brand-primary-enabled" : "text-foreground-neutral-primary"} h-10 w-full rounded-[10px] border-1 border-stroke-neutral-1 px-4 font-inter font-semibold text-[0.875rem]`}
-                placeholder={"Starting Location"}
-                defaultValue={srcName}
-                onFocus={(event) => {
-                  setSearchTarget("nav-src");
-                  setSearchQuery(event.target.value);
-                }}
-                onClick={() => {
-                  srcInputRef.current?.select();
-                }}
-                onChange={(event) => {
-                  setSearchQuery(event.target.value);
-                }}
-                ref={srcInputRef}
-                value={searchTarget === "nav-src" ? searchQuery : srcName}
-              />
-              <input
-                className={`${dstType === "User" ? "text-background-brand-primary-enabled" : "text-foreground-neutral-primary"} h-10 w-full rounded-[10px] border-1 border-stroke-neutral-1 px-4 font-inter font-semibold text-[0.875rem]`}
-                placeholder={"Destination"}
-                defaultValue={dstName}
-                onFocus={(event) => {
-                  setSearchTarget("nav-dst");
-                  setSearchQuery(event.target.value);
-                }}
-                onClick={() => {
-                  dstInputRef.current?.select();
-                }}
-                onChange={(event) => {
-                  setSearchQuery(event.target.value);
-                }}
-                ref={dstInputRef}
-                value={searchTarget === "nav-dst" ? searchQuery : dstName}
-              />
-            </div>
-          </div>
-
-          {searchTarget && searchQuery.length > 0 && (
-            <>
-              <hr className="mb-2 border-stroke-neutral-1" />
-              <div className="h-50 overflow-y-scroll">
-                <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
-              </div>
-            </>
-          )}
         </div>
       </div>
     );
@@ -158,7 +144,7 @@ const NavHeader = ({
 
   const renderInstructionHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-3 top-3 overflow-auto rounded-[20px] bg-button-green">
+      <div className="flex flex-col bg-button-green">
         <div className="flex h-[111px] gap-4 px-8 pt-5 pb-3">
           <img
             src={instructionIcons[action || "Forward"]}
@@ -221,9 +207,9 @@ const NavHeader = ({
 
   const renderArrivedHeader = () => {
     return (
-      <div className="btn-shadow fixed inset-x-3 top-3 overflow-auto rounded-[20px] bg-background-brand-primary-enabled">
-        <div className="flex h-[111px] justify-center">
-          <div className="mt-4 flex-col">
+      <div className="flex flex-col bg-background-brand-primary-enabled">
+        <div className="flex h-[111px] justify-center bg-background-brand-primary-enabled px-8 pt-6 pb-3">
+          <div className="flex-col">
             <div className="flex justify-center font-lato font-semibold text-[2rem] text-white">
               You Have Arrived
             </div>
@@ -254,7 +240,20 @@ const NavHeader = ({
     );
   };
 
-  return isNavigating ? renderNavigateHeader() : renderChooseHeader();
+  return (
+    <>
+      {isNavigating ? renderNavigateHeader() : renderChooseHeader()}
+      {children}
+      {!isNavigating && searchTarget && searchQuery.length > 0 && (
+        <>
+          <hr className="mb-2 border-stroke-neutral-1" />
+          <div className="h-100 overflow-y-scroll">
+            <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
+          </div>
+        </>
+      )}
+    </>
+  );
 };
 
 export default NavHeader;

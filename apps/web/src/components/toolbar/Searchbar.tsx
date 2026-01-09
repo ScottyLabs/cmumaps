@@ -112,7 +112,7 @@ const Searchbar = ({ mapRef }: Props) => {
     <IoIosClose
       title="Close"
       size={30}
-      className="absolute right-7"
+      className="w-auto shrink-0 pr-2"
       onClick={() => {
         if (searchQuery === "") {
           setSearchTarget(undefined);
@@ -124,30 +124,19 @@ const Searchbar = ({ mapRef }: Props) => {
     />
   );
 
-  // const renderBackground = () => {
-  //   return (
-  //     <button
-  //       type="button"
-  //       onClick={() => {
-  //         setSearchTarget(undefined);
-  //         setSearchQuery("");
-  //         hideSearch();
-  //       }}
-  //       className="fixed inset-0 z-50 bg-black/30 backdrop-blur-md"
-  //     />
-  //   );
-  // };
-
   return (
-    <>
-      {/* {searchTarget && isMobile && renderBackground()} */}
-      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white">
+    <div className="flex flex-col">
+      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white shadow-[1px_4px_4px_0_rgba(0,0,0,0.15)]">
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
       </div>
-      <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
-    </>
+      {isSearchOpen && (
+        <div className="h-100 overflow-y-scroll rounded-lg">
+          <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
+        </div>
+      )}
+    </div>
   );
 };
 

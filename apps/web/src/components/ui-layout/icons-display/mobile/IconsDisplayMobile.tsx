@@ -1,10 +1,10 @@
 import { useState } from "react";
 import userMenuIcon from "@/assets/icons/plus_button_menu/mobile/settings.svg";
-import UserMenu from "@/components/ui-layout/icons-display/mobile/UserMenu";
+import UserMenu from "@/components/ui-layout/icons-display/UserMenu";
 import useLocationParams from "@/hooks/useLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
-import PlusButton from "./PlusButton";
+import PlusButton from "../PlusButton";
 
 enum PlusButtonMenuState {
   CLOSED = 0,
@@ -18,7 +18,7 @@ interface MenuButtonProps {
   icon: string;
   altText: string;
   selectedMenuState: PlusButtonMenuState;
-  menu: (props: { lowerHeight: number }) => React.ReactElement;
+  menu: () => React.ReactElement;
 }
 
 const IconsDisplayMobile = () => {
@@ -71,13 +71,16 @@ const IconsDisplayMobile = () => {
             plusButtonMenuState === PlusButtonMenuState.CLOSED
               ? ""
               : "btn-shadow-dark"
-          } ${plusButtonMenuState === selectedMenuState ? "bg-background-brand-primary-enabled" : "bg-blue-gray-500"} fixed bottom-8 left-5 z-50 flex h-14 w-14 rounded-full rounded-full transition-transform duration-500 ease-in-out`}
+          } ${plusButtonMenuState === selectedMenuState ? "bg-background-brand-primary-enabled" : "bg-blue-gray-500"} fixed bottom-8 left-5 z-50 flex h-14 w-14 rounded-full transition-transform duration-500 ease-in-out`}
           style={style}
         >
           <img className="m-auto" alt={altText} src={icon} />
         </button>
-        {plusButtonMenuState === selectedMenuState &&
-          menu({ lowerHeight: 104 + 68 * menuButtons.length })}
+        {plusButtonMenuState === selectedMenuState && (
+          <div className="fixed inset-x-10 top-[50%] z-50 -translate-y-1/2">
+            {menu()}
+          </div>
+        )}
       </div>
     );
   };
@@ -110,14 +113,16 @@ const IconsDisplayMobile = () => {
     };
 
     return (
-      <PlusButton
-        isMenuOpen={plusButtonMenuState !== PlusButtonMenuState.CLOSED}
-        isPlusButtonSelected={
-          plusButtonMenuState === PlusButtonMenuState.CLOSED ||
-          plusButtonMenuState === PlusButtonMenuState.OPEN
-        }
-        onClick={handleClick}
-      />
+      <div className="fixed bottom-8 left-5 z-50">
+        <PlusButton
+          isMenuOpen={plusButtonMenuState !== PlusButtonMenuState.CLOSED}
+          isPlusButtonSelected={
+            plusButtonMenuState === PlusButtonMenuState.CLOSED ||
+            plusButtonMenuState === PlusButtonMenuState.OPEN
+          }
+          onClick={handleClick}
+        />
+      </div>
     );
   };
 

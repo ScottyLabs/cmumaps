@@ -3,16 +3,22 @@ import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
 import useLocationParams from "@/hooks/useLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
 import { CardStates, CardStatesList } from "@/store/cardSlice";
 
 interface Props {
   snapPoints: number[];
-  children: React.ReactElement;
+  children: React.ReactElement[] | React.ReactElement;
+  onClose: () => void;
+  onCollapse?: () => void;
 }
 
-const DraggableSheet = ({ snapPoints, children }: Props) => {
+const DraggableSheet = ({
+  snapPoints,
+  children,
+  onClose,
+  onCollapse,
+}: Props) => {
   // Library hooks
   const navigate = useNavigate();
   const controls = useAnimation();
@@ -31,7 +37,6 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
 
   // Custom hooks
   const { isCardOpen, floor, coordinate, buildingCode } = useLocationParams();
-  const { setSrc, setDst } = useNavigationParams();
 
   // updates the card status when the isCardOpen changes
   // TODO: uncomment once eateries are listed
@@ -52,9 +57,13 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
         controls.start({ y: -snapPoints[snapIndex] });
       }
     } else {
-      controls.start({ y: 0 });
+      controls.start({ y: -(snapPoints[0] ?? 0) });
     }
   }, [controls, isCardOpen, snapIndex, snapPoints]);
+
+  useEffect(() => {
+    controls.set({ y: window.innerHeight });
+  });
 
   /* biome-ignore lint/correctness/useExhaustiveDependencies: re-rendering whenever navigate
    * changes would lock draggableSheet in Collapsed state */
@@ -69,11 +78,11 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     }
   }, [focusedFloor, setCardStatus]);
 
-  const { isNavOpen } = useNavigationParams();
+  // const { isNavOpen } = useNavigationParams();
 
-  if (isNavOpen) {
-    return;
-  }
+  // if (isNavOpen) {
+  //   return;
+  // }
 
   const handleDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
@@ -92,7 +101,13 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
       if (CardStatesList[index]) {
         setCardStatus(CardStatesList[index]);
         if (snapPoints[index]) {
-          controls.start({ y: -snapPoints[index] });
+          controls.start(
+            { y: -snapPoints[index] },
+            {
+              onComplete:
+                closestSnap === -window.innerHeight ? onCollapse : () => {},
+            },
+          );
         }
       }
     }
@@ -122,14 +137,17 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
     return (
       <div className="flex h-12 shrink-0 items-center justify-between px-2">
         <div className="w-8" />
-        <div className="h-1 w-12 rounded-full rounded-t-xl bg-black" />
+        <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
         <IoIosClose
           title="Close"
           size={32}
           onClick={() => {
-            navigate("/");
-            setSrc(null);
-            setDst(null);
+            controls.start(
+              { y: window.innerHeight },
+              {
+                onComplete: onClose,
+              },
+            );
           }}
         />
       </div>
@@ -137,7 +155,7 @@ const DraggableSheet = ({ snapPoints, children }: Props) => {
   };
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 h-0">
       <motion.div
         animate={controls}
         ref={sheetRef}

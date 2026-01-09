@@ -81,7 +81,7 @@ const UserMenu = () => {
   };
 
   return (
-    <div className="btn-shadow-dark fixed inset-x-10 top-[50%] z-50 -translate-y-1/2 rounded-xl border border-gray-200 bg-white px-4 pt-5 pb-2 font-sans shadow-lg">
+    <div className="btn-shadow-dark rounded-xl border border-gray-200 bg-white px-4 pt-5 pb-2 font-sans shadow-lg">
       <div className="mb-4 flex items-center">{renderUserProfile()}</div>
       {menuButtons.map(renderMenuButton)}
     </div>

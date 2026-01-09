@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import navStackIcon from "@/assets/icons/nav/nav-stack.svg";
 import accessibleAvailableIcon from "@/assets/icons/nav/route-selection/accessibleAvailable.svg";
 import accessibleSelectedIcon from "@/assets/icons/nav/route-selection/accessibleSelected.svg";
@@ -18,7 +18,7 @@ import useBoundStore from "@/store";
 interface NavHeaderProps {
   isNavigating: boolean;
   startNav: () => void;
-  toggleListShown: () => void;
+  toggleListShown?: () => void;
   listShown: boolean;
 }
 
@@ -75,12 +75,6 @@ const NavCard = ({
       hour12: true,
     },
   );
-
-  const [yControl, setYControl] = useState(300);
-
-  useEffect(() => {
-    setYControl(isNavigating ? 28 : 0);
-  }, [isNavigating]);
 
   const renderPathInfo = () => {
     return (
@@ -170,7 +164,9 @@ const NavCard = ({
               startNav();
             }}
           >
-            <span className="text-center text-white">GO</span>
+            <span className="text-center font-inter font-semibold text-[20px] text-white">
+              GO
+            </span>
           </button>
         </div>
       </div>
@@ -189,45 +185,34 @@ const NavCard = ({
             setSrc(null);
           }}
         >
-          <span className="text-center text-white">End</span>
+          <span className="text-center font-inter font-semibold text-[20px] text-white">
+            End
+          </span>
         </button>
       </div>
     );
   };
 
   return (
-    <div
-      className={`${listShown ? "bg-white" : "bg-transparent"} fixed inset-x-0 bottom-0 h-30`}
-    >
-      {listShown && (
-        <div className="h-full w-full rounded-t-xl shadow-[0px_-10px_15px_-3px_rgba(0,0,0,0.1)]" />
+    <>
+      {isNavigating && isMobile && (
+        <div className="flex justify-end p-4">
+          <button
+            type="button"
+            hidden={isMobile && listShown}
+            className="btn-shadow flex h-12 w-12 rounded-full bg-button-green"
+            onClick={toggleListShown}
+          >
+            <img src={navStackIcon} alt="directions list" className="m-auto" />
+          </button>
+        </div>
       )}
       <div
-        className={`${isNavigating ? "bottom-10" : "bottom-0"} fixed inset-x-[14px] transition duration-300 ease-in-out`}
-        style={{ transform: `translateY(${yControl}px)` }}
+        className={`${isMobile ? (isNavigating ? "rounded-xl" : "rounded-t-xl") : ""} overflow-auto bg-white ${!listShown && "btn-shadow"}`}
       >
-        {isNavigating && (
-          <div className="flex justify-end p-4">
-            <button
-              type="button"
-              className="btn-shadow flex h-12 w-12 rounded-full bg-button-green"
-              onClick={toggleListShown}
-            >
-              <img
-                src={navStackIcon}
-                alt="directions list"
-                className="m-auto"
-              />
-            </button>
-          </div>
-        )}
-        <div
-          className={`${isNavigating ? "rounded-xl" : "rounded-t-xl"} overflow-auto bg-white ${!listShown && "btn-shadow"}`}
-        >
-          {isNavigating ? renderNavCard() : renderChooseCard()}
-        </div>
+        {isNavigating ? renderNavCard() : renderChooseCard()}
       </div>
-    </div>
+    </>
   );
 };
 
