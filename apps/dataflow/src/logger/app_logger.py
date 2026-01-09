@@ -1,4 +1,5 @@
 import logging
+import os
 from functools import lru_cache
 from logging.config import dictConfig
 from typing import cast
@@ -13,8 +14,8 @@ from .constants import LOGGER_NAME, PRINT_LEVEL, SUCCESS_LEVEL
 @lru_cache(maxsize=1)
 def get_app_logger() -> AppLogger:
     """Get the app logger. Cache the result for reuse across the app."""
-    # Colorama: ensures reset after each print and force keep ANSI for colors
-    init(autoreset=True, strip=False)
+    # Colorama: ensures reset after each print if not on Railway
+    init(autoreset=not os.getenv("RAILWAY_PROJECT_NAME"))
 
     # Register the success and print log levels
     logging.addLevelName(SUCCESS_LEVEL, "SUCCESS")
