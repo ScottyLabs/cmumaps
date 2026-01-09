@@ -1,61 +1,56 @@
-# Script to populate the Building table of the database using buildings.json
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
 import json
-import requests  # type: ignore
-from s3_utils.s3_utils import get_json_from_s3
 
-
-# Drop Building table
-def drop_building_table(clerk_manager):
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": ["Building"]},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+from clients import get_api_client_singleton, get_s3_client_singleton
+from logger import get_app_logger
 
 
 # Populate Building table
-def create_buildings(clerk_manager):
-    data = get_json_from_s3("floorplans/buildings.json", return_data=True)
+def populate_building_table() -> None:
+    """
+    Populate the Building table.
 
-    # Iterate through all buildings
+    Raises ValueError if the data cannot be retrieved from S3.
+    """
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
+    s3_client = get_s3_client_singleton()
+
+    # Get buildings data from S3
+    data = s3_client.get_json_file("floorplans/buildings.json")
+    if data is None:
+        msg = "Failed to get buildings data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
+
+    # Iterate through all buildings and create a list of buildings data
+    # in the shape of the Building table
     buildings_data = []
-    for buildingCode in data:
-        name = data[buildingCode]["name"]
-        osmId = data[buildingCode]["osmId"]
-        if "defaultOrdinal" in data[buildingCode]:
-            defaultOrdinal = data[buildingCode]["defaultOrdinal"]
+    for building_code in data:
+        name = data[building_code]["name"]
+        osm_id = data[building_code]["osmId"]
+        if "defaultOrdinal" in data[building_code]:
+            default_ordinal = data[building_code]["defaultOrdinal"]
         else:
-            defaultOrdinal = None
-        labelLatitude = data[buildingCode]["labelPosition"]["latitude"]
-        labelLongitude = data[buildingCode]["labelPosition"]["longitude"]
-        shape = json.dumps(data[buildingCode]["shapes"])
-        hitbox = json.dumps(data[buildingCode]["hitbox"])
+            default_ordinal = None
+        label_latitude = data[building_code]["labelPosition"]["latitude"]
+        label_longitude = data[building_code]["labelPosition"]["longitude"]
+        shape = json.dumps(data[building_code]["shapes"])
+        hitbox = json.dumps(data[building_code]["hitbox"])
         # Create building entry
         building = {
-            "buildingCode": buildingCode,
+            "buildingCode": building_code,
             "name": name,
-            "osmId": osmId,
-            "defaultOrdinal": defaultOrdinal,
-            "labelLatitude": labelLatitude,
-            "labelLongitude": labelLongitude,
+            "osmId": osm_id,
+            "defaultOrdinal": default_ordinal,
+            "labelLatitude": label_latitude,
+            "labelLongitude": label_longitude,
             "shape": shape,
             "hitbox": hitbox,
         }
         buildings_data.append(building)
 
-    # Send request to server to populate Building table
-    server_url = clerk_manager.server_url
-    response = requests.post(
-        f"{server_url}/populate-table/buildings",
-        json=buildings_data,
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response)
-    print(response.json())
+    # Populate Building table
+    if not api_client.populate_table("Buildings", buildings_data):
+        msg = "Failed to populate Building table"
+        logger.critical(msg)
+        raise RuntimeError(msg)

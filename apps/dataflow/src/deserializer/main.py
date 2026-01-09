@@ -1,27 +1,31 @@
 import dotenv
 
-from clients.api_client import ApiClient
+from clients import ALL_TABLE_NAMES, get_api_client_singleton
 from logger import log_operation
+from logger.app_logger import get_app_logger
 from logger.utils import print_section
 
-# from .alias import create_aliases
-# from .building import create_buildings
-# from .edge import create_edges
-# from .floor import create_floors
-# from .node import create_nodes
-# from .room import create_rooms
+from .tables.building import populate_building_table
 
 dotenv.load_dotenv()
 
 
 def main() -> None:
-    api_client = ApiClient()
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
 
-    with log_operation("drop all tables"):
-        api_client.drop_all_tables()
+    if not api_client.drop_tables(ALL_TABLE_NAMES):
+        msg = "Failed to drop tables"
+        logger.critical(msg)
+        raise RuntimeError(msg)
 
-    print_section("Creating buildings")
-    # create_buildings(api_client)
+    try:
+        with log_operation("Populating building table"):
+            populate_building_table()
+    except Exception as e:
+        msg = "Failed to populate building table"
+        logger.critical(msg)
+        raise RuntimeError(msg) from e
 
     print_section("Creating floors")
     # create_floors(api_client)

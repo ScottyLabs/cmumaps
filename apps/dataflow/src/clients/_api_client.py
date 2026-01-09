@@ -35,6 +35,7 @@ def get_api_client_singleton() -> ApiClient:
 
 class ApiClient:
     TIMEOUT = 10
+    SUCCESS_STATUS_CODE = 200
 
     def __init__(self) -> None:
         self.logger = get_app_logger()
@@ -68,7 +69,7 @@ class ApiClient:
             self._cached_token = token
             return token
 
-    def drop_tables(self, table_names: list[TableName]) -> None:
+    def drop_tables(self, table_names: list[TableName]) -> bool:
         """Drop specified tables."""
         response = requests.delete(
             f"{self.server_url}/drop-tables",
@@ -76,4 +77,14 @@ class ApiClient:
             headers={"Authorization": f"Bearer {self._get_token()}"},
             timeout=self.TIMEOUT,
         )
-        return response.json()
+        return response.status_code == self.SUCCESS_STATUS_CODE
+
+    def populate_table(self, table_name: TableName, data: list[dict]) -> bool:
+        """Populate a table with the given data."""
+        response = requests.post(
+            f"{self.server_url}/populate-table/{table_name}",
+            json=data,
+            headers={"Authorization": f"Bearer {self._get_token()}"},
+            timeout=self.TIMEOUT,
+        )
+        return response.status_code == self.SUCCESS_STATUS_CODE

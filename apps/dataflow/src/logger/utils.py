@@ -17,7 +17,12 @@ def print_section(section: str) -> None:
 
 @contextmanager
 def log_operation(operation_name: str) -> Generator[None]:
-    """Context manager to log when an operation starts, finishes, or fails."""
+    """
+    Context manager to log when an operation starts, finishes, or fails.
+
+    When an exception occurs, it is logged and the traceback is printed,
+    and the exception is re-raised.
+    """
     logger = get_app_logger()
     logger.info("Starting to %s...", operation_name)
     try:
@@ -26,3 +31,4 @@ def log_operation(operation_name: str) -> Generator[None]:
     except Exception:
         logger.exception("Failed to %s", operation_name)
         traceback.print_exc()
+        raise
