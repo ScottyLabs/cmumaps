@@ -1,33 +1,29 @@
 # Script to populate the Rooms table
 # skip empty buildings and outside
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
 import json
-import requests  # type: ignore
-from s3_utils.s3_utils import get_json_from_s3
+
+from clients import get_api_client_singleton, get_s3_client_singleton
+from logger import get_app_logger
 
 
-# Drop and populate Element and Room tables
-def drop_room_table(clerk_manager):
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": ["Room"]},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+def populate_room_table() -> None:
+    # Get the logger and clients
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
+    s3_client = get_s3_client_singleton()
 
+    # Get the floorplans data from S3
+    floorplans = s3_client.get_json_file("floorplans/floorplans.json")
+    if floorplans is None:
+        msg = "Failed to get floorplans data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
 
-def create_rooms(clerk_manager):
-    data = get_json_from_s3("floorplans/floorplans.json", return_data=True)
-
-    # Populate Room data
-    for building in data:
+    # Iterate through all buildings and create a list of rooms data
+    # in the required format for the populate room table api endpoint
+    for building in floorplans:
         # skip empty buildings
-        if not data[building]:
+        if not floorplans[building]:
             continue
 
         # skip outside because we will be using OSM
@@ -35,38 +31,32 @@ def create_rooms(clerk_manager):
             continue
 
         rooms_data = []
-        for floor in data[building]:
-            for room in data[building][floor]:
-                roomdata = data[building][floor][room]
-                roomId = roomdata["id"]
-                labelLatitude = roomdata["labelPosition"]["latitude"]
-                labelLongitude = roomdata["labelPosition"]["longitude"]
-                type = roomdata["type"]
-                buildingCode = roomdata["floor"]["buildingCode"]
-                floorLevel = roomdata["floor"]["level"]
-                name = roomdata["name"]
-                polygon = json.dumps(roomdata["coordinates"])
+        for floor in floorplans[building]:
+            for room_id in floorplans[building][floor]:
+                room = floorplans[building][floor][room_id]
+                label_latitude = room["labelPosition"]["latitude"]
+                label_longitude = room["labelPosition"]["longitude"]
+                room_type = room["type"]
+                building_code = room["floor"]["buildingCode"]
+                floor_level = room["floor"]["level"]
+                name = room["name"]
+                polygon = json.dumps(room["coordinates"])
 
                 room = {
-                    "roomId": roomId,
+                    "roomId": room_id,
                     "name": name,
-                    "type": type,
-                    "labelLatitude": labelLatitude,
-                    "labelLongitude": labelLongitude,
+                    "type": room_type,
+                    "labelLatitude": label_latitude,
+                    "labelLongitude": label_longitude,
                     "polygon": polygon,
-                    "buildingCode": buildingCode,
-                    "floorLevel": floorLevel,
+                    "buildingCode": building_code,
+                    "floorLevel": floor_level,
                 }
 
                 rooms_data.append(room)
 
-        # Send request to server to populate Room table
-        server_url = clerk_manager.server_url
-        response = requests.post(
-            f"{server_url}/populate-table/rooms",
-            json=rooms_data,
-            headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-        )
-        print(building)
-        print(response)
-        print(response.json())
+        # API call to populate the Room table
+        if not api_client.populate_table("Room", rooms_data):
+            msg = "Failed to populate the Room table"
+            logger.critical(msg)
+            raise RuntimeError(msg)

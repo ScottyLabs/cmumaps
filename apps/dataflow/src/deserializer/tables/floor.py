@@ -14,15 +14,15 @@ def populate_floor_table() -> None:
     s3_client = get_s3_client_singleton()
 
     # Get the buildings data from S3
-    buildings_data = s3_client.get_json_file("floorplans/buildings.json")
-    if buildings_data is None:
+    buildings = s3_client.get_json_file("floorplans/buildings.json")
+    if buildings is None:
         msg = "Failed to get buildings data from S3"
         logger.critical(msg)
         raise ValueError(msg)
 
     # Get the placements data from S3
-    placements_data = s3_client.get_json_file("floorplans/placements.json")
-    if placements_data is None:
+    placements = s3_client.get_json_file("floorplans/placements.json")
+    if placements is None:
         msg = "Failed to get placements data from S3"
         logger.critical(msg)
         raise ValueError(msg)
@@ -30,20 +30,20 @@ def populate_floor_table() -> None:
     # Iterate through all buildings and create a list of floors data
     # in the required format for the populate floor table api endpoint
     floors_data = []
-    for building_code in placements_data:
+    for building_code in placements:
         # skip outside
         if building_code == "outside":
             continue
 
-        for floor_level in placements_data[building_code]:
-            placement = placements_data[building_code][floor_level]
+        for floor_level in placements[building_code]:
+            placement = placements[building_code][floor_level]
             center_latitude = placement["center"]["latitude"]
             center_longitude = placement["center"]["longitude"]
             scale = placement["scale"]
             angle = placement["angle"]
             pdf_center = placement["pdfCenter"]
 
-            default_floor = buildings_data[building_code]["defaultFloor"]
+            default_floor = buildings[building_code]["defaultFloor"]
             is_default = floor_level == default_floor
 
             floor = {
