@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { BIOME_CONFIG_PATH, getAllRules } from "./generate-biome-rules.ts";
+import { BIOME_CONFIG_PATH, getAllRules } from "./generate-rules.ts";
 
 const allRules = await getAllRules();
 const biomeConfig = JSON.parse(await fs.readFile(BIOME_CONFIG_PATH, "utf-8"));
