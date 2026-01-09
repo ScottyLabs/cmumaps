@@ -1,55 +1,49 @@
-# Script to populate Node table of the database using all_graph.json
-# skip outside nodes
-# python scripts/json-to-database/node.py
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
-import requests  # type: ignore
-from s3_utils.s3_utils import get_json_from_s3
+from clients import get_api_client_singleton, get_s3_client_singleton
+from logger import get_app_logger
 
 
-# Drop and populate Node table
-def drop_node_table(clerk_manager):
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": ["Node"]},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+def populate_node_table() -> None:
+    """
+    Populate the Node table using all-graph.json.
 
+    Precondition: Room table must be populated.
+    """
+    # Get the logger and clients
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
+    s3_client = get_s3_client_singleton()
 
-def create_nodes(clerk_manager):
-    data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
+    # Get the all-graph data from S3
+    data = s3_client.get_json_file("floorplans/all-graph.json")
+    if data is None:
+        msg = "Failed to get all-graph data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
 
+    # Iterate through all nodes and create a list of nodes data
+    # in the required format for the populate node table api endpoint
     node_data = []
-    for nodeId in data:
-        nodeDict = data[nodeId]
-        latitude = nodeDict["coordinate"]["latitude"]
-        longitude = nodeDict["coordinate"]["longitude"]
-        buildingCode = nodeDict["floor"]["buildingCode"]
-        floorLevel = nodeDict["floor"]["level"]
-        roomId = nodeDict["roomId"] if buildingCode != "outside" else ""
+    for node_id in data:
+        node = data[node_id]
+        latitude = node["coordinate"]["latitude"]
+        longitude = node["coordinate"]["longitude"]
+        building_code = node["floor"]["buildingCode"]
+        floor_level = node["floor"]["level"]
+        room_id = node["roomId"] if building_code != "outside" else ""
 
         node = {
-            "nodeId": nodeDict["id"],
+            "nodeId": node_id,
             "latitude": latitude,
             "longitude": longitude,
-            "buildingCode": buildingCode if buildingCode != "outside" else None,
-            "floorLevel": floorLevel if buildingCode != "outside" else None,
-            "roomId": roomId if roomId else None,
+            "buildingCode": building_code if building_code != "outside" else None,
+            "floorLevel": floor_level if building_code != "outside" else None,
+            "roomId": room_id if room_id else None,
         }
 
         node_data.append(node)
 
     # Send request to server to populate Node table
-    server_url = clerk_manager.server_url
-    response = requests.post(
-        f"{server_url}/populate-table/nodes",
-        json=node_data,
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response)
-    print(response.json())
+    if not api_client.populate_table("Node", node_data):
+        msg = "Failed to populate the Node table"
+        logger.critical(msg)
+        raise RuntimeError(msg)
