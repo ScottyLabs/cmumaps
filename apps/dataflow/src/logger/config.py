@@ -24,6 +24,7 @@ def get_logger_config() -> dict[str, Any]:
             handler_name: {
                 "class": "logging.StreamHandler",
                 "formatter": color_formatter_name,
+                "stream": "ext://sys.stdout",
             }
         },
         "formatters": {
