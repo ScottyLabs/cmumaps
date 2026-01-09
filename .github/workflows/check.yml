@@ -41,8 +41,8 @@ jobs:
       - name: Run Syncpack
         run: bun run syncpack
 
-  biome-rules-check:
-    name: Check if Biome config is up to date
+  biome-config-check:
+    name: Biome Config Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: bun install remeda
 
-      - name: Run Biome config check
+      - name: Check if Biome config is up to date
         run: bun run scripts/biome/check-biome-config.ts
 
   bun-check:
