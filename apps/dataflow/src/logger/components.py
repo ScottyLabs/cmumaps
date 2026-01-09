@@ -49,8 +49,7 @@ class ColorFormatter(logging.Formatter):
         logging.DEBUG: Fore.LIGHTBLACK_EX,
         logging.INFO: Fore.BLUE,
         SUCCESS_LEVEL: Fore.GREEN,
-        # Yellow is not distinguishable in GitHub Actions
-        logging.WARNING: Fore.LIGHTYELLOW_EX,
+        logging.WARNING: Fore.YELLOW,
         logging.ERROR: Fore.RED,
         logging.CRITICAL: Back.RED + Fore.WHITE,
     }
