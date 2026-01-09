@@ -94,7 +94,7 @@ const OVERRIDES = {
   },
 };
 
-export async function getAllRules() {
+export async function generateRules() {
   const schema = (await (
     await fetch("https://biomejs.dev/schemas/latest/schema.json")
   ).json()) as BiomeSchema;

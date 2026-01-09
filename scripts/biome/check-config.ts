@@ -2,11 +2,17 @@
 
 import fs from "node:fs/promises";
 import process from "node:process";
-import { BIOME_CONFIG_PATH, getAllRules } from "./generate-rules.ts";
+import { parse } from "comment-json";
+import { BIOME_CONFIG_PATH, generateRules } from "./generate-rules.ts";
 
-const allRules = await getAllRules();
-const biomeConfig = JSON.parse(await fs.readFile(BIOME_CONFIG_PATH, "utf-8"));
-if (JSON.stringify(biomeConfig.linter.rules) === JSON.stringify(allRules)) {
+const generatedRules = await generateRules();
+const biomeConfig = parse(await fs.readFile(BIOME_CONFIG_PATH, "utf-8"), null);
+
+// @ts-expect-error
+const currentRules = biomeConfig.linter.rules;
+
+// Check if the current rules are the same as the generated rules
+if (JSON.stringify(currentRules) === JSON.stringify(generatedRules)) {
   console.debug("Biome config is up to date");
   process.exit(0);
 } else {
