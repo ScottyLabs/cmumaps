@@ -1,8 +1,11 @@
 import { useMemo } from "react";
 import $api from "@/api/client";
 import buildingIcon from "@/assets/icons/search_results/building.svg";
+import classroomIcon from "@/assets/icons/search_results/classroom.svg";
+import defaultIcon from "@/assets/icons/search_results/default.svg";
+import libraryIcon from "@/assets/icons/search_results/library.svg";
 import userIcon from "@/assets/icons/search_results/mark.svg";
-import classroomIcon from "@/assets/icons/search_results/study.svg";
+import restaurantIcon from "@/assets/icons/search_results/restaurant.svg";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useUser from "@/hooks/useUser";
@@ -42,10 +45,16 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const { setSrc, setDst } = useNavigationParams();
   const { hasAccess } = useUser();
 
-  const { data: searchResults } = $api.useQuery("get", "/search", {
-    params: { query: { query: searchQuery } },
-    enabled: isSearchOpen && searchQuery.length > 0,
-  });
+  const { data: searchResults } = $rapi.useQuery(
+    "get",
+    "/search",
+    {
+      params: { query: { query: searchQuery } },
+    },
+    {
+      enabled: (isSearchOpen || searchTarget) && searchQuery.length > 0,
+    },
+  );
 
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
@@ -72,7 +81,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   }, [searchResults, userPosition, searchTarget]);
 
   // Don't render if the search is not open or the search query is empty
-  if (searchQuery.length === 0 || !isSearchOpen) {
+  if (searchQuery.length === 0 || (!isSearchOpen && !searchTarget)) {
     return;
   }
 
@@ -82,24 +91,42 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
           <img width={24} src={buildingIcon} alt="classroom" />
         </div>
-        <div className="flex flex-col">{result.fullNameWithSpace}</div>
+        <span className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
+          {result.fullNameWithSpace}
+        </span>
       </>
     );
   };
 
   const renderRoomResult = (result: SearchResultProps) => {
+    const roomName = result.nameWithSpace?.split(" ")[1];
+    const buildingName = result.nameWithSpace?.split(" ")[0];
+    const floor = getFloorLevelFromRoomName(roomName);
+
+    const icons = {
+      Food: restaurantIcon,
+      Library: libraryIcon,
+      Classroom: classroomIcon,
+    };
+
+    const icon = icons[result.type as keyof typeof icons] ?? defaultIcon;
+
     return (
       <>
         <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
-          <img width={24} src={classroomIcon} alt="classroom" />
+          <img width={24} src={icon} alt="classroom" />
         </div>
-        <div className="flex w-[100%] items-center justify-between">
-          <div className="flex flex-col text-left">
-            {result.alias && result.alias !== ""
-              ? result.alias
-              : result.fullNameWithSpace}
-          </div>
-          <div className="self-center pr-5 text-[#9ca3af]">Rooms</div>
+        <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
+          {(result.type === "Food" ||
+            !(
+              buildingName &&
+              floor &&
+              buildings?.[buildingName]?.floors.includes(floor)
+            )) &&
+          result.alias &&
+          result.alias !== ""
+            ? result.alias
+            : result.nameWithSpace}
         </div>
       </>
     );
@@ -111,7 +138,9 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
           <img width={24} src={userIcon} alt="classroom" />
         </div>
-        <div className="flex flex-col">User Position</div>
+        <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
+          User Position
+        </div>
       </>
     );
   };
@@ -236,14 +265,13 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     setSearchTarget(undefined);
   };
 
-  // No results found
   return (
-    <div className="z-50 flex-col overflow-hidden overflow-y-scroll rounded-[8px] bg-white">
+    <div className="z-50 flex-col overflow-hidden overflow-y-scroll rounded-lg bg-white py-2">
       {organizedResults?.map((result, i) => (
         <button
           type="button"
           key={i}
-          className="flex h-19 w-full items-center bg-white text-lg hover:bg-[#F5F5F5] active:bg-[#dce8f6]"
+          className="flex h-9 w-full items-center bg-white text-lg active:bg-[#F5F5F5]"
           onClick={() => handleClick(result)}
         >
           {renderResultByType(result)}

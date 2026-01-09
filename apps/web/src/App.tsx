@@ -8,7 +8,7 @@ import IconsDisplay from "@/components/ui-layout/icons-display/IconsDisplay";
 import MyToastContainer from "@/components/ui-layout/MyToastContainer";
 import useUser from "@/hooks/useUser";
 import useBoundStore from "@/store";
-import NavOverlay from "./components/nav/NavOverlay.tsx";
+import NavOverlay from "./components/nav/NavOverlay";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
@@ -33,11 +33,11 @@ const App = () => {
   }, [setUserPosition]);
 
   return (
-    <main className="relative h-dvh">
+    <main className="relative h-dvh overflow-hidden">
       <MapDisplay mapRef={mapRef} />
       <LoginModal />
       <IconsDisplay />
-      <NavOverlay />
+      <NavOverlay mapRef={mapRef} />
       <FloorSwitcher />
       <Toolbar mapRef={mapRef} />
       <MyToastContainer />

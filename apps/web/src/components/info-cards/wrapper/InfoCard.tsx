@@ -1,5 +1,6 @@
 import { useQueryState } from "nuqs";
 import React from "react";
+import { useNavigate } from "react-router";
 import RoomCard from "@/components/info-cards/room-card/RoomCard";
 import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
 import useIsMobile from "@/hooks/useIsMobile";
@@ -19,7 +20,9 @@ const InfoCard = ({ mapRef }: Props) => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
 
   // TODO: determine why useNavigationParams causes constant rerenders
-  const [src] = useQueryState("src");
+  const [src, setSrc] = useQueryState("src");
+  const [_dst, setDst] = useQueryState("dst");
+  const navigate = useNavigate();
   const isNavOpen = !!src;
 
   if (isSearchOpen) {
@@ -30,19 +33,19 @@ const InfoCard = ({ mapRef }: Props) => {
     if (isNavOpen && !isMobile) {
       return {
         snapPoints: [],
-        element: () => <NavCardDesktop />,
+        element: () => <NavCardDesktop mapRef={mapRef} />,
       };
     }
     if (coordinate) {
       return {
-        snapPoints: [142],
+        snapPoints: [154],
         element: () => <CoordinateCard mapRef={mapRef} />,
       };
     }
     if (roomName) {
       // TODO: should change based on if has schedule
       return {
-        snapPoints: [166, 310, window.innerHeight],
+        snapPoints: [178, 310, window.innerHeight],
         element: () => <RoomCard />,
       };
     }
@@ -50,7 +53,7 @@ const InfoCard = ({ mapRef }: Props) => {
       // TODO: should change based on if has food eateries
       // eateries.length > 0 ? 460 : 288));
       return {
-        snapPoints: [142, 288, window.innerHeight],
+        snapPoints: [154, 288, window.innerHeight],
         element: () => <BuildingCard mapRef={mapRef} />,
       };
     }
@@ -64,9 +67,18 @@ const InfoCard = ({ mapRef }: Props) => {
 
   if (isMobile) {
     return (
-      <DraggableSheet snapPoints={snapPoints}>
-        {React.createElement(element)}
-      </DraggableSheet>
+      !isNavOpen && (
+        <DraggableSheet
+          snapPoints={snapPoints}
+          onClose={() => {
+            navigate("/");
+            setSrc(null);
+            setDst(null);
+          }}
+        >
+          {React.createElement(element)}
+        </DraggableSheet>
+      )
     );
   }
   return (

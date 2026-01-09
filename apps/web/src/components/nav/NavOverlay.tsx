@@ -6,7 +6,11 @@ import useBoundStore from "@/store";
 import type { Node } from "@/types/navTypes";
 import NavOverlayMobile from "./NavOverlayMobile";
 
-const NavOverlay = () => {
+const NavOverlay = ({
+  mapRef,
+}: {
+  mapRef: React.RefObject<mapkit.Map | null>;
+}) => {
   const isMobile = useIsMobile();
 
   const isNavigating = useBoundStore((state) => state.isNavigating);
@@ -105,7 +109,13 @@ const NavOverlay = () => {
   }
 
   if (isMobile) {
-    return <NavOverlayMobile isNavigating={isNavigating} startNav={startNav} />;
+    return (
+      <NavOverlayMobile
+        mapRef={mapRef}
+        isNavigating={isNavigating}
+        startNav={startNav}
+      />
+    );
   }
 };
 

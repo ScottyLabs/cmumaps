@@ -3,7 +3,6 @@ import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
 import SearchResults from "@/components/toolbar/SearchResults";
 import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
-import useIsMobile from "@/hooks/useIsMobile";
 import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
 import useNavigationParams from "@/hooks/useNavigationParams";
 import useBoundStore from "@/store";
@@ -37,7 +36,6 @@ const Searchbar = ({ mapRef }: Props) => {
   // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
   const { isNavOpen } = useNavigationParams();
-  const isMobile = useIsMobile();
 
   // Blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
@@ -85,20 +83,12 @@ const Searchbar = ({ mapRef }: Props) => {
   }, [isNavOpen, setSearchTarget]);
 
   // Hide searchbar if navigating, unless selecting a destination or source
-  if (
-    (isNavOpen && searchTarget !== "nav-dst" && searchTarget !== "nav-src") ||
-    isNavigating
-  ) {
+  if (isNavOpen || isNavigating) {
     return;
   }
 
   const renderSearchIcon = () => (
-    <img
-      alt="Search Icon"
-      src={searchIcon}
-      className="ml-4 size-4.5 opacity-60 invert"
-      width={20}
-    />
+    <img alt="Search Icon" src={searchIcon} className="ml-4" width={20} />
   );
 
   const renderInput = () => (
@@ -121,8 +111,8 @@ const Searchbar = ({ mapRef }: Props) => {
   const renderCloseButton = () => (
     <IoIosClose
       title="Close"
-      size={25}
-      className="absolute right-3"
+      size={30}
+      className="w-auto shrink-0 pr-2"
       onClick={() => {
         if (searchQuery === "") {
           setSearchTarget(undefined);
@@ -134,30 +124,19 @@ const Searchbar = ({ mapRef }: Props) => {
     />
   );
 
-  const renderBackground = () => {
-    return (
-      <button
-        type="button"
-        onClick={() => {
-          setSearchTarget(undefined);
-          setSearchQuery("");
-          hideSearch();
-        }}
-        className="fixed inset-0 z-50 bg-black/30 backdrop-blur-md"
-      />
-    );
-  };
-
   return (
-    <>
-      {searchTarget && isMobile && renderBackground()}
-      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white">
+    <div className="flex flex-col">
+      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white shadow-[1px_4px_4px_0_rgba(0,0,0,0.15)]">
         {renderSearchIcon()}
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
       </div>
-      <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
-    </>
+      {isSearchOpen && (
+        <div className="h-100 overflow-y-scroll rounded-lg">
+          <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
+        </div>
+      )}
+    </div>
   );
 };
 
