@@ -1,13 +1,28 @@
+from collections.abc import Callable
+
 import dotenv
 
-from clients import ALL_TABLE_NAMES, get_api_client_singleton
+from clients import ALL_TABLE_NAMES, TableName, get_api_client_singleton
 from logger import log_operation
 from logger.app_logger import get_app_logger
 from logger.utils import print_section
 
 from .tables.building import populate_building_table
+from .tables.floor import populate_floor_table
 
 dotenv.load_dotenv()
+
+
+def populate_table(table_name: TableName, populate_function: Callable) -> None:
+    logger = get_app_logger()
+    print_section(f"Populating {table_name} table")
+    try:
+        with log_operation(f"Populating {table_name} table"):
+            populate_function()
+    except Exception as e:
+        msg = f"Failed to populate {table_name} table"
+        logger.critical(msg)
+        raise RuntimeError(msg) from e
 
 
 def main() -> None:
@@ -19,29 +34,12 @@ def main() -> None:
         logger.critical(msg)
         raise RuntimeError(msg)
 
-    print_section("Populating building table")
-    try:
-        with log_operation("Populating building table"):
-            populate_building_table()
-    except Exception as e:
-        msg = "Failed to populate building table"
-        logger.critical(msg)
-        raise RuntimeError(msg) from e
-
-    print_section("Creating floors")
-    # create_floors(api_client)
-
-    print_section("Creating rooms")
-    # create_rooms(api_client)
-
-    print_section("Creating aliases")
-    # create_aliases(api_client)
-
-    print_section("Creating nodes")
-    # create_nodes(api_client)
-
-    print_section("Creating edges")
-    # create_edges(api_client)
+    populate_table("Building", populate_building_table)
+    populate_table("Floor", populate_floor_table)
+    # populate_table("Room", populate_room_table)
+    # populate_table("Alias", populate_alias_table)
+    # populate_table("Node", populate_node_table)
+    # populate_table("Edge", populate_edge_table)
 
 
 if __name__ == "__main__":

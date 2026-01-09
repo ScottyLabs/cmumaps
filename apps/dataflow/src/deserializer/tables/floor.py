@@ -2,65 +2,66 @@
 # Precondition: Building table must be populated
 # excludes outside
 
-import os
-import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
-import requests  # type: ignore
-from s3_utils.s3_utils import get_json_from_s3
+from clients import get_api_client_singleton, get_s3_client_singleton
+from logger import get_app_logger
 
 
-def drop_floor_table(clerk_manager):
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": ["Floor"]},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+def populate_floor_table() -> None:
+    # Get the logger and clients
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
+    s3_client = get_s3_client_singleton()
 
+    # Get the buildings data from S3
+    buildings_data = s3_client.get_json_file("floorplans/buildings.json")
+    if buildings_data is None:
+        msg = "Failed to get buildings data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
 
-def create_floors(clerk_manager):
+    # Get the placements data from S3
+    placements_data = s3_client.get_json_file("floorplans/placements.json")
+    if placements_data is None:
+        msg = "Failed to get placements data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
+
+    # Iterate through all buildings and create a list of floors data
+    # in the required format for the populate floor table api endpoint
     floors_data = []
-
-    buildings = get_json_from_s3("floorplans/buildings.json", return_data=True)
-    data = get_json_from_s3("floorplans/placements.json", return_data=True)
-
-    for buildingCode in data:
-        if buildingCode == "outside":
+    for building_code in placements_data:
+        # skip outside
+        if building_code == "outside":
             continue
 
-        for floorLevel in data[buildingCode]:
-            centerLatitude = data[buildingCode][floorLevel]["center"]["latitude"]
-            centerLongitude = data[buildingCode][floorLevel]["center"]["longitude"]
-            scale = data[buildingCode][floorLevel]["scale"]
-            angle = data[buildingCode][floorLevel]["angle"]
-            pdf_center = data[buildingCode][floorLevel]["pdfCenter"]
+        for floor_level in placements_data[building_code]:
+            placement = placements_data[building_code][floor_level]
+            center_latitude = placement["center"]["latitude"]
+            center_longitude = placement["center"]["longitude"]
+            scale = placement["scale"]
+            angle = placement["angle"]
+            pdf_center = placement["pdfCenter"]
 
-            defaultFloor = buildings[buildingCode]["defaultFloor"]
-            isDefault = floorLevel == defaultFloor
+            default_floor = buildings_data[building_code]["defaultFloor"]
+            is_default = floor_level == default_floor
 
             floor = {
-                "buildingCode": buildingCode,
-                "floorLevel": floorLevel,
-                "isDefault": isDefault,
+                "buildingCode": building_code,
+                "floorLevel": floor_level,
+                "isDefault": is_default,
                 "centerX": pdf_center["x"],
                 "centerY": pdf_center["y"],
-                "centerLatitude": centerLatitude,
-                "centerLongitude": centerLongitude,
+                "centerLatitude": center_latitude,
+                "centerLongitude": center_longitude,
                 "scale": scale,
                 "angle": angle,
             }
 
             floors_data.append(floor)
 
-    # Send request to server to populate Floor table
-    server_url = clerk_manager.server_url
-    response = requests.post(
-        f"{server_url}/populate-table/floors",
-        json=floors_data,
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response)
-    print(response.json())
+    # API call to populate the Floor table
+    if not api_client.populate_table("Floor", floors_data):
+        msg = "Failed to populate the Floor table"
+        logger.critical(msg)
+        raise RuntimeError(msg)
