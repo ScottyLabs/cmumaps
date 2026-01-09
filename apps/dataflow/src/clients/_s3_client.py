@@ -1,18 +1,31 @@
 import json
 import os
+from functools import lru_cache
 
 from minio import Minio
 
 from logger.app_logger import get_app_logger
 
 
+@lru_cache(maxsize=1)
+def get_s3_client_singleton() -> S3Client:
+    return S3Client()
+
+
 class S3Client:
     BUCKET_NAME = "cmumaps"
 
     def __init__(self) -> None:
+        self.logger = get_app_logger()
+
         self.access_key = os.getenv("S3_ACCESS_KEY")
         self.secret_key = os.getenv("S3_SECRET_KEY")
         self.s3_endpoint = os.getenv("S3_ENDPOINT")
+
+        if not self.s3_endpoint:
+            msg = "S3_ENDPOINT must be set"
+            self.logger.critical(msg)
+            raise ValueError(msg)
 
         self._client = Minio(
             self.s3_endpoint,

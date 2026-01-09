@@ -1,9 +1,36 @@
 import os
+from functools import lru_cache
+from typing import Literal
 
 import requests
 from clerk_backend_api import Clerk
 
 from logger import get_app_logger
+
+type TableName = Literal[
+    "Building",
+    "Floor",
+    "Room",
+    "Alias",
+    "Node",
+    "Edge",
+    "Poi",
+]
+
+ALL_TABLE_NAMES: list[TableName] = [
+    "Building",
+    "Floor",
+    "Room",
+    "Alias",
+    "Node",
+    "Edge",
+    "Poi",
+]
+
+
+@lru_cache(maxsize=1)
+def get_api_client_singleton() -> ApiClient:
+    return ApiClient()
 
 
 class ApiClient:
@@ -41,8 +68,8 @@ class ApiClient:
             self._cached_token = token
             return token
 
-    def drop_all_tables(self) -> None:
-        table_names = ["Building", "Floor", "Room", "Alias", "Node", "Edge", "Poi"]
+    def drop_tables(self, table_names: list[TableName]) -> None:
+        """Drop specified tables."""
         response = requests.delete(
             f"{self.server_url}/drop-tables",
             json={"tableNames": table_names},
