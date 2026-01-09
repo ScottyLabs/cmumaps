@@ -6,10 +6,10 @@ WORKDIR /app
 COPY apps/dataflow .
 
 # Install deps
-RUN uv sync
+RUN uv sync --no-dev
 
 # Set environment variable to print output to console
 ENV PYTHONUNBUFFERED=1
 
 # Run the script
-CMD ["uv", "run", "process-25live"]
+CMD ["uv", "run", "--no-dev", "process-25live"]
