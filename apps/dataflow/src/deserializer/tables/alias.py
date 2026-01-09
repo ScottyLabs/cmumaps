@@ -1,27 +1,27 @@
-# create Alias table of the database using floorPlanMap.json
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
-import requests  # type: ignore
-from s3_utils.s3_utils import get_json_from_s3
+from clients import get_api_client_singleton, get_s3_client_singleton
+from logger import get_app_logger
 
 
-# Drop and populate Alias table
-def drop_alias_table(clerk_manager):
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": ["Alias"]},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+def populate_alias_table() -> None:
+    """
+    Populate the Alias table using floorplans.json.
 
+    Precondition: Room table must be populated.
+    """
+    # Get the logger and clients
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
+    s3_client = get_s3_client_singleton()
 
-def create_aliases(clerk_manager):
-    data = get_json_from_s3("floorplans/floorplans.json", return_data=True)
+    # Get the floorplans data from S3
+    data = s3_client.get_json_file("floorplans/floorplans.json")
+    if data is None:
+        msg = "Failed to get floorplans data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
 
+    # Iterate through all buildings and create a list of alias data
+    # in the required format for the populate alias table api endpoint
     alias_data = []
     for building in data:
         # skip empty buildings
@@ -35,31 +35,31 @@ def create_aliases(clerk_manager):
         for floor in data[building]:
             for room_id in data[building][floor]:
                 room = data[building][floor][room_id]
-                displayAlias = (
-                    ""
-                    if "aliases" not in room or not room["aliases"]
-                    else room["aliases"][0]
-                )
+                aliases = create_aliases(room)
+                alias_data.extend(aliases)
 
-                roomId = room["id"]
-                if "aliases" not in room:
-                    continue
-                for alias in room["aliases"]:
-                    if alias:
-                        alias_data.append(
-                            {
-                                "alias": alias,
-                                "roomId": roomId,
-                                "isDisplayAlias": alias == displayAlias,
-                            }
-                        )
+    # API call to populate the Alias table
+    response = api_client.populate_table("Alias", alias_data)
+    if not response:
+        msg = "Failed to populate the Alias table"
+        logger.critical(msg)
+        raise RuntimeError(msg)
 
-    # Send request to server to populate Alias table
-    server_url = clerk_manager.server_url
-    response = requests.post(
-        f"{server_url}/populate-table/alias",
-        json=alias_data,
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response)
-    print(response.json())
+
+def create_aliases(room: dict) -> list[dict]:
+    """Create a list of aliases for a room."""
+    # skip rooms without aliases
+    if not room.get("aliases"):
+        return []
+
+    display_alias = room["aliases"][0]
+
+    return [
+        {
+            "alias": alias,
+            "roomId": room["id"],
+            "isDisplayAlias": alias == display_alias,
+        }
+        for alias in room["aliases"]
+        if alias  # skip empty aliases
+    ]

@@ -1,13 +1,13 @@
-# Script to populate the Floor table of the database using placements.json
-# Precondition: Building table must be populated
-# excludes outside
-
-
 from clients import get_api_client_singleton, get_s3_client_singleton
 from logger import get_app_logger
 
 
 def populate_floor_table() -> None:
+    """
+    Populate the Floor table using placements.json and buildings.json.
+
+    Precondition: Building table must be populated.
+    """
     # Get the logger and clients
     logger = get_app_logger()
     api_client = get_api_client_singleton()

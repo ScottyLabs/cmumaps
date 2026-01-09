@@ -5,6 +5,7 @@ from logger import get_app_logger
 
 
 def populate_building_table() -> None:
+    """Populate the Building table using buildings.json."""
     # Get the logger and clients
     logger = get_app_logger()
     api_client = get_api_client_singleton()

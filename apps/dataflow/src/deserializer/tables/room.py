@@ -1,5 +1,3 @@
-# Script to populate the Rooms table
-# skip empty buildings and outside
 import json
 
 from clients import get_api_client_singleton, get_s3_client_singleton
@@ -7,6 +5,11 @@ from logger import get_app_logger
 
 
 def populate_room_table() -> None:
+    """
+    Populate the Room table using floorplans.json.
+
+    Precondition: Floor table must be populated.
+    """
     # Get the logger and clients
     logger = get_app_logger()
     api_client = get_api_client_singleton()

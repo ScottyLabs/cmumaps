@@ -87,4 +87,9 @@ class ApiClient:
             headers={"Authorization": f"Bearer {self._get_token()}"},
             timeout=self.TIMEOUT,
         )
-        return response.status_code == self.SUCCESS_STATUS_CODE
+
+        if response.status_code != self.SUCCESS_STATUS_CODE:
+            msg = f"Failed to populate {table_name} table: {response.json()}"
+            raise RuntimeError(msg)
+
+        return True

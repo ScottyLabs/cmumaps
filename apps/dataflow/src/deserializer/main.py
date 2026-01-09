@@ -7,6 +7,7 @@ from logger import log_operation
 from logger.app_logger import get_app_logger
 from logger.utils import print_section
 
+from .tables.alias import populate_alias_table
 from .tables.building import populate_building_table
 from .tables.floor import populate_floor_table
 from .tables.room import populate_room_table
@@ -18,15 +19,9 @@ dotenv.load_dotenv()
 
 
 def populate_table(table_name: TableName, populate_function: Callable) -> None:
-    logger = get_app_logger()
     print_section(f"Populating {table_name} table")
-    try:
-        with log_operation(f"Populating {table_name} table"):
-            populate_function()
-    except Exception as e:
-        msg = f"Failed to populate {table_name} table"
-        logger.critical(msg)
-        raise RuntimeError(msg) from e
+    with log_operation(f"populate {table_name} table"):
+        populate_function()
 
 
 def main() -> None:
@@ -41,6 +36,6 @@ def main() -> None:
     populate_table("Building", populate_building_table)
     populate_table("Floor", populate_floor_table)
     populate_table("Room", populate_room_table)
-    # populate_table("Alias", populate_alias_table)
+    populate_table("Alias", populate_alias_table)
     # populate_table("Node", populate_node_table)
     # populate_table("Edge", populate_edge_table)
