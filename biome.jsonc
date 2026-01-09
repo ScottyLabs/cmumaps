@@ -273,7 +273,7 @@
         "noDynamicNamespaceImportAccess": "error",
         "noImgElement": "error",
         "noNamespaceImport": "off",
-        "noReExportAll": "error",
+        "noReExportAll": "off",
         "noUnwantedPolyfillio": "error",
         "useGoogleFontPreconnect": "error",
         "useSolidForComponent": "off",

@@ -1,1 +1,1 @@
-export * from "./mapConstants";
+export * from "./mapConstants.ts";

@@ -1,4 +1,5 @@
 // CMU Campus
+/** biome-ignore-all lint/style/useNumericSeparators: more readable without separators */
 export const INITIAL_REGION = {
   centerLatitude: 40.444,
   centerLongitude: -79.945,

@@ -62,6 +62,7 @@ const OVERRIDES = {
     noBarrelFile: "off",
     noNamespaceImport: "off",
     useSolidForComponent: "off",
+    noReExportAll: "off", // Not a performance issue for our use case
   },
   security: {
     noSecrets: "off",
