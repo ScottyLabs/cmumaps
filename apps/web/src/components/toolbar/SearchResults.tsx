@@ -45,7 +45,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const { setSrc, setDst } = useNavigationParams();
   const { hasAccess } = useUser();
 
-  const { data: searchResults } = $rapi.useQuery(
+  const { data: searchResults } = $api.useQuery(
     "get",
     "/search",
     {
@@ -88,7 +88,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const renderBuildingResult = (result: SearchResultProps) => {
     return (
       <>
-        <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
+        <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
           <img width={24} src={buildingIcon} alt="classroom" />
         </div>
         <span className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
@@ -113,7 +113,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
     return (
       <>
-        <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
+        <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
           <img width={24} src={icon} alt="classroom" />
         </div>
         <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
@@ -135,7 +135,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const renderUserLocationResult = () => {
     return (
       <>
-        <div className="mr-2 ml-4 flex h-7 w-7 flex-shrink-0 flex-col items-center justify-center rounded-md text-white">
+        <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
           <img width={24} src={userIcon} alt="classroom" />
         </div>
         <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">

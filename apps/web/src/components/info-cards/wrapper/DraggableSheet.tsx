@@ -63,7 +63,7 @@ const DraggableSheet = ({
 
   useEffect(() => {
     controls.set({ y: window.innerHeight });
-  }, []);
+  }, [controls]);
 
   /* biome-ignore lint/correctness/useExhaustiveDependencies: re-rendering whenever navigate
    * changes would lock draggableSheet in Collapsed state */

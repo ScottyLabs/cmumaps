@@ -124,7 +124,7 @@ const NavDirectionsList = () => {
             {
               distance: instruction.distance,
               action: instruction.action,
-              id: instruction.node_id,
+              id: instruction.nodeId,
             },
             i,
           ),
