@@ -7,7 +7,6 @@ const envSchema = z.object({
   VITE_MAPKIT_TOKEN: z.string().optional(),
   VITE_PUBLIC_POSTHOG_HOST: z.string().optional(),
   VITE_PUBLIC_POSTHOG_KEY: z.string().optional(),
-  VITE_RUST_SERVER_URL: z.url(),
   VITE_SERVER_URL: z.url(),
 });
 
