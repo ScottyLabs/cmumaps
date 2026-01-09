@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 set -e
 
 # Install UV for Python package management:
@@ -8,6 +8,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Install Bun for JavaScript package management:
 # https://bun.com/get
 curl -fsSL https://bun.sh/install | bash
+export PATH="$HOME/.bun/bin:$PATH"
+echo 'export PATH="$HOME/.bun/bin:$PATH"' >>~/.zshrc
 
 # Install shfmt for shell script formatting
 # https://formulae.brew.sh/formula/shfmt
