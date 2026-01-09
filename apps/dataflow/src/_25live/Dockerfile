@@ -12,4 +12,4 @@ RUN uv sync
 ENV PYTHONUNBUFFERED=1
 
 # Run the script
-CMD ["uv", "run", "src/25live/main.py"]
+CMD ["uv", "run", "process-25live"]
