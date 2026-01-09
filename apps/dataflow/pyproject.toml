@@ -19,6 +19,7 @@ dev = [
   "ruff>=0.14.11",
   "ty>=0.0.10",
   "types-colorama>=0.4.15.20250801",
+  "types-requests>=2.32.4.20260107",
 ]
 
 [build-system]
