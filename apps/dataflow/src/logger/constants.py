@@ -1,0 +1,3 @@
+LOGGER_NAME = "cmumaps"
+SUCCESS_LEVEL = 25
+PRINT_LEVEL = 5

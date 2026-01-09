@@ -150,6 +150,15 @@ wheels = [
 ]
 
 [[package]]
+name = "colorama"
+version = "0.4.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
+]
+
+[[package]]
 name = "cryptography"
 version = "45.0.7"
 source = { registry = "https://pypi.org/simple" }
@@ -190,6 +199,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "clerk-backend-api" },
+    { name = "colorama" },
     { name = "minio" },
     { name = "pyjwt" },
     { name = "python-dotenv" },
@@ -201,11 +211,13 @@ dev = [
     { name = "mypy" },
     { name = "ruff" },
     { name = "ty" },
+    { name = "types-colorama" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "clerk-backend-api", specifier = ">=4.2.0" },
+    { name = "colorama", specifier = ">=0.4.6" },
     { name = "minio", specifier = ">=7.2.20" },
     { name = "pyjwt", specifier = ">=2.10.1" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
@@ -217,6 +229,7 @@ dev = [
     { name = "mypy", specifier = ">=1.19.1" },
     { name = "ruff", specifier = ">=0.14.11" },
     { name = "ty", specifier = ">=0.0.10" },
+    { name = "types-colorama", specifier = ">=0.4.15.20250801" },
 ]
 
 [[package]]
@@ -513,6 +526,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/35/67/5b6906fccef654c7e801d6ac8dcbe0d493e1f04c38127f82a5e6d7e0aa0e/ty-0.0.10-py3-none-win32.whl", hash = "sha256:f51b6fd485bc695d0fdf555e69e6a87d1c50f14daef6cb980c9c941e12d6bcba", size = 9271806, upload-time = "2026-01-07T22:08:10.08Z" },
     { url = "https://files.pythonhosted.org/packages/42/36/82e66b9753a76964d26fd9bc3514ea0abce0a5ba5ad7d5f084070c6981da/ty-0.0.10-py3-none-win_amd64.whl", hash = "sha256:16deb77a72cf93b89b4d29577829613eda535fbe030513dfd9fba70fe38bc9f5", size = 10130520, upload-time = "2026-01-07T23:04:11.759Z" },
     { url = "https://files.pythonhosted.org/packages/63/52/89da123f370e80b587d2db8551ff31562c882d87b32b0e92b59504b709ae/ty-0.0.10-py3-none-win_arm64.whl", hash = "sha256:7495288bca7afba9a4488c9906466d648ffd3ccb6902bc3578a6dbd91a8f05f0", size = 9626026, upload-time = "2026-01-07T23:04:17.91Z" },
+]
+
+[[package]]
+name = "types-colorama"
+version = "0.4.15.20250801"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/37/af713e7d73ca44738c68814cbacf7a655aa40ddd2e8513d431ba78ace7b3/types_colorama-0.4.15.20250801.tar.gz", hash = "sha256:02565d13d68963d12237d3f330f5ecd622a3179f7b5b14ee7f16146270c357f5", size = 10437, upload-time = "2025-08-01T03:48:22.605Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/3a/44ccbbfef6235aeea84c74041dc6dfee6c17ff3ddba782a0250e41687ec7/types_colorama-0.4.15.20250801-py3-none-any.whl", hash = "sha256:b6e89bd3b250fdad13a8b6a465c933f4a5afe485ea2e2f104d739be50b13eea9", size = 10743, upload-time = "2025-08-01T03:48:21.774Z" },
 ]
 
 [[package]]

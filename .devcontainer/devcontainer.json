@@ -35,6 +35,7 @@
           "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "biomejs.biome",
+        "python.defaultInterpreterPath": "apps/dataflow/.venv/bin/python3",
         "[typescript]": {
           "editor.defaultFormatter": "biomejs.biome"
         },

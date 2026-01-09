@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
   "clerk-backend-api>=4.2.0",
+  "colorama>=0.4.6",
   "minio>=7.2.20",
   "pyjwt>=2.10.1",
   "python-dotenv>=1.2.1",
@@ -13,7 +14,12 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["mypy>=1.19.1", "ruff>=0.14.11", "ty>=0.0.10"]
+dev = [
+    "mypy>=1.19.1",
+    "ruff>=0.14.11",
+    "ty>=0.0.10",
+    "types-colorama>=0.4.15.20250801",
+]
 
 [build-system]
 requires = ["hatchling"]
