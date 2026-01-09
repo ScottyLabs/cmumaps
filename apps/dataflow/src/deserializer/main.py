@@ -1,50 +1,42 @@
-# Script that combines other json-to-database scripts to populate entire database
-# python floorplans/deserializer/database_population.py <env>
-import os
-import sys
+import dotenv
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from clients.api_client import ApiClient
+from logger import log_operation
+from logger.utils import print_section
 
-import requests  # type: ignore
-from alias import create_aliases
-from building import create_buildings
-from edge import create_edges
-from floor import create_floors
-from node import create_nodes
-from room import create_rooms
+# from .alias import create_aliases
+# from .building import create_buildings
+# from .edge import create_edges
+# from .floor import create_floors
+# from .node import create_nodes
+# from .room import create_rooms
 
-from auth_utils.api_client import ClerkTokenManager
+dotenv.load_dotenv()
 
 
-def drop_all_tables(clerk_manager):
-    table_names = ["Building", "Floor", "Room", "Alias", "Node", "Edge", "Poi"]
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": table_names},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+def main() -> None:
+    api_client = ApiClient()
 
+    with log_operation("drop all tables"):
+        api_client.drop_all_tables()
 
-def main():
-    clerk_manager = ClerkTokenManager(env_name)
+    print_section("Creating buildings")
+    # create_buildings(api_client)
 
-    drop_all_tables(clerk_manager)
+    print_section("Creating floors")
+    # create_floors(api_client)
 
-    # Populate all tables
-    create_buildings(clerk_manager)
-    print("created buildings")
-    create_floors(clerk_manager)
-    print("created floors")
-    create_rooms(clerk_manager)
-    print("created rooms")
-    create_aliases(clerk_manager)
-    print("created aliases")
-    create_nodes(clerk_manager)
-    print("created nodes")
-    create_edges(clerk_manager)
-    print("created edges")
+    print_section("Creating rooms")
+    # create_rooms(api_client)
+
+    print_section("Creating aliases")
+    # create_aliases(api_client)
+
+    print_section("Creating nodes")
+    # create_nodes(api_client)
+
+    print_section("Creating edges")
+    # create_edges(api_client)
 
 
 if __name__ == "__main__":
