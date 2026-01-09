@@ -33,8 +33,9 @@ def populate_room_table() -> None:
         if building == "outside":
             continue
 
-        rooms_data = []
+        # Make a request for every floor to bypass the request payload limit
         for floor in floorplans[building]:
+            rooms_data = []
             for room_id in floorplans[building][floor]:
                 room = floorplans[building][floor][room_id]
                 label_latitude = room["labelPosition"]["latitude"]
@@ -58,8 +59,11 @@ def populate_room_table() -> None:
 
                 rooms_data.append(room)
 
-        # API call to populate the Room table
-        if not api_client.populate_table("Room", rooms_data):
-            msg = "Failed to populate the Room table"
-            logger.critical(msg)
-            raise RuntimeError(msg)
+            # API call to populate the Room table
+            if not api_client.populate_table("Room", rooms_data):
+                msg = "Failed to populate the Room table"
+                logger.critical(msg)
+                raise RuntimeError(msg)
+
+            # Log the progress
+            logger.debug("Populated rooms for %s-%s", building, floor)

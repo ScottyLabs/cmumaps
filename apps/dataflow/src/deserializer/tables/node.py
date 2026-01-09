@@ -1,6 +1,8 @@
 from clients import get_api_client_singleton, get_s3_client_singleton
 from logger import get_app_logger
 
+MAX_NODES_PER_REQUEST = 5000  # Tested to work with 1MB request payload limit
+
 
 def populate_node_table() -> None:
     """
@@ -14,8 +16,8 @@ def populate_node_table() -> None:
     s3_client = get_s3_client_singleton()
 
     # Get the all-graph data from S3
-    data = s3_client.get_json_file("floorplans/all-graph.json")
-    if data is None:
+    graph = s3_client.get_json_file("floorplans/all-graph.json")
+    if graph is None:
         msg = "Failed to get all-graph data from S3"
         logger.critical(msg)
         raise ValueError(msg)
@@ -23,8 +25,9 @@ def populate_node_table() -> None:
     # Iterate through all nodes and create a list of nodes data
     # in the required format for the populate node table api endpoint
     node_data = []
-    for node_id in data:
-        node = data[node_id]
+    batch_count = 0  # Count of batches of nodes processed
+    for node_id in graph:
+        node = graph[node_id]
         latitude = node["coordinate"]["latitude"]
         longitude = node["coordinate"]["longitude"]
         building_code = node["floor"]["buildingCode"]
@@ -42,8 +45,26 @@ def populate_node_table() -> None:
 
         node_data.append(node)
 
-    # Send request to server to populate Node table
+        # If the number of nodes is greater than the limit, populate the Node table
+        # so we don't exceed the request payload limit
+        if len(node_data) >= MAX_NODES_PER_REQUEST:
+            # API call to populate the Node table
+            if not api_client.populate_table("Node", node_data):
+                msg = "Failed to populate the Node table"
+                logger.critical(msg)
+                raise RuntimeError(msg)
+
+            # Log the progress
+            logger.debug("Populated %d nodes", batch_count * MAX_NODES_PER_REQUEST)
+            batch_count += 1
+            node_data = []
+
+    # API call to populate the rest of the nodes
     if not api_client.populate_table("Node", node_data):
         msg = "Failed to populate the Node table"
         logger.critical(msg)
         raise RuntimeError(msg)
+
+    # Log the progress
+    total_nodes = batch_count * MAX_NODES_PER_REQUEST + len(node_data)
+    logger.debug("Populated %d nodes", total_nodes)

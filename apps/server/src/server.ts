@@ -16,7 +16,7 @@ import { socketAuth } from "./middleware/socketAuth";
 import { WebSocketService } from "./services/webSocketService";
 
 const app = express();
-app.use(express.json({ limit: "8mb" }));
+app.use(express.json({ limit: "1mb" }));
 
 // Define CORS options
 const corsOptions: CorsOptions = {
