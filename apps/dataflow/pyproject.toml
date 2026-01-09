@@ -40,7 +40,7 @@ packages = [
 [project.scripts]
 populate-database = "deserializer:main"
 process-25live = "_25live:main"
-lint = "lint:main"
+lint = "linter:main"
 scrape-fms = "scraper.fms:main"
 
 [tool.mypy]

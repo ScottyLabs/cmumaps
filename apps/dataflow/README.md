@@ -16,29 +16,63 @@ uv run --env-file <ENV_FILE> <SCRIPT_NAME>
 from the [event-scraper](https://github.com/ScottyLabs/event-scraper) s3 bucket
 and populating the database with the data.
 
-## scraper
+## Cleaner
 
-`scraper/` is responsible for scraping floorplan data from the FMS website and
-uploading it to the S3 bucket.
+`cleaner/` is responsible for archiving one-time scripts for cleaning data.
 
-## processor
+## Clients
 
-`processor/` is responsible for processing the scraped floorplan data, including
-repositionig the svgs and merging the data into existing floorplan data.
+`clients/` contains the clients for interacting with the CMU Maps API and S3 bucket.
 
 ## deserializer
 
 `deserializer/` is responsible for deserializing the JSON files from the S3 bucket
 and populating the database with the data.
 
-## serializer
+## Linter
+
+`linter/` exists to enable the `lint` script in `pyproject.toml`.
+
+## Logger
+
+`logger/` contains the logging module for the dataflow application.
+
+## Processor
+
+`processor/` is responsible for processing the scraped floorplan data.
+
+### Generator
+
+`processor/generator/` is responsible for generating the floorplan data from the
+scraped data.
+
+### Merger
+
+`processor/merger/` is responsible for merging the scraped data into the
+existing floorplan data.
+
+## Scraper
+
+`scraper/` is responsible for scraping floorplan data from various sources and
+uploading it to the S3 bucket
+
+### ESIM
+
+`scraper/esim/` is responsible for scraping building data from the ESIM website.
+
+### FMS
+
+`scraper/fms/` is responsible for scraping floorplan data from the FMS website.
+
+### OSM
+
+`scraper/osm/` is responsible for scraping graph data from the OSM website.
+
+## Serializer
 
 `serializer/` is responsible for serializing data from the database to JSON files.
 
-## clients
+## Additional Information
 
-`clients/` contains the clients for interacting with the CMU Maps API and S3 bucket.
-
-## logger
-
-`logger/` contains the logging functionality for the dataflow application.
+See the [Dataflow wiki page](https://github.com/ScottyLabs/wiki/wiki/Dataflow)
+for more information.
