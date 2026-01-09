@@ -2,52 +2,49 @@
 # excludes outside, neighbors who are missing in node or out node,
 # edges whose in node or out node are missing a roomId
 # python scripts/json-to-database/edge.py
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
-import requests  # type: ignore
-from s3_utils.s3_utils import get_json_from_s3
+from clients import get_api_client_singleton, get_s3_client_singleton
+from logger import get_app_logger
 
 
-# Drop and populate Edge table
-def drop_edge_table(clerk_manager):
-    server_url = clerk_manager.server_url
-    response = requests.delete(
-        f"{server_url}/drop-tables",
-        json={"tableNames": ["Edge"]},
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response.json())
+def populate_edge_table() -> None:
+    """
+    Populate the Edge table using all-graph.json.
 
+    Precondition: Node table must be populated.
+    """
+    # Get the logger and clients
+    logger = get_app_logger()
+    api_client = get_api_client_singleton()
+    s3_client = get_s3_client_singleton()
 
-def create_edges(clerk_manager):
-    data = get_json_from_s3("floorplans/all-graph.json", return_data=True)
+    # Get the all-graph data from S3
+    data = s3_client.get_json_file("floorplans/all-graph.json")
+    if data is None:
+        msg = "Failed to get all-graph data from S3"
+        logger.critical(msg)
+        raise ValueError(msg)
 
+    # Iterate through all nodes and create a list of edges data
+    # in the required format for the populate edge table api endpoint
     edge_data = []
-    for nodeId in data:
-        if "neighbors" not in data[nodeId]:
-            print(f"Node {nodeId} has no neighbors")
+    for node_id in data:
+        if "neighbors" not in data[node_id]:
             continue
-        neighbors = data[nodeId]["neighbors"]
+
+        neighbors = data[node_id]["neighbors"]
         for neighbor_id in neighbors:
-            inNodeId = nodeId
-            outNodeId = neighbor_id
+            in_node_id = node_id
+            out_node_id = neighbor_id
 
-            edge_node = {"inNodeId": inNodeId, "outNodeId": outNodeId}
+            edge_node = {"inNodeId": in_node_id, "outNodeId": out_node_id}
 
-            if outNodeId not in data:
+            if out_node_id not in data:
                 continue
 
             edge_data.append(edge_node)
 
-    # Send request to server to populate Edge table
-    server_url = clerk_manager.server_url
-    response = requests.post(
-        f"{server_url}/populate-table/edges",
-        json=edge_data,
-        headers={"Authorization": f"Bearer {clerk_manager.get_clerk_token()}"},
-    )
-    print(response)
-    print(response.json())
+    # API call to populate the Edge table
+    if not api_client.populate_table("Edge", edge_data):
+        msg = "Failed to populate the Edge table"
+        logger.critical(msg)
+        raise RuntimeError(msg)

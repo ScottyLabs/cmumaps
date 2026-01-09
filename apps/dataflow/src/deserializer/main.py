@@ -9,6 +9,7 @@ from logger.utils import print_section
 
 from .tables.alias import populate_alias_table
 from .tables.building import populate_building_table
+from .tables.edge import populate_edge_table
 from .tables.floor import populate_floor_table
 from .tables.node import populate_node_table
 from .tables.room import populate_room_table
@@ -39,4 +40,4 @@ def main() -> None:
     populate_table("Room", populate_room_table)
     populate_table("Alias", populate_alias_table)
     populate_table("Node", populate_node_table)
-    # populate_table("Edge", populate_edge_table)
+    populate_table("Edge", populate_edge_table)
