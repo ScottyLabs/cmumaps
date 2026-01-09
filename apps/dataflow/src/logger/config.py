@@ -26,7 +26,7 @@ def get_logger_config() -> dict[str, Any]:
         },
         "formatters": {
             formatter_name: {
-                "()": "logger.components.ColorFormatter",
+                "()": "logger.components.RailwayLogFormatter",
             }
         },
         "filters": {filter_name: {"()": "logger.components.LogStatusFilter"}},

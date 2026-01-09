@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Any, ClassVar
 
@@ -63,3 +64,13 @@ class ColorFormatter(logging.Formatter):
             return f"{color}{record.getMessage()}{Style.RESET_ALL}"
 
         return f"{color}{base}{Style.RESET_ALL}"
+
+
+class RailwayLogFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord) -> str:
+        log_record = {
+            "time": self.formatTime(record),
+            "level": record.levelname,
+            "message": record.getMessage(),
+        }
+        return json.dumps(log_record)
