@@ -66,10 +66,20 @@ class ColorFormatter(logging.Formatter):
 
 
 class RailwayLogFormatter(logging.Formatter):
+    LEVEL_NAME_MAP: ClassVar = {
+        PRINT_LEVEL: "debug",
+        logging.DEBUG: "debug",
+        logging.INFO: "info",
+        SUCCESS_LEVEL: "info",
+        logging.WARNING: "warning",
+        logging.ERROR: "error",
+        logging.CRITICAL: "error",
+    }
+
     def format(self, record: logging.LogRecord) -> str:
         log_record = {
             "time": self.formatTime(record),
-            "level": record.levelname,
+            "level": self.LEVEL_NAME_MAP[record.levelno],
             "message": record.getMessage(),
         }
         return json.dumps(log_record)
