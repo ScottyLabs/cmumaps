@@ -21,12 +21,14 @@
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "charliermarsh.ruff",
+        "ms-python.mypy-type-checker",
+        "astral-sh.ty",
+        "vscode-icons-team.vscode-icons",
         "mkhl.shfmt",
         "davidanson.vscode-markdownlint",
-        "prisma.prisma",
         "redhat.vscode-yaml",
-        "vscode-icons-team.vscode-icons",
-        "tamasfe.even-better-toml"
+        "tamasfe.even-better-toml",
+        "prisma.prisma"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
