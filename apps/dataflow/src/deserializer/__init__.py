@@ -1,3 +1,3 @@
-from .database_population import main
+from .main import main
 
 __all__ = ["main"]
