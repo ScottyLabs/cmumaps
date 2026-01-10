@@ -51,7 +51,6 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "check": "tsc -b && biome check",
     "dev": "vite",
     "format": "biome format",
     "lint": "biome lint",
