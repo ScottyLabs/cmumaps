@@ -3,7 +3,6 @@ from functools import lru_cache
 from typing import Literal
 
 import requests
-from clerk_backend_api import Clerk
 
 from logger import get_app_logger
 
@@ -37,20 +36,25 @@ class ApiClient:
     TIMEOUT = 10
     SUCCESS_STATUS_CODE = 200
 
+    TOKEN_URL = (
+        "https://idp.scottylabs.org/realms/scottylabs/protocol/openid-connect/token"  # noqa: S105
+    )
+
     def __init__(self) -> None:
         self.logger = get_app_logger()
 
         # Load required environment-specific variables
         self.server_url = os.getenv("SERVER_URL")
-        self.machine_secret = os.getenv("CLERK_MACHINE_SECRET")
+        self.auth_client_id = os.getenv("AUTH_CLIENT_ID")
+        self.auth_client_secret = os.getenv("AUTH_CLIENT_SECRET")
 
         if not self.server_url:
             msg = "SERVER_URL must be set"
             self.logger.critical(msg)
             raise ValueError(msg)
 
-        if not self.machine_secret:
-            msg = "CLERK_MACHINE_SECRET must be set"
+        if not self.auth_client_id or not self.auth_client_secret:
+            msg = "AUTH_CLIENT_ID and AUTH_CLIENT_SECRET must be set"
             self.logger.critical(msg)
             raise ValueError(msg)
 
@@ -61,13 +65,23 @@ class ApiClient:
         if self._cached_token:
             return self._cached_token
 
-        with Clerk(bearer_auth=self.machine_secret) as clerk:
-            res = clerk.m2m.create_token()
-            token = res.token
+        data = {
+            "grant_type": "client_credentials",
+            "client_id": self.auth_client_id,
+            "client_secret": self.auth_client_secret,
+        }
 
-            # Cache in memory
-            self._cached_token = token
-            return token
+        response = requests.post(self.TOKEN_URL, data=data, timeout=self.TIMEOUT)
+        response.raise_for_status()
+        token_data = response.json()
+
+        self._cached_token = token_data.get("access_token")
+        if not self._cached_token:
+            msg = "Failed to get token"
+            self.logger.critical(msg)
+            raise RuntimeError(msg)
+
+        return self._cached_token
 
     def drop_tables(self, table_names: list[TableName]) -> bool:
         """Drop specified tables."""

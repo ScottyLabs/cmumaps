@@ -13,7 +13,7 @@ import { env } from "../env.ts";
 
 export const AUTH_ISSUER = "https://idp.scottylabs.org/realms/scottylabs";
 export const AUTH_JWKS_URI =
-  "https://idp.scottylabs.org/realms/scottylabs/.well-known/openid-configuration/jwks";
+  "https://idp.scottylabs.org/realms/scottylabs/protocol/openid-connect/certs";
 
 declare global {
   // biome-ignore lint/style/noNamespace: Express uses global namespace
