@@ -1,6 +1,7 @@
-import { SignInButton, SignOutButton } from "@clerk/clerk-react";
+import { FaRegUserCircle } from "react-icons/fa";
 import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
+import { env } from "@/env";
 import { useUser } from "@/hooks/useUser";
 
 interface MenuButtonProps {
@@ -10,10 +11,10 @@ interface MenuButtonProps {
 }
 
 const UserMenu = () => {
-  const { isSignedIn, user, imageUrl } = useUser();
+  const user = useUser();
 
   const renderUserProfile = () => {
-    if (!(isSignedIn && user)) {
+    if (!user) {
       return (
         <div className="text-center font-semibold text-gray-800 text-sm">
           Not signed in
@@ -23,13 +24,7 @@ const UserMenu = () => {
 
     return (
       <div className="flex gap-5">
-        <img
-          className="rounded-full"
-          src={imageUrl}
-          alt="User Profile"
-          width={48}
-          height={48}
-        />
+        <FaRegUserCircle size={48} />
         <div>
           <div className="font-inter font-medium text-[1.25em] text-foreground-neutral-primary">
             {user.name}
@@ -42,7 +37,7 @@ const UserMenu = () => {
     );
   };
 
-  const menuButtons: MenuButtonProps[] = isSignedIn
+  const menuButtons: MenuButtonProps[] = user
     ? [
         {
           icon: signOutIcon,
@@ -62,20 +57,26 @@ const UserMenu = () => {
     { icon, label, type }: MenuButtonProps,
     index: number,
   ) => {
-    const Cmp = type === "signIn" ? SignInButton : SignOutButton;
+    const handleClick = () => {
+      if (type === "signIn") {
+        window.location.href = `${env.VITE_SERVER_URL}/login?redirect_uri=${window.location.href}`;
+      } else if (type === "signOut") {
+        window.location.href = `${env.VITE_SERVER_URL}/logout?redirect_uri=${window.location.href}`;
+      }
+    };
+
     return (
       <div key={index}>
-        <Cmp>
-          <button
-            type="button"
-            className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-white px-3 py-2 text-gray-700 text-sm active:bg-gray-100"
-          >
-            <img src={icon} alt="User Settings Button" width={24} height={24} />
-            <span className="font-inter font-normal text-[1rem] text-foreground-neutral-primary">
-              {label}
-            </span>
-          </button>
-        </Cmp>
+        <button
+          type="button"
+          className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-white px-3 py-2 text-gray-700 text-sm active:bg-gray-100"
+          onClick={handleClick}
+        >
+          <img src={icon} alt="User Settings Button" width={24} height={24} />
+          <span className="font-inter font-normal text-[1rem] text-foreground-neutral-primary">
+            {label}
+          </span>
+        </button>
       </div>
     );
   };

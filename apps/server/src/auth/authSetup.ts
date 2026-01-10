@@ -21,8 +21,10 @@ declare global {
     interface User {
       sub: string;
       email?: string;
+      name?: string;
       given_name?: string;
       groups?: string[];
+      imageUrl?: string;
     }
   }
 }

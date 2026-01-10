@@ -21,7 +21,7 @@ const NavOverlay = ({
   const showLogin = useBoundStore((state) => state.showLogin);
 
   const { navPaths, isNavOpen, dstType, srcType } = useNavPaths();
-  const { hasAccess } = useUser();
+  const user = useUser();
 
   // Process instructions
   useEffect(() => {
@@ -100,7 +100,7 @@ const NavOverlay = ({
   // On page load, if the destination is a room and the user is not signed in, redirect to the login page
   // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load/dstType change
   useEffect(() => {
-    if ((dstType === "Room" || srcType === "Room") && !hasAccess) {
+    if ((dstType === "Room" || srcType === "Room") && !user) {
       showLogin();
     }
   }, [dstType, srcType]);

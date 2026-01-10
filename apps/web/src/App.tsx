@@ -14,11 +14,11 @@ const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
 
   // Identify PostHog user with user ID
-  const { user } = useUser();
+  const user = useUser();
   const posthog = usePostHog();
   useEffect(() => {
     if (user) {
-      posthog?.identify(user.id);
+      posthog?.identify(user.sub);
     } else {
       posthog?.reset();
     }

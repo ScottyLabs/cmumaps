@@ -11,7 +11,7 @@ import { useBoundStore } from "@/store/index.ts";
  */
 const FloorSwitcher = () => {
   // Library hooks
-  const { hasAccess } = useUser();
+  const user = useUser();
   const isMobile = useIsMobile();
 
   // Global states
@@ -29,7 +29,7 @@ const FloorSwitcher = () => {
   }
 
   // Don't show the floor switcher if the user is not signed in
-  if (!hasAccess) {
+  if (!user) {
     return;
   }
 

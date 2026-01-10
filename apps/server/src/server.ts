@@ -24,6 +24,7 @@ const corsOptions: CorsOptions = {
   origin: env.ALLOWED_ORIGINS_REGEX?.split(",").map(
     (origin) => new RegExp(origin),
   ),
+  credentials: true,
 };
 app.use(cors(corsOptions));
 

@@ -3,11 +3,11 @@ import { useUser } from "@/hooks/useUser.ts";
 import { useBoundStore } from "@/store/index.ts";
 
 const FloorplansOverlay = () => {
-  const { isSignedIn } = useUser();
+  const user = useUser();
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
   // Only show floorplans if user is signed in and a floor is focused
-  if (!(focusedFloor && isSignedIn)) {
+  if (!(focusedFloor && user)) {
     return;
   }
 

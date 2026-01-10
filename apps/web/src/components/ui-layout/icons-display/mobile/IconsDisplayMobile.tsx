@@ -40,7 +40,7 @@ const IconsDisplayMobile = () => {
       icon: userMenuIcon,
       altText: "User Menu",
       selectedMenuState: PlusButtonMenuState.USER_SELECTED,
-      menu: UserMenu,
+      menu: () => <UserMenu />,
     },
   ];
 

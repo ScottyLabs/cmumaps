@@ -44,7 +44,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst } = useNavPaths();
-  const { hasAccess } = useUser();
+  const user = useUser();
 
   const { data: searchResults } = $api.useQuery(
     "get",
@@ -249,7 +249,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   const handleClick = (result: SearchResultProps) => {
     if (result.type === "room") {
-      if (!hasAccess) {
+      if (!user) {
         showLogin();
         return;
       }
