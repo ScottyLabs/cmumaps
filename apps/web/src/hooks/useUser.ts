@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/performance/useTopLevelRegex: TODO: define the regex top level */
 import { useUser as useClerkUser } from "@clerk/clerk-react";
 
 const useUser = () => {
@@ -27,4 +28,4 @@ const useUser = () => {
   };
 };
 
-export default useUser;
+export { useUser };

@@ -1,7 +1,7 @@
 import type { Building, Floor } from "@cmumaps/common";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import DefaultViewButton from "@/components/floor-switcher/desktop/DefaultViewButton";
-import useBoundStore from "@/store";
+import { DefaultViewButton } from "@/components/floor-switcher/desktop/DefaultViewButton";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   building: Building;
@@ -82,4 +82,4 @@ const DefaultView = ({ building, floor, setShowFloorPicker }: Props) => {
   );
 };
 
-export default DefaultView;
+export { DefaultView };

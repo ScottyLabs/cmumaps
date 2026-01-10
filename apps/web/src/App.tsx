@@ -1,14 +1,14 @@
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef } from "react";
-import FloorSwitcher from "@/components/floor-switcher/FloorSwitcher";
-import LoginModal from "@/components/login/LoginModal";
-import MapDisplay from "@/components/map-display/MapDisplay";
-import Toolbar from "@/components/toolbar/Toolbar";
-import IconsDisplay from "@/components/ui-layout/icons-display/IconsDisplay";
-import MyToastContainer from "@/components/ui-layout/MyToastContainer";
-import useUser from "@/hooks/useUser";
-import useBoundStore from "@/store";
-import NavOverlay from "./components/nav/NavOverlay";
+import { FloorSwitcher } from "@/components/floor-switcher/FloorSwitcher.tsx";
+import { LoginModal } from "@/components/login/LoginModal.tsx";
+import { MapDisplay } from "@/components/map-display/MapDisplay.tsx";
+import { Toolbar } from "@/components/toolbar/Toolbar.tsx";
+import { IconsDisplay } from "@/components/ui-layout/icons-display/IconsDisplay.tsx";
+import { MyToastContainer } from "@/components/ui-layout/MyToastContainer.tsx";
+import { useUser } from "@/hooks/useUser.ts";
+import { useBoundStore } from "@/store/index.ts";
+import { NavOverlay } from "./components/nav/NavOverlay.tsx";
 
 const App = () => {
   const mapRef = useRef<mapkit.Map | null>(null);
@@ -45,4 +45,4 @@ const App = () => {
   );
 };
 
-export default App;
+export { App };

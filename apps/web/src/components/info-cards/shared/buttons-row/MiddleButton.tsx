@@ -6,18 +6,16 @@ interface Props {
   url: string;
 }
 
-const MiddleButton = ({ title, icon, url }: Props) => {
-  return (
-    <a href={url} target="_blank" rel="noreferrer">
-      <button
-        type="button"
-        className="flex h-full items-center gap-2 rounded-lg bg-[#1e86ff] px-3 py-1 text-white"
-      >
-        {icon}
-        <p>{title}</p>
-      </button>
-    </a>
-  );
-};
+const MiddleButton = ({ title, icon, url }: Props) => (
+  <a href={url} target="_blank" rel="noreferrer">
+    <button
+      type="button"
+      className="flex h-full items-center gap-2 rounded-lg bg-primary-blue px-3 py-1 text-white"
+    >
+      {icon}
+      <p>{title}</p>
+    </button>
+  </a>
+);
 
-export default MiddleButton;
+export { MiddleButton };

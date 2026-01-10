@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import type { StateCreator } from "zustand";
 
 export const CardStates = {

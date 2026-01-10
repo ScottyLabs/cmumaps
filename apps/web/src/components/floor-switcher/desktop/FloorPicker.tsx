@@ -1,6 +1,6 @@
 import type { Building, Floor } from "@cmumaps/common";
 
-import useBoundStore from "@/store";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   building: Building;
@@ -35,4 +35,4 @@ const FloorPicker = ({ building, floor, setShowFloorPicker }: Props) => {
   });
 };
 
-export default FloorPicker;
+export { FloorPicker };

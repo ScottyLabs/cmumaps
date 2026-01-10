@@ -1,4 +1,6 @@
-import { Annotation, type Coordinate } from "mapkit-react";
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
+import type { Coordinate } from "mapkit-react";
+import { Annotation } from "mapkit-react";
 import { useEffect, useState } from "react";
 import enterIcon from "@/assets/icons/nav/path/enter.svg";
 import enterCompletedIcon from "@/assets/icons/nav/path/enter-completed.svg";
@@ -7,9 +9,9 @@ import exitCompletedIcon from "@/assets/icons/nav/path/exit-completed.svg";
 import endIcon from "@/assets/icons/nav/path/pathEnd.svg";
 import startIcon from "@/assets/icons/nav/path/pathStart.svg";
 import startIconCompleted from "@/assets/icons/nav/path/pathStart-completed.svg";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
-import type { Node } from "@/types/navTypes";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
+import type { NavPath, Node } from "@/types/navTypes";
 import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface IconInfo {
@@ -64,7 +66,7 @@ const NavLine = ({ map }: Props) => {
   const [pathOverlay, setPathOverlay] = useState<mapkit.PolylineOverlay[]>([]);
   const [iconInfos, setIconInfos] = useState<IconInfo[]>([]);
 
-  const { navPaths, isNavOpen } = useNavigationParams();
+  const { navPaths, isNavOpen } = useNavPaths();
 
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
   const isNavigating = useBoundStore((state) => state.isNavigating);
@@ -199,33 +201,31 @@ const NavLine = ({ map }: Props) => {
       }
 
       setPathOverlay(newPathOverlays);
+    } else if (recommendedPath) {
+      newPathOverlays.push(
+        ...Object.values(recommendedPath).map((p: NavPath, _) => {
+          const style = {
+            strokeColor: "#3D83D3",
+            strokeOpacity: 0.9,
+            lineWidth: 5,
+          };
+
+          return new mapkit.PolylineOverlay(
+            p.path.path.map(
+              (n) =>
+                new mapkit.Coordinate(
+                  n.coordinate.latitude,
+                  n.coordinate.longitude,
+                ),
+            ),
+            { style: new mapkit.Style(style) },
+          );
+        }),
+      );
+
+      setPathOverlay(newPathOverlays);
     } else {
-      if (!recommendedPath) {
-        setPathOverlay([]);
-      } else {
-        newPathOverlays.push(
-          ...Object.values(recommendedPath).map((p, _) => {
-            const style = {
-              strokeColor: "#3D83D3",
-              strokeOpacity: 0.9,
-              lineWidth: 5,
-            };
-
-            return new mapkit.PolylineOverlay(
-              p.path.path.map(
-                (n) =>
-                  new mapkit.Coordinate(
-                    n.coordinate.latitude,
-                    n.coordinate.longitude,
-                  ),
-              ),
-              { style: new mapkit.Style(style) },
-            );
-          }),
-        );
-
-        setPathOverlay(newPathOverlays);
-      }
+      setPathOverlay([]);
     }
   }, [recommendedPath, completedPath, isNavigating, uncompletedPath]);
 
@@ -265,7 +265,7 @@ const NavLine = ({ map }: Props) => {
 
       const lastIndex = path.length - 1;
       if (!path[lastIndex]) return;
-      const coordinate = path[lastIndex].coordinate;
+      const { coordinate } = path[lastIndex];
       newIconInfos.push({
         coordinate,
         icon: EndIcon,
@@ -282,7 +282,7 @@ const NavLine = ({ map }: Props) => {
         if (PathInstructionIcons[instruction.action]) {
           newIconInfos.push({
             coordinate: {
-              latitude: coord.latitude + 0.000000001,
+              latitude: coord.latitude + 0.000_000_001,
               longitude: coord.longitude,
             },
             icon: PathInstructionIcons[
@@ -309,7 +309,7 @@ const NavLine = ({ map }: Props) => {
     instructionIndex,
   ]);
 
-  if (!isNavOpen || !map) {
+  if (!(isNavOpen && map)) {
     return;
   }
 
@@ -317,10 +317,11 @@ const NavLine = ({ map }: Props) => {
     <>
       {iconInfos.map((iconInfo, index) => (
         <Annotation
+          // biome-ignore lint/suspicious/noArrayIndexKey: TODO: fix the array index key
           key={index}
           latitude={iconInfo.coordinate.latitude}
           longitude={iconInfo.coordinate.longitude}
-          displayPriority={"required"}
+          displayPriority="required"
         >
           <img
             src={iconInfo.icon.icon}
@@ -340,4 +341,4 @@ const NavLine = ({ map }: Props) => {
   );
 };
 
-export default NavLine;
+export { NavLine };

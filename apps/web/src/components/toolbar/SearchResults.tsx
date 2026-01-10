@@ -1,16 +1,17 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import { useMemo } from "react";
-import $api from "@/api/client";
+import { $api } from "@/api/client";
 import buildingIcon from "@/assets/icons/search_results/building.svg";
 import classroomIcon from "@/assets/icons/search_results/classroom.svg";
 import defaultIcon from "@/assets/icons/search_results/default.svg";
 import libraryIcon from "@/assets/icons/search_results/library.svg";
 import userIcon from "@/assets/icons/search_results/mark.svg";
 import restaurantIcon from "@/assets/icons/search_results/restaurant.svg";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useUser from "@/hooks/useUser";
-import useBoundStore from "@/store";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useUser } from "@/hooks/useUser.ts";
 import { CardStates } from "@/store/cardSlice";
+import { useBoundStore } from "@/store/index.ts";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { zoomOnObject, zoomOnPoint } from "@/utils/zoomUtils";
 
@@ -42,7 +43,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const userPosition = useBoundStore((state) => state.userPosition);
 
   const navigate = useNavigateLocationParams();
-  const { setSrc, setDst } = useNavigationParams();
+  const { setSrc, setDst } = useNavPaths();
   const { hasAccess } = useUser();
 
   const { data: searchResults } = $api.useQuery(
@@ -61,6 +62,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const organizedResults = useMemo(() => {
     if (!searchResults) return [];
 
+    // biome-ignore lint/nursery/noShadow: TODO: fix the shadowing
     const buildings = searchResults.filter(
       (result) => result.type === "building",
     );
@@ -81,22 +83,20 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   }, [searchResults, userPosition, searchTarget]);
 
   // Don't render if the search is not open or the search query is empty
-  if (searchQuery.length === 0 || (!isSearchOpen && !searchTarget)) {
+  if (searchQuery.length === 0 || !(isSearchOpen || searchTarget)) {
     return;
   }
 
-  const renderBuildingResult = (result: SearchResultProps) => {
-    return (
-      <>
-        <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
-          <img width={24} src={buildingIcon} alt="classroom" />
-        </div>
-        <span className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
-          {result.fullNameWithSpace}
-        </span>
-      </>
-    );
-  };
+  const renderBuildingResult = (result: SearchResultProps) => (
+    <>
+      <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
+        <img width={24} src={buildingIcon} alt="classroom" />
+      </div>
+      <span className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
+        {result.fullNameWithSpace}
+      </span>
+    </>
+  );
 
   const renderRoomResult = (result: SearchResultProps) => {
     const roomName = result.nameWithSpace?.split(" ")[1];
@@ -132,18 +132,16 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     );
   };
 
-  const renderUserLocationResult = () => {
-    return (
-      <>
-        <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
-          <img width={24} src={userIcon} alt="classroom" />
-        </div>
-        <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
-          User Position
-        </div>
-      </>
-    );
-  };
+  const renderUserLocationResult = () => (
+    <>
+      <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
+        <img width={24} src={userIcon} alt="classroom" />
+      </div>
+      <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
+        User Position
+      </div>
+    </>
+  );
 
   const renderResultByType = (result: SearchResultProps) => {
     switch (result.type) {
@@ -267,10 +265,10 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   return (
     <div className="z-50 flex-col overflow-hidden overflow-y-scroll rounded-lg bg-white py-2">
-      {organizedResults?.map((result, i) => (
+      {organizedResults?.map((result) => (
         <button
           type="button"
-          key={i}
+          key={result.id}
           className="flex h-9 w-full items-center bg-white text-lg active:bg-[#F5F5F5]"
           onClick={() => handleClick(result)}
         >
@@ -281,4 +279,4 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   );
 };
 
-export default SearchResults;
+export { SearchResults };

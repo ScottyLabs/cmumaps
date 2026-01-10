@@ -1,13 +1,13 @@
-import $api from "@/api/client";
-import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
-import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
-import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
+import { $api } from "@/api/client";
+import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
+import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 const RoomCard = () => {
   const isMobile = useIsMobile();
-  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed);
+  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed)();
   const { buildingCode, roomName, floor } = useLocationParams();
 
   // Query data
@@ -17,10 +17,10 @@ const RoomCard = () => {
     "get",
     "/floors/{floorCode}/floorplan",
     { params: { path: { floorCode: floorCode ?? "" } } },
-    { enabled: !!floorCode },
+    { enabled: Boolean(floorCode) },
   );
 
-  if (!roomName || !rooms || !buildings) {
+  if (!(roomName && rooms && buildings)) {
     return;
   }
 
@@ -30,8 +30,6 @@ const RoomCard = () => {
   }
 
   const renderRoomImage = () => {
-    const buildingCode = room.floor.buildingCode;
-
     // the default image is the building image
     const url = `/location_images/building_room_images/${buildingCode}/${buildingCode}.jpg`;
     // TODO: but get the room image if it exists
@@ -67,13 +65,13 @@ const RoomCard = () => {
     );
   };
 
-  const renderSchedule = () => {
-    return <p className="text-gray-500">No Room Schedule Available</p>;
-  };
+  const renderSchedule = () => (
+    <p className="text-gray-500">No Room Schedule Available</p>
+  );
 
   return (
     <>
-      {(!isCardCollapsed || !isMobile) && renderRoomImage()}
+      {!(isCardCollapsed && isMobile) && renderRoomImage()}
       <div className="mx-3 mt-2">
         {renderTitle()}
         {renderSchedule()}
@@ -83,4 +81,4 @@ const RoomCard = () => {
   );
 };
 
-export default RoomCard;
+export { RoomCard };

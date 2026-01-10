@@ -1,4 +1,5 @@
 // tailwind.config.js
+// biome-ignore lint/style/noCommonJs: TODO: Replace with tailwind.css later
 module.exports = {
   theme: {
     extend: {

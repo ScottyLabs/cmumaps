@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 
-import $api from "@/api/client";
-import useLocationParams from "@/hooks/useLocationParams";
+import { $api } from "@/api/client";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { buildFloorCode } from "@/utils/floorUtils";
 
 const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
@@ -12,7 +12,7 @@ const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
     "get",
     "/floors/{floorCode}/floorplan",
     { params: { path: { floorCode: floorCode ?? "" } } },
-    { enabled: !!floorCode },
+    { enabled: Boolean(floorCode) },
   );
 
   const autoFillSearchQuery = useCallback(() => {
@@ -45,4 +45,4 @@ const useAutofillSearchQuery = (setSearchQuery: (query: string) => void) => {
   }, [autoFillSearchQuery]);
 };
 
-export default useAutofillSearchQuery;
+export { useAutofillSearchQuery };

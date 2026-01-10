@@ -1,17 +1,17 @@
 import { FaArrowRight } from "react-icons/fa";
 import { TbXboxX } from "react-icons/tb";
-import ShareButton from "@/components/info-cards/shared/buttons-row/ShareButton";
-import useLocationParams from "@/hooks/useLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { ShareButton } from "@/components/info-cards/shared/buttons-row/ShareButton.tsx";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { CardStates } from "@/store/cardSlice";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   middleButton?: React.JSX.Element;
 }
 
 const ButtonsRow = ({ middleButton }: Props) => {
-  const { setSrc, setDst } = useNavigationParams();
+  const { setSrc, setDst } = useNavPaths();
   const { buildingCode, roomName, coordinate } = useLocationParams();
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
@@ -39,7 +39,9 @@ const ButtonsRow = ({ middleButton }: Props) => {
           setCardStatus(CardStates.COLLAPSED);
         }}
       >
+        {/** biome-ignore lint/nursery/noUnnecessaryConditions: need to calculate isRoomAcc later */}
         {isRoomAcc ? <TbXboxX size={20} /> : <FaArrowRight size={12} />}
+        {/** biome-ignore lint/nursery/noUnnecessaryConditions: need to calculate isRoomAcc later */}
         <p>{isRoomAcc ? "Not Accessible" : "Directions"}</p>
       </button>
     );
@@ -58,4 +60,4 @@ const ButtonsRow = ({ middleButton }: Props) => {
   );
 };
 
-export default ButtonsRow;
+export { ButtonsRow };

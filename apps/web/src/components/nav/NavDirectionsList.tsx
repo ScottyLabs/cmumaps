@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import enterIconBlack from "@/assets/icons/nav/directions-list/enter-black.svg";
 import enterIconGrey from "@/assets/icons/nav/directions-list/enter-grey.svg";
 import enterIconWhite from "@/assets/icons/nav/directions-list/enter-white.svg";
@@ -13,8 +14,8 @@ import leftArrowIconWhite from "@/assets/icons/nav/directions-list/left-arrow-wh
 import rightArrowIconBlack from "@/assets/icons/nav/directions-list/right-arrow-black.svg";
 import rightArrowIconGrey from "@/assets/icons/nav/directions-list/right-arrow-grey.svg";
 import rightArrowIconWhite from "@/assets/icons/nav/directions-list/right-arrow-white.svg";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface DirectionIconSet {
   Black: string;
@@ -67,7 +68,7 @@ const NavDirectionsList = () => {
   const instructionIndex = useBoundStore((state) => state.navInstructionIndex);
   const selectedPath = useBoundStore((state) => state.selectedPath);
 
-  const { navPaths } = useNavigationParams();
+  const { navPaths } = useNavPaths();
 
   const renderDirectionEntry = (
     { distance, action, id }: DirectionProps,
@@ -133,4 +134,4 @@ const NavDirectionsList = () => {
   );
 };
 
-export default NavDirectionsList;
+export { NavDirectionsList };

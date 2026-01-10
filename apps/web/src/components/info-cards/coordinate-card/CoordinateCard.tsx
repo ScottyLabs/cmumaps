@@ -1,5 +1,5 @@
-import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
-import useLocationParams from "@/hooks/useLocationParams";
+import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow.tsx";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -20,4 +20,4 @@ const CoordinateCard = ({ mapRef: _mapRef }: Props) => {
   );
 };
 
-export default CoordinateCard;
+export { CoordinateCard };

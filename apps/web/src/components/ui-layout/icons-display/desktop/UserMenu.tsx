@@ -1,6 +1,6 @@
 import { SignInButton, SignOutButton } from "@clerk/clerk-react";
 import scottylabsBackground from "@/assets/images/scottylabs-background.png";
-import useUser from "@/hooks/useUser";
+import { useUser } from "@/hooks/useUser.ts";
 
 const UserMenu = () => {
   const { isSignedIn, email } = useUser();
@@ -42,4 +42,4 @@ const UserMenu = () => {
   );
 };
 
-export default UserMenu;
+export { UserMenu };

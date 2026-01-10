@@ -1,8 +1,8 @@
 import type { Building } from "@cmumaps/common";
 import { useQueryState } from "nuqs";
-import Roundel from "@/components/shared/Roundel";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useBoundStore from "@/store";
+import { Roundel } from "@/components/shared/Roundel.tsx";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   building: Building;
@@ -33,4 +33,4 @@ const RoundelButton = ({ building }: Props) => {
   );
 };
 
-export default RoundelButton;
+export { RoundelButton };

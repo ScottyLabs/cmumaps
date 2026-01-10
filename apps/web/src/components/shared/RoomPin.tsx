@@ -1,6 +1,7 @@
-import { type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
+import type { GeoRoom } from "@cmumaps/common";
+import { getRoomTypeDetails } from "@cmumaps/common";
 import pinIcon from "@/assets/icons/search_results/pin.svg";
-import useLocationParams from "@/hooks/useLocationParams";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import type { Document } from "@/types/searchTypes";
 import { getIcon } from "@/utils/iconUtils";
 
@@ -17,7 +18,7 @@ const RoomPin = ({ room }: Props) => {
   const isSelected = "name" in room && room.name === roomName;
 
   const icon = getIcon(room);
-  const hasGraphic = !!icon;
+  const hasGraphic = Boolean(icon);
 
   const roomColors = getRoomTypeDetails(
     room.type === "Building" ? "Default" : room.type,
@@ -29,12 +30,12 @@ const RoomPin = ({ room }: Props) => {
       style={{ background: roomColors.primary }}
     >
       <img
-        alt={"Room Pin"}
-        src={hasGraphic ? icon : pinIcon}
+        alt="Room Pin"
+        src={hasGraphic ? (icon ?? "") : pinIcon}
         className={`${isSelected ? "size-6" : "size-3"} pointer-events-none`}
       />
     </div>
   );
 };
 
-export default RoomPin;
+export { RoomPin };

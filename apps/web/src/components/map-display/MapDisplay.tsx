@@ -1,27 +1,23 @@
 import { CAMERA_BOUNDARY, INITIAL_REGION } from "@cmumaps/ui";
-import {
-  FeatureVisibility,
-  type MapInteractionEvent,
-  Map as MapkitMap,
-  MapType,
-} from "mapkit-react";
+import type { MapInteractionEvent } from "mapkit-react";
+import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import $api from "@/api/client";
-import BuildingsDisplay from "@/components/map-display/buildings-display/BuildingsDisplay";
-import FloorPlansOverlay from "@/components/map-display/floorplans-overlay/FloorplansOverlay";
-import env from "@/env";
-import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
-import useMapRegionChange from "@/hooks/useMapRegionChange";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { $api } from "@/api/client";
+import { BuildingsDisplay } from "@/components/map-display/buildings-display/BuildingsDisplay";
+import { FloorPlansOverlay } from "@/components/map-display/floorplans-overlay/FloorplansOverlay.tsx";
+import { env } from "@/env.ts";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useMapRegionChange } from "@/hooks/useMapRegionChange.ts";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 import { isInPolygon } from "@/utils/geometry";
-import prefersReducedMotion from "@/utils/prefersReducedMotion";
+import { prefersReducedMotion } from "@/utils/prefersReducedMotion.ts";
 import { zoomOnObject } from "@/utils/zoomUtils";
-import NavLine from "../nav/NavLine";
-import CoordinatePin from "./coordinate-pin/CoordinatePin";
+import { NavLine } from "../nav/NavLine.tsx";
+import { CoordinatePin } from "./coordinate-pin/CoordinatePin.tsx";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -51,7 +47,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
   const navigate = useNavigateLocationParams();
-  const { setSrc, setDst, isNavOpen } = useNavigationParams();
+  const { setSrc, setDst, isNavOpen } = useNavPaths();
   const { buildingCode, roomName, error } = useLocationParams();
 
   // Toast initial error when location params are invalid
@@ -70,7 +66,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       if (!building?.shape) return;
       zoomOnObject(mapRef.current, building?.shape.flat(), setIsZooming);
     }
-  }, [!!mapRef.current]);
+  }, [Boolean(mapRef.current)]);
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
@@ -99,8 +95,10 @@ const MapDisplay = ({ mapRef }: Props) => {
     if (!showFloor) {
       const coords = e.toCoordinates();
 
-      for (const buildingCode in buildings) {
-        const building = buildings[buildingCode];
+      // biome-ignore lint/nursery/noForIn: TODO
+      // biome-ignore lint/suspicious/useGuardForIn: TODO
+      for (const code in buildings) {
+        const building = buildings[code];
         if (building?.shape[0] && isInPolygon(coords, building.shape[0])) {
           if (building) {
             selectBuilding(building);
@@ -145,7 +143,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       cameraBoundary={CAMERA_BOUNDARY}
       minCameraDistance={5}
       maxCameraDistance={1500}
-      showsUserLocationControl
+      showsUserLocationControl={true}
       showsUserLocation={true}
       mapType={MapType.MutedStandard}
       // paddingBottom={isMobile ? 72 : 0}
@@ -155,7 +153,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       paddingTop={10}
       showsZoomControl={!isMobile}
       showsCompass={FeatureVisibility.Visible}
-      allowWheelToZoom
+      allowWheelToZoom={true}
       onLoad={handleLoad}
       onClick={handleClick}
       onLongPress={handleLongPress}
@@ -182,4 +180,4 @@ const MapDisplay = ({ mapRef }: Props) => {
   );
 };
 
-export default MapDisplay;
+export { MapDisplay };

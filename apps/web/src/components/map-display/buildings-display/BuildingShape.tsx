@@ -1,7 +1,7 @@
 import type { Building } from "@cmumaps/common";
 import { Polygon } from "mapkit-react";
 
-import useBoundStore from "@/store";
+import { useBoundStore } from "@/store/index.ts";
 import { getBuildingShapeFillColor } from "@/utils/buildingColorUtils";
 
 interface Props {
@@ -62,4 +62,4 @@ const BuildingShape = ({ building }: Props) => {
   );
 };
 
-export default BuildingShape;
+export { BuildingShape };

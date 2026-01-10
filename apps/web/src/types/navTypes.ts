@@ -1,12 +1,13 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import type { Floor } from "@cmumaps/common";
 import type { Coordinate } from "mapkit-react";
 
-export type Edge = {
+export interface Edge {
   dist: number;
   toFloorInfo: { toFloor: string; type: string };
-};
+}
 
-export type Node = {
+export interface Node {
   neighbors: {
     [neighborId: string]: Edge;
   };
@@ -14,22 +15,26 @@ export type Node = {
   floor: Floor;
   coordinate: Coordinate;
   id: string;
-};
+}
 
-export type Instruction = { action: string; distance: number; nodeId: string };
+export interface Instruction {
+  action: string;
+  distance: number;
+  nodeId: string;
+}
 
-export type NavPath = {
+export interface NavPath {
   instructions: Instruction[];
   path: { path: Node[]; distance: number };
-};
+}
 
 export type NavWaypointType = "User" | "Room" | "Building" | "Coordinate";
 
 export type NavPathType = "Fastest" | "Accessible" | "Inside" | "Outside";
 
-export type NavPaths = {
+export interface NavPaths {
   Fastest?: NavPath;
   Accessible?: NavPath;
   Inside?: NavPath;
   Outside?: NavPath;
-};
+}

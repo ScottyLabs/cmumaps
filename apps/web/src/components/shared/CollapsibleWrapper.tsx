@@ -43,4 +43,4 @@ const CollapsibleWrapper = ({ title, children }: Props) => {
   );
 };
 
-export default CollapsibleWrapper;
+export { CollapsibleWrapper };

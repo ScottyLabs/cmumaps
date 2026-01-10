@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router";
-import useNavigationParams from "./useNavigationParams";
+import { useNavPaths } from "./useNavigationParams.ts";
 
 const useNavigateLocationParams = () => {
   const navigate = useNavigate();
 
-  const { isNavOpen } = useNavigationParams();
+  const { isNavOpen } = useNavPaths();
 
-  return (newParams: string) => {
+  return async (newParams: string) => {
     if (!isNavOpen) {
-      navigate(newParams);
+      await navigate(newParams);
     }
   };
 };
 
-export default useNavigateLocationParams;
+export { useNavigateLocationParams };

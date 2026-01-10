@@ -1,15 +1,20 @@
 import { create } from "zustand";
-import { type BuildingSlice, createBuildingSlice } from "./buildingSlice";
-import { type CardSlice, createCardSlice } from "./cardSlice";
-import { createFloorSlice, type FloorSlice } from "./floorSlice";
-import { createLoginSlice, type LoginSlice } from "./loginSlice";
-import { createNavSlice, type NavSlice } from "./navSlice";
-import { createSearchSlice, type SearchSlice } from "./searchSlice";
-import {
-  createUserPositionSlice,
-  type UserPositionSlice,
-} from "./userPositionSlice";
-import { createZoomSlice, type ZoomSlice } from "./zoomSlice";
+import type { BuildingSlice } from "./buildingSlice.ts";
+import { createBuildingSlice } from "./buildingSlice.ts";
+import type { CardSlice } from "./cardSlice.ts";
+import { createCardSlice } from "./cardSlice.ts";
+import type { FloorSlice } from "./floorSlice.ts";
+import { createFloorSlice } from "./floorSlice.ts";
+import type { LoginSlice } from "./loginSlice.ts";
+import { createLoginSlice } from "./loginSlice.ts";
+import type { NavSlice } from "./navSlice.ts";
+import { createNavSlice } from "./navSlice.ts";
+import type { SearchSlice } from "./searchSlice.ts";
+import { createSearchSlice } from "./searchSlice.ts";
+import type { UserPositionSlice } from "./userPositionSlice.ts";
+import { createUserPositionSlice } from "./userPositionSlice.ts";
+import type { ZoomSlice } from "./zoomSlice.ts";
+import { createZoomSlice } from "./zoomSlice.ts";
 
 export type BoundStore = BuildingSlice &
   CardSlice &
@@ -31,4 +36,4 @@ const useBoundStore = create<BoundStore>()((...args) => ({
   ...createUserPositionSlice(...args),
 }));
 
-export default useBoundStore;
+export { useBoundStore };

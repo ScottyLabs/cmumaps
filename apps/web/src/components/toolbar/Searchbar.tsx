@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
-import SearchResults from "@/components/toolbar/SearchResults";
-import useAutofillSearchQuery from "@/hooks/useAutofillSearchQuery";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { SearchResults } from "@/components/toolbar/SearchResults.tsx";
+import { useAutofillSearchQuery } from "@/hooks/useAutofillSearchQuery.ts";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 import type { SearchTarget } from "@/types/searchTypes";
 
 interface Props {
@@ -35,14 +35,12 @@ const Searchbar = ({ mapRef }: Props) => {
 
   // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
-  const { isNavOpen } = useNavigationParams();
+  const { isNavOpen } = useNavPaths();
 
   // Blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
-    if (!isSearchOpen) {
-      if (inputRef.current) {
-        inputRef.current.blur();
-      }
+    if (!isSearchOpen && inputRef.current) {
+      inputRef.current.blur();
     }
   }, [isSearchOpen]);
 
@@ -140,4 +138,4 @@ const Searchbar = ({ mapRef }: Props) => {
   );
 };
 
-export default Searchbar;
+export { Searchbar };

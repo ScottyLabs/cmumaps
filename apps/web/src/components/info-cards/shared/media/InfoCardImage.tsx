@@ -14,4 +14,4 @@ const InfoCardImage = ({ url, alt }: Props) => {
   );
 };
 
-export default InfoCardImage;
+export { InfoCardImage };

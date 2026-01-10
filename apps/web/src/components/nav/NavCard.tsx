@@ -12,8 +12,8 @@ import indoorUnavailableIcon from "@/assets/icons/nav/route-selection/indoorUnav
 import outdoorAvailableIcon from "@/assets/icons/nav/route-selection/outdoorAvailable.svg";
 import outdoorSelectedIcon from "@/assets/icons/nav/route-selection/outdoorSelected.svg";
 import outdoorUnavailableIcon from "@/assets/icons/nav/route-selection/outdoorUnavailable.svg";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface NavHeaderProps {
   isNavigating: boolean;
@@ -63,7 +63,7 @@ const NavCard = ({
   const selectedPath = useBoundStore((state) => state.selectedPath);
   const setSelectedPath = useBoundStore((state) => state.setSelectedPath);
 
-  const { navPaths, setSrc, setDst } = useNavigationParams();
+  const { navPaths, setSrc, setDst } = useNavPaths();
 
   const distance = Math.round(navPaths?.[selectedPath]?.path.distance ?? 0);
   const time = Math.round((navPaths?.[selectedPath]?.path.distance ?? 0) / 100);
@@ -76,125 +76,121 @@ const NavCard = ({
     },
   );
 
-  const renderPathInfo = () => {
-    return (
-      <div className="h-9">
-        <div className="flex gap-7">
-          <div className="flex-col">
-            <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
-              {endTime}
-            </div>
-            <div className="w-full -translate-y-2">arrival</div>
+  const renderPathInfo = () => (
+    <div className="h-9">
+      <div className="flex gap-7">
+        <div className="flex-col">
+          <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
+            {endTime}
           </div>
-          <div className="flex-col">
-            <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
-              {time}
-            </div>
-            <div className="w-full -translate-y-2">min</div>
+          <div className="w-full -translate-y-2">arrival</div>
+        </div>
+        <div className="flex-col">
+          <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
+            {time}
           </div>
-          <div className="flex-col">
-            <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
-              {distance}
-            </div>
-            <div className="w-full -translate-y-2">ft</div>
+          <div className="w-full -translate-y-2">min</div>
+        </div>
+        <div className="flex-col">
+          <div className="w-full font-bold text-[min(1.25rem,5vw)] text-black">
+            {distance}
           </div>
+          <div className="w-full -translate-y-2">ft</div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
-  const renderChooseCard = () => {
-    return (
-      <div className="relative flex w-full flex-col items-start self-stretch bg-background-brand-secondary-pressed">
-        <div className="flex w-full items-center justify-center gap-8 self-stretch px-6 pt-[6px] pb-[6px]">
-          {navigationOptions.map((option) => {
-            const isAvailable = !!navPaths?.[option.id];
-            const isSelected = option.id === selectedPath;
-            return (
-              <button
-                type="button"
-                onClick={
-                  isAvailable && !isSelected
-                    ? () => setSelectedPath(option.id)
-                    : () => {}
+  const renderChooseCard = () => (
+    <div className="relative flex w-full flex-col items-start self-stretch bg-background-brand-secondary-pressed">
+      <div className="flex w-full items-center justify-center gap-8 self-stretch px-6 pt-[6px] pb-[6px]">
+        {navigationOptions.map((option) => {
+          const isAvailable = Boolean(navPaths?.[option.id]);
+          const isSelected = option.id === selectedPath;
+          return (
+            <button
+              type="button"
+              onClick={
+                isAvailable && !isSelected
+                  ? () => setSelectedPath(option.id)
+                  : // biome-ignore lint/suspicious/noEmptyBlockStatements: TODO: fix the empty block
+                    () => {}
+              }
+              key={option.id}
+              className={`relative flex flex-1 flex-col items-center gap-0.5 rounded-xl pt-2 pb-1 ${isSelected ? "bg-[rgba(182,223,253,0.71)]" : ""}`}
+            >
+              <img
+                className="relative h-6 w-6"
+                alt={option.id}
+                src={
+                  isSelected
+                    ? option.selectedIcon
+                    : isAvailable
+                      ? option.availableIcon
+                      : option.unavailableIcon
                 }
-                key={option.id}
-                className={`relative flex flex-1 flex-col items-center gap-0.5 rounded-xl pt-2 pb-1 ${isSelected ? "bg-[rgba(182,223,253,0.71)]" : ""}`}
+              />
+
+              <div
+                className={`relative self-stretch pb-px text-center font-medium text-[10px] text-inter ${
+                  isSelected
+                    ? "text-[#156588]"
+                    : isAvailable
+                      ? "text-black"
+                      : "text-foreground-neutral-tertiary"
+                }`}
               >
-                <img
-                  className="relative h-6 w-6"
-                  alt={option.id}
-                  src={
-                    isSelected
-                      ? option.selectedIcon
-                      : isAvailable
-                        ? option.availableIcon
-                        : option.unavailableIcon
-                  }
-                />
-
-                <div
-                  className={`relative self-stretch pb-px text-center font-medium text-[10px] text-inter ${
-                    isSelected
-                      ? "text-[#156588]"
-                      : isAvailable
-                        ? "text-black"
-                        : "text-foreground-neutral-tertiary"
-                  }`}
-                >
-                  {option.id}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="relative flex w-full justify-between self-stretch bg-white pt-6 pr-5 pb-6 pl-5">
-          {navPaths?.[selectedPath] ? (
-            renderPathInfo()
-          ) : (
-            <div className="h-9 text-black text-xl">Path unavailable...</div>
-          )}
-
-          <button
-            type="button"
-            className={`${!navPaths ? "bg-primary-grey" : "bg-button-green"} inline-flex h-12 w-20 items-center justify-center rounded-full font-medium text-sm`}
-            disabled={!navPaths?.[selectedPath]}
-            onClick={() => {
-              startNav();
-            }}
-          >
-            <span className="text-center font-inter font-semibold text-[20px] text-white">
-              GO
-            </span>
-          </button>
-        </div>
+                {option.id}
+              </div>
+            </button>
+          );
+        })}
       </div>
-    );
-  };
 
-  const renderNavCard = () => {
-    return (
-      <div className="ml-9 flex justify-between py-6">
-        {renderPathInfo()}
+      <div className="relative flex w-full justify-between self-stretch bg-white pt-6 pr-5 pb-6 pl-5">
+        {navPaths?.[selectedPath] ? (
+          renderPathInfo()
+        ) : (
+          <div className="h-9 text-black text-xl">Path unavailable...</div>
+        )}
+
         <button
           type="button"
-          className="mr-5 inline-flex h-12 w-20 items-center justify-center rounded-full bg-primary-red font-medium text-sm"
+          className={`${navPaths ? "bg-button-green" : "bg-primary-grey"} inline-flex h-12 w-20 items-center justify-center rounded-full font-medium text-sm`}
+          disabled={!navPaths?.[selectedPath]}
           onClick={() => {
-            setDst(null);
-            setSrc(null);
+            startNav();
           }}
         >
           <span className="text-center font-inter font-semibold text-[20px] text-white">
-            End
+            GO
           </span>
         </button>
       </div>
-    );
-  };
+    </div>
+  );
+
+  const renderNavCard = () => (
+    <div className="ml-9 flex justify-between py-6">
+      {renderPathInfo()}
+      <button
+        type="button"
+        className="mr-5 inline-flex h-12 w-20 items-center justify-center rounded-full bg-primary-red font-medium text-sm"
+        onClick={() => {
+          setDst(null);
+          setSrc(null);
+        }}
+      >
+        <span className="text-center font-inter font-semibold text-[20px] text-white">
+          End
+        </span>
+      </button>
+    </div>
+  );
 
   return (
     <>
+      {/** biome-ignore lint/nursery/noLeakedRender: TODO: fix the leaked render */}
       {isNavigating && isMobile && (
         <div className="flex justify-end p-4">
           <button
@@ -208,7 +204,9 @@ const NavCard = ({
         </div>
       )}
       <div
-        className={`${isMobile ? (isNavigating ? "rounded-xl" : "rounded-t-xl") : ""} overflow-auto bg-white ${!listShown && "btn-shadow"}`}
+        className={`${
+          isMobile ? (isNavigating ? "rounded-xl" : "rounded-t-xl") : ""
+        } overflow-auto bg-white ${!listShown && "btn-shadow"}`}
       >
         {isNavigating ? renderNavCard() : renderChooseCard()}
       </div>
@@ -216,4 +214,4 @@ const NavCard = ({
   );
 };
 
-export default NavCard;
+export { NavCard };

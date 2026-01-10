@@ -1,7 +1,8 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import { useState } from "react";
 import userMenuIcon from "@/assets/icons/plus_button_menu/mobile/settings.svg";
-import UserMenu from "@/components/ui-layout/icons-display/UserMenu";
-import PlusButton from "../PlusButton";
+import { UserMenu } from "@/components/ui-layout/icons-display/UserMenu.tsx";
+import { PlusButton } from "../PlusButton.tsx";
 
 enum PlusButtonMenuState {
   CLOSED = 0,
@@ -115,4 +116,4 @@ const IconsDisplayDesktop = () => {
   return <>{renderPlusButton()}</>;
 };
 
-export default IconsDisplayDesktop;
+export { IconsDisplayDesktop };

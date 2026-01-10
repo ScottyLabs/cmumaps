@@ -1,14 +1,14 @@
 import { SignInButton } from "@clerk/clerk-react";
 import { useEffect } from "react";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useUser from "@/hooks/useUser";
-import useBoundStore from "@/store";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useUser } from "@/hooks/useUser.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 const LoginModal = () => {
   const { isSignedIn, hasAccess } = useUser();
   const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
   const hideLogin = useBoundStore((state) => state.hideLogin);
-  const { setSrc, setDst } = useNavigationParams();
+  const { setSrc, setDst } = useNavPaths();
 
   // Should try to show the login modal again if the user signed out
   useEffect(() => {
@@ -29,7 +29,11 @@ const LoginModal = () => {
         <h2 className="font-bold text-2xl text-black">CMU Maps</h2>
         <p className="text-gray-500 text-sm">
           CMU Maps is built with ❤ by ScottyLabs. Find out more about us{" "}
-          <a href="https://www.scottylabs.org/" className="underline">
+          <a
+            href="https://www.scottylabs.org/"
+            className="underline"
+            aria-label="ScottyLabs website"
+          >
             here
           </a>
           . Your feedback is appreciated.
@@ -62,4 +66,4 @@ const LoginModal = () => {
   );
 };
 
-export default LoginModal;
+export { LoginModal };

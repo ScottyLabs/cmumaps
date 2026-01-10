@@ -6,18 +6,16 @@ interface Props {
   building: Building;
 }
 
-const BuildingRoundel = ({ building }: Props) => {
-  return (
-    <div className="translate-y-1/2 cursor-pointer">
-      <Annotation
-        latitude={building.labelLatitude}
-        longitude={building.labelLongitude}
-        displayPriority="required"
-      >
-        <Roundel code={building.code} />
-      </Annotation>
-    </div>
-  );
-};
+const BuildingRoundel = ({ building }: Props) => (
+  <div className="translate-y-1/2 cursor-pointer">
+    <Annotation
+      latitude={building.labelLatitude}
+      longitude={building.labelLongitude}
+      displayPriority="required"
+    >
+      <Roundel code={building.code} />
+    </Annotation>
+  </div>
+);
 
-export default BuildingRoundel;
+export { BuildingRoundel };

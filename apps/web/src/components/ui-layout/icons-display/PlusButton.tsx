@@ -17,6 +17,7 @@ const PlusButton = ({
 }: PlusButtonProps) => {
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: Outer element must be a div, since nested buttons are not allowed
+    // biome-ignore lint/a11y/noNoninteractiveElementInteractions: TODO
     <div
       className={`${
         isMenuOpen ? "btn-shadow-dark" : "btn-shadow"
@@ -39,4 +40,4 @@ const PlusButton = ({
   );
 };
 
-export default PlusButton;
+export { PlusButton };

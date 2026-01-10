@@ -1,6 +1,6 @@
 import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
-import env from "@/env";
+import { env } from "@/env.ts";
 import type { paths } from "../../../server/build/swagger.d.ts";
 
 const fetchClient = createFetchClient<paths>({
@@ -18,4 +18,4 @@ const fetchClient = createFetchClient<paths>({
 
 const $api = createClient(fetchClient);
 
-export default $api;
+export { $api };

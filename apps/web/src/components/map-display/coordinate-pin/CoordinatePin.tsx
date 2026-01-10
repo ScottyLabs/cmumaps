@@ -1,10 +1,10 @@
 import { Annotation } from "mapkit-react";
 import { useEffect, useState } from "react";
 import coordinateMarkerIcon from "@/assets/icons/nav/path/coordinateMarker.svg";
-import useLocationParams from "@/hooks/useLocationParams";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 const CoordinatePin = ({ map }: Props) => {
   const { coordinate } = useLocationParams();
-  const { setSrc, isNavOpen } = useNavigationParams();
+  const { setSrc, isNavOpen } = useNavPaths();
 
   const setIsZooming = useBoundStore((state) => state.setIsZooming);
 
@@ -34,9 +34,9 @@ const CoordinatePin = ({ map }: Props) => {
     if (map && coordinate && !isNavOpen) {
       zoomOnPoint(map, coordinate, 0.001, setIsZooming);
     }
-  }, [coordinate?.latitude, coordinate?.longitude, !!map]);
+  }, [coordinate?.latitude, coordinate?.longitude, Boolean(map)]);
 
-  if (!map || !prevCoordinate) {
+  if (!(map && prevCoordinate)) {
     return;
   }
 
@@ -57,7 +57,7 @@ const CoordinatePin = ({ map }: Props) => {
     <Annotation
       latitude={prevCoordinate.latitude}
       longitude={prevCoordinate.longitude}
-      displayPriority={"required"}
+      displayPriority="required"
     >
       <button type="button" onClick={handleClick}>
         <img
@@ -70,4 +70,4 @@ const CoordinatePin = ({ map }: Props) => {
   );
 };
 
-export default CoordinatePin;
+export { CoordinatePin };

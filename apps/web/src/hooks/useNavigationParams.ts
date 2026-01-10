@@ -1,8 +1,8 @@
 import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import $api from "@/api/client";
-import useBoundStore from "@/store";
+import { $api } from "@/api/client";
+import { useBoundStore } from "@/store";
 import type { NavPaths, NavWaypointType } from "@/types/navTypes";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
@@ -32,7 +32,7 @@ const getWaypointParams = (
 } => {
   const { data: buildings } = $api.useQuery("get", "/buildings");
   const pointSplit = point.split("-");
-  const buildingCode = pointSplit[0];
+  const [buildingCode] = pointSplit;
   const roomName = pointSplit.slice(1).join("-");
   const floorName = getFloorLevelFromRoomName(roomName);
   const userPosition = useBoundStore((state) => state.userPosition);
@@ -42,7 +42,7 @@ const getWaypointParams = (
     "get",
     "/floors/{floorCode}/floorplan",
     { params: { path: { floorCode: floorCode ?? "" } } },
-    { enabled: !!floorCode },
+    { enabled: Boolean(floorCode) },
   );
 
   if (point.includes("user")) {
@@ -71,7 +71,7 @@ const getWaypointParams = (
   }
 
   if (point.includes("-")) {
-    if (!rooms || !buildings) return { type: "Room" };
+    if (!(rooms && buildings)) return { type: "Room" };
 
     const room = rooms[roomName];
     if (!room) return { error: `Invalid Room Waypoint ${roomName}` };
@@ -87,7 +87,7 @@ const getWaypointParams = (
     return { type: "Building" };
   }
 
-  if (!point || !buildings?.[point]) {
+  if (!(point && buildings?.[point])) {
     return { error: `Invalid Building ${point}` };
   }
 
@@ -134,28 +134,30 @@ const useNavPaths = (): Params => {
       },
     },
     {
-      enabled: !!srcQuery && !!dstQuery && srcQuery !== "" && dstQuery !== "",
+      enabled: Boolean(
+        srcQuery && dstQuery && srcQuery !== "" && dstQuery !== "",
+      ),
     },
   ) as { data: NavPaths | undefined };
 
-  const swap = () => {
+  const swap = async () => {
     const temp = src;
     if (srcUrlParam) {
-      navigate(`/${srcUrlParam}`);
+      await navigate(`/${srcUrlParam}`);
     }
     setSrc(dst);
     setDst(temp);
   };
 
-  const setDstAndURLParam = (dst: string | null) => {
-    if (dst) {
-      navigate(`/${dst}`);
+  const setDstAndUrlParam = async (newDst: string | null) => {
+    if (newDst) {
+      await navigate(`/${newDst}`);
     }
-    setDst(dst);
+    setDst(newDst);
     setSrc(src);
   };
 
-  if (!src || !dst || src === "" || dst === "") {
+  if (!(src && dst) || src === "" || dst === "") {
     if (src) setSrc(null);
     if (dst) setDst(null);
     return { setSrc, setDst, swap, isNavOpen: false };
@@ -170,7 +172,7 @@ const useNavPaths = (): Params => {
 
   return {
     navPaths,
-    isNavOpen: !!dstName,
+    isNavOpen: Boolean(dstName),
     srcName,
     dstName,
     srcShortName,
@@ -178,9 +180,9 @@ const useNavPaths = (): Params => {
     srcType,
     dstType,
     setSrc,
-    setDst: setDstAndURLParam,
+    setDst: setDstAndUrlParam,
     swap,
   };
 };
 
-export default useNavPaths;
+export { useNavPaths, getWaypointParams };

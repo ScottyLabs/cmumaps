@@ -2,7 +2,7 @@ import tailwindcss from "@tailwindcss/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-// https://vite.dev/config/
+// biome-ignore lint/style/noDefaultExport: suggested by https://vite.dev/config/
 export default defineConfig({
   plugins: [
     viteReact({

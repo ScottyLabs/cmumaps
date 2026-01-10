@@ -1,7 +1,7 @@
 import { SignInButton, SignOutButton } from "@clerk/clerk-react";
 import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
-import useUser from "@/hooks/useUser";
+import { useUser } from "@/hooks/useUser";
 
 interface MenuButtonProps {
   icon: string;
@@ -13,7 +13,7 @@ const UserMenu = () => {
   const { isSignedIn, user, imageUrl } = useUser();
 
   const renderUserProfile = () => {
-    if (!isSignedIn || !user) {
+    if (!(isSignedIn && user)) {
       return (
         <div className="text-center font-semibold text-gray-800 text-sm">
           Not signed in
@@ -88,4 +88,4 @@ const UserMenu = () => {
   );
 };
 
-export default UserMenu;
+export { UserMenu };

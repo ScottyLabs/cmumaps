@@ -20,4 +20,4 @@ const ShareButton = () => {
   );
 };
 
-export default ShareButton;
+export { ShareButton };

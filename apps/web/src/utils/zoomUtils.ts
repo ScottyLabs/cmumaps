@@ -1,6 +1,6 @@
 import type { Buildings, Floor } from "@cmumaps/common";
 import type { Coordinate } from "mapkit-react";
-import prefersReducedMotion from "@/utils/prefersReducedMotion";
+import { prefersReducedMotion } from "@/utils/prefersReducedMotion";
 
 const setIsZoomingAsync =
   (setIsZooming: (isZooming: boolean) => void) => (isZooming: boolean) =>
@@ -9,14 +9,14 @@ const setIsZoomingAsync =
       resolve();
     });
 
-export const zoomOnFloor = (
+export const zoomOnFloor = async (
   map: mapkit.Map,
   buildings: Buildings,
   floor: Floor,
   setIsZooming: (isZooming: boolean) => void,
 ) => {
   // zoom after finish setting the floor
-  setIsZoomingAsync(setIsZooming)(true).then(() => {
+  await setIsZoomingAsync(setIsZooming)(true).then(() => {
     const shape = buildings[floor.buildingCode]?.shape;
     if (shape) {
       zoomOnObject(map, shape.flat());

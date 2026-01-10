@@ -1,6 +1,6 @@
-import useIsMobile from "@/hooks/useIsMobile";
-import IconsDisplayDesktop from "./desktop/IconsDisplayDesktop";
-import IconsDisplayMobile from "./mobile/IconsDisplayMobile";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
+import { IconsDisplayDesktop } from "./desktop/IconsDisplayDesktop.tsx";
+import { IconsDisplayMobile } from "./mobile/IconsDisplayMobile.tsx";
 
 const IconsDisplay = () => {
   const isMobile = useIsMobile();
@@ -11,4 +11,4 @@ const IconsDisplay = () => {
   return <IconsDisplayDesktop />;
 };
 
-export default IconsDisplay;
+export { IconsDisplay };

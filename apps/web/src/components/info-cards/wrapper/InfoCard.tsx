@@ -1,14 +1,14 @@
 import { useQueryState } from "nuqs";
 import React from "react";
 import { useNavigate } from "react-router";
-import RoomCard from "@/components/info-cards/room-card/RoomCard";
-import DraggableSheet from "@/components/info-cards/wrapper/DraggableSheet";
-import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
-import BuildingCard from "../building-card/BuildingCard";
-import CoordinateCard from "../coordinate-card/CoordinateCard";
-import NavCardDesktop from "../nav-card-desktop/NavCardDesktop";
+import { BuildingCard } from "@/components/info-cards/building-card/BuildingCard.tsx";
+import { CoordinateCard } from "@/components/info-cards/coordinate-card/CoordinateCard.tsx";
+import { NavCardDesktop } from "@/components/info-cards/nav-card-desktop/NavCardDesktop.tsx";
+import { RoomCard } from "@/components/info-cards/room-card/RoomCard.tsx";
+import { DraggableSheet } from "@/components/info-cards/wrapper/DraggableSheet.tsx";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -23,7 +23,7 @@ const InfoCard = ({ mapRef }: Props) => {
   const [src, setSrc] = useQueryState("src");
   const [_dst, setDst] = useQueryState("dst");
   const navigate = useNavigate();
-  const isNavOpen = !!src;
+  const isNavOpen = Boolean(src);
 
   if (isSearchOpen) {
     return;
@@ -70,8 +70,8 @@ const InfoCard = ({ mapRef }: Props) => {
       !isNavOpen && (
         <DraggableSheet
           snapPoints={snapPoints}
-          onClose={() => {
-            navigate("/");
+          onClose={async () => {
+            await navigate("/");
             setSrc(null);
             setDst(null);
           }}
@@ -88,4 +88,4 @@ const InfoCard = ({ mapRef }: Props) => {
   );
 };
 
-export default InfoCard;
+export { InfoCard };

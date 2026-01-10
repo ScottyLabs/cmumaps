@@ -1,5 +1,6 @@
 import type { CoordinateRegion } from "mapkit-react";
-import { type RefObject, useEffect, useRef } from "react";
+import type { RefObject } from "react";
+import { useEffect, useRef } from "react";
 
 export interface UseMapPositionHandlers {
   onRegionChangeStart: () => void;
@@ -16,11 +17,11 @@ const MAX_UPDATE_TIME_MS = 5000;
  * @param initialRegion The initial region of the map
  * @returns Handlers that need to be added to the map.
  */
-export default function useMapPosition(
+const useMapPosition = (
   callback: (region: CoordinateRegion, density: number) => void,
   mapRef: RefObject<mapkit.Map | null>,
   initialRegion: CoordinateRegion,
-): UseMapPositionHandlers {
+): UseMapPositionHandlers => {
   const timeout = useRef<number | null>(null);
   const iterations = useRef(0);
   const isUpdating = useRef(false);
@@ -102,4 +103,6 @@ export default function useMapPosition(
   );
 
   return { onRegionChangeStart, onRegionChangeEnd };
-}
+};
+
+export { useMapPosition };

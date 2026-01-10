@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import NavCard from "@/components/nav/NavCard";
-import NavDirectionsList from "@/components/nav/NavDirectionsList";
-import NavHeader from "@/components/nav/NavHeader";
-import useBoundStore from "@/store";
+import { NavCard } from "@/components/nav/NavCard.tsx";
+import { NavDirectionsList } from "@/components/nav/NavDirectionsList.tsx";
+import { NavHeader } from "@/components/nav/NavHeader.tsx";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -24,19 +24,9 @@ const NavCardDesktop = ({ mapRef }: Props) => {
       scrollRef.current.scrollTop = 44 * (instructionIndex - 1);
   }, [instructionIndex]);
 
-  const renderDirectionsList = () => {
-    return <NavDirectionsList />;
-  };
-
-  const renderCard = () => {
-    return (
-      <NavCard
-        isNavigating={isNavigating}
-        startNav={startNav}
-        listShown={true}
-      />
-    );
-  };
+  const renderCard = () => (
+    <NavCard isNavigating={isNavigating} startNav={startNav} listShown={true} />
+  );
 
   return (
     <div className="shrink-0">
@@ -58,11 +48,11 @@ const NavCardDesktop = ({ mapRef }: Props) => {
           className="mt-2 h-100 overflow-y-scroll bg-white pb-2"
           ref={scrollRef}
         >
-          {renderDirectionsList()}
+          <NavDirectionsList />
         </div>
       )}
     </div>
   );
 };
 
-export default NavCardDesktop;
+export { NavCardDesktop };

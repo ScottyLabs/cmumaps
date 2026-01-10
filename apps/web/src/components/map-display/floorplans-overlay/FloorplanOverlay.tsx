@@ -1,12 +1,13 @@
-import { type Floor, type GeoRoom, getRoomTypeDetails } from "@cmumaps/common";
+import type { Floor, GeoRoom } from "@cmumaps/common";
+import { getRoomTypeDetails } from "@cmumaps/common";
 import { Annotation, Polygon } from "mapkit-react";
-import $api from "@/api/client";
-import RoomPin from "@/components/shared/RoomPin";
-import useLocationParams from "@/hooks/useLocationParams";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
+import { $api } from "@/api/client";
+import { RoomPin } from "@/components/shared/RoomPin.tsx";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { CardStates } from "@/store/cardSlice";
+import { useBoundStore } from "@/store/index.ts";
 import { getFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Props {
@@ -27,20 +28,21 @@ const FloorplanOverlay = ({ floor }: Props) => {
     "get",
     "/floors/{floorCode}/floorplan",
     { params: { path: { floorCode: floorCode ?? "" } } },
-    { enabled: !!floorCode },
+    { enabled: Boolean(floorCode) },
   );
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
   // Custom hooks
   const { roomName: selectedRoomName } = useLocationParams();
-  const { isNavOpen, setSrc } = useNavigationParams();
+  const { isNavOpen, setSrc } = useNavPaths();
 
   if (!rooms) {
     return null;
   }
 
   const handleSelectRoom = (roomName: string, room: GeoRoom) => {
-    const floor = room.floor;
+    // biome-ignore lint/nursery/noShadow: TODO: fix the shadow
+    const { floor } = room;
 
     if (
       !buildings?.[floor.buildingCode]?.floors.includes(
@@ -69,6 +71,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
         return (
           <div className="text-center text-sm leading-[1.1] tracking-wide">
             {showRoomNames && <p>{roomName}</p>}
+            {/** biome-ignore lint/nursery/noLeakedRender: TODO: fix the leaked render */}
             {room.alias && (
               <p className="w-16 text-wrap italic">{room.alias}</p>
             )}
@@ -94,7 +97,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
         <Annotation
           latitude={room.labelPosition.latitude}
           longitude={room.labelPosition.longitude}
-          displayPriority={"low"}
+          displayPriority="low"
         >
           <button
             type="button"
@@ -105,6 +108,7 @@ const FloorplanOverlay = ({ floor }: Props) => {
               e.stopPropagation();
             }}
           >
+            {/** biome-ignore lint/nursery/noLeakedRender: TODO: fix the leaked render */}
             {showPin && <RoomPin room={{ ...room, name: roomName }} />}
             {renderRoomName()}
           </button>
@@ -114,4 +118,4 @@ const FloorplanOverlay = ({ floor }: Props) => {
   });
 };
 
-export default FloorplanOverlay;
+export { FloorplanOverlay };

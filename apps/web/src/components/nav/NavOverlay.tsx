@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import useIsMobile from "@/hooks/useIsMobile";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useUser from "@/hooks/useUser";
-import useBoundStore from "@/store";
+import { NavOverlayMobile } from "@/components/nav/NavOverlayMobile.tsx";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useUser } from "@/hooks/useUser.ts";
+import { useBoundStore } from "@/store/index.ts";
 import type { Node } from "@/types/navTypes";
-import NavOverlayMobile from "./NavOverlayMobile";
 
 const NavOverlay = ({
   mapRef,
@@ -20,7 +20,7 @@ const NavOverlay = ({
   const selectedPath = useBoundStore((state) => state.selectedPath);
   const showLogin = useBoundStore((state) => state.showLogin);
 
-  const { navPaths, isNavOpen, dstType, srcType } = useNavigationParams();
+  const { navPaths, isNavOpen, dstType, srcType } = useNavPaths();
   const { hasAccess } = useUser();
 
   // Process instructions
@@ -28,6 +28,7 @@ const NavOverlay = ({
     const instructions = navPaths?.[selectedPath]?.instructions ?? [];
     const path: Node[] = navPaths?.[selectedPath]?.path.path ?? [];
 
+    // biome-ignore lint/suspicious/noEvolvingTypes: TODO: fix the type
     const newInstructions = [];
 
     let oldInstructionsIndex = 0;
@@ -80,12 +81,12 @@ const NavOverlay = ({
     newInstructions.push({
       action: "Forward",
       distance: Math.round(distanceAcc),
-      nodeId: path[path.length - 1]?.id ?? "",
+      nodeId: path.at(-1)?.id ?? "",
     });
     newInstructions.push({
       action: "Arrive",
       distance: 0,
-      nodeId: path[path.length - 1]?.id ?? "",
+      nodeId: path.at(-1)?.id ?? "",
     });
     setNavInstructions?.(newInstructions);
   }, [navPaths, setNavInstructions, selectedPath]);
@@ -119,4 +120,4 @@ const NavOverlay = ({
   }
 };
 
-export default NavOverlay;
+export { NavOverlay };

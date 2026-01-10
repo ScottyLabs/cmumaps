@@ -1,8 +1,8 @@
 import { getSelectorsByUserAgent } from "react-device-detect";
 
 const useIsMobile = () => {
-  const userAgent = navigator.userAgent;
+  const { userAgent } = navigator;
   return getSelectorsByUserAgent(userAgent).isMobile;
 };
 
-export default useIsMobile;
+export { useIsMobile };

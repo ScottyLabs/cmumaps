@@ -1,7 +1,7 @@
-type Coordinate = {
+interface Coordinate {
   latitude: number;
   longitude: number;
-};
+}
 
 export function encodeCoord(coord: Coordinate): string {
   const s = `${coord.latitude},${coord.longitude}`;

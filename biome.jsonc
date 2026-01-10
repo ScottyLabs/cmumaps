@@ -6,10 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": [
-      "**",
-      "!**/routeTree.gen.ts"
-    ]
+    "includes": ["**", "!**/routeTree.gen.ts"]
   },
   "formatter": {
     "useEditorconfig": true
@@ -169,7 +166,7 @@
         "useExhaustiveDependencies": "error",
         "useGraphqlNamedOperations": "error",
         "useHookAtTopLevel": "error",
-        "useImageSize": "error",
+        "useImageSize": "off",
         "useImportExtensions": "error",
         "useIsNan": "error",
         "useJsonImportAttributes": "error",
@@ -196,7 +193,7 @@
         "noImportCycles": "off",
         "noIncrementDecrement": "off",
         "noJsxLiterals": "off",
-        "noJsxPropsBind": "error",
+        "noJsxPropsBind": "off",
         "noLeakedRender": "error",
         "noMisusedPromises": "error",
         "noMultiAssign": "error",
@@ -270,7 +267,7 @@
         "noBarrelFile": "off",
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",
-        "noImgElement": "error",
+        "noImgElement": "off",
         "noNamespaceImport": "off",
         "noReExportAll": "off",
         "noUnwantedPolyfillio": "error",
@@ -298,7 +295,7 @@
         "noMagicNumbers": "off",
         "noNamespace": "error",
         "noNegationElse": "error",
-        "noNestedTernary": "error",
+        "noNestedTernary": "off",
         "noNonNullAssertion": "error",
         "noParameterAssign": "error",
         "noParameterProperties": "error",
@@ -351,7 +348,7 @@
           }
         },
         "useLiteralEnumMembers": "error",
-        "useNamingConvention": "off",
+        "useNamingConvention": "error",
         "useNodeAssertStrict": "error",
         "useNodejsImportProtocol": "error",
         "useNumberNamespace": "error",

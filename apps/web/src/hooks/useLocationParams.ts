@@ -1,7 +1,8 @@
+/** biome-ignore-all lint/nursery/noFloatingPromises: TODO: fix the floating promises */
 import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import $api from "@/api/client";
+import { $api } from "@/api/client";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Params {
@@ -35,7 +36,7 @@ const useLocationParams = (): Params => {
     "get",
     "/floors/{floorCode}/floorplan",
     { params: { path: { floorCode: floorCode ?? "" } } },
-    { enabled: !!floorCode },
+    { enabled: Boolean(floorCode) },
   );
 
   const building = buildings && buildingCode && buildings[buildingCode];
@@ -60,8 +61,7 @@ const useLocationParams = (): Params => {
   if (suffix.includes(",")) {
     const [latitude, longitude] = suffix.split(",").map(Number.parseFloat);
     if (
-      !latitude ||
-      !longitude ||
+      !(latitude && longitude) ||
       Number.isNaN(latitude) ||
       Number.isNaN(longitude)
     ) {
@@ -99,7 +99,7 @@ const useLocationParams = (): Params => {
   }
 
   if (!roomName || roomName === "") {
-    return { buildingCode, isCardOpen: !!buildingCode && !dst };
+    return { buildingCode, isCardOpen: Boolean(buildingCode && !dst) };
   }
 
   if (!floor || (building && !building.floors.includes(floor))) {
@@ -109,11 +109,11 @@ const useLocationParams = (): Params => {
   }
 
   if (roomName === floor) {
-    return { buildingCode, floor, isCardOpen: !!buildingCode && !dst };
+    return { buildingCode, floor, isCardOpen: Boolean(buildingCode && !dst) };
   }
 
   if (!rooms) {
-    return { buildingCode, floor, isCardOpen: !!buildingCode && !dst };
+    return { buildingCode, floor, isCardOpen: Boolean(buildingCode && !dst) };
   }
 
   if (!rooms[roomName]) {
@@ -126,8 +126,8 @@ const useLocationParams = (): Params => {
     buildingCode,
     floor,
     roomName,
-    isCardOpen: !!buildingCode && !dst,
+    isCardOpen: Boolean(buildingCode && !dst),
   };
 };
 
-export default useLocationParams;
+export { useLocationParams };

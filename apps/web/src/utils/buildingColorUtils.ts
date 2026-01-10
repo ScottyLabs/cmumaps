@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Building code are in all caps */
 const buildingCodeToShapeFillColor = {
   MOE: "#fde047",
   STE: "#307454",
@@ -35,8 +36,7 @@ const buildingCodeToShapeFillColor = {
   RES: "#2A2D4B",
 };
 
-export const getBuildingShapeFillColor = (buildingCode: string) => {
-  return buildingCodeToShapeFillColor[
+export const getBuildingShapeFillColor = (buildingCode: string) =>
+  buildingCodeToShapeFillColor[
     buildingCode as keyof typeof buildingCodeToShapeFillColor
   ];
-};

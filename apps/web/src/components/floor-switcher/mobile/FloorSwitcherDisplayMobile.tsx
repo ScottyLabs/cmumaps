@@ -1,9 +1,9 @@
 import type { Building } from "@cmumaps/common";
 import { animate, motion, useMotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import $api from "@/api/client";
-import useBoundStore from "@/store";
-import FloorSwitcherCarouselMobile from "./FloorSwitcherCarousel";
+import { $api } from "@/api/client";
+import { useBoundStore } from "@/store/index.ts";
+import { FloorSwitcherCarouselMobile } from "./FloorSwitcherCarousel.tsx";
 
 interface Props {
   building: Building;
@@ -30,9 +30,9 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
   useEffect(() => {
-    const building = buildings?.[focusedFloor?.buildingCode ?? ""];
-    if (focusedFloor && building) {
-      const newFloorIndex = building.floors.indexOf(focusedFloor.level);
+    const focusedBuilding = buildings?.[focusedFloor?.buildingCode ?? ""];
+    if (focusedFloor && focusedBuilding) {
+      const newFloorIndex = focusedBuilding.floors.indexOf(focusedFloor.level);
       progressValue.set(newFloorIndex);
     }
   }, [focusedFloor, buildings, progressValue.set]);
@@ -112,4 +112,4 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   );
 };
 
-export default FloorSwitcherDisplayMobile;
+export { FloorSwitcherDisplayMobile };

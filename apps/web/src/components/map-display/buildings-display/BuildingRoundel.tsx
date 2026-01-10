@@ -1,11 +1,12 @@
-import { type Building, extractBuildingCode } from "@cmumaps/common";
+import type { Building } from "@cmumaps/common";
+import { extractBuildingCode } from "@cmumaps/common";
 import { Annotation } from "mapkit-react";
 import { useQueryState } from "nuqs";
 import { useLocation } from "react-router";
-import Roundel from "@/components/shared/Roundel";
-import useNavigateLocationParams from "@/hooks/useNavigateLocationParams";
-import useBoundStore from "@/store";
+import { Roundel } from "@/components/shared/Roundel.tsx";
+import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { CardStates } from "@/store/cardSlice";
+import { useBoundStore } from "@/store/index.ts";
 import { zoomOnObject } from "@/utils/zoomUtils";
 
 interface Props {
@@ -17,7 +18,7 @@ const BuildingRoundel = ({ map, building }: Props) => {
   const navigate = useNavigateLocationParams();
 
   const location = useLocation();
-  const floorCode = location.pathname.split("/")[1];
+  const [, floorCode] = location.pathname.split("/");
   const selectBuilding = useBoundStore((state) => state.selectBuilding);
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
@@ -76,4 +77,4 @@ const BuildingRoundel = ({ map, building }: Props) => {
   );
 };
 
-export default BuildingRoundel;
+export { BuildingRoundel };

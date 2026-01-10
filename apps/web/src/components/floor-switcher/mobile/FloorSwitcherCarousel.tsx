@@ -1,8 +1,10 @@
+/** biome-ignore-all lint/suspicious/noBitwiseOperators: want to use bitwise operators? */
 import type { Building } from "@cmumaps/common";
-import { animate, type MotionValue, motion, useTransform } from "motion/react";
+import type { MotionValue } from "motion/react";
+import { animate, motion, useTransform } from "motion/react";
 import { useEffect } from "react";
-import $api from "@/api/client";
-import useBoundStore from "@/store";
+import { $api } from "@/api/client";
+import { useBoundStore } from "@/store/index.ts";
 
 interface FloorSwitcherButtonProps {
   building: Building;
@@ -152,7 +154,7 @@ const FloorSwitcherCarouselMobile = ({ building, progressValue }: Props) => {
           index={index}
           floor={floor}
           progressValue={progressValue}
-          key={index}
+          key={floor}
         />
       ))}
       <DummyButton
@@ -163,4 +165,4 @@ const FloorSwitcherCarouselMobile = ({ building, progressValue }: Props) => {
   );
 };
 
-export default FloorSwitcherCarouselMobile;
+export { FloorSwitcherCarouselMobile };

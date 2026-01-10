@@ -1,4 +1,5 @@
 // https://github.com/adamhl8/configs/blob/main/generate-biome-rules.ts
+/** biome-ignore-all lint/style/useNamingConvention: some rules violate this rule */
 /** biome-ignore-all lint/nursery/useAwaitThenable: external script style */
 import { mergeDeep } from "remeda";
 
@@ -22,6 +23,9 @@ const OVERRIDES = {
     noForEach: "off",
   },
   correctness: {
+    // TODO: enable later after we figure out how to get the image size of svgs
+    useImageSize: "off",
+
     noNodejsModules: "off",
     noQwikUseVisibleTask: "off",
     noSolidDestructuredProps: "off",
@@ -35,10 +39,13 @@ const OVERRIDES = {
     useExplicitType: "off",
     noIncrementDecrement: "off",
 
+    // Common pattern of creating a function for a button violates this rule
+    noJsxPropsBind: "off",
+
     // Not a useful rule
     useMaxParams: "off",
 
-    // Need to enable later after figure out how to fix it in server with dependncy injection
+    // TODO: Need to enable later after figure out how to fix it in server with dependncy injection
     noImportCycles: "off",
 
     noJsxLiterals: "off",
@@ -72,6 +79,9 @@ const OVERRIDES = {
     noNamespaceImport: "off",
     useSolidForComponent: "off",
 
+    // Next.js rule
+    noImgElement: "off",
+
     // Not a performance issue for our use case
     noReExportAll: "off",
 
@@ -82,6 +92,9 @@ const OVERRIDES = {
     noSecrets: "off",
   },
   style: {
+    // Sometimes nested ternary is simpler
+    noNestedTernary: "off",
+
     noEnum: "off",
     noMagicNumbers: "off",
     noProcessEnv: "off",

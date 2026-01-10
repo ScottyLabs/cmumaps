@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Environment variables are in all caps */
 import { z } from "zod";
 
 // Define the schema as an object with all of the env
@@ -21,4 +22,4 @@ if (!parsed.success) {
 const env = parsed.data;
 
 // Export the result so we can use it in the project
-export default env;
+export { env };

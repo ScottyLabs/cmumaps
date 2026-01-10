@@ -3,8 +3,8 @@ import { PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
-import env from "@/env.ts";
-import App from "./App.tsx";
+import { env } from "@/env.ts";
+import { App } from "./App.tsx";
 import "./index.css";
 import { ClerkProvider } from "@clerk/clerk-react";
 import type { Clerk } from "@clerk/types";
@@ -14,12 +14,14 @@ import posthog from "posthog-js";
 // https://clerk.com/docs/components/control/clerk-loaded
 declare global {
   interface Window {
+    // biome-ignore lint/style/useNamingConvention: Clerk name is in camelCase
     Clerk: Clerk;
   }
 }
 
 // Initialize Posthog https://posthog.com/docs/libraries/react
 posthog.init(env.VITE_PUBLIC_POSTHOG_KEY || "", {
+  // biome-ignore lint/style/useNamingConvention: posthog config is in snake_case
   api_host: env.VITE_PUBLIC_POSTHOG_HOST,
 });
 

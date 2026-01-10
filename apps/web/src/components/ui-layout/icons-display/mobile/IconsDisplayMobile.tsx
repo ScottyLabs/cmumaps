@@ -1,10 +1,11 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import { useState } from "react";
 import userMenuIcon from "@/assets/icons/plus_button_menu/mobile/settings.svg";
-import UserMenu from "@/components/ui-layout/icons-display/UserMenu";
-import useLocationParams from "@/hooks/useLocationParams";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
-import PlusButton from "../PlusButton";
+import { UserMenu } from "@/components/ui-layout/icons-display/UserMenu.tsx";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store";
+import { PlusButton } from "../PlusButton.tsx";
 
 enum PlusButtonMenuState {
   CLOSED = 0,
@@ -24,7 +25,7 @@ interface MenuButtonProps {
 const IconsDisplayMobile = () => {
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
   const { isCardOpen } = useLocationParams();
-  const { isNavOpen } = useNavigationParams();
+  const { isNavOpen } = useNavPaths();
 
   const [plusButtonMenuState, setPlusButtonMenuState] = useState(
     PlusButtonMenuState.CLOSED,
@@ -137,4 +138,4 @@ const IconsDisplayMobile = () => {
   );
 };
 
-export default IconsDisplayMobile;
+export { IconsDisplayMobile };

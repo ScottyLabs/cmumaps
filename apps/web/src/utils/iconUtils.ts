@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import type { GeoRoom, RoomType } from "@cmumaps/common";
 import restroomIcon from "@/assets/icons/quick_search/restroom.svg";
 import corridorIcon from "@/assets/icons/search_results/corridor.svg";

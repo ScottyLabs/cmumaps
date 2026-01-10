@@ -1,4 +1,4 @@
-import BuildingRoundel from "@/components/map-view/building-display/BuildingRoundel";
+import { BuildingRoundel } from "@/components/map-view/building-display/BuildingRoundel";
 import BuildingShape from "@/components/map-view/building-display/BuildingShape";
 import { useGetBuildingsQuery } from "@/store/api/buildingApiSlice";
 

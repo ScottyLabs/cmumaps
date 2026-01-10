@@ -1,15 +1,16 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use right naming convention */
 import { useEffect, useRef, useState } from "react";
 import enterIcon from "@/assets/icons/nav/nav-overlay/header-instructions/enter.svg";
 import exitIcon from "@/assets/icons/nav/nav-overlay/header-instructions/exit.svg";
 import forwardArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/forward-arrow.svg";
 import leftArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/left-arrow.svg";
 import rightArrowIcon from "@/assets/icons/nav/nav-overlay/header-instructions/right-arrow.svg";
-import useNavigationParams from "@/hooks/useNavigationParams";
-import useBoundStore from "@/store";
-import DraggableSheet from "../info-cards/wrapper/DraggableSheet";
-import NavCard from "./NavCard";
-import NavDirectionsList from "./NavDirectionsList";
-import NavHeader from "./NavHeader";
+import { DraggableSheet } from "@/components/info-cards/wrapper/DraggableSheet.tsx";
+import { NavCard } from "@/components/nav/NavCard.tsx";
+import { NavDirectionsList } from "@/components/nav/NavDirectionsList.tsx";
+import { NavHeader } from "@/components/nav/NavHeader.tsx";
+import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface NavOverlayMobileProps {
   isNavigating: boolean;
@@ -24,7 +25,7 @@ const NavOverlayMobile = ({
 }: NavOverlayMobileProps) => {
   const [listShown, setListShown] = useState(false);
 
-  const { dstShortName } = useNavigationParams();
+  const { dstShortName } = useNavPaths();
 
   const [yControl, setYControl] = useState(300);
 
@@ -74,6 +75,7 @@ const NavOverlayMobile = ({
           mapRef={mapRef}
         />
       </div>
+      {/** biome-ignore lint/nursery/noLeakedRender: TODO: fix the leaked render */}
       {listShown && (
         <>
           <DraggableSheet
@@ -135,4 +137,4 @@ const NavOverlayMobile = ({
   );
 };
 
-export default NavOverlayMobile;
+export { NavOverlayMobile };

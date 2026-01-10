@@ -1,21 +1,22 @@
 import type { Building } from "@cmumaps/common";
 import { INITIAL_REGION } from "@cmumaps/ui";
 import type { CoordinateRegion } from "mapkit-react";
-import { type RefObject, useState } from "react";
-import $api from "@/api/client";
+import type { RefObject } from "react";
+import { useState } from "react";
+import { $api } from "@/api/client";
 import {
   THRESHOLD_DENSITY_TO_SHOW_FLOORS,
   THRESHOLD_DENSITY_TO_SHOW_ROOMS,
 } from "@/components/map-display/mapConstants";
-import useMapPosition from "@/hooks/useMapPosition";
-import useBoundStore from "@/store";
+import { useMapPosition } from "@/hooks/useMapPosition.ts";
+import { useBoundStore } from "@/store";
 import {
   getFloorByOrdinal,
   getFloorLevelFromRoomName,
   getFloorOrdinal,
 } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
-import useNavigationParams from "./useNavigationParams";
+import { useNavPaths } from "./useNavigationParams.ts";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Query data
@@ -34,7 +35,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Local state
   const [showFloor, setShowFloor] = useState<boolean>(false);
 
-  const { navPaths } = useNavigationParams();
+  const { navPaths } = useNavPaths();
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
 
   // Calculates the focused floor based on the region
@@ -130,16 +131,16 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
     (region, density) => {
       // dispatch(setInfoCardStatus(CardStates.COLLAPSED));
 
-      const showFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
-      setShowFloor(showFloor);
+      const newShowFloor = density >= THRESHOLD_DENSITY_TO_SHOW_FLOORS;
+      setShowFloor(newShowFloor);
       setShowRoomNames(density >= THRESHOLD_DENSITY_TO_SHOW_ROOMS);
 
-      if (showFloor && !sessionStorage.getItem("showedLogin")) {
+      if (newShowFloor && !sessionStorage.getItem("showedLogin")) {
         sessionStorage.setItem("showedLogin", "true");
         showLogin();
       }
 
-      if (!showFloor) {
+      if (!newShowFloor) {
         unfocusFloor();
         return;
       }
@@ -153,4 +154,4 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   return { onRegionChangeStart, onRegionChangeEnd, showFloor };
 };
 
-export default useMapRegionChange;
+export { useMapRegionChange };

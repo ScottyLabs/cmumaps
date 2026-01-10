@@ -1,9 +1,9 @@
-import $api from "@/api/client";
-import ButtonsRow from "@/components/info-cards/shared/buttons-row/ButtonsRow";
-import InfoCardImage from "@/components/info-cards/shared/media/InfoCardImage";
-import useIsMobile from "@/hooks/useIsMobile";
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
+import { $api } from "@/api/client";
+import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
+import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -11,11 +11,11 @@ interface Props {
 
 const BuildingCard = ({ mapRef: _mapRef }: Props) => {
   const isMobile = useIsMobile();
-  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed);
+  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed)();
   const { buildingCode } = useLocationParams();
   const { data: buildings } = $api.useQuery("get", "/buildings");
 
-  if (!buildingCode || !buildings) {
+  if (!(buildingCode && buildings)) {
     return;
   }
 
@@ -31,7 +31,7 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
 
   return (
     <>
-      {(!isCardCollapsed || !isMobile) && renderBuildingImage()}
+      {!(isCardCollapsed && isMobile) && renderBuildingImage()}
       <h2 className="ml-3 pt-2">
         {building.name} ({building.code})
       </h2>
@@ -40,4 +40,4 @@ const BuildingCard = ({ mapRef: _mapRef }: Props) => {
   );
 };
 
-export default BuildingCard;
+export { BuildingCard };

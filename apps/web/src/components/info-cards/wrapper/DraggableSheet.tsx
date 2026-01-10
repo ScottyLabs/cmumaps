@@ -1,10 +1,12 @@
-import { motion, type PanInfo, useAnimation } from "motion/react";
+/** biome-ignore-all lint/nursery/noFloatingPromises: Fix floating promises */
+import type { PanInfo } from "motion/react";
+import { motion, useAnimation } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
-import useLocationParams from "@/hooks/useLocationParams";
-import useBoundStore from "@/store";
-import { CardStates, CardStatesList } from "@/store/cardSlice";
+import { useLocationParams } from "@/hooks/useLocationParams.ts";
+import { CardStates, CardStatesList } from "@/store/cardSlice.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   snapPoints: number[];
@@ -31,9 +33,10 @@ const DraggableSheet = ({
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
   // Local state
-  const snapIndex = useMemo(() => {
-    return CardStatesList.indexOf(cardStatus);
-  }, [cardStatus]);
+  const snapIndex = useMemo(
+    () => CardStatesList.indexOf(cardStatus),
+    [cardStatus],
+  );
 
   // Custom hooks
   const { isCardOpen, floor, coordinate, buildingCode } = useLocationParams();
@@ -105,6 +108,7 @@ const DraggableSheet = ({
             { y: -snapPoints[index] },
             {
               onComplete:
+                // biome-ignore lint/suspicious/noEmptyBlockStatements: TODO: fix the empty block statements
                 closestSnap === -window.innerHeight ? onCollapse : () => {},
             },
           );
@@ -133,26 +137,24 @@ const DraggableSheet = ({
     }
   };
 
-  const renderHandle = () => {
-    return (
-      <div className="flex h-12 shrink-0 items-center justify-between px-2">
-        <div className="w-8" />
-        <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
-        <IoIosClose
-          title="Close"
-          size={32}
-          onClick={() => {
-            controls.start(
-              { y: window.innerHeight },
-              {
-                onComplete: onClose,
-              },
-            );
-          }}
-        />
-      </div>
-    );
-  };
+  const renderHandle = () => (
+    <div className="flex h-12 shrink-0 items-center justify-between px-2">
+      <div className="w-8" />
+      <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
+      <IoIosClose
+        title="Close"
+        size={32}
+        onClick={() => {
+          controls.start(
+            { y: window.innerHeight },
+            {
+              onComplete: onClose,
+            },
+          );
+        }}
+      />
+    </div>
+  );
 
   return (
     <div className="absolute inset-0 h-0">
@@ -172,4 +174,4 @@ const DraggableSheet = ({
   );
 };
 
-export default DraggableSheet;
+export { DraggableSheet };
