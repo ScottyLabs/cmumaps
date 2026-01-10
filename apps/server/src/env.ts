@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: environment variables are in all caps */
 import process from "node:process";
 import { z } from "zod";
 

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use the right naming convention */
 import type { GeoCoordinate } from "@cmumaps/common";
 import { dist } from "@cmumaps/common";
 import type { Document } from "./types.ts";

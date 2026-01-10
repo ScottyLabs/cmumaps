@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Prisma uses snake_case */
 import { prisma } from "../../prisma/index.ts";
 
 export const edgeService = {

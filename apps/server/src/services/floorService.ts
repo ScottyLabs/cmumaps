@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Prisma uses snake_case */
 import type {
   EdgeInfo,
   GeoCoordinate,
