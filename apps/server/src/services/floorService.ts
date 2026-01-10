@@ -19,7 +19,7 @@ import {
   pdfPolygonToGeoPolygon,
 } from "@cmumaps/common";
 import type { InputJsonValue } from "@prisma/client/runtime/library";
-import { prisma } from "../../prisma";
+import { prisma } from "../../prisma/index.ts";
 
 export const floorService = {
   getFloorGraph: async (floorCode: string, placement: Placement) => {
@@ -59,7 +59,7 @@ export const floorService = {
       // Create a mapping of neighbor node strings to edge info
       const neighbors: Record<string, EdgeInfo> = {};
       for (const edge of node.outEdges) {
-        const outNode = edge.outNode;
+        const { outNode } = edge;
         neighbors[edge.outNodeId] = {};
 
         // Determine if cross floor edge
@@ -95,8 +95,8 @@ export const floorService = {
     // Get all rooms on the floor from the database
     const dbRooms = await prisma.room.findMany({
       where: {
-        buildingCode: buildingCode,
-        floorLevel: floorLevel,
+        buildingCode,
+        floorLevel,
       },
       include: {
         aliases: true,
@@ -113,7 +113,7 @@ export const floorService = {
           longitude: room.labelLongitude,
         }),
         type: room.type as RoomType,
-        displayAlias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
+        displayAlias: room.aliases.find((a) => a.isDisplayAlias)?.alias,
         aliases: room.aliases.map((a) => a.alias),
         polygon: geoPolygonToPdfPolygon(
           room.polygon as unknown as GeoCoordinate[][],
@@ -132,8 +132,8 @@ export const floorService = {
     const dbPois = await prisma.poi.findMany({
       where: {
         node: {
-          buildingCode: buildingCode,
-          floorLevel: floorLevel,
+          buildingCode,
+          floorLevel,
         },
       },
     });
@@ -272,8 +272,8 @@ export const floorService = {
     // Get all rooms on the floor from the database
     const dbRooms = await prisma.room.findMany({
       where: {
-        buildingCode: buildingCode,
-        floorLevel: floorLevel,
+        buildingCode,
+        floorLevel,
       },
       include: {
         aliases: true,
@@ -294,7 +294,7 @@ export const floorService = {
         },
         type: room.type as RoomType,
         id: room.roomId,
-        alias: room.aliases.filter((a) => a.isDisplayAlias)[0]?.alias,
+        alias: room.aliases.find((a) => a.isDisplayAlias)?.alias,
         points: room.polygon as unknown as GeoCoordinate[][],
       };
     }
@@ -342,7 +342,7 @@ export const floorService = {
       // Create a mapping of neighbor node strings to edge info
       const neighbors: Record<string, EdgeInfo> = {};
       for (const edge of node.outEdges) {
-        const outNode = edge.outNode;
+        const { outNode } = edge;
 
         // Determine if cross floor edge
         const outFloorCode = `${outNode.buildingCode}-${outNode.floorLevel}`;

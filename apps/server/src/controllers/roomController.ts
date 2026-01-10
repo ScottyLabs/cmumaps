@@ -10,18 +10,18 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication";
-import { requireSocketId } from "../middleware/socketAuth";
-import { webSocketService } from "../server";
-import { floorService } from "../services/floorService";
-import { roomService } from "../services/roomService";
+import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import { requireSocketId } from "../middleware/socketAuth.ts";
+import { webSocketService } from "../server.ts";
+import { floorService } from "../services/floorService.ts";
+import { roomService } from "../services/roomService.ts";
 
 @Middlewares(requireSocketId)
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
 @Route("rooms")
 export class RoomController {
   @Post("/:roomId")
-  async createRoom(
+  public async createRoom(
     @Request() req: ExpressRequest,
     @Body() body: {
       floorCode: string;
@@ -29,9 +29,9 @@ export class RoomController {
       roomInfo: RoomInfo;
     },
   ) {
-    const roomId = req.params.roomId;
+    const { roomId } = req.params;
     const { floorCode, roomNodes, roomInfo } = body;
-    const socketId = req.socketId;
+    const { socketId } = req;
 
     const placement = await floorService.getFloorPlacement(floorCode);
     await roomService.createRoom(
@@ -47,9 +47,8 @@ export class RoomController {
   }
 
   @Delete("/:roomId")
-  async deleteRoom(@Request() req: ExpressRequest) {
-    const roomId = req.params.roomId;
-    const socketId = req.socketId;
+  public async deleteRoom(@Request() req: ExpressRequest) {
+    const { roomId, socketId } = req.params;
 
     await roomService.deleteRoom(roomId);
     const payload = { roomId };
@@ -58,13 +57,13 @@ export class RoomController {
   }
 
   @Patch("/:roomId")
-  async updateRoom(
+  public async updateRoom(
     @Request() req: ExpressRequest,
     @Body() body: { floorCode: string; roomInfo: Partial<RoomInfo> },
   ) {
-    const roomId = req.params.roomId;
+    const { roomId } = req.params;
     const { roomInfo, floorCode } = body;
-    const socketId = req.socketId;
+    const { socketId } = req;
 
     const placement = await floorService.getFloorPlacement(floorCode);
     await roomService.updateRoom(roomId, roomInfo, placement);

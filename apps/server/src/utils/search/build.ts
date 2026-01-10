@@ -1,8 +1,8 @@
 import type { Buildings, GeoCoordinate, RoomType } from "@cmumaps/common";
-import { prisma } from "../../../prisma";
-import { buildingService } from "../../services/buildingService";
-import { parseQuery } from "./parse";
-import type { Document, FloorPlans, SearchIndex } from "./types";
+import { prisma } from "../../../prisma/index.ts";
+import { buildingService } from "../../services/buildingService.ts";
+import { parseQuery } from "./parse.ts";
+import type { Document, FloorPlans, SearchIndex } from "./types.ts";
 
 export function buildingToDocument({
   id,
@@ -19,7 +19,7 @@ export function buildingToDocument({
     id,
     nameWithSpace: name,
     fullNameWithSpace: name,
-    labelPosition: labelPosition,
+    labelPosition,
     type: "building",
     alias: code,
     numTerms: 0,
@@ -55,7 +55,7 @@ export function roomToDocument({
     id,
     nameWithSpace: `${buildingCode} ${name}`,
     fullNameWithSpace: `${buildingName} ${name}`,
-    labelPosition: labelPosition,
+    labelPosition,
     type: "room",
     alias,
     numTerms: 0,
@@ -85,7 +85,7 @@ export async function getFloorplans(): Promise<FloorPlans> {
     const { buildingCode, floorLevel } = room;
 
     // Skip rooms without building code or floor level
-    if (!buildingCode || !floorLevel) continue;
+    if (!(buildingCode && floorLevel)) continue;
 
     // Initialize building if not exists
     if (!floorplans[buildingCode]) {
@@ -161,7 +161,7 @@ function insertTerms(index: SearchIndex, terms: string[], docId: string): void {
   }
 }
 
-export async function buildSearchIndex(
+export function buildSearchIndex(
   floorplans: FloorPlans,
   buildingMap: Buildings,
 ) {

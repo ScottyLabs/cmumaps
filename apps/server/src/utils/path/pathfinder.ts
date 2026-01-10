@@ -8,8 +8,8 @@ import type {
 } from "@cmumaps/common";
 import { dist, geoNodeToNavPathNode } from "@cmumaps/common";
 import TinyQueue from "tinyqueue";
-import type { Buildings } from "../../services/pathService";
-import { generateInstructions } from "./instructions";
+import type { Buildings } from "../../services/pathService.ts";
+import { generateInstructions } from "./instructions.ts";
 
 const findClosestNeighbors = (
   targetCoord: { latitude: number; longitude: number },
@@ -60,7 +60,7 @@ export const waypointToNodes = (
   graph: GeoNodes,
   buildings: Buildings,
 ) => {
-  const nodes = [];
+  const nodes: string[] = [];
   switch (waypoint.type) {
     case "Room": {
       for (const node of Object.values(graph)) {
@@ -72,19 +72,19 @@ export const waypointToNodes = (
     }
     case "Coordinate": {
       const coord = waypoint.coordinate;
-      let best_dist = null;
-      let best_node = null;
+      let bestDist: number | null = null;
+      let bestNode: string | null = null;
       for (const node of Object.values(graph)) {
         const d = dist(node.pos, coord);
-        if (best_dist === null || d < best_dist) {
-          best_dist = d;
-          best_node = node.id;
+        if (bestDist === null || d < bestDist) {
+          bestDist = d;
+          bestNode = node.id;
         }
       }
-      if (best_node === null) {
+      if (bestNode === null) {
         throw new Error("Graph should not be empty!");
       }
-      nodes.push(best_node);
+      nodes.push(bestNode);
       break;
     }
     case "Building": {
@@ -139,6 +139,9 @@ export const waypointToNodes = (
       }
       break;
     }
+    default: {
+      throw new Error(`Unknown waypoint type: ${JSON.stringify(waypoint)}`);
+    }
   }
   return nodes;
 };
@@ -154,7 +157,11 @@ export const findPath = (
   graph: GeoNodes,
   outsideCostMul = 1,
 ): Route | null => {
-  type QueueItem = { path: string[]; distance: number; addCost: number };
+  interface QueueItem {
+    path: string[];
+    distance: number;
+    addCost: number;
+  }
 
   // Init work list and empty explored set (shared across all start nodes)
   const pq = new TinyQueue<QueueItem>([], (a, b) => a.distance - b.distance);
@@ -175,7 +182,7 @@ export const findPath = (
   }
 
   // Loop until pq is empty or shortest path is found, always explore lower-cost paths first
-  while (pq.length) {
+  while (pq.length > 0) {
     const current = pq.pop();
     if (!current) break;
 
@@ -190,11 +197,10 @@ export const findPath = (
     const lastNode = graph[lastNodeId];
     if (!lastNode) continue;
 
-    if (!exploredSet.has(lastNodeId)) {
-      exploredSet.add(lastNodeId);
-    } else {
+    if (exploredSet.has(lastNodeId)) {
       continue;
     }
+    exploredSet.add(lastNodeId);
 
     // Check if the popped off node is in the goal set
     // Since we're using a min-heap priority queue sorted by distance,
@@ -221,7 +227,7 @@ export const findPath = (
 
       let outsideAdd = 0;
       const stepDist = (() => {
-        if (!lastGeo || !nextGeo) {
+        if (!(lastGeo && nextGeo)) {
           // Fallback distance if placement missing (mirrors Rust's 25.0 default when dist < 0)
           return 25;
         }

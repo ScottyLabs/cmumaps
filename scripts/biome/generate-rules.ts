@@ -34,12 +34,21 @@ const OVERRIDES = {
     noUnresolvedImports: "off",
     useExplicitType: "off",
     noIncrementDecrement: "off",
+
+    // Not a useful rule
+    useMaxParams: "off",
+
+    // Need to enable later after figure out how to fix it in server with dependncy injection
+    noImportCycles: "off",
+
     noJsxLiterals: "off",
     noSyncScripts: "off",
     useQwikMethodUsage: "off",
     useQwikValidLexicalScope: "off",
     noTernary: "off",
-    useAwaitThenable: "off", // Too many false positives
+
+    // Too many false positives
+    useAwaitThenable: "off",
 
     // Vue rules
     noVueDataObjectDeclaration: "off",
@@ -62,7 +71,12 @@ const OVERRIDES = {
     noBarrelFile: "off",
     noNamespaceImport: "off",
     useSolidForComponent: "off",
-    noReExportAll: "off", // Not a performance issue for our use case
+
+    // Not a performance issue for our use case
+    noReExportAll: "off",
+
+    // Enable later after figure out how to refactor code to not use await in loops
+    noAwaitInLoops: "off",
   },
   security: {
     noSecrets: "off",
@@ -86,7 +100,6 @@ const OVERRIDES = {
         style: "separatedType",
       },
     },
-    useNamingConvention: "off",
     noHeadElement: "off",
   },
   suspicious: {

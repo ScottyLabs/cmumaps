@@ -1,12 +1,12 @@
-import {
-  type Building,
-  type BuildingMetadata,
-  type Buildings,
-  ERROR_CODES,
-  type GeoCoordinate,
+import type {
+  Building,
+  BuildingMetadata,
+  Buildings,
+  GeoCoordinate,
 } from "@cmumaps/common";
-import { prisma } from "../../prisma";
-import { BuildingError } from "../errors/error";
+import { ERROR_CODES } from "@cmumaps/common";
+import { prisma } from "../../prisma/index.ts";
+import { BuildingError } from "../errors/error.ts";
 
 export const buildingService = {
   async getBuildings(): Promise<Buildings> {
@@ -73,15 +73,12 @@ export const buildingService = {
     });
     return buildings
       .sort((a, b) => a.name.localeCompare(b.name))
-      .map((building) => {
-        return {
-          buildingCode: building.buildingCode,
-          name: building.name,
-          defaultFloor:
-            building.floors.find((floor) => floor.isDefault)?.floorLevel ??
-            null,
-        };
-      });
+      .map((building) => ({
+        buildingCode: building.buildingCode,
+        name: building.name,
+        defaultFloor:
+          building.floors.find((floor) => floor.isDefault)?.floorLevel ?? null,
+      }));
   },
 
   async getBuildingName(buildingCode: string) {
@@ -126,9 +123,8 @@ export const buildingService = {
       "LL",
       "EV",
     ];
-    const floorLevelSort = (f1: string, f2: string) => {
-      return floorCodeOrder.indexOf(f2) - floorCodeOrder.indexOf(f1);
-    };
+    const floorLevelSort = (f1: string, f2: string) =>
+      floorCodeOrder.indexOf(f2) - floorCodeOrder.indexOf(f1);
 
     return floors.sort(floorLevelSort);
   },

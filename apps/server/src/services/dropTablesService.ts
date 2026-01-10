@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma";
+import { prisma } from "../../prisma/index.ts";
 
 export const dropTablesService = {
   dropTables: async (tableNames: string[]) => {

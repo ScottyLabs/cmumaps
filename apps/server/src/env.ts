@@ -1,3 +1,4 @@
+import process from "node:process";
 import { z } from "zod";
 
 // Define the schema as an object with all of the env
@@ -15,4 +16,4 @@ const envSchema = z.object({
 const env = envSchema.parse(process.env);
 
 // Export the result so we can use it in the project
-export default env;
+export { env };

@@ -4,14 +4,13 @@ import {
   extractFloorLevel,
   pdfCoordsToGeoCoords,
 } from "@cmumaps/common";
-import { prisma } from "../../prisma";
+import { prisma } from "../../prisma/index.ts";
 
 export const nodeService = {
-  getNode: async (nodeId: string) => {
-    return await prisma.node.findUniqueOrThrow({
+  getNode: async (nodeId: string) =>
+    await prisma.node.findUniqueOrThrow({
       where: { nodeId },
-    });
-  },
+    }),
 
   upsertNode: async (
     floorCode: string,

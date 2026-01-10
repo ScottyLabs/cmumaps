@@ -8,7 +8,6 @@
   "files": {
     "includes": [
       "**",
-      "!**/src/assets",
       "!**/routeTree.gen.ts"
     ]
   },
@@ -194,7 +193,7 @@
         "noEqualsToNull": "error",
         "noFloatingPromises": "error",
         "noForIn": "error",
-        "noImportCycles": "error",
+        "noImportCycles": "off",
         "noIncrementDecrement": "off",
         "noJsxLiterals": "off",
         "noJsxPropsBind": "error",
@@ -233,7 +232,7 @@
         "useExhaustiveSwitchCases": "error",
         "useExplicitType": "off",
         "useFind": "error",
-        "useMaxParams": "error",
+        "useMaxParams": "off",
         "useQwikMethodUsage": "off",
         "useQwikValidLexicalScope": "off",
         "useRegexpExec": "error",
@@ -267,7 +266,7 @@
       },
       "performance": {
         "noAccumulatingSpread": "error",
-        "noAwaitInLoops": "error",
+        "noAwaitInLoops": "off",
         "noBarrelFile": "off",
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",

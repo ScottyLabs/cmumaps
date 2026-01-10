@@ -1,10 +1,10 @@
 import type { GeoNodes, PreciseRoute } from "@cmumaps/common";
-import { prisma } from "../../prisma";
+import { prisma } from "../../prisma/index.ts";
 import {
   getRoute,
   parseWaypoint,
   waypointToNodes,
-} from "../utils/path/pathfinder";
+} from "../utils/path/pathfinder.ts";
 
 export type Buildings = Awaited<ReturnType<typeof prisma.building.findMany>>;
 
@@ -77,7 +77,7 @@ export const pathService = {
     start: string,
     end: string,
   ): Promise<Record<string, PreciseRoute>> {
-    if (!start || !end) {
+    if (!(start && end)) {
       throw new Error("Invalid start or end waypoint format");
     }
 

@@ -1,8 +1,8 @@
 import type { GeoCoordinate } from "@cmumaps/common";
-import { getSearchContext } from "../utils/search/build";
-import { parseQuery } from "../utils/search/parse";
-import { BM25Term, distanceWeightedScore, topN } from "../utils/search/rank";
-import type { Document } from "../utils/search/types";
+import { getSearchContext } from "../utils/search/build.ts";
+import { parseQuery } from "../utils/search/parse.ts";
+import { BM25Term, distanceWeightedScore, topN } from "../utils/search/rank.ts";
+import type { Document } from "../utils/search/types.ts";
 
 const DEFAULT_NUM_RESULTS = 20;
 
@@ -96,7 +96,7 @@ export const searchService = {
     }
 
     // Apply distance weighting for rooms if position is provided
-    const scoredDocs: Array<[string, number]> = Array.from(
+    const scoredDocs: [string, number][] = Array.from(
       overallScores.entries(),
     ).map(([docId, score]) => {
       const doc = documents[docId];

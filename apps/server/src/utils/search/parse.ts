@@ -5,13 +5,13 @@
  */
 function trigrams(s: string): string[] {
   const paddedStr = `#${s}#`;
-  const trigrams: string[] = [];
+  const result: string[] = [];
 
   for (let i = 0; i < paddedStr.length - 2; i++) {
-    trigrams.push(paddedStr.slice(i, i + 3));
+    result.push(paddedStr.slice(i, i + 3));
   }
 
-  return trigrams;
+  return result;
 }
 
 /**

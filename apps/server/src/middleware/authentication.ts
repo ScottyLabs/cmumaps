@@ -2,7 +2,7 @@
 // https://medium.com/@alexandre.penombre/tsoa-the-library-that-will-supercharge-your-apis-c551c8989081
 import { clerkClient, getAuth } from "@clerk/express";
 import type * as express from "express";
-import env from "../env";
+import { env } from "../env.ts";
 
 export const BEARER_AUTH = "bearerAuth";
 export const MEMBER_SCOPE = "org:member";
@@ -13,6 +13,7 @@ export function expressAuthentication(
   securityName: string,
   scopes?: string[],
 ) {
+  // biome-ignore lint/nursery/noMisusedPromises: not sure how TSOA works here but will be refactored later anyways
   return new Promise((resolve, reject) => {
     const response = request.res;
     if (securityName !== BEARER_AUTH) {
@@ -47,7 +48,7 @@ const verifyToken = async (
     if (m2mTokenVerified) {
       return resolve({});
     }
-  } catch (_e) {
+  } catch {
     // If the token is invalid, expired, or unrecognized,
     // the verifyToken function throws a ClerkAPIResponseError
     // so we can just catch the error and continue to the next step

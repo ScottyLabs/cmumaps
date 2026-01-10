@@ -1,13 +1,12 @@
+import type { Placement, RoomInfo } from "@cmumaps/common";
 import {
   extractBuildingCode,
   extractFloorLevel,
-  type Placement,
   pdfCoordsToGeoCoords,
   pdfPolygonToGeoPolygon,
-  type RoomInfo,
 } from "@cmumaps/common";
 import type { InputJsonValue } from "@prisma/client/runtime/library";
-import { prisma } from "../../prisma";
+import { prisma } from "../../prisma/index.ts";
 
 export const roomService = {
   createRoom: async (

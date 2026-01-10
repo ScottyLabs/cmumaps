@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { ValidateError } from "tsoa";
-import { BuildingError } from "../errors/error";
+import { BuildingError } from "../errors/error.ts";
 
 // From https://tsoa-community.github.io/docs/error-handling.html
 export const errorHandler = (

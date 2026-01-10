@@ -1,17 +1,14 @@
-import {
-  type LiveUser,
-  WebSocketEvents,
-  type WebSocketPayloads,
-} from "@cmumaps/websocket";
+import type { LiveUser, WebSocketPayloads } from "@cmumaps/websocket";
+import { WebSocketEvents } from "@cmumaps/websocket";
 import type { Server } from "socket.io";
 
 export class WebSocketService {
-  private io: Server;
+  private readonly io: Server;
 
-  private socketToRoom: Map<string, string> = new Map();
-  private socketToUser: Map<string, LiveUser> = new Map();
+  private readonly socketToRoom: Map<string, string> = new Map();
+  private readonly socketToUser: Map<string, LiveUser> = new Map();
 
-  constructor(io: Server) {
+  public constructor(io: Server) {
     this.io = io;
     // Socket.IO connection handling
     io.on("connection", (socket) => {

@@ -25,7 +25,7 @@ export class EdgeController {
     @Body() body: { inNodeId: string; outNodeId: string },
   ) {
     const { inNodeId, outNodeId } = body;
-    const socketId = req.socketId;
+    const { socketId } = req;
 
     // create edge in database
     await edgeService.createEdge(inNodeId, outNodeId);
@@ -43,7 +43,7 @@ export class EdgeController {
     @Body() body: { inNodeId: string; outNodeId: string },
   ) {
     const { inNodeId, outNodeId } = body;
-    const socketId = req.socketId;
+    const { socketId } = req;
 
     await edgeService.deleteEdge(inNodeId, outNodeId);
     const payload = { inNodeId, outNodeId };
@@ -62,7 +62,7 @@ export class EdgeController {
     },
   ) {
     const { floorCode, outFloorCode, inNodeId, outNodeId } = body;
-    const socketId = req.socketId;
+    const { socketId } = req;
 
     // validate that the out node is on the out floor
     const outNode = await nodeService.getNode(outNodeId);
@@ -112,7 +112,7 @@ export class EdgeController {
     },
   ) {
     const { floorCode, outFloorCode, inNodeId, outNodeId } = body;
-    const socketId = req.socketId;
+    const { socketId } = req;
 
     await edgeService.deleteEdge(inNodeId, outNodeId);
     const payload = { outFloorCode, inNodeId, outNodeId };

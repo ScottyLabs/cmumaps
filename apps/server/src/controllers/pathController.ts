@@ -1,7 +1,7 @@
 import type { PreciseRoute } from "@cmumaps/common";
 import { Get, Query, Route, Security } from "tsoa";
-import { BEARER_AUTH } from "../middleware/authentication";
-import { pathService } from "../services/pathService";
+import { BEARER_AUTH } from "../middleware/authentication.ts";
+import { pathService } from "../services/pathService.ts";
 
 @Route("/path")
 export class PathController {
@@ -11,6 +11,6 @@ export class PathController {
     @Query() start: string,
     @Query() end: string,
   ): Promise<Record<string, PreciseRoute>> {
-    return pathService.calculatePath(start, end);
+    return await pathService.calculatePath(start, end);
   }
 }

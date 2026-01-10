@@ -1,6 +1,6 @@
 import type { GeoCoordinate } from "@cmumaps/common";
 import { dist } from "@cmumaps/common";
-import type { Document } from "./types";
+import type { Document } from "./types.ts";
 
 /**
  * Calculate BM25 score for a single term
@@ -38,7 +38,7 @@ export function distanceWeightedScore(
   userPos: GeoCoordinate | null | undefined,
   score: number,
 ): number {
-  if (!userPos || !doc.labelPosition) {
+  if (!(userPos && doc.labelPosition)) {
     return score;
   }
 
@@ -53,11 +53,11 @@ export function distanceWeightedScore(
  * @param sort - Whether to sort results by score descending (default: false)
  */
 export function topN(
-  rankList: Array<[string, number]>,
+  rankList: [string, number][],
   n: number,
   sort = false,
-): Array<[string, number]> {
-  let result: Array<[string, number]>;
+): [string, number][] {
+  let result: [string, number][];
 
   if (rankList.length <= n) {
     result = rankList;

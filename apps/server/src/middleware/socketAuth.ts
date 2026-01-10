@@ -1,3 +1,4 @@
+import process from "node:process";
 import { verifyToken } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
 import type { Socket } from "socket.io";
@@ -8,7 +9,7 @@ export const socketAuth = async (
   next: (err?: Error) => void,
 ) => {
   try {
-    const token = socket.handshake.auth.token;
+    const { token } = socket.handshake.auth;
     if (!token) {
       console.error("Socket authentication error: No token provided");
       return next(new Error("Authentication failed: No token provided"));

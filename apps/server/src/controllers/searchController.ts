@@ -1,6 +1,6 @@
 import { Get, Query, Route } from "tsoa";
-import { searchService } from "../services/searchService";
-import type { Document } from "../utils/search/types";
+import { searchService } from "../services/searchService.ts";
+import type { Document } from "../utils/search/types.ts";
 
 @Route("search")
 export class SearchController {
@@ -11,6 +11,6 @@ export class SearchController {
     @Query() lat?: number,
     @Query() lon?: number,
   ): Promise<Document[]> {
-    return searchService.search(query, n, lat, lon);
+    return await searchService.search(query, n, lat, lon);
   }
 }

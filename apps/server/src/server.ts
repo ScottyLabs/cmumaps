@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import http from "node:http";
+import process from "node:process";
 import { clerkMiddleware } from "@clerk/express";
 import { YAML } from "bun";
 import cors, { type CorsOptions } from "cors";
@@ -7,13 +8,13 @@ import type { ErrorRequestHandler } from "express";
 import express from "express";
 import { Server } from "socket.io";
 import swaggerUi, { type JsonObject } from "swagger-ui-express";
-import { RegisterRoutes } from "../build/routes";
-import { prisma } from "../prisma";
-import env from "./env";
-import { errorHandler } from "./middleware/errorHandler";
-import { notFoundHandler } from "./middleware/notFoundHandler";
-import { socketAuth } from "./middleware/socketAuth";
-import { WebSocketService } from "./services/webSocketService";
+import { RegisterRoutes } from "../build/routes.ts";
+import { prisma } from "../prisma/index.ts";
+import { env } from "./env.ts";
+import { errorHandler } from "./middleware/errorHandler.ts";
+import { notFoundHandler } from "./middleware/notFoundHandler.ts";
+import { socketAuth } from "./middleware/socketAuth.ts";
+import { WebSocketService } from "./services/webSocketService.ts";
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
