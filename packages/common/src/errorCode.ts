@@ -1,4 +1,5 @@
 // Define error codes as string literals
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use the right naming convention */
 export const ERROR_CODES = {
   INVALID_FLOOR_LEVEL: "INVALID_FLOOR_LEVEL",
   INVALID_BUILDING_CODE: "INVALID_BUILDING_CODE",

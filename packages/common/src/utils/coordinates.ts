@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNumericSeparators: Ratios looks better without separators */
 import type {
   GeoCoordinate,
   GeoNode,
@@ -5,7 +6,7 @@ import type {
   PdfCoordinate,
   Placement,
   Polygon,
-} from "../types";
+} from "../types/index.ts";
 
 // The number of meters in a degree.
 // //Values computed for the Pittsburgh region using https://stackoverflow.com/a/51765950/4652564
@@ -91,8 +92,8 @@ function rotate(x: number, y: number, angle: number): PdfCoordinate {
 export const pdfPolygonToGeoPolygon = (
   pdfPolygon: Polygon,
   placement: Placement,
-): GeoCoordinate[][] => {
-  return pdfPolygon.coordinates.map((ring) =>
+): GeoCoordinate[][] =>
+  pdfPolygon.coordinates.map((ring) =>
     ring.map((coords) => {
       if (coords[0] === undefined || coords[1] === undefined) {
         throw new Error("Invalid coordinates");
@@ -100,26 +101,23 @@ export const pdfPolygonToGeoPolygon = (
       return pdfCoordsToGeoCoords(placement)({ x: coords[0], y: coords[1] });
     }),
   );
-};
 
 export const geoPolygonToPdfPolygon = (
   geoPolygon: GeoCoordinate[][],
   placement: Placement,
-): Polygon => {
-  return {
-    type: "Polygon",
-    coordinates: geoPolygon.map((ring) =>
-      ring.map((coords) =>
-        Object.values(
-          geoCoordsToPdfCoords(placement)({
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-          }),
-        ),
+): Polygon => ({
+  type: "Polygon",
+  coordinates: geoPolygon.map((ring) =>
+    ring.map((coords) =>
+      Object.values(
+        geoCoordsToPdfCoords(placement)({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        }),
       ),
     ),
-  };
-};
+  ),
+});
 
 export const dist = (coord1: GeoCoordinate, coord2: GeoCoordinate): number => {
   const lat1 = coord1.latitude;
@@ -163,17 +161,15 @@ export const calculateAngle = (
   return angle;
 };
 
-export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => {
-  return {
-    neighbors: geoNode.neighbors,
-    coordinate: geoNode.pos,
-    roomId: geoNode.roomId || "outside",
-    id: geoNode.id,
-    floor: geoNode.floor
-      ? {
-          buildingCode: geoNode.floor.buildingCode,
-          level: geoNode.floor.level,
-        }
-      : undefined,
-  };
-};
+export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => ({
+  neighbors: geoNode.neighbors,
+  coordinate: geoNode.pos,
+  roomId: geoNode.roomId || "outside",
+  id: geoNode.id,
+  floor: geoNode.floor
+    ? {
+        buildingCode: geoNode.floor.buildingCode,
+        level: geoNode.floor.level,
+      }
+    : undefined,
+});

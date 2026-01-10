@@ -1,4 +1,4 @@
-import type { RoomType } from "../types";
+import type { RoomType } from "../types/index.ts";
 
 /**
  * The attributes of a room type.

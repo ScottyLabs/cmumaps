@@ -1,4 +1,4 @@
-import type { PdfCoordinate } from "./coordTypes";
+import type { PdfCoordinate } from "./coordTypes.ts";
 
 export interface DoorInfo {
   /**

@@ -1,10 +1,10 @@
-import type { GeoCoordinate, PdfCoordinate } from "./coordTypes";
+import type { GeoCoordinate, PdfCoordinate } from "./coordTypes.ts";
 
-export type BuildingMetadata = {
+export interface BuildingMetadata {
   buildingCode: string;
   name: string;
   defaultFloor: string | null;
-};
+}
 
 export interface Building {
   code: string;

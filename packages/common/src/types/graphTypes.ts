@@ -1,5 +1,5 @@
-import type { GeoCoordinate, PdfCoordinate } from "./coordTypes";
-import type { Floor, FloorInfo } from "./floorTypes";
+import type { GeoCoordinate, PdfCoordinate } from "./coordTypes.ts";
+import type { Floor, FloorInfo } from "./floorTypes.ts";
 
 export const ValidCrossFloorEdgeTypes = [
   "Ramp",

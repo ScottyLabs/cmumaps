@@ -1,4 +1,4 @@
-import type { GeoCoordinate } from "./coordTypes";
+import type { GeoCoordinate } from "./coordTypes.ts";
 
 export type WayPoint =
   | {

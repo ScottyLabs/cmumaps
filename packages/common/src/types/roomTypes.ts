@@ -1,5 +1,5 @@
-import type { PdfCoordinate } from "./coordTypes";
-import type { Polygon } from "./geojson";
+import type { PdfCoordinate } from "./coordTypes.ts";
+import type { Polygon } from "./geojson.ts";
 
 export const RoomTypes = [
   "Default",
