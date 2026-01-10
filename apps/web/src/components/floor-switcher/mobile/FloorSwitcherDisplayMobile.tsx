@@ -3,7 +3,7 @@ import { animate, motion, useMotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { $api } from "@/api/client";
 import { useBoundStore } from "@/store/index.ts";
-import { FloorSwitcherCarouselMobile } from "./FloorSwitcherCarousel.tsx";
+import { FloorSwitcherCarouselMobile } from "./FloorSwitcherCarouselMobile.tsx";
 
 interface Props {
   building: Building;

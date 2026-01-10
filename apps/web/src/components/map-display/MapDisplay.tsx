@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { $api } from "@/api/client";
 import { BuildingsDisplay } from "@/components/map-display/buildings-display/BuildingsDisplay";
-import { FloorPlansOverlay } from "@/components/map-display/floorplans-overlay/FloorplansOverlay.tsx";
+import { FloorplansOverlay } from "@/components/map-display/floorplans-overlay/FloorplansOverlay.tsx";
 import { env } from "@/env.ts";
 import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
@@ -173,7 +173,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       }}
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
-      <FloorPlansOverlay />
+      <FloorplansOverlay />
       <NavLine map={mapRef.current} />
       <CoordinatePin map={mapRef.current} />
     </MapkitMap>

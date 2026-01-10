@@ -6,7 +6,12 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/routeTree.gen.ts"]
+    "includes": [
+      "**",
+      "!apps/visualizer",
+      "!apps/rust-server",
+      "!**/routeTree.gen.ts"
+    ]
   },
   "formatter": {
     "useEditorconfig": true
@@ -75,7 +80,7 @@
         "noExcessiveNestedTestSuites": "error",
         "noExtraBooleanCast": "error",
         "noFlatMapIdentity": "error",
-        "noForEach": "off",
+        "noForEach": "error",
         "noImplicitCoercions": "error",
         "noImportantStyles": "error",
         "noStaticOnlyClass": "error",
@@ -96,7 +101,7 @@
         "noUselessThisAlias": "error",
         "noUselessTypeConstraint": "error",
         "noUselessUndefinedInitialization": "error",
-        "noVoid": "off",
+        "noVoid": "error",
         "useArrowFunction": "error",
         "useDateNow": "error",
         "useFlatMap": "error",
@@ -142,7 +147,7 @@
         "noSolidDestructuredProps": "off",
         "noStringCaseMismatch": "error",
         "noSwitchDeclarations": "error",
-        "noUndeclaredDependencies": "off",
+        "noUndeclaredDependencies": "error",
         "noUndeclaredVariables": "off",
         "noUnknownFunction": "error",
         "noUnknownMediaFeatureName": "error",
@@ -205,7 +210,7 @@
         "noReturnAssign": "error",
         "noScriptUrl": "error",
         "noShadow": "error",
-        "noSyncScripts": "off",
+        "noSyncScripts": "error",
         "noTernary": "off",
         "noUndeclaredEnvVars": "error",
         "noUnknownAttribute": "error",
@@ -268,7 +273,7 @@
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",
         "noImgElement": "off",
-        "noNamespaceImport": "off",
+        "noNamespaceImport": "error",
         "noReExportAll": "off",
         "noUnwantedPolyfillio": "error",
         "useGoogleFontPreconnect": "error",
@@ -299,7 +304,7 @@
         "noNonNullAssertion": "error",
         "noParameterAssign": "error",
         "noParameterProperties": "error",
-        "noProcessEnv": "off",
+        "noProcessEnv": "error",
         "noRestrictedGlobals": "error",
         "noRestrictedImports": "error",
         "noRestrictedTypes": "error",
@@ -336,17 +341,12 @@
         "useExponentiationOperator": "error",
         "useExportType": "error",
         "useExportsLast": "off",
-        "useFilenamingConvention": "off",
+        "useFilenamingConvention": "error",
         "useForOf": "error",
         "useFragmentSyntax": "error",
         "useGraphqlNamingConvention": "error",
         "useGroupedAccessorPairs": "error",
-        "useImportType": {
-          "level": "error",
-          "options": {
-            "style": "separatedType"
-          }
-        },
+        "useImportType": "error",
         "useLiteralEnumMembers": "error",
         "useNamingConvention": "error",
         "useNodeAssertStrict": "error",

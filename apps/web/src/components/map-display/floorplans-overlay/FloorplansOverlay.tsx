@@ -2,7 +2,7 @@ import { FloorplanOverlay } from "@/components/map-display/floorplans-overlay/Fl
 import { useUser } from "@/hooks/useUser.ts";
 import { useBoundStore } from "@/store/index.ts";
 
-const FloorPlansOverlay = () => {
+const FloorplansOverlay = () => {
   const { isSignedIn } = useUser();
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
@@ -14,4 +14,4 @@ const FloorPlansOverlay = () => {
   return <FloorplanOverlay floor={focusedFloor} />;
 };
 
-export { FloorPlansOverlay };
+export { FloorplansOverlay };

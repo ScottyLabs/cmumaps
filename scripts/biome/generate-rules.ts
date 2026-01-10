@@ -16,48 +16,62 @@ const DEFAULT_RULE_SEVERITY = "error";
 
 const OVERRIDES = {
   complexity: {
-    useLiteralKeys: "off", // Conflicts with tsc noPropertyAccessFromIndexSignature
-    noExcessiveCognitiveComplexity: "off",
+    // Conflicts with tsc noPropertyAccessFromIndexSignature
+    useLiteralKeys: "off",
+
+    // Not a good metric
     noExcessiveLinesPerFunction: "off",
-    noVoid: "off",
-    noForEach: "off",
+
+    // Not a good metric
+    noExcessiveCognitiveComplexity: "off",
   },
   correctness: {
     // TODO: enable later after we figure out how to get the image size of svgs
     useImageSize: "off",
 
+    // TODO: figure out how to import mapkit or explain why it can't
+    noUndeclaredVariables: "off",
+
+    // None React Rules
     noNodejsModules: "off",
     noQwikUseVisibleTask: "off",
     noSolidDestructuredProps: "off",
-    noUndeclaredDependencies: "off",
-    noUndeclaredVariables: "off",
     useQwikClasslist: "off",
   },
   nursery: {
-    noContinue: "off",
-    noUnresolvedImports: "off",
+    // TODO: Need to enable later after figure out how to fix it in server with dependncy injection
+    noImportCycles: "off",
+
+    // Implicit typing are sometimes useful
     useExplicitType: "off",
-    noIncrementDecrement: "off",
+
+    // All node.js built in imports are flagged as violations
+    noUnresolvedImports: "off",
 
     // Common pattern of creating a function for a button violates this rule
     noJsxPropsBind: "off",
 
-    // Not a useful rule
-    useMaxParams: "off",
-
-    // TODO: Need to enable later after figure out how to fix it in server with dependncy injection
-    noImportCycles: "off",
-
+    // We don't need to worry about internationalization lol
     noJsxLiterals: "off",
-    noSyncScripts: "off",
-    useQwikMethodUsage: "off",
-    useQwikValidLexicalScope: "off",
-    noTernary: "off",
 
     // Too many false positives
     useAwaitThenable: "off",
 
-    // Vue rules
+    // Not a useful rule
+    noTernary: "off",
+
+    // Not a useful rule
+    noIncrementDecrement: "off",
+
+    // Not a good metric
+    noContinue: "off",
+
+    // Not a good metric
+    useMaxParams: "off",
+
+    // None React Rules
+    useQwikMethodUsage: "off",
+    useQwikValidLexicalScope: "off",
     noVueDataObjectDeclaration: "off",
     noVueDuplicateKeys: "off",
     noVueReservedKeys: "off",
@@ -75,48 +89,65 @@ const OVERRIDES = {
     useVueValidVText: "off",
   },
   performance: {
-    noBarrelFile: "off",
-    noNamespaceImport: "off",
-    useSolidForComponent: "off",
+    // TODO: enable later after figure out how to refactor code to not use await in loops
+    noAwaitInLoops: "off",
 
-    // Next.js rule
-    noImgElement: "off",
+    // Not a performance issue for our use case
+    noBarrelFile: "off",
 
     // Not a performance issue for our use case
     noReExportAll: "off",
 
-    // Enable later after figure out how to refactor code to not use await in loops
-    noAwaitInLoops: "off",
+    // Solid rule
+    useSolidForComponent: "off",
+
+    // Next.js rule
+    noImgElement: "off",
   },
   security: {
+    // Too many false positives
     noSecrets: "off",
   },
   style: {
+    // TODO: Enable later and replace enums with constant objects or union of strings
+    noEnum: "off",
+
     // Sometimes nested ternary is simpler
     noNestedTernary: "off",
 
-    noEnum: "off",
-    noMagicNumbers: "off",
-    noProcessEnv: "off",
+    // Sometimes looks better without curly braces
     useBlockStatements: "off",
+
+    // Sometimes we want to export in the beginning of the file
+    useExportsLast: "off",
+
+    // Flags http status codes and 1.0 as violations
+    noMagicNumbers: "off",
+
+    // Next.js rule
+    noHeadElement: "off",
+
     useConsistentMemberAccessibility: {
       level: DEFAULT_RULE_SEVERITY,
       options: {
+        // Otherwise public modifier is disallowed
         accessibility: "explicit",
       },
     },
-    useExportsLast: "off",
-    useFilenamingConvention: "off",
+
     useImportType: {
       level: DEFAULT_RULE_SEVERITY,
       options: {
+        // Enforce `import type { T }` instead of `import { type T }`
         style: "separatedType",
       },
     },
-    noHeadElement: "off",
   },
   suspicious: {
+    // TODO: replace later only when we have a different way of handling logs
     noConsole: "off",
+
+    // None React Rule
     noReactSpecificProps: "off",
   },
 };
