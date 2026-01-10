@@ -1,8 +1,8 @@
 import { FaRegUserCircle } from "react-icons/fa";
 import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
-import { env } from "@/env";
 import { useUser } from "@/hooks/useUser";
+import { signIn, signOut } from "@/utils/authUtils";
 
 interface MenuButtonProps {
   icon: string;
@@ -59,9 +59,9 @@ const UserMenu = () => {
   ) => {
     const handleClick = () => {
       if (type === "signIn") {
-        window.location.href = `${env.VITE_SERVER_URL}/login?redirect_uri=${window.location.href}`;
+        signIn();
       } else if (type === "signOut") {
-        window.location.href = `${env.VITE_SERVER_URL}/logout?redirect_uri=${window.location.href}`;
+        signOut();
       }
     };
 

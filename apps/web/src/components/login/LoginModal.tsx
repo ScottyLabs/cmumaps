@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
 import { useBoundStore } from "@/store/index.ts";
+import { signIn } from "@/utils/authUtils";
 
 const LoginModal = () => {
   const user = useUser();
@@ -39,14 +40,13 @@ const LoginModal = () => {
         <p className="text-sm">Log in to see floor plans.</p>
 
         <div className="flex justify-between">
-          {/* <SignInButton mode="redirect"> */}
           <button
             type="button"
             className="w-fit cursor-pointer rounded-md bg-blue-100 p-2 text-blue-400 text-sm hover:bg-blue-200"
+            onClick={signIn}
           >
             Sign in
           </button>
-          {/* </SignInButton> */}
           <button
             type="button"
             className="cursor-pointer rounded-md bg-red-200 p-2 text-red-700 text-sm hover:bg-red-300"
