@@ -6,12 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": [
-      "**",
-      "!apps/visualizer",
-      "!apps/rust-server",
-      "!**/routeTree.gen.ts"
-    ]
+    "includes": ["**", "!**/routeTree.gen.ts"]
   },
   "formatter": {
     "useEditorconfig": true
@@ -346,7 +341,12 @@
         "useFragmentSyntax": "error",
         "useGraphqlNamingConvention": "error",
         "useGroupedAccessorPairs": "error",
-        "useImportType": "error",
+        "useImportType": {
+          "level": "error",
+          "options": {
+            "style": "separatedType"
+          }
+        },
         "useLiteralEnumMembers": "error",
         "useNamingConvention": "error",
         "useNodeAssertStrict": "error",
