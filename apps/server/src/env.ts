@@ -5,12 +5,15 @@ import { z } from "zod";
 // Define the schema as an object with all of the env
 // variables and their types
 const envSchema = z.object({
-  SERVER_PORT: z.number().default(80),
-  CLERK_PUBLISHABLE_KEY: z.string(),
-  CLERK_SECRET_KEY: z.string(),
-  DATABASE_URL: z.string(),
   ALLOWED_ORIGINS_REGEX: z.string(),
-  CLERK_MACHINE_SECRET: z.string(),
+  APP_ENV: z.enum(["development", "production"]).default("development"),
+  AUTH_CLIENT_ID: z.string(),
+  AUTH_CLIENT_SECRET: z.string(),
+  AUTH_SESSION_SECRET: z.string(),
+  DATABASE_URL: z.string(),
+  REDIS_URL: z.string(),
+  SERVER_PORT: z.number().default(80),
+  SERVER_URL: z.url(),
 });
 
 // Validate `process.env` against our schema and return the result

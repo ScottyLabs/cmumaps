@@ -1,10 +1,14 @@
 import type { Placement } from "@cmumaps/common";
 import { Body, Get, Path, Put, Route, Security } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import {
+  BEARER_AUTH,
+  MEMBER_SCOPE,
+  OIDC_AUTH,
+} from "../auth/authentication.ts";
 import { floorService } from "../services/floorService.ts";
 
+@Security(OIDC_AUTH, [])
 @Security(BEARER_AUTH, [])
-
 @Route("floors")
 export class FloorController {
   @Get("/:floorCode/floorplan")
@@ -40,6 +44,7 @@ export class FloorController {
     return await floorService.getFloorPlacement(floorCode);
   }
 
+  @Security(OIDC_AUTH, [MEMBER_SCOPE])
   @Security(BEARER_AUTH, [MEMBER_SCOPE])
   @Put("/:floorCode/placement")
   public async updateFloorPlacement(

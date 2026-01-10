@@ -10,15 +10,20 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import {
+  BEARER_AUTH,
+  MEMBER_SCOPE,
+  OIDC_AUTH,
+} from "../auth/authentication.ts";
 import { requireSocketId } from "../middleware/socketAuth.ts";
 import { webSocketService } from "../server.ts";
 import { edgeService } from "../services/edgeService.ts";
 import { floorService } from "../services/floorService.ts";
 import { nodeService } from "../services/nodeService.ts";
 
-@Middlewares(requireSocketId)
+@Security(OIDC_AUTH, [MEMBER_SCOPE])
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
+@Middlewares(requireSocketId)
 @Route("nodes")
 export class NodeController {
   @Post("/:nodeId")

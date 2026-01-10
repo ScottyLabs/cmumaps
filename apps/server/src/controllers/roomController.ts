@@ -10,14 +10,19 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import {
+  BEARER_AUTH,
+  MEMBER_SCOPE,
+  OIDC_AUTH,
+} from "../auth/authentication.ts";
 import { requireSocketId } from "../middleware/socketAuth.ts";
 import { webSocketService } from "../server.ts";
 import { floorService } from "../services/floorService.ts";
 import { roomService } from "../services/roomService.ts";
 
-@Middlewares(requireSocketId)
+@Security(OIDC_AUTH, [MEMBER_SCOPE])
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
+@Middlewares(requireSocketId)
 @Route("rooms")
 export class RoomController {
   @Post("/:roomId")

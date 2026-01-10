@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import http from "node:http";
 import process from "node:process";
-import { clerkMiddleware } from "@clerk/express";
 import { YAML } from "bun";
 import cors, { type CorsOptions } from "cors";
 import type { ErrorRequestHandler } from "express";
@@ -10,6 +9,7 @@ import { Server } from "socket.io";
 import swaggerUi, { type JsonObject } from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes.ts";
 import { prisma } from "../prisma/index.ts";
+import { setupAuth } from "./auth/authSetup.ts";
 import { env } from "./env.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
 import { notFoundHandler } from "./middleware/notFoundHandler.ts";
@@ -38,8 +38,8 @@ io.use(socketAuth);
 // Initialize WebSocket service
 export const webSocketService = new WebSocketService(io);
 
-// Clerk middleware to authenticate requests
-app.use(clerkMiddleware());
+// Setup Authentication
+await setupAuth(app);
 
 // Swagger
 const swaggerYaml = fs.readFileSync("./build/swagger.yaml", "utf8");

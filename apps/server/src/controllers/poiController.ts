@@ -10,13 +10,18 @@ import {
   Route,
   Security,
 } from "tsoa";
-import { BEARER_AUTH, MEMBER_SCOPE } from "../middleware/authentication.ts";
+import {
+  BEARER_AUTH,
+  MEMBER_SCOPE,
+  OIDC_AUTH,
+} from "../auth/authentication.ts";
 import { requireSocketId } from "../middleware/socketAuth.ts";
 import { webSocketService } from "../server.ts";
 import { poiService } from "../services/poiService.ts";
 
-@Middlewares(requireSocketId)
+@Security(OIDC_AUTH, [MEMBER_SCOPE])
 @Security(BEARER_AUTH, [MEMBER_SCOPE])
+@Middlewares(requireSocketId)
 @Route("pois")
 export class PoiController {
   @Post("/:poiId")
