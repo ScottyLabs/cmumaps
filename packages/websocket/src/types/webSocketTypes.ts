@@ -1,25 +1,26 @@
+/** biome-ignore-all lint/style/useNamingConvention: TODO: use the right naming convention */
 import type {
   CreateEdgeAcrossFloorsPayload,
   CreateEdgePayload,
   DeleteEdgeAcrossFloorsPayload,
   DeleteEdgePayload,
-} from "./edgeTypes";
+} from "./edgeTypes.ts";
 import type {
   CreateNodePayload,
   DeleteNodePayload,
   UpdateNodePayload,
-} from "./nodeTypes";
+} from "./nodeTypes.ts";
 import type {
   CreatePoiPayload,
   DeletePoiPayload,
   UpdatePoiPayload,
-} from "./poiTypes";
+} from "./poiTypes.ts";
 import type {
   CreateRoomPayload,
   DeleteRoomPayload,
   UpdateRoomPayload,
-} from "./roomTypes";
-import type { SyncUserPayload } from "./userTypes";
+} from "./roomTypes.ts";
+import type { SyncUserPayload } from "./userTypes.ts";
 
 // Define all WebSocket event names as string literals
 export const WebSocketEvents = {
@@ -48,7 +49,7 @@ export type WebSocketEventType =
   (typeof WebSocketEvents)[keyof typeof WebSocketEvents];
 
 // Define payload types for each event
-export type WebSocketPayloads = {
+export interface WebSocketPayloads {
   [WebSocketEvents.SYNC_USERS]: SyncUserPayload;
 
   [WebSocketEvents.CREATE_NODE]: CreateNodePayload;
@@ -67,4 +68,4 @@ export type WebSocketPayloads = {
   [WebSocketEvents.CREATE_POI]: CreatePoiPayload;
   [WebSocketEvents.DELETE_POI]: DeletePoiPayload;
   [WebSocketEvents.UPDATE_POI]: UpdatePoiPayload;
-};
+}
