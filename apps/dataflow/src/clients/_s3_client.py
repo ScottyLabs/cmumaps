@@ -1,6 +1,7 @@
 import json
 import os
 from functools import lru_cache
+from typing import Any, cast
 
 from minio import Minio
 
@@ -54,7 +55,7 @@ class S3Client:
 
         return True
 
-    def get_json_file(self, s3_object_name: str) -> dict | None:
+    def get_json_file(self, s3_object_name: str) -> dict[str, Any] | None:
         """Get JSON data from S3 bucket."""
         try:
             # Get the object
@@ -71,7 +72,7 @@ class S3Client:
             )
             return None
 
-        return json_data
+        return cast("dict[str, Any]", json_data)
 
 
 if __name__ == "__main__":

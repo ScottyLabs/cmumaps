@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from typing import Literal
+from typing import Any, Literal
 
 import requests
 
@@ -93,7 +93,7 @@ class ApiClient:
         )
         return response.status_code == self.SUCCESS_STATUS_CODE
 
-    def populate_table(self, table_name: TableName, data: list[dict]) -> bool:
+    def populate_table(self, table_name: TableName, data: list[dict[str, Any]]) -> bool:
         """Populate a table with the given data."""
         response = requests.post(
             f"{self.server_url}/populate-table/{table_name}",

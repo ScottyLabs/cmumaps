@@ -1,3 +1,5 @@
+from typing import Any
+
 from clients import get_api_client_singleton, get_s3_client_singleton
 from logger import get_app_logger
 
@@ -45,7 +47,7 @@ def populate_alias_table() -> None:
         raise RuntimeError(msg)
 
 
-def create_aliases(room: dict) -> list[dict]:
+def create_aliases(room: dict[str, Any]) -> list[dict[str, Any]]:
     """Create a list of aliases for a room."""
     # skip rooms without aliases
     if not room.get("aliases"):

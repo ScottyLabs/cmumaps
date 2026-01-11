@@ -44,9 +44,6 @@ process-25live = "_25live:main"
 lint = "linter:main"
 scrape-fms = "scraper.fms:main"
 
-[tool.mypy]
-check_untyped_defs = true
-
 # Supported rules https://github.com/charliermarsh/ruff/#supported-rules
 [tool.ruff]
 lint.select = ["ALL"]

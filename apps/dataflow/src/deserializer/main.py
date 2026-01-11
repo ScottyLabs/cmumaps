@@ -22,7 +22,10 @@ if TYPE_CHECKING:
 dotenv.load_dotenv()
 
 
-def populate_table(table_name: TableName, populate_function: Callable) -> None:
+def populate_table(
+    table_name: TableName,
+    populate_function: Callable[[], None],
+) -> None:
     """Populate a table with the given function."""
     print_section(f"Populating {table_name} table")
     with log_operation(f"populate {table_name} table"):
