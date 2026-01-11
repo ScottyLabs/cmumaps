@@ -47,3 +47,24 @@ scrape-fms = "scraper.fms:main"
 # Supported rules https://github.com/charliermarsh/ruff/#supported-rules
 [tool.ruff]
 lint.select = ["ALL"]
+
+# Upgrade all non-error rules to "error"
+[tool.ty.rules]
+# Defaults: warn
+ambiguous-protocol-member = "error"
+deprecated = "error"
+ignore-comment-unknown-rule = "error"
+invalid-ignore-comment = "error"
+possibly-missing-attribute = "error"
+possibly-missing-implicit-call = "error"
+redundant-cast = "error"
+undefined-reveal = "error"
+unresolved-global = "error"
+unsupported-base = "error"
+unused-ignore-comment = "error"
+useless-overload-body = "error"
+
+# Defaults: ignore
+division-by-zero = "error"
+possibly-missing-import = "error"
+possibly-unresolved-reference = "error"
