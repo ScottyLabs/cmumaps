@@ -42,7 +42,7 @@ export const webSocketService = new WebSocketService(io);
 // Setup Authentication
 await setupAuth(app);
 
-// Swagger
+// Swagger and OpenAPI JSON
 const swaggerYaml = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerJson = YAML.parse(swaggerYaml) as JsonObject;
 app.use(
@@ -51,8 +51,6 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerJson),
 );
-
-// OpenAPI JSON
 app.get("/openapi", (_req, res) => {
   res.status(200).send(swaggerJson);
 });
