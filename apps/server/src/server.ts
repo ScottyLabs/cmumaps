@@ -44,17 +44,15 @@ await setupAuth(app);
 
 // Swagger
 const swaggerYaml = fs.readFileSync("./build/swagger.yaml", "utf8");
-const swaggerDocument = YAML.parse(swaggerYaml) as JsonObject;
+const swaggerJson = YAML.parse(swaggerYaml) as JsonObject;
 app.use(
   "/swagger",
   express.static("./node_modules/swagger-ui-dist", { index: false }),
   swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument),
+  swaggerUi.setup(swaggerJson),
 );
 
 // OpenAPI JSON
-const swaggerJsonFile = fs.readFileSync("./build/swagger.json", "utf8");
-const swaggerJson = JSON.parse(swaggerJsonFile) as JsonObject;
 app.get("/openapi", (_req, res) => {
   res.status(200).send(swaggerJson);
 });

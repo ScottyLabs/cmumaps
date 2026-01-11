@@ -17,7 +17,8 @@
     },
     "basePath": "/",
     "outputDirectory": "build",
-    "specVersion": 3
+    "specVersion": 3,
+    "yaml": true
   },
   "routes": {
     "routesDir": "build",

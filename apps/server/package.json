@@ -57,7 +57,7 @@
     "server": "dotenv -e .env -- bun run --watch src/server.ts",
     "start": "bun dist/server.js",
     "tsc": "tsc -b",
-    "tsoa": "tsoa spec-and-routes --json && tsoa spec-and-routes --yaml",
+    "tsoa": "tsoa spec-and-routes",
     "tsoa:watch": "onchange 'src/controllers/*.ts' 'tsoa.json' -- bun run tsoa"
   },
   "type": "module"
