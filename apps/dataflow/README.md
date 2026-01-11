@@ -24,7 +24,7 @@ and populating the database with the data.
 
 `clients/` contains the clients for interacting with the CMU Maps API and S3 bucket.
 
-## deserializer
+## Deserializer
 
 `deserializer/` is responsible for deserializing the JSON files from the S3 bucket
 and populating the database with the data.
