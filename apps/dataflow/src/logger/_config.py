@@ -27,13 +27,13 @@ def get_logger_config() -> dict[str, Any]:
         },
         "formatters": {
             color_formatter_name: {
-                "()": "logger.components.ColorFormatter",
+                "()": "logger.ColorFormatter",
             },
             railway_formatter_name: {
-                "()": "logger.components.RailwayLogFormatter",
+                "()": "logger.RailwayLogFormatter",
             },
         },
-        "filters": {filter_name: {"()": "logger.components.LogStatusFilter"}},
+        "filters": {filter_name: {"()": "logger.LogStatusFilter"}},
     }
 
     # If the project is running on Railway, use the Railway log formatter instead of
