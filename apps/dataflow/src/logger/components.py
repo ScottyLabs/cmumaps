@@ -12,14 +12,17 @@ class AppLogger(logging.Logger):
     """Custom logger that adds a .success() method and .print() method."""
 
     def success(self, msg: str, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
+        """Log a success message with the SUCCESS level."""
         if self.isEnabledFor(SUCCESS_LEVEL):
             self._log(SUCCESS_LEVEL, msg, args, **kwargs)
 
     def print_bold(self, msg: str, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
+        """Print a bold message with the PRINT level."""
         if self.isEnabledFor(PRINT_LEVEL):
             self._log(PRINT_LEVEL, Style.BRIGHT + msg, args, **kwargs)
 
     def print(self, msg: str, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
+        """Print a message with the PRINT level."""
         if self.isEnabledFor(PRINT_LEVEL):
             self._log(PRINT_LEVEL, msg, args, **kwargs)
 
@@ -28,11 +31,13 @@ class LogStatusFilter(logging.Filter):
     """A logger filter to track whether any wanrnings or errors were logged."""
 
     def __init__(self) -> None:
+        """Initialize the log status filter with error and warning counters."""
         super().__init__()
         self.error_logged = 0
         self.warning_logged = 0
 
     def filter(self, record: logging.LogRecord) -> bool:
+        """Filter the log record to track whether any warnings or errors were logged."""
         if record.levelno == logging.ERROR:
             self.error_logged += 1
 
@@ -55,6 +60,7 @@ class ColorFormatter(logging.Formatter):
     }
 
     def format(self, record: logging.LogRecord) -> str:
+        """Format the log record as a colored string."""
         color = self.COLOR_MAP.get(record.levelno, "")
         base = super().format(record)
 
@@ -66,6 +72,8 @@ class ColorFormatter(logging.Formatter):
 
 
 class RailwayLogFormatter(logging.Formatter):
+    """Formatter for the Railway logger."""
+
     LEVEL_NAME_MAP: ClassVar = {
         PRINT_LEVEL: "debug",
         logging.DEBUG: "debug",
@@ -77,6 +85,7 @@ class RailwayLogFormatter(logging.Formatter):
     }
 
     def format(self, record: logging.LogRecord) -> str:
+        """Format the log record as structured JSON for Railway."""
         log_record = {
             "time": self.formatTime(record),
             "level": self.LEVEL_NAME_MAP[record.levelno],

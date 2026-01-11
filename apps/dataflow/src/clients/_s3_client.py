@@ -46,7 +46,9 @@ class S3Client:
             )
         except Exception:
             self.logger.exception(
-                "Error uploading %s to %s", local_file_path, s3_object_name
+                "Error uploading %s to %s",
+                local_file_path,
+                s3_object_name,
             )
             return False
 
@@ -63,7 +65,9 @@ class S3Client:
 
         except Exception:
             self.logger.exception(
-                "Error getting %s from %s", s3_object_name, self.BUCKET_NAME
+                "Error getting %s from %s",
+                s3_object_name,
+                self.BUCKET_NAME,
             )
             return None
 

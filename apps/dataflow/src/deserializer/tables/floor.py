@@ -3,8 +3,7 @@ from logger import get_app_logger
 
 
 def populate_floor_table() -> None:
-    """
-    Populate the Floor table using placements.json and buildings.json.
+    """Populate the Floor table using placements.json and buildings.json.
 
     Precondition: Building table must be populated.
     """

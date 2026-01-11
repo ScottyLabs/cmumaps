@@ -17,13 +17,13 @@ def get_logger_config() -> dict[str, Any]:
                 "handlers": [handler_name],
                 "level": PRINT_LEVEL,
                 "filters": [filter_name],
-            }
+            },
         },
         "handlers": {
             handler_name: {
                 "class": "logging.StreamHandler",
                 "formatter": color_formatter_name,
-            }
+            },
         },
         "formatters": {
             color_formatter_name: {

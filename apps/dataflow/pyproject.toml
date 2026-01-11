@@ -50,20 +50,7 @@ check_untyped_defs = true
 # Supported rules https://github.com/charliermarsh/ruff/#supported-rules
 [tool.ruff]
 lint.select = ["ALL"]
-
 lint.ignore = [
-  # Do not require documentation for every single function/method.
+  # Do not require documentation for every public module
   "D100",
-  "D101",
-  "D102",
-  "D103",
-  "D104",
-  "D105",
-  "D106",
-  "D107",
-  # Ignore rules with lower code number when they are at conflict
-  "D203",
-  "D212",
-  # May cause conflicts when used with the formatter
-  "COM812",
 ]

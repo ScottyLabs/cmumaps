@@ -5,8 +5,7 @@ MAX_NODES_PER_REQUEST = 5000  # Tested to work with 1MB request payload limit
 
 
 def populate_node_table() -> None:
-    """
-    Populate the Node table using all-graph.json.
+    """Populate the Node table using all-graph.json.
 
     Precondition: Room table must be populated.
     """

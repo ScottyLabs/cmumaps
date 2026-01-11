@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 def print_section(section: str) -> None:
+    """Print the header banner of a section."""
     logger = get_app_logger()
     logger.print_bold("=" * 50)
     logger.print_bold("%s...", section)
@@ -16,8 +17,7 @@ def print_section(section: str) -> None:
 
 @contextmanager
 def log_operation(operation_name: str) -> Generator[None]:
-    """
-    Context manager to log when an operation starts, finishes, or fails.
+    """Context manager to log when an operation starts, finishes, or fails.
 
     When an exception occurs, it is logged and the traceback is printed,
     and the exception is re-raised.

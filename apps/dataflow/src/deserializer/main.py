@@ -6,12 +6,14 @@ from clients import ALL_TABLE_NAMES, TableName, get_api_client_singleton
 from logger import log_operation
 from logger.utils import print_section
 
-from .tables.alias import populate_alias_table
-from .tables.building import populate_building_table
-from .tables.edge import populate_edge_table
-from .tables.floor import populate_floor_table
-from .tables.node import populate_node_table
-from .tables.room import populate_room_table
+from .tables import (
+    populate_alias_table,
+    populate_building_table,
+    populate_edge_table,
+    populate_floor_table,
+    populate_node_table,
+    populate_room_table,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -20,12 +22,14 @@ dotenv.load_dotenv()
 
 
 def populate_table(table_name: TableName, populate_function: Callable) -> None:
+    """Populate a table with the given function."""
     print_section(f"Populating {table_name} table")
     with log_operation(f"populate {table_name} table"):
         populate_function()
 
 
 def main() -> None:
+    """Entry point to populate the tables."""
     api_client = get_api_client_singleton()
 
     with log_operation("drop tables"):

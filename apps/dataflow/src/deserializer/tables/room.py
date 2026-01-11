@@ -5,8 +5,7 @@ from logger import get_app_logger
 
 
 def populate_room_table() -> None:
-    """
-    Populate the Room table using floorplans.json.
+    """Populate the Room table using floorplans.json.
 
     Precondition: Floor table must be populated.
     """

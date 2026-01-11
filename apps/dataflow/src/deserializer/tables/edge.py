@@ -9,8 +9,7 @@ MAX_EDGES_PER_REQUEST = 5000  # Tested to work with 1MB request payload limit
 
 
 def populate_edge_table() -> None:
-    """
-    Populate the Edge table using all-graph.json.
+    """Populate the Edge table using all-graph.json.
 
     Precondition: Node table must be populated.
     """

@@ -3,8 +3,7 @@ from logger import get_app_logger
 
 
 def populate_alias_table() -> None:
-    """
-    Populate the Alias table using floorplans.json.
+    """Populate the Alias table using floorplans.json.
 
     Precondition: Room table must be populated.
     """

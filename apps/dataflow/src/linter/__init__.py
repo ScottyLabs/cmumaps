@@ -1,3 +1,5 @@
+"""Linter for the dataflow application."""
+
 import subprocess
 
 
