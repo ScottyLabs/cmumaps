@@ -23,7 +23,8 @@ Follow the instructions in [ScottyLabs Base Contributing Guide](https://github.c
 
 The [Project Board](https://github.com/orgs/ScottyLabs/projects/11/views/1)
 is another useful resource to find a issue you might be interested in. Please
-avoid picking issues in Backlog since they need to be groomed first.
+avoid picking issues in Backlog since they need to be groomed first. Please also
+don't pick an issue typed `Maintenance` or `Task` as your first issue.
 
 When opening your Governance PR, make sure to
 use the [CODEOWNERS file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) to ping the appropriate reviewers
