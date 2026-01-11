@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
-from .app_logger import get_app_logger
+from ._app_logger import get_app_logger
 
 if TYPE_CHECKING:
     from collections.abc import Generator

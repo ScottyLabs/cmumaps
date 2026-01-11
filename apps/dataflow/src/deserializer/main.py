@@ -1,10 +1,11 @@
+"""Main module for the deserializer application."""
+
 from typing import TYPE_CHECKING
 
 import dotenv
 
 from clients import ALL_TABLE_NAMES, TableName, get_api_client_singleton
-from logger import log_operation
-from logger.utils import print_section
+from logger import log_operation, print_section
 
 from .tables import (
     populate_alias_table,

@@ -1,6 +1,6 @@
 from typing import Any
 
-from .constants import LOGGER_NAME, PRINT_LEVEL, RUNNING_ON_RAILWAY
+from ._constants import LOGGER_NAME, PRINT_LEVEL, RUNNING_ON_RAILWAY
 
 
 def get_logger_config() -> dict[str, Any]:

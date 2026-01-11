@@ -1,4 +1,4 @@
-from logger.app_logger import get_app_logger
+from logger import get_app_logger
 
 
 def main() -> None:

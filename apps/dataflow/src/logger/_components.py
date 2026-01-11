@@ -5,7 +5,7 @@ from typing import Any, ClassVar
 from colorama import Fore, Style
 from colorama.ansi import Back
 
-from .constants import PRINT_LEVEL, SUCCESS_LEVEL
+from ._constants import PRINT_LEVEL, SUCCESS_LEVEL
 
 
 class AppLogger(logging.Logger):

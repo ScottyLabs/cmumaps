@@ -4,7 +4,7 @@ from functools import lru_cache
 
 from minio import Minio
 
-from logger.app_logger import get_app_logger
+from logger import get_app_logger
 
 
 @lru_cache(maxsize=1)
