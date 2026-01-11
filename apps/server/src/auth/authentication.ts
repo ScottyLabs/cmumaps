@@ -23,6 +23,9 @@ declare module "express" {
   }
 }
 
+// Matches paths like /floors/:id/floorplan
+const FLOORPLAN_PATH_REGEX = "^/floors/[^/]+/floorplan$";
+
 export function expressAuthentication(
   request: express.Request,
   securityName: string,
@@ -33,6 +36,12 @@ export function expressAuthentication(
   request.authErrors = request.authErrors ?? [];
 
   return new Promise((resolve, reject) => {
+    // Accept any request to view CUC floorplans
+    const match = request.path.match(FLOORPLAN_PATH_REGEX);
+    if (match && request.params.floorCode.startsWith("CUC")) {
+      return resolve({});
+    }
+
     if (securityName === OIDC_AUTH) {
       return validateOidc(request, reject, resolve, scopes);
     }

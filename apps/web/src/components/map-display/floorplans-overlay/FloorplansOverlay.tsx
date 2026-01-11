@@ -6,8 +6,12 @@ const FloorplansOverlay = () => {
   const user = useUser();
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
 
-  // Only show floorplans if user is signed in and a floor is focused
-  if (!(focusedFloor && user)) {
+  // Authenticated users can see all floorplans.
+  // Unauthenticated users can only see CUC floorplans.
+  const canShowFloorplans = user || focusedFloor?.buildingCode === "CUC";
+
+  // Only show floorplans if a floor is focused
+  if (!(focusedFloor && canShowFloorplans)) {
     return;
   }
 

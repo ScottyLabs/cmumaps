@@ -28,8 +28,9 @@ const FloorSwitcher = () => {
     return;
   }
 
-  // Don't show the floor switcher if the user is not signed in
-  if (!user) {
+  // Don't show the floor switcher if the user is not signed in unless
+  // the floor is a CUC floor
+  if (!user && floor?.buildingCode !== "CUC") {
     return;
   }
 

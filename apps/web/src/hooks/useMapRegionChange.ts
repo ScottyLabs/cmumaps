@@ -1,4 +1,4 @@
-import type { Building } from "@cmumaps/common";
+import type { Building, Floor } from "@cmumaps/common";
 import { INITIAL_REGION } from "@cmumaps/ui";
 import type { CoordinateRegion } from "mapkit-react";
 import type { RefObject } from "react";
@@ -17,10 +17,12 @@ import {
 } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 import { useNavPaths } from "./useNavigationParams.ts";
+import { useUser } from "./useUser.ts";
 
 const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   // Query data
   const { data: buildings } = $api.useQuery("get", "/buildings");
+  const user = useUser();
 
   // Global state
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
@@ -39,9 +41,9 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
   const instructions = useBoundStore((state) => state.navInstructions) ?? [];
 
   // Calculates the focused floor based on the region
-  const calcFocusedFloor = (region: CoordinateRegion) => {
+  const calcFocusedFloor = (region: CoordinateRegion): Floor | null => {
     if (!buildings) {
-      return;
+      return null;
     }
 
     const center = {
@@ -56,13 +58,11 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       ) ?? null;
 
     if (!centerBuilding) {
-      return;
+      return null;
     }
 
-    // if no floor is focused or the focused floor is not in the center building
-    //   - we focus on the floor of the selected room if there is one
-    //     and it is in the center building
-    //   - otherwise we focus on the default floor of the center building
+    // If no floor is currently focused or the focused floor is not in the center
+    // building we need to find a new floor to focus on.
     if (!focusedFloor || focusedFloor.buildingCode !== centerBuilding.code) {
       // If actively navigating, focus on the floor corresponding to the current instruction
       // if it is in the focused building
@@ -74,8 +74,7 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
                 (n) => n.id === instructions[instructionIndex - 1]?.nodeId,
               );
         if (node?.floor && node.floor.buildingCode === centerBuilding.code) {
-          focusFloor(node.floor);
-          return;
+          return node.floor;
         }
       }
 
@@ -87,28 +86,21 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       const selectedFloor = getFloorLevelFromRoomName(roomName);
 
       if (
-        selectedFloor &&
+        selectedBuildingCode &&
         selectedBuildingCode === centerBuilding.code &&
         selectedFloor !== focusedFloor?.level
       ) {
-        focusFloor({
+        return {
           buildingCode: centerBuilding.code,
-          level: selectedFloor,
-        });
-        return;
+          level: selectedFloor ?? "",
+        };
       }
 
-      if (!centerBuilding.defaultFloor) {
-        return;
-      }
-
-      const newFocusedFloor = {
+      return {
         buildingCode: centerBuilding.code,
-        level: centerBuilding.defaultFloor,
+        // biome-ignore lint/style/noNonNullAssertion: TODO: figure out which floor to focus on if no default floor is set
+        level: centerBuilding.defaultFloor!,
       };
-
-      focusFloor(newFocusedFloor);
-      return;
     }
 
     // if we are focusing on a different building,
@@ -122,9 +114,11 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       );
 
       if (newFocusedFloor) {
-        focusFloor(newFocusedFloor);
+        return newFocusedFloor;
       }
     }
+
+    return focusedFloor;
   };
 
   const { onRegionChangeStart, onRegionChangeEnd } = useMapPosition(
@@ -135,17 +129,28 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
       setShowFloor(newShowFloor);
       setShowRoomNames(density >= THRESHOLD_DENSITY_TO_SHOW_ROOMS);
 
-      if (newShowFloor && !sessionStorage.getItem("showedLogin")) {
-        sessionStorage.setItem("showedLogin", "true");
-        showLogin();
-      }
+      if (newShowFloor) {
+        // Calculate the new focused floor
+        const newFocusedFloor = calcFocusedFloor(region);
 
-      if (!newShowFloor) {
-        unfocusFloor();
-        return;
-      }
+        // Show the login modal if the user is not signed in and we are showing a floor
+        // Exception: we are allowed to show CUC floors to all users
+        if (
+          !(sessionStorage.getItem("showedLogin") || user) &&
+          newFocusedFloor?.buildingCode !== "CUC"
+        ) {
+          sessionStorage.setItem("showedLogin", "true");
+          showLogin();
+          return;
+        }
 
-      calcFocusedFloor(region);
+        // Focus the new floor if it is not the same as the currently focused floor
+        if (newFocusedFloor !== focusedFloor && newFocusedFloor) {
+          focusFloor(newFocusedFloor);
+        }
+      }
+      // Unfocus the floor if we are not showing floors
+      else unfocusFloor();
     },
     mapRef,
     INITIAL_REGION,
