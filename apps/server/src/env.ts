@@ -6,7 +6,7 @@ import { z } from "zod";
 // variables and their types
 const envSchema = z.object({
   ALLOWED_ORIGINS_REGEX: z.string(),
-  APP_ENV: z.enum(["development", "production"]).default("development"),
+  APP_ENV: z.enum(["development", "production"]),
   AUTH_CLIENT_ID: z.string(),
   AUTH_CLIENT_SECRET: z.string(),
   AUTH_SESSION_SECRET: z.string(),
