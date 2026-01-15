@@ -15,6 +15,7 @@ import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useBoundStore } from "@/store/index.ts";
 import { isInPolygon } from "@/utils/geometry";
 import { prefersReducedMotion } from "@/utils/prefersReducedMotion.ts";
+import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { zoomOnObject } from "@/utils/zoomUtils";
 import { NavLine } from "../nav/NavLine.tsx";
 import { CoordinatePin } from "./coordinate-pin/CoordinatePin.tsx";
@@ -49,6 +50,16 @@ const MapDisplay = ({ mapRef }: Props) => {
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst, isNavOpen } = useNavPaths();
   const { buildingCode, roomName, error } = useLocationParams();
+  const floorCode =
+    buildingCode && roomName
+      ? buildFloorCode(buildingCode, getFloorLevelFromRoomName(roomName) || "")
+      : null;
+  const { data: rooms } = $api.useQuery(
+    "get",
+    "/floors/{floorCode}/floorplan",
+    { params: { path: { floorCode: floorCode ?? "" } } },
+    { enabled: Boolean(floorCode) },
+  );
 
   // Toast initial error when location params are invalid
   useEffect(() => {
@@ -67,6 +78,14 @@ const MapDisplay = ({ mapRef }: Props) => {
       zoomOnObject(mapRef.current, building?.shape.flat(), setIsZooming);
     }
   }, [Boolean(mapRef.current)]);
+
+  // Zoom on a specific room if provided in the URL
+  useEffect(() => {
+    if (!mapRef.current || !(rooms && roomName)) return;
+    const room = rooms[roomName];
+    if (!room) return;
+    zoomOnObject(mapRef.current, room.points, setIsZooming);
+  }, [Boolean(mapRef.current), rooms, roomName]);
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
