@@ -9,6 +9,7 @@ import {
 
 export type Buildings = Awaited<ReturnType<typeof prisma.building.findMany>>;
 
+const OUTSIDE_MULTIPLIER = 100;
 // Cache the graph
 let graphCache: GeoNodes | null = null;
 
@@ -105,8 +106,23 @@ export const pathService = {
       throw new Error(msg);
     }
 
-    const route = getRoute(startNodes, endNodes, graph, 1);
-    return { Fastest: route };
+    // Calculate the fastest route (no outside penalty)
+    const fastestRoute = getRoute(startNodes, endNodes, graph, 1);
+
+    // Calculate the inside route with a higher outside cost multiplier
+    // to incentivize finding indoor paths
+    const insideRoute = getRoute(
+      startNodes,
+      endNodes,
+      graph,
+      OUTSIDE_MULTIPLIER,
+    );
+
+    const result: Record<string, PreciseRoute> = {
+      Fastest: fastestRoute,
+      Inside: insideRoute,
+    };
+    return result;
   },
 };
 
