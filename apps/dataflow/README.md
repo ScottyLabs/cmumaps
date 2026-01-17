@@ -74,5 +74,5 @@ uploading it to the S3 bucket
 
 ## Additional Information
 
-See the [Dataflow wiki page](https://github.com/ScottyLabs/wiki/wiki/Dataflow)
+See the [Dataflow wiki page](https://github.com/ScottyLabs/cmumaps/wiki/Data-Flow)
 for more information.
