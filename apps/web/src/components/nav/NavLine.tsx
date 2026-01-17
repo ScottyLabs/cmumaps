@@ -11,7 +11,7 @@ import startIcon from "@/assets/icons/nav/path/pathStart.svg";
 import startIconCompleted from "@/assets/icons/nav/path/pathStart-completed.svg";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useBoundStore } from "@/store/index.ts";
-import type { NavPath, Node } from "@/types/navTypes";
+import type { Node } from "@/types/navTypes";
 import { zoomOnPoint } from "@/utils/zoomUtils";
 
 interface IconInfo {
@@ -201,33 +201,37 @@ const NavLine = ({ map }: Props) => {
       }
 
       setPathOverlay(newPathOverlays);
-    } else if (recommendedPath) {
-      newPathOverlays.push(
-        ...Object.values(recommendedPath).map((p: NavPath, _) => {
-          const style = {
-            strokeColor: "#3D83D3",
-            strokeOpacity: 0.9,
-            lineWidth: 5,
-          };
+    } else if (recommendedPath?.[selectedPath]) {
+      const selectedNavPath = recommendedPath[selectedPath];
+      const style = {
+        strokeColor: "#3D83D3",
+        strokeOpacity: 0.9,
+        lineWidth: 5,
+      };
 
-          return new mapkit.PolylineOverlay(
-            p.path.path.map(
-              (n) =>
-                new mapkit.Coordinate(
-                  n.coordinate.latitude,
-                  n.coordinate.longitude,
-                ),
+      const selectedPathOverlay = new mapkit.PolylineOverlay(
+        selectedNavPath.path.path.map(
+          (n) =>
+            new mapkit.Coordinate(
+              n.coordinate.latitude,
+              n.coordinate.longitude,
             ),
-            { style: new mapkit.Style(style) },
-          );
-        }),
+        ),
+        { style: new mapkit.Style(style) },
       );
 
+      newPathOverlays.push(selectedPathOverlay);
       setPathOverlay(newPathOverlays);
     } else {
       setPathOverlay([]);
     }
-  }, [recommendedPath, completedPath, isNavigating, uncompletedPath]);
+  }, [
+    recommendedPath,
+    completedPath,
+    isNavigating,
+    uncompletedPath,
+    selectedPath,
+  ]);
 
   // render the polylines so they stay on top
   // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render whenever new floor is focused so line is not covered
