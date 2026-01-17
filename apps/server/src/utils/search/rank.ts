@@ -25,7 +25,8 @@ export function BM25Term(
   const n = numDocs;
 
   const idfPart = Math.log((n - df + 0.5) / (df + 0.5) + 1.0);
-  const tfPart = (tf * (k + 1.0)) / (tf + k * (1.0 - b + (b * docLen) / avgDl));
+  const tfPart =
+    (tf * (k + 1.0)) / (tf + k * (1.0 - b + (b * docLen) / Math.max(1, avgDl)));
 
   return idfPart * tfPart;
 }
