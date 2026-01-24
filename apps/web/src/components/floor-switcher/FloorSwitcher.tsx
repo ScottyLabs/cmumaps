@@ -5,6 +5,7 @@ import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useUser } from "@/hooks/useUser.ts";
 import { CardStates } from "@/store/cardSlice";
 import { useBoundStore } from "@/store/index.ts";
+import { isPublicBuilding } from "@/utils/authUtils";
 
 /**
  * This component determines if the floor switcher should be shown.
@@ -29,8 +30,9 @@ const FloorSwitcher = () => {
   }
 
   // Don't show the floor switcher if the user is not signed in unless
-  // the floor is a CUC floor
-  if (!user && floor?.buildingCode !== "CUC") {
+  // the floor is a public building floor
+  const canViewFloor = Boolean(user) || isPublicBuilding(floor?.buildingCode);
+  if (!canViewFloor) {
     return;
   }
 

@@ -10,6 +10,7 @@ import {
 } from "@/components/map-display/mapConstants";
 import { useMapPosition } from "@/hooks/useMapPosition.ts";
 import { useBoundStore } from "@/store";
+import { isPublicBuilding } from "@/utils/authUtils";
 import {
   getFloorByOrdinal,
   getFloorLevelFromRoomName,
@@ -134,11 +135,12 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
         const newFocusedFloor = calcFocusedFloor(region);
 
         // Show the login modal if the user is not signed in and we are showing a floor
-        // Exception: we are allowed to show CUC floors to all users
-        if (
-          !(sessionStorage.getItem("showedLogin") || user) &&
-          newFocusedFloor?.buildingCode !== "CUC"
-        ) {
+        // Exception: we are allowed to show public building floors to all users
+        const canSkipLogin =
+          sessionStorage.getItem("showedLogin") ||
+          user ||
+          isPublicBuilding(newFocusedFloor?.buildingCode);
+        if (!canSkipLogin) {
           sessionStorage.setItem("showedLogin", "true");
           showLogin();
           return;

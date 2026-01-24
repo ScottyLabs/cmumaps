@@ -12,6 +12,7 @@ import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
 import { CardStates } from "@/store/cardSlice";
 import { useBoundStore } from "@/store/index.ts";
+import { isPublicBuilding } from "@/utils/authUtils";
 import { getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { zoomOnObject, zoomOnPoint } from "@/utils/zoomUtils";
 
@@ -249,7 +250,12 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
   const handleClick = (result: SearchResultProps) => {
     if (result.type === "room") {
-      if (!user) {
+      // Public buildings are accessible to unauthenticated users via the public pathfinding API
+      // Other rooms require authentication
+      // Extract building code from nameWithSpace (e.g., "CUC 159" -> "CUC")
+      const buildingCode = result.nameWithSpace?.split(" ")[0];
+      const canAccess = Boolean(user) || isPublicBuilding(buildingCode);
+      if (!canAccess) {
         showLogin();
         return;
       }

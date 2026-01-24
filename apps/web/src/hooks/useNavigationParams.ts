@@ -2,6 +2,7 @@ import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { $api } from "@/api/client";
+import { useUser } from "@/hooks/useUser";
 import { useBoundStore } from "@/store";
 import type { NavPaths, NavWaypointType } from "@/types/navTypes";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -15,6 +16,8 @@ interface Params {
   dstShortName?: string;
   srcType?: NavWaypointType;
   dstType?: NavWaypointType;
+  srcBuildingCode?: string;
+  dstBuildingCode?: string;
   setSrc: (src: string | null) => void;
   setDst: (dst: string | null) => void;
   swap: () => void;
@@ -28,6 +31,7 @@ const getWaypointParams = (
   labelShort?: string;
   urlParam?: string;
   type?: NavWaypointType;
+  buildingCode?: string;
   error?: string;
 } => {
   const { data: buildings } = $api.useQuery("get", "/buildings");
@@ -71,7 +75,7 @@ const getWaypointParams = (
   }
 
   if (point.includes("-")) {
-    if (!(rooms && buildings)) return { type: "Room" };
+    if (!(rooms && buildings)) return { type: "Room", buildingCode };
 
     const room = rooms[roomName];
     if (!room) return { error: `Invalid Room Waypoint ${roomName}` };
@@ -79,7 +83,14 @@ const getWaypointParams = (
     const label =
       room.alias || `${buildings[room.floor.buildingCode]?.name} ${roomName}`;
     const labelShort = `${buildingCode} ${roomName}`;
-    return { query: room.id, label, labelShort, urlParam: point, type: "Room" };
+    return {
+      query: room.id,
+      label,
+      labelShort,
+      urlParam: point,
+      type: "Room",
+      buildingCode,
+    };
   }
 
   // If point is not a coordinate, user position, or room name, we treat it as a building code
@@ -102,6 +113,7 @@ const getWaypointParams = (
 const useNavPaths = (): Params => {
   const [src, setSrc] = useQueryState("src");
   const [dst, setDst] = useQueryState("dst");
+  const user = useUser();
 
   const navigate = useNavigate();
 
@@ -111,6 +123,7 @@ const useNavPaths = (): Params => {
     labelShort: srcShortName,
     urlParam: srcUrlParam,
     type: srcType,
+    buildingCode: srcBuildingCode,
     error: srcError,
   } = getWaypointParams(src ?? "");
 
@@ -119,10 +132,16 @@ const useNavPaths = (): Params => {
     label: dstName,
     labelShort: dstShortName,
     type: dstType,
+    buildingCode: dstBuildingCode,
     error: dstError,
   } = getWaypointParams(dst ?? "");
 
-  const { data: navPaths } = $api.useQuery(
+  const hasValidQuery = Boolean(
+    srcQuery && dstQuery && srcQuery !== "" && dstQuery !== "",
+  );
+
+  // Use authenticated endpoint when user is logged in
+  const { data: authNavPaths } = $api.useQuery(
     "get",
     "/path",
     {
@@ -134,11 +153,29 @@ const useNavPaths = (): Params => {
       },
     },
     {
-      enabled: Boolean(
-        srcQuery && dstQuery && srcQuery !== "" && dstQuery !== "",
-      ),
+      enabled: hasValidQuery && Boolean(user),
     },
   ) as { data: NavPaths | undefined };
+
+  // Use public endpoint when user is not logged in (only allows CUC + outside)
+  const { data: publicNavPaths } = $api.useQuery(
+    "get",
+    "/path/public",
+    {
+      params: {
+        query: {
+          start: srcQuery ?? "",
+          end: dstQuery ?? "",
+        },
+      },
+    },
+    {
+      enabled: hasValidQuery && !user,
+    },
+  ) as { data: NavPaths | undefined };
+
+  // Use the appropriate path data based on auth status
+  const navPaths = user ? authNavPaths : publicNavPaths;
 
   const swap = async () => {
     const temp = src;
@@ -179,6 +216,8 @@ const useNavPaths = (): Params => {
     dstShortName,
     srcType,
     dstType,
+    srcBuildingCode,
+    dstBuildingCode,
     setSrc,
     setDst: setDstAndUrlParam,
     swap,
