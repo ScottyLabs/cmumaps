@@ -58,7 +58,7 @@ const RoomCard = () => {
     return (
       <div className="flex items-center justify-between">
         <h2>
-          {buildings[room.floor.buildingCode]?.name} {roomName}
+          {buildings[room.floor?.buildingCode ?? buildingCode]?.name} {roomName}
         </h2>
         <p className="italic">{room.type}</p>
       </div>

@@ -81,7 +81,8 @@ const getWaypointParams = (
     if (!room) return { error: `Invalid Room Waypoint ${roomName}` };
 
     const label =
-      room.alias || `${buildings[room.floor.buildingCode]?.name} ${roomName}`;
+      room.alias ||
+      `${buildings[room.floor?.buildingCode ?? buildingCode]?.name} ${roomName}`;
     const labelShort = `${buildingCode} ${roomName}`;
     return {
       query: room.id,

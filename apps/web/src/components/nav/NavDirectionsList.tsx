@@ -83,7 +83,7 @@ const NavDirectionsList = () => {
 
     const buildingCode = navPaths?.[selectedPath]?.path.path.find(
       (n) => n.id === id,
-    )?.floor.buildingCode;
+    )?.floor?.buildingCode;
 
     const buildingName = buildingCode === "outside" ? "Outside" : buildingCode;
 
