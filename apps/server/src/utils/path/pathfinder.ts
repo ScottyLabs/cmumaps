@@ -156,6 +156,7 @@ export const findPath = (
   endNodes: string[],
   graph: GeoNodes,
   outsideCostMul = 1,
+  allowedBuildingCodes?: Set<string>,
 ): Route | null => {
   interface QueueItem {
     path: string[];
@@ -221,6 +222,14 @@ export const findPath = (
       const currentNode = graph[lastNodeId];
       const nextNode = graph[neighborId];
       if (!nextNode) continue;
+
+      // Skip nodes that are not in allowed buildings (if restriction is set)
+      if (allowedBuildingCodes) {
+        const nextBuildingCode = nextNode.floor?.buildingCode ?? "outside";
+        if (!allowedBuildingCodes.has(nextBuildingCode)) {
+          continue;
+        }
+      }
 
       const lastGeo = getGeoCoordForNode(lastNodeId);
       const nextGeo = getGeoCoordForNode(neighborId);
@@ -294,8 +303,15 @@ export const getRoute = (
   endNodes: string[],
   graph: GeoNodes,
   outsideCostMul = 1,
+  allowedBuildingCodes?: Set<string>,
 ): PreciseRoute => {
-  const found = findPath(startNodes, endNodes, graph, outsideCostMul);
+  const found = findPath(
+    startNodes,
+    endNodes,
+    graph,
+    outsideCostMul,
+    allowedBuildingCodes,
+  );
   if (!found) {
     throw new Error("No path found");
   }
