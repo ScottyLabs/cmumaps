@@ -5,6 +5,7 @@ import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
 import { useBoundStore } from "@/store/index.ts";
 import type { Node } from "@/types/navTypes";
+import { isPublicBuilding } from "@/utils/authUtils";
 
 const NavOverlay = ({
   mapRef,
@@ -20,7 +21,14 @@ const NavOverlay = ({
   const selectedPath = useBoundStore((state) => state.selectedPath);
   const showLogin = useBoundStore((state) => state.showLogin);
 
-  const { navPaths, isNavOpen, dstType, srcType } = useNavPaths();
+  const {
+    navPaths,
+    isNavOpen,
+    dstType,
+    srcType,
+    srcBuildingCode,
+    dstBuildingCode,
+  } = useNavPaths();
   const user = useUser();
 
   // Process instructions
@@ -97,13 +105,26 @@ const NavOverlay = ({
     }
   }, [isNavOpen, endNav]);
 
-  // On page load, if the destination is a room and the user is not signed in, redirect to the login page
+  // On page load, if the destination is a non-public room and the user is not signed in, show the login modal
+  // Public buildings (e.g., CUC) are allowed for unauthenticated users via the public pathfinding API
   // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load/dstType change
   useEffect(() => {
-    if ((dstType === "Room" || srcType === "Room") && !user) {
-      showLogin();
+    if (!user) {
+      // Only check for auth if the building code is known (not undefined)
+      // A room needs auth if it's a Room type with a known building code that is NOT public
+      const srcNeedsAuth =
+        srcType === "Room" &&
+        srcBuildingCode &&
+        !isPublicBuilding(srcBuildingCode);
+      const dstNeedsAuth =
+        dstType === "Room" &&
+        dstBuildingCode &&
+        !isPublicBuilding(dstBuildingCode);
+      if (srcNeedsAuth || dstNeedsAuth) {
+        showLogin();
+      }
     }
-  }, [dstType, srcType]);
+  }, [dstType, srcType, srcBuildingCode, dstBuildingCode]);
 
   if (!isNavOpen) {
     return;
