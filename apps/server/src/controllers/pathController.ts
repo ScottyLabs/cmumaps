@@ -14,4 +14,12 @@ export class PathController {
   ): Promise<Record<string, PreciseRoute>> {
     return await pathService.calculatePath(start, end);
   }
+
+  @Get("/public")
+  public async publicPath(
+    @Query() start: string,
+    @Query() end: string,
+  ): Promise<Record<string, PreciseRoute>> {
+    return await pathService.calculatePublicPath(start, end);
+  }
 }

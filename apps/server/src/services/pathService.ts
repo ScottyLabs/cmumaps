@@ -74,6 +74,9 @@ async function getOrBuildGraph(): Promise<GeoNodes> {
   return graphCache;
 }
 
+// Allowed building codes for public pathfinding (outside + CUC only)
+const PUBLIC_ALLOWED_BUILDINGS = new Set(["outside", "CUC"]);
+
 export const pathService = {
   async calculatePath(
     start: string,
@@ -116,6 +119,62 @@ export const pathService = {
       endNodes,
       graph,
       OUTSIDE_MULTIPLIER,
+    );
+
+    const result: Record<string, PreciseRoute> = {
+      Fastest: fastestRoute,
+      Inside: insideRoute,
+    };
+    return result;
+  },
+
+  async calculatePublicPath(
+    start: string,
+    end: string,
+  ): Promise<Record<string, PreciseRoute>> {
+    if (!(start && end)) {
+      throw new Error("Invalid start or end waypoint format");
+    }
+
+    // Get cached graph
+    const graph = await getOrBuildGraph();
+
+    // Parse waypoints
+    const startWaypoint = parseWaypoint(start);
+    const endWaypoint = parseWaypoint(end);
+
+    const buildings = await prisma.building.findMany();
+    const startNodes = waypointToNodes(startWaypoint, graph, buildings);
+    const endNodes = waypointToNodes(endWaypoint, graph, buildings);
+
+    if (startNodes.length === 0 || endNodes.length === 0) {
+      let msg: string;
+      if (startNodes.length === 0 && endNodes.length === 0) {
+        msg = `Could not match start or end waypoint to any nodes: ${start}, ${JSON.stringify(startWaypoint)}, ${end}, ${JSON.stringify(endWaypoint)}`;
+      } else if (startNodes.length === 0) {
+        msg = `Could not match start waypoint to any nodes: ${start}, ${JSON.stringify(startWaypoint)}, ${end}, ${JSON.stringify(endWaypoint)}`;
+      } else {
+        msg = `Could not match end waypoint to any nodes: ${end}, ${JSON.stringify(endWaypoint)}`;
+      }
+      throw new Error(msg);
+    }
+
+    // Calculate the fastest route with building restrictions (outside + CUC only)
+    const fastestRoute = getRoute(
+      startNodes,
+      endNodes,
+      graph,
+      1,
+      PUBLIC_ALLOWED_BUILDINGS,
+    );
+
+    // Calculate the inside route with building restrictions
+    const insideRoute = getRoute(
+      startNodes,
+      endNodes,
+      graph,
+      OUTSIDE_MULTIPLIER,
+      PUBLIC_ALLOWED_BUILDINGS,
     );
 
     const result: Record<string, PreciseRoute> = {
