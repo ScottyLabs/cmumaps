@@ -28,6 +28,11 @@ class S3Client:
     BUCKET_NAME = "cmumaps"
 
     def __init__(self) -> None:
+        """
+        Initialize the S3 client and related configuration for interacting with the configured bucket.
+        
+        Reads S3 credentials and endpoint from environment variables S3_ACCESS_KEY, S3_SECRET_KEY, and S3_ENDPOINT, initializes the application logger, and constructs a Minio client assigned to self._client. If S3_ENDPOINT is not set, logs a critical error and raises ValueError("S3_ENDPOINT must be set").
+        """
         self.logger = get_app_logger()
 
         self.access_key = os.getenv("S3_ACCESS_KEY")
@@ -48,7 +53,15 @@ class S3Client:
         self.logger = get_app_logger()
 
     def _get_validator(self, s3_object_name: str) -> type[BaseModel] | None:
-        """Get the Pydantic validator model for a given S3 object name."""
+        """
+        Return the Pydantic model that validates JSON for the given S3 object name by matching known filename suffixes.
+        
+        Parameters:
+            s3_object_name (str): S3 object key or path to match against registered validator filename patterns.
+        
+        Returns:
+            type[BaseModel] | None: The Pydantic model class to use for validation if a matching suffix is found, otherwise `None`.
+        """
         for pattern, validator in SCHEMA_VALIDATORS.items():
             if s3_object_name.endswith(pattern):
                 return validator
@@ -57,7 +70,16 @@ class S3Client:
     def _validate_json_data(
         self, json_data: dict[str, Any], validator: type[BaseModel],
     ) -> bool:
-        """Validate JSON data against a Pydantic model. Returns True if valid."""
+        """
+        Validate JSON-decoded data against a Pydantic model.
+        
+        Parameters:
+            json_data (dict[str, Any]): The JSON-decoded data to validate.
+            validator (type[BaseModel]): The Pydantic model class to validate the data against.
+        
+        Returns:
+            bool: `True` if the data conforms to the model, `False` otherwise.
+        """
         try:
             validator.model_validate(json_data)
         except ValidationError:
@@ -67,9 +89,13 @@ class S3Client:
             return True
 
     def upload_json_file(self, local_file_path: str, s3_object_name: str) -> bool:
-        """Upload a JSON file to S3 bucket. Return if the upload was successful.
-
-        Validates the JSON data against the appropriate Pydantic model before uploading.
+        """
+        Upload a local JSON file to the S3 bucket, validating it against a registered Pydantic schema when applicable.
+        
+        If a validator is registered for the given s3_object_name, the file is parsed and validated before upload; the upload is aborted on parse or validation failure. On success, the file is uploaded with content type "application/json".
+        
+        Returns:
+            True if the file was uploaded successfully, False otherwise.
         """
         validator = self._get_validator(s3_object_name)
 
