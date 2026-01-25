@@ -1,11 +1,22 @@
 import json
 import os
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, cast
 
 from minio import Minio
+from pydantic import BaseModel, ValidationError
 
 from logger import get_app_logger
+from models import Buildings, Floorplans, Graph, Placements
+
+# Mapping of S3 object name patterns to their Pydantic validator models
+SCHEMA_VALIDATORS: dict[str, type[BaseModel]] = {
+    "buildings.json": Buildings,
+    "floorplans.json": Floorplans,
+    "placements.json": Placements,
+    "all-graph.json": Graph,
+}
 
 
 @lru_cache(maxsize=1)
@@ -36,8 +47,49 @@ class S3Client:
 
         self.logger = get_app_logger()
 
+    def _get_validator(self, s3_object_name: str) -> type[BaseModel] | None:
+        """Get the Pydantic validator model for a given S3 object name."""
+        for pattern, validator in SCHEMA_VALIDATORS.items():
+            if s3_object_name.endswith(pattern):
+                return validator
+        return None
+
+    def _validate_json_data(
+        self, json_data: dict[str, Any], validator: type[BaseModel],
+    ) -> bool:
+        """Validate JSON data against a Pydantic model. Returns True if valid."""
+        try:
+            validator.model_validate(json_data)
+        except ValidationError:
+            self.logger.exception("Validation failed")
+            return False
+        else:
+            return True
+
     def upload_json_file(self, local_file_path: str, s3_object_name: str) -> bool:
-        """Upload a JSON file to S3 bucket. Return if the upload was successful."""
+        """Upload a JSON file to S3 bucket. Return if the upload was successful.
+
+        Validates the JSON data against the appropriate Pydantic model before uploading.
+        """
+        validator = self._get_validator(s3_object_name)
+
+        if validator:
+            try:
+                with Path(local_file_path).open(encoding="utf-8") as f:
+                    json_data = json.load(f)
+            except Exception:
+                self.logger.exception(
+                    "Error loading JSON file %s",
+                    local_file_path,
+                )
+                return False
+
+            if not self._validate_json_data(json_data, validator):
+                self.logger.error(
+                    "Validation failed for %s, not uploading", local_file_path,
+                )
+                return False
+
         try:
             self._client.fput_object(
                 self.BUCKET_NAME,
