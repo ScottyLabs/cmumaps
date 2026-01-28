@@ -37,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--downloaded-buildings",
         type=Path,
-        default=Path("downloaded_buildings.json"),
+        default=Path("buildings.json"),
     )
     parser.add_argument("--output", type=Path, default=Path("buildings.json"))
     parser.add_argument(
