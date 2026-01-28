@@ -1,0 +1,84 @@
+"""Orchestrate the full ESIM building data pipeline.
+
+This script runs all pipeline stages in sequence to generate complete
+building data for CMU Maps from ArcGIS and OpenStreetMap sources.
+
+Pipeline stages:
+    1. arc_gis_query.py: Fetch building metadata from ArcGIS
+    2. osm_building_to_json.py: Parse OSM export for building geometries
+    3. sign_abbrev_mapping.py: Create sign abbreviation to ID mapping
+    4. add_fms_id.py: Enrich buildings with FMS identifiers
+
+Input:
+    - export.osm: OpenStreetMap export of CMU campus buildings
+    - buildings.json: Existing building data with osmId mappings
+
+Output:
+    - query.json: Raw ArcGIS building data
+    - sign_abbrev_mapping.json: Sign abbreviation to FMS ID mapping
+    - buildings.json: Final building data with geometries and FMS IDs
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Run the building pipeline from ArcGIS/OSM to buildings.json",
+    )
+    parser.add_argument("--osm-file", type=Path, default=Path("export.osm"))
+    parser.add_argument(
+        "--downloaded-buildings",
+        type=Path,
+        default=Path("downloaded_buildings.json"),
+    )
+    parser.add_argument("--output", type=Path, default=Path("buildings.json"))
+    parser.add_argument(
+        "--skip-arcgis",
+        action="store_true",
+        help="Skip ArcGIS fetch (use existing query.json)",
+    )
+    parser.add_argument("--dry-run", action="store_true")
+    return parser.parse_args()
+
+
+def _run(cmd: list[str], env: dict[str, str] | None = None) -> None:
+    """Run a subprocess command."""
+    subprocess.run(cmd, check=True, env=env)  # noqa: S603
+
+
+def main() -> None:
+    """Run the building pipeline."""
+    args = parse_args()
+    python = sys.executable
+
+    # Step 1: Fetch from ArcGIS
+    if not args.skip_arcgis:
+        _run([python, "arc_gis_query.py"])
+
+    # Step 2: Parse OSM buildings
+    env = os.environ.copy()
+    env["CMUMAPS_OSM_FILE"] = str(args.osm_file)
+    env["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(args.downloaded_buildings)
+    env["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(args.output)
+    _run([python, "osm_building_to_json.py"], env=env)
+
+    # Step 3: Build sign mapping
+    _run([python, "sign_abbrev_mapping.py"])
+
+    # Step 4: Add FMS IDs
+    cmd = [python, "add_fms_id.py", "--buildings", str(args.output)]
+    if args.dry_run:
+        cmd.append("--dry-run")
+    _run(cmd)
+
+
+if __name__ == "__main__":
+    main()
