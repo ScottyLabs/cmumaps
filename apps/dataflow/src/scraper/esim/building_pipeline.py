@@ -91,7 +91,12 @@ def main() -> None:
     ])
 
     # Step 4: Add FMS IDs
-    cmd = [python, str(script_dir / "add_fms_id.py"), "--buildings", str(output_file)]
+    cmd = [
+        python,
+        str(script_dir / "add_fms_id.py"),
+        "--buildings", str(output_file),
+        "--mapping", str(sign_mapping_json),
+    ]
     if args.dry_run:
         cmd.append("--dry-run")
     _run(cmd)

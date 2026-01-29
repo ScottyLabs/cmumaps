@@ -333,8 +333,15 @@ def _floors_from_levels(tags: dict[str, str]) -> list[str]:
 
 
 # OSM parsing
-tree = ET.parse(OSM_FILE)  # noqa: S314
-root = tree.getroot()
+try:
+    tree = ET.parse(OSM_FILE)  # noqa: S314
+    root = tree.getroot()
+except FileNotFoundError:
+    logger.exception("Could not find %s", OSM_FILE)
+    sys.exit(1)
+except ET.ParseError:
+    logger.exception("Invalid XML in %s", OSM_FILE)
+    sys.exit(1)
 
 # Collect nodes and node tags
 nodes: dict[str, Point] = {}
