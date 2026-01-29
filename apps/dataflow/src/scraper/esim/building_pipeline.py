@@ -65,9 +65,15 @@ def main() -> None:
     downloaded_buildings = Path(args.downloaded_buildings).resolve()
     output_file = Path(args.output).resolve()
 
+    # Intermediate files stored in script directory
+    query_json = (script_dir / "query.json").resolve()
+    sign_mapping_json = script_dir / "sign_abbrev_mapping.json"
+    sign_mapping_json = sign_mapping_json.resolve()
+
     # Step 1: Fetch from ArcGIS
     if not args.skip_arcgis:
-        _run([python, str(script_dir / "arc_gis_query.py")])
+        _run([python, str(script_dir / "arc_gis_query.py"), "--output",
+              str(query_json)])
 
     # Step 2: Parse OSM buildings
     env = os.environ.copy()
@@ -77,7 +83,12 @@ def main() -> None:
     _run([python, str(script_dir / "osm_building_to_json.py")], env=env)
 
     # Step 3: Build sign mapping
-    _run([python, str(script_dir / "sign_abbrev_mapping.py")])
+    _run([
+        python,
+        str(script_dir / "sign_abbrev_mapping.py"),
+        "--query", str(query_json),
+        "--output", str(sign_mapping_json),
+    ])
 
     # Step 4: Add FMS IDs
     cmd = [python, str(script_dir / "add_fms_id.py"), "--buildings", str(output_file)]

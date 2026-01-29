@@ -3,7 +3,7 @@ name = "dataflow"
 version = "0.1.0"
 description = "Responsible for handling data flow for CMU Maps"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.10,<3.14"  # TODO: Remove <3.14 constraint when pyarrow has 3.14 wheels
 dependencies = [
   "arcgis>=2.4.0",
   "colorama>=0.4.6",

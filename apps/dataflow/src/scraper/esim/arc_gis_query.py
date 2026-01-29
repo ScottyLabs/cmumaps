@@ -29,9 +29,32 @@ FIELDS = [
 
 def _fetch_buildings(output_path: Path = Path("query.json")) -> int:
     """Fetch building data from ArcGIS and save to JSON."""
-    portal = GIS()
-    layer = portal.content.get(LAYER_ID).layers[0]
-    results = layer.query(where="ZIP = 15213", out_fields=FIELDS)
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    try:
+        portal = GIS()
+    except Exception:
+        logger.exception("Failed to connect to ArcGIS")
+        return 0
+
+    item = portal.content.get(LAYER_ID)
+    if item is None:
+        logger.error("ArcGIS layer not found: %s", LAYER_ID)
+        return 0
+
+    if not hasattr(item, "layers") or not item.layers:
+        logger.error("ArcGIS item has no layers: %s", LAYER_ID)
+        return 0
+
+    layer = item.layers[0]
+
+    try:
+        results = layer.query(where="ZIP = 15213", out_fields=FIELDS)
+    except Exception:
+        logger.exception("Failed to query ArcGIS layer")
+        return 0
 
     def clean(val: object) -> object:
         return val.strip() if isinstance(val, str) else val
@@ -49,5 +72,21 @@ def _fetch_buildings(output_path: Path = Path("query.json")) -> int:
     return len(data["features"])
 
 
+def _parse_args() -> Path:
+    """Parse command line arguments."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Fetch CMU building data from ArcGIS.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("query.json"),
+        help="Path to write the query results (default: query.json).",
+    )
+    return parser.parse_args().output
+
+
 if __name__ == "__main__":
-    _fetch_buildings()
+    _fetch_buildings(_parse_args())

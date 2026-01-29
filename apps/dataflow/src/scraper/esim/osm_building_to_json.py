@@ -17,12 +17,15 @@ from __future__ import annotations
 
 import heapq
 import json
+import logging
 import math
 import os
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 # Type aliases
 Point = tuple[float, float]
@@ -92,8 +95,10 @@ try:
             fallback_name_lookup[name_key] = entries[0]
 
 except FileNotFoundError:
+    logger.exception("Could not find %s", DOWNLOADED_BUILDINGS_JSON)
     sys.exit(1)
 except json.JSONDecodeError:
+    logger.exception("Invalid JSON in %s", DOWNLOADED_BUILDINGS_JSON)
     sys.exit(1)
 
 
