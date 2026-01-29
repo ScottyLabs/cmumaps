@@ -16,7 +16,7 @@ import argparse
 import json
 from collections import defaultdict
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -59,10 +59,10 @@ def _to_building_numeric(raw_value: object) -> int | None:
         return None
 
 
-def _build_sign_mapping(features: Iterable[dict]) -> MappingResult:
+def _build_sign_mapping(features: Iterable[dict[str, Any]]) -> MappingResult:
     """Construct the sign abbreviation mapping."""
     grouped: MappingResult = {}
-    sign_to_ids: dict[str, set[str]] = defaultdict(set)
+    sign_to_ids: dict[str, set[int]] = defaultdict(set)
 
     for feature in features:
         attributes = feature.get("attributes") or {}
@@ -83,8 +83,10 @@ def _build_sign_mapping(features: Iterable[dict]) -> MappingResult:
 
         label = None
         if sign_label:
-            if sign_label in conflict_signs and short_label:
-                label = short_label
+            if sign_label in conflict_signs:
+                if short_label:
+                    label = short_label
+                # else: label stays None -> skip ambiguous entries without disambiguator
             else:
                 label = sign_label
         else:
@@ -109,13 +111,17 @@ def _build_sign_mapping(features: Iterable[dict]) -> MappingResult:
     return {label: grouped[label] for label in sorted(grouped)}
 
 
-def _load_query(path: Path) -> dict:
+def _load_query(path: Path) -> dict[str, Any]:
     """Load query JSON from file."""
     if not path.exists():
         msg = f"Could not find query JSON at {path}"
         raise FileNotFoundError(msg)
     with path.open(encoding="utf-8") as handle:
-        return json.load(handle)
+        data = json.load(handle)
+    if not isinstance(data, dict):
+        msg = f"Unexpected JSON shape in {path}; expected an object."
+        raise TypeError(msg)
+    return {str(key): value for key, value in data.items()}
 
 
 def _parse_args() -> argparse.Namespace:
@@ -142,7 +148,12 @@ def main() -> None:
     """Run the sign abbreviation mapping script."""
     args = _parse_args()
     data = _load_query(args.query)
-    features = data.get("features") or []
+    features: list[dict[str, Any]] = []
+    raw_features = data.get("features")
+    if isinstance(raw_features, list):
+        for item in raw_features:
+            if isinstance(item, dict):
+                features.append(item)
 
     mapping = _build_sign_mapping(features)
     output = json.dumps(mapping, indent=2, ensure_ascii=False)

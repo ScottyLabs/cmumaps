@@ -18,19 +18,25 @@ import json
 import re
 from collections import OrderedDict
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+MappingEntry = dict[str, int | str]
 
-def _load_json(path: Path) -> dict:
+
+def _load_json(path: Path) -> dict[str, Any]:
     """Load JSON from file."""
     with path.open(encoding="utf-8") as handle:
-        return json.load(handle)
+        data = json.load(handle)
+    if not isinstance(data, dict):
+        msg = f"Unexpected JSON shape in {path}; expected an object."
+        raise TypeError(msg)
+    return {str(key): value for key, value in data.items()}
 
 
-def _write_json(path: Path, data: dict) -> None:
+def _write_json(path: Path, data: dict[str, Any]) -> None:
     """Write JSON to file."""
     with path.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=4, ensure_ascii=False)
@@ -65,7 +71,7 @@ def _candidate_labels(code: str | None, name: str | None) -> Iterable[str]:
 
 
 def _lookup_fms_id(
-    mapping_upper: dict[str, dict[str, int]],
+    mapping_upper: dict[str, MappingEntry],
     code: str | None,
     name: str | None,
 ) -> int | None:
@@ -73,7 +79,11 @@ def _lookup_fms_id(
     for label in _candidate_labels(code, name):
         entry = mapping_upper.get(label.upper())
         if entry:
-            return entry["BuildingID_Numeric_2"]
+            value = entry.get("BuildingID_Numeric_2")
+            if isinstance(value, int):
+                return value
+            if isinstance(value, str) and value.isdigit():
+                return int(value)
     return None
 
 
@@ -83,13 +93,43 @@ def _insert_fms_field(
 ) -> dict[str, object]:
     """Insert fmsId immediately after osmId in the given building record."""
     updated: dict[str, object] = OrderedDict()
+    inserted = False
     for key, value in building.items():
+        if key == "fmsId":
+            continue  # Skip existing fmsId; we'll insert the new one
         updated[key] = value
         if key == "osmId":
             updated["fmsId"] = fms_id
-    if "osmId" not in updated and "fmsId" not in updated:
+            inserted = True
+    if not inserted:
         updated["fmsId"] = fms_id
     return updated
+
+
+def _parse_mapping(mapping_raw: dict[str, Any]) -> dict[str, MappingEntry]:
+    """Parse and validate the mapping JSON structure."""
+    mapping: dict[str, MappingEntry] = {}
+    for key, value in mapping_raw.items():
+        if not isinstance(value, dict):
+            msg = f"Unexpected mapping entry for {key}; expected an object."
+            raise TypeError(msg)
+        entry: MappingEntry = {}
+        for entry_key, entry_value in value.items():
+            if isinstance(entry_value, (int, str)):
+                entry[str(entry_key)] = entry_value
+        mapping[str(key)] = entry
+    return mapping
+
+
+def _parse_buildings(buildings_raw: dict[str, Any]) -> dict[str, dict[str, object]]:
+    """Parse and validate the buildings JSON structure."""
+    buildings: dict[str, dict[str, object]] = {}
+    for code, payload in buildings_raw.items():
+        if not isinstance(payload, dict):
+            msg = f"Unexpected building entry for {code}; expected an object."
+            raise TypeError(msg)
+        buildings[str(code)] = {str(k): v for k, v in payload.items()}
+    return buildings
 
 
 def _parse_args() -> argparse.Namespace:
@@ -121,25 +161,23 @@ def main() -> None:
     """Run the FMS ID addition script."""
     args = _parse_args()
 
-    mapping = _load_json(args.mapping)
-    buildings = _load_json(args.buildings)
+    mapping = _parse_mapping(_load_json(args.mapping))
+    buildings = _parse_buildings(_load_json(args.buildings))
     mapping_upper = {key.upper(): value for key, value in mapping.items()}
 
     updated_buildings: dict[str, dict[str, object]] = OrderedDict()
 
     for code, payload in buildings.items():
-        fms_id = _lookup_fms_id(
-            mapping_upper,
-            payload.get("code") or code,
-            payload.get("name"),
-        )
-        has_fms = "fmsId" in payload
+        code_value = payload.get("code")
+        name_value = payload.get("name")
+        code_str = code_value if isinstance(code_value, str) else None
+        name_str = name_value if isinstance(name_value, str) else None
+        fms_id = _lookup_fms_id(mapping_upper, code_str or code, name_str)
+        existing_fms = payload.get("fmsId")
 
-        if fms_id is not None:
-            if has_fms and payload["fmsId"] == fms_id:
-                updated_buildings[code] = payload
-            else:
-                updated_buildings[code] = _insert_fms_field(payload, fms_id)
+        already_has_fms = isinstance(existing_fms, int) and existing_fms == fms_id
+        if fms_id is not None and not already_has_fms:
+            updated_buildings[code] = _insert_fms_field(payload, fms_id)
         else:
             updated_buildings[code] = payload
 

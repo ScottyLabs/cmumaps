@@ -238,6 +238,28 @@ class _Cell:
         return self.max > other.max
 
 
+def _polylabel_refine(
+    pq: list[tuple[float, _Cell]],
+    best: _Cell,
+    rings: list[Ring],
+    precision: float,
+) -> _Cell:
+    """Refine the best cell using priority queue."""
+    while pq:
+        _, c = heapq.heappop(pq)
+        if c.max - best.d <= precision:
+            continue
+        h = c.h / 2
+        for dx in (-h, h):
+            for dy in (-h, h):
+                cx, cy = c.x + dx, c.y + dy
+                nc = _Cell(cx, cy, h, _point_to_polygon_distance(cx, cy, rings))
+                if nc.d > best.d:
+                    best = nc
+                heapq.heappush(pq, (-nc.max, nc))
+    return best
+
+
 def _polylabel(
     rings: list[Ring],
     precision: float = 1e-6,
@@ -250,8 +272,12 @@ def _polylabel(
     minx, maxx = min(p[0] for p in pts), max(p[0] for p in pts)
     miny, maxy = min(p[1] for p in pts), max(p[1] for p in pts)
     cell_size = min(maxx - minx, maxy - miny)
-    h = cell_size / 2
 
+    # Handle degenerate geometry (all x or y coordinates equal)
+    if cell_size <= 0:
+        return ((minx + maxx) / 2, (miny + maxy) / 2)
+
+    h = cell_size / 2
     cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
     best = _Cell(cx, cy, 0, _point_to_polygon_distance(cx, cy, rings))
 
@@ -268,19 +294,7 @@ def _polylabel(
             y += cell_size
         x += cell_size
 
-    while pq:
-        _, c = heapq.heappop(pq)
-        if c.max - best.d <= precision:
-            continue
-        h = c.h / 2
-        for dx in (-h, h):
-            for dy in (-h, h):
-                cx, cy = c.x + dx, c.y + dy
-                nc = _Cell(cx, cy, h, _point_to_polygon_distance(cx, cy, rings))
-                if nc.d > best.d:
-                    best = nc
-                heapq.heappush(pq, (-nc.max, nc))
-
+    best = _polylabel_refine(pq, best, rings, precision)
     return (best.x, best.y)
 
 
@@ -468,11 +482,11 @@ for rel in relations:
         assigned_codes.add(entry["code"])
 
 # Standalone ways (not already used)
-for wid, w in ways_by_id.items():
+for wid, way in ways_by_id.items():
     if wid in outer_ways_used:
         continue
 
-    tags = w["tags"]
+    tags = way["tags"]
     info = osm_id_to_info.get(wid)
     if not info:
         info = _match_building_by_name(tags, assigned_codes)

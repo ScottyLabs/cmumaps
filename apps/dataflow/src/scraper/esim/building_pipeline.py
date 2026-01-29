@@ -58,23 +58,29 @@ def main() -> None:
     """Run the building pipeline."""
     args = parse_args()
     python = sys.executable
+    script_dir = Path(__file__).parent
+
+    # Resolve all paths to absolute
+    osm_file = Path(args.osm_file).resolve()
+    downloaded_buildings = Path(args.downloaded_buildings).resolve()
+    output_file = Path(args.output).resolve()
 
     # Step 1: Fetch from ArcGIS
     if not args.skip_arcgis:
-        _run([python, "arc_gis_query.py"])
+        _run([python, str(script_dir / "arc_gis_query.py")])
 
     # Step 2: Parse OSM buildings
     env = os.environ.copy()
-    env["CMUMAPS_OSM_FILE"] = str(args.osm_file)
-    env["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(args.downloaded_buildings)
-    env["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(args.output)
-    _run([python, "osm_building_to_json.py"], env=env)
+    env["CMUMAPS_OSM_FILE"] = str(osm_file)
+    env["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(downloaded_buildings)
+    env["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(output_file)
+    _run([python, str(script_dir / "osm_building_to_json.py")], env=env)
 
     # Step 3: Build sign mapping
-    _run([python, "sign_abbrev_mapping.py"])
+    _run([python, str(script_dir / "sign_abbrev_mapping.py")])
 
     # Step 4: Add FMS IDs
-    cmd = [python, "add_fms_id.py", "--buildings", str(args.output)]
+    cmd = [python, str(script_dir / "add_fms_id.py"), "--buildings", str(output_file)]
     if args.dry_run:
         cmd.append("--dry-run")
     _run(cmd)
