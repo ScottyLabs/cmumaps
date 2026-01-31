@@ -81,11 +81,11 @@ const MapDisplay = ({ mapRef }: Props) => {
 
   // Zoom on a specific room if provided in the URL
   useEffect(() => {
-    if (!mapRef.current || !(rooms && roomName)) return;
+    if (!(mapRef.current && rooms && roomName)) return;
     const room = rooms[roomName];
     if (!room) return;
-    zoomOnObject(mapRef.current, room.points, setIsZooming);
-  }, [Boolean(mapRef.current), rooms, roomName]);
+    zoomOnObject(mapRef.current, room.points.flat(), setIsZooming);
+  }, [mapRef.current, rooms, roomName, setIsZooming]);
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
