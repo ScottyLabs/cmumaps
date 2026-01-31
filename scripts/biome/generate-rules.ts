@@ -152,10 +152,48 @@ const OVERRIDES = {
   },
 };
 
+// Need to be fault tolerant due to multiple ECONNRESET errors in CI
+async function fetchLatestBiomeSchema(
+  retries = 5,
+  delayMs = 5000,
+): Promise<BiomeSchema> {
+  const url = "https://biomejs.dev/schemas/latest/schema.json";
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      console.log(
+        `Fetching latest Biome schema (attempt ${attempt}/${retries})`,
+      );
+
+      const response = await fetch(url, {
+        verbose: attempt === retries,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch schema: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return (await response.json()) as BiomeSchema;
+    } catch (error) {
+      console.error(
+        `Failed to fetch latest Biome schema (attempt ${attempt}/${retries}): ${error}`,
+      );
+
+      if (attempt < retries) {
+        await new Promise((resolve) => setTimeout(resolve, delayMs * attempt));
+      }
+    }
+  }
+
+  throw new Error(
+    `Unable to fetch latest Biome schema after ${retries} attempts`,
+  );
+}
+
 export async function generateRules() {
-  const schema = (await (
-    await fetch("https://biomejs.dev/schemas/latest/schema.json")
-  ).json()) as BiomeSchema;
+  const schema = await fetchLatestBiomeSchema();
   const ruleGroupName = Object.keys(schema.$defs.Rules.properties).filter(
     (key) => key !== "recommended",
   );
