@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run pre-commit hook",
+      "type": "shell",
+      "command": "zsh",
+      "args": [".husky/pre-commit"],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ]
+}
