@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
+import { signIn } from "@/lib/authClient.ts";
 import { useBoundStore } from "@/store/index.ts";
-import { signIn } from "@/utils/authUtils";
 
 const LoginModal = () => {
   const user = useUser();

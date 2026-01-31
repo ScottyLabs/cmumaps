@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <Just for populating table> */
 import { Body, Post, Route, Security } from "tsoa";
-import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../auth/authentication.ts";
+import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../lib/authentication.ts";
 import { populateTableService } from "../services/populateTableService.ts";
 
 @Security(OIDC_AUTH, [ADMIN_SCOPE])

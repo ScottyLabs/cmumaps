@@ -10,11 +10,7 @@ import {
   Route,
   Security,
 } from "tsoa";
-import {
-  BEARER_AUTH,
-  MEMBER_SCOPE,
-  OIDC_AUTH,
-} from "../auth/authentication.ts";
+import { BEARER_AUTH, MEMBER_SCOPE, OIDC_AUTH } from "../lib/authentication.ts";
 import { requireSocketId } from "../middleware/socketAuth.ts";
 import { webSocketService } from "../server.ts";
 import { edgeService } from "../services/edgeService.ts";

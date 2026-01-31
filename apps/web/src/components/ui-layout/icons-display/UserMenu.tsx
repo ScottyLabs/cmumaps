@@ -2,7 +2,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import signInIcon from "@/assets/icons/plus_button_menu/sign-in.svg";
 import signOutIcon from "@/assets/icons/plus_button_menu/sign-out.svg";
 import { useUser } from "@/hooks/useUser";
-import { signIn, signOut } from "@/utils/authUtils";
+import { signIn, signOut } from "@/lib/authClient.ts";
 
 interface MenuButtonProps {
   icon: string;

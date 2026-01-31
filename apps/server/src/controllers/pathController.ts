@@ -1,6 +1,6 @@
 import type { PreciseRoute } from "@cmumaps/common";
 import { Get, Query, Route, Security } from "tsoa";
-import { BEARER_AUTH, OIDC_AUTH } from "../auth/authentication.ts";
+import { BEARER_AUTH, OIDC_AUTH } from "../lib/authentication.ts";
 import { pathService } from "../services/pathService.ts";
 
 @Route("/path")

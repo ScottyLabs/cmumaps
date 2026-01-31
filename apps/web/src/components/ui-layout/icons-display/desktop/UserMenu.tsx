@@ -1,6 +1,6 @@
 import scottylabsBackground from "@/assets/images/scottylabs-background.png";
 import { useUser } from "@/hooks/useUser.ts";
-import { signIn, signOut } from "@/utils/authUtils";
+import { signIn, signOut } from "@/lib/authClient.ts";
 
 const UserMenu = () => {
   const user = useUser();

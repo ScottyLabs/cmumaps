@@ -1,10 +1,6 @@
 import type { Placement } from "@cmumaps/common";
 import { Body, Get, Path, Put, Route, Security } from "tsoa";
-import {
-  BEARER_AUTH,
-  MEMBER_SCOPE,
-  OIDC_AUTH,
-} from "../auth/authentication.ts";
+import { BEARER_AUTH, MEMBER_SCOPE, OIDC_AUTH } from "../lib/authentication.ts";
 import { floorService } from "../services/floorService.ts";
 
 @Security(OIDC_AUTH, [])

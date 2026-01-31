@@ -1,7 +1,7 @@
-import { $api } from "@/api/client";
+import { useSession } from "@/lib/authClient";
 
 const useUser = () => {
-  const { data } = $api.useQuery("get", "/auth/me");
+  const { data } = useSession();
 
   if (data?.user) {
     return data.user;

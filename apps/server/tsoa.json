@@ -22,6 +22,6 @@
   },
   "routes": {
     "routesDir": "build",
-    "authenticationModule": "./src/auth/authentication.ts"
+    "authenticationModule": "./src/lib/authentication.ts"
   }
 }

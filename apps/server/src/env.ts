@@ -6,12 +6,12 @@ import { z } from "zod";
 // variables and their types
 const envSchema = z.object({
   ALLOWED_ORIGINS_REGEX: z.string(),
-  APP_ENV: z.enum(["development", "production"]),
   AUTH_CLIENT_ID: z.string(),
   AUTH_CLIENT_SECRET: z.string(),
-  AUTH_SESSION_SECRET: z.string(),
+  AUTH_ISSUER: z.string(),
+  AUTH_JWKS_URI: z.string(),
+  BETTER_AUTH_URL: z.url(), // https://www.better-auth.com/docs/installation#set-environment-variables
   DATABASE_URL: z.string(),
-  REDIS_URL: z.string(),
   SERVER_PORT: z.number().default(80),
   SERVER_URL: z.url(),
 });

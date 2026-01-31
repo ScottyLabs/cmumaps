@@ -1,5 +1,5 @@
 import { Body, Delete, Route, Security } from "tsoa";
-import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../auth/authentication.ts";
+import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../lib/authentication.ts";
 import { dropTablesService } from "../services/dropTablesService.ts";
 
 @Security(OIDC_AUTH, [ADMIN_SCOPE])
