@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel
 
-if TYPE_CHECKING:
-    from models._common import Floor, GeoCoordinate, LocalPosition
+from models._common import Floor, GeoCoordinate, LocalPosition  # noqa: TC001
 
 
 class NeighborConnection(BaseModel):

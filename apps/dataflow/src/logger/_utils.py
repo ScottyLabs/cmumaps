@@ -1,10 +1,7 @@
+from collections.abc import Generator  # noqa: TC003
 from contextlib import contextmanager
-from typing import TYPE_CHECKING
 
 from ._app_logger import get_app_logger
-
-if TYPE_CHECKING:
-    from collections.abc import Generator
 
 
 def print_section(section: str) -> None:

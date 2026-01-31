@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import BaseModel, ConfigDict, Field, RootModel
 
-if TYPE_CHECKING:
-    from models._common import GeoCoordinate
+from models._common import GeoCoordinate  # noqa: TC001
 
 
 class Building(BaseModel):
@@ -24,7 +21,7 @@ class Building(BaseModel):
     fms_id: float | None = Field(default=None, alias="fmsId")
     hitbox: list[GeoCoordinate] | None
     code: str | None = None
-    entrances: list | None = None
+    entrances: list[str] | None = None
     default_ordinal: int | None = Field(default=None, alias="defaultOrdinal")
 
 

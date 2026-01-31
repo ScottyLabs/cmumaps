@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import BaseModel, ConfigDict, Field, RootModel
 
-if TYPE_CHECKING:
-    from models._common import GeoCoordinate, LocalPosition
+from models._common import GeoCoordinate, LocalPosition  # noqa: TC001
 
 
 class Placement(BaseModel):

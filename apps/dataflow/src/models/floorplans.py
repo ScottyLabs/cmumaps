@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import BaseModel, ConfigDict, Field, RootModel
 
-if TYPE_CHECKING:
-    from models._common import Floor, GeoCoordinate
+from models._common import Floor, GeoCoordinate
 
 
 class Room(BaseModel):

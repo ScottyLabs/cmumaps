@@ -18,16 +18,14 @@ SCHEMA_VALIDATORS: dict[str, type[BaseModel]] = {
     "all-graph.json": Graph,
 }
 
-
-@lru_cache(maxsize=1)
-def get_s3_client_singleton() -> S3Client:
-    return S3Client()
-
-
 class S3Client:
     BUCKET_NAME = "cmumaps"
 
     def __init__(self) -> None:
+        """Initialize the S3 client.
+
+        Sets up configuration for interacting with the configured bucket.
+        """
         self.logger = get_app_logger()
 
         self.access_key = os.getenv("S3_ACCESS_KEY")
@@ -49,10 +47,8 @@ class S3Client:
 
     def _get_validator(self, s3_object_name: str) -> type[BaseModel] | None:
         """Get the Pydantic validator model for a given S3 object name."""
-        for pattern, validator in SCHEMA_VALIDATORS.items():
-            if s3_object_name.endswith(pattern):
-                return validator
-        return None
+        basename = Path(s3_object_name).name
+        return SCHEMA_VALIDATORS.get(basename)
 
     def _validate_json_data(
         self, json_data: dict[str, Any], validator: type[BaseModel],
@@ -125,6 +121,10 @@ class S3Client:
             return None
 
         return cast("dict[str, Any]", json_data)
+
+@lru_cache(maxsize=1)
+def get_s3_client_singleton() -> S3Client:
+    return S3Client()
 
 
 if __name__ == "__main__":
