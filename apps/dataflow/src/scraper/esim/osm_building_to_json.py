@@ -17,17 +17,20 @@ from __future__ import annotations
 
 import heapq
 import json
-import logging
 import math
 import os
 import sys
-import xml.etree.ElementTree as ET
+import time
 from pathlib import Path
 from typing import Any
+from xml.etree.ElementTree import ParseError
 
+import defusedxml.ElementTree as ET
 import overpass
 
-logger = logging.getLogger(__name__)
+from logger import get_app_logger
+
+logger = get_app_logger()
 
 # Type aliases
 Point = tuple[float, float]
@@ -336,20 +339,34 @@ def _floors_from_levels(tags: dict[str, str]) -> list[str]:
     return floors
 
 
-# Fetch OSM data
-try:
-    api = overpass.API()
-    osm_xml = api.get(CMU_OVERPASS_QUERY, responseformat="xml")
-    Path(OSM_FILE).write_text(osm_xml, encoding="utf-8")
-except Exception:
-    logger.exception("Failed to fetch OSM data from Overpass API")
-    sys.exit(1)
+# Fetch OSM data with retry/backoff
+_MAX_RETRIES = 5
+_INITIAL_DELAY = 2
+
+for _attempt in range(_MAX_RETRIES):
+    try:
+        api = overpass.API(timeout=60)
+        osm_xml = api.get(CMU_OVERPASS_QUERY, responseformat="xml")
+        Path(OSM_FILE).write_text(osm_xml, encoding="utf-8")
+        break
+    except Exception:
+        if _attempt == _MAX_RETRIES - 1:
+            logger.exception(
+                "Failed to fetch OSM data after %d attempts", _MAX_RETRIES,
+            )
+            sys.exit(1)
+        delay = _INITIAL_DELAY * (2 ** _attempt)
+        logger.warning(
+            "Overpass API request failed (attempt %d/%d), retrying in %ds...",
+            _attempt + 1, _MAX_RETRIES, delay,
+        )
+        time.sleep(delay)
 
 # OSM parsing
 try:
-    tree = ET.parse(OSM_FILE)  # noqa: S314
+    tree = ET.parse(OSM_FILE)
     root = tree.getroot()
-except ET.ParseError:
+except ParseError:
     logger.exception("Invalid XML in %s", OSM_FILE)
     sys.exit(1)
 

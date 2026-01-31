@@ -12,11 +12,12 @@ Output:
 
 import argparse
 import json
-import logging
 import sys
 from pathlib import Path
 
 from arcgis.gis import GIS
+
+from logger import get_app_logger
 
 LAYER_ID = "0a8e645dc06d43f1b197b2ea2c2b876e"
 FIELDS = [
@@ -32,8 +33,7 @@ FIELDS = [
 
 def _fetch_buildings(output_path: Path = Path("query.json")) -> int:
     """Fetch building data from ArcGIS and save to JSON."""
-    logger = logging.getLogger(__name__)
-
+    logger = get_app_logger()
     try:
         portal = GIS()
     except Exception:
