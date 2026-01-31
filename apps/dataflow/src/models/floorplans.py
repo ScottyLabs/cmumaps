@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel
 
-from models._common import Floor, GeoCoordinate
+from models._common import Floor, GeoCoordinate  # noqa: TC001
 
 
 class Room(BaseModel):
