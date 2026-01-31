@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "charliermarsh.ruff",
+    "ms-python.mypy-type-checker",
+    "astral-sh.ty",
+    "vscode-icons-team.vscode-icons",
+    "mkhl.shfmt",
+    "davidanson.vscode-markdownlint",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "prisma.prisma",
+    "vscode-icons-team.vscode-icons"
+  ]
+}
