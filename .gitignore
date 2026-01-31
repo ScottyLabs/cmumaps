@@ -4,6 +4,7 @@ node_modules/
 
 # Cache directories
 __pycache__/
+**/*.egg-info/
 .ruff_cache/
 .mypy_cache/
 .turbo/
@@ -11,13 +12,6 @@ __pycache__/
 # Build
 dist/
 build/
-
-# Rust
-target/
-Cargo.lock
-
-# Python
-**/*.egg-info/
 
 # Misc
 .env*
