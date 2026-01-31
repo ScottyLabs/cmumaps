@@ -48,6 +48,9 @@ scrape-fms = "scraper.fms:main"
 [tool.ruff]
 lint.select = ["ALL"]
 
+[tool.mypy]
+strict = true
+
 # Upgrade all non-error rules to "error"
 [tool.ty.rules]
 # Defaults: warn
