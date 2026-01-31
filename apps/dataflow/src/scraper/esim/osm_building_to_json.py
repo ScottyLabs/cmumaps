@@ -25,12 +25,16 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
 
+import overpass
+
 logger = logging.getLogger(__name__)
 
 # Type aliases
 Point = tuple[float, float]
 Ring = list[Point]
 BuildingInfo = dict[str, Any]
+
+CMU_OVERPASS_QUERY = "nwr(40.440278, -79.951806, 40.451722, -79.933778);"
 
 # Input
 OSM_FILE = os.environ.get("CMUMAPS_OSM_FILE", "export.osm")
@@ -332,13 +336,19 @@ def _floors_from_levels(tags: dict[str, str]) -> list[str]:
     return floors
 
 
+# Fetch OSM data
+try:
+    api = overpass.API()
+    osm_xml = api.get(CMU_OVERPASS_QUERY, responseformat="xml")
+    Path(OSM_FILE).write_text(osm_xml, encoding="utf-8")
+except Exception:
+    logger.exception("Failed to fetch OSM data from Overpass API")
+    sys.exit(1)
+
 # OSM parsing
 try:
     tree = ET.parse(OSM_FILE)  # noqa: S314
     root = tree.getroot()
-except FileNotFoundError:
-    logger.exception("Could not find %s", OSM_FILE)
-    sys.exit(1)
 except ET.ParseError:
     logger.exception("Invalid XML in %s", OSM_FILE)
     sys.exit(1)
@@ -357,7 +367,9 @@ for n in root.findall("node"):
 # Collect ways
 ways_by_id: dict[str, dict[str, Any]] = {}
 for w in root.findall("way"):
-    wid = w.attrib["id"]
+    wid = w.attrib.get("id")
+    if not wid:
+        continue
     nds = [nd.attrib["ref"] for nd in w.findall("nd") if "ref" in nd.attrib]
     tags = {t.attrib["k"]: t.attrib["v"] for t in w.findall("tag") if "k" in t.attrib}
     ways_by_id[wid] = {"nodes": nds, "tags": tags}
@@ -365,7 +377,9 @@ for w in root.findall("way"):
 # Collect relations
 relations: list[dict[str, Any]] = []
 for r in root.findall("relation"):
-    rid = r.attrib["id"]
+    rid = r.attrib.get("id")
+    if not rid:
+        continue
     tags = {t.attrib["k"]: t.attrib["v"] for t in r.findall("tag") if "k" in t.attrib}
     members = [
         {

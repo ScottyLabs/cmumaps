@@ -16,7 +16,7 @@ import logging
 import sys
 from pathlib import Path
 
-from arcgis.gis import GIS  # type: ignore[import-untyped]
+from arcgis.gis import GIS
 
 LAYER_ID = "0a8e645dc06d43f1b197b2ea2c2b876e"
 FIELDS = [
