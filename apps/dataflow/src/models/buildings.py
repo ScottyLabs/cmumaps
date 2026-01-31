@@ -19,7 +19,6 @@ class Building(BaseModel):
     label_position: GeoCoordinate = Field(alias="labelPosition")
     shapes: list[list[GeoCoordinate]]
     fms_id: float | None = Field(default=None, alias="fmsId")
-    hitbox: list[GeoCoordinate] | None
     code: str | None = None
     entrances: list[str] | None = None
     default_ordinal: int | None = Field(default=None, alias="defaultOrdinal")

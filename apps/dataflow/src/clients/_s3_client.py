@@ -43,8 +43,6 @@ class S3Client:
             secret_key=self.secret_key,
         )
 
-        self.logger = get_app_logger()
-
     def _get_validator(self, s3_object_name: str) -> type[BaseModel] | None:
         """Get the Pydantic validator model for a given S3 object name."""
         basename = Path(s3_object_name).name
