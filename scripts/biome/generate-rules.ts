@@ -59,21 +59,21 @@ const OVERRIDES = {
 
     // Not a useful rule
     noTernary: "off",
-
-    // Not a useful rule
     noIncrementDecrement: "off",
 
     // Not a good metric
     noContinue: "off",
-
-    // Not a good metric
     useMaxParams: "off",
+    noExcessiveLinesPerFile: "off",
+    noExcessiveClassesPerFile: "off",
 
     // None React Rules
+    noDuplicateGraphqlOperationName: "off",
     useQwikMethodUsage: "off",
     useQwikValidLexicalScope: "off",
     noVueDataObjectDeclaration: "off",
     noVueDuplicateKeys: "off",
+    noVueOptionsApi: "off",
     noVueReservedKeys: "off",
     noVueReservedProps: "off",
     noVueVIfWithVFor: "off",
