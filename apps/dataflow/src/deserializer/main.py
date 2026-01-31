@@ -1,6 +1,6 @@
 """Main module for the deserializer application."""
 
-from typing import TYPE_CHECKING
+from collections.abc import Callable  # noqa: TC003
 
 import dotenv
 
@@ -15,9 +15,6 @@ from .tables import (
     populate_node_table,
     populate_room_table,
 )
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 dotenv.load_dotenv()
 

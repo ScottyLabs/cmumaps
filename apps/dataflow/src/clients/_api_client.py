@@ -27,11 +27,6 @@ ALL_TABLE_NAMES: list[TableName] = [
 ]
 
 
-@lru_cache(maxsize=1)
-def get_api_client_singleton() -> ApiClient:
-    return ApiClient()
-
-
 class ApiClient:
     TIMEOUT = 10
     SUCCESS_STATUS_CODE = 200
@@ -107,3 +102,7 @@ class ApiClient:
             raise RuntimeError(msg)
 
         return True
+
+@lru_cache(maxsize=1)
+def get_api_client_singleton() -> ApiClient:
+    return ApiClient()
