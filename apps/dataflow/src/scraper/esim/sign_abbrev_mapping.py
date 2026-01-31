@@ -151,9 +151,7 @@ def main() -> None:
     features: list[dict[str, Any]] = []
     raw_features = data.get("features")
     if isinstance(raw_features, list):
-        for item in raw_features:
-            if isinstance(item, dict):
-                features.append(item)
+        features.extend(item for item in raw_features if isinstance(item, dict))
 
     mapping = _build_sign_mapping(features)
     output = json.dumps(mapping, indent=2, ensure_ascii=False)

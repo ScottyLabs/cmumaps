@@ -5,8 +5,7 @@ building data for CMU Maps from ArcGIS and OpenStreetMap sources.
 
 Pipeline stages:
     1. arc_gis_query.py: Fetch building metadata from ArcGIS
-    2. osm_building_to_json.py: Fetch OSM data and parse building
-       geometries
+    2. osm_building_to_json.py: Fetch OSM data and parse building geometries
     3. sign_abbrev_mapping.py: Create sign abbreviation to ID mapping
     4. add_fms_id.py: Enrich buildings with FMS identifiers
 

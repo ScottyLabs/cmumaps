@@ -5,12 +5,12 @@ with existing building metadata to produce structured building records with
 shapes, hitboxes, label positions, and entrance locations.
 
 Input:
-    - export.osm: OpenStreetMap XML export containing building ways/relations
     - buildings.json: Existing building data with osmId and name mappings
 
 Output:
     - buildings.json: Building records with shapes, hitboxes, floors, entrances
     - building_info_map.json: Simplified code-to-info mapping for reference
+    - export.osm: OpenStreetMap XML export containing building ways/relations
 """
 
 from __future__ import annotations
