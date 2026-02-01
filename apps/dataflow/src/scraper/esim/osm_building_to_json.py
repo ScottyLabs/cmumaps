@@ -89,9 +89,10 @@ def _load_building_data() -> None:
                 "defaultFloor": data.get("defaultFloor", "1"),
             }
 
-            osm_id = data.get("osmId")
+            raw_osm_id = data.get("osmId")
             floors = data.get("floors")
-            if osm_id:
+            if raw_osm_id is not None and str(raw_osm_id).strip():
+                osm_id = str(raw_osm_id)
                 osm_id_to_info[osm_id] = {
                     "code": code,
                     "name": data.get("name", "Unknown"),
@@ -516,12 +517,12 @@ def _parse_osm_elements(osm_file: str) -> None:
     )
 
 
-def _collect_buildings() -> dict[str, dict[str, Any]]:
-    """Match OSM elements to known buildings and assemble entries."""
-    buildings: dict[str, dict[str, Any]] = {}
+def _collect_from_relations(
+    buildings: dict[str, dict[str, Any]],
+    assigned_codes: set[str],
+) -> set[str]:
+    """Process relations and return the set of outer way IDs used."""
     outer_ways_used: set[str] = set()
-    assigned_codes: set[str] = set()
-
     for rel in relations:
         osm_id = rel["id"]
         tags = rel["tags"]
@@ -558,6 +559,15 @@ def _collect_buildings() -> dict[str, dict[str, Any]]:
             buildings[entry["code"]] = entry
             assigned_codes.add(entry["code"])
 
+    return outer_ways_used
+
+
+def _collect_from_ways(
+    buildings: dict[str, dict[str, Any]],
+    assigned_codes: set[str],
+    outer_ways_used: set[str],
+) -> None:
+    """Process standalone ways not already consumed by relations."""
     for wid, way in ways_by_id.items():
         if wid in outer_ways_used:
             continue
@@ -575,6 +585,13 @@ def _collect_buildings() -> dict[str, dict[str, Any]]:
             buildings[entry["code"]] = entry
             assigned_codes.add(entry["code"])
 
+
+def _collect_buildings() -> dict[str, dict[str, Any]]:
+    """Match OSM elements to known buildings and assemble entries."""
+    buildings: dict[str, dict[str, Any]] = {}
+    assigned_codes: set[str] = set()
+    outer_ways_used = _collect_from_relations(buildings, assigned_codes)
+    _collect_from_ways(buildings, assigned_codes, outer_ways_used)
     return buildings
 
 

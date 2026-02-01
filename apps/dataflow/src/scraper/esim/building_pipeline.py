@@ -24,6 +24,7 @@ import argparse
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from logger import get_app_logger
@@ -48,7 +49,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip ArcGIS fetch (use existing query.json)",
     )
-    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Write parsed buildings to a temp file and skip FMS ID writes",
+    )
     return parser.parse_args()
 
 
@@ -85,31 +90,46 @@ def main() -> None:
         )
         sys.exit(1)
 
-    # Step 2: Parse OSM buildings
-    env = os.environ.copy()
-    env["CMUMAPS_OSM_FILE"] = str(osm_file)
-    env["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(downloaded_buildings)
-    env["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(output_file)
-    _run([python, str(script_dir / "osm_building_to_json.py")], env=env)
-
-    # Step 3: Build sign mapping
-    _run([
-        python,
-        str(script_dir / "sign_abbrev_mapping.py"),
-        "--query", str(query_json),
-        "--output", str(sign_mapping_json),
-    ])
-
-    # Step 4: Add FMS IDs
-    cmd = [
-        python,
-        str(script_dir / "add_fms_id.py"),
-        "--buildings", str(output_file),
-        "--mapping", str(sign_mapping_json),
-    ]
+    # In dry-run mode, write parsed buildings to a temp file so we never
+    # overwrite the real output.
     if args.dry_run:
-        cmd.append("--dry-run")
-    _run(cmd)
+        tmp_fd, tmp_path = tempfile.mkstemp(
+            dir=work_dir, suffix=".json", prefix="buildings_dry_",
+        )
+        os.close(tmp_fd)
+        parsed_output = Path(tmp_path)
+    else:
+        parsed_output = output_file
+
+    try:
+        # Step 2: Parse OSM buildings
+        env = os.environ.copy()
+        env["CMUMAPS_OSM_FILE"] = str(osm_file)
+        env["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(downloaded_buildings)
+        env["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(parsed_output)
+        _run([python, str(script_dir / "osm_building_to_json.py")], env=env)
+
+        # Step 3: Build sign mapping
+        _run([
+            python,
+            str(script_dir / "sign_abbrev_mapping.py"),
+            "--query", str(query_json),
+            "--output", str(sign_mapping_json),
+        ])
+
+        # Step 4: Add FMS IDs
+        cmd = [
+            python,
+            str(script_dir / "add_fms_id.py"),
+            "--buildings", str(parsed_output),
+            "--mapping", str(sign_mapping_json),
+        ]
+        if args.dry_run:
+            cmd.append("--dry-run")
+        _run(cmd)
+    finally:
+        if args.dry_run:
+            parsed_output.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":
