@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import http from "node:http";
-import path from "node:path";
 import process from "node:process";
 import { toNodeHandler } from "better-auth/node";
 import { YAML } from "bun";
@@ -50,11 +49,11 @@ const swaggerYaml = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerJson = YAML.parse(swaggerYaml) as JsonObject;
 app.use(
   "/swagger",
-  express.static(path.join(__dirname, "../public/swagger-ui")),
+  express.static("./node_modules/swagger-ui-dist", { index: false }),
   swaggerUi.serve,
   swaggerUi.setup(swaggerJson),
 );
-app.get("/openapi.json", (_req, res) => {
+app.get("/openapi", (_req, res) => {
   res.status(200).send(swaggerJson);
 });
 

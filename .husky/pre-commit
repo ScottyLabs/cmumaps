@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 set -e
-editorconfig-checker --exclude '(^LICENSE|^apps/server/public/.*)'
+editorconfig-checker --exclude '(^LICENSE|^apps/rust-server/.*)'
 bun run syncpack
 # bunx markdownlint-cli2
 bun run check

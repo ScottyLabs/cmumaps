@@ -33,6 +33,10 @@ USER server
 # Copy swagger UI
 COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./build/swagger.yaml
 
+# Copy swagger UI dist (which can be either in apps/node_modules or apps/server/node_modules)
+# COPY --from=builder --chown=server:nodejs /app/apps/node_modules/swagger-ui-dist /app/apps/node_modules/swagger-ui-dist
+COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/swagger-ui-dist /app/apps/server/node_modules/swagger-ui-dist
+
 # Copy prisma engines (which can be either in apps/node_modules or apps/server/node_modules)
 # COPY --from=builder --chown=server:nodejs /app/apps/node_modules/prisma /tmp/prisma-engines
 COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/prisma /tmp/prisma-engines
