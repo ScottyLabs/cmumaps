@@ -146,7 +146,14 @@ const verifyBearerAuth = (
     token,
     (header, callback) => {
       client.getSigningKey(header.kid, (_error, key) => {
-        const signingKey = key?.getPublicKey();
+        if (!key) {
+          console.error("No key found for kid:", header.kid);
+          const err = new AuthenticationError();
+          request.authErrors?.push(err);
+          return reject(err);
+        }
+
+        const signingKey = key.getPublicKey();
         callback(null, signingKey);
       });
     },
