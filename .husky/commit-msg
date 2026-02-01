@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-# cat .git/COMMIT_EDITMSG | bunx commitlint --verbose
+bunx commitlint --edit $1
