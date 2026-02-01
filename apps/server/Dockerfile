@@ -59,4 +59,5 @@ COPY --from=builder --chown=server:nodejs \
   /app/apps/server/dist
 
 EXPOSE 3000
-CMD ["cd", "apps/server", "&&", "bun", "dist/server.js"]
+WORKDIR /app/apps/server
+CMD ["bun", "dist/server.js"]
