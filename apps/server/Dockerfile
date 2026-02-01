@@ -37,10 +37,6 @@ COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./
 # COPY --from=builder --chown=server:nodejs /app/apps/node_modules/swagger-ui-dist /app/apps/node_modules/swagger-ui-dist
 COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/swagger-ui-dist /app/apps/server/node_modules/swagger-ui-dist
 
-# Debug: print the contents of the swagger-ui-bundle.js file to make sure it's copied correctly
-# https://medium.com/@vishalvoid/solving-swaggeruibundle-is-not-defined-error-in-express-with-swagger-cdbc3164fd89
-RUN cat /app/apps/server/node_modules/swagger-ui-dist/swagger-ui-bundle.js
-
 # Copy prisma engines (which can be either in apps/node_modules or apps/server/node_modules)
 # COPY --from=builder --chown=server:nodejs /app/apps/node_modules/prisma /tmp/prisma-engines
 COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/prisma /tmp/prisma-engines
