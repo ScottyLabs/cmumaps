@@ -22,6 +22,7 @@ dev = [
   "ruff>=0.14.11",
   "ty>=0.0.10",
   "types-colorama>=0.4.15.20250801",
+  "types-defusedxml>=0.7.0.20240218",
   "types-requests>=2.32.4.20260107",
 ]
 
@@ -55,6 +56,10 @@ lint.select = ["ALL"]
 
 [tool.mypy]
 strict = true
+
+[[tool.mypy.overrides]]
+module = ["overpass", "arcgis.*"]
+ignore_missing_imports = true
 
 # Upgrade all non-error rules to "error"
 [tool.ty.rules]

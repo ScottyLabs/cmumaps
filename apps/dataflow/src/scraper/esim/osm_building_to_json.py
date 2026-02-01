@@ -475,6 +475,10 @@ def _parse_osm_elements(osm_file: str) -> None:
         logger.exception("Invalid XML in %s", osm_file)
         sys.exit(1)
 
+    if root is None:
+        msg = f"Empty XML document in {osm_file}"
+        raise ValueError(msg)
+
     for n in root.findall("node"):
         nid = n.attrib.get("id")
         if nid and "lat" in n.attrib and "lon" in n.attrib:

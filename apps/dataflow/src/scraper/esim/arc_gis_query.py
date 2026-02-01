@@ -84,7 +84,8 @@ def _parse_args() -> Path:
         default=Path("query.json"),
         help="Path to write the query results (default: query.json).",
     )
-    return parser.parse_args().output
+    output: Path = parser.parse_args().output
+    return output
 
 
 if __name__ == "__main__":
