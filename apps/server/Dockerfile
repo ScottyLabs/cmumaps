@@ -30,19 +30,33 @@ RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid 1001 server
 USER server
 
-# Copy swagger UI
-COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./build/swagger.yaml
+# Copy Swagger spec
+COPY --from=builder --chown=server:nodejs \
+  /app/apps/server/build/swagger.yaml \
+  /app/apps/server/build/swagger.yaml
 
-# Copy swagger UI dist (which can be either in apps/node_modules or apps/server/node_modules)
-# COPY --from=builder --chown=server:nodejs /app/apps/node_modules/swagger-ui-dist ./apps/node_modules/swagger-ui-dist
-COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/swagger-ui-dist ./apps/server/node_modules/swagger-ui-dist
+# Copy Swagger UI dist
+# (which can be either in apps/node_modules or apps/server/node_modules)
+# COPY --from=builder --chown=server:nodejs \
+#   /app/apps/node_modules/swagger-ui-dist \
+#   /app/apps/node_modules/swagger-ui-dist
+COPY --from=builder --chown=server:nodejs \
+  /app/apps/server/node_modules/swagger-ui-dist \
+  /app/apps/server/node_modules/swagger-ui-dist
 
-# Copy prisma engines (which can be either in apps/node_modules or apps/server/node_modules)
-# COPY --from=builder --chown=server:nodejs /app/apps/node_modules/prisma /tmp/prisma-engines
-COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/prisma /tmp/prisma-engines
+# Copy Prisma engines
+# (which can be either in apps/node_modules or apps/server/node_modules)
+# COPY --from=builder --chown=server:nodejs \
+#   /app/apps/node_modules/prisma \
+#   /tmp/prisma-engines
+COPY --from=builder --chown=server:nodejs \
+  /app/apps/server/node_modules/prisma \
+  /tmp/prisma-engines
 
 # Copy only what's needed to run the server
-COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
+COPY --from=builder --chown=server:nodejs \
+  /app/apps/server/dist \
+  /app/apps/server/dist
 
 EXPOSE 3000
 CMD ["bun", "apps/server/dist/server.js"]
