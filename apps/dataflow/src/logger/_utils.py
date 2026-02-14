@@ -1,4 +1,4 @@
-from collections.abc import Generator  # noqa: TC003
+from collections.abc import Generator
 from contextlib import contextmanager
 
 from ._app_logger import get_app_logger
