@@ -422,13 +422,6 @@ def _shape_from_way(
     return shape, ring, node_ids
 
 
-def _hull_from_rings(rings: list[Ring]) -> list[Point]:
-    """Compute convex hull from rings."""
-    pts = [p for r in rings for p in r[:-1]]
-    min_pts = 3
-    return _convex_hull(pts) if len(pts) >= min_pts else _close_ring(pts)
-
-
 def _assemble_entry(  # noqa: PLR0913
     osm_id: str,
     info: BuildingInfo,
@@ -440,7 +433,6 @@ def _assemble_entry(  # noqa: PLR0913
     """Assemble one building entry with all fields."""
     label = _polylabel(rings) or _polygon_area_and_centroid(rings[0])[1:]
     cx, cy = label
-    hull = _hull_from_rings(rings)
     floors_override = info.get("floors")
     floors = _floors_from_levels(tags) if floors_override is None else floors_override
     default_floor = info.get("defaultFloor", "1")
