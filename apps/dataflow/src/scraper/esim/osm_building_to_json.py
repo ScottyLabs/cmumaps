@@ -8,7 +8,7 @@ Input:
     - buildings.json: Existing building data with osmId and name mappings
 
 Output:
-    - buildings.json: Building records with shapes, hitboxes, floors, entrances
+    - buildings.json: Building records with shapes, floors, entrances
     - building_info_map.json: Simplified code-to-info mapping for reference
     - export.osm: OpenStreetMap XML export containing building ways/relations
 """
@@ -460,7 +460,6 @@ def _assemble_entry(  # noqa: PLR0913
         "defaultFloor": str(default_floor),
         "labelPosition": {"latitude": cy, "longitude": cx},
         "shapes": shapes,
-        "hitbox": [{"latitude": y, "longitude": x} for x, y in hull],
         "code": info.get("code"),
         "entrances": [str(e) for e in sorted(entrances)],
     }
