@@ -40,8 +40,6 @@ const FloorSwitcherButton = ({
 
   const height = useTransform(() => 38 + distCurveValue() * 8);
 
-  const boundingBoxSize = useTransform(() => 80 - distCurveValue() * 80);
-
   const lerpColor = (colorA: string, colorB: string, t: number): string => {
     const hexToRgb = (hex: string) => {
       const bigint = Number.parseInt(hex.replace("#", ""), 16);
@@ -84,8 +82,6 @@ const FloorSwitcherButton = ({
         offsetPath: 'path("M -30,70 L 0,70 A 56,70 0 1,0 0,-70 L -30, -70")',
         offsetDistance,
         offsetRotate: "0deg",
-        width: boundingBoxSize,
-        height: boundingBoxSize,
       }}
       key={index}
       onClick={onClick}
