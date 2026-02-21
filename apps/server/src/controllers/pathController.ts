@@ -8,11 +8,11 @@ export class PathController {
   @Get("/")
   @Security(OIDC_AUTH, [])
   @Security(BEARER_AUTH, [])
-  public async path(
+  public path(
     @Query() start: string,
     @Query() end: string,
   ): Promise<Record<string, PreciseRoute>> {
-    return await pathService.calculatePath(start, end);
+    return pathService.calculatePath(start, end);
   }
 
   @Get("/public")

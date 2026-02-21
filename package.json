@@ -31,7 +31,7 @@
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server",
     "format": "turbo format",
     "lint": "turbo lint",
-    "preinstall": "npx only-allow bun",
+    "preinstall": "bunx only-allow bun",
     "prepare": "husky && husky install",
     "secrets:pull": "PROJECT=cmumaps APPS='web server visualizer dataflow' ENVS='applicants local dev staging prod' ./scripts/secrets/multi/pull.sh",
     "secrets:push": "PROJECT=cmumaps APPS='web server visualizer dataflow' ENVS='applicants local dev staging prod' ./scripts/secrets/multi/push.sh",
