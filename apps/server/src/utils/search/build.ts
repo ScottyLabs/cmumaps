@@ -43,6 +43,7 @@ export function roomToDocument({
   buildingCode,
   alias,
   labelPosition,
+  roomType,
 }: {
   id: string;
   name: string;
@@ -50,6 +51,7 @@ export function roomToDocument({
   buildingCode: string;
   alias: string;
   labelPosition: GeoCoordinate;
+  roomType: RoomType;
 }): { doc: Document; terms: string[] } {
   const doc: Document = {
     id,
@@ -57,6 +59,7 @@ export function roomToDocument({
     fullNameWithSpace: `${buildingName} ${name}`,
     labelPosition,
     type: "room",
+    roomType,
     alias,
     numTerms: 0,
   };
@@ -191,6 +194,7 @@ export function buildSearchIndex(
           buildingCode,
           alias: room.alias.join(", "),
           labelPosition: room.labelPosition,
+          roomType: room.type,
         });
 
         const docId = `${buildingCode}-${floorId}-${roomId}`;
