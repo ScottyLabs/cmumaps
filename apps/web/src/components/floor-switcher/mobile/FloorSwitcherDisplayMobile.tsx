@@ -95,9 +95,8 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   if (!hasFloorplan) {
     return (
       <div className="fixed top-1/2 flex h-78 w-68 -translate-x-1/2 -translate-y-1/2 items-center justify-center align-center">
-        <div className="btn-shadow flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-[#646464] backdrop-blur-md">
+        <div className="btn-shadow flex items-center justify-center rounded-full bg-white/80 p-3 backdrop-blur-md">
           <img alt="Lock Icon" src={lockIcon} />
-          <p>Inaccessible</p>
         </div>
       </div>
     );
