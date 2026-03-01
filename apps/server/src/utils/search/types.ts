@@ -7,8 +7,9 @@ export interface Document {
   nameWithSpace: string;
   fullNameWithSpace: string;
   labelPosition: GeoCoordinate | null;
-  type: "room" | "building";
+  type: "room" | "building" | "floor";
   roomType?: RoomType;
+  floor?: Floor;
   alias: string;
   numTerms: number;
 }
