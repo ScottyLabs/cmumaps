@@ -23,6 +23,13 @@ interface Params {
   swap: () => void;
 }
 
+const FLOOR_WAYPOINT_PREFIX = "floor:";
+
+const getPathFromWaypointParam = (point: string) =>
+  point.startsWith(FLOOR_WAYPOINT_PREFIX)
+    ? point.slice(FLOOR_WAYPOINT_PREFIX.length)
+    : point;
+
 const getWaypointParams = (
   point: string,
 ): {
@@ -34,11 +41,14 @@ const getWaypointParams = (
   buildingCode?: string;
   error?: string;
 } => {
+  const normalizedPoint = getPathFromWaypointParam(point);
   const { data: buildings } = $api.useQuery("get", "/buildings");
-  const pointSplit = point.split("-");
+  const pointSplit = normalizedPoint.split("-");
   const [buildingCode] = pointSplit;
   const roomName = pointSplit.slice(1).join("-");
-  const floorName = getFloorLevelFromRoomName(roomName);
+  const floorName = point.startsWith(FLOOR_WAYPOINT_PREFIX)
+    ? roomName
+    : getFloorLevelFromRoomName(roomName);
   const userPosition = useBoundStore((state) => state.userPosition);
 
   const floorCode = buildFloorCode(buildingCode, floorName);
@@ -49,7 +59,7 @@ const getWaypointParams = (
     { enabled: Boolean(floorCode) },
   );
 
-  if (point.includes("user")) {
+  if (point === "user") {
     if (!userPosition) {
       return { label: "Your Location (unavailable)" };
     }
@@ -74,8 +84,39 @@ const getWaypointParams = (
     };
   }
 
-  if (point.includes("-")) {
-    if (!(rooms && buildings)) return { type: "Room", buildingCode };
+  if (normalizedPoint.includes("-")) {
+    if (!buildings) {
+      return {
+        type: point.startsWith(FLOOR_WAYPOINT_PREFIX) ? "Floor" : "Room",
+        buildingCode,
+      };
+    }
+
+    const building = buildingCode ? buildings[buildingCode] : undefined;
+    if (!(buildingCode && building)) {
+      return { error: `Invalid Building ${buildingCode}` };
+    }
+
+    const isFloorWaypoint =
+      point.startsWith(FLOOR_WAYPOINT_PREFIX) ||
+      building.floors.includes(roomName);
+    if (isFloorWaypoint) {
+      if (!building.floors.includes(roomName)) {
+        return { error: `Invalid Floor Waypoint ${roomName}` };
+      }
+
+      const floorPathParam = `${buildingCode}-${roomName}`;
+      return {
+        query: `${FLOOR_WAYPOINT_PREFIX}${floorPathParam}`,
+        label: `${building.name} Floor ${roomName}`,
+        labelShort: `${buildingCode} ${roomName}`,
+        urlParam: floorPathParam,
+        type: "Floor",
+        buildingCode,
+      };
+    }
+
+    if (!rooms) return { type: "Room", buildingCode };
 
     const room = rooms[roomName];
     if (!room) return { error: `Invalid Room Waypoint ${roomName}` };
@@ -88,7 +129,7 @@ const getWaypointParams = (
       query: room.id,
       label,
       labelShort,
-      urlParam: point,
+      urlParam: normalizedPoint,
       type: "Room",
       buildingCode,
     };
@@ -189,7 +230,7 @@ const useNavPaths = (): Params => {
 
   const setDstAndUrlParam = async (newDst: string | null) => {
     if (newDst) {
-      await navigate(`/${newDst}`);
+      await navigate(`/${getPathFromWaypointParam(newDst)}`);
     }
     setDst(newDst);
     setSrc(src);

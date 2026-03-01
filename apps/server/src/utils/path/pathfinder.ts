@@ -37,22 +37,28 @@ const findClosestNeighbors = (
 };
 
 export const parseWaypoint = (s: string): WayPoint => {
-  if (s.includes(",")) {
-    const [latStr, lonStr] = s.split(",");
+  const waypoint = s.trim();
+
+  if (waypoint.startsWith("floor:")) {
+    return { type: "Floor", floorCode: waypoint.slice("floor:".length) };
+  }
+
+  if (waypoint.includes(",")) {
+    const [latStr, lonStr] = waypoint.split(",");
     const latitude = Number(latStr);
     const longitude = Number(lonStr);
     if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
       return { type: "Coordinate", coordinate: { latitude, longitude } };
     }
   }
-  if (s.length < 5) {
-    return { type: "Building", buildingCode: s };
+  if (waypoint.length < 5) {
+    return { type: "Building", buildingCode: waypoint };
   }
-  if (s.length === 36 && !s.includes(",")) {
-    return { type: "Room", roomId: s };
+  if (waypoint.length === 36 && !waypoint.includes(",")) {
+    return { type: "Room", roomId: waypoint };
   }
   // For now, treat unknown as room
-  return { type: "Room", roomId: s };
+  return { type: "Room", roomId: waypoint };
 };
 
 export const waypointToNodes = (
@@ -65,6 +71,23 @@ export const waypointToNodes = (
     case "Room": {
       for (const node of Object.values(graph)) {
         if (node.roomId === waypoint.roomId) {
+          nodes.push(node.id);
+        }
+      }
+      break;
+    }
+    case "Floor": {
+      const [buildingCode, ...floorParts] = waypoint.floorCode.split("-");
+      const level = floorParts.join("-");
+      if (!(buildingCode && level)) {
+        throw new Error(`Invalid floor code: ${waypoint.floorCode}`);
+      }
+
+      for (const node of Object.values(graph)) {
+        if (
+          node.floor?.buildingCode === buildingCode &&
+          node.floor?.level === level
+        ) {
           nodes.push(node.id);
         }
       }
