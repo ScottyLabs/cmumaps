@@ -29,6 +29,7 @@
     "dev:visualizer": "turbo dev --filter=@cmumaps/visualizer --filter=@cmumaps/server",
     "dev:web": "turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",
     "dev:web:host": "turbo dev:host --filter=@cmumaps/web --filter=@cmumaps/server",
+    "dev:web:noauth": "IGNORE_LOGIN=true VITE_IGNORE_LOGIN=true turbo dev --filter=@cmumaps/web --filter=@cmumaps/server",
     "format": "turbo format",
     "lint": "turbo lint",
     "preinstall": "bunx only-allow bun",

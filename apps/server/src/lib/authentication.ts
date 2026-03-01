@@ -52,6 +52,10 @@ export function expressAuthentication(
 
   // biome-ignore lint/nursery/noMisusedPromises: Weird TSOA quirks
   return new Promise((resolve, reject) => {
+    if (env.IGNORE_LOGIN) {
+      return resolve({ sub: "dev-user", groups: [ADMIN_SCOPE, MEMBER_SCOPE] });
+    }
+
     // Accept any request to view CUC floorplans
     const match = request.path.match(FLOORPLAN_PATH_REGEX);
     if (match && request.params.floorCode.startsWith("CUC")) {
