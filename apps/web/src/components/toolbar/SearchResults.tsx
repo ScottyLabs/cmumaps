@@ -10,6 +10,7 @@ import restaurantIcon from "@/assets/icons/search_results/restaurant.svg";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
+import { setPostLoginCallbackUrl } from "@/lib/authClient.ts";
 import { CardStates } from "@/store/cardSlice";
 import { useBoundStore } from "@/store/index.ts";
 import { isPublicBuilding } from "@/utils/authUtils";
@@ -244,9 +245,14 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
       // Public buildings are accessible to unauthenticated users via the public pathfinding API
       // Other rooms require authentication
       // Extract building code from nameWithSpace (e.g., "CUC 159" -> "CUC")
-      const buildingCode = result.nameWithSpace?.split(" ")[0];
+      const [buildingCode, roomName] = result.nameWithSpace?.split(" ") ?? [];
       const canAccess = Boolean(user) || isPublicBuilding(buildingCode);
       if (!canAccess) {
+        if (buildingCode && roomName) {
+          const callbackUrl = new URL(window.location.href);
+          callbackUrl.pathname = `/${buildingCode}-${roomName}`;
+          setPostLoginCallbackUrl(callbackUrl.toString());
+        }
         showLogin();
         return;
       }
