@@ -31,5 +31,6 @@ The dataflow app reads JSON from S3 and POSTs to the server's `/populate-table/*
 - **Python lint**: `cd apps/dataflow && uv run lint`
 - **Build**: `bun run build`
 - **Dev (server + web)**: `bun run dev:web` (uses turbo to start both)
+- **Dev (server + web, no auth)**: `bun run dev:web:noauth` (bypasses all CMU login checks — sets `IGNORE_LOGIN=true` and `VITE_IGNORE_LOGIN=true). Use this for local development and testing features that requires authentication(e.g. viewing floorplans, path finding to POIs).
 - **Dev (server only)**: `bun run dev:server`
 - See `package.json` scripts for the full list.
