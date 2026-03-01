@@ -17,4 +17,5 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  envPrefix: ["VITE_", "GOOGLE_MAPS_"],
 });
