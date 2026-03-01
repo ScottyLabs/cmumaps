@@ -42,6 +42,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   const focusFloor = useBoundStore((state) => state.focusFloor);
   const showLogin = useBoundStore((state) => state.showLogin);
   const userPosition = useBoundStore((state) => state.userPosition);
+  const mapController = useBoundStore((state) => state.mapController);
 
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst } = useNavPaths();
@@ -203,14 +204,14 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
 
     const latitude = result.labelPosition?.latitude;
     const longitude = result.labelPosition?.longitude;
-    if (latitude && longitude && mapRef.current) {
-      const newRegionSize = 0.0005;
-      zoomOnPoint(
-        mapRef.current,
-        new mapkit.Coordinate(latitude, longitude),
-        newRegionSize,
-        setIsZooming,
-      );
+    if (latitude && longitude) {
+      const point = { latitude, longitude };
+      if (mapController) {
+        mapController.zoomToPoint(point, 0.0005);
+      } else if (mapRef.current) {
+        const newRegionSize = 0.0005;
+        zoomOnPoint(mapRef.current, point, newRegionSize, setIsZooming);
+      }
     }
   };
 
@@ -228,8 +229,12 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         break;
     }
     const building = buildings?.[result.id];
-    if (building && mapRef.current) {
-      zoomOnObject(mapRef.current, building.shape.flat(), setIsZooming);
+    if (building) {
+      if (mapController) {
+        mapController.zoomToBounds(building.shape.flat());
+      } else if (mapRef.current) {
+        zoomOnObject(mapRef.current, building.shape.flat(), setIsZooming);
+      }
     }
   };
 

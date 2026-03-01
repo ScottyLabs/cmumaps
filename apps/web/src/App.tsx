@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { FloorSwitcher } from "@/components/floor-switcher/FloorSwitcher.tsx";
 import { LoginModal } from "@/components/login/LoginModal.tsx";
 import { MapDisplay } from "@/components/map-display/MapDisplay.tsx";
+import { MapViewSwitcher } from "@/components/map-display/MapViewSwitcher.tsx";
 import { Toolbar } from "@/components/toolbar/Toolbar.tsx";
 import { IconsDisplay } from "@/components/ui-layout/icons-display/IconsDisplay.tsx";
 import { MyToastContainer } from "@/components/ui-layout/MyToastContainer.tsx";
@@ -35,6 +36,7 @@ const App = () => {
   return (
     <main className="relative h-dvh overflow-hidden">
       <MapDisplay mapRef={mapRef} />
+      <MapViewSwitcher />
       <LoginModal />
       <IconsDisplay />
       <NavOverlay mapRef={mapRef} />

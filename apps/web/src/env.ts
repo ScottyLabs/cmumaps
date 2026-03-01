@@ -5,6 +5,8 @@ import { z } from "zod";
 // variables and their types
 const envSchema = z.object({
   VITE_MAPKIT_TOKEN: z.string().optional(),
+  VITE_GOOGLE_MAPS_API_KEY: z.string().optional(),
+  GOOGLE_MAPS_API_KEY: z.string().optional(),
   VITE_PUBLIC_POSTHOG_HOST: z.string().optional(),
   VITE_PUBLIC_POSTHOG_KEY: z.string().optional(),
   VITE_SERVER_URL: z.url(),
@@ -18,7 +20,11 @@ if (!parsed.success) {
   throw new Error("Invalid environment variables");
 }
 
-const env = parsed.data;
+const env = {
+  ...parsed.data,
+  GOOGLE_MAPS_API_KEY:
+    parsed.data.VITE_GOOGLE_MAPS_API_KEY ?? parsed.data.GOOGLE_MAPS_API_KEY,
+};
 
 // Export the result so we can use it in the project
 export { env };

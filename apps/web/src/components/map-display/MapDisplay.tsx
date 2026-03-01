@@ -16,9 +16,11 @@ import { useBoundStore } from "@/store/index.ts";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 import { prefersReducedMotion } from "@/utils/prefersReducedMotion.ts";
-import { zoomOnObject } from "@/utils/zoomUtils";
+import { zoomOnObject, zoomOnPoint } from "@/utils/zoomUtils";
 import { NavLine } from "../nav/NavLine.tsx";
+import { GooglePhotorealisticMap } from "./GooglePhotorealisticMap.tsx";
 import { CoordinatePin } from "./coordinate-pin/CoordinatePin.tsx";
+import { MAPKIT_MAP_TYPE_BY_MODE } from "./mapViewModes.ts";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -39,6 +41,8 @@ const MapDisplay = ({ mapRef }: Props) => {
   );
   const isNavigating = useBoundStore((state) => state.isNavigating);
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
+  const mapViewMode = useBoundStore((state) => state.mapViewMode);
+  const setMapController = useBoundStore((state) => state.setMapController);
 
   // Local state
   const isMobile = useIsMobile();
@@ -92,8 +96,45 @@ const MapDisplay = ({ mapRef }: Props) => {
   const handleLoad = () => {
     if (mapRef.current) {
       mapRef.current.addEventListener("scroll-end", () => setUsedPanning(true));
+      setMapController({
+        zoomToBounds: (points) => {
+          if (!mapRef.current) {
+            return;
+          }
+          zoomOnObject(mapRef.current, points, setIsZooming);
+        },
+        zoomToPoint: (point, offset = 0.001) => {
+          if (!mapRef.current) {
+            return;
+          }
+          zoomOnPoint(
+            mapRef.current,
+            point,
+            offset,
+            setIsZooming,
+            setQueuedZoomRegion,
+          );
+        },
+      });
     }
   };
+
+  useEffect(() => {
+    if (mapViewMode === "photorealistic3d") {
+      setMapController(null);
+    }
+  }, [mapViewMode, setMapController]);
+
+  useEffect(
+    () => () => {
+      setMapController(null);
+    },
+    [setMapController],
+  );
+
+  if (mapViewMode === "photorealistic3d") {
+    return <GooglePhotorealisticMap />;
+  }
 
   const handleClick = (e: MapInteractionEvent) => {
     if (!buildings) {
@@ -164,7 +205,7 @@ const MapDisplay = ({ mapRef }: Props) => {
       maxCameraDistance={1500}
       showsUserLocationControl={true}
       showsUserLocation={true}
-      mapType={MapType.MutedStandard}
+      mapType={MAPKIT_MAP_TYPE_BY_MODE[mapViewMode] ?? MapType.Standard}
       // paddingBottom={isMobile ? 72 : 0}
       paddingBottom={0}
       paddingLeft={4}

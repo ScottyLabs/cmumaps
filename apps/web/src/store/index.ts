@@ -7,6 +7,8 @@ import type { FloorSlice } from "./floorSlice.ts";
 import { createFloorSlice } from "./floorSlice.ts";
 import type { LoginSlice } from "./loginSlice.ts";
 import { createLoginSlice } from "./loginSlice.ts";
+import type { MapSlice } from "./mapSlice.ts";
+import { createMapSlice } from "./mapSlice.ts";
 import type { NavSlice } from "./navSlice.ts";
 import { createNavSlice } from "./navSlice.ts";
 import type { SearchSlice } from "./searchSlice.ts";
@@ -20,6 +22,7 @@ export type BoundStore = BuildingSlice &
   CardSlice &
   FloorSlice &
   LoginSlice &
+  MapSlice &
   SearchSlice &
   ZoomSlice &
   NavSlice &
@@ -30,6 +33,7 @@ const useBoundStore = create<BoundStore>()((...args) => ({
   ...createBuildingSlice(...args),
   ...createCardSlice(...args),
   ...createLoginSlice(...args),
+  ...createMapSlice(...args),
   ...createSearchSlice(...args),
   ...createZoomSlice(...args),
   ...createNavSlice(...args),
