@@ -9,7 +9,7 @@ CMU Maps is a Turborepo monorepo with 4 apps and 3 shared packages. See `README.
 ### Services
 
 | Service | Port | How to start |
-|---|---|---|
+| --- | --- | --- |
 | PostgreSQL 17 | 5432 | `sudo docker start cmumaps-postgres` (or create via `docker run`) |
 | Server (`@cmumaps/server`) | 80 | `cd apps/server && bunx dotenv -e .env -- bun run --watch src/server.ts` |
 | Web app (`@cmumaps/web`) | 5173 | `cd apps/web && bunx vite --port 5173 --host` |
