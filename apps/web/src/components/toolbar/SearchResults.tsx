@@ -11,6 +11,7 @@ import stairsIcon from "@/assets/icons/search_results/stairs.svg";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
+import { setPostLoginCallbackUrl } from "@/lib/authClient.ts";
 import { CardStates } from "@/store/cardSlice";
 import { useBoundStore } from "@/store/index.ts";
 import { isPublicBuilding } from "@/utils/authUtils";
@@ -317,12 +318,25 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     if (result.type === "room" || result.type === "floor") {
       // Public buildings are accessible to unauthenticated users via the public pathfinding API
       // Other indoor destinations require authentication
+      const [nameBuildingCode, roomName] =
+        result.nameWithSpace?.split(" ") ?? [];
       const buildingCode =
         result.type === "floor"
           ? (result.floor?.buildingCode ?? result.id.split("-")[0])
-          : result.nameWithSpace?.split(" ")[0];
+          : nameBuildingCode;
       const canAccess = Boolean(user) || isPublicBuilding(buildingCode);
       if (!canAccess) {
+        const callbackPath =
+          result.type === "floor"
+            ? `/${result.id}`
+            : buildingCode && roomName
+              ? `/${buildingCode}-${roomName}`
+              : null;
+        if (callbackPath) {
+          const callbackUrl = new URL(window.location.href);
+          callbackUrl.pathname = callbackPath;
+          setPostLoginCallbackUrl(callbackUrl.toString());
+        }
         showLogin();
         return;
       }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
-import { signIn } from "@/lib/authClient.ts";
+import { clearPostLoginCallbackUrl, signIn } from "@/lib/authClient.ts";
 import { useBoundStore } from "@/store/index.ts";
 
 const LoginModal = () => {
@@ -51,6 +51,7 @@ const LoginModal = () => {
             type="button"
             className="cursor-pointer rounded-md bg-red-200 p-2 text-red-700 text-sm hover:bg-red-300"
             onClick={() => {
+              clearPostLoginCallbackUrl();
               hideLogin();
               setSrc(null);
               setDst(null);
