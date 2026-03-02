@@ -3,10 +3,12 @@ import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
 import { SearchResults } from "@/components/toolbar/SearchResults.tsx";
 import { useAutofillSearchQuery } from "@/hooks/useAutofillSearchQuery.ts";
+import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useBoundStore } from "@/store/index.ts";
 import type { SearchTarget } from "@/types/searchTypes";
+import { FilterCarousel } from "./FilterCarousel.tsx";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -36,6 +38,7 @@ const Searchbar = ({ mapRef }: Props) => {
   // Custom Hook
   useAutofillSearchQuery(setSearchQuery);
   const { isNavOpen } = useNavPaths();
+  const isMobile = useIsMobile();
 
   // Blur the input field when not searching (mainly used for clicking on the map to close search)
   useEffect(() => {
@@ -124,13 +127,21 @@ const Searchbar = ({ mapRef }: Props) => {
 
   return (
     <div className="flex flex-col">
-      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white shadow-[1px_4px_4px_0_rgba(0,0,0,0.15)]">
-        {renderSearchIcon()}
-        {renderInput()}
-        {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
+      <div className="flex">
+        <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white shadow-[1px_4px_4px_0_rgba(0,0,0,0.15)]">
+          {renderSearchIcon()}
+          {renderInput()}
+          {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
+        </div>
+        {!isMobile && isSearchOpen && (
+          <div className="w-screen">
+            <FilterCarousel setSearchQuery={setSearchQuery} />
+          </div>
+        )}
       </div>
       {isSearchOpen && (
         <div className="h-100 overflow-y-scroll rounded-lg">
+          {isMobile && <FilterCarousel setSearchQuery={setSearchQuery} />}
           <SearchResults mapRef={mapRef} searchQuery={searchQuery} />
         </div>
       )}
