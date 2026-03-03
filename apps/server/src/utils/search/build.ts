@@ -75,6 +75,47 @@ export function roomToDocument({
   return { doc, terms };
 }
 
+export function floorToDocument({
+  buildingCode,
+  buildingName,
+  floorLevel,
+  labelPosition,
+}: {
+  buildingCode: string;
+  buildingName: string;
+  floorLevel: string;
+  labelPosition: GeoCoordinate;
+}): { doc: Document; terms: string[] } {
+  const floorCode = `${buildingCode}-${floorLevel}`;
+  const doc: Document = {
+    id: floorCode,
+    nameWithSpace: `${buildingCode} ${floorLevel}`,
+    fullNameWithSpace: `${buildingName} Floor ${floorLevel}`,
+    labelPosition,
+    type: "floor",
+    floor: {
+      buildingCode,
+      level: floorLevel,
+    },
+    alias: floorCode,
+    numTerms: 0,
+  };
+
+  const terms = [
+    ...parseQuery(floorLevel),
+    ...parseQuery(floorCode),
+    ...parseQuery(`floor ${floorLevel}`),
+    ...parseQuery(`${buildingCode} floor ${floorLevel}`),
+    ...parseQuery(`${buildingName} floor ${floorLevel}`),
+    ...parseQuery(doc.alias),
+    ...parseQuery(doc.nameWithSpace),
+    ...parseQuery(doc.fullNameWithSpace),
+  ];
+
+  doc.numTerms = terms.length;
+  return { doc, terms };
+}
+
 export async function getFloorplans(): Promise<FloorPlans> {
   const allRooms = await prisma.room.findMany({
     include: {
@@ -177,6 +218,27 @@ export function buildSearchIndex(
     insertTerms(index, terms, docId);
   }
   console.log(`Built ${Object.keys(documents).length} building documents`);
+
+  // Add floor documents so users can navigate directly to a floor.
+  let floorDocumentCount = 0;
+  for (const [buildingCode, building] of Object.entries(buildingMap)) {
+    for (const floorLevel of building.floors) {
+      const { doc, terms } = floorToDocument({
+        buildingCode,
+        buildingName: building.name,
+        floorLevel,
+        labelPosition: {
+          latitude: building.labelLatitude,
+          longitude: building.labelLongitude,
+        },
+      });
+      const docId = `floor:${doc.id}`;
+      documents[docId] = doc;
+      insertTerms(index, terms, docId);
+      floorDocumentCount++;
+    }
+  }
+  console.log(`Built ${floorDocumentCount} floor documents`);
 
   // Iterate over buildings in floorplans
   for (const [buildingCode, buildingPlan] of Object.entries(floorplans)) {

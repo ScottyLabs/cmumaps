@@ -6,6 +6,10 @@ export type WayPoint =
       roomId: string;
     }
   | {
+      type: "Floor";
+      floorCode: string;
+    }
+  | {
       type: "Coordinate";
       coordinate: GeoCoordinate;
     }

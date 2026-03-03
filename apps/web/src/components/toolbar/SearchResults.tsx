@@ -7,6 +7,7 @@ import defaultIcon from "@/assets/icons/search_results/default.svg";
 import libraryIcon from "@/assets/icons/search_results/library.svg";
 import userIcon from "@/assets/icons/search_results/mark.svg";
 import restaurantIcon from "@/assets/icons/search_results/restaurant.svg";
+import stairsIcon from "@/assets/icons/search_results/stairs.svg";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
@@ -68,6 +69,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     const buildings = searchResults.filter(
       (result) => result.type === "building",
     );
+    const floors = searchResults.filter((result) => result.type === "floor");
     const rooms = searchResults.filter((result) => result.type === "room");
 
     const userLocationResult: SearchResultProps = {
@@ -78,10 +80,10 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     };
 
     if (searchTarget && userPosition) {
-      return [userLocationResult, ...buildings, ...rooms];
+      return [userLocationResult, ...buildings, ...floors, ...rooms];
     }
 
-    return [...buildings, ...rooms];
+    return [...buildings, ...floors, ...rooms];
   }, [searchResults, userPosition, searchTarget]);
 
   // Don't render if the search is not open or the search query is empty
@@ -124,6 +126,17 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     );
   };
 
+  const renderFloorResult = (result: SearchResultProps) => (
+    <>
+      <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
+        <img width={24} src={stairsIcon} alt="floor" />
+      </div>
+      <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
+        {result.fullNameWithSpace}
+      </div>
+    </>
+  );
+
   const renderUserLocationResult = () => (
     <>
       <div className="mr-2 ml-4 flex h-7 w-7 shrink-0 flex-col items-center justify-center rounded-md text-white">
@@ -141,9 +154,27 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
         return renderUserLocationResult();
       case "building":
         return renderBuildingResult(result);
+      case "floor":
+        return renderFloorResult(result);
       default:
         return renderRoomResult(result);
     }
+  };
+
+  const getFloorFromResult = (result: SearchResultProps) => {
+    if (result.floor?.buildingCode && result.floor?.level) {
+      return {
+        buildingCode: result.floor.buildingCode,
+        level: result.floor.level,
+      };
+    }
+
+    const [buildingCode, ...levelParts] = result.id.split("-");
+    const level = levelParts.join("-");
+    if (!(buildingCode && level)) {
+      return null;
+    }
+    return { buildingCode, level };
   };
 
   const handleSelectRoom = (result: SearchResultProps) => {
@@ -224,6 +255,44 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
     }
   };
 
+  const handleSelectFloor = (result: SearchResultProps) => {
+    const floor = getFloorFromResult(result);
+    if (!floor) {
+      return;
+    }
+
+    const floorCode = `${floor.buildingCode}-${floor.level}`;
+    const floorWaypoint = `floor:${floorCode}`;
+
+    switch (searchTarget) {
+      case "nav-src":
+        setSrc(floorWaypoint);
+        break;
+      case "nav-dst":
+        navigate(`/${floorCode}`);
+        setDst(floorWaypoint);
+        break;
+      default:
+        navigate(`/${floorCode}`);
+        setCardStatus(CardStates.COLLAPSED);
+        break;
+    }
+
+    focusFloor(floor);
+
+    const latitude = result.labelPosition?.latitude;
+    const longitude = result.labelPosition?.longitude;
+    if (latitude && longitude && mapRef.current) {
+      const newRegionSize = 0.0008;
+      zoomOnPoint(
+        mapRef.current,
+        new mapkit.Coordinate(latitude, longitude),
+        newRegionSize,
+        setIsZooming,
+      );
+    }
+  };
+
   const handleSelectUserLocation = (result: SearchResultProps) => {
     switch (searchTarget) {
       case "nav-src":
@@ -240,17 +309,23 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   };
 
   const handleClick = (result: SearchResultProps) => {
-    if (result.type === "room") {
+    if (result.type === "room" || result.type === "floor") {
       // Public buildings are accessible to unauthenticated users via the public pathfinding API
-      // Other rooms require authentication
-      // Extract building code from nameWithSpace (e.g., "CUC 159" -> "CUC")
-      const buildingCode = result.nameWithSpace?.split(" ")[0];
+      // Other indoor destinations require authentication
+      const buildingCode =
+        result.type === "floor"
+          ? (result.floor?.buildingCode ?? result.id.split("-")[0])
+          : result.nameWithSpace?.split(" ")[0];
       const canAccess = Boolean(user) || isPublicBuilding(buildingCode);
       if (!canAccess) {
         showLogin();
         return;
       }
-      handleSelectRoom(result);
+      if (result.type === "floor") {
+        handleSelectFloor(result);
+      } else {
+        handleSelectRoom(result);
+      }
     } else if (result.type === "user") {
       handleSelectUserLocation(result);
     } else {
