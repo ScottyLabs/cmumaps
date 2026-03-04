@@ -84,6 +84,7 @@ const OVERRIDES = {
     noDuplicateGraphqlOperationName: "off",
     noVueOptionsApi: "off",
     noVueVIfWithVFor: "off",
+    noVueRefAsOperand: "off",
     useVueDefineMacrosOrder: "off",
     useVueHyphenatedAttributes: "off",
     useVueMultiWordComponentNames: "off",

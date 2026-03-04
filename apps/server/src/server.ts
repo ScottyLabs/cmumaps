@@ -24,7 +24,7 @@ app.use(express.json({ limit: "1mb" }));
 // Define CORS options
 const corsOptions: CorsOptions = {
   origin: env.ALLOWED_ORIGINS_REGEX?.split(",").map(
-    (origin) => new RegExp(origin),
+    (origin) => new RegExp(origin, "u"),
   ),
   credentials: true,
 };

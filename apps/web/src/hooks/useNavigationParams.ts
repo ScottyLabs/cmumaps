@@ -202,7 +202,7 @@ const useNavPaths = (): Params => {
   }
 
   if (srcError || dstError) {
-    toast.error(srcError || dstError);
+    toast.error(srcError ?? dstError);
     if (src) setSrc(null);
     if (dst) setDst(null);
     return { setSrc, setDst, swap, isNavOpen: false };
