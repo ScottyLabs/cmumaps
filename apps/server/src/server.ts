@@ -59,7 +59,7 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerJson),
 );
-app.get("/openapi", (_req, res) => {
+app.get("/openapi.json", (_req, res) => {
   res.status(200).send(swaggerJson);
 });
 
