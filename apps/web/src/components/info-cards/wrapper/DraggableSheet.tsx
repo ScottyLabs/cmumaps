@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/nursery/noFloatingPromises: Fix floating promises */
 import type { PanInfo } from "motion/react";
-import { motion, useAnimation, useDragControls } from "motion/react";
+import { motion, useAnimation, useDragControls} from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
@@ -40,7 +40,9 @@ const DraggableSheet = ({
   );
 
   // Custom hooks
-  const { isCardOpen, floor, coordinate, buildingCode } = useLocationParams();
+  const { isCardOpen, floor, coordinate, buildingCode, carnivalEvent } = useLocationParams();
+  const disableBodyDrag =
+    carnivalEvent === "booth" && cardStatus === CardStates.EXPANDED;
 
   // updates the card status when the isCardOpen changes
   // TODO: uncomment once eateries are listed
@@ -135,16 +137,12 @@ const DraggableSheet = ({
   };
 
   const renderHandle = () => (
-    <div className="flex h-12 shrink-0 items-center justify-between px-2">
+    <div 
+      className="flex h-12 shrink-0 items-center justify-between px-2"
+      onPointerDown={(event) => dragControls.start(event)}
+    >
       <div className="w-8" />
-      <button
-        type="button"
-        aria-label="Drag sheet"
-        className="cursor-grab rounded-full p-2 active:cursor-grabbing"
-        onPointerDown={(event) => dragControls.start(event)}
-      >
-        <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
-      </button>
+      <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
       <IoIosClose
         title="Close"
         size={32}
@@ -168,13 +166,17 @@ const DraggableSheet = ({
         transition={{ duration: 0.5 }}
         drag="y"
         dragControls={dragControls}
-        dragListener={false}
+        dragListener={!disableBodyDrag}
         onDragEnd={handleDragEnd}
         onDrag={handleDrag}
         className="flex h-dvh flex-col overflow-hidden rounded-t-xl bg-white"
       >
         {renderHandle()}
-        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        {disableBodyDrag ? (
+          <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        ) : (
+          children
+        )}
       </motion.div>
     </div>
   );

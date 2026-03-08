@@ -5,6 +5,7 @@ import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRo
 import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
 import type { CardStatus } from "@/store/cardSlice.ts";
 import { CardStates } from "@/store/cardSlice.ts";
+import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   cardStatus: CardStatus;
@@ -19,6 +20,7 @@ interface BoothInfo {
 const BoothCard = ({ cardStatus }: Props) => {
   const isCollapsed = cardStatus === CardStates.COLLAPSED;
   const isExpanded = cardStatus === CardStates.EXPANDED;
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
   const showImage = !isCollapsed;
   const showBoothList = !isCollapsed;
   const showDescription = isExpanded;
@@ -30,6 +32,7 @@ const BoothCard = ({ cardStatus }: Props) => {
     <button
       type="button"
       className="flex items-center gap-2 rounded-full bg-primary-red px-5 py-2 text-white"
+      onClick={() => setCardStatus(CardStates.EXPANDED)}
     >
       <HiOutlineMap size={16} />
       <span>View all booth</span>
@@ -55,7 +58,7 @@ const BoothCard = ({ cardStatus }: Props) => {
     }
 
     return (
-      <div className="no-scrollbar flex gap-3 overflow-x-auto px-3 py-4">
+      <div className="no-scrollbar flex items-start gap-3 overflow-x-auto px-3 pt-4 pb-0">
         {booths.map(([name, booth]) => (
           <BoothEventCard
             boothType={booth.boothType}

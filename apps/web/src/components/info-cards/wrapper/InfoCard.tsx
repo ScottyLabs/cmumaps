@@ -47,7 +47,7 @@ const InfoCard = ({ mapRef }: Props) => {
     }
     if (carnivalEvent === "booth") {
       return {
-        snapPoints: [175, 490, window.innerHeight],
+        snapPoints: [175, 460, window.innerHeight],
         element: () => <BoothCard cardStatus={cardStatus} />,
       };
     }
