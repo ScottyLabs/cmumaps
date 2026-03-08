@@ -1,5 +1,6 @@
 import { HiOutlineMap } from "react-icons/hi2";
 import boothData from "@/assets/carnival/json/booth.json" with { type: "json" };
+import { BoothEventCard } from "@/components/booth-cards/BoothEventCard.tsx";
 import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
 import type { CardStatus } from "@/store/cardSlice.ts";
@@ -15,12 +16,6 @@ interface BoothInfo {
   theme: string;
 }
 
-const TAG_STYLES: Record<string, string> = {
-  club: "bg-[#DDEEFF] text-[#0093E0]",
-  fraternity: "bg-[#E4D7FA] text-[#5B3CB7]",
-  sorority: "bg-[#FFE3D7] text-[#E35A1C]",
-};
-
 const BoothCard = ({ cardStatus }: Props) => {
   const isCollapsed = cardStatus === CardStates.COLLAPSED;
   const isExpanded = cardStatus === CardStates.EXPANDED;
@@ -30,34 +25,6 @@ const BoothCard = ({ cardStatus }: Props) => {
   const showViewAllButton = !isExpanded;
 
   const booths = Object.entries(boothData as Record<string, BoothInfo>);
-
-  const renderBadge = (label: string, className: string) => (
-    <span className={`rounded-md px-2 py-1 font-bold text-sm ${className}`}>
-      {label}
-    </span>
-  );
-
-  const renderBoothItem = (
-    [name, booth]: [string, BoothInfo],
-    index: number,
-    horizontal: boolean,
-  ) => (
-    <article
-      key={`${name}-${index}`}
-      className={`rounded-2xl border border-stroke-neutral-1 bg-white p-3 shadow-sm ${horizontal ? "min-w-[300px]" : ""}`}
-    >
-      <div className="mb-2 flex gap-2">
-        {renderBadge(booth.boothType, "bg-[#FFE3D7] text-[#E35A1C]")}
-        {renderBadge(
-          booth.orgType,
-          TAG_STYLES[booth.orgType.toLowerCase()] ??
-            "bg-gray-100 text-gray-700",
-        )}
-      </div>
-      <h3 className="leading-tight">{name}</h3>
-      <p className="mt-1 text-gray-500">Theme: {booth.theme}</p>
-    </article>
-  );
 
   const renderMiddleButton = () => (
     <button
@@ -73,14 +40,32 @@ const BoothCard = ({ cardStatus }: Props) => {
     if (isExpanded) {
       return (
         <div className="space-y-4 px-3 py-4">
-          {booths.map((entry, index) => renderBoothItem(entry, index, false))}
+          {booths.map(([name, booth]) => (
+            <BoothEventCard
+              boothType={booth.boothType}
+              horizontal={false}
+              key={name}
+              name={name}
+              orgType={booth.orgType}
+              theme={booth.theme}
+            />
+          ))}
         </div>
       );
     }
 
     return (
       <div className="no-scrollbar flex gap-3 overflow-x-auto px-3 py-4">
-        {booths.map((entry, index) => renderBoothItem(entry, index, true))}
+        {booths.map(([name, booth]) => (
+          <BoothEventCard
+            boothType={booth.boothType}
+            horizontal={true}
+            key={name}
+            name={name}
+            orgType={booth.orgType}
+            theme={booth.theme}
+          />
+        ))}
       </div>
     );
   };

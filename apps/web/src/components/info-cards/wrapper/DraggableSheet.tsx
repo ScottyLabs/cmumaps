@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/nursery/noFloatingPromises: Fix floating promises */
 import type { PanInfo } from "motion/react";
-import { motion, useAnimation } from "motion/react";
+import { motion, useAnimation, useDragControls } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
@@ -24,6 +24,7 @@ const DraggableSheet = ({
   // Library hooks
   const navigate = useNavigate();
   const controls = useAnimation();
+  const dragControls = useDragControls();
   const sheetRef = useRef<HTMLDivElement>(null);
 
   // Global state
@@ -49,7 +50,6 @@ const DraggableSheet = ({
     } else {
       setCardStatus(CardStates.COLLAPSED);
     }
-    // setCardStatus(CardStates.COLLAPSED);
   }, [isCardOpen, setCardStatus, floor, focusedFloor, coordinate]);
 
   // updates the snapping when isCardOpen or snapIndex changes
@@ -67,8 +67,6 @@ const DraggableSheet = ({
     controls.set({ y: window.innerHeight });
   }, [controls]);
 
-  /* biome-ignore lint/correctness/useExhaustiveDependencies: re-rendering whenever navigate
-   * changes would lock draggableSheet in Collapsed state */
   useEffect(() => {
     if (
       focusedFloor &&
@@ -139,7 +137,14 @@ const DraggableSheet = ({
   const renderHandle = () => (
     <div className="flex h-12 shrink-0 items-center justify-between px-2">
       <div className="w-8" />
-      <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
+      <button
+        type="button"
+        aria-label="Drag sheet"
+        className="cursor-grab rounded-full p-2 active:cursor-grabbing"
+        onPointerDown={(event) => dragControls.start(event)}
+      >
+        <div className="h-[5px] w-14 rounded-full bg-surface-darker-background" />
+      </button>
       <IoIosClose
         title="Close"
         size={32}
@@ -162,12 +167,14 @@ const DraggableSheet = ({
         ref={sheetRef}
         transition={{ duration: 0.5 }}
         drag="y"
+        dragControls={dragControls}
+        dragListener={false}
         onDragEnd={handleDragEnd}
         onDrag={handleDrag}
         className="flex h-dvh flex-col overflow-hidden rounded-t-xl bg-white"
       >
         {renderHandle()}
-        {children}
+        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </motion.div>
     </div>
   );
