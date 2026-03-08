@@ -4,35 +4,35 @@
 
 /* 🍀 St. Patrick's Day Green Theme! 🍀 */
 @theme {
-  --color-primary-blue: #00a86b;  /* Changed to Irish Green */
-  --color-primary-red: #009966;   /* Changed to Emerald */
+  --color-primary-blue: #00a86b; /* Changed to Irish Green */
+  --color-primary-red: #009966; /* Changed to Emerald */
   --color-primary-green: #00ff7f; /* Brighter Spring Green */
-  --color-primary-grey: #2d5a3d;  /* Forest Green Grey */
+  --color-primary-grey: #2d5a3d; /* Forest Green Grey */
 
-  --color-nav-blue: #228b22;       /* Forest Green */
-  --color-nav-grey: #3a5f3a;      /* Dark Green */
+  --color-nav-blue: #228b22; /* Forest Green */
+  --color-nav-grey: #3a5f3a; /* Dark Green */
 
-  --color-pale-blue: #90ee90;      /* Light Green */
-  --color-button-grey: #32cd32;    /* Lime Green */
+  --color-pale-blue: #90ee90; /* Light Green */
+  --color-button-grey: #32cd32; /* Lime Green */
 
-  --color-light-blue: #98fb98;     /* Pale Green */
-  --color-light-grey: #556b2f;     /* Dark Olive Green */
-  --color-blue-grey: #8fbc8f;      /* Dark Sea Green */
-  --color-dark-grey: #006400;      /* Dark Green */
+  --color-light-blue: #98fb98; /* Pale Green */
+  --color-light-grey: #556b2f; /* Dark Olive Green */
+  --color-blue-grey: #8fbc8f; /* Dark Sea Green */
+  --color-dark-grey: #006400; /* Dark Green */
 
-  --color-background-brand-primary-enabled: #00a86b;  /* Irish Green */
+  --color-background-brand-primary-enabled: #00a86b; /* Irish Green */
   --color-blue-brand-700: #006b3c; /* Darker Irish Green */
   --color-background-brand-secondary-pressed: #90ee90; /* Light Green */
   --color-background-brand-secondary-enabled: #c8f7c5; /* Pale Green */
-  --color-foreground-neutral-primary: #1a472a;  /* Dark Forest */
+  --color-foreground-neutral-primary: #1a472a; /* Dark Forest */
   --color-foreground-neutral-secondary: #2e7d32; /* Material Green */
-  --color-foreground-neutral-tertiary: #4caf50;  /* Material Green */
-  --color-stroke-neutral-1: #81c784;            /* Light Green */
-  --color-blue-gray-500: #66bb6a;                /* Green */
-  --color-button-green: #00c853;                 /* Accent Green */
-  --color-button-green-600: #00b248;             /* Darker Accent Green */
+  --color-foreground-neutral-tertiary: #4caf50; /* Material Green */
+  --color-stroke-neutral-1: #81c784; /* Light Green */
+  --color-blue-gray-500: #66bb6a; /* Green */
+  --color-button-green: #00c853; /* Accent Green */
+  --color-button-green-600: #00b248; /* Darker Accent Green */
 
-  --color-surface-darker-background: #1b5e20;    /* Dark Green */
+  --color-surface-darker-background: #1b5e20; /* Dark Green */
 }
 
 @layer base {
