@@ -2,6 +2,7 @@ import type { RoomType } from "../types/index.ts";
 
 /**
  * The attributes of a room type.
+ * 🍀 St. Patrick's Day Edition - All colors are shades of green! 🍀
  */
 interface RoomTypeDetails {
   /**
@@ -10,12 +11,12 @@ interface RoomTypeDetails {
   primary: string;
 
   /**
-   * A CSS color used for the background of the room’s shape
+   * A CSS color used for the background of the room's shape
    */
   background: string;
 
   /**
-   * A CSS color used for the border of the room’s shape
+   * A CSS color used for the border of the room's shape
    */
   border: string;
 }
@@ -28,45 +29,45 @@ interface RoomTypeDetails {
 export function getRoomTypeDetails(type: RoomType): RoomTypeDetails {
   switch (type) {
     case "Default":
-      return { primary: "#b5b3b2", background: "#eeeeee", border: "#cccccc" };
+      return { primary: "#2e7d32", background: "#e8f5e9", border: "#81c784" };
     case "Corridor":
-      return { primary: "#cecece", background: "#fefefe", border: "#cccccc" };
+      return { primary: "#66bb6a", background: "#c8e6c9", border: "#4caf50" };
     case "Office":
-      return { primary: "#b5b3b2", background: "#eeeeee", border: "#cccccc" };
+      return { primary: "#43a047", background: "#dcedc8", border: "#66bb6a" };
     case "Auditorium":
     case "Classroom":
     case "Conference":
-      return { primary: "#7082b3", background: "#e6ecfe", border: "#9eabcd" };
+      return { primary: "#1b5e20", background: "#c8e6c9", border: "#388e3c" };
     case "Operational":
     case "Storage":
-      return { primary: "#808080", background: "#ece3d5", border: "#b9b9b9" };
+      return { primary: "#558b2f", background: "#dcedc8", border: "#689f38" };
     case "Laboratory":
     case "Computer Lab":
     case "Studio":
     case "Workshop":
-      return { primary: "#ff7e81", background: "#ffdbdc", border: "#ff7e81" };
+      return { primary: "#00c853", background: "#b9f6ca", border: "#00e676" };
     case "Vestibule":
-      return { primary: "#cecece", background: "#fefefe", border: "#cccccc" };
+      return { primary: "#81c784", background: "#f1f8e9", border: "#a5d6a7" };
     case "Restroom":
-      return { primary: "#c39dff", background: "#e7dfed", border: "#d6d0db" };
+      return { primary: "#0097a7", background: "#e0f7fa", border: "#00acc1" };
     case "Stairs":
     case "Elevator":
     case "Ramp":
-      return { primary: "#3b92f0", background: "#c4dadf", border: "#9bacb0" };
+      return { primary: "#00796b", background: "#b2dfdb", border: "#009688" };
     case "Dining":
-      return { primary: "#ff961c", background: "#ffdcb2", border: "#f8992a" };
+      return { primary: "#33691e", background: "#dcedc8", border: "#558b2f" };
     case "Food":
-      return { primary: "#ff961c", background: "#ffdcb2", border: "#f8992a" };
+      return { primary: "#2e7d32", background: "#c8e6c9", border: "#43a047" };
     case "Store":
-      return { primary: "#ffc855", background: "#fff0d0", border: "#ffc855" };
+      return { primary: "#1b5e20", background: "#a5d6a7", border: "#2e7d32" };
     case "Library":
     case "Study":
-      return { primary: "#d18e63", background: "#f5dbc8", border: "#d18e63" };
+      return { primary: "#388e3c", background: "#c8e6c9", border: "#4caf50" };
     case "Sport":
-      return { primary: "#6bc139", background: "#e1fcd1", border: "#9ac382" };
+      return { primary: "#00e676", background: "#b9f6ca", border: "#00c853" };
     case "Parking":
-      return { primary: "#51a2f7", background: "#d4e9ff", border: "#51a2f7" };
+      return { primary: "#26a69a", background: "#e0f2f1", border: "#26a69a" };
     default:
-      return { primary: "#b5b3b2", background: "#eeeeee", border: "#cccccc" };
+      return { primary: "#2e7d32", background: "#e8f5e9", border: "#81c784" };
   }
 }

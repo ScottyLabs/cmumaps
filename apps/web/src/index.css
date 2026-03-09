@@ -2,36 +2,37 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 @import "tailwindcss";
 
+/* 🍀 St. Patrick's Day Green Theme! 🍀 */
 @theme {
-  --color-primary-blue: #1e86ff;
-  --color-primary-red: #c41230;
-  --color-primary-green: #31b777;
-  --color-primary-grey: #bec1c6;
+  --color-primary-blue: #00a86b; /* Changed to Irish Green */
+  --color-primary-red: #009966; /* Changed to Emerald */
+  --color-primary-green: #00ff7f; /* Brighter Spring Green */
+  --color-primary-grey: #2d5a3d; /* Forest Green Grey */
 
-  --color-nav-blue: #3d83d3;
-  --color-nav-grey: #828282;
+  --color-nav-blue: #228b22; /* Forest Green */
+  --color-nav-grey: #3a5f3a; /* Dark Green */
 
-  --color-pale-blue: #e6f0ff;
-  --color-button-grey: #979797;
+  --color-pale-blue: #90ee90; /* Light Green */
+  --color-button-grey: #32cd32; /* Lime Green */
 
-  --color-light-blue: #f1f4fd;
-  --color-light-grey: #b0b0b0;
-  --color-blue-grey: #e6e6e6;
-  --color-dark-grey: #4c5564;
+  --color-light-blue: #98fb98; /* Pale Green */
+  --color-light-grey: #556b2f; /* Dark Olive Green */
+  --color-blue-grey: #8fbc8f; /* Dark Sea Green */
+  --color-dark-grey: #006400; /* Dark Green */
 
-  --color-background-brand-primary-enabled: #0e96d1;
-  --color-blue-brand-700: #0a6b94;
-  --color-background-brand-secondary-pressed: #f5f5f5;
-  --color-background-brand-secondary-enabled: #e7f5fa;
-  --color-foreground-neutral-primary: #1e1e1e;
-  --color-foreground-neutral-secondary: #666;
-  --color-foreground-neutral-tertiary: #808080;
-  --color-stroke-neutral-1: #d6d6d6;
-  --color-blue-gray-500: #869db3;
-  --color-button-green: #0ea041;
-  --color-button-green-600: #0d923b;
+  --color-background-brand-primary-enabled: #00a86b; /* Irish Green */
+  --color-blue-brand-700: #006b3c; /* Darker Irish Green */
+  --color-background-brand-secondary-pressed: #90ee90; /* Light Green */
+  --color-background-brand-secondary-enabled: #c8f7c5; /* Pale Green */
+  --color-foreground-neutral-primary: #1a472a; /* Dark Forest */
+  --color-foreground-neutral-secondary: #2e7d32; /* Material Green */
+  --color-foreground-neutral-tertiary: #4caf50; /* Material Green */
+  --color-stroke-neutral-1: #81c784; /* Light Green */
+  --color-blue-gray-500: #66bb6a; /* Green */
+  --color-button-green: #00c853; /* Accent Green */
+  --color-button-green-600: #00b248; /* Darker Accent Green */
 
-  --color-surface-darker-background: #8e8e8e;
+  --color-surface-darker-background: #1b5e20; /* Dark Green */
 }
 
 @layer base {
@@ -58,10 +59,10 @@
 
 @layer components {
   .btn-shadow {
-    @apply shadow-md shadow-gray-400;
+    @apply shadow-md shadow-green-400;
   }
   .btn-shadow-dark {
-    @apply shadow-md shadow-gray-500;
+    @apply shadow-md shadow-green-600;
   }
 
   .no-scrollbar::-webkit-scrollbar {
