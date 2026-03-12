@@ -99,8 +99,8 @@ const useMapRegionChange = (mapRef: RefObject<mapkit.Map | null>) => {
 
       return {
         buildingCode: centerBuilding.code,
-        // biome-ignore lint/style/noNonNullAssertion: TODO: figure out which floor to focus on if no default floor is set
-        level: centerBuilding.defaultFloor!,
+        // Fallback to the first known floor if default metadata is missing.
+        level: centerBuilding.defaultFloor ?? centerBuilding.floors[0] ?? "",
       };
     }
 
