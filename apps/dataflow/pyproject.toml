@@ -63,7 +63,7 @@ lint.select = ["ALL"]
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["overpass", "arcgis.*", "sampler", "triangle", "scipy.*", "shapely.*"]
+module = ["overpass", "arcgis.*", "scipy.*", "shapely.*"]
 ignore_missing_imports = true
 
 # Upgrade all non-error rules to "error"
