@@ -10,9 +10,9 @@ from typing import Any
 from xml.etree.ElementTree import Element
 
 # requires python <= 3.12
-import overpass
+import overpass  # type: ignore[import-untyped]
 from defusedxml import ElementTree
-from geopy import distance
+from geopy import distance  # type: ignore[import-untyped]
 
 from logger import get_app_logger
 
@@ -101,6 +101,7 @@ def query_osm(max_attempt_count: int) -> str | None:
             counter = 100
         except overpass.errors.ServerLoadError:
             logger.print("Query failed. Trying again...")
+            counter += 1
 
     if counter == max_attempt_count:
         logger.exception("Unable to get data from OSM. Please try again later.")
@@ -120,8 +121,8 @@ def create_node(child: Element) -> None:
     current_node: dict[str, Any] = {
         "neighbors": {},
         "coordinate": {
-            "latitude": node_attributes["lat"],
-            "longitude": node_attributes["lon"],
+            "latitude": float(node_attributes["lat"]),
+            "longitude": float(node_attributes["lon"]),
         },
         "id": node_attributes["id"],
         "tags": {},
@@ -141,10 +142,10 @@ def process_way(child: Element) -> None:
         child: the node being added
 
     """
-    way = child
-    way_tags = way.findall("tag")
-    exclude = is_excluded(way)
-    way_nodes = way.findall("nd")
+    way: Element = child
+    way_tags: list[Element] = way.findall("tag")
+    exclude: bool = is_excluded(way)
+    way_nodes: list[Element] = way.findall("nd")
     for i in range(len(way_nodes)):
         current_node = nodes.get(way_nodes[i].attrib["ref"], False)
 
@@ -154,7 +155,7 @@ def process_way(child: Element) -> None:
             if not exclude:
                 add_neighbors_from_way(way_nodes, i)
             elif exclude and current_node["tags"].get("entrance", False):
-                safe_nodes.append(way_nodes[i - 1].attrib["ref"])
+                safe_nodes.append(way_nodes[i].attrib["ref"])
                 for tag in way_tags:
                     if tag.attrib["k"] == "name":
                         current_node["entrance"] = tag.attrib["v"]
@@ -175,7 +176,7 @@ def add_neighbors_from_way(way_nodes: list[Element], i: int) -> None:
     """
     current_node = nodes.get(way_nodes[i].attrib["ref"], False)
 
-    safe_nodes.append(way_nodes[i - 1].attrib["ref"])
+    safe_nodes.append(way_nodes[i].attrib["ref"])
     if i > 0:
         compare_node = nodes.get(
             way_nodes[i - 1].attrib["ref"],
