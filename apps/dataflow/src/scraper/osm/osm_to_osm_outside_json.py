@@ -165,7 +165,7 @@ def process_way(child: Element) -> None:
                     nodes_to_pop.append(node)
 
 
-def add_neighbors_from_way(way_nodes: list, i: int) -> None:
+def add_neighbors_from_way(way_nodes: list[Element], i: int) -> None:
     """Add nodes in a way as neighbors.
 
     Args:
@@ -233,7 +233,7 @@ def is_excluded(way: Element) -> bool:
             if node not in nodes_to_pop:
                 nodes_to_pop.append(node)
         return True
-    way_tags = way.findall("tag")
+    way_tags: list[Element] = way.findall("tag")
     for tag in way_tags:
         if tag.attrib["k"] in excluded_tags:
             return True
