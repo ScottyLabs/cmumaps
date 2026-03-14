@@ -41,6 +41,7 @@ import json
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from sampler import Triangulator, UniformSampler
 from shapely.geometry import LineString, Polygon
@@ -64,7 +65,7 @@ class RoomDataLoader:
     def load(
         floor_path: str | Path,
         neighbor_path: str | Path,
-    ) -> tuple[dict, dict]:
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
         """Load rooms_data and neighbor_data from JSON.
 
         Returns (rooms_data, neighbor_data).
@@ -76,7 +77,7 @@ class RoomDataLoader:
         return rooms_data, neighbor_data
 
     @staticmethod
-    def parse_polygon_coords(coords: list) -> list[tuple[float, float]]:
+    def parse_polygon_coords(coords: list[Any]) -> list[tuple[float, float]]:
         """Parse polygon coords from JSON to list of (lon, lat) tuples."""
         out = []
         for coord_wrapper in coords:
@@ -331,7 +332,7 @@ class GraphBuilder:
 
         # Pass 2: neighbor_data fallback for pairs with no door intersection
         for access_name_a, neighbors in self.neighbor_data.items():
-            uuid_a = access_name_to_uuid.get(access_name_a)
+            uuid_a: str | None = access_name_to_uuid.get(access_name_a)
             if uuid_a is None:
                 continue
             floor_level_a = self.rooms_data[uuid_a].get("floor", {}).get("level", "")
@@ -652,7 +653,7 @@ class GraphBuilder:
         def dist(a_id: int, b_id: int) -> float:
             xa, ya = node_id_to_xy_cur.get(a_id, (0, 0))
             xb, yb = node_id_to_xy_cur.get(b_id, (0, 0))
-            return ((xa - xb) ** 2 + (ya - yb) ** 2) ** 0.5
+            return float(((xa - xb) ** 2 + (ya - yb) ** 2) ** 0.5)
 
         neighbors = defaultdict(set)
         for e in intra_room_edges:
@@ -682,7 +683,7 @@ class GraphBuilder:
         pairs.sort(key=lambda t: t[0])
 
         removed: set[int] = set()
-        new_nodes: list[dict] = []
+        new_nodes: list[dict[str, Any]] = []
         next_id = max(n["id"] for n in pruned_nodes) + 1
 
         for _d, a, b in pairs:
