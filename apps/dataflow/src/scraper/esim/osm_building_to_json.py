@@ -1,16 +1,15 @@
 """Parse OpenStreetMap building geometries into CMU Maps format.
 
-This script extracts building polygons from an OSM export and combines them
-with existing building metadata to produce structured building records with
-shapes, hitboxes, label positions, and entrance locations.
+Reads an OSM XML export and combines it with existing building metadata
+to produce structured building records with shapes, label positions,
+and entrance locations.
 
 Input:
     - buildings.json: Existing building data with osmId and name mappings
+    - export.osm: OpenStreetMap XML export (from fetch_osm_data.py)
 
 Output:
-    - buildings.json: Building records with shapes, hitboxes, floors, entrances
-    - building_info_map.json: Simplified code-to-info mapping for reference
-    - export.osm: OpenStreetMap XML export containing building ways/relations
+    - buildings.json: Building records with shapes, floors, entrances
 """
 
 from __future__ import annotations
@@ -21,13 +20,11 @@ import math
 import os
 import sys
 import tempfile
-import time
 from pathlib import Path
 from typing import Any
 from xml.etree.ElementTree import ParseError
 
 import defusedxml.ElementTree as ET  # noqa: N817
-import overpass
 
 from logger import get_app_logger
 
@@ -38,8 +35,6 @@ Point = tuple[float, float]
 Ring = list[Point]
 BuildingInfo = dict[str, Any]
 
-CMU_OVERPASS_QUERY = "nwr(40.440278, -79.951806, 40.451722, -79.933778);"
-
 # Input
 OSM_FILE = os.environ.get("CMUMAPS_OSM_FILE", "export.osm")
 DOWNLOADED_BUILDINGS_JSON = os.environ.get(
@@ -48,10 +43,6 @@ DOWNLOADED_BUILDINGS_JSON = os.environ.get(
 )
 
 # Output
-BUILDING_MAPPING_OUTPUT_JSON = os.environ.get(
-    "CMUMAPS_BUILDING_MAPPING_OUTPUT",
-    "building_info_map.json",
-)
 PARSED_DATA_OUTPUT_JSON = os.environ.get(
     "CMUMAPS_PARSED_BUILDINGS_OUTPUT",
     "buildings.json",
@@ -59,19 +50,14 @@ PARSED_DATA_OUTPUT_JSON = os.environ.get(
 
 # Module-level lookup tables (populated by _load_building_data)
 osm_id_to_info: dict[str, BuildingInfo] = {}
-building_info_map: dict[str, BuildingInfo] = {}
 fallback_name_lookup: dict[str, BuildingInfo] = {}
 
-# Module-level data stores (populated in main)
+# Module-level data stores (populated by _parse_osm_elements)
 nodes: dict[str, Point] = {}
 node_tags: dict[str, dict[str, str]] = {}
 ways_by_id: dict[str, dict[str, Any]] = {}
 relations: list[dict[str, Any]] = []
 entrance_nodes: set[str] = set()
-
-# Retry configuration
-_MAX_RETRIES = 5
-_INITIAL_DELAY = 2
 
 
 def _load_building_data() -> None:
@@ -83,12 +69,6 @@ def _load_building_data() -> None:
         name_match_candidates: dict[str, list[BuildingInfo]] = {}
 
         for code, data in downloaded_buildings.items():
-            building_info_map[code] = {
-                "name": data.get("name", ""),
-                "code": code,
-                "defaultFloor": data.get("defaultFloor", "1"),
-            }
-
             raw_osm_id = data.get("osmId")
             floors = data.get("floors")
             if raw_osm_id is not None and str(raw_osm_id).strip():
@@ -112,9 +92,6 @@ def _load_building_data() -> None:
                         },
                     )
 
-        with Path(BUILDING_MAPPING_OUTPUT_JSON).open("w", encoding="utf-8") as f:
-            json.dump(building_info_map, f, indent=4)
-
         for name_key, entries in name_match_candidates.items():
             if len(entries) == 1:
                 fallback_name_lookup[name_key] = entries[0]
@@ -128,6 +105,11 @@ def _load_building_data() -> None:
     except OSError:
         logger.exception("I/O error processing %s", DOWNLOADED_BUILDINGS_JSON)
         sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# Geometry utilities
+# ---------------------------------------------------------------------------
 
 
 def _close_ring(pts: list[Point]) -> list[Point]:
@@ -331,6 +313,11 @@ def _polylabel(
     return (best.x, best.y)
 
 
+# ---------------------------------------------------------------------------
+# Floor helpers
+# ---------------------------------------------------------------------------
+
+
 def _parse_int(tags: dict[str, str], keys: list[str]) -> int | None:
     """Parse integer from tags."""
     for k in keys:
@@ -360,41 +347,9 @@ def _floors_from_levels(tags: dict[str, str]) -> list[str]:
     return floors
 
 
-def _fetch_osm_data(
-    osm_file: Path,
-    max_retries: int = _MAX_RETRIES,
-    initial_delay: int = _INITIAL_DELAY,
-) -> None:
-    """Fetch OSM data from Overpass API with retry/backoff.
-
-    Raises
-    ------
-    Exception
-        If all retry attempts are exhausted.
-
-    """
-    for attempt in range(max_retries):
-        try:
-            api = overpass.API(timeout=60)
-            osm_xml = api.get(CMU_OVERPASS_QUERY, responseformat="xml")
-        except Exception:
-            if attempt == max_retries - 1:
-                logger.exception(
-                    "Failed to fetch OSM data after %d attempts",
-                    max_retries,
-                )
-                raise
-            delay = initial_delay * (2**attempt)
-            logger.warning(
-                "Overpass API request failed (attempt %d/%d), retrying in %ds...",
-                attempt + 1,
-                max_retries,
-                delay,
-            )
-            time.sleep(delay)
-        else:
-            osm_file.write_text(osm_xml, encoding="utf-8")
-            return
+# ---------------------------------------------------------------------------
+# OSM parsing and building assembly
+# ---------------------------------------------------------------------------
 
 
 def _shape_from_way(
@@ -422,13 +377,6 @@ def _shape_from_way(
     return shape, ring, node_ids
 
 
-def _hull_from_rings(rings: list[Ring]) -> list[Point]:
-    """Compute convex hull from rings."""
-    pts = [p for r in rings for p in r[:-1]]
-    min_pts = 3
-    return _convex_hull(pts) if len(pts) >= min_pts else _close_ring(pts)
-
-
 def _assemble_entry(  # noqa: PLR0913
     osm_id: str,
     info: BuildingInfo,
@@ -440,7 +388,6 @@ def _assemble_entry(  # noqa: PLR0913
     """Assemble one building entry with all fields."""
     label = _polylabel(rings) or _polygon_area_and_centroid(rings[0])[1:]
     cx, cy = label
-    hull = _hull_from_rings(rings)
     floors_override = info.get("floors")
     floors = _floors_from_levels(tags) if floors_override is None else floors_override
     default_floor = info.get("defaultFloor", "1")
@@ -460,7 +407,6 @@ def _assemble_entry(  # noqa: PLR0913
         "defaultFloor": str(default_floor),
         "labelPosition": {"latitude": cy, "longitude": cx},
         "shapes": shapes,
-        "hitbox": [{"latitude": y, "longitude": x} for x, y in hull],
         "code": info.get("code"),
         "entrances": [str(e) for e in sorted(entrances)],
     }
@@ -616,9 +562,8 @@ def _write_json_atomic(data: dict[str, Any], output_path: Path) -> None:
 
 
 def main() -> None:
-    """Run the OSM building parser."""
+    """Parse OSM data and produce updated buildings.json."""
     _load_building_data()
-    _fetch_osm_data(Path(OSM_FILE))
     _parse_osm_elements(OSM_FILE)
     buildings = _collect_buildings()
     _write_json_atomic(buildings, Path(PARSED_DATA_OUTPUT_JSON))
