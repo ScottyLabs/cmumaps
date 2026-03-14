@@ -24,35 +24,49 @@ const OVERRIDES = {
 
     // Not a good metric
     noExcessiveCognitiveComplexity: "off",
+
+    // Not a good metric
+    useMaxParams: "off",
   },
   correctness: {
+    // TODO: Definitely enable this later
+    useExhaustiveDependencies: "off",
+
     // TODO: enable later after we figure out how to get the image size of svgs
     useImageSize: "off",
 
     // TODO: figure out how to import mapkit or explain why it can't
     noUndeclaredVariables: "off",
 
+    // All node.js built in imports are flagged as violations
+    noUnresolvedImports: "off",
+
     // None React Rules
     noNodejsModules: "off",
     noQwikUseVisibleTask: "off",
     noSolidDestructuredProps: "off",
     useQwikClasslist: "off",
+    noNextAsyncClientComponent: "off",
+    noVueDataObjectDeclaration: "off",
+    noVueDuplicateKeys: "off",
+    noVueReservedKeys: "off",
+    noVueReservedProps: "off",
+    noVueSetupPropsReactivityLoss: "off",
+    useQwikMethodUsage: "off",
+    useQwikValidLexicalScope: "off",
   },
   nursery: {
-    // TODO: Need to enable later after figure out how to fix it in server with dependncy injection
-    noImportCycles: "off",
+    // Too many changes and our code doesn't need to be portable across platforms
+    useGlobalThis: "off",
+
+    // TODO: replace later with a better way to handle hex colors
+    noHexColors: "off",
 
     // Implicit typing are sometimes useful
     useExplicitType: "off",
 
-    // All node.js built in imports are flagged as violations
-    noUnresolvedImports: "off",
-
     // Common pattern of creating a function for a button violates this rule
     noJsxPropsBind: "off",
-
-    // We don't need to worry about internationalization lol
-    noJsxLiterals: "off",
 
     // Too many false positives
     useAwaitThenable: "off",
@@ -63,19 +77,12 @@ const OVERRIDES = {
 
     // Not a good metric
     noContinue: "off",
-    useMaxParams: "off",
     noExcessiveLinesPerFile: "off",
     noExcessiveClassesPerFile: "off",
 
     // None React Rules
     noDuplicateGraphqlOperationName: "off",
-    useQwikMethodUsage: "off",
-    useQwikValidLexicalScope: "off",
-    noVueDataObjectDeclaration: "off",
-    noVueDuplicateKeys: "off",
     noVueOptionsApi: "off",
-    noVueReservedKeys: "off",
-    noVueReservedProps: "off",
     noVueVIfWithVFor: "off",
     useVueDefineMacrosOrder: "off",
     useVueHyphenatedAttributes: "off",
@@ -87,6 +94,8 @@ const OVERRIDES = {
     useVueValidVIf: "off",
     useVueValidVOn: "off",
     useVueValidVText: "off",
+    noVueArrowFuncInWatch: "off",
+    useVueVapor: "off",
   },
   performance: {
     // TODO: enable later after figure out how to refactor code to not use await in loops
@@ -127,6 +136,9 @@ const OVERRIDES = {
     // Next.js rule
     noHeadElement: "off",
 
+    // We don't need to worry about internationalization lol
+    noJsxLiterals: "off",
+
     useConsistentMemberAccessibility: {
       level: DEFAULT_RULE_SEVERITY,
       options: {
@@ -149,6 +161,9 @@ const OVERRIDES = {
 
     // None React Rule
     noReactSpecificProps: "off",
+
+    // TODO: Need to enable later after figure out how to fix it in server with dependncy injection
+    noImportCycles: "off",
   },
 };
 
