@@ -1,39 +1,40 @@
 /** biome-ignore-all lint/style/useNamingConvention: Building code are in all caps */
+/* 🐰 Easter Edition - Buildings in pastel spring colors! 🌷 */
 const buildingCodeToShapeFillColor = {
-  MOE: "#fde047",
-  STE: "#307454",
-  MUD: "#6900a9",
-  MOR: "#FED97B",
-  DON: "#0025a9",
+  MOE: "#fff4b8" /* Pastel Yellow */,
+  STE: "#b8e8c8" /* Mint Green */,
+  MUD: "#d4b8e8" /* Soft Lavender */,
+  MOR: "#ffd4a8" /* Peach */,
+  DON: "#a8c8e8" /* Baby Blue */,
 
-  FBA: "#F28B5F",
+  FBA: "#ffb8c8" /* Light Pink */,
 
-  SCO: "#a90000",
-  WEL: "#a90000",
-  BOS: "#a90000",
-  MCG: "#a90000",
-  HEN: "#a90000",
+  SCO: "#e8a8c8" /* Soft Rose */,
+  WEL: "#f0b8d0" /* Pastel Pink */,
+  BOS: "#ffc8d8" /* Light Salmon */,
+  MCG: "#e8b8c8" /* Dusty Pink */,
+  HEN: "#f8d0e0" /* Pale Pink */,
 
-  HAM: "#6C1515",
-  ROS1: "#6C1515",
-  ROS2: "#6C1515",
-  ROS3: "#6C1515",
-  SPT: "#6C1515",
-  WOO: "#6C1515",
-  MMA: "#6C1515",
+  HAM: "#c8b8d8" /* Soft Purple */,
+  ROS1: "#d0b8e0" /* Light Lavender */,
+  ROS2: "#d8c0e8" /* Pale Purple */,
+  ROS3: "#e0c8f0" /* Soft Lilac */,
+  SPT: "#c8c8e8" /* Periwinkle */,
+  WOO: "#d8d0f0" /* Light Periwinkle */,
+  MMA: "#e8d0f8" /* Pale Lavender */,
 
-  ROF: "#ae12bc",
-  FCL: "#ae12bc",
+  ROF: "#b8e0e8" /* Light Teal */,
+  FCL: "#a8d8e0" /* Soft Cyan */,
 
-  FAF: "#89177D",
-  NVL: "#89177D",
-  FIF: "#89177D",
-  MC: "#89177D",
-  HIL: "#89177D",
-  CLY: "#89177D",
+  FAF: "#c8a8d8" /* Soft Violet */,
+  NVL: "#d0b0e0" /* Light Violet */,
+  FIF: "#d8b8e8" /* Pale Purple */,
+  MC: "#e0c0f0" /* Soft Lilac */,
+  HIL: "#e8c8f8" /* Light Lilac */,
+  CLY: "#f0d0ff" /* Pale Lavender */,
 
-  WWG: "#2A2D4B",
-  RES: "#2A2D4B",
+  WWG: "#a8b8d8" /* Soft Blue */,
+  RES: "#b0c0e0" /* Light Blue */,
 };
 
 export const getBuildingShapeFillColor = (buildingCode: string) =>
