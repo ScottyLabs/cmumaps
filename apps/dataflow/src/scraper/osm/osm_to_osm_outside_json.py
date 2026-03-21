@@ -10,9 +10,9 @@ from typing import Any
 from xml.etree.ElementTree import Element
 
 # requires python <= 3.12
-import overpass  # type: ignore[import-untyped]
+import overpass
 from defusedxml import ElementTree
-from geopy import distance  # type: ignore[import-untyped]
+from geopy import distance
 
 from logger import get_app_logger
 
