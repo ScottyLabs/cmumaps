@@ -568,10 +568,14 @@ class GraphBuilder:
                     0 if direction is None or edge_dir == direction else 1
                 )
                 if (v, edge_dir) not in seen:
-                    heapq.heappush(
-                        heap,
-                        (dist + w, new_turns, v, edge_dir, [*path, v]),
+                    item: tuple[float, int, int, str | None, list[int]] = (
+                        dist + w,
+                        new_turns,
+                        v,
+                        edge_dir,
+                        [*path, v],
                     )
+                    heapq.heappush(heap, item)
         return None
 
     @staticmethod
