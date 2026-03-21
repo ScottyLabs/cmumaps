@@ -6,6 +6,8 @@ into a JSON that contains all nodes that are outside.
 
 import json
 from pathlib import Path
+from typing import Any
+from xml.etree.ElementTree import Element
 
 # requires python <= 3.12
 import overpass
@@ -17,7 +19,7 @@ from logger import get_app_logger
 logger = get_app_logger()
 
 # all of the tags of ways that should not be used
-excluded_tags = [
+excluded_tags: list[str] = [
     "building",
     "leisure",
     "barrier",
@@ -28,16 +30,16 @@ excluded_tags = [
 ]
 # ways that have no tags and need to be cut
 # first (27591285) is the skibo gym
-excluded_ways = ["27591285"]
+excluded_ways: list[str] = ["27591285"]
 
 # holds all of the nodes
 # will be converted to a JSON at the end
-nodes = {}
+nodes: dict[str, Any] = {}
 
 # stores nodes that we will need to remove later
-nodes_to_pop = []
+nodes_to_pop: list[str] = []
 # stores nodes that are part of ways that we want to keep
-safe_nodes = []
+safe_nodes: list[str] = []
 
 
 def main() -> None:
@@ -49,11 +51,11 @@ def main() -> None:
     """
     logger.print("\nAttempting to get data from OSM...\n")
 
-    response = query_osm(10)
+    response: str | None = query_osm(10)
     if response is None:
         return
 
-    root = ElementTree.fromstring(response)
+    root: Element = ElementTree.fromstring(response)
 
     logger.print("Converting nodes and ways to JSON...")
     for child in root:
@@ -99,6 +101,7 @@ def query_osm(max_attempt_count: int) -> str | None:
             counter = 100
         except overpass.errors.ServerLoadError:
             logger.print("Query failed. Trying again...")
+            counter += 1
 
     if counter == max_attempt_count:
         logger.exception("Unable to get data from OSM. Please try again later.")
@@ -107,19 +110,19 @@ def query_osm(max_attempt_count: int) -> str | None:
     return response
 
 
-def create_node(child: ElementTree) -> None:
+def create_node(child: Element) -> None:
     """Create a node and add it to the nodes list.
 
     Args:
         child: the node being added
 
     """
-    node_attributes = child.attrib
-    current_node = {
+    node_attributes: dict[str, str] = child.attrib
+    current_node: dict[str, Any] = {
         "neighbors": {},
         "coordinate": {
-            "latitude": node_attributes["lat"],
-            "longitude": node_attributes["lon"],
+            "latitude": float(node_attributes["lat"]),
+            "longitude": float(node_attributes["lon"]),
         },
         "id": node_attributes["id"],
         "tags": {},
@@ -132,17 +135,17 @@ def create_node(child: ElementTree) -> None:
         current_node["tags"][tag.attrib["k"]] = tag.attrib["v"]
 
 
-def process_way(child: ElementTree) -> None:
+def process_way(child: Element) -> None:
     """Create a node and add it to the nodes list.
 
     Args:
         child: the node being added
 
     """
-    way = child
-    way_tags = way.findall("tag")
-    exclude = is_excluded(way)
-    way_nodes = way.findall("nd")
+    way: Element = child
+    way_tags: list[Element] = way.findall("tag")
+    exclude: bool = is_excluded(way)
+    way_nodes: list[Element] = way.findall("nd")
     for i in range(len(way_nodes)):
         current_node = nodes.get(way_nodes[i].attrib["ref"], False)
 
@@ -152,18 +155,18 @@ def process_way(child: ElementTree) -> None:
             if not exclude:
                 add_neighbors_from_way(way_nodes, i)
             elif exclude and current_node["tags"].get("entrance", False):
-                safe_nodes.append(way_nodes[i - 1].attrib["ref"])
+                safe_nodes.append(way_nodes[i].attrib["ref"])
                 for tag in way_tags:
                     if tag.attrib["k"] == "name":
                         current_node["entrance"] = tag.attrib["v"]
             elif exclude:
                 # add nodes that should be popped if unused to list
-                node = way_nodes[i].attrib["ref"]
+                node: str = way_nodes[i].attrib["ref"]
                 if node not in nodes_to_pop:
                     nodes_to_pop.append(node)
 
 
-def add_neighbors_from_way(way_nodes: list, i: int) -> None:
+def add_neighbors_from_way(way_nodes: list[Element], i: int) -> None:
     """Add nodes in a way as neighbors.
 
     Args:
@@ -173,7 +176,7 @@ def add_neighbors_from_way(way_nodes: list, i: int) -> None:
     """
     current_node = nodes.get(way_nodes[i].attrib["ref"], False)
 
-    safe_nodes.append(way_nodes[i - 1].attrib["ref"])
+    safe_nodes.append(way_nodes[i].attrib["ref"])
     if i > 0:
         compare_node = nodes.get(
             way_nodes[i - 1].attrib["ref"],
@@ -216,7 +219,7 @@ def add_neighbors_from_way(way_nodes: list, i: int) -> None:
             }
 
 
-def is_excluded(way: ElementTree) -> bool:
+def is_excluded(way: Element) -> bool:
     """Check whether a way should be excluded.
 
     Args:
@@ -231,7 +234,7 @@ def is_excluded(way: ElementTree) -> bool:
             if node not in nodes_to_pop:
                 nodes_to_pop.append(node)
         return True
-    way_tags = way.findall("tag")
+    way_tags: list[Element] = way.findall("tag")
     for tag in way_tags:
         if tag.attrib["k"] in excluded_tags:
             return True
