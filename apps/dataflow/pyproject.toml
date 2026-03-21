@@ -19,6 +19,7 @@ dependencies = [
   "triangle==20230923",
   "scipy==1.15.3",
   "networkx==3.5",
+  "geopy>=2.4.1",
 ]
 
 [dependency-groups]
@@ -63,7 +64,7 @@ lint.select = ["ALL"]
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["overpass", "arcgis.*", "scipy.*", "shapely.*", "triangle"]
+module = ["overpass", "arcgis.*", "scipy.*", "shapely.*", "triangle", "geopy.*"]
 ignore_missing_imports = true
 
 # Upgrade all non-error rules to "error"
