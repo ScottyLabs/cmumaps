@@ -43,7 +43,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from sampler import Triangulator, UniformSampler
+from generator.sampler import Triangulator, UniformSampler
 from shapely.geometry import LineString, Polygon
 
 # Minimum polygon vertices for a valid ring / room
@@ -114,8 +114,8 @@ class GraphBuilder:
 
     def __init__(
         self,
-        rooms_data: dict,
-        neighbor_data: dict,
+        rooms_data: dict[str, Any],
+        neighbor_data: dict[str, Any],
         config: GraphBuilderConfig | None = None,
     ) -> None:
         """Initialize with room data, neighbor data, and optional config."""
@@ -123,32 +123,32 @@ class GraphBuilder:
         self.neighbor_data = neighbor_data
         self.config = config or GraphBuilderConfig()
         if self.config.use_triangulation:
-            self._sampler = Triangulator()
+            self._sampler: Triangulator | UniformSampler = Triangulator()
         else:
             self._sampler = UniformSampler()
 
-        self._nodes: list[dict] = []
-        self._access_name_to_node_id: dict = {}
-        self._crucial_points: list[dict] = []
-        self._neighbor_edges: list[dict] = []
-        self._intra_room_edges: list[dict] = []
+        self._nodes: list[dict[str, Any]] = []
+        self._access_name_to_node_id: dict[str, Any] = {}
+        self._crucial_points: list[dict[str, Any]] = []
+        self._neighbor_edges: list[dict[str, Any]] = []
+        self._intra_room_edges: list[dict[str, Any]] = []
 
     @property
-    def nodes(self) -> list[dict]:
+    def nodes(self) -> list[dict[str, Any]]:
         """Return the current list of graph nodes."""
         return self._nodes
 
     @property
-    def neighbor_edges(self) -> list[dict]:
+    def neighbor_edges(self) -> list[dict[str, Any]]:
         """Return the current list of neighbor edges."""
         return self._neighbor_edges
 
     @property
-    def intra_room_edges(self) -> list[dict]:
+    def intra_room_edges(self) -> list[dict[str, Any]]:
         """Return the current list of intra-room edges."""
         return self._intra_room_edges
 
-    def build(self) -> tuple[list[dict], list[dict]]:
+    def build(self) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         """Run full pipeline: nodes, neighbor edges, intra-room edges, prune.
 
         Returns (nodes, edges).
@@ -274,8 +274,10 @@ class GraphBuilder:
             return (
                 min(
                     nids,
-                    key=lambda nid: (node_id_to_xy[nid][0] - px) ** 2
-                    + (node_id_to_xy[nid][1] - py) ** 2,
+                    key=lambda nid: (
+                        (node_id_to_xy[nid][0] - px) ** 2
+                        + (node_id_to_xy[nid][1] - py) ** 2
+                    ),
                 )
                 if nids
                 else None
@@ -298,7 +300,7 @@ class GraphBuilder:
             )
 
         # Build geometry and access-name lookup for all rooms
-        floor_to_rooms: dict[tuple, list[str]] = defaultdict(list)
+        floor_to_rooms: dict[tuple[str, str], list[str]] = defaultdict(list)
         room_geoms: dict[str, Polygon] = {}
         access_name_to_uuid: dict[str, str] = {}
         for room_uuid, room_data in self.rooms_data.items():
@@ -332,24 +334,25 @@ class GraphBuilder:
 
         # Pass 2: neighbor_data fallback for pairs with no door intersection
         for access_name_a, neighbors in self.neighbor_data.items():
-            uuid_a: str | None = access_name_to_uuid.get(access_name_a)
-            if uuid_a is None:
+            room_uuid_a = access_name_to_uuid.get(access_name_a)
+            if room_uuid_a is None:
                 continue
-            floor_level_a = self.rooms_data[uuid_a].get("floor", {}).get("level", "")
+            floor_level_a = (
+                self.rooms_data[room_uuid_a].get("floor", {}).get("level", "")
+            )
             for access_name_b in neighbors:
-                uuid_b = access_name_to_uuid.get(access_name_b)
-                if uuid_b is None:
+                room_uuid_b = access_name_to_uuid.get(access_name_b)
+                if room_uuid_b is None:
                     continue
-                # only same-floor pairs not already covered by a door
                 floor_level_b = (
-                    self.rooms_data[uuid_b].get("floor", {}).get("level", "")
+                    self.rooms_data[room_uuid_b].get("floor", {}).get("level", "")
                 )
                 if floor_level_a != floor_level_b:
                     continue
-                if tuple(sorted([uuid_a, uuid_b])) in room_pair_set:
+                if tuple(sorted([room_uuid_a, room_uuid_b])) in room_pair_set:
                     continue
-                nids_a = room_to_node_ids.get(uuid_a, [])
-                nids_b = room_to_node_ids.get(uuid_b, [])
+                nids_a = room_to_node_ids.get(room_uuid_a, [])
+                nids_b = room_to_node_ids.get(room_uuid_b, [])
                 if not nids_a or not nids_b:
                     continue
                 best_sid, best_tid = min(
@@ -359,7 +362,7 @@ class GraphBuilder:
                         + (node_id_to_xy[st[0]][1] - node_id_to_xy[st[1]][1]) ** 2
                     ),
                 )
-                room_pair_set.add(tuple(sorted([uuid_a, uuid_b])))
+                room_pair_set.add(tuple(sorted([room_uuid_a, room_uuid_b])))
                 add_edge(best_sid, best_tid)
 
     # ---------- Intra-room edges and pruning ----------
@@ -481,14 +484,14 @@ class GraphBuilder:
         if (x1, y1) == (x2, y2):
             return True
         line = LineString([(x1, y1), (x2, y2)])
-        return geom.contains(line) or line.within(geom)
+        return bool(geom.contains(line) or line.within(geom))
 
     def _build_cardinal_adj(  # noqa: C901
         self,
         node_ids: list[int],
-        node_id_to_xy: dict,
+        node_id_to_xy: dict[int, tuple[float, float]],
         geom: Polygon,
-    ) -> dict:
+    ) -> dict[int, list[tuple[int, int, str]]]:
         """Build H/V-only adjacency.
 
         For each node find nearest neighbor in 4 cardinal directions (within
@@ -496,11 +499,11 @@ class GraphBuilder:
         Returns adj[nid] = [(neighbor_id, weight, 'H'|'V'), ...].
         """
         tol = self.config.grid_spacing * 0.3
-        adj: dict[int, list] = defaultdict(list)
-        seen_pairs: set = set()
+        adj: dict[int, list[tuple[int, int, str]]] = defaultdict(list)
+        seen_pairs: set[tuple[int, int]] = set()
 
         def add(a: int, b: int, direction: str) -> None:
-            key = tuple(sorted([a, b]))
+            key = (min(a, b), max(a, b))
             if key in seen_pairs:
                 return
             seen_pairs.add(key)
@@ -536,16 +539,21 @@ class GraphBuilder:
         return adj
 
     @staticmethod
-    def _turn_minimized_path(adj: dict, start: int, goal: int) -> list | None:
+    def _turn_minimized_path(
+        adj: dict[int, list[tuple[int, int, str]]],
+        start: int,
+        goal: int,
+    ) -> list[int] | None:
         """Compute shortest path minimizing (distance, num_turns).
 
         adj[node] = [(neighbor_id, weight, 'H'|'V'), ...]. Returns path list or None.
         """
         if start == goal:
             return [start]
-        # State: (dist, turns, node, direction, path); direction=None at start
-        heap = [(0.0, 0, start, None, [start])]
-        seen: set = set()
+        heap: list[tuple[float, int, int, str | None, list[int]]] = [
+            (0.0, 0, start, None, [start]),
+        ]
+        seen: set[tuple[int, str | None]] = set()
         while heap:
             dist, turns, u, direction, path = heapq.heappop(heap)
             state = (u, direction)
@@ -566,7 +574,11 @@ class GraphBuilder:
         return None
 
     @staticmethod
-    def _dijkstra_path(adj: dict, start: int, goal: int) -> list | None:
+    def _dijkstra_path(
+        adj: dict[int, list[tuple[int, float]]],
+        start: int,
+        goal: int,
+    ) -> list[int] | None:
         """Shortest path from start to goal.
 
         adj[node] = [(neighbor_id, weight), ...]. Returns path list or None.
@@ -589,11 +601,11 @@ class GraphBuilder:
 
     @staticmethod
     def _prune_nodes_and_intra_edges(
-        nodes: list[dict],
-        intra_room_edges: list[dict],
+        nodes: list[dict[str, Any]],
+        intra_room_edges: list[dict[str, Any]],
         crucial_ids: set[int],
         path_node_ids: set[int],
-    ) -> tuple[list[dict], list[dict]]:
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         """Keep crucial and path nodes; drop intra_room edges at removed nodes."""
         keep_set = crucial_ids | path_node_ids
         pruned = [n for n in nodes if n["id"] in keep_set]
@@ -606,9 +618,9 @@ class GraphBuilder:
 
     def _filter_intra_room_edges_inside_polygons(
         self,
-        nodes: list[dict],
-        intra_room_edges: list[dict],
-    ) -> list[dict]:
+        nodes: list[dict[str, Any]],
+        intra_room_edges: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
         """Keep only intra-room edges whose segment lies inside the room polygon."""
         node_by_id = {n["id"]: n for n in nodes}
         kept = []
@@ -635,13 +647,13 @@ class GraphBuilder:
 
     def _merge_close_path_nodes(  # noqa: C901, PLR0912, PLR0915
         self,
-        pruned_nodes: list[dict],
-        intra_room_edges: list[dict],
+        pruned_nodes: list[dict[str, Any]],
+        intra_room_edges: list[dict[str, Any]],
         crucial_ids: set[int],
         path_node_ids: set[int],
         keep_set: set[int],
-        _node_id_to_xy: dict,
-    ) -> tuple[list[dict], list[dict]]:
+        _node_id_to_xy: dict[int, tuple[float, float]],
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         """Merge path-only nodes within max_merge_distance; reconnect via midpoint."""
         path_only_ids = path_node_ids - crucial_ids
         if len(path_only_ids) < MIN_PATH_NODES_FOR_MERGE:
