@@ -83,7 +83,7 @@ for building_code, building_data in floorplans.items():
     for floor_level, floor_data in building_data.items():
         for room_id, room_data in floor_data.items():
             room_id_to_name[room_id] = (
-                f"{building_code}_{floor_level}_{room_data.get("name")}"
+                f"{building_code}_{floor_level}_{room_data.get('name')}"
             )
 
 # Convert room IDs to room names in the room_neighbors_list

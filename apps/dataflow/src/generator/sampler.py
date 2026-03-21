@@ -23,7 +23,10 @@ DEPENDENCIES
   pip install shapely triangle numpy scipy
 """
 
+from typing import Any
+
 import numpy as np
+import numpy.typing as npt
 import triangle as tr
 from scipy.spatial import Delaunay
 from shapely.geometry import Point, Polygon
@@ -36,7 +39,7 @@ class Triangulator:
     """CDT of polygons with centroid nodes and adjacency edges."""
 
     @staticmethod
-    def polygon_to_pslg(poly: Polygon) -> dict:
+    def polygon_to_pslg(poly: Polygon) -> dict[str, Any]:
         """Convert a Shapely Polygon to a PSLG (Planar Straight Line Graph).
 
         Args:
@@ -46,37 +49,36 @@ class Triangulator:
             Dict with 'vertices' (Nx2), 'segments' (Mx2), and optionally 'holes'.
 
         """
-        vertices = []
-        segments = []
-        vertex_index = {}
+        vertices_list: list[list[float]] = []
+        segments_list: list[list[int]] = []
+        vertex_index: dict[tuple[float, float], int] = {}
 
-        def add_ring(coords: list) -> None:
-            nonlocal vertices, segments, vertex_index
+        def add_ring(coords: list[Any]) -> None:
             if coords[0] == coords[-1]:
                 coords = coords[:-1]
-            indices = []
+            indices: list[int] = []
             for x, y in coords:
-                key = (x, y)
+                key = (float(x), float(y))
                 if key not in vertex_index:
-                    vertex_index[key] = len(vertices)
-                    vertices.append([x, y])
+                    vertex_index[key] = len(vertices_list)
+                    vertices_list.append([float(x), float(y)])
                 indices.append(vertex_index[key])
             n = len(indices)
             for i in range(n):
                 i0, i1 = indices[i], indices[(i + 1) % n]
-                segments.append([i0, i1])
+                segments_list.append([i0, i1])
 
         add_ring(list(poly.exterior.coords))
-        holes = []
+        holes_list: list[Any] = []
         for interior in poly.interiors:
             add_ring(list(interior.coords))
-            holes.append(next(iter(interior.representative_point().coords)))
+            holes_list.append(next(iter(interior.representative_point().coords)))
 
-        vertices = np.asarray(vertices, dtype=float)
-        segments = np.asarray(segments, dtype=int)
-        holes = np.asarray(holes, dtype=float) if holes else None
+        vertices = np.asarray(vertices_list, dtype=float)
+        segments = np.asarray(segments_list, dtype=int)
+        holes = np.asarray(holes_list, dtype=float) if holes_list else None
 
-        pslg = {"vertices": vertices, "segments": segments}
+        pslg: dict[str, Any] = {"vertices": vertices, "segments": segments}
         if holes is not None:
             pslg["holes"] = holes
         return pslg
@@ -87,7 +89,7 @@ class Triangulator:
         spacing: float,
         max_area: float | None = None,
         min_edge_distance: float | None = None,
-    ) -> tuple[np.ndarray, list]:
+    ) -> tuple[npt.NDArray[np.float64], list[tuple[int, int]]]:
         """Run CDT on a polygon; return centroid positions and adjacency edges.
 
         Args:
@@ -146,10 +148,10 @@ class Triangulator:
     def _filter_by_boundary_distance(
         self,
         poly: Polygon,
-        centroids: np.ndarray,
-        triangles: np.ndarray,
+        centroids: npt.NDArray[np.float64],
+        triangles: npt.NDArray[np.intp],
         min_edge_distance: float,
-    ) -> tuple[np.ndarray, list]:
+    ) -> tuple[npt.NDArray[np.float64], list[tuple[int, int]]]:
         """Filter nodes by min distance to boundary; rebuild adjacency edges."""
         valid_indices = []
         for i, (cx, cy) in enumerate(centroids):
@@ -177,13 +179,16 @@ class Triangulator:
         return centroids, adjacency_edges
 
     @staticmethod
-    def _build_edge_to_triangles(triangles: np.ndarray) -> dict:
+    def _build_edge_to_triangles(
+        triangles: npt.NDArray[np.intp],
+    ) -> dict[tuple[int, int], list[int]]:
         """Map each vertex edge to the triangle indices that contain it."""
-        edge_to_triangles = {}
+        edge_to_triangles: dict[tuple[int, int], list[int]] = {}
         for ti, tri in enumerate(triangles):
             for k in range(3):
                 a, b = tri[k], tri[(k + 1) % 3]
-                e = tuple(sorted((int(a), int(b))))
+                ia, ib = int(a), int(b)
+                e = (min(ia, ib), max(ia, ib))
                 edge_to_triangles.setdefault(e, []).append(ti)
         return edge_to_triangles
 
@@ -198,7 +203,7 @@ class UniformSampler:
         maxx: float,
         maxy: float,
         spacing: float,
-    ) -> np.ndarray:
+    ) -> npt.NDArray[np.float64]:
         """Generate 2D grid points in a bounding box with given spacing.
 
         Grid is aligned so points are spaced by `spacing`; the first point
@@ -226,7 +231,7 @@ class UniformSampler:
         return np.column_stack([xx.ravel(), yy.ravel()])
 
     @staticmethod
-    def _delaunay_edges(points: np.ndarray) -> list[tuple[int, int]]:
+    def _delaunay_edges(points: npt.NDArray[np.float64]) -> list[tuple[int, int]]:
         """Build adjacency edges from Delaunay triangulation of points.
 
         Returns list of (i, j) with i < j for each edge in the triangulation.
@@ -249,7 +254,7 @@ class UniformSampler:
         spacing: float,
         max_area: float | None = None,
         min_edge_distance: float | None = None,
-    ) -> tuple[np.ndarray, list]:
+    ) -> tuple[npt.NDArray[np.float64], list[tuple[int, int]]]:
         """Sample points uniformly inside a polygon with roughly equal spacing.
 
         Uses a regular grid with the given spacing; points outside the polygon
@@ -293,9 +298,9 @@ class UniformSampler:
     @staticmethod
     def _filter_by_boundary_distance(
         poly: Polygon,
-        points: np.ndarray,
+        points: npt.NDArray[np.float64],
         min_edge_distance: float,
-    ) -> np.ndarray:
+    ) -> npt.NDArray[np.float64]:
         """Keep only points at least min_edge_distance from the polygon boundary."""
         valid = []
         for i in range(len(points)):
