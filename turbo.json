@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalPassThroughEnv": ["IGNORE_LOGIN", "VITE_IGNORE_LOGIN"],
   "tasks": {
     "dev": {
       "cache": false,

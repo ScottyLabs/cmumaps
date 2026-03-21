@@ -1,7 +1,12 @@
+import { env } from "@/env.ts";
 import { useSession } from "@/lib/authClient";
 
 const useUser = () => {
   const { data } = useSession();
+
+  if (env.VITE_IGNORE_LOGIN) {
+    return { id: "dev-user", name: "Dev User", email: "dev@localhost" };
+  }
 
   if (data?.user) {
     return data.user;

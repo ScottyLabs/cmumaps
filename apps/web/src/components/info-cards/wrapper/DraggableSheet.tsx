@@ -43,14 +43,13 @@ const DraggableSheet = ({
 
   // updates the card status when the isCardOpen changes
   // TODO: uncomment once eateries are listed
-  // biome-ignore lint/correctness/useExhaustiveDependencies: will change once eateries are listed
   useEffect(() => {
-    // if (isCardOpen && !floor && !focusedFloor && !coordinate) {
-    //   setCardStatus(CardStates.HALF_OPEN);
-    // } else {
-    //   setCardStatus(CardStates.COLLAPSED);
-    // }
-    setCardStatus(CardStates.COLLAPSED);
+    if (isCardOpen && !floor && !focusedFloor && !coordinate) {
+      setCardStatus(CardStates.HALF_OPEN);
+    } else {
+      setCardStatus(CardStates.COLLAPSED);
+    }
+    // setCardStatus(CardStates.COLLAPSED);
   }, [isCardOpen, setCardStatus, floor, focusedFloor, coordinate]);
 
   // updates the snapping when isCardOpen or snapIndex changes

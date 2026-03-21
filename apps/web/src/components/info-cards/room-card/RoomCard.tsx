@@ -7,7 +7,7 @@ import { useBoundStore } from "@/store/index.ts";
 
 const RoomCard = () => {
   const isMobile = useIsMobile();
-  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed)();
+  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed());
   const { buildingCode, roomName, floor } = useLocationParams();
 
   // Query data

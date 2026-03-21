@@ -11,7 +11,7 @@ interface Props {
 
 const BuildingCard = ({ mapRef: _mapRef }: Props) => {
   const isMobile = useIsMobile();
-  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed)();
+  const isCardCollapsed = useBoundStore((state) => state.isCardCollapsed());
   const { buildingCode } = useLocationParams();
   const { data: buildings } = $api.useQuery("get", "/buildings");
 

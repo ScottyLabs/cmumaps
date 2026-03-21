@@ -4,6 +4,10 @@ import { z } from "zod";
 // Define the schema as an object with all of the env
 // variables and their types
 const envSchema = z.object({
+  VITE_IGNORE_LOGIN: z
+    .string()
+    .default("false")
+    .transform((val) => val === "true"),
   VITE_MAPKIT_TOKEN: z.string().optional(),
   VITE_PUBLIC_POSTHOG_HOST: z.string().optional(),
   VITE_PUBLIC_POSTHOG_KEY: z.string().optional(),

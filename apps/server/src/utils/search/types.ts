@@ -8,6 +8,7 @@ export interface Document {
   fullNameWithSpace: string;
   labelPosition: GeoCoordinate | null;
   type: "room" | "building";
+  roomType?: RoomType;
   alias: string;
   numTerms: number;
 }

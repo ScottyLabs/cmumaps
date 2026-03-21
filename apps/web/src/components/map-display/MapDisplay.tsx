@@ -12,6 +12,7 @@ import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useMapRegionChange } from "@/hooks/useMapRegionChange.ts";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { CardStates } from "@/store/cardSlice.ts";
 import { useBoundStore } from "@/store/index.ts";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
@@ -32,6 +33,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const hideSearch = useBoundStore((state) => state.hideSearch);
   const selectBuilding = useBoundStore((state) => state.selectBuilding);
   const deselectBuilding = useBoundStore((state) => state.deselectBuilding);
+  const setCardStatus = useBoundStore((state) => state.setCardStatus);
   const setIsZooming = useBoundStore((state) => state.setIsZooming);
   const queuedZoomRegion = useBoundStore((state) => state.queuedZoomRegion);
   const setQueuedZoomRegion = useBoundStore(
@@ -176,7 +178,10 @@ const MapDisplay = ({ mapRef }: Props) => {
       onLoad={handleLoad}
       onClick={handleClick}
       onLongPress={handleLongPress}
-      onRegionChangeStart={onRegionChangeStart}
+      onRegionChangeStart={() => {
+        setCardStatus(CardStates.COLLAPSED);
+        onRegionChangeStart();
+      }}
       onRegionChangeEnd={() => {
         if (queuedZoomRegion) {
           mapRef.current?.setRegionAnimated(

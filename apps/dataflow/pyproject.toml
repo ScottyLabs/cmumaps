@@ -15,6 +15,11 @@ dependencies = [
   "python-dotenv>=1.2.1",
   "requests>=2.32.5",
   "geopy>=2.4.1",
+  "shapely==2.1.1",
+  "numpy>=1.26.0",
+  "triangle==20230923",
+  "scipy==1.15.3",
+  "networkx==3.5",
 ]
 
 [dependency-groups]
@@ -59,7 +64,7 @@ lint.select = ["ALL"]
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["overpass", "arcgis.*", "geopy.*", ]
+module = ["overpass", "arcgis.*", "scipy.*", "shapely.*", "triangle", "geopy.*"]
 ignore_missing_imports = true
 
 # Upgrade all non-error rules to "error"

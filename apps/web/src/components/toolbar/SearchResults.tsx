@@ -22,6 +22,7 @@ interface SearchResultProps {
   fullNameWithSpace?: string;
   alias?: string;
   type?: string;
+  roomType?: string;
   labelPosition?: { latitude?: number; longitude?: number } | null;
   floor?: { buildingCode?: string; level?: string };
 }
@@ -100,17 +101,14 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
   );
 
   const renderRoomResult = (result: SearchResultProps) => {
-    const roomName = result.nameWithSpace?.split(" ")[1];
-    const buildingName = result.nameWithSpace?.split(" ")[0];
-    const floor = getFloorLevelFromRoomName(roomName);
-
     const icons = {
       Food: restaurantIcon,
+      Dining: restaurantIcon,
       Library: libraryIcon,
       Classroom: classroomIcon,
     };
 
-    const icon = icons[result.type as keyof typeof icons] ?? defaultIcon;
+    const icon = icons[result.roomType as keyof typeof icons] ?? defaultIcon;
 
     return (
       <>
@@ -118,14 +116,7 @@ const SearchResults = ({ searchQuery, mapRef }: Props) => {
           <img width={24} src={icon} alt="classroom" />
         </div>
         <div className="flex flex-col overflow-hidden whitespace-nowrap font-foreground-neutral-primary text-[0.875rem]">
-          {(result.type === "Food" ||
-            !(
-              buildingName &&
-              floor &&
-              buildings?.[buildingName]?.floors.includes(floor)
-            )) &&
-          result.alias &&
-          result.alias !== ""
+          {result.alias && result.alias !== ""
             ? result.alias
             : result.nameWithSpace}
         </div>

@@ -2,12 +2,17 @@ import process from "node:process";
 import { verifyToken } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
 import type { Socket } from "socket.io";
+import { env } from "../env.ts";
 
 // auth middleware for socket.io
 export const socketAuth = async (
   socket: Socket,
   next: (err?: Error) => void,
 ) => {
+  if (env.IGNORE_LOGIN) {
+    return next();
+  }
+
   try {
     const { token } = socket.handshake.auth;
     if (!token) {
