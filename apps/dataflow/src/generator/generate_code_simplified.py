@@ -43,8 +43,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from generator.sampler import Triangulator, UniformSampler
 from shapely.geometry import LineString, Polygon
+
+from generator.sampler import Triangulator, UniformSampler
 
 # Minimum polygon vertices for a valid ring / room
 MIN_POLYGON_POINTS = 3
