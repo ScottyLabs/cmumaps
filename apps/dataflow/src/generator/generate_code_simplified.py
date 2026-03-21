@@ -551,10 +551,10 @@ class GraphBuilder:
         """
         if start == goal:
             return [start]
-        heap: list[tuple[float, int, int, str | None, list[int]]] = [
-            (0.0, 0, start, None, [start]),
+        heap: list[tuple[float, int, int, str, list[int]]] = [
+            (0.0, 0, start, "", [start]),
         ]
-        seen: set[tuple[int, str | None]] = set()
+        seen: set[tuple[int, str]] = set()
         while heap:
             dist, turns, u, direction, path = heapq.heappop(heap)
             state = (u, direction)
@@ -565,10 +565,10 @@ class GraphBuilder:
                 return path
             for v, w, edge_dir in adj[u]:
                 new_turns = turns + (
-                    0 if direction is None or edge_dir == direction else 1
+                    0 if direction in ("", edge_dir) else 1
                 )
                 if (v, edge_dir) not in seen:
-                    item: tuple[float, int, int, str | None, list[int]] = (
+                    item: tuple[float, int, int, str, list[int]] = (
                         dist + w,
                         new_turns,
                         v,
