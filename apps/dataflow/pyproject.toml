@@ -20,6 +20,7 @@ dependencies = [
   "triangle==20230923",
   "scipy==1.15.3",
   "networkx==3.5",
+  "selenium>=4.0.0",
 ]
 
 [dependency-groups]
@@ -48,6 +49,7 @@ packages = [
   "src/processor",
   "src/scraper",
   "src/serializer",
+  "src/utils",
 ]
 
 [project.scripts]

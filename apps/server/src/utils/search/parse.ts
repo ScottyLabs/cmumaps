@@ -21,7 +21,7 @@ function trigrams(s: string): string[] {
  */
 export function parseQuery(query: string): string[] {
   const cleanedQuery = query.trim().toLowerCase();
-  const nonAlphanumRegex = /[^a-zA-Z0-9 ]/g;
+  const nonAlphanumRegex = /[^a-zA-Z0-9 ]/gu;
   const splitQuery = cleanedQuery.split(nonAlphanumRegex);
 
   const allTrigrams = splitQuery.flatMap((term) => {

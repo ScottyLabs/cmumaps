@@ -164,7 +164,7 @@ export const calculateAngle = (
 export const geoNodeToNavPathNode = (geoNode: GeoNode): NavPathNode => ({
   neighbors: geoNode.neighbors,
   coordinate: geoNode.pos,
-  roomId: geoNode.roomId || "outside",
+  roomId: geoNode.roomId ?? "outside",
   id: geoNode.id,
   floor: geoNode.floor
     ? {

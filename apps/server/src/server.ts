@@ -24,7 +24,7 @@ app.use(express.json({ limit: "1mb" }));
 // Define CORS options
 const corsOptions: CorsOptions = {
   origin: env.ALLOWED_ORIGINS_REGEX?.split(",").map(
-    (origin) => new RegExp(origin),
+    (origin) => new RegExp(origin, "u"),
   ),
   credentials: true,
 };
@@ -59,7 +59,7 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerJson),
 );
-app.get("/openapi", (_req, res) => {
+app.get("/openapi.json", (_req, res) => {
   res.status(200).send(swaggerJson);
 });
 
