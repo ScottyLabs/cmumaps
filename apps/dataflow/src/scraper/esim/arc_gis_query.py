@@ -15,7 +15,7 @@ import json
 import sys
 from pathlib import Path
 
-from arcgis.gis import GIS
+from arcgis.gis import GIS  # ty: ignore[unresolved-import]
 
 from logger import get_app_logger
 

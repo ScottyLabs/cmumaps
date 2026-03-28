@@ -40,6 +40,7 @@
   "scripts": {
     "build": "bun build src/server.ts --outdir=dist --target=bun --sourcemap",
     "check": "tsc -b && biome check",
+    "db": "dotenv -e .env -- prisma",
     "db-generate": "prisma generate",
     "dev": "concurrently 'bun run server' 'bun run tsoa:watch' 'bun run openapi:watch'",
     "dev:host": "bun run dev",

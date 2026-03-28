@@ -2,10 +2,9 @@
 
 from collections.abc import Callable
 
-import dotenv
-
 from clients import ALL_TABLE_NAMES, TableName, get_api_client_singleton
 from logger import log_operation, print_section
+from utils.env import load_dataflow_dotenv
 
 from .tables import (
     populate_alias_table,
@@ -16,7 +15,7 @@ from .tables import (
     populate_room_table,
 )
 
-dotenv.load_dotenv()
+load_dataflow_dotenv()
 
 
 def populate_table(

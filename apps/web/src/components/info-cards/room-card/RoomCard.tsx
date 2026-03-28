@@ -1,6 +1,8 @@
 import { $api } from "@/api/client";
+import { RestroomStarRating } from "@/components/info-cards/room-card/RestroomStarRating.tsx";
 import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
+import { env } from "@/env.ts";
 import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useBoundStore } from "@/store/index.ts";
@@ -75,6 +77,9 @@ const RoomCard = () => {
       <div className="mx-3 mt-2">
         {renderTitle()}
         {renderSchedule()}
+        {env.VITE_CMUSHITS && room.type === "Restroom" && (
+          <RestroomStarRating roomId={room.id} />
+        )}
       </div>
       <ButtonsRow />
     </>

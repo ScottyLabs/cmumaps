@@ -9,6 +9,10 @@ import "./index.css";
 import { NuqsAdapter } from "nuqs/adapters/react";
 import posthog from "posthog-js";
 
+if (env.VITE_CMUSHITS) {
+  document.title = "CMU Shits";
+}
+
 // Initialize Posthog https://posthog.com/docs/libraries/react
 posthog.init(env.VITE_PUBLIC_POSTHOG_KEY || "", {
   // biome-ignore lint/style/useNamingConvention: posthog config is in snake_case

@@ -8,6 +8,10 @@ const envSchema = z.object({
     .string()
     .default("false")
     .transform((val) => val === "true"),
+  VITE_CMUSHITS: z
+    .string()
+    .default("false")
+    .transform((val) => val === "true"),
   VITE_MAPKIT_TOKEN: z.string().optional(),
   VITE_PUBLIC_POSTHOG_HOST: z.string().optional(),
   VITE_PUBLIC_POSTHOG_KEY: z.string().optional(),

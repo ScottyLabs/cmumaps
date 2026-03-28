@@ -5,7 +5,6 @@ description = "Responsible for handling data flow for CMU Maps"
 readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
-  "arcgis>=2.4.0",
   "colorama>=0.4.6",
   "defusedxml>=0.7.1",
   "minio>=7.2.20",
@@ -16,6 +15,9 @@ dependencies = [
   "requests>=2.32.5",
   "selenium>=4.0.0",
 ]
+
+[project.optional-dependencies]
+esim = ["arcgis>=2.4.0"]
 
 [dependency-groups]
 dev = [

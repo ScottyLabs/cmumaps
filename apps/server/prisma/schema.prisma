@@ -39,19 +39,33 @@ model Floor {
 }
 
 model Room {
-  roomId         String  @id
-  name           String
-  type           String
-  labelLatitude  Float
-  labelLongitude Float
-  polygon        Json
-  buildingCode   String?
-  floorLevel     String?
-  aliases        Alias[]
-  nodes          Node[]
-  floor          Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+  roomId          String            @id
+  name            String
+  type            String
+  labelLatitude   Float
+  labelLongitude  Float
+  polygon         Json
+  buildingCode    String?
+  floorLevel      String?
+  aliases         Alias[]
+  nodes           Node[]
+  floor           Floor?            @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+  restroomRatings RestroomRating[]
 
   @@index([buildingCode, floorLevel])
+}
+
+model RestroomRating {
+  id        String   @id @default(cuid())
+  roomId    String
+  userSub   String
+  stars     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  room      Room     @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
+
+  @@unique([roomId, userSub])
+  @@index([roomId])
 }
 
 model Alias {

@@ -4,10 +4,11 @@ import json
 import os
 from typing import Any
 
-from dotenv import load_dotenv
 from minio import Minio
 
-load_dotenv()
+from utils.env import load_dataflow_dotenv
+
+load_dataflow_dotenv()
 
 access_key = os.getenv("S3_ACCESS_KEY")
 secret_key = os.getenv("S3_SECRET_KEY")

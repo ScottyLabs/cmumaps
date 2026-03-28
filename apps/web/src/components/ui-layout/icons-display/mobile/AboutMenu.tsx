@@ -1,3 +1,5 @@
+import { env } from "@/env.ts";
+
 interface Props {
   lowerHeight: number;
 }
@@ -8,7 +10,7 @@ const AboutMenu = ({ lowerHeight }: Props) => (
     style={{ bottom: lowerHeight }}
   >
     <div className="w-full py-2 text-center font-bold text-xl">
-      About CMU Maps
+      About {env.VITE_CMUSHITS ? "CMU Shits" : "CMU Maps"}
     </div>
     <div className="flex w-full justify-center py-2 text-lg">
       <a

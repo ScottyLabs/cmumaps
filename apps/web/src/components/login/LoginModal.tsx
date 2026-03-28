@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+import { env } from "@/env.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
 import { useUser } from "@/hooks/useUser.ts";
 import { signIn } from "@/lib/authClient.ts";
 import { useBoundStore } from "@/store/index.ts";
 
 const LoginModal = () => {
+  const appName = env.VITE_CMUSHITS ? "CMU Shits" : "CMU Maps";
   const user = useUser();
   const isLoginOpen = useBoundStore((state) => state.isLoginOpen);
   const hideLogin = useBoundStore((state) => state.hideLogin);
@@ -25,9 +27,9 @@ const LoginModal = () => {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-white p-4">
-        <h2 className="font-bold text-2xl text-black">CMU Maps</h2>
+        <h2 className="font-bold text-2xl text-black">{appName}</h2>
         <p className="text-gray-500 text-sm">
-          CMU Maps is built with ❤ by ScottyLabs. Find out more about us{" "}
+          {appName} is built with ❤ by ScottyLabs. Find out more about us{" "}
           <a
             href="https://www.scottylabs.org/"
             className="underline"

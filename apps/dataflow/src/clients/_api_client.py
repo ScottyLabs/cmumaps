@@ -1,3 +1,4 @@
+import contextlib
 import os
 from functools import lru_cache
 from typing import Any, Literal
@@ -86,19 +87,32 @@ class ApiClient:
             headers={"Authorization": f"Bearer {self._get_token()}"},
             timeout=self.TIMEOUT,
         )
-        return response.status_code == self.SUCCESS_STATUS_CODE
+        if response.status_code != self.SUCCESS_STATUS_CODE:
+            detail = response.text
+            with contextlib.suppress(ValueError):
+                detail = str(response.json())
+            msg = f"Failed to drop tables ({response.status_code}): {detail}"
+            self.logger.critical(msg)
+            raise RuntimeError(msg)
+        return True
 
     def populate_table(self, table_name: TableName, data: list[dict[str, Any]]) -> bool:
         """Populate a table with the given data."""
+        # OpenAPI paths are lowercase (e.g. /populate-table/building).
+        path = table_name.lower()
         response = requests.post(
-            f"{self.server_url}/populate-table/{table_name}",
+            f"{self.server_url}/populate-table/{path}",
             json=data,
             headers={"Authorization": f"Bearer {self._get_token()}"},
             timeout=self.TIMEOUT,
         )
 
         if response.status_code != self.SUCCESS_STATUS_CODE:
-            msg = f"Failed to populate {table_name} table: {response.json()}"
+            try:
+                body = response.json()
+            except ValueError:
+                body = response.text
+            msg = f"Failed to populate {table_name} table: {body}"
             raise RuntimeError(msg)
 
         return True

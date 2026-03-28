@@ -22,6 +22,7 @@ export const MEMBER_SCOPE = "cmumaps-members";
 declare module "express" {
   interface Request {
     authErrors?: HttpError[];
+    user?: Express.User;
   }
 }
 
