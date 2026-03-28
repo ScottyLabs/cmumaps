@@ -71,7 +71,6 @@ const MapDisplay = ({ mapRef }: Props) => {
   }, [error]);
 
   //Zoom on url param building/room location
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Should only fire on page load
   useEffect(() => {
     if (!mapRef.current) return;
     if (buildingCode) {

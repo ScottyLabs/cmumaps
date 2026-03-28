@@ -234,7 +234,6 @@ const NavLine = ({ map }: Props) => {
   ]);
 
   // render the polylines so they stay on top
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render whenever new floor is focused so line is not covered
   useEffect(() => {
     if (pathOverlay) {
       if (isNavOpen) {

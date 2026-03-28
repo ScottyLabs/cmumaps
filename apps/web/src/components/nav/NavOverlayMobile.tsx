@@ -53,7 +53,6 @@ const NavOverlayMobile = ({
   };
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: must adjust scroll position once the direction list is shown
   useEffect(() => {
     if (scrollRef.current)
       scrollRef.current.scrollTop = 44 * (instructionIndex - 1);

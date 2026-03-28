@@ -25,8 +25,6 @@ const CoordinatePin = ({ map }: Props) => {
   } | null>(null);
 
   // Zoom on focused coordinate if there is one
-  /* biome-ignore lint/correctness/useExhaustiveDependencies: Should only zoom when coordinate changes
-   * or when map first loads */
   useEffect(() => {
     if (coordinate) {
       setPrevCoordinate(coordinate);

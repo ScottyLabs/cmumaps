@@ -107,7 +107,6 @@ const NavOverlay = ({
 
   // On page load, if the destination is a non-public room and the user is not signed in, show the login modal
   // Public buildings (e.g., CUC) are allowed for unauthenticated users via the public pathfinding API
-  // biome-ignore lint/correctness/useExhaustiveDependencies: should only fire on page load/dstType change
   useEffect(() => {
     if (!user) {
       // Only check for auth if the building code is known (not undefined)
