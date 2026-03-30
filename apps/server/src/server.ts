@@ -69,6 +69,74 @@ app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
+// TODO: remove — temporary debug endpoint for auth investigation
+app.get("/debug-auth", async (_req, res) => {
+  const token = _req.headers.authorization?.split(" ")[1];
+  if (!token) return res.json({ error: "no token" });
+
+  const jwt = await import("jsonwebtoken");
+  const jwksClient = await import("jwks-rsa");
+
+  const client = jwksClient.default({
+    jwksUri: env.AUTH_JWKS_URI,
+    timeout: 5000,
+  });
+
+  const result: Record<string, unknown> = {
+    authClientId: env.AUTH_CLIENT_ID,
+    authIssuer: env.AUTH_ISSUER,
+    jwksUri: env.AUTH_JWKS_URI,
+  };
+
+  try {
+    const decoded = jwt.default.decode(token, { complete: true });
+    result.tokenKid = (decoded?.header as unknown as Record<string, unknown>)?.kid;
+    result.tokenAud = (decoded?.payload as Record<string, unknown>)?.aud;
+    result.tokenIss = (decoded?.payload as Record<string, unknown>)?.iss;
+  } catch (e) {
+    result.decodeError = String(e);
+  }
+
+  try {
+    const kid = (jwt.default.decode(token, { complete: true })?.header as unknown as Record<string, unknown>)?.kid as string;
+    const key = await client.getSigningKey(kid);
+    result.jwksOk = true;
+    result.keyId = key.kid;
+  } catch (e) {
+    result.jwksOk = false;
+    result.jwksError = String(e);
+  }
+
+  await new Promise<void>((resolve) => {
+    jwt.default.verify(
+      token,
+      (header, callback) => {
+        // biome-ignore lint/style/noNonNullAssertion: debug endpoint
+        client.getSigningKey(header.kid!, (err, key) => {
+          if (err || !key) {
+            result.verifyKeyError = String(err);
+            callback(err || new Error("no key"), undefined);
+            return;
+          }
+          callback(null, key.getPublicKey());
+        });
+      },
+      { issuer: env.AUTH_ISSUER, audience: env.AUTH_CLIENT_ID },
+      (error, decoded) => {
+        if (error) {
+          result.verifyError = error.message;
+        } else {
+          result.verifyOk = true;
+          result.groups = (decoded as Record<string, unknown>)?.groups;
+        }
+        resolve();
+      },
+    );
+  });
+
+  res.json(result);
+});
+
 // Error Handling and Not Found Handlers
 app.use(errorHandler as ErrorRequestHandler);
 app.use(notFoundHandler);

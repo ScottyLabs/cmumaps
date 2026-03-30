@@ -1,11 +1,12 @@
 // https://github.com/adamhl8/configs/blob/main/generate-biome-rules.ts
 /** biome-ignore-all lint/style/useNamingConvention: some rules violate this rule */
 /** biome-ignore-all lint/nursery/useAwaitThenable: external script style */
+import { readFile } from "node:fs/promises";
 import { mergeDeep } from "remeda";
 
 /*
  * This script does the following:
- * - Fetches the latest biome schema from `https://biomejs.dev/schemas/latest/schema.json`
+ * - Loads the Biome schema from the installed `@biomejs/biome` package (must match package.json)
  * - Based on that schema, generates a Biome `linter.rules` object where all the rules are set to `"on"` (`allRules`)
  * - Merges the `OVERRIDES` object into `allRules` (`mergedRules`)
  * - Replaces the `linter.rules` object in the Biome config at `BIOME_CONFIG_PATH` with `mergedRules`
@@ -168,48 +169,18 @@ const OVERRIDES = {
   },
 };
 
-// Need to be fault tolerant due to multiple ECONNRESET errors in CI
-async function fetchLatestBiomeSchema(
-  retries = 5,
-  delayMs = 5000,
-): Promise<BiomeSchema> {
-  const url = "https://biomejs.dev/schemas/latest/schema.json";
-
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      console.log(
-        `Fetching latest Biome schema (attempt ${attempt}/${retries})`,
-      );
-
-      const response = await fetch(url, {
-        verbose: attempt === retries,
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch schema: ${response.status} ${response.statusText}`,
-        );
-      }
-
-      return (await response.json()) as BiomeSchema;
-    } catch (error) {
-      console.error(
-        `Failed to fetch latest Biome schema (attempt ${attempt}/${retries}): ${error}`,
-      );
-
-      if (attempt < retries) {
-        await new Promise((resolve) => setTimeout(resolve, delayMs * attempt));
-      }
-    }
-  }
-
-  throw new Error(
-    `Unable to fetch latest Biome schema after ${retries} attempts`,
+async function loadBiomeSchema(): Promise<BiomeSchema> {
+  const schemaUrl = new URL(
+    "../../node_modules/@biomejs/biome/configuration_schema.json",
+    import.meta.url,
   );
+  const raw = await readFile(schemaUrl, "utf-8");
+  return JSON.parse(raw) as BiomeSchema;
 }
 
 export async function generateRules() {
-  const schema = await fetchLatestBiomeSchema();
+  console.log("Loading Biome schema from installed @biomejs/biome");
+  const schema = await loadBiomeSchema();
   const ruleGroupName = Object.keys(schema.$defs.Rules.properties).filter(
     (key) => key !== "recommended",
   );

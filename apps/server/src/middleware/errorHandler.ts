@@ -36,9 +36,9 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  // The authentication errors takes the highest priority
+  // Only surface auth errors when authentication actually failed (no user resolved)
   const firstAuthError = req.authErrors?.[0];
-  if (req.authErrors && firstAuthError) {
+  if (!req.user && req.authErrors && firstAuthError) {
     // the most relevant error is the one with the highest status code
     // 500 (invalid security name here) > 403 Forbidden > 401 Unauthorized
     const errorToReturn = req.authErrors.reduce(
