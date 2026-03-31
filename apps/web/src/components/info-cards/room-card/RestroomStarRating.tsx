@@ -37,6 +37,9 @@ const RestroomStarRating = ({ roomId }: Props) => {
         await queryClient.invalidateQueries({
           queryKey: ["get", "/restroom-ratings/{roomId}/mine"],
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["get", "/restroom-ratings/leaderboard"],
+        });
       },
     },
   );

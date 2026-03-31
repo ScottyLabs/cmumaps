@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import searchIcon from "@/assets/icons/search.svg";
+import { BestBathroomsCard } from "@/components/toolbar/BestBathroomsCard.tsx";
 import { SearchResults } from "@/components/toolbar/SearchResults.tsx";
+import { env } from "@/env.ts";
 import { useAutofillSearchQuery } from "@/hooks/useAutofillSearchQuery.ts";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
@@ -129,6 +131,9 @@ const Searchbar = ({ mapRef }: Props) => {
         {renderInput()}
         {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
       </div>
+      {env.VITE_CMUSHITS && !isSearchOpen && (
+        <BestBathroomsCard mapRef={mapRef} />
+      )}
       {isSearchOpen && (
         <div className="h-100 overflow-y-scroll rounded-lg">
           <SearchResults mapRef={mapRef} searchQuery={searchQuery} />

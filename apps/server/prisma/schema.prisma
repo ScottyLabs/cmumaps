@@ -50,7 +50,8 @@ model Room {
   aliases         Alias[]
   nodes           Node[]
   floor           Floor?            @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
-  restroomRatings RestroomRating[]
+  restroomRatings   RestroomRating[]
+  restroomTypeVotes RestroomTypeVote[]
 
   @@index([buildingCode, floorLevel])
 }
@@ -62,6 +63,17 @@ model RestroomRating {
   stars     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  room      Room     @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
+
+  @@unique([roomId, userSub])
+  @@index([roomId])
+}
+
+model RestroomTypeVote {
+  id        String   @id @default(cuid())
+  roomId    String
+  userSub   String
+  createdAt DateTime @default(now())
   room      Room     @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
 
   @@unique([roomId, userSub])

@@ -29,7 +29,7 @@ ALL_TABLE_NAMES: list[TableName] = [
 
 
 class ApiClient:
-    TIMEOUT = 10
+    TIMEOUT = 120
     SUCCESS_STATUS_CODE = 200
 
     TOKEN_URL = (

@@ -1,4 +1,5 @@
 import { $api } from "@/api/client";
+import { IsRestroomVote } from "@/components/info-cards/room-card/IsRestroomVote.tsx";
 import { RestroomStarRating } from "@/components/info-cards/room-card/RestroomStarRating.tsx";
 import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
@@ -77,6 +78,13 @@ const RoomCard = () => {
       <div className="mx-3 mt-2">
         {renderTitle()}
         {renderSchedule()}
+        {room.type === "Default" && floorCode && (
+          <IsRestroomVote
+            roomId={room.id}
+            floorCode={floorCode}
+            localRoomType={room.type}
+          />
+        )}
         {env.VITE_CMUSHITS && room.type === "Restroom" && (
           <RestroomStarRating roomId={room.id} />
         )}

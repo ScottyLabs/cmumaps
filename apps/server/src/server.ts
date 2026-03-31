@@ -90,7 +90,9 @@ app.get("/debug-auth", async (_req, res) => {
 
   try {
     const decoded = jwt.default.decode(token, { complete: true });
-    result.tokenKid = (decoded?.header as unknown as Record<string, unknown>)?.kid;
+    result.tokenKid = (
+      decoded?.header as unknown as Record<string, unknown>
+    )?.kid;
     result.tokenAud = (decoded?.payload as Record<string, unknown>)?.aud;
     result.tokenIss = (decoded?.payload as Record<string, unknown>)?.iss;
   } catch (e) {
@@ -98,7 +100,10 @@ app.get("/debug-auth", async (_req, res) => {
   }
 
   try {
-    const kid = (jwt.default.decode(token, { complete: true })?.header as unknown as Record<string, unknown>)?.kid as string;
+    const kid = (
+      jwt.default.decode(token, { complete: true })
+        ?.header as unknown as Record<string, unknown>
+    )?.kid as string;
     const key = await client.getSigningKey(kid);
     result.jwksOk = true;
     result.keyId = key.kid;

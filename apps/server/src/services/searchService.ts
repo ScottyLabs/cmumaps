@@ -42,6 +42,10 @@ async function getOrBuildSearchContext() {
   return searchContextCache;
 }
 
+export function invalidateSearchContextCache(): void {
+  searchContextCache = null;
+}
+
 export const searchService = {
   async search(
     query: string,
