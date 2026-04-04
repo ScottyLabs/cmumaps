@@ -2,6 +2,7 @@ interface Props {
   boothType: string;
   horizontal: boolean;
   name: string;
+  onClick: () => void;
   orgType: string;
   theme: string;
 }
@@ -16,18 +17,32 @@ const BoothEventCard = ({
   boothType,
   horizontal,
   name,
+  onClick,
   orgType,
   theme,
 }: Props) => {
+  const shouldUseWideLayout = horizontal && theme.length > 22;
+  const badgeClassName = "rounded-md px-2 py-1 font-bold text-sm ";
+  const cardWidthClass = horizontal
+    ? shouldUseWideLayout
+      ? "w-[344px] min-w-[344px]"
+      : "w-[300px] min-w-[300px]"
+    : "block w-full";
+
   const renderBadge = (label: string, className: string) => (
-    <span className={`rounded-md px-2 py-1 font-bold text-sm ${className}`}>
-      {label}
-    </span>
+    <span className={badgeClassName + className}>{label}</span>
   );
 
   return (
-    <article
-      className={`rounded-2xl border border-stroke-neutral-1 bg-white p-3 shadow-sm ${horizontal ? "min-w-[300px]" : ""}`}
+    <button
+      type="button"
+      className={[
+        "rounded-2xl border border-stroke-neutral-1 bg-white p-3 text-left shadow-sm",
+        cardWidthClass,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      onClick={onClick}
     >
       <div className="mb-2 flex gap-2">
         {renderBadge(boothType, "bg-[#FFE3D7] text-[#E35A1C]")}
@@ -38,7 +53,7 @@ const BoothEventCard = ({
       </div>
       <h3 className="leading-tight">{name}</h3>
       <p className="mt-1 text-gray-500">Theme: {theme}</p>
-    </article>
+    </button>
   );
 };
 

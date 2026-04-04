@@ -1,4 +1,5 @@
 import { HiOutlineMap } from "react-icons/hi2";
+import { useNavigate } from "react-router";
 import boothData from "@/assets/carnival/json/booth.json" with { type: "json" };
 import { BoothEventCard } from "@/components/booth-cards/BoothEventCard.tsx";
 import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
@@ -18,6 +19,7 @@ interface BoothInfo {
 }
 
 const BoothCard = ({ cardStatus }: Props) => {
+  const navigate = useNavigate();
   const isCollapsed = cardStatus === CardStates.COLLAPSED;
   const isExpanded = cardStatus === CardStates.EXPANDED;
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
@@ -39,6 +41,13 @@ const BoothCard = ({ cardStatus }: Props) => {
     </button>
   );
 
+  const openSpecificBooth = (boothName: string) => {
+    setCardStatus(CardStates.HALF_OPEN);
+    Promise.resolve(
+      navigate(`/carnival/booth/${encodeURIComponent(boothName)}`),
+    ).catch(() => undefined);
+  };
+
   const renderBoothList = () => {
     if (isExpanded) {
       return (
@@ -49,6 +58,7 @@ const BoothCard = ({ cardStatus }: Props) => {
               horizontal={false}
               key={name}
               name={name}
+              onClick={() => openSpecificBooth(name)}
               orgType={booth.orgType}
               theme={booth.theme}
             />
@@ -65,6 +75,7 @@ const BoothCard = ({ cardStatus }: Props) => {
             horizontal={true}
             key={name}
             name={name}
+            onClick={() => openSpecificBooth(name)}
             orgType={booth.orgType}
             theme={booth.theme}
           />
