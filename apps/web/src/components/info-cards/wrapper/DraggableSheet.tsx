@@ -40,7 +40,8 @@ const DraggableSheet = ({
   );
 
   // Custom hooks
-  const { isCardOpen, floor, coordinate, buildingCode, carnivalEvent } = useLocationParams();
+  const { isCardOpen, floor, coordinate, buildingCode, carnivalEvent } =
+    useLocationParams();
   const disableBodyDrag =
     carnivalEvent === "booth" && cardStatus === CardStates.EXPANDED;
 
@@ -137,7 +138,7 @@ const DraggableSheet = ({
   };
 
   const renderHandle = () => (
-    <div 
+    <div
       className="flex h-12 shrink-0 items-center justify-between px-2"
       onPointerDown={(event) => dragControls.start(event)}
     >
