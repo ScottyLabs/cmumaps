@@ -1,8 +1,8 @@
 import { useQueryState } from "nuqs";
 import React from "react";
 import { useNavigate } from "react-router";
-import { BoothCard } from "@/components/info-cards/booth-cards/BoothCard";
-import { SpecificBoothCard } from "@/components/info-cards/booth-cards/SpecificBoothCard";
+import { BoothCard } from "@/components/booth-cards/BoothCard.tsx";
+import { SpecificBoothCard } from "@/components/booth-cards/SpecificBoothCard.tsx";
 import { BuildingCard } from "@/components/info-cards/building-card/BuildingCard.tsx";
 import { CoordinateCard } from "@/components/info-cards/coordinate-card/CoordinateCard.tsx";
 import { NavCardDesktop } from "@/components/info-cards/nav-card-desktop/NavCardDesktop.tsx";
