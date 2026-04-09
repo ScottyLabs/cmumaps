@@ -1,9 +1,11 @@
+// biome-ignore-all lint/nursery/noUnnecessaryConditions: showBoothList and showViewAllButton are temporarily set to false
 import { HiOutlineMap } from "react-icons/hi2";
 import { useNavigate } from "react-router";
 import boothData from "@/assets/carnival/json/booth.json" with { type: "json" };
-import { BoothEventCard } from "@/components/booth-cards/BoothEventCard.tsx";
+import { BoothEventCard } from "@/components/info-cards/booth-cards/BoothEventCard";
 import { ButtonsRow } from "@/components/info-cards/shared/buttons-row/ButtonsRow";
 import { InfoCardImage } from "@/components/info-cards/shared/media/InfoCardImage.tsx";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { CardStatus } from "@/store/cardSlice.ts";
 import { CardStates } from "@/store/cardSlice.ts";
 import { useBoundStore } from "@/store/index.ts";
@@ -20,13 +22,21 @@ interface BoothInfo {
 
 const BoothCard = ({ cardStatus }: Props) => {
   const navigate = useNavigate();
-  const isCollapsed = cardStatus === CardStates.COLLAPSED;
-  const isExpanded = cardStatus === CardStates.EXPANDED;
+  const isMobile = useIsMobile();
+  const isCollapsed = cardStatus === CardStates.COLLAPSED && isMobile;
+  const isExpanded = cardStatus === CardStates.EXPANDED || !isMobile;
   const setCardStatus = useBoundStore((state) => state.setCardStatus);
+
   const showImage = !isCollapsed;
-  const showBoothList = !isCollapsed;
-  const showDescription = isExpanded;
-  const showViewAllButton = !isExpanded;
+
+  // TODO: switch once booths json has been updated to include 2026 booths
+  // const showBoothList = !isCollapsed;
+  // const showViewAllButton = !isExpanded;
+  // const showDescription = isExpanded;
+
+  const showBoothList = false;
+  const showViewAllButton = false;
+  const showDescription = !isCollapsed;
 
   const booths = Object.entries(boothData as Record<string, BoothInfo>);
 
@@ -95,7 +105,7 @@ const BoothCard = ({ cardStatus }: Props) => {
   );
 
   return (
-    <>
+    <div className={isMobile ? "" : "overflow-scroll"}>
       {showImage ? (
         <InfoCardImage url="/imgs/carnival/booth.png" alt="Booth" />
       ) : null}
@@ -116,7 +126,7 @@ const BoothCard = ({ cardStatus }: Props) => {
         </>
       ) : null}
       {showBoothList ? renderBoothList() : null}
-    </>
+    </div>
   );
 };
 
