@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/nursery/noFloatingPromises: Fix floating promises */
 import type { PanInfo } from "motion/react";
-import { motion, useAnimation, useDragControls} from "motion/react";
+import { motion, useAnimation, useDragControls } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router";
