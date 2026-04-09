@@ -1,6 +1,8 @@
 import { useQueryState } from "nuqs";
 import React from "react";
 import { useNavigate } from "react-router";
+import { BoothCard } from "@/components/booth-cards/BoothCard.tsx";
+import { SpecificBoothCard } from "@/components/booth-cards/SpecificBoothCard.tsx";
 import { BuildingCard } from "@/components/info-cards/building-card/BuildingCard.tsx";
 import { CoordinateCard } from "@/components/info-cards/coordinate-card/CoordinateCard.tsx";
 import { NavCardDesktop } from "@/components/info-cards/nav-card-desktop/NavCardDesktop.tsx";
@@ -16,8 +18,10 @@ interface Props {
 
 const InfoCard = ({ mapRef }: Props) => {
   const isMobile = useIsMobile();
-  const { buildingCode, roomName, coordinate } = useLocationParams();
+  const { boothName, buildingCode, roomName, coordinate, carnivalEvent } =
+    useLocationParams();
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
+  const cardStatus = useBoundStore((state) => state.cardStatus);
 
   // TODO: determine why useNavigationParams causes constant rerenders
   const [src, setSrc] = useQueryState("src");
@@ -42,16 +46,27 @@ const InfoCard = ({ mapRef }: Props) => {
         element: () => <CoordinateCard mapRef={mapRef} />,
       };
     }
+    if (carnivalEvent === "booth" && boothName) {
+      return {
+        snapPoints: [175, 470, window.innerHeight],
+        element: () => (
+          <SpecificBoothCard boothName={boothName} cardStatus={cardStatus} />
+        ),
+      };
+    }
+    if (carnivalEvent === "booth") {
+      return {
+        snapPoints: [175, 460, window.innerHeight],
+        element: () => <BoothCard cardStatus={cardStatus} />,
+      };
+    }
     if (roomName) {
-      // TODO: should change based on if has schedule
       return {
         snapPoints: [178, 310, window.innerHeight],
         element: () => <RoomCard />,
       };
     }
     if (buildingCode) {
-      // TODO: should change based on if has food eateries
-      // eateries.length > 0 ? 460 : 288));
       return {
         snapPoints: [154, 288, window.innerHeight],
         element: () => <BuildingCard mapRef={mapRef} />,
