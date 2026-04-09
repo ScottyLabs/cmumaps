@@ -11,6 +11,7 @@ import { DraggableSheet } from "@/components/info-cards/wrapper/DraggableSheet.t
 import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useBoundStore } from "@/store/index.ts";
+import { BuggyCard } from "../buggy-cards/BuggyCard.tsx";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -56,8 +57,14 @@ const InfoCard = ({ mapRef }: Props) => {
     }
     if (carnivalEvent === "booth") {
       return {
-        snapPoints: [175, 460, window.innerHeight],
+        snapPoints: [175, 520, window.innerHeight],
         element: () => <BoothCard cardStatus={cardStatus} />,
+      };
+    }
+    if (carnivalEvent === "buggy") {
+      return {
+        snapPoints: [154, 560, window.innerHeight],
+        element: () => <BuggyCard mapRef={mapRef} />,
       };
     }
     if (roomName) {

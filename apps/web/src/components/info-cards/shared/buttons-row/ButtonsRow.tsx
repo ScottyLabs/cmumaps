@@ -3,8 +3,6 @@ import { TbXboxX } from "react-icons/tb";
 import { ShareButton } from "@/components/info-cards/shared/buttons-row/ShareButton.tsx";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
-import { CardStates } from "@/store/cardSlice";
-import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   middleButton?: React.JSX.Element;
@@ -12,8 +10,8 @@ interface Props {
 
 const ButtonsRow = ({ middleButton }: Props) => {
   const { setSrc, setDst } = useNavPaths();
-  const { buildingCode, roomName, coordinate } = useLocationParams();
-  const setCardStatus = useBoundStore((state) => state.setCardStatus);
+  const { buildingCode, roomName, coordinate, carnivalEvent } =
+    useLocationParams();
 
   const renderDirectionButton = () => {
     const isRoomAcc = false;
@@ -35,8 +33,13 @@ const ButtonsRow = ({ middleButton }: Props) => {
           } else if (coordinate) {
             setDst(`${coordinate.latitude},${coordinate.longitude}`);
             setSrc("user");
+          } else if (carnivalEvent === "booth") {
+            setDst("40.44203633912226,-79.94285420514268");
+            setSrc("user");
+          } else if (carnivalEvent === "buggy") {
+            setDst("40.44159610270523,-79.94164839194336");
+            setSrc("user");
           }
-          setCardStatus(CardStates.COLLAPSED);
         }}
       >
         {/** biome-ignore lint/nursery/noUnnecessaryConditions: need to calculate isRoomAcc later */}
