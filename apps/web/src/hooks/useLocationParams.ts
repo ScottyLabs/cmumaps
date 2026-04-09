@@ -3,12 +3,14 @@ import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { $api } from "@/api/client";
+import boothData from "@/assets/carnival/json/booth.json" with { type: "json" };
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Params {
   buildingCode?: string;
   floor?: string;
   roomName?: string;
+  boothName?: string;
   eventId?: string;
   carnivalEvent?: "booth" | "buggy" | "mobot";
   coordinate?: { latitude: number; longitude: number };
@@ -21,7 +23,9 @@ const useLocationParams = (): Params => {
   const [src, setSrc] = useQueryState("src");
 
   const path = window.location.pathname;
-  const pathSuffix = path.split("/")?.slice(1).join("/") || "";
+  const pathParts = path.split("/");
+  const [, rootSegment, secondarySegment, tertiarySegment] = pathParts;
+  const pathSuffix = pathParts.slice(1).join("/") || "";
   const suffix: string = dst && dst !== pathSuffix ? dst : pathSuffix;
 
   const navigate = useNavigate();
@@ -71,19 +75,45 @@ const useLocationParams = (): Params => {
     return { coordinate: { latitude, longitude }, isCardOpen: !dst };
   }
 
-  if (path.split("/")?.[1] === "events") {
+  if (rootSegment === "events") {
     return {
-      eventId: path.split("/")?.[2],
+      eventId: secondarySegment,
       isCardOpen: true,
     };
   }
 
-  if (path.split("/")?.[1] === "carnival") {
+  if (rootSegment === "carnival") {
+    const carnivalEvent = secondarySegment?.toLowerCase() as
+      | "booth"
+      | "buggy"
+      | "mobot";
+
+    if (carnivalEvent === "booth" && tertiarySegment) {
+      let boothName = "";
+
+      try {
+        boothName = decodeURIComponent(tertiarySegment);
+      } catch {
+        navigate("/carnival/booth");
+        toast.error("Invalid booth name");
+        return { error: "Invalid booth name" };
+      }
+
+      if (!(boothName in boothData)) {
+        navigate("/carnival/booth");
+        toast.error("Invalid booth name");
+        return { error: "Invalid booth name" };
+      }
+
+      return {
+        boothName,
+        carnivalEvent,
+        isCardOpen: true,
+      };
+    }
+
     return {
-      carnivalEvent: path.split("/")?.[2]?.toLowerCase() as
-        | "booth"
-        | "buggy"
-        | "mobot",
+      carnivalEvent,
       isCardOpen: true,
     };
   }
@@ -103,7 +133,7 @@ const useLocationParams = (): Params => {
   }
 
   if (!floor || (building && !building.floors.includes(floor))) {
-    navigate(`/${buildingCode}`);
+    navigate(`/${String(buildingCode)}`);
     toast.error("Invalid floor code");
     return { error: "Invalid floor level" };
   }
@@ -117,7 +147,7 @@ const useLocationParams = (): Params => {
   }
 
   if (!rooms[roomName]) {
-    navigate(`/${buildingCode}-${floor}`);
+    navigate(`/${String(buildingCode)}-${String(floor)}`);
     toast.error("Invalid room code");
     return { error: "Invalid room name" };
   }
