@@ -1,6 +1,7 @@
 import type { CoordinateRegion } from "mapkit-react";
 import { parseAsFloat, useQueryStates } from "nuqs";
 import { type RefObject, useEffect } from "react";
+import { useLocation } from "react-router";
 import { prefersReducedMotion } from "@/utils/prefersReducedMotion";
 
 const DECIMALS = 6;
@@ -12,6 +13,10 @@ const round = (n: number) => {
 };
 
 const useViewportParams = (mapRef: RefObject<mapkit.Map | null>) => {
+  const location = useLocation();
+  // path navigation (room/building/coordinate/event) takes precedence over viewport params
+  const isTrivialPath = location.pathname === "/";
+
   const [params, setParams] = useQueryStates(
     {
       lat: parseAsFloat,
@@ -23,6 +28,7 @@ const useViewportParams = (mapRef: RefObject<mapkit.Map | null>) => {
   );
 
   const initialRegion: CoordinateRegion | null =
+    isTrivialPath &&
     params.lat !== null &&
     params.lng !== null &&
     params.latd !== null &&
@@ -40,6 +46,9 @@ const useViewportParams = (mapRef: RefObject<mapkit.Map | null>) => {
     if (!map) {
       return;
     }
+    if (!isTrivialPath) {
+      return;
+    }
     const { region } = map;
     setParams({
       lat: round(region.center.latitude),
@@ -48,6 +57,22 @@ const useViewportParams = (mapRef: RefObject<mapkit.Map | null>) => {
       lngd: round(region.span.longitudeDelta),
     });
   };
+
+  // clear viewport params when a path-based selection takes over
+  useEffect(() => {
+    if (isTrivialPath) {
+      return;
+    }
+    if (
+      params.lat === null &&
+      params.lng === null &&
+      params.latd === null &&
+      params.lngd === null
+    ) {
+      return;
+    }
+    setParams({ lat: null, lng: null, latd: null, lngd: null });
+  }, [isTrivialPath, params, setParams]);
 
   // url -> map: react to external param changes after mount
   useEffect(() => {
@@ -79,10 +104,7 @@ const useViewportParams = (mapRef: RefObject<mapkit.Map | null>) => {
       ),
     );
     map.setRegionAnimated(target, !prefersReducedMotion());
-  }, [
-    mapRef,
-    initialRegion,
-  ]);
+  }, [mapRef, initialRegion]);
 
   return { initialRegion, writeViewport };
 };
