@@ -3,8 +3,6 @@ import { TbXboxX } from "react-icons/tb";
 import { ShareButton } from "@/components/info-cards/shared/buttons-row/ShareButton.tsx";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
-import { CardStates } from "@/store/cardSlice";
-import { useBoundStore } from "@/store/index.ts";
 
 interface Props {
   middleButton?: React.JSX.Element;
@@ -13,7 +11,6 @@ interface Props {
 const ButtonsRow = ({ middleButton }: Props) => {
   const { setSrc, setDst } = useNavPaths();
   const { buildingCode, roomName, coordinate } = useLocationParams();
-  const setCardStatus = useBoundStore((state) => state.setCardStatus);
 
   const renderDirectionButton = () => {
     const isRoomAcc = false;
@@ -36,7 +33,6 @@ const ButtonsRow = ({ middleButton }: Props) => {
             setDst(`${coordinate.latitude},${coordinate.longitude}`);
             setSrc("user");
           }
-          setCardStatus(CardStates.COLLAPSED);
         }}
       >
         {/** biome-ignore lint/nursery/noUnnecessaryConditions: need to calculate isRoomAcc later */}

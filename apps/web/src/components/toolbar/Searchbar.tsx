@@ -124,10 +124,12 @@ const Searchbar = ({ mapRef }: Props) => {
 
   return (
     <div className="flex flex-col">
-      <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white shadow-[1px_4px_4px_0_rgba(0,0,0,0.15)]">
-        {renderSearchIcon()}
-        {renderInput()}
-        {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
+      <div className="flex">
+        <div className="z-50 mb-2 flex w-full shrink-0 items-center overflow-hidden rounded-full bg-white shadow-[1px_4px_4px_0_rgba(0,0,0,0.15)]">
+          {renderSearchIcon()}
+          {renderInput()}
+          {(isSearchOpen || searchQuery.length > 0) && renderCloseButton()}
+        </div>
       </div>
       {isSearchOpen && (
         <div className="h-100 overflow-y-scroll rounded-lg">
