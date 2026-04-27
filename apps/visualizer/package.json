@@ -52,8 +52,6 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "format": "biome format",
-    "lint": "biome lint",
     "preview": "vite preview",
     "tsc": "tsc -b"
   },

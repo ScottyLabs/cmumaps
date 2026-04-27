@@ -20,12 +20,8 @@
       "dependsOn": ["^start", "^build"],
       "persistent": true
     },
-    "format": {},
     "transit": {
       "dependsOn": ["^transit"]
-    },
-    "lint": {
-      "dependsOn": ["transit"]
     },
     "tsc": {
       "dependsOn": ["transit"]

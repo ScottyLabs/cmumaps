@@ -43,11 +43,9 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "check": "tsc -b && biome check",
+    "check": "tsc -b",
     "dev": "vite",
     "dev:host": "vite --host",
-    "format": "biome format",
-    "lint": "biome lint",
     "preview": "vite preview",
     "tsc": "tsc -b"
   },
