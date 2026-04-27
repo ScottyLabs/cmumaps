@@ -42,4 +42,10 @@ export class PopulateTableController {
     await populateTableService.populateEdges(data);
     return { message: "Edges populated" };
   }
+
+  @Post("/poi")
+  public async populatePois(@Body() data: any) {
+    await populateTableService.populatePois(data);
+    return { message: "POIs populated" };
+  }
 }
