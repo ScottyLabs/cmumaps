@@ -3,16 +3,13 @@ import { useQueryState } from "nuqs";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { $api } from "@/api/client";
-import boothData from "@/assets/carnival/json/booth.json" with { type: "json" };
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 
 interface Params {
   buildingCode?: string;
   floor?: string;
   roomName?: string;
-  boothName?: string;
   eventId?: string;
-  carnivalEvent?: "booth" | "buggy" | "mobot";
   coordinate?: { latitude: number; longitude: number };
   isCardOpen?: boolean;
   error?: string;
@@ -24,7 +21,7 @@ const useLocationParams = (): Params => {
 
   const path = window.location.pathname;
   const pathParts = path.split("/");
-  const [, rootSegment, secondarySegment, tertiarySegment] = pathParts;
+  const [, rootSegment, secondarySegment] = pathParts;
   const pathSuffix = pathParts.slice(1).join("/") || "";
   const suffix: string = dst && dst !== pathSuffix ? dst : pathSuffix;
 
@@ -78,42 +75,6 @@ const useLocationParams = (): Params => {
   if (rootSegment === "events") {
     return {
       eventId: secondarySegment,
-      isCardOpen: true,
-    };
-  }
-
-  if (rootSegment === "carnival") {
-    const carnivalEvent = secondarySegment?.toLowerCase() as
-      | "booth"
-      | "buggy"
-      | "mobot";
-
-    if (carnivalEvent === "booth" && tertiarySegment) {
-      let boothName = "";
-
-      try {
-        boothName = decodeURIComponent(tertiarySegment);
-      } catch {
-        navigate("/carnival/booth");
-        toast.error("Invalid booth name");
-        return { error: "Invalid booth name" };
-      }
-
-      if (!(boothName in boothData)) {
-        navigate("/carnival/booth");
-        toast.error("Invalid booth name");
-        return { error: "Invalid booth name" };
-      }
-
-      return {
-        boothName,
-        carnivalEvent,
-        isCardOpen: true,
-      };
-    }
-
-    return {
-      carnivalEvent,
       isCardOpen: true,
     };
   }
