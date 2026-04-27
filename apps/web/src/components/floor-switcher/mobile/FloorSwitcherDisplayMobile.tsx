@@ -1,8 +1,8 @@
 import type { Building } from "@cmumaps/common";
 import { animate, motion, useMotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { MdLock } from "react-icons/md";
 import { $api } from "@/api/client";
-import lockIcon from "@/assets/icons/half-lock.svg";
 import { useBoundStore } from "@/store/index.ts";
 import { FloorSwitcherCarouselMobile } from "./FloorSwitcherCarouselMobile.tsx";
 
@@ -95,8 +95,8 @@ const FloorSwitcherDisplayMobile = ({ building, initialFloorLevel }: Props) => {
   if (!hasFloorplan) {
     return (
       <div className="fixed top-1/2 flex h-78 w-68 -translate-x-1/2 -translate-y-1/2 items-center justify-center align-center">
-        <div className="btn-shadow flex items-center justify-center rounded-full bg-white/80 p-3 backdrop-blur-md">
-          <img alt="Lock Icon" src={lockIcon} />
+        <div className="btn-shadow flex items-center justify-center rounded-full bg-white/80 p-3 text-gray-600 backdrop-blur-md">
+          <MdLock size={32} />
         </div>
       </div>
     );
