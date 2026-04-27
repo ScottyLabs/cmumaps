@@ -13,6 +13,7 @@ import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useMapRegionChange } from "@/hooks/useMapRegionChange.ts";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useFocusedFloorParam } from "@/hooks/useFocusedFloorParam.ts";
 import { useViewportParams } from "@/hooks/useViewportParams.ts";
 import { CardStates } from "@/store/cardSlice.ts";
 import { useBoundStore } from "@/store/index.ts";
@@ -52,6 +53,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
   const { initialRegion, writeViewport } = useViewportParams(mapRef);
+  useFocusedFloorParam();
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst, isNavOpen } = useNavPaths();
   const { buildingCode, roomName, error } = useLocationParams();
