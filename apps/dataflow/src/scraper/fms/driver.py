@@ -145,8 +145,10 @@ def open_sites_and_expand_main_campus(wait: WebDriverWait[webdriver.Chrome]) -> 
     sites_link.click()
     print("Clicked on 'Sites' link")  # noqa: T201
 
-    campus_plus = wait.until(ec.element_to_be_clickable((By.XPATH, campus_plus_xpath)))
-    js_click(campus_plus)
+    campus_plus_elem = wait.until(
+        ec.element_to_be_clickable((By.XPATH, campus_plus_xpath)),
+    )
+    js_click(campus_plus_elem)
     print("Clicked + to expand Main Campus section")  # noqa: T201
 
 
