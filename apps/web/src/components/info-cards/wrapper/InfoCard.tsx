@@ -1,8 +1,6 @@
 import { useQueryState } from "nuqs";
 import React from "react";
 import { useNavigate } from "react-router";
-import { BoothCard } from "@/components/info-cards/booth-cards/BoothCard.tsx";
-import { SpecificBoothCard } from "@/components/info-cards/booth-cards/SpecificBoothCard.tsx";
 import { BuildingCard } from "@/components/info-cards/building-card/BuildingCard.tsx";
 import { CoordinateCard } from "@/components/info-cards/coordinate-card/CoordinateCard.tsx";
 import { NavCardDesktop } from "@/components/info-cards/nav-card-desktop/NavCardDesktop.tsx";
@@ -11,7 +9,6 @@ import { DraggableSheet } from "@/components/info-cards/wrapper/DraggableSheet.t
 import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useBoundStore } from "@/store/index.ts";
-import { BuggyCard } from "../buggy-cards/BuggyCard.tsx";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -19,10 +16,8 @@ interface Props {
 
 const InfoCard = ({ mapRef }: Props) => {
   const isMobile = useIsMobile();
-  const { boothName, buildingCode, roomName, coordinate, carnivalEvent } =
-    useLocationParams();
+  const { buildingCode, roomName, coordinate } = useLocationParams();
   const isSearchOpen = useBoundStore((state) => state.isSearchOpen);
-  const cardStatus = useBoundStore((state) => state.cardStatus);
 
   // TODO: determine why useNavigationParams causes constant rerenders
   const [src, setSrc] = useQueryState("src");
@@ -45,26 +40,6 @@ const InfoCard = ({ mapRef }: Props) => {
       return {
         snapPoints: [154],
         element: () => <CoordinateCard mapRef={mapRef} />,
-      };
-    }
-    if (carnivalEvent === "booth" && boothName) {
-      return {
-        snapPoints: [175, 470, window.innerHeight],
-        element: () => (
-          <SpecificBoothCard boothName={boothName} cardStatus={cardStatus} />
-        ),
-      };
-    }
-    if (carnivalEvent === "booth") {
-      return {
-        snapPoints: [175, 520, window.innerHeight],
-        element: () => <BoothCard cardStatus={cardStatus} />,
-      };
-    }
-    if (carnivalEvent === "buggy") {
-      return {
-        snapPoints: [154, 560, window.innerHeight],
-        element: () => <BuggyCard mapRef={mapRef} />,
       };
     }
     if (roomName) {
