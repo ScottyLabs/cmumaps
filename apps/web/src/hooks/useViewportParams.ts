@@ -1,8 +1,10 @@
 import type { CoordinateRegion } from "mapkit-react";
 import { parseAsFloat, useQueryStates } from "nuqs";
-import type { RefObject } from "react";
+import { type RefObject, useEffect } from "react";
+import { prefersReducedMotion } from "@/utils/prefersReducedMotion";
 
 const DECIMALS = 6;
+const EPSILON = 10 ** -DECIMALS;
 
 const round = (n: number) => {
   const f = 10 ** DECIMALS;
@@ -46,6 +48,41 @@ const useViewportParams = (mapRef: RefObject<mapkit.Map | null>) => {
       lngd: round(region.span.longitudeDelta),
     });
   };
+
+  // url -> map: react to external param changes after mount
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !initialRegion) {
+      return;
+    }
+    const { region } = map;
+    if (
+      Math.abs(region.center.latitude - initialRegion.centerLatitude) <
+        EPSILON &&
+      Math.abs(region.center.longitude - initialRegion.centerLongitude) <
+        EPSILON &&
+      Math.abs(region.span.latitudeDelta - initialRegion.latitudeDelta) <
+        EPSILON &&
+      Math.abs(region.span.longitudeDelta - initialRegion.longitudeDelta) <
+        EPSILON
+    ) {
+      return;
+    }
+    const target = new mapkit.CoordinateRegion(
+      new mapkit.Coordinate(
+        initialRegion.centerLatitude,
+        initialRegion.centerLongitude,
+      ),
+      new mapkit.CoordinateSpan(
+        initialRegion.latitudeDelta,
+        initialRegion.longitudeDelta,
+      ),
+    );
+    map.setRegionAnimated(target, !prefersReducedMotion());
+  }, [
+    mapRef,
+    initialRegion,
+  ]);
 
   return { initialRegion, writeViewport };
 };
