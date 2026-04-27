@@ -57,6 +57,7 @@ populate-database = "deserializer:main"
 process-25live = "_25live:main"
 lint = "linter:main"
 scrape-fms = "scraper.fms:main"
+scrape-osm-pois = "scraper.osm:scrape_pois"
 
 # Supported rules https://github.com/charliermarsh/ruff/#supported-rules
 [tool.ruff]

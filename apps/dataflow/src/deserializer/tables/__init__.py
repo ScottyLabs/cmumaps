@@ -5,6 +5,7 @@ from ._building import populate_building_table
 from ._edge import populate_edge_table
 from ._floor import populate_floor_table
 from ._node import populate_node_table
+from ._poi import populate_poi_table
 from ._room import populate_room_table
 
 __all__ = [
@@ -13,5 +14,6 @@ __all__ = [
     "populate_edge_table",
     "populate_floor_table",
     "populate_node_table",
+    "populate_poi_table",
     "populate_room_table",
 ]
