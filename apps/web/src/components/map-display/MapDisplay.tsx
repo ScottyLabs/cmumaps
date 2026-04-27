@@ -13,6 +13,7 @@ import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useMapRegionChange } from "@/hooks/useMapRegionChange.ts";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useViewportParams } from "@/hooks/useViewportParams.ts";
 import { CardStates } from "@/store/cardSlice.ts";
 import { useBoundStore } from "@/store/index.ts";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
@@ -50,6 +51,7 @@ const MapDisplay = ({ mapRef }: Props) => {
   // Custom hooks
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
+  const { initialRegion, writeViewport } = useViewportParams(mapRef);
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst, isNavOpen } = useNavPaths();
   const { buildingCode, roomName, error } = useLocationParams();
@@ -160,7 +162,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     <MapkitMap
       ref={mapRef}
       token={env.VITE_MAPKIT_TOKEN || ""}
-      initialRegion={INITIAL_REGION}
+      initialRegion={initialRegion ?? INITIAL_REGION}
       includedPOICategories={[]}
       cameraBoundary={CAMERA_BOUNDARY}
       minCameraDistance={5}
@@ -195,6 +197,7 @@ const MapDisplay = ({ mapRef }: Props) => {
           setIsZooming(false);
         }
         onRegionChangeEnd();
+        writeViewport();
       }}
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
