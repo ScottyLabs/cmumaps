@@ -4,9 +4,6 @@ import { FeatureVisibility, Map as MapkitMap, MapType } from "mapkit-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { $api } from "@/api/client";
-import buggyPath from "@/assets/carnival/json/buggy-path.json" with {
-  type: "json",
-};
 import { BuildingsDisplay } from "@/components/map-display/buildings-display/BuildingsDisplay";
 import { FloorplansOverlay } from "@/components/map-display/floorplans-overlay/FloorplansOverlay.tsx";
 import { env } from "@/env.ts";
@@ -22,7 +19,6 @@ import { isInPolygon } from "@/utils/geometry";
 import { prefersReducedMotion } from "@/utils/prefersReducedMotion.ts";
 import { zoomOnObject } from "@/utils/zoomUtils";
 import { NavLine } from "../nav/NavLine.tsx";
-import { BuggyPath } from "./buggy-path/BuggyPath.tsx";
 import { CoordinatePin } from "./coordinate-pin/CoordinatePin.tsx";
 
 interface Props {
@@ -55,7 +51,7 @@ const MapDisplay = ({ mapRef }: Props) => {
     useMapRegionChange(mapRef);
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst, isNavOpen } = useNavPaths();
-  const { buildingCode, roomName, error, carnivalEvent } = useLocationParams();
+  const { buildingCode, roomName, error } = useLocationParams();
   const floorCode =
     buildingCode && roomName
       ? buildFloorCode(buildingCode, getFloorLevelFromRoomName(roomName) || "")
@@ -92,12 +88,6 @@ const MapDisplay = ({ mapRef }: Props) => {
     if (!room) return;
     zoomOnObject(mapRef.current, room.points.flat(), setIsZooming);
   }, [mapRef.current, rooms, roomName, setIsZooming]);
-
-  // Zoom on buggy path if buggy card opened
-  useEffect(() => {
-    if (!(mapRef.current && carnivalEvent === "buggy")) return;
-    zoomOnObject(mapRef.current, buggyPath, setIsZooming);
-  }, [mapRef.current, carnivalEvent, setIsZooming]);
 
   // Need to keep track of usedPanning because the end of panning is a click
   // and we don't want to trigger a click when the user is panning
@@ -208,7 +198,6 @@ const MapDisplay = ({ mapRef }: Props) => {
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorplansOverlay />
-      <BuggyPath />
       <NavLine map={mapRef.current} />
       <CoordinatePin map={mapRef.current} />
     </MapkitMap>

@@ -10,8 +10,7 @@ interface Props {
 
 const ButtonsRow = ({ middleButton }: Props) => {
   const { setSrc, setDst } = useNavPaths();
-  const { buildingCode, roomName, coordinate, carnivalEvent } =
-    useLocationParams();
+  const { buildingCode, roomName, coordinate } = useLocationParams();
 
   const renderDirectionButton = () => {
     const isRoomAcc = false;
@@ -32,12 +31,6 @@ const ButtonsRow = ({ middleButton }: Props) => {
             setSrc("user");
           } else if (coordinate) {
             setDst(`${coordinate.latitude},${coordinate.longitude}`);
-            setSrc("user");
-          } else if (carnivalEvent === "booth") {
-            setDst("40.44203633912226,-79.94285420514268");
-            setSrc("user");
-          } else if (carnivalEvent === "buggy") {
-            setDst("40.44159610270523,-79.94164839194336");
             setSrc("user");
           }
         }}

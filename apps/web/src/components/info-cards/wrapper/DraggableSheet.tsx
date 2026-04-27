@@ -40,10 +40,7 @@ const DraggableSheet = ({
   );
 
   // Custom hooks
-  const { isCardOpen, floor, coordinate, buildingCode, carnivalEvent } =
-    useLocationParams();
-  const disableBodyDrag =
-    carnivalEvent === "booth" && cardStatus === CardStates.EXPANDED;
+  const { isCardOpen, floor, coordinate, buildingCode } = useLocationParams();
 
   // updates the card status when the isCardOpen changes
   // TODO: uncomment once eateries are listed
@@ -167,17 +164,12 @@ const DraggableSheet = ({
         transition={{ duration: 0.5 }}
         drag="y"
         dragControls={dragControls}
-        dragListener={!disableBodyDrag}
         onDragEnd={handleDragEnd}
         onDrag={handleDrag}
         className="flex h-dvh flex-col overflow-hidden rounded-t-xl bg-white"
       >
         {renderHandle()}
-        {disableBodyDrag ? (
-          <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
-        ) : (
-          children
-        )}
+        {children}
       </motion.div>
     </div>
   );
