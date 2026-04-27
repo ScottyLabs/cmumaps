@@ -14,9 +14,24 @@ export interface PoiInfo {
   type: PoiType;
 
   /**
-   * The node id that the POI is associated with
+   * The latitude of the POI
    */
-  nodeId: string;
+  latitude: number;
+
+  /**
+   * The longitude of the POI
+   */
+  longitude: number;
+
+  /**
+   * The building this POI sits in, if any
+   */
+  buildingCode?: string | null;
+
+  /**
+   * The floor level this POI sits on, if any
+   */
+  floorLevel?: string | null;
 }
 //#endregion
 
