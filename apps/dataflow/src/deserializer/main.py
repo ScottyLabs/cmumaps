@@ -13,6 +13,7 @@ from .tables import (
     populate_edge_table,
     populate_floor_table,
     populate_node_table,
+    populate_poi_table,
     populate_room_table,
 )
 
@@ -42,3 +43,4 @@ def main() -> None:
     populate_table("Alias", populate_alias_table)
     populate_table("Node", populate_node_table)
     populate_table("Edge", populate_edge_table)
+    populate_table("Poi", populate_poi_table)
