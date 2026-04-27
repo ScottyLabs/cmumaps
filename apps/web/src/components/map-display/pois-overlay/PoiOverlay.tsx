@@ -22,7 +22,7 @@ const PoiOverlay = ({ floor }: Props) => {
   }
 
   return Object.entries(pois).map(([poiId, poi]) => {
-    const style = getPoiTypeStyle(poi.type);
+    const { background, Icon } = getPoiTypeStyle(poi.type);
     return (
       <Annotation
         key={poiId}
@@ -32,10 +32,10 @@ const PoiOverlay = ({ floor }: Props) => {
       >
         <div
           title={poi.type || "POI"}
-          className="flex size-5 items-center justify-center rounded-full font-semibold text-white text-xs shadow"
-          style={{ background: style.background }}
+          className="flex size-5 items-center justify-center rounded-full text-white shadow"
+          style={{ background }}
         >
-          {style.label}
+          <Icon className="size-3" />
         </div>
       </Annotation>
     );
