@@ -1,4 +1,4 @@
-import type { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/common";
+import type { Graph, PdfCoordinate, Rooms } from "@cmumaps/common";
 import type Konva from "konva";
 
 import { useRef, useState } from "react";
@@ -12,7 +12,6 @@ interface Props {
   floorCode: string;
   graph: Graph;
   rooms: Rooms;
-  pois: Pois;
 }
 
 const SCALE_BY = 1.05;
@@ -22,7 +21,7 @@ const MAX_SCALE = 20;
 /**
  * Handles zooming and panning for PDF and Canvas
  */
-const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
+const ZoomPanWrapper = ({ floorCode, graph, rooms }: Props) => {
   const loadingStatus = useAppSelector((state) => state.status.loadingStatus);
 
   const [canPan, setCanPan] = useState<boolean>(true);
@@ -84,7 +83,6 @@ const ZoomPanWrapper = ({ floorCode, graph, rooms, pois }: Props) => {
         floorCode={floorCode}
         graph={graph}
         rooms={rooms}
-        pois={pois}
         setCanPan={setCanPan}
         handleWheel={handleWheel}
         handleDragMove={handleDragMove}

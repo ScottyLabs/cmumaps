@@ -1,4 +1,4 @@
-import type { Graph, PdfCoordinate, Pois, Rooms } from "@cmumaps/common";
+import type { Graph, PdfCoordinate, Rooms } from "@cmumaps/common";
 import type Konva from "konva";
 
 import { Layer, Stage } from "react-konva";
@@ -20,7 +20,6 @@ interface Props {
   floorCode: string;
   graph: Graph;
   rooms: Rooms;
-  pois: Pois;
   setCanPan: (canPan: boolean) => void;
   handleWheel: (evt: Konva.KonvaEventObject<WheelEvent>) => void;
   handleDragMove: (evt: Konva.KonvaEventObject<DragEvent>) => void;
@@ -33,7 +32,6 @@ const FloorDisplay = ({
   floorCode,
   graph,
   rooms,
-  pois,
   setCanPan,
   handleWheel,
   handleDragMove,
@@ -96,7 +94,6 @@ const FloorDisplay = ({
           floorCode={floorCode}
           graph={graph}
           rooms={rooms}
-          pois={pois}
           offset={offset}
           scale={scale}
         />

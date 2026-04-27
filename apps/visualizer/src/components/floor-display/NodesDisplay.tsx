@@ -2,7 +2,6 @@ import {
   type Graph,
   type NodeInfo,
   type PdfCoordinate,
-  type Pois,
   type Rooms,
   ValidCrossFloorEdgeTypes,
 } from "@cmumaps/common";
@@ -48,7 +47,6 @@ interface Props {
   floorCode: string;
   graph: Graph;
   rooms: Rooms;
-  pois: Pois;
   offset: PdfCoordinate;
   scale: number;
 }
@@ -57,7 +55,6 @@ const NodesDisplay = ({
   floorCode,
   graph,
   rooms,
-  pois,
   offset,
   scale,
 }: Props) => {
@@ -77,18 +74,6 @@ const NodesDisplay = ({
   const editPolygon = useAppSelector(selectEditPolygon);
   const editRoomLabel = useAppSelector((state) => state.ui.editRoomLabel);
 
-  // calculate which nodes are pois
-  const poiNodes: string[] = useMemo(
-    () =>
-      Object.keys(graph).filter((nodeId) => {
-        return (
-          Object.values(pois).filter((poiInfo) => poiInfo.nodeId === nodeId)
-            .length !== 0
-        );
-      }),
-    [graph, pois],
-  );
-
   if (!showNodes || editPolygon || editRoomLabel) {
     return;
   }
@@ -97,10 +82,6 @@ const NodesDisplay = ({
   const getFillColor = (nodeId: string) => {
     if (nodeId === selectedNodeId) {
       return "yellow";
-    }
-
-    if (poiNodes.includes(nodeId)) {
-      return "cyan";
     }
 
     const room = graph[nodeId].roomId && rooms[graph[nodeId].roomId];
