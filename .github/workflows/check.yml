@@ -47,21 +47,6 @@ jobs:
       - name: Run Syncpack
         run: bun run syncpack
 
-  biome-config-check:
-    name: Biome Config Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install remeda comment-json
-
-      - name: Check if the Biome config is up to date
-        run: bun run scripts/biome/check-config.ts
-
   bun-check:
     name: Bun Check
     runs-on: ubuntu-latest

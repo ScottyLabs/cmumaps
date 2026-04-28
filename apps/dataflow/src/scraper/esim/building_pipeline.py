@@ -5,14 +5,18 @@ building data for CMU Maps from ArcGIS and OpenStreetMap sources.
 
 Pipeline stages:
     1. arc_gis_query.py: Fetch building metadata from ArcGIS
-    2. osm_building_to_json.py: Fetch OSM data and parse building geometries
-    3. sign_abbrev_mapping.py: Create sign abbreviation to ID mapping
-    4. add_fms_id.py: Enrich buildings with FMS identifiers
+    2. fetch_osm_data.py: Fetch OSM data from Overpass API into export.osm
+    3. generate_building_info_map.py: Create building code-to-info mapping
+    4. osm_building_to_json.py: Parse OSM geometries into buildings.json
+    5. sign_abbrev_mapping.py: Create sign abbreviation to ID mapping
+    6. add_fms_id.py: Enrich buildings with FMS identifiers
 
 Input:
     - buildings.json: Existing building data with osmId mappings
 
 Output:
+    - export.osm: OpenStreetMap XML export
+    - building_info_map.json: Simplified code-to-info mapping
     - query.json: Raw ArcGIS building data
     - sign_abbrev_mapping.json: Sign abbreviation to FMS ID mapping
     - buildings.json: Final building data with geometries and FMS IDs
@@ -37,13 +41,14 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run the building pipeline from ArcGIS/OSM to buildings.json",
     )
-    parser.add_argument("--osm-file", type=Path, default=Path("export.osm"))
+    script_dir = Path(__file__).parent
+    parser.add_argument("--osm-file", type=Path, default=script_dir / "export.osm")
     parser.add_argument(
         "--downloaded-buildings",
         type=Path,
-        default=Path("buildings.json"),
+        default=script_dir / "buildings.json",
     )
-    parser.add_argument("--output", type=Path, default=Path("buildings.json"))
+    parser.add_argument("--output", type=Path, default=script_dir / "buildings.json")
     parser.add_argument(
         "--skip-arcgis",
         action="store_true",
@@ -102,14 +107,27 @@ def main() -> None:
         parsed_output = output_file
 
     try:
-        # Step 2: Parse OSM buildings
+        # Step 2: Fetch OSM data
         env = os.environ.copy()
         env["CMUMAPS_OSM_FILE"] = str(osm_file)
-        env["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(downloaded_buildings)
-        env["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(parsed_output)
-        _run([python, str(script_dir / "osm_building_to_json.py")], env=env)
+        _run([python, str(script_dir / "fetch_osm_data.py")], env=env)
 
-        # Step 3: Build sign mapping
+        # Step 3: Generate building info map
+        env_map = os.environ.copy()
+        env_map["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(downloaded_buildings)
+        env_map["CMUMAPS_BUILDING_MAPPING_OUTPUT"] = str(
+            work_dir / "building_info_map.json",
+        )
+        _run([python, str(script_dir / "generate_building_info_map.py")], env=env_map)
+
+        # Step 4: Parse OSM buildings
+        env_parse = os.environ.copy()
+        env_parse["CMUMAPS_OSM_FILE"] = str(osm_file)
+        env_parse["CMUMAPS_DOWNLOADED_BUILDINGS_JSON"] = str(downloaded_buildings)
+        env_parse["CMUMAPS_PARSED_BUILDINGS_OUTPUT"] = str(parsed_output)
+        _run([python, str(script_dir / "osm_building_to_json.py")], env=env_parse)
+
+        # Step 5: Build sign mapping
         _run([
             python,
             str(script_dir / "sign_abbrev_mapping.py"),
@@ -117,7 +135,7 @@ def main() -> None:
             "--output", str(sign_mapping_json),
         ])
 
-        # Step 4: Add FMS IDs
+        # Step 6: Add FMS IDs
         cmd = [
             python,
             str(script_dir / "add_fms_id.py"),

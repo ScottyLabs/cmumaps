@@ -8,7 +8,10 @@ export const poiService = {
       data: {
         poiId,
         type: poiInfo.type,
-        nodeId: poiInfo.nodeId,
+        latitude: poiInfo.latitude,
+        longitude: poiInfo.longitude,
+        buildingCode: poiInfo.buildingCode ?? null,
+        floorLevel: poiInfo.floorLevel ?? null,
       },
     });
   },

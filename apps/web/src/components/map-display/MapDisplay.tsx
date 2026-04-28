@@ -6,20 +6,25 @@ import { toast } from "react-toastify";
 import { $api } from "@/api/client";
 import { BuildingsDisplay } from "@/components/map-display/buildings-display/BuildingsDisplay";
 import { FloorplansOverlay } from "@/components/map-display/floorplans-overlay/FloorplansOverlay.tsx";
+import { PoisOverlay } from "@/components/map-display/pois-overlay/PoisOverlay.tsx";
 import { env } from "@/env.ts";
 import { useIsMobile } from "@/hooks/useIsMobile.ts";
 import { useLocationParams } from "@/hooks/useLocationParams.ts";
 import { useMapRegionChange } from "@/hooks/useMapRegionChange.ts";
 import { useNavigateLocationParams } from "@/hooks/useNavigateLocationParams.ts";
 import { useNavPaths } from "@/hooks/useNavigationParams.ts";
+import { useFocusedFloorParam } from "@/hooks/useFocusedFloorParam.ts";
+import { useViewportParams } from "@/hooks/useViewportParams.ts";
 import { CardStates } from "@/store/cardSlice.ts";
 import { useBoundStore } from "@/store/index.ts";
 import { buildFloorCode, getFloorLevelFromRoomName } from "@/utils/floorUtils";
 import { isInPolygon } from "@/utils/geometry";
 import { prefersReducedMotion } from "@/utils/prefersReducedMotion.ts";
-import { zoomOnObject } from "@/utils/zoomUtils";
+import { zoomOnObject, zoomOnPoint } from "@/utils/zoomUtils";
 import { NavLine } from "../nav/NavLine.tsx";
+import { GooglePhotorealisticMap } from "./GooglePhotorealisticMap.tsx";
 import { CoordinatePin } from "./coordinate-pin/CoordinatePin.tsx";
+import { MAPKIT_MAP_TYPE_BY_MODE } from "./mapViewModes.ts";
 
 interface Props {
   mapRef: React.RefObject<mapkit.Map | null>;
@@ -41,6 +46,8 @@ const MapDisplay = ({ mapRef }: Props) => {
   );
   const isNavigating = useBoundStore((state) => state.isNavigating);
   const focusedFloor = useBoundStore((state) => state.focusedFloor);
+  const mapViewMode = useBoundStore((state) => state.mapViewMode);
+  const setMapController = useBoundStore((state) => state.setMapController);
 
   // Local state
   const isMobile = useIsMobile();
@@ -49,6 +56,8 @@ const MapDisplay = ({ mapRef }: Props) => {
   // Custom hooks
   const { onRegionChangeStart, onRegionChangeEnd, showFloor } =
     useMapRegionChange(mapRef);
+  const { initialRegion, writeViewport } = useViewportParams(mapRef);
+  useFocusedFloorParam();
   const navigate = useNavigateLocationParams();
   const { setSrc, setDst, isNavOpen } = useNavPaths();
   const { buildingCode, roomName, error } = useLocationParams();
@@ -94,8 +103,45 @@ const MapDisplay = ({ mapRef }: Props) => {
   const handleLoad = () => {
     if (mapRef.current) {
       mapRef.current.addEventListener("scroll-end", () => setUsedPanning(true));
+      setMapController({
+        zoomToBounds: (points) => {
+          if (!mapRef.current) {
+            return;
+          }
+          zoomOnObject(mapRef.current, points, setIsZooming);
+        },
+        zoomToPoint: (point, offset = 0.001) => {
+          if (!mapRef.current) {
+            return;
+          }
+          zoomOnPoint(
+            mapRef.current,
+            point,
+            offset,
+            setIsZooming,
+            setQueuedZoomRegion,
+          );
+        },
+      });
     }
   };
+
+  useEffect(() => {
+    if (mapViewMode === "photorealistic3d") {
+      setMapController(null);
+    }
+  }, [mapViewMode, setMapController]);
+
+  useEffect(
+    () => () => {
+      setMapController(null);
+    },
+    [setMapController],
+  );
+
+  if (mapViewMode === "photorealistic3d") {
+    return <GooglePhotorealisticMap />;
+  }
 
   const handleClick = (e: MapInteractionEvent) => {
     if (!buildings) {
@@ -159,14 +205,14 @@ const MapDisplay = ({ mapRef }: Props) => {
     <MapkitMap
       ref={mapRef}
       token={env.VITE_MAPKIT_TOKEN || ""}
-      initialRegion={INITIAL_REGION}
+      initialRegion={initialRegion ?? INITIAL_REGION}
       includedPOICategories={[]}
       cameraBoundary={CAMERA_BOUNDARY}
       minCameraDistance={5}
       maxCameraDistance={1500}
       showsUserLocationControl={true}
       showsUserLocation={true}
-      mapType={MapType.MutedStandard}
+      mapType={MAPKIT_MAP_TYPE_BY_MODE[mapViewMode] ?? MapType.Standard}
       // paddingBottom={isMobile ? 72 : 0}
       paddingBottom={0}
       paddingLeft={4}
@@ -194,10 +240,12 @@ const MapDisplay = ({ mapRef }: Props) => {
           setIsZooming(false);
         }
         onRegionChangeEnd();
+        writeViewport();
       }}
     >
       <BuildingsDisplay map={mapRef.current} buildings={buildings} />
       <FloorplansOverlay />
+      <PoisOverlay />
       <NavLine map={mapRef.current} />
       <CoordinatePin map={mapRef.current} />
     </MapkitMap>

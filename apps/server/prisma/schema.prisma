@@ -34,6 +34,7 @@ model Floor {
   building        Building @relation(fields: [buildingCode], references: [buildingCode])
   nodes           Node[]
   rooms           Room[]
+  pois            Poi[]
 
   @@id([buildingCode, floorLevel])
 }
@@ -74,7 +75,6 @@ model Node {
   inEdges      Edge[]  @relation("InEdges")
   floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
   room         Room?   @relation(fields: [roomId], references: [roomId])
-  poi          Poi?
 
   @@index([buildingCode, floorLevel])
 }
@@ -89,8 +89,13 @@ model Edge {
 }
 
 model Poi {
-  poiId  String @id
-  type   String
-  nodeId String @unique
-  node   Node   @relation(fields: [nodeId], references: [nodeId])
+  poiId        String  @id
+  type         String
+  latitude     Float
+  longitude    Float
+  buildingCode String?
+  floorLevel   String?
+  floor        Floor?  @relation(fields: [buildingCode, floorLevel], references: [buildingCode, floorLevel])
+
+  @@index([buildingCode, floorLevel])
 }

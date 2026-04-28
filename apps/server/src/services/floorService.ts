@@ -131,17 +131,18 @@ export const floorService = {
     const floorLevel = extractFloorLevel(floorCode);
 
     const dbPois = await prisma.poi.findMany({
-      where: {
-        node: {
-          buildingCode,
-          floorLevel,
-        },
-      },
+      where: { buildingCode, floorLevel },
     });
 
     const pois: Pois = {};
     for (const poi of dbPois) {
-      pois[poi.poiId] = { type: poi.type as PoiType, nodeId: poi.nodeId };
+      pois[poi.poiId] = {
+        type: poi.type as PoiType,
+        latitude: poi.latitude,
+        longitude: poi.longitude,
+        buildingCode: poi.buildingCode,
+        floorLevel: poi.floorLevel,
+      };
     }
 
     return pois;

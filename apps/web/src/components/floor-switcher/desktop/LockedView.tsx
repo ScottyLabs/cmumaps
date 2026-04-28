@@ -1,5 +1,5 @@
 import type { Building } from "@cmumaps/common";
-import lockIcon from "@/assets/icons/half-lock.svg";
+import { MdLock } from "react-icons/md";
 
 interface Props {
   building: Building;
@@ -8,9 +8,8 @@ interface Props {
 const LockedView = ({ building }: Props) => (
   <div className="flex items-center">
     <p className="mr-4 ml-2">{building.name}</p>
-    <div className="flex items-center gap-1 rounded-r bg-gray-200 py-2 pr-1">
-      <img alt="Lock Icon" src={lockIcon} />
-      <p className="p-1 text-[#646464]">Inaccessible</p>
+    <div className="flex items-center self-stretch rounded-r bg-gray-200 px-2.5 text-gray-600">
+      <MdLock size={20} />
     </div>
   </div>
 );

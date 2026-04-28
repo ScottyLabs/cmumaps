@@ -113,11 +113,11 @@ const NavOverlay = ({
       // Only check for auth if the building code is known (not undefined)
       // A room needs auth if it's a Room type with a known building code that is NOT public
       const srcNeedsAuth =
-        srcType === "Room" &&
+        (srcType === "Room" || srcType === "Floor") &&
         srcBuildingCode &&
         !isPublicBuilding(srcBuildingCode);
       const dstNeedsAuth =
-        dstType === "Room" &&
+        (dstType === "Room" || dstType === "Floor") &&
         dstBuildingCode &&
         !isPublicBuilding(dstBuildingCode);
       if (srcNeedsAuth || dstNeedsAuth) {

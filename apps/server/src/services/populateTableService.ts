@@ -36,4 +36,8 @@ export const populateTableService = {
   populateEdges: async (data: any) => {
     await prisma.edge.createMany({ data });
   },
+
+  populatePois: async (data: any) => {
+    await prisma.poi.createMany({ data, skipDuplicates: true });
+  },
 };

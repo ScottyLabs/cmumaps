@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "biomejs.biome",
     "bradlc.vscode-tailwindcss",
     "charliermarsh.ruff",
     "ms-python.mypy-type-checker",

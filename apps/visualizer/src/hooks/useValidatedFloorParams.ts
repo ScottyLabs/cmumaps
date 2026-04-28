@@ -64,25 +64,15 @@ const useValidatedFloorParams = (floorCode: string): FloorParamsResult => {
     }
 
     if (poiId) {
-      // nodeId can be the nodeId of the poi
-      const nodeId = pois[poiId].nodeId;
-
-      // roomId can be the roomId of the node
-      const roomId = graph[nodeId].roomId;
-
-      return { poiId, nodeId, roomId };
+      // pois are not anchored to nodes; room is resolved from coords
+      return { poiId };
     }
 
     if (nodeId) {
-      // poiId can be the poiId of the node
-      const poiId = Object.entries(pois).find(
-        (poi) => poi[1].nodeId === nodeId,
-      )?.[0];
-
       // roomId can be the roomId of the node
       const roomId = graph[nodeId].roomId;
 
-      return { nodeId, poiId, roomId };
+      return { nodeId, roomId };
     }
 
     return {};
