@@ -143,6 +143,7 @@ const GooglePhotorealisticMap = () => {
   const zoomTimeoutRef = useRef<number | null>(null);
 
   const [isMapReady, setIsMapReady] = useState(false);
+  const [isLibraryReady, setIsLibraryReady] = useState(false);
   const [prevCoordinate, setPrevCoordinate] = useState<MapCoordinate | null>(
     null,
   );
@@ -292,6 +293,7 @@ const GooglePhotorealisticMap = () => {
           return;
         }
         maps3dLibraryRef.current = imported;
+        setIsLibraryReady(true);
       } catch (error) {
         if (!isCancelled) {
           console.error(error);
@@ -359,7 +361,7 @@ const GooglePhotorealisticMap = () => {
       mapElementRef.current = null;
       setIsMapReady(false);
     };
-  }, [setMapController, zoomToBounds, zoomToPoint]);
+  }, [isLibraryReady, setMapController, zoomToBounds, zoomToPoint]);
 
   useEffect(() => {
     if (locationParamError) {
