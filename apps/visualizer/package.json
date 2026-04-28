@@ -45,7 +45,7 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "globals": "^16.5.0",
     "openapi-typescript": "^7.10.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vite": "^7.0.4"
   },
   "private": true,

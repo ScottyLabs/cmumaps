@@ -33,7 +33,7 @@
     "prisma": "^6.18.0",
     "tsoa": "^6.6.0",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "keywords": [],
   "license": "ISC",
