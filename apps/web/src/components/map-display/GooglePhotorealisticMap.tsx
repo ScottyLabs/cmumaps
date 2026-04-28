@@ -335,7 +335,6 @@ const GooglePhotorealisticMap = () => {
       bounds: CMU_CAMERA_BOUNDS,
       mode: maps3dLibrary.MapMode?.HYBRID ?? "HYBRID",
       gestureHandling: "GREEDY",
-      hideDefaultUI: false,
     });
 
     mapElement.style.width = "100%";
