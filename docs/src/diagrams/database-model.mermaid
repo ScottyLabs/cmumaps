@@ -1,0 +1,67 @@
+---
+config:
+  layout: elk
+---
+erDiagram
+	direction LR
+	Building {
+		string buildingCode PK ""  
+		string name  ""  
+		int defaultOrdinal  ""  
+		string osmId  ""  
+		float labelLatitude  ""  
+		float labelLongitude  ""  
+		string shape  ""  
+		string hitbox  ""  
+	}
+	Floor {
+		string buildingCode PK ""  
+		int floorLevel PK ""  
+		bool isDefault  ""  
+		float centerX  ""  
+		float centerY  ""  
+		float centerLatitude  ""  
+		float centerLongitude  ""  
+		float scale  ""  
+		float angle  ""  
+		float altitude  ""  
+	}
+	FloorConnection {
+	}
+	Complex {
+		string Name PK ""  
+	}
+	Room {
+		string roomId PK ""  
+		string name  ""  
+		string type  ""  
+		float labelLatitude  ""  
+		float labelLongitude  ""  
+		string polygon  ""  
+	}
+	Alias {
+		string alias PK ""  
+		bool isDisplayAlias  ""  
+	}
+	Node {
+		string nodeId PK ""  
+		float latitude  ""  
+		float longitude  ""  
+	}
+	Edge {
+	}
+	Poi {
+		string poiId PK ""  
+		string type  ""  
+	}
+
+	Building||--o{Floor:"has"
+	Floor||--o{FloorConnection:"are connected by"
+	Floor||--o{Room:"has"
+	%% Floor}o--||Complex:"belongs_to"
+	Floor||--o{Node:"has"
+	Complex||--o{Room:"has"
+	Room||--o{Alias:"has"
+	Room||--o{Node:"has"
+	Node||--o{Edge:"are connected by"
+	Node||--||Poi:"is"
