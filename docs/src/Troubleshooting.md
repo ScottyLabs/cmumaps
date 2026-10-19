@@ -17,7 +17,7 @@ must use Linux containers. The script uses the active Docker context; check
 OIDC login authenticates your identity; it does not grant every path. This setup
 reads KV v2 mount `secret`, path `secretspec/maps/dev/<NAME>`, field `value`.
 The older `ScottyLabs/cmumaps/local/server` path is not used by the new launcher.
-Ask the team to check your Maps development policies and that all six entries
+Ask the team to check your Maps development policies and that all eleven entries
 listed in the running guide exist. A failed fetch leaves existing env files intact.
 Do not paste tokens or secret values into logs or issues.
 
@@ -75,12 +75,17 @@ login does not prove that the service account can populate data.
 
 ## Missing maps, routes, or floorplans
 
-Startup creates a schema and an empty bucket; it does not load a dataset. Follow
-the upload/population steps in the running guide. If an import fails validation,
+Startup creates the local schema but does not load a dataset. Run `dev.py secrets`
+to refresh CDN credentials, then follow the hosted population steps in the running
+guide. Check that the four `floorplans/*.json` objects exist in the allocated bucket;
+raw `source-fetch/` files cannot be imported directly. A CDN 403 indicates storage
+access issues, separate from Keycloak backend authorization. Missing credentials
+or objects do not fall back to legacy storage and do not clear the local database.
+For an isolated dataset, upload to Garage and use `populate --source garage`. If an import fails validation,
 correct the source files before retrying. If it fails after clearing tables,
 retry the complete import after resolving the error. Restart the backend after a
-successful import to rebuild its cached graph/search index. SVG assets and POIs
-are not supplied by the four required JSON files.
+successful import to rebuild its cached graph/search index. POIs require their optional dataset; floorplan geometry is rendered from the
+imported room records rather than raw SVGs.
 
 ## Windows line endings, file watching, and paths
 

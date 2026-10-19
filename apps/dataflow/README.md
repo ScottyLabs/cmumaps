@@ -13,28 +13,39 @@ uv run --env-file <ENV_FILE> <SCRIPT_NAME>
 ## Local database import
 
 Start the devcontainer and backend using the [running guide](../../docs/src/Setup.md).
-Then, from the repository root on the host (use `py -3` in Windows PowerShell):
+The host launcher downloads CDN settings from OpenBao into this app's ignored env
+files. From the repository root (use `py -3` in Windows PowerShell):
 
 ```sh
-python3 scripts/dev/dev.py upload "uploads/Data/cmumaps-data/floorplans"
+python3 scripts/dev/dev.py secrets
 python3 scripts/dev/dev.py populate --check
 python3 scripts/dev/dev.py populate
 ```
 
-The upload folder must contain `buildings.json`, `floorplans.json`,
-`placements.json`, and `all-graph.json`. Import validates these datasets and
-backend authorization before clearing the seven map tables. POIs are left empty
-unless `--include-pois` is supplied and `osm-pois.json` is available. Restart the
-backend after import to refresh its search and graph caches. A failure after the
-reset can leave a partial import; the whole operation is not transactional.
+By default this reads `floorplans/buildings.json`, `floorplans/floorplans.json`,
+`floorplans/placements.json`, and `floorplans/all-graph.json` from the allocated
+hosted CDN bucket (`cdn-maps`). It uses S3 credentials, not the public CDN URL, and
+writes only through the local backend API. The storage settings override inherited
+Garage variables. The importer does not upload to or modify hosted storage.
 
-The local helper loads service-account credentials from the server env file and
-uses local Garage's S3 variables. The client needs `/projects/maps/admins` in its
-Keycloak access token. It uses the minimal `populate` dependency group rather than
-installing the entire scraper/geometry toolchain. For standalone environments,
-configure `S3_ENDPOINT`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, optional `S3_BUCKET` and
-`S3_REGION`, `SERVER_URL`, `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, and `AUTH_ISSUER`.
-The script's `--local` mode enforces the development Garage endpoint and local API.
+Import validates datasets and backend authorization before clearing the seven
+local map tables. POIs are left empty unless `--include-pois` is supplied and
+`floorplans/osm-pois.json` exists. Restart the backend after import to refresh
+search and graph caches. A failure after reset can leave a partial import; the
+whole operation is not transactional. Raw `source-fetch/` artifacts are not the
+processed datasets required by this importer.
+
+For isolated experiments, `dev.py upload DIRECTORY` uploads to local Garage and
+`dev.py populate --source garage` imports from it. Local Garage remains in the
+Kennel scaffold; it is not the default data source.
+
+The local helper loads identity credentials from the server env file. The client
+needs `/projects/maps/admins` in its Keycloak access token. It uses the minimal
+`populate` dependency group, without the full scraper/geometry toolchain. The
+`--local` mode always forces the local API destination, regardless of data source.
+For a standalone import without `--local`, configure `S3_ENDPOINT`, `S3_ACCESS_KEY`,
+`S3_SECRET_KEY`, optional `S3_BUCKET` and `S3_REGION`, `SERVER_URL`, `AUTH_CLIENT_ID`,
+`AUTH_CLIENT_SECRET`, and `AUTH_ISSUER` for the intended environment explicitly.
 
 ## Validation
 

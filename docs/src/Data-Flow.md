@@ -6,11 +6,16 @@ The [running guide](Setup.md#upload-and-populate-the-local-database) describes t
 supported local pipeline:
 
 ```text
-Authorized JSON dataset -> local Garage maps/floorplans/*
+Allocated hosted CDN cdn-maps/floorplans/*.json
   -> dataflow validation + Keycloak service token
   -> backend population API -> local PostgreSQL
   -> backend restart -> search index and graph cache -> web app
 ```
+
+OpenBao provides the CDN S3 credentials. `populate` reads shared hosted data and
+writes only to the local API/database. `populate --source garage` is the optional
+isolated source. Each developer imports independently; sharing files does not
+automatically synchronize databases.
 
 The four required inputs are `buildings.json`, `floorplans.json`, `placements.json`,
 and `all-graph.json`; POIs require `osm-pois.json` and an explicit flag. Validation

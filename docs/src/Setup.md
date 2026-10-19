@@ -57,8 +57,8 @@ py -3 scripts/dev/dev.py start
 
 Open [CMU Maps](http://localhost:5173). Keep the launcher terminal open for app
 logs. First startup downloads packages and may take several minutes. The initial
-local database and bucket are empty; load an authorized dataset using the steps
-below before expecting buildings and routes.
+local database is empty; import the shared CDN dataset using the steps below
+before expecting buildings and routes.
 
 All subsequent examples use `python3`; substitute `py -3` in PowerShell.
 The old `bash scripts/dev/container.sh` command remains a macOS/Linux shortcut.
@@ -94,9 +94,9 @@ host. Do not run a second app if the host launcher already started one.
 ## What startup does
 
 1. Checks Docker/Compose and the selected Linux container engine.
-2. Checks your host OpenBao login, fetches six development values, and writes the
-   server/web `.env` and `.env.local` files. It fetches and validates all values
-   before replacing any file. This replaces local edits in those four files.
+2. Checks your host OpenBao login, fetches eleven development values, and writes the
+   server/web/dataflow `.env` and `.env.local` files. It fetches and validates all values
+   before replacing any file. This replaces local edits in those six files.
 3. Runs Compose to start PostgreSQL and the development container. The latter
    runs `devenv up`, enabling Garage and Ricochet through Kennel's Nix module.
 4. Waits for service readiness, then installs the pinned Bun/Node/OpenSSL runtimes
@@ -105,8 +105,8 @@ host. Do not run a second app if the host launcher already started one.
    `prisma db push --skip-generate` against local PostgreSQL. It does not pass
    `--accept-data-loss`; schema changes that require it need manual review.
 6. Starts the backend and web app with the container database URL overriding the
-   host-oriented value in the env file. Uploading and populating data are separate,
-   explicit commands.
+   host-oriented value in the env file. Importing data is a separate, explicit
+   command so ordinary startup does not reset your database.
 
 ## Secrets and login
 
@@ -120,10 +120,16 @@ string field named `value` in each entry:
 | `KEYCLOAK_URL`, `KEYCLOAK_REALM` | Server `AUTH_ISSUER` and `AUTH_JWKS_URI` |
 | `OAUTH_RELAY_URL` | Server OAuth callback relay URL |
 | `MAPKIT_TOKEN` | Web `VITE_MAPKIT_TOKEN` |
+| `CDN_S3_ENDPOINT` | Dataflow `S3_ENDPOINT` |
+| `CDN_S3_BUCKET` | Dataflow `S3_BUCKET` |
+| `CDN_ACCESS_KEY_ID` | Dataflow `S3_ACCESS_KEY` |
+| `CDN_SECRET_ACCESS_KEY` | Dataflow `S3_SECRET_KEY` |
+| `CDN_PUBLIC_URL` | Dataflow CDN reference URL (not a credential) |
 
 The launcher also supplies local URLs, the local PostgreSQL connection string,
 and the allowed frontend origin. The web env file contains only the MapKit token
-and `VITE_SERVER_URL`; client credentials stay in the server env files. Files are
+and `VITE_SERVER_URL`; identity client credentials stay in the server env files.
+CDN access credentials stay in the dataflow env files and never reach the browser. Files are
 ignored by Git and excluded from image builds. The OpenBao session/token remains
 on your host; it is not passed into the container. POSIX env files are owner-only;
 Windows files inherit your checkout's access controls. Never commit them.
@@ -152,38 +158,50 @@ its PostgreSQL connection to perform the authorized writes.
 
 ## Upload and populate the local database
 
-Obtain the dataset from the team and extract it under the ignored `uploads/`
-directory. Point `upload` at the folder that directly contains these files:
+The default pipeline reads the allocated hosted CDN's backing S3 bucket and writes
+to your local PostgreSQL database through the local API:
 
-| Local file | Object key in Garage's `maps` bucket |
-| --- | --- |
-| `buildings.json` | `floorplans/buildings.json` |
-| `floorplans.json` | `floorplans/floorplans.json` |
-| `placements.json` | `floorplans/placements.json` |
-| `all-graph.json` | `floorplans/all-graph.json` |
-| `osm-pois.json` (optional) | `floorplans/osm-pois.json` |
+```text
+OpenBao CDN credentials -> hosted cdn-maps/floorplans/*.json
+  -> dataflow validation + service-account token
+  -> local backend -> local PostgreSQL -> restart backend caches -> web
+```
 
-With services and the app running, use another host terminal:
+The current development allocation is bucket `cdn-maps` at
+`https://s3.scottylabs.org`, exposed publicly at `https://cdn.scottylabs.org/maps/`.
+The importer uses authenticated S3 reads, not the public HTTP URL. It overrides
+inherited local Garage/legacy storage variables with the dataflow env file and
+always targets `http://localhost` for API writes. It never uploads to or modifies
+the hosted bucket. The allocation is read from development OpenBao entries;
+this code does not provision separate development/production buckets.
+
+With the app running, use a second host terminal:
 
 ```sh
-python3 scripts/dev/dev.py upload "uploads/Data/cmumaps-data/floorplans"
 python3 scripts/dev/dev.py populate --check
 python3 scripts/dev/dev.py populate
 ```
 
-Adjust the directory to match your extraction. The upload command requires a
-folder inside the checkout and uploads only those four JSON files, replacing
-objects with the same keys. It does not upload an archive, `.git`, documentation,
-or an entire directory tree. Add `--include-pois` to both `upload` and `populate`
-to upload and import `osm-pois.json` too.
+Run `python3 scripts/dev/dev.py secrets` first if upgrading from the older setup,
+so `apps/dataflow/.env` contains the allocated CDN credentials. Missing credentials
+fail explicitly; there is no fallback to the old `cmumaps` bucket or local Garage.
+
+| Required object key in the allocated bucket | Contents |
+| --- | --- |
+| `floorplans/buildings.json` | Building metadata |
+| `floorplans/floorplans.json` | Room/floorplan geometry |
+| `floorplans/placements.json` | Floor placement data |
+| `floorplans/all-graph.json` | Navigation graph |
+| `floorplans/osm-pois.json` (optional) | Points of interest |
 
 `populate --check` downloads and validates the JSON models and references, obtains
 a Keycloak token, and sends an empty building batch to test backend authorization.
-It does not clear tables. `populate` then clears the seven map tables and imports
-buildings, floors, rooms, aliases, nodes, and edges. POIs are cleared and left empty
-unless `--include-pois` is supplied. Validation happens before clearing; a later
-network or write failure can still leave a partial import because the complete
-operation is not one transaction. Correct the issue and rerun the import.
+It does not clear tables. `populate` then clears the seven local map tables and
+imports buildings, floors, rooms, aliases, nodes, and edges. POIs are cleared and
+left empty unless `--include-pois` is supplied and their file exists in the bucket.
+Validation happens before clearing. A later network or write failure can still
+leave a partial import because the complete operation is not one transaction;
+correct the issue and rerun the import. Missing CDN objects abort before reset.
 
 After population, stop and restart the app to rebuild its in-memory search index
 and graph cache. Ctrl-C in its startup terminal, then:
@@ -192,9 +210,28 @@ and graph cache. Ctrl-C in its startup terminal, then:
 python3 scripts/dev/dev.py start --skip-secrets
 ```
 
-The JSON import does not supply missing SVG floorplan images or copy production
-CDN assets. The local upload command always targets local Garage, never
-`cdn.scottylabs.org`.
+Developers share the source dataset, not the database: each local database changes
+only when its developer imports. Publishing updated JSON to the shared bucket is
+a separate deliberate operation. Raw files under `source-fetch/` are not processed
+import datasets and are not read by this command.
+
+### Optional isolated Garage workflow
+
+Garage remains in the Kennel scaffold for local experiments and runs alongside
+the relay. It is no longer the default import source. Extract a dataset under the
+ignored `uploads/` directory, then:
+
+```sh
+python3 scripts/dev/dev.py upload "uploads/Data/cmumaps-data/floorplans"
+python3 scripts/dev/dev.py populate --source garage --check
+python3 scripts/dev/dev.py populate --source garage
+```
+
+The upload folder must be inside the checkout and directly contain the four JSON
+files listed above. `upload` writes only to local Garage's `maps` bucket, never
+the shared CDN. Add `--include-pois` to upload/import its optional file too.
+It does not upload an archive, `.git`, or a whole directory tree. The JSON import
+does not copy raw SVG assets; the web app renders floorplan geometry from the API.
 
 ## Manual run
 
@@ -256,7 +293,7 @@ Bun's Nix loader needs the Nix library, while the standalone Prisma schema engin
 uses Ubuntu's OpenSSL. The helper also removes stale `SERVER_PORT` assignments
 from server dotenv files and guards against two app instances.
 
-### 4. Upload manually (optional)
+### 4. Upload to local Garage manually (optional)
 
 Enter `devenv shell` with `python3 scripts/dev/dev.py shell`. For each required
 file, use the matching object key, for example:
@@ -269,8 +306,8 @@ curl --fail --silent --show-error \
   "${S3_ENDPOINT}/${S3_BUCKET}/floorplans/buildings.json"
 ```
 
-The upload helper repeats this for the four known filenames after checking all
-are present. [Storage configuration](../../scripts/dev/README.md) describes the
+This optional upload does not affect the default hosted import. The upload helper
+repeats this for the four known filenames after checking all are present. [Storage configuration](../../scripts/dev/README.md) describes the
 local credentials and bucket.
 
 ### 5. Populate manually (optional)
@@ -291,14 +328,16 @@ export UV_PYTHON_INSTALL_DIR=/root/.cache/cmumaps-dataflow/python
 export UV_PROJECT_ENVIRONMENT=/root/.cache/cmumaps-dataflow/venv
 cd apps/dataflow
 export PYTHONPATH=src
-uv run --locked --only-group populate python -m deserializer --local --skip-pois --check
+uv run --locked --only-group populate python -m deserializer --local --source cdn --skip-pois --check
 ```
 
-Remove `--check` to replace data; remove `--skip-pois` to include POIs. The
-`populate` dependency group avoids installing scraping/geometry tools not needed
-by the importer. The importer reads client credentials from `apps/server/.env`,
-checks that Garage is local, and calls the local backend API. Restart the app
-when finished.
+Remove `--check` to replace local data; remove `--skip-pois` to include POIs.
+Use `--source garage` only for the optional local bucket. The `populate` dependency
+group avoids installing scraping/geometry tools not needed
+by the importer. The importer reads identity credentials from `apps/server/.env`,
+overrides the shell's Garage settings with CDN credentials from `apps/dataflow/.env`, and calls
+the local backend API. With `--source garage`, it instead validates the local
+Garage endpoint and bucket. Restart the app when finished.
 
 ## Checks and maintenance
 

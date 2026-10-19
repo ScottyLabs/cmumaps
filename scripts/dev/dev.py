@@ -20,6 +20,11 @@ SECRET_NAMES = (
     "KEYCLOAK_REALM",
     "MAPKIT_TOKEN",
     "OAUTH_RELAY_URL",
+    "CDN_S3_ENDPOINT",
+    "CDN_S3_BUCKET",
+    "CDN_ACCESS_KEY_ID",
+    "CDN_SECRET_ACCESS_KEY",
+    "CDN_PUBLIC_URL",
 )
 
 
@@ -94,7 +99,14 @@ def secret_environments(values):
         "VITE_SERVER_URL": "http://localhost",
         "VITE_MAPKIT_TOKEN": values["MAPKIT_TOKEN"],
     }
-    return {"server": dotenv(server), "web": dotenv(web)}
+    dataflow = {
+        "S3_ENDPOINT": values["CDN_S3_ENDPOINT"],
+        "S3_BUCKET": values["CDN_S3_BUCKET"],
+        "S3_ACCESS_KEY": values["CDN_ACCESS_KEY_ID"],
+        "S3_SECRET_KEY": values["CDN_SECRET_ACCESS_KEY"],
+        "CDN_PUBLIC_URL": values["CDN_PUBLIC_URL"],
+    }
+    return {"server": dotenv(server), "web": dotenv(web), "dataflow": dotenv(dataflow)}
 
 
 def write_env(path, content):
@@ -162,7 +174,7 @@ def pull_secrets():
         for filename in (".env", ".env.local"):
             write_env(ROOT / "apps" / app / filename, content)
     print(
-        "Updated server/web .env and .env.local. OpenBao login stays on the host.",
+        "Updated server/web/dataflow .env and .env.local. OpenBao login stays on the host.",
         flush=True,
     )
 
@@ -275,10 +287,17 @@ def main(argv=None):
         "--rebuild", action="store_true", help="Rebuild the Docker image"
     )
     commands.add_parser(
-        "secrets", help="Only refresh server/web env files from OpenBao"
+        "secrets", help="Only refresh server/web/dataflow env files from OpenBao"
     )
     populate = commands.add_parser(
-        "populate", help="Replace local map tables from Garage; restart app afterwards"
+        "populate",
+        help="Replace local map tables from the hosted CDN; restart app afterwards",
+    )
+    populate.add_argument(
+        "--source",
+        choices=("cdn", "garage"),
+        default="cdn",
+        help="Read the allocated hosted CDN (default), or local Garage",
     )
     populate.add_argument(
         "--check",
@@ -311,8 +330,10 @@ def main(argv=None):
         else:
             docker_ready()
             if args.command == "populate":
-                options = (["--check"] if args.check else []) + (
-                    ["--include-pois"] if args.include_pois else []
+                options = (
+                    ["--source", args.source]
+                    + (["--check"] if args.check else [])
+                    + (["--include-pois"] if args.include_pois else [])
                 )
                 execute_helper("populate.sh", options)
                 if not args.check:

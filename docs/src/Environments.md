@@ -11,13 +11,15 @@ Nix/devenv uses Kennel's module for Garage and Ricochet. It does not deploy the 
 | Web | `http://localhost:5173` | Vite in the devcontainer |
 | API | `http://localhost` | Bun in the devcontainer |
 | OAuth relay | `http://localhost:8090` | Kennel Ricochet; registered callback from OpenBao |
-| S3 API | `http://localhost:9000` | Garage, bucket `maps` |
+| Shared dataset | `https://s3.scottylabs.org` | Allocated CDN bucket `cdn-maps`, read using OpenBao credentials |
+| Optional local S3 API | `http://localhost:9000` | Garage, bucket `maps`; select `--source garage` |
 | PostgreSQL | `postgres:5432` inside Docker | No host port published |
 | Identity provider | ScottyLabs Keycloak | Development client from OpenBao |
 
-The local setup uses `secret/secretspec/maps/dev` for identity and MapKit values.
+The local setup uses `secret/secretspec/maps/dev` for identity, MapKit, and CDN values.
 Database and Garage credentials are public local defaults, and their volumes are
-independent of hosted data. The launcher does not write secrets back to OpenBao.
+independent of hosted storage. Population reads shared hosted JSON and copies
+its records into local PostgreSQL; it does not synchronize databases automatically. The launcher does not write secrets back to OpenBao.
 
 ## Hosted environments
 

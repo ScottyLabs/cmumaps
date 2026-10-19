@@ -23,13 +23,21 @@ Hosted database access is configured separately; do not reuse local credentials.
 
 ## Object storage
 
-Local Garage provides an S3-compatible `maps` bucket on `http://localhost:9000`.
-The importer reads dataset JSON under `floorplans/`; the backend writes those
-records into PostgreSQL through its authorized population routes. Garage's data
-persists in the `garage_data` volume. It is separate from hosted S3/CDN storage.
+The default development importer reads the allocated hosted CDN bucket
+`cdn-maps` at `https://s3.scottylabs.org`, exposed at
+`https://cdn.scottylabs.org/maps/`. OpenBao supplies its S3 settings and credentials
+via the dataflow env file. Processed JSON under `floorplans/` is imported through
+the local backend API into each developer's own PostgreSQL database. The importer
+only reads hosted storage; publishing a dataset is a separate operation. Raw
+`source-fetch/` artifacts do not replace the four processed JSON inputs.
 
-The local upload helper only uploads the four required JSON files and, when
-requested, `osm-pois.json`. It does not publish to the public CDN or install missing
-SVG assets. See the [Garage reference](../../scripts/dev/README.md) for credentials,
-path-style S3 addressing, and persistence. Never commit downloaded campus datasets
-or secrets; keep local input files under the ignored `uploads/` directory.
+Local Garage remains available for isolated experiments: S3 endpoint
+`http://localhost:9000`, bucket `maps`, persisted in `garage_data`.
+`populate --source garage` opts into it. The upload helper still targets only this
+local bucket and never publishes to the CDN. See the [storage and script reference](../../scripts/dev/README.md)
+for details. Keep downloaded campus datasets under ignored `uploads/` and never
+commit credentials.
+
+This setup uses the existing allocated bucket. Provisioning distinct hosted
+buckets and credentials for development and production is an infrastructure
+configuration task; the application does not create them automatically.

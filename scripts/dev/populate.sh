@@ -4,24 +4,36 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../.."
 
 args=(--local)
 skip_pois=true
-for argument in "$@"; do
-  case "$argument" in
+source=cdn
+original_args=("$@")
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --include-pois) skip_pois=false ;;
     --check) args+=(--check) ;;
+    --source)
+      if [[ $# -lt 2 || ( "$2" != "cdn" && "$2" != "garage" ) ]]; then
+        echo "--source requires cdn or garage" >&2
+        exit 1
+      fi
+      source="$2"
+      shift ;;
     --help|-h)
-      echo "Usage: bash scripts/dev/populate.sh [--check] [--include-pois]"
+      echo "Usage: bash scripts/dev/populate.sh [--check] [--include-pois] [--source cdn|garage]"
+      echo "Reads the allocated hosted CDN by default; writes only to the local backend."
       echo "Run with the devcontainer and backend already running."
       echo "Replaces local map tables; POIs are cleared and left empty by default."
       echo "--check validates inputs and backend authorization without clearing data."
-      echo "--include-pois also requires floorplans/osm-pois.json in Garage."
+      echo "--source garage uses the optional local bucket instead."
       exit 0 ;;
-    *) echo "Unknown option: $argument" >&2; exit 1 ;;
+    *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
+  shift
 done
+args+=(--source "$source")
 if "$skip_pois"; then args+=(--skip-pois); fi
 
 if [[ ! -f /.dockerenv ]]; then
-  exec python3 scripts/dev/dev.py populate "$@"
+  exec python3 scripts/dev/dev.py populate "${original_args[@]}"
 fi
 
 # Use the same pinned Nix runtime source as the application helper.
@@ -31,7 +43,7 @@ if ! command -v uv >/dev/null; then
     "github:NixOS/nixpkgs/$nixpkgs_rev#uv"
 fi
 
-# Separate Linux dependencies from the Mac's apps/dataflow/.venv.
+# Keep Linux dependencies separate from the host's apps/dataflow/.venv.
 export UV_CACHE_DIR=/root/.cache/cmumaps-dataflow/uv
 export UV_PYTHON_INSTALL_DIR=/root/.cache/cmumaps-dataflow/python
 export UV_PROJECT_ENVIRONMENT=/root/.cache/cmumaps-dataflow/venv

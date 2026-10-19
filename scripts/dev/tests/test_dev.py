@@ -21,7 +21,7 @@ class LauncherTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="maps test ")
         self.root = Path(self.temporary.name).resolve()
-        for app in ("server", "web"):
+        for app in ("server", "web", "dataflow"):
             (self.root / "apps" / app).mkdir(parents=True)
         self.root_patch = patch.object(dev, "ROOT", self.root)
         self.root_patch.start()
@@ -30,6 +30,9 @@ class LauncherTests(unittest.TestCase):
         self.values = {name: "example-" + name.lower() for name in dev.SECRET_NAMES}
         self.values["KEYCLOAK_URL"] = "https://idp.example.test/"
         self.values["OAUTH_RELAY_URL"] = "http://localhost:8090/oauth2/callback"
+        self.values["CDN_S3_ENDPOINT"] = "https://s3.example.test"
+        self.values["CDN_S3_BUCKET"] = "cdn-maps"
+        self.values["CDN_PUBLIC_URL"] = "https://cdn.example.test/maps/"
 
     def mock_bao(self, args, **kwargs):
         if args[1:3] == ["token", "lookup"]:
@@ -49,6 +52,11 @@ class LauncherTests(unittest.TestCase):
         self.assertNotIn("AUTH_CLIENT", envs["web"])
         self.assertNotIn("example-oidc_client_secret", envs["web"])
         self.assertEqual(len(envs["web"].splitlines()), 2)
+        self.assertIn('S3_BUCKET="cdn-maps"', envs["dataflow"])
+        self.assertIn('S3_ENDPOINT="https://s3.example.test"', envs["dataflow"])
+        self.assertIn(self.values["CDN_SECRET_ACCESS_KEY"], envs["dataflow"])
+        for app in ("server", "web"):
+            self.assertNotIn(self.values["CDN_SECRET_ACCESS_KEY"], envs[app])
         self.assertNotIn("SERVER_PORT=", envs["server"])
 
     def test_refresh_creates_both_env_variants_without_logging_secrets(self):
@@ -60,7 +68,7 @@ class LauncherTests(unittest.TestCase):
         ):
             dev.pull_secrets()
         self.assertNotIn(self.values["OIDC_CLIENT_SECRET"], output.getvalue())
-        for app in ("server", "web"):
+        for app in ("server", "web", "dataflow"):
             path = self.root / "apps" / app / ".env"
             self.assertEqual(
                 path.read_bytes(), path.with_name(".env.local").read_bytes()
@@ -70,10 +78,10 @@ class LauncherTests(unittest.TestCase):
                 self.assertEqual(path.stat().st_mode & 0o777, 0o600)
 
     def test_failed_last_secret_preserves_all_existing_files(self):
-        for app in ("server", "web"):
+        for app in ("server", "web", "dataflow"):
             for name in (".env", ".env.local"):
                 (self.root / "apps" / app / name).write_text("old\n")
-        self.values["OAUTH_RELAY_URL"] = None
+        self.values["CDN_PUBLIC_URL"] = None
         with (
             patch.object(dev, "require_tool"),
             patch.object(dev, "run", side_effect=self.mock_bao),
@@ -145,7 +153,9 @@ class LauncherTests(unittest.TestCase):
             patch.object(dev, "execute_helper") as execute,
         ):
             self.assertEqual(dev.main(["populate", "--check", "--include-pois"]), 0)
-        execute.assert_called_once_with("populate.sh", ["--check", "--include-pois"])
+        execute.assert_called_once_with(
+            "populate.sh", ["--source", "cdn", "--check", "--include-pois"]
+        )
 
     def test_upload_requires_complete_input_before_contacting_docker(self):
         folder = self.root / "uploads" / "floor plans"

@@ -205,7 +205,7 @@ class LocalTargetTests(unittest.TestCase):
             ),
             self.assertRaises(ValueError),
         ):
-            population.configure_local()
+            population.configure_local(source="garage")
 
     def test_local_mode_forces_backend_and_loads_only_auth(self) -> None:
         """Old remote backend settings cannot redirect a local reset."""
@@ -231,6 +231,80 @@ class LocalTargetTests(unittest.TestCase):
                 },
             ),
         ):
-            population.configure_local()
+            population.configure_local(source="garage")
             self.assertEqual(os.environ["SERVER_URL"], "http://localhost")
             self.assertNotIn("UNRELATED", os.environ)
+
+
+class HostedSourceTests(unittest.TestCase):
+    """CDN imports read hosted data but can only reset the local backend."""
+
+    def setUp(self) -> None:
+        """Provide separate server and dataflow dotenv fixtures."""
+        self.server = {
+            "AUTH_CLIENT_ID": "test",
+            "AUTH_CLIENT_SECRET": "test",
+            "AUTH_ISSUER": "https://idp.example/realm",
+            "SERVER_URL": "https://production.example",
+        }
+        self.storage = {
+            "S3_ENDPOINT": "https://s3.example.com",
+            "S3_BUCKET": "cdn-maps",
+            "S3_ACCESS_KEY": "cdn-test-key",
+            "S3_SECRET_KEY": "cdn-test-secret",
+            "SERVER_URL": "https://production.example",
+        }
+
+    def test_cdn_overrides_garage_and_pins_local_target(self) -> None:
+        """Inherited devenv/legacy values cannot select another bucket or API."""
+        with (
+            patch.dict(
+                os.environ,
+                {
+                    "S3_ENDPOINT": "http://localhost:9000",
+                    "S3_BUCKET": "maps",
+                    "S3_ACCESS_KEY": "local-key",
+                    "S3_SECRET_KEY": "local-secret",
+                    "S3_REGION": "us-east-1",
+                    "SERVER_URL": "https://production.example",
+                },
+                clear=True,
+            ),
+            patch.object(
+                population.dotenv,
+                "dotenv_values",
+                side_effect=[self.server, self.storage],
+            ),
+        ):
+            population.configure_local()
+            self.assertEqual(os.environ["SERVER_URL"], "http://localhost")
+            for name in ("S3_ENDPOINT", "S3_BUCKET", "S3_ACCESS_KEY", "S3_SECRET_KEY"):
+                self.assertEqual(os.environ[name], self.storage[name])
+            self.assertNotIn("S3_REGION", os.environ)
+
+    def test_missing_cdn_credentials_do_not_fall_back(self) -> None:
+        """A missing secret must fail instead of reading legacy or local storage."""
+        del self.storage["S3_SECRET_KEY"]
+        with (
+            patch.dict(os.environ, {"S3_SECRET_KEY": "old-secret"}, clear=True),
+            patch.object(
+                population.dotenv,
+                "dotenv_values",
+                side_effect=[self.server, self.storage],
+            ),
+            self.assertRaisesRegex(ValueError, "S3_SECRET_KEY"),
+        ):
+            population.configure_local()
+
+    def test_cdn_requires_tls(self) -> None:
+        """Do not send the hosted credentials over HTTP."""
+        self.storage["S3_ENDPOINT"] = "http://s3.example.com"
+        with (
+            patch.object(
+                population.dotenv,
+                "dotenv_values",
+                side_effect=[self.server, self.storage],
+            ),
+            self.assertRaisesRegex(ValueError, "HTTPS"),
+        ):
+            population.configure_local()
