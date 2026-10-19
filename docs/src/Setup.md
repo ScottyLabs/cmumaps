@@ -6,6 +6,83 @@ or in VS Code's Dev Containers extension. Bun, Node, Nix, devenv, Garage, the OA
 relay, and the dataflow Python environment run inside the development container.
 PostgreSQL runs in a second, sibling container.
 
+## Quick start
+
+For a first-time setup: **start the app → populate the local database → restart
+the app → open CMU Maps**. Run these commands from the repository root after
+installing the [prerequisites](#prerequisites) and starting Docker Desktop, Colima,
+or Docker Engine.
+
+### 1. Log in and start the app (terminal 1)
+
+macOS, Linux, or WSL:
+
+```sh
+export BAO_ADDR=https://secrets.scottylabs.org
+bao login -method=oidc
+python3 scripts/dev/dev.py start
+```
+
+Windows PowerShell:
+
+```powershell
+$env:BAO_ADDR = "https://secrets.scottylabs.org"
+bao login -method=oidc
+py -3 scripts/dev/dev.py start
+```
+
+Wait for the backend and web app to start, then leave this terminal running.
+First startup downloads packages and may take several minutes. The new local
+database has tables but no campus data yet.
+
+### 2. Populate the database (terminal 2)
+
+Open a second host terminal in the repository root. Validate the shared CDN
+inputs, then import them into your local database. Continue only if the check succeeds.
+
+macOS, Linux, or WSL:
+
+```sh
+python3 scripts/dev/dev.py populate --check
+python3 scripts/dev/dev.py populate
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 scripts/dev/dev.py populate --check
+py -3 scripts/dev/dev.py populate
+```
+
+### 3. Restart the app (terminal 1)
+
+After population finishes, press **Ctrl-C in terminal 1**, then restart to rebuild
+the backend's search index and navigation graph cache.
+
+macOS, Linux, or WSL:
+
+```sh
+python3 scripts/dev/dev.py start --skip-secrets
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 scripts/dev/dev.py start --skip-secrets
+```
+
+### 4. Open CMU Maps
+
+Open [localhost:5173](http://localhost:5173) and sign in through the app when needed.
+Keep terminal 1 running while developing.
+
+For later sessions, start your container engine and run `start --skip-secrets`.
+Your local data persists. Run `populate` again only when you want to replace your
+local map data with the shared dataset, and restart the app afterward.
+
+All subsequent examples use `python3`; substitute `py -3` in PowerShell.
+The old `bash scripts/dev/container.sh` command remains a macOS/Linux shortcut.
+
 ## Prerequisites
 
 Install these yourself and make their commands available in your terminal:
@@ -34,34 +111,6 @@ For Windows/WSL, keep the checkout in the WSL Linux filesystem for better bind-m
 performance and file watching, as described in [Docker's WSL guide](https://docs.docker.com/desktop/features/wsl/).
 Install Python and `bao`, and log into OpenBao, in the environment where you run
 the launcher; a Windows login is not automatically a WSL login.
-
-## Quick start
-
-From the repository root, after starting your container engine:
-
-### macOS, Linux, or WSL
-
-```sh
-export BAO_ADDR=https://secrets.scottylabs.org
-bao login -method=oidc
-python3 scripts/dev/dev.py start
-```
-
-### Windows PowerShell
-
-```powershell
-$env:BAO_ADDR = "https://secrets.scottylabs.org"
-bao login -method=oidc
-py -3 scripts/dev/dev.py start
-```
-
-Open [CMU Maps](http://localhost:5173). Keep the launcher terminal open for app
-logs. First startup downloads packages and may take several minutes. The initial
-local database is empty; import the shared CDN dataset using the steps below
-before expecting buildings and routes.
-
-All subsequent examples use `python3`; substitute `py -3` in PowerShell.
-The old `bash scripts/dev/container.sh` command remains a macOS/Linux shortcut.
 
 ## Everyday commands
 

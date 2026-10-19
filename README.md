@@ -12,28 +12,51 @@ Key features include:
 - Search for buildings and rooms
 - View building and room information
 
-## Local development
+## Quick start
 
 Install Docker with Compose, Python, and OpenBao CLI on your host. Start Docker
-Desktop, Colima, or Docker Engine, then log into OpenBao and launch the project:
+Desktop, Colima, or Docker Engine. From the repository root:
 
-```sh
-export BAO_ADDR=https://secrets.scottylabs.org
-bao login -method=oidc
-python3 scripts/dev/dev.py start
-```
+1. **Terminal 1:** log into OpenBao and start the app. Leave it running once ready.
 
-On Windows PowerShell:
+   macOS, Linux, or WSL:
 
-```powershell
-$env:BAO_ADDR = "https://secrets.scottylabs.org"
-bao login -method=oidc
-py -3 scripts/dev/dev.py start
-```
+   ```sh
+   export BAO_ADDR=https://secrets.scottylabs.org
+   bao login -method=oidc
+   python3 scripts/dev/dev.py start
+   ```
 
-Open [localhost:5173](http://localhost:5173). The [running guide](docs/src/Setup.md)
-covers prerequisites, importing shared CDN data into local PostgreSQL, daily
-commands, and a manual walkthrough.
+   On Windows PowerShell:
+
+   ```powershell
+   $env:BAO_ADDR = "https://secrets.scottylabs.org"
+   bao login -method=oidc
+   py -3 scripts/dev/dev.py start
+   ```
+
+2. **Terminal 2:** open another terminal in the repository root, check the shared
+   CDN dataset, then populate the local database. Continue only if the check succeeds.
+
+   ```sh
+   python3 scripts/dev/dev.py populate --check
+   python3 scripts/dev/dev.py populate
+   ```
+
+3. **Terminal 1:** after population finishes, press **Ctrl-C** and restart the app
+   to refresh its search and navigation caches:
+
+   ```sh
+   python3 scripts/dev/dev.py start --skip-secrets
+   ```
+
+4. Open [localhost:5173](http://localhost:5173).
+
+For steps 2–3 in Windows PowerShell, replace `python3` with `py -3`.
+On later runs, use `start --skip-secrets`; populate only when refreshing local data.
+
+The [running guide](docs/src/Setup.md#quick-start) includes platform prerequisites,
+the full first-run walkthrough, daily commands, and manual instructions.
 The launcher reports missing Docker/OpenBao dependencies; it does not install them.
 
 ## Documentation
