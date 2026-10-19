@@ -1,0 +1,20 @@
+strict_ports: true
+
+inputs:
+  nixpkgs:
+    url: github:nixos/nixpkgs/nixos-unstable
+  scottylabs:
+    url: git+https://git.cmu.dev/ScottyLabs/kennel
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+  treefmt-nix:
+    url: github:numtide/treefmt-nix
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+  git-hooks:
+    url: github:cachix/git-hooks.nix
+    inputs:
+      nixpkgs:
+        follows: nixpkgs

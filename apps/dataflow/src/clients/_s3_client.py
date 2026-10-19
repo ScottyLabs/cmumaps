@@ -3,6 +3,7 @@ import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, cast
+from urllib.parse import urlsplit
 
 from minio import Minio
 from pydantic import BaseModel, ValidationError
@@ -18,9 +19,8 @@ SCHEMA_VALIDATORS: dict[str, type[BaseModel]] = {
     "all-graph.json": Graph,
 }
 
-class S3Client:
-    BUCKET_NAME = "cmumaps"
 
+class S3Client:
     def __init__(self) -> None:
         """Initialize the S3 client.
 
@@ -37,8 +37,28 @@ class S3Client:
             self.logger.critical(msg)
             raise ValueError(msg)
 
+        endpoint = urlsplit(
+            self.s3_endpoint
+            if "://" in self.s3_endpoint
+            else f"https://{self.s3_endpoint}",
+        )
+        if (
+            endpoint.scheme not in {"http", "https"}
+            or not endpoint.hostname
+            or endpoint.path not in {"", "/"}
+            or endpoint.query
+            or endpoint.fragment
+            or endpoint.username
+            or endpoint.password
+        ):
+            msg = "S3_ENDPOINT must be an HTTP(S) origin or host:port"
+            raise ValueError(msg)
+        self.bucket_name = os.getenv("S3_BUCKET", "cmumaps")
+        self._json_cache: dict[str, dict[str, Any]] = {}
         self._client = Minio(
-            self.s3_endpoint,
+            endpoint.netloc,
+            secure=endpoint.scheme == "https",
+            region=os.getenv("S3_REGION"),
             access_key=self.access_key,
             secret_key=self.secret_key,
         )
@@ -49,7 +69,9 @@ class S3Client:
         return SCHEMA_VALIDATORS.get(basename)
 
     def _validate_json_data(
-        self, json_data: dict[str, Any], validator: type[BaseModel],
+        self,
+        json_data: dict[str, Any],
+        validator: type[BaseModel],
     ) -> bool:
         """Validate JSON data against a Pydantic model. Returns True if valid."""
         try:
@@ -80,13 +102,14 @@ class S3Client:
 
             if not self._validate_json_data(json_data, validator):
                 self.logger.error(
-                    "Validation failed for %s, not uploading", local_file_path,
+                    "Validation failed for %s, not uploading",
+                    local_file_path,
                 )
                 return False
 
         try:
             self._client.fput_object(
-                self.BUCKET_NAME,
+                self.bucket_name,
                 s3_object_name,
                 local_file_path,
                 content_type="application/json",
@@ -101,24 +124,43 @@ class S3Client:
 
         return True
 
+    def preload_json_file(self, s3_object_name: str) -> dict[str, Any]:
+        """Validate and cache an input so imports use the preflight snapshot."""
+        data = self.get_json_file(s3_object_name)
+        if not isinstance(data, dict) or not data:
+            msg = f"Missing, empty, or invalid dataset: {s3_object_name}"
+            raise ValueError(msg)
+        validator = self._get_validator(s3_object_name)
+        if validator:
+            validator.model_validate(data)
+        self._json_cache[s3_object_name] = data
+        return data
+
     def get_json_file(self, s3_object_name: str) -> dict[str, Any] | None:
         """Get JSON data from S3 bucket."""
+        if s3_object_name in self._json_cache:
+            return self._json_cache[s3_object_name]
         try:
             # Get the object
-            response = self._client.get_object(self.BUCKET_NAME, s3_object_name)
+            response = self._client.get_object(self.bucket_name, s3_object_name)
 
             # Read and parse JSON data
-            json_data = json.loads(response.read().decode("utf-8"))
+            try:
+                json_data = json.loads(response.read().decode("utf-8"))
+            finally:
+                response.close()
+                response.release_conn()
 
         except Exception:
             self.logger.exception(
                 "Error getting %s from %s",
                 s3_object_name,
-                self.BUCKET_NAME,
+                self.bucket_name,
             )
             return None
 
         return cast("dict[str, Any]", json_data)
+
 
 @lru_cache(maxsize=1)
 def get_s3_client_singleton() -> S3Client:

@@ -31,7 +31,7 @@ def populate_node_table() -> None:
         longitude = node["coordinate"]["longitude"]
         building_code = node["floor"]["buildingCode"]
         floor_level = node["floor"]["level"]
-        room_id = node["roomId"] if building_code != "outside" else ""
+        room_id = node.get("roomId") if building_code != "outside" else ""
 
         node = {
             "nodeId": node_id,

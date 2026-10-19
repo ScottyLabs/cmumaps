@@ -3,11 +3,8 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "./.devcontainer/post-create.sh",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
   "features": {
-    "git": {
-      "enabled": true
-    },
     "ghcr.io/devcontainers/features/common-utils": {
       "installZsh": true,
       "installOhMyZsh": true,

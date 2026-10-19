@@ -1,3 +1,5 @@
+# Manual integration tests
+
 ## Building Info Card Test
 
 1. Go to website

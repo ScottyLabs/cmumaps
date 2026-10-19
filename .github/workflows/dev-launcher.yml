@@ -1,0 +1,20 @@
+name: Development launcher
+on:
+  push:
+    branches: [main, staging, hotfix]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  launcher:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Test portable host launcher (no credentials or daemon)
+        run: python -m unittest discover -s scripts/dev/tests -v

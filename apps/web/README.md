@@ -1,25 +1,18 @@
 # CMU Maps Web
 
-## Overview
-
-The [CMU Maps web](https://cmumaps.com) is a web application that provides a map of the CMU campus.
+The [CMU Maps web app](https://cmumaps.com) provides a map of the CMU campus.
 
 ## Development
 
-### Running the Web
+Use the [running guide](../../docs/src/Setup.md) to start the web and backend in
+the development container. Open [localhost:5173](http://localhost:5173). Edit this
+checkout on the host or attach VS Code to the container. `dev:host` binds port 5173
+and fails if it is occupied, keeping browser login origins predictable.
 
-Run the web with the server by running the following command in the root directory:
+The Compose configuration publishes services on loopback only. Viewing the app
+from a separate phone requires an explicit network/auth-origin configuration;
+the default local setup is not reachable over your LAN.
 
-```zsh
-bun run dev:web
-```
-
-### Developing by viewing on a Mobile Device
-
-To develop by viewing on a mobile device, run the following command in the root directory:
-
-```zsh
-bun run dev:web:host
-```
-
-Then, open the web application on your mobile device by navigating to the Network URL listed in the terminal.
+For an existing native-host environment with Bun and env files already configured,
+`bun run dev:web` from the repository root runs both services. This is separate
+from the container launcher and requires host runtimes.

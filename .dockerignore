@@ -1,12 +1,13 @@
 # Dependency directories
-node_modules/
-.venv/
+**/node_modules/
+**/.venv/
 
 # Cache directories
-__pycache__/
+**/__pycache__/
 .ruff_cache/
 .mypy_cache/
 .turbo/
+.devenv/
 
 # Build
 dist/
@@ -16,9 +17,12 @@ build/
 **/*.egg-info/
 
 # Misc
-.env*
+**/.env*
 .DS_Store
 
 # Git
 .git
 **/.gitignore
+
+# Local campus datasets (never commit or bake into images)
+uploads/

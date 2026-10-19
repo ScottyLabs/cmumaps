@@ -12,6 +12,7 @@ const envSchema = z.object({
   AUTH_JWKS_URI: z.string(),
   BETTER_AUTH_URL: z.url(), // https://www.better-auth.com/docs/installation#set-environment-variables
   DATABASE_URL: z.string(),
+  OAUTH_RELAY_URL: z.url().optional(),
   IGNORE_LOGIN: z
     .string()
     .default("false")

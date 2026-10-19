@@ -1,0 +1,4 @@
+# This image installs tools only; source is mounted by Compose at runtime.
+**
+!.devcontainer/
+!.devcontainer/Dockerfile

@@ -32,15 +32,16 @@ when opening your PR.
 
 ### Setup and Develop
 
-After you are added to Governance as a CMU Maps applicant, you will have access to the applicants secrets.
-Compared to a regular CMU Maps developer, you will **not** have access to an Apple MapKit token.
-You will have read-only access to the CMU Maps S3 bucket.
+Follow the [running guide](../docs/src/Setup.md) for Docker Desktop, Colima, or
+Docker Engine setup on macOS, Windows, and Linux. Ask the team for Maps development
+OpenBao access and an authorized dataset. A successful OpenBao login alone does
+not grant access to every secret path.
 
 ### Key Resources
 
-- [Setup](https://github.com/ScottyLabs/cmumaps/wiki/Setup) for setup instructions.
-- [Style Guide](https://github.com/ScottyLabs/cmumaps/wiki/Style-Guide) for coding style.
-- [Troubleshooting](https://github.com/ScottyLabs/cmumaps/wiki/Troubleshooting) for troubleshooting common issues, including precommit checks.
+- [Setup and manual run](../docs/src/Setup.md)
+- [Style Guide](../docs/src/Style-Guide.md)
+- [Troubleshooting](../docs/src/Troubleshooting.md)
 
 ### Additional Notes
 

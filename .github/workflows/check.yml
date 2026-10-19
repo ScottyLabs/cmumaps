@@ -56,7 +56,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies, generaet DB schema and OpenAPI spec
+      - name: Install dependencies, generate DB schema and OpenAPI spec
         run: |
           bun install
           cd apps/server
@@ -67,6 +67,9 @@ jobs:
 
       - name: Run checks
         run: bun run check
+
+      - name: Test OAuth relay
+        run: bun test apps/server/src/lib/ricochetOAuth.test.ts
 
   uv-lint:
     name: UV Lint
@@ -79,3 +82,6 @@ jobs:
 
       - name: Run UV Lint
         run: cd apps/dataflow && uv sync --only-dev && uv run lint
+
+      - name: Test population preflight
+        run: cd apps/dataflow && PYTHONPATH=src uv run python -m unittest discover -s tests -v

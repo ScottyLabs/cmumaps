@@ -28,7 +28,7 @@ def populate_building_table() -> None:
         label_latitude = data[building_code]["labelPosition"]["latitude"]
         label_longitude = data[building_code]["labelPosition"]["longitude"]
         shape = json.dumps(data[building_code]["shapes"])
-        hitbox = json.dumps(data[building_code]["hitbox"])
+        hitbox = json.dumps(data[building_code].get("hitbox"))
         building = {
             "buildingCode": building_code,
             "name": name,

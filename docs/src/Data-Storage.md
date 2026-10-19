@@ -1,89 +1,35 @@
-## Database
+# Data storage
 
-We use Postgres for the database. The database is hosted on Railway. Use docker compose for local Postgres instance.
+## PostgreSQL
 
-### Database Model
+The backend uses Prisma with PostgreSQL. The authoritative schema lives in
+[`apps/server/prisma`](../../apps/server/prisma). Map records include buildings,
+floors, rooms, aliases, graph nodes/edges, and POIs; authentication tables are
+managed alongside them. Population replaces the seven map tables, not user login
+records.
 
-```mermaid
----
-config:
-  layout: elk
----
-erDiagram
-	direction LR
-	Building {
-		string buildingCode PK ""  
-		string name  ""  
-		int defaultOrdinal  ""  
-		string osmId  ""  
-		float labelLatitude  ""  
-		float labelLongitude  ""  
-		string shape  ""  
-		string hitbox  ""  
-	}
-	Floor {
-		string buildingCode PK ""  
-		int floorLevel PK ""  
-		bool isDefault  ""  
-		float centerX  ""  
-		float centerY  ""  
-		float centerLatitude  ""  
-		float centerLongitude  ""  
-		float scale  ""  
-		float angle  ""  
-		float altitude  ""  
-	}
-	FloorConnection {
-	}
-	Complex {
-		string Name PK ""  
-	}
-	Room {
-		string roomId PK ""  
-		string name  ""  
-		string type  ""  
-		float labelLatitude  ""  
-		float labelLongitude  ""  
-		string polygon  ""  
-	}
-	Alias {
-		string alias PK ""  
-		bool isDisplayAlias  ""  
-	}
-	Node {
-		string nodeId PK ""  
-		float latitude  ""  
-		float longitude  ""  
-	}
-	Edge {
-	}
-	Poi {
-		string poiId PK ""  
-		string type  ""  
-	}
+Locally, Compose runs PostgreSQL 17 in a sibling container. The backend connects
+to `postgres:5432`; the database port is not published to the host. Inspect it from
+the repository root with:
 
-	Building||--o{Floor:"has"
-	Floor||--o{FloorConnection:"are connected by"
-	Floor||--o{Room:"has"
-	%% Floor}o--||Complex:"belongs_to"
-	Floor||--o{Node:"has"
-	Complex||--o{Room:"has"
-	Room||--o{Alias:"has"
-	Room||--o{Node:"has"
-	Node||--o{Edge:"are connected by"
-	Node||--||Poi:"is"
+```sh
+docker compose -f .devcontainer/docker-compose.yml exec postgres psql -U postgres -d cmumaps
 ```
 
-### How to access the database
+The `postgres_data` volume preserves data across container recreation. The startup
+helper applies the Prisma schema but does not automatically populate it. See
+[Running locally](Setup.md#upload-and-populate-the-local-database) for importing.
+Hosted database access is configured separately; do not reuse local credentials.
 
-Use PgAdmin, which can connect to the DB through Railway's internal network and limits login retries for safety.
+## Object storage
 
-Passwords are stored in Railway. Hosted in the following locations for each environment
+Local Garage provides an S3-compatible `maps` bucket on `http://localhost:9000`.
+The importer reads dataset JSON under `floorplans/`; the backend writes those
+records into PostgreSQL through its authorized population routes. Garage's data
+persists in the `garage_data` volume. It is separate from hosted S3/CDN storage.
 
-- Dev: https://pgadmin.maps.slabs-dev.org/browser/
-- Staging: to be set up
-- Prod: to be set up
-
-## S3 Bucket
-
-Will created schemas in the dataflow folder.
+The local upload helper only uploads the four required JSON files and, when
+requested, `osm-pois.json`. It does not publish to the public CDN or install missing
+SVG assets. See the [Garage reference](../../scripts/dev/README.md) for credentials,
+path-style S3 addressing, and persistence. Never commit downloaded campus datasets
+or secrets; keep local input files under the ignored `uploads/` directory.

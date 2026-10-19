@@ -1,2 +1,7 @@
 docs/mermaid.min.js linguist-vendored
 docs/mermaid-init.js linguist-vendored
+
+# Linux container entry points must retain LF on Windows checkouts.
+*.sh text eol=lf
+*.py text eol=lf
+*.nix text eol=lf

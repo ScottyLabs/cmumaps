@@ -1,3 +1,5 @@
+# Project board
+
 ## Triage
 
 `no:type,label -type:Design,Maintenance,Task` means that every issue needs a type. Also for issues that are not Design, Maintenance, or Task, they need labels.

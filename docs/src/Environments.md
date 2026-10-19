@@ -1,51 +1,32 @@
 # Environments
 
-## Production
+## Local development
 
-The production environment is version used by the public users.
+The supported local workflow is documented in [Running locally](Setup.md).
+Docker runs a Linux development container and a sibling PostgreSQL 17 container.
+Nix/devenv uses Kennel's module for Garage and Ricochet. It does not deploy the app.
 
-**Vercel**: production
+| Component | Local address | Configuration |
+| --- | --- | --- |
+| Web | `http://localhost:5173` | Vite in the devcontainer |
+| API | `http://localhost` | Bun in the devcontainer |
+| OAuth relay | `http://localhost:8090` | Kennel Ricochet; registered callback from OpenBao |
+| S3 API | `http://localhost:9000` | Garage, bucket `maps` |
+| PostgreSQL | `postgres:5432` inside Docker | No host port published |
+| Identity provider | ScottyLabs Keycloak | Development client from OpenBao |
 
-- CMU Maps: [maps.scottylabs.org](http://maps.scottylabs.org)
-- Visualizer: [floorplans.scottylabs.org](http://floorplans.scottylabs.org)
+The local setup uses `secret/secretspec/maps/dev` for identity and MapKit values.
+Database and Garage credentials are public local defaults, and their volumes are
+independent of hosted data. The launcher does not write secrets back to OpenBao.
 
-**Railway**: production
+## Hosted environments
 
-- [api.maps.scottylabs.org](http://api.maps.scottylabs.org)
+The public app is [CMU Maps](https://cmumaps.com). Hosted web/API/identity/storage
+settings are deployment-specific and must not be replaced with local defaults.
+Older native setup commands retain environment profiles such as staging and prod;
+they are separate from this local container workflow.
 
-**Clerk**: production
-
-## Staging
-
-The staging environment is version used by the development team for testing before merging to main.
-
-**Vercel**: staging
-
-- CMU Maps: [maps.slabs-staging.org](http://maps.slabs-staging.org)
-- Visualizer: [floorplans.slabs-staging.org](http://floorplans.slabs-staging.org)
-
-**Railway**: staging
-
-- [api.maps.slabs-staging.org](http://api.maps.slabs-staging.org)
-
-**Clerk**: development
-
-## Development
-
-The development environment is used for verifying a PR before merging to staging.
-
-**Vercel**: preview
-
-- CMU Maps: ^https:\/\/cmumaps-[0-9a-zA-Z]{9}-scottylabs\.vercel\.app$
-- Visualizer: none since staging is more than enough testing for this internal tool.
-
-**Railway**: development (default connected to the staging branch, but can be changed to a specific branch as needed for api testing)
-
-- [api.maps.slabs-dev.org](http://api.maps.slabs-dev.org)
-
-**Clerk**: development
-
-### Note:
-
-Using Railway PR environment probably could achieve automation of the development environment for every PR,
-but would be unnecessarily costly since most PRs won't affect the server. Might be worth it to revisit in the future.
+The root Nix scaffold preserves Kennel integration for a future migration. It
+currently enables local services, not production application deployment. Consult
+the team's deployment configuration for current hosted endpoints and credentials;
+this local setup does not provision them.

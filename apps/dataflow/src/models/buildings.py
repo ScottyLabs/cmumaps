@@ -13,11 +13,12 @@ class Building(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str
-    osm_id: str = Field(alias="osmId")
+    osm_id: str | None = Field(alias="osmId")
     floors: list[str]
     default_floor: str = Field(alias="defaultFloor")
     label_position: GeoCoordinate = Field(alias="labelPosition")
     shapes: list[list[GeoCoordinate]]
+    hitbox: list[GeoCoordinate] | None = None
     fms_id: float | None = Field(default=None, alias="fmsId")
     code: str | None = None
     entrances: list[str] | None = None

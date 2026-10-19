@@ -26,6 +26,7 @@
     "db:populate": "cd apps/dataflow && uv run populate-database",
     "dev": "bun run dev:prepare:noauth && IGNORE_LOGIN=true VITE_IGNORE_LOGIN=true bunx mprocs --config mprocs.yaml",
     "dev:auth": "bun run dev:prepare && bunx mprocs --config mprocs.yaml",
+    "dev:container": "bun scripts/dev/container.ts",
     "dev:panel:db": "cd apps/server && bunx prisma studio",
     "dev:panel:server": "cd apps/server && bun run dev",
     "dev:panel:visualizer": "cd apps/visualizer && bunx vite --host",

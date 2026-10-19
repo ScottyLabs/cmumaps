@@ -16,7 +16,7 @@ import { auth } from "./auth.ts";
 
 export const OIDC_AUTH = "oidc";
 export const BEARER_AUTH = "bearerAuth";
-export const ADMIN_SCOPE = "cmumaps-admins";
+export const ADMIN_SCOPE = "/projects/maps/admins";
 export const MEMBER_SCOPE = "cmumaps-members";
 
 declare module "express" {
@@ -161,7 +161,7 @@ const verifyBearerAuth = (
         callback(null, signingKey);
       });
     },
-    { issuer: env.AUTH_ISSUER, audience: env.AUTH_CLIENT_ID },
+    { issuer: env.AUTH_ISSUER },
     (error, decoded) => {
       // Check if the token is valid
       if (error) {

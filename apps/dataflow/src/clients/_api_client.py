@@ -39,7 +39,7 @@ class ApiClient:
         self.logger = get_app_logger()
 
         # Load required environment-specific variables
-        self.server_url = os.getenv("SERVER_URL")
+        self.server_url = os.getenv("SERVER_URL", "").rstrip("/")
         self.auth_client_id = os.getenv("AUTH_CLIENT_ID")
         self.auth_client_secret = os.getenv("AUTH_CLIENT_SECRET")
 
@@ -52,6 +52,13 @@ class ApiClient:
             msg = "AUTH_CLIENT_ID and AUTH_CLIENT_SECRET must be set"
             self.logger.critical(msg)
             raise ValueError(msg)
+
+        issuer = os.getenv("AUTH_ISSUER")
+        self.token_url = (
+            f"{issuer.rstrip('/')}/protocol/openid-connect/token"
+            if issuer
+            else self.TOKEN_URL
+        )
 
         # In-memory cached token
         self._cached_token = None
@@ -66,7 +73,7 @@ class ApiClient:
             "client_secret": self.auth_client_secret,
         }
 
-        response = requests.post(self.TOKEN_URL, data=data, timeout=self.TIMEOUT)
+        response = requests.post(self.token_url, data=data, timeout=self.TIMEOUT)
         response.raise_for_status()
         token_data = response.json()
 
@@ -78,6 +85,10 @@ class ApiClient:
 
         return self._cached_token
 
+    def preflight(self) -> None:
+        """Check credentials, admin authorization, and backend without adding rows."""
+        self.populate_table("Building", [])
+
     def drop_tables(self, table_names: list[TableName]) -> bool:
         """Drop specified tables."""
         response = requests.delete(
@@ -86,22 +97,32 @@ class ApiClient:
             headers={"Authorization": f"Bearer {self._get_token()}"},
             timeout=self.TIMEOUT,
         )
+        response.raise_for_status()
         return response.status_code == self.SUCCESS_STATUS_CODE
 
     def populate_table(self, table_name: TableName, data: list[dict[str, Any]]) -> bool:
         """Populate a table with the given data."""
         response = requests.post(
-            f"{self.server_url}/populate-table/{table_name}",
+            f"{self.server_url}/populate-table/{table_name.lower()}",
             json=data,
             headers={"Authorization": f"Bearer {self._get_token()}"},
             timeout=self.TIMEOUT,
         )
 
+        if response.status_code in {401, 403}:
+            msg = (
+                "Backend rejected the population service token. The Keycloak "
+                "service account needs /projects/maps/admins in its groups claim. "
+                "The token must be valid and issued by the configured Keycloak realm. "
+                "See scripts/dev/openbao.md."
+            )
+            raise RuntimeError(msg)
         if response.status_code != self.SUCCESS_STATUS_CODE:
-            msg = f"Failed to populate {table_name} table: {response.json()}"
+            msg = f"Failed to populate {table_name} table (HTTP {response.status_code})"
             raise RuntimeError(msg)
 
         return True
+
 
 @lru_cache(maxsize=1)
 def get_api_client_singleton() -> ApiClient:
